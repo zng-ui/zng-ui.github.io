@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AddFont","ApiMsg","DebugCommand","FrameMsg","GenerateFrame","ResourceUpdate","SceneMsg"],"struct":["AddBlobImage","AddFontInstance","AddImage","CaptureBits","CapturedDocument","ClearCache","DocumentTransaction","MemoryReport","RenderApi","RenderApiSender","Transaction","TransactionMsg","UpdateBlobImage","UpdateImage"]};

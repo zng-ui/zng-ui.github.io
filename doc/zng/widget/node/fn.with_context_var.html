@@ -1,0 +1,61 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Helper for declaring properties that sets a context var."><title>with_context_var in zng::widget::node - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::widget::node</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../../index.html">zng</a>::<wbr><a href="../index.html">widget</a>::<wbr><a href="index.html">node</a>::<wbr><a class="fn" href="#">with_context_var</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/zng_wgt/node.rs.html#117">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn with_context_var&lt;T&gt;(
+    child: impl <a class="trait" href="trait.UiNode.html" title="trait zng::widget::node::UiNode">UiNode</a>,
+    context_var: <a class="struct" href="../../var/struct.ContextVar.html" title="struct zng::var::ContextVar">ContextVar</a>&lt;T&gt;,
+    value: impl <a class="trait" href="../../var/trait.IntoVar.html" title="trait zng::var::IntoVar">IntoVar</a>&lt;T&gt;
+) -&gt; impl <a class="trait" href="trait.UiNode.html" title="trait zng::widget::node::UiNode">UiNode</a><div class="where">where
+    T: <a class="trait" href="../../var/trait.VarValue.html" title="trait zng::var::VarValue">VarValue</a>,</div></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Helper for declaring properties that sets a context var.</p>
+<p>The generated <a href="trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a> delegates each method to <code>child</code> inside a call to <a href="../../var/struct.ContextVar.html#method.with_context" title="method zng::var::ContextVar::with_context"><code>ContextVar::with_context</code></a>.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>A simple context property declaration:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">context_var! </span>{
+    <span class="kw">pub static </span>FOO_VAR: u32 = <span class="number">0u32</span>;
+}
+
+<span class="doccomment">/// Sets the [`FOO_VAR`] in the widgets and its content.
+</span><span class="attr">#[property(CONTEXT, default(FOO_VAR))]
+</span><span class="kw">pub fn </span>foo(child: <span class="kw">impl </span>UiNode, value: <span class="kw">impl </span>IntoVar&lt;u32&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    with_context_var(child, FOO_VAR, value)
+}</code></pre></div>
+<p>When set in a widget, the <code>value</code> is accessible in all inner nodes of the widget, using <code>FOO_VAR.get</code>, and if <code>value</code> is set to a
+variable the <code>FOO_VAR</code> will also reflect its <a href="../../var/trait.AnyVar.html#method.is_new" title="method zng::var::AnyVar::is_new"><code>is_new</code></a> and <a href="../../var/trait.Var.html#tymethod.read_only" title="method zng::var::Var::read_only"><code>read_only</code></a>. If the <code>value</code> var is not read-only inner nodes
+can modify it using <code>FOO_VAR.set</code> or <code>FOO_VAR.modify</code>.</p>
+<p>Also note that the property <a href="../attr.property.html#default" title="attr zng::widget::property"><code>default</code></a> is set to the same <code>FOO_VAR</code>, this causes the property to <em>pass-through</em> the outer context
+value, as if it was not set.</p>
+<p><strong>Tip:</strong> You can use a <a href="../../var/macro.merge_var.html" title="macro zng::var::merge_var"><code>merge_var!</code></a> to merge a new value to the previous context value:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[derive(Debug, Clone, Default, PartialEq)]
+</span><span class="kw">pub struct </span>Config {
+    <span class="kw">pub </span>foo: bool,
+    <span class="kw">pub </span>bar: bool,
+}
+
+<span class="macro">context_var! </span>{
+    <span class="kw">pub static </span>CONFIG_VAR: Config = Config::default();
+}
+
+<span class="doccomment">/// Sets the *foo* config.
+</span><span class="attr">#[property(CONTEXT, default(<span class="bool-val">false</span>))]
+</span><span class="kw">pub fn </span>foo(child: <span class="kw">impl </span>UiNode, value: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    with_context_var(child, CONFIG_VAR, <span class="macro">merge_var!</span>(CONFIG_VAR, value.into_var(), |c, <span class="kw-2">&amp;</span>v| {
+        <span class="kw">let </span><span class="kw-2">mut </span>c = c.clone();
+        c.foo = v;
+        c
+    }))
+}
+
+<span class="doccomment">/// Sets the *bar* config.
+</span><span class="attr">#[property(CONTEXT, default(<span class="bool-val">false</span>))]
+</span><span class="kw">pub fn </span>bar(child: <span class="kw">impl </span>UiNode, value: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    with_context_var(child, CONFIG_VAR, <span class="macro">merge_var!</span>(CONFIG_VAR, value.into_var(), |c, <span class="kw-2">&amp;</span>v| {
+        <span class="kw">let </span><span class="kw-2">mut </span>c = c.clone();
+        c.bar = v;
+        c
+    }))
+}</code></pre></div>
+<p>When set in a widget, the <a href="../../var/macro.merge_var.html" title="macro zng::var::merge_var"><code>merge_var!</code></a> will read the context value of the parent properties, modify a clone of the value and
+the result will be accessible to the inner properties, the widget user can then set with the composed value in steps and
+the final consumer of the composed value only need to monitor to a single context variable.</p>
+</div></details></section></div></main></body></html>

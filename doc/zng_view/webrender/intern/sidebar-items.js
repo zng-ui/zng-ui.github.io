@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["DataStore","Handle","Insertion","Interner","InternerSubReport","InterningMemoryReport","ItemUid","Removal","UpdateList"],"trait":["InternDebug","Internable"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["build","include_intrinsics","widget","widget_child","widget_inner"]};

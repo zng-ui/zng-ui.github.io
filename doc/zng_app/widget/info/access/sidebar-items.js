@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AccessCmdName","AccessRole","CurrentKind","LiveIndicator","Orientation","Popup","SortDirection"],"struct":["AccessBuildArgs","AccessEnabled","AutoComplete","Invalid","WidgetAccessInfo","WidgetAccessInfoBuilder"]};

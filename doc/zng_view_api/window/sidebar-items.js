@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CursorIcon","EventCause","FocusIndicator","FrameCapture","RenderMode","WindowState"],"struct":["CursorImage","EventFrameRendered","FrameId","FrameRequest","FrameUpdateRequest","FrameWaitId","HeadlessOpenData","HeadlessRequest","MonitorId","MonitorInfo","VideoMode","WindowChanged","WindowId","WindowOpenData","WindowRequest","WindowStateAll"]};

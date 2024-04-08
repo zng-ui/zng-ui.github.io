@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["app_hn","app_hn_once","async_app_hn","async_app_hn_once","async_hn","async_hn_once","hn","hn_once"],"struct":["AppHandlerArgs","FilteWidgetHandler","FilterAppHandler"],"trait":["AppHandler","AppWeakHandle","WidgetHandler"]};

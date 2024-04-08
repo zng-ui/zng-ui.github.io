@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ColorScheme","FontAntiAliasing"],"struct":["AnimationsConfig","KeyRepeatConfig","LocaleConfig","MultiClickConfig","TouchConfig"]};

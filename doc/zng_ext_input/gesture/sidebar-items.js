@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ClickArgsSource","ShortcutClick"],"static":["CLICK_EVENT","SHORTCUT_EVENT"],"struct":["ClickArgs","GESTURES","GestureManager","ShortcutActions","ShortcutArgs","ShortcutsHandle","WeakShortcutsHandle"],"trait":["CommandShortcutMatchesExt","HeadlessAppGestureExt"]};

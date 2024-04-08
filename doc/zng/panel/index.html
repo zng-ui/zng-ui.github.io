@@ -1,0 +1,56 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Panel layout widget."><title>zng::panel - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module panel</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">panel</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/panel.rs.html#1-63">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Panel layout widget.</p>
+<p>The <a href="struct.Panel.html" title="struct zng::panel::Panel"><code>Panel!</code></a> widget allows widgets to</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">let </span>layouts = [
+    (
+        <span class="string">"Stack!"</span>,
+        <span class="macro">wgt_fn!</span>(|args: zng::panel::PanelArgs| {
+            <span class="macro">Stack! </span>{
+                direction = StackDirection::top_to_bottom();
+                spacing = <span class="number">5</span>;
+                children = args.children;
+            }
+        }),
+    ),
+    (
+        <span class="string">"Wrap!"</span>,
+        <span class="macro">wgt_fn!</span>(|args: zng::panel::PanelArgs| {
+            <span class="macro">Wrap! </span>{
+                spacing = <span class="number">5</span>;
+                children = args.children;
+            }
+        }),
+    ),
+    (
+        <span class="string">"Grid!"</span>,
+        <span class="macro">wgt_fn!</span>(|args: zng::panel::PanelArgs| {
+            <span class="macro">Grid! </span>{
+                columns = <span class="macro">ui_vec!</span>[<span class="macro">grid::Column!</span>(<span class="number">100</span>.pct())];
+                auto_grow_fn = <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">grid::Row!</span>(<span class="number">1</span>.lft()));
+                spacing = <span class="number">5</span>;
+                cells = args.children;
+            }
+        }),
+    ),
+];
+<span class="kw">let </span>selected_layout = var(<span class="number">0usize</span>);
+
+<span class="macro">zng::panel::Panel! </span>{
+    children = layouts.iter().enumerate().map(|(i, (name, <span class="kw">_</span>))| {
+        <span class="macro">Toggle! </span>{
+            value::&lt;usize&gt; = i;
+            child = <span class="macro">Text!</span>(<span class="kw-2">*</span>name);
+            grid::cell::at = grid::cell::AT_AUTO;
+        }
+    }).collect::&lt;UiNodeVec&gt;();
+    toggle::selector = toggle::Selector::single(selected_layout.clone());
+
+    panel_fn = selected_layout.map(<span class="kw">move </span>|<span class="kw-2">&amp;</span>i| layouts[i].<span class="number">1</span>.clone());
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_wgt_panel/index.html" title="mod zng_wgt_panel"><code>zng_wgt_panel</code></a> for the full widget API.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.Panel.html" title="struct zng::panel::Panel">Panel</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Represents a dynamic layout panel.</div></li><li><div class="item-name"><a class="struct" href="struct.PanelArgs.html" title="struct zng::panel::PanelArgs">PanelArgs</a></div><div class="desc docblock-short">Arguments for <a href="fn.panel_fn.html" title="fn zng::panel::panel_fn"><code>panel_fn</code></a>.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.node.html" title="fn zng::panel::node">node</a></div><div class="desc docblock-short">Panel widget child node.</div></li><li><div class="item-name"><a class="fn" href="fn.panel_fn.html" title="fn zng::panel::panel_fn">panel_fn</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that generates the panel layout widget.</div></li></ul></section></div></main></body></html>

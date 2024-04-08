@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["default_context_menu","default_selection_toolbar","style_fn"],"static":["STYLE_FN_VAR"],"struct":["DefaultStyle","SelectableText"]};

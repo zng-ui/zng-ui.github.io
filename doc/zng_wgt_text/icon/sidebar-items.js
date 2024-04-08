@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["GlyphSource"],"fn":["ico","ico_color","ico_size"],"static":["ICON_COLOR_VAR","ICON_SIZE_VAR"],"struct":["GlyphIcon","Icon"],"trait":["CommandIconExt"]};

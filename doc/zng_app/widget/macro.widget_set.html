@@ -1,0 +1,233 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content=" Sets properties and when condition on a widget builder."><title>widget_set in zng_app::widget - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"><script>
+// Hides tagged `macro_rules!` macros from crate root.
+
+document.addEventListener('DOMContentLoaded', function () {
+    let is_front_pg = false;
+    document.querySelectorAll('h1').forEach(function (h) {
+        if (h.innerText.trimStart().startsWith("Crate ")) {
+            is_front_pg = true;
+        }
+    });
+
+    if (is_front_pg) {
+        // remove tagged macros.
+        let removes = document.querySelectorAll('span[data-del-macro-root]');
+        for (let remove of removes) {
+            let div = remove.parentElement.parentElement;
+            if (div.previousElementSibling != null) {
+                div.previousElementSibling.remove();
+            }
+            div.remove();
+        }
+    }
+
+    // remove empty macros section.
+    let title = document.getElementById('macros');
+    if (title != null && title.nextElementSibling.querySelector('a') == null) {
+        title.nextElementSibling.remove();
+        title.remove();
+
+        let side_anchor = document.querySelector('a[href="#macros"]');
+        if (side_anchor != null) {
+            side_anchor.parentElement.remove();
+        }
+    }
+})
+</script>
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../zng_app/index.html">zng_app</a><span class="version">0.2.1</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng_app::widget</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">zng_app</a>::<wbr><a href="index.html">widget</a>::<wbr><a class="macro" href="#">widget_set</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_app/widget.rs.html#465-499">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>widget_set {
+    (
+        $(<span class="attr">#[<span class="macro-nonterminal">$skip</span>:meta]</span>)*
+        $(<span class="macro-nonterminal">$invalid</span>:ident)::+ = $(<span class="macro-nonterminal">$tt</span>:tt)*
+    ) =&gt; { ... };
+    (
+        $(<span class="attr">#[<span class="macro-nonterminal">$skip</span>:meta]</span>)*
+        when = $(<span class="macro-nonterminal">$invalid</span>:tt)*
+    ) =&gt; { ... };
+    (
+        <span class="macro-nonterminal">$wgt_mut</span>:ident;
+        $(<span class="macro-nonterminal">$tt</span>:tt)*
+    ) =&gt; { ... };
+    (
+        <span class="macro-nonterminal">$wgt_borrow_mut</span>:expr;
+        $(<span class="macro-nonterminal">$tt</span>:tt)*
+    ) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Sets properties and when condition on a widget builder.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>wgt = Wgt::widget_new();
+
+<span class="kw">if </span>flag {
+    <span class="macro">widget_set! </span>{
+        <span class="kw-2">&amp;mut </span>wgt;
+        enabled = <span class="bool-val">false</span>;
+    }
+}
+
+<span class="macro">widget_set! </span>{
+    <span class="kw-2">&amp;mut </span>wgt;
+    id = <span class="string">"wgt"</span>;
+}
+
+<span class="kw">let </span>wgt = wgt.widget_build();</code></pre></div>
+<p>In the example above the widget will always build with custom <code>id</code>, but only will set <code>enabled = false</code> when <code>flag</code> is <code>true</code>.</p>
+<p>Note that properties are designed to have a default <em>neutral</em> value that behaves as if unset, in the example case you could more easily write:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>wgt = <span class="macro">Wgt! </span>{
+    enabled = !flag;
+    id = <span class="string">"wgt"</span>;
+};</code></pre></div>
+<p>You should use this macro only in contexts where a widget will be build in steps, or in very hot code paths where a widget
+has many properties and only some will be non-default per instance.</p>
+<h2 id="property-assign"><a class="doc-anchor" href="#property-assign">§</a>Property Assign</h2>
+<p>Properties can be assigned using the <code>property = value;</code> syntax, this expands to a call to the property method, either
+directly implemented on the widget or from a trait.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>id = <span class="string">"name"</span>;
+background_color = colors::BLUE;</code></pre></div>
+<p>The example above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>wgt.id(<span class="string">"name"</span>);
+wgt.background_color(colors::BLUE);</code></pre></div>
+<p>Note that <code>id</code> is an intrinsic property inherited from <a href="base/struct.WidgetBase.html" title="struct zng_app::widget::base::WidgetBase"><code>WidgetBase</code></a>, but <code>background_color</code> is an extension property declared
+by a <a href="attr.property.html" title="attr zng_app::widget::property"><code>property</code></a> function. Extension properties require <code>&amp;mut self</code> access to the widget, intrinsic properties only require <code>&amp;self</code>,
+this is done so that IDEs that use a different style for mutable methods highlight the properties that are not intrinsic to the widget.</p>
+<h3 id="path-assign"><a class="doc-anchor" href="#path-assign">§</a>Path Assign</h3>
+<p>A full or partial path can be used to specify exactly what extension property will be set:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="self">self</span>::background_color = colors::BLUE;</code></pre></div>
+<p>In the example above <code>self::background_color</code> specify that an extension property that is imported in the <code>self</code> module must be set,
+even if the widget gets an intrinsic <code>background_color</code> property the extension property will still be used.</p>
+<p>The example above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="self">self</span>::background_color::background_color(<span class="kw-2">&amp;mut </span>wgt, colors::BLUE);</code></pre></div>
+<h3 id="named-assign"><a class="doc-anchor" href="#named-assign">§</a>Named Assign</h3>
+<p>Properties can have multiple parameters, multiple parameters can be set using the struct init syntax:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>border = {
+    widths: <span class="number">1</span>,
+    sides: colors::RED,
+};</code></pre></div>
+<p>Note that just like in struct init the parameters don’t need to be in order:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>border = {
+    sides: colors::RED,
+    widths: <span class="number">1</span>,
+};</code></pre></div>
+<p>Internally each property method has auxiliary methods that validate the member names and construct the property using sorted params, therefore
+accepting any parameter order. Note each parameter is evaluated in the order they appear, even if they are assigned in a different order after.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span><span class="kw-2">mut </span>eval_order = <span class="macro">vec!</span>[];
+
+border = {
+    sides: {
+        eval_order.push(<span class="string">"sides"</span>);
+        colors::RED
+    },
+    widths: {
+        eval_order.push(<span class="string">"widths"</span>);
+        <span class="number">1
+    </span>},
+};
+
+<span class="macro">assert_eq!</span>(eval_order, <span class="macro">vec!</span>[<span class="string">"sides"</span>, <span class="string">"widths"</span>]);</code></pre></div>
+<h3 id="unnamed-assign-multiple"><a class="doc-anchor" href="#unnamed-assign-multiple">§</a>Unnamed Assign Multiple</h3>
+<p>Properties with multiple parameters don’t need to be set using the named syntax:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>border = <span class="number">1</span>, colors::RED;</code></pre></div>
+<p>The example above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>wgt.border(<span class="number">1</span>, colors::RED);</code></pre></div>
+<h3 id="shorthand-assign"><a class="doc-anchor" href="#shorthand-assign">§</a>Shorthand Assign</h3>
+<p>Is a variable with the same name as a property is in context the <code>= name</code> can be omitted:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>id = <span class="string">"name"</span>;
+<span class="kw">let </span>background_color = colors::BLUE;
+<span class="kw">let </span>widths = <span class="number">1</span>;
+
+<span class="kw">let </span>wgt = <span class="macro">zng_app::widget::base::WidgetBase! </span>{
+    id;
+    <span class="self">self</span>::background_color;
+    border = {
+        widths,
+        sides: colors::RED,
+    };
+};</code></pre></div>
+<p>Note that the shorthand syntax also works for path properties and parameter names.</p>
+<p>The above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>id = <span class="string">"name"</span>;
+<span class="kw">let </span>background_color = colors::BLUE;
+<span class="kw">let </span>widths = <span class="number">1</span>;
+
+<span class="kw">let </span>wgt = <span class="macro">zng_app::widget::base::WidgetBase! </span>{
+    id = id;
+    <span class="self">self</span>::background_color = background_color;
+    border = {
+        widths: widths,
+        sides: colors::RED,
+    };
+};</code></pre></div>
+<h2 id="property-unset"><a class="doc-anchor" href="#property-unset">§</a>Property Unset</h2>
+<p>All properties can be assigned to an special value <code>unset!</code>, that <em>removes</em> a property, when the widget is build the
+unset property will not be instantiated:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>border = <span class="macro">unset!</span>;</code></pre></div>
+<p>The example above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>wgt.unset_border();</code></pre></div>
+<p>Each property method generates an auxiliary <code>unset_property</code> method, the unset is registered in the widget builder using the current
+importance, in <code>widget_intrinsic</code> they only unset already inherited default assigns, in instances it unsets all inherited or
+previous assigns, see <a href="builder/struct.WidgetBuilder.html#method.push_unset" title="method zng_app::widget::builder::WidgetBuilder::push_unset"><code>WidgetBuilder::push_unset</code></a> for more details.</p>
+<h2 id="generic-properties"><a class="doc-anchor" href="#generic-properties">§</a>Generic Properties</h2>
+<p>Generic properties need a <em>turbofish</em> annotation on assign:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>value::&lt;f32&gt; = <span class="number">1.0</span>;</code></pre></div>
+<h2 id="when"><a class="doc-anchor" href="#when">§</a>When</h2>
+<p>Conditional property assigns can be setup using <code>when</code> blocks. A <code>when</code> block has a <code>bool</code> expression and property assigns,
+when the expression is <code>true</code> each property has the assigned value, unless it is overridden by a later <code>when</code> block.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>background_color = colors::RED;
+
+when <span class="kw-2">*</span>#is_pressed {
+    background_color = colors::GREEN;
+}</code></pre></div>
+<h3 id="when-condition"><a class="doc-anchor" href="#when-condition">§</a>When Condition</h3>
+<p>The <code>when</code> block defines a condition expression, in the example above this is <code>*#is_pressed</code>. The expression can be any Rust expression
+that results in a <a href="https://doc.rust-lang.org/1.77.1/std/primitive.bool.html" title="primitive bool"><code>bool</code></a> value, you can reference properties in it using the <code>#</code> token followed by the property name or path and you
+can reference variables in it using the <code>#{var}</code> syntax. If a property or var is referenced the <code>when</code> block is dynamic, updating all
+assigned properties when the expression result changes.</p>
+<h4 id="property-reference"><a class="doc-anchor" href="#property-reference">§</a>Property Reference</h4>
+<p>The most common <code>when</code> expression reference is a property, in the example above the <code>is_pressed</code> property is instantiated for the widget
+and it controls when the background is set to green. Note that a reference to the value is inserted in the expression
+so an extra deref <code>*</code> is required. A property can also be referenced with a path, <code>#properties::is_pressed</code> also works.</p>
+<p>The syntax seen so far is actually a shorthand way to reference the first input of a property, the full syntax is <code>#is_pressed.0</code> or
+<code>#is_pressed.state</code>. You can use the extended syntax to reference inputs of properties with more than one input, the input can be
+reference by tuple-style index or by name. Note that if the value it self is a tuple or <code>struct</code> you need to use the extended syntax
+to reference a member of the value, <code>#foo.0.0</code> or <code>#foo.0.name</code>. Methods have no ambiguity, <code>#foo.name()</code> is the same as <code>#foo.0.name()</code>.</p>
+<p>Not all properties can be referenced in <code>when</code> conditions, only inputs of type <code>impl IntoVar&lt;T&gt;</code> and <code>impl IntoValue&lt;T&gt;</code> are
+allowed, attempting to reference a different kind of input generates a compile error.</p>
+<h4 id="variable-reference"><a class="doc-anchor" href="#variable-reference">§</a>Variable Reference</h4>
+<p>Other variable can also be referenced, context variables or any locally declared variable can be referenced. Like with properties
+the variable value is inserted in the expression as a reference so you may need to deref in case the var is a simple <a href="https://doc.rust-lang.org/1.77.1/core/marker/trait.Copy.html" title="trait core::marker::Copy"><code>Copy</code></a> value.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">context_var! </span>{
+    <span class="kw">pub static </span>FOO_VAR: Vec&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; = <span class="macro">vec!</span>[];
+    <span class="kw">pub static </span>BAR_VAR: bool = <span class="bool-val">false</span>;
+}
+
+background_color = colors::RED;
+when !<span class="kw-2">*</span>#{BAR_VAR} &amp;&amp; #{FOO_VAR}.contains(<span class="kw-2">&amp;</span><span class="string">"green"</span>) {
+    background_color = colors::GREEN;
+}</code></pre></div>
+<h3 id="when-assigns"><a class="doc-anchor" href="#when-assigns">§</a>When Assigns</h3>
+<p>Inside the <code>when</code> block a list of property assigns is expected, most properties can be assigned, but <code>impl IntoValue&lt;T&gt;</code> properties cannot,
+you also cannot <code>unset!</code> in when assigns, a compile time error happens if the property cannot be assigned.</p>
+<p>On instantiation a single instance of the property will be generated, the parameters will track the when expression state and update
+to the value assigned when it is <code>true</code>. When no block is <code>true</code> the value assigned to the property outside <code>when</code> blocks is used, or the property default value. When more then one block is <code>true</code> the <em>last</em> one sets the value.</p>
+<h4 id="default-values"><a class="doc-anchor" href="#default-values">§</a>Default Values</h4>
+<p>A when assign can be defined by a property without setting a default value, during instantiation if the property declaration has
+a default value it is used, or if the property was later assigned a value it is used as <em>default</em>, if it is not possible to generate
+a default value the property is not instantiated and the when assign is not used.</p>
+<p>The same apply for properties referenced in the condition expression, note that all <code>is_state</code> properties have a default value so
+it is more rare that a default value is not available. If a condition property cannot be generated the entire when block is ignored.</p>
+</div></details></section></div></main></body></html>

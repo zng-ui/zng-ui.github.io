@@ -1,0 +1,154 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Expands a struct to a widget struct and macro."><title>widget in zng::widget - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc attr"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::widget</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Attribute Macro <a href="../index.html">zng</a>::<wbr><a href="index.html">widget</a>::<wbr><a class="attr" href="#">widget</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_app_proc_macros/lib.rs.html#63">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>#[widget]</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Expands a struct to a widget struct and macro.</p>
+<p>Each widget is a struct and macro pair of the same name that builds a custom widget using <a href="builder/struct.WidgetBuilder.html" title="struct zng::widget::builder::WidgetBuilder"><code>WidgetBuilder</code></a>. Widgets
+<em>inherit</em> from one other widget and can also inherit multiple mix-ins. Widgets can have intrinsic nodes, default properties
+and can build to a custom output type.</p>
+<p>Properties can be strongly associated with the widget using the <code>#[property(.., widget_impl(Widget))]</code> directive, existing properties
+can be implemented for the widget using the <a href="macro.widget_impl.html" title="macro zng::widget::widget_impl"><code>widget_impl!</code></a> macro.</p>
+<h2 id="attribute"><a class="doc-anchor" href="#attribute">§</a>Attribute</h2>
+<p>The widget attribute must be placed in a <code>struct Name(Parent);</code> declaration, only struct following the exact pattern are allowed,
+different struct syntaxes will generate a compile error.</p>
+<p>The attribute requires one argument, it must be a macro style <code>$crate</code> path to the widget struct, this is used in the generated macro
+to find the struct during instantiation. The path must be to the <em>public</em> path to the struct, that is, the same path that will be used
+to import the widget. After the required widget path <a href="#custom-rules">custom rules</a> for the generated macro can be declared.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="doccomment">/// Minimal widget.
+</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::Foo</span>)]
+</span><span class="kw">pub struct </span>Foo(WidgetBase);</code></pre></div>
+<h2 id="inherit"><a class="doc-anchor" href="#inherit">§</a>Inherit</h2>
+<p>The widget struct field must be the parent widget type. All widgets inherit from another or the
+<a href="struct.WidgetBase.html" title="struct zng::widget::WidgetBase"><code>WidgetBase</code></a>, the parent widgets intrinsic properties and nodes are all included in the new widget. The intrinsic
+properties are included by deref, the new widget will dereference to the parent widget, during widget build auto-deref will select
+the property methods first, this mechanism even allows for property overrides.</p>
+<h2 id="intrinsic"><a class="doc-anchor" href="#intrinsic">§</a>Intrinsic</h2>
+<p>The widget struct can define a method <code>widget_intrinsic</code> that includes custom build actions in the <a href="builder/struct.WidgetBuilder.html" title="struct zng::widget::builder::WidgetBuilder"><code>WidgetBuilder</code></a>, this special
+method will be called once for the widget. The same method is also called for the inherited widgets.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[widget(<span class="macro-nonterminal">$crate::Foo</span>)]
+</span><span class="kw">pub struct </span>Foo(WidgetBase);
+
+<span class="kw">impl </span>Foo {
+    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.widget_builder().push_build_action(|b| {
+            <span class="comment">// push_intrinsic, capture_var.
+        </span>});
+    }
+}</code></pre></div>
+<p>The example above demonstrates the intrinsic method used to <a href="builder/struct.WidgetBuilder.html#method.push_build_action" title="method zng::widget::builder::WidgetBuilder::push_build_action"><code>push_build_action</code></a>. This is the primary mechanism for widgets to define their
+own behavior that does not depend on properties. Note that the widget inherits from <a href="struct.WidgetBase.html" title="struct zng::widget::WidgetBase"><code>WidgetBase</code></a>, during instantiation
+of <code>Foo!</code> the base <code>widget_intrinsic</code> is called first, then the <code>Foo!</code> <code>widget_intrinsic</code> is called.</p>
+<p>The method does not need to be <code>pub</code>, and it is not required.</p>
+<h2 id="build"><a class="doc-anchor" href="#build">§</a>Build</h2>
+<p>The widget struct can define a method that builds the final widget instance.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[widget(<span class="macro-nonterminal">$crate::Foo</span>)]
+</span><span class="kw">pub struct </span>Foo(WidgetBase);
+
+<span class="kw">impl </span>Foo {
+    <span class="doccomment">/// Custom build.
+    </span><span class="kw">pub fn </span>widget_build(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw">impl </span>UiNode {
+        <span class="macro">println!</span>(<span class="string">"on build!"</span>);
+        WidgetBase::widget_build(<span class="self">self</span>)
+    }
+}</code></pre></div>
+<p>The build method must have the same visibility as the widget, and can define its own
+return type, this is the widget instance type. If the build method is not defined the inherited parent build method is used.</p>
+<p>Unlike the <a href="#intrinsic">intrinsic</a> method, the widget only has one <code>widget_build</code>, if defined it overrides the parent
+<code>widget_build</code>. Most widgets don’t define their own build, leaving it to be inherited from <a href="struct.WidgetBase.html" title="struct zng::widget::WidgetBase"><code>WidgetBase</code></a>. The base instance type
+is an opaque <code>impl UiNode</code>.</p>
+<p>Normal widgets must implement <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a>, otherwise they cannot be used as child of other widgets.
+The widget outer-node also must implement the widget context, to ensure that the widget is correctly placed in the UI tree.
+Note that you can still use the parent type build implementation, so even if you need
+to run code on build or define a custom type you don’t need to deref to the parent type to build.</p>
+<h2 id="defaults"><a class="doc-anchor" href="#defaults">§</a>Defaults</h2>
+<p>The <a href="macro.widget_set.html" title="macro zng::widget::widget_set"><code>widget_set!</code></a> macro can be used inside <code>widget_intrinsic</code> to set properties and when conditions that are applied on the widget by default,
+if not overridden by derived widgets or the widget instance. During the call to <code>widget_intrinsic</code> the <code>self.importance()</code> value is
+<a href="builder/struct.Importance.html#associatedconstant.WIDGET" title="associated constant zng::widget::builder::Importance::WIDGET"><code>Importance::WIDGET</code></a>, after it is changed to <a href="builder/struct.Importance.html#associatedconstant.INSTANCE" title="associated constant zng::widget::builder::Importance::INSTANCE"><code>Importance::INSTANCE</code></a>, so just by setting properties in <code>widget_intrinsic</code> they
+will have less importance allowing for the override mechanism to replace them.</p>
+<h2 id="impl-properties"><a class="doc-anchor" href="#impl-properties">§</a>Impl Properties</h2>
+<p>The <a href="macro.widget_impl.html" title="macro zng::widget::widget_impl"><code>widget_impl!</code></a> macro can be used inside a <code>impl WgtIdent { }</code> block to strongly associate a property with the widget,
+and the <a href="attr.property.html" title="attr zng::widget::property"><code>property</code></a> attribute has a <code>widget_impl(WgtIdent)</code> directive that also strongly associates a property with the widget.</p>
+<p>These two mechanisms can be used to define properties for the widget, the impl properties don’t need to be imported and are
+always selected over other properties of the same name. They also appear in the widget documentation and can have a distinct
+visual in IDEs as they are represented by immutable methods while standalone properties are represented by mutable trait methods.</p>
+<p>As a general rule only properties that are captured by the widget, or only work with the widget, or have an special meaning in the widget
+are implemented like this, standalone properties that can be used in any widget are not implemented.</p>
+<h2 id="generated-macro"><a class="doc-anchor" href="#generated-macro">§</a>Generated Macro</h2>
+<p>The generated widget macro has the same syntax as <a href="macro.widget_set.html" title="macro zng::widget::widget_set"><code>widget_set!</code></a>, except that is also starts the widget and builds it at the end.</p>
+<p>This widget macro call:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>wgt = <span class="macro">Foo! </span>{
+    id = <span class="string">"foo"</span>;
+};</code></pre></div>
+<p>Expands to this:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>wgt = {
+    <span class="kw">let </span><span class="kw-2">mut </span>wgt = Foo::widget_new();
+    <span class="macro">widget_set! </span>{
+        <span class="kw-2">&amp;mut </span>wgt;
+        id = <span class="string">"foo"</span>;
+    }
+    wgt.widget_build()
+};</code></pre></div>
+<h5 id="custom-rules"><a class="doc-anchor" href="#custom-rules">§</a>Custom Rules</h5>
+<p>You can declare custom rules for the widget macro, this can be used to declare custom shorthand syntax for the widget.</p>
+<p>The custom rules are declared inside braces after the widget path in the widget attribute. The syntax is similar to <code>macro_rules!</code>
+rules, but the expanded tokens are the direct input of the normal widget expansion.</p>
+<div class="example-wrap"><pre class="language-txt"><code>(&lt;rule&gt;) =&gt; { &lt;init&gt; };
+</code></pre></div>
+<p>The <code>&lt;rule&gt;</code> is any macro pattern rule, the <code>&lt;init&gt;</code> is the normal widget init code that the rule expands to.</p>
+<p>Note that custom rules are not inherited, they apply only to the declaring widget macro, inherited widgets must replicate
+the rules if desired.</p>
+<p>Example of a widget that declares a shorthand syntax to implicitly set the <code>id</code> property:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[widget(<span class="macro-nonterminal">$crate::Foo </span>{
+    (<span class="macro-nonterminal">$id</span>:expr) =&gt; {
+        id = <span class="macro-nonterminal">$id</span>;
+    };
+})]
+</span><span class="kw">pub struct </span>Foo(WidgetBase);
+
+<span class="kw">let </span>wgt = <span class="macro">Foo!</span>(<span class="string">"foo"</span>);</code></pre></div>
+<p>The macro instance above is equivalent to:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>wgt = <span class="macro">Foo! </span>{
+    id = <span class="string">"foo"</span>;
+};</code></pre></div>
+<h5 id="limitations"><a class="doc-anchor" href="#limitations">§</a>Limitations</h5>
+<p>The expanded tokens can only be a recursive input for the same widget macro, you can’t expand to a different widget.</p>
+<p>Some rules are intercepted by the default widget rules:</p>
+<ul>
+<li><code>$(#[$attr:meta])* $($property:ident)::+ = $($rest:tt)*</code>, blocks all custom <code>$ident = $tt*</code> patterns.</li>
+<li><code>$(#[$attr:meta])* when $($rest:tt)*</code>, blocks all custom <code>when $tt*</code> patterns.</li>
+</ul>
+<p>Note that the default single property shorthand syntax is not blocked, for example <code>Text!(font_size)</code> will match
+the custom shorthand rule and try to set the <code>txt</code> with the <code>font_size</code> variable, without the shorthand it would create a widget without
+<code>txt</code> that sets <code>font_size</code>. So a custom rule <code>$p:expr</code> is only recommended for widgets that have a property of central importance.</p>
+<h2 id="widget-type"><a class="doc-anchor" href="#widget-type">§</a>Widget Type</h2>
+<p>A public associated function <code>widget_type</code> is also generated for the widget, it returns a <a href="builder/struct.WidgetType.html" title="struct zng::widget::builder::WidgetType"><code>WidgetType</code></a> instance that describes the
+widget type. Note that this is not the widget instance type, only the struct and macro type. If compiled with the <code>&quot;inspector&quot;</code> feature
+the type is also available in the widget info.</p>
+<h2 id="see-also"><a class="doc-anchor" href="#see-also">§</a>See Also</h2>
+<p>See the <a href="struct.WidgetBase.html" title="struct zng::widget::WidgetBase"><code>WidgetBase</code></a>, <a href="builder/struct.WidgetBuilder.html" title="struct zng::widget::builder::WidgetBuilder"><code>WidgetBuilder</code></a>, <a href="builder/struct.WidgetBuilding.html" title="struct zng::widget::builder::WidgetBuilding"><code>WidgetBuilding</code></a>, <a href="builder/struct.NestGroup.html" title="struct zng::widget::builder::NestGroup"><code>NestGroup</code></a> and <a href="builder/struct.Importance.html" title="struct zng::widget::builder::Importance"><code>Importance</code></a> for more details.</p>
+<script>
+// hide re-exported docs
+let me = document.currentScript;
+document.addEventListener("DOMContentLoaded", function() {
+    while(me.nextElementSibling !== null) {
+        me.nextElementSibling.remove();
+    }
+});
+</script>
+<p>Expands a struct to a widget and macro.</p>
+<h2 id="full-documentation"><a class="doc-anchor" href="#full-documentation">§</a>Full Documentation</h2>
+<p>Read the documentation in the <code>zng::widget::widget</code> page.</p>
+</div></details></section></div></main></body></html>

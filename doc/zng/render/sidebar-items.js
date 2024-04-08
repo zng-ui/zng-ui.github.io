@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FrameValue","ImageRendering","RepeatMode"],"struct":["ClipBuilder","FontSynthesis","FrameBuilder","FrameId","FrameUpdate","FrameValueKey","FrameValueUpdate","HitTestBuilder","HitTestClipBuilder","ReferenceFrameId","ReuseRange","SpatialFrameId","StaticSpatialFrameId"]};

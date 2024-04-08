@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="App extensions, context, events and commands API."><title>zng::app - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module app</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#statics">Statics</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">app</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/app.rs.html#1-421">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>App extensions, context, events and commands API.</p>
+<h2 id="runtime"><a class="doc-anchor" href="#runtime">§</a>Runtime</h2>
+<p>A typical app instance has two processes, the initial process called the <em>app-process</em>, and a second process called the
+<em>view-process</em>. The app-process implements the event loop and updates, the view-process implements the platform integration and
+renderer, the app-process controls the view-process, most of the time app implementers don’t interact directly with it, except
+at the start where the view-process is spawned.</p>
+<p>The reason for this dual process architecture is mostly for resilience, the unsafe interactions with the operating system and
+graphics driver are isolated in a different process, in case of crashes the view-process is respawned automatically and
+all windows are recreated. It is possible to run the app in a single process, in this case the view runs in the main thread
+and the app main loop in another.</p>
+<h3 id="view-process"><a class="doc-anchor" href="#view-process">§</a>View-Process</h3>
+<p>To simplify distribution the view-process is an instance of the same app executable, the view-process crate provides
+and <code>init</code> function that does nothing the process is not the view-process or takes over execution if it is, never returning.</p>
+<p>On the first instance of the app executable the <code>init</code> function does nothing, the app init spawns a second process marked as
+the view-process, on this second instance the init function never returns, for this reason the function
+must be called early in main, all code before the <code>init</code> call runs in both the app and view processes.</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+zng = { version = &quot;0.2.2&quot;, features = [&quot;view_prebuilt&quot;] }
+</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main() {
+    app_and_view();
+    zng::view_process::prebuilt::init(); <span class="comment">// init only returns if it is not called in the view-process.
+    </span>app();
+}
+
+<span class="kw">fn </span>app_and_view() {
+    <span class="comment">// code here runs in the app-process and view-process.
+</span>}
+
+<span class="kw">fn </span>app() {
+    <span class="comment">// code here only runs in the app-process.
+
+    </span>APP.defaults().run(<span class="kw">async </span>{
+        <span class="comment">// ..
+    </span>})
+}</code></pre></div>
+<h3 id="same-process"><a class="doc-anchor" href="#same-process">§</a>Same Process</h3>
+<p>You can also run the view in the same process, this mode of execution is slightly more efficient, but
+your app will not be resilient to crashes caused by the operating system or graphics driver, the app code
+will also run in a different thread, not the main.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main() {
+    zng::view_process::prebuilt::run_same_process(app);
+}
+
+<span class="kw">fn </span>app() {
+    <span class="comment">// code here runs in a different thread, the main thread becomes the view.
+    </span>APP.defaults().run(<span class="kw">async </span>{
+        <span class="comment">// ..
+    </span>})
+}</code></pre></div>
+<h2 id="headless"><a class="doc-anchor" href="#headless">§</a>Headless</h2>
+<p>The app can also run <em>headless</em>, where no window is actually created, optionally with real rendering.
+This mode is useful for running integration tests, or for rendering images.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">let </span><span class="kw-2">mut </span>app = APP.defaults().run_headless(<span class="comment">/* with_renderer: */ </span><span class="bool-val">false</span>);
+app.run_window(<span class="kw">async </span>{
+    <span class="macro">Window! </span>{
+        child = <span class="macro">Text!</span>(<span class="string">"Some text"</span>);
+        auto_size = <span class="bool-val">true</span>;
+
+        render_mode = window::RenderMode::Software;
+        frame_capture_mode = window::FrameCaptureMode::Next;
+
+        on_frame_image_ready = <span class="macro">async_hn!</span>(|args: window::FrameImageReadyArgs| {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(img) = args.frame_image {
+                <span class="comment">// if the app runs with `run_headless(/* with_renderer: */ true)` an image is captured
+                // and saved here.
+                </span>img.save(<span class="string">"screenshot.png"</span>).<span class="kw">await</span>.unwrap();
+            }
+
+            <span class="comment">// close the window, causing the app to exit.
+            </span>WINDOW.close();
+        });
+    }
+});</code></pre></div>
+<p>You can also run multiple headless apps in the same process, one per thread, if the crate is build using the <code>&quot;multi_app&quot;</code> feature.</p>
+<h2 id="app-extension"><a class="doc-anchor" href="#app-extension">§</a>App Extension</h2>
+<p>Apps can be extended to provide new services and events, in fact all default services and events are implemented as extensions
+loaded by <a href="../struct.APP.html#method.defaults" title="method zng::APP::defaults"><code>APP.defaults()</code></a>. The app extension API is <a href="trait.AppExtension.html" title="trait zng::app::AppExtension"><code>AppExtension</code></a>. Usually extensions are named with suffix <code>Manager</code>, but
+that is not a requirement.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::{app::{AppExtended, AppExtension}, APP};
+
+<span class="attr">#[derive(Default)]
+</span><span class="kw">pub struct </span>HelloManager {}
+<span class="kw">impl </span>AppExtension <span class="kw">for </span>HelloManager {
+    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">println!</span>(<span class="string">"Hello init!"</span>);
+    }
+
+    <span class="kw">fn </span>update_preview(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">println!</span>(<span class="string">"Hello before UI!"</span>);
+    }
+
+    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">println!</span>(<span class="string">"Hello after UI!"</span>);
+    }
+}
+
+<span class="kw">pub fn </span>app() -&gt; AppExtended&lt;<span class="kw">impl </span>AppExtension&gt; {
+    APP.defaults().extend(HelloManager::default())
+}</code></pre></div>
+<h3 id="services"><a class="doc-anchor" href="#services">§</a>Services</h3>
+<p>App services are defined by convention, there is no service trait or struct. Proper service implementations follow
+these rules:</p>
+<h5 id="app-services-are-an-unit-struct-named-like-a-static"><a class="doc-anchor" href="#app-services-are-an-unit-struct-named-like-a-static">§</a>App services are an unit struct named like a static</h5>
+<p>This is because services are a kind of <em>singleton</em>. The service API is implemented as methods on the service struct.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="kw">pub struct </span>SCREAMING_CASE;
+<span class="kw">impl </span>SCREAMING_CASE {
+    <span class="kw">pub fn </span>state(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+    }
+}</code></pre></div>
+<p>Note that you need to suppress a lint if the service name has more then one word.</p>
+<p>Service state and config methods should prefer variables over direct values. The use of variables allows the service state
+to be plugged directly into the UI. Async operations should prefer using <a href="../var/type.ResponseVar.html" title="type zng::var::ResponseVar"><code>ResponseVar&lt;R&gt;</code></a> over <code>async</code> methods for
+the same reason.</p>
+<h5 id="app-services-lifetime-is-the-current-app-lifetime"><a class="doc-anchor" href="#app-services-lifetime-is-the-current-app-lifetime">§</a>App services lifetime is the current app lifetime</h5>
+<p>Unlike a simple singleton app services must only live for the duration of the app and must support
+multiple parallel instances if built with the <code>&quot;multi_app&quot;</code> feature. You can use private
+<a href="macro.app_local.html" title="macro zng::app::app_local"><code>app_local!</code></a> static variables as backing storage to fulfill this requirement.</p>
+<p>A common pattern in the zng services is to name the app locals with a <code>_SV</code> suffix.</p>
+<p>Services do not expose the app local locking, all state output is cloned the state is only locked
+for the duration of the service method call.</p>
+<h5 id="app-services-dont-change-public-state-mid-update"><a class="doc-anchor" href="#app-services-dont-change-public-state-mid-update">§</a>App services don’t change public state mid update</h5>
+<p>All widgets using the service during the same update see the same state. State change requests are scheduled
+for the next update, just like variable updates or event notifications. Services also request
+an <a href="../update/struct.UPDATES.html#method.update" title="method zng::update::UPDATES::update"><code>UPDATES.update</code></a> after scheduling to wake-up the app in case the service request was made from a <a href="../task/index.html" title="mod zng::task"><code>task</code></a> thread.</p>
+<p>This is even true for the <a href="struct.INSTANT.html" title="struct zng::app::INSTANT"><code>INSTANT</code></a> service, although this can be configured for this service using <a href="../../zng_app/struct.APP.html#method.pause_time_for_update" title="method zng_app::APP::pause_time_for_update"><code>APP.pause_time_for_update</code></a>.</p>
+<h4 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h4>
+<p>Fulfilling service requests is where the <a href="trait.AppExtension.html" title="trait zng::app::AppExtension"><code>AppExtension</code></a> comes in, it is possible to declare a simple standalone
+service using only variables, <code>Event::on_event</code> and <code>UPDATES.run_hn_once</code>, but an app extension is more efficient
+and more easy to implement.</p>
+<p>If the service request can fail or be delayed it is common for the request method to return a <a href="../var/type.ResponseVar.html" title="type zng::var::ResponseVar"><code>ResponseVar&lt;R&gt;</code></a>
+that is updated once the request is finished. You can also make the method <code>async</code>, but a response var is superior
+because it can be plugged directly into any UI property, and it can still be awaited using the variable async methods.</p>
+<p>If the service request cannot fail and it is guaranteed to affect an observable change in the service state in the
+next update a response var is not needed.</p>
+<p>The example below demonstrates an app extension implementation that provides a service.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::{prelude_wgt::<span class="kw-2">*</span>, app::AppExtension};
+
+<span class="doccomment">/// Foo service.
+</span><span class="kw">pub struct </span>FOO;
+
+<span class="kw">impl </span>FOO {
+    <span class="doccomment">/// Foo read-write var.
+    </span><span class="kw">pub fn </span>config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        FOO_SV.read().config.clone()
+    }
+
+    <span class="doccomment">/// Foo request.
+    </span><span class="kw">pub fn </span>request(<span class="kw-2">&amp;</span><span class="self">self</span>, request: char) -&gt; ResponseVar&lt;char&gt; {
+        UPDATES.update(<span class="prelude-val">None</span>);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>foo = FOO_SV.write();
+        <span class="kw">let </span>(responder, response) = response_var();
+        foo.requests.push((request, responder));
+        response
+    }
+}
+
+<span class="kw">struct </span>FooService {
+    config: ArcVar&lt;bool&gt;,
+    requests: Vec&lt;(char, ResponderVar&lt;char&gt;)&gt;,
+}
+
+<span class="macro">app_local! </span>{
+    <span class="kw">static </span>FOO_SV: FooService = FooService { config: var(<span class="bool-val">false</span>), requests: <span class="macro">vec!</span>[] };
+}
+
+<span class="doccomment">/// Foo app extension.
+///
+/// # Services
+///
+/// Services provided by this extension.
+///
+/// * [`FOO`]
+</span><span class="attr">#[derive(Default)]
+</span><span class="kw">pub struct </span>FooManager { }
+
+<span class="kw">impl </span>AppExtension <span class="kw">for </span>FooManager {
+    <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">let </span><span class="kw-2">mut </span>foo = FOO_SV.write();
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(cfg) = foo.config.get_new() {
+            <span class="macro">println!</span>(<span class="string">"foo cfg={cfg}"</span>);
+        }
+
+        <span class="kw">for </span>(request, responder) <span class="kw">in </span>foo.requests.drain(..) {
+            <span class="macro">println!</span>(<span class="string">"foo request {request:?}"</span>);
+            responder.respond(request);
+        }
+    }
+}</code></pre></div>
+<p>Note that in the example requests are processed in the <a href="trait.AppExtension.html#method.update" title="method zng::app::AppExtension::update"><code>AppExtension::update</code></a> update that is called
+after all widgets have had a chance to make requests. Requests can also be made from parallel <a href="../task/index.html" title="mod zng::task"><code>task</code></a> threads so
+the service also requests an <a href="../update/struct.UPDATES.html#method.update" title="method zng::update::UPDATES::update"><code>UPDATES.update</code></a> just in case there is no update running. If you expect to receive many
+requests from parallel tasks you can also process requests in the <a href="trait.AppExtension.html#method.update" title="method zng::app::AppExtension::update"><code>AppExtension::update</code></a> instead, but there is probably
+little practical difference.</p>
+<h2 id="init--main-loop"><a class="doc-anchor" href="#init--main-loop">§</a>Init &amp; Main Loop</h2>
+<p>A headed app initializes in this sequence:</p>
+<ol>
+<li><a href="trait.AppExtension.html#method.register" title="method zng::app::AppExtension::register"><code>AppExtension::register</code></a> is called.</li>
+<li><a href="trait.AppExtension.html#method.enable_device_events" title="method zng::app::AppExtension::enable_device_events"><code>AppExtension::enable_device_events</code></a> is queried.</li>
+<li>Spawn view-process.</li>
+<li><a href="trait.AppExtension.html#method.init" title="method zng::app::AppExtension::init"><code>AppExtension::init</code></a> is called.</li>
+<li>Schedule the app run future to run in the first preview update.</li>
+<li>Does <a href="#updates-loop">updates loop</a>.</li>
+<li>Does <a href="#update-events-loop">update events loop</a>.</li>
+<li>Does <a href="#main-loop">main loop</a>.</li>
+</ol>
+<h5 id="main-loop"><a class="doc-anchor" href="#main-loop">§</a>Main Loop</h5>
+<p>The main loop coordinates view-process events, timers, app events and updates. There is no scheduler, update and event requests
+are captured and coalesced to various buffers that are drained in known sequential order. App extensions update one at a time
+in the order they are registered. Windows and widgets update in parallel by default, this is controlled by <a href="../window/struct.WINDOWS.html#method.parallel" title="method zng::window::WINDOWS::parallel"><code>WINDOWS.parallel</code></a> and <a href="../widget/fn.parallel.html" title="fn zng::widget::parallel"><code>parallel</code></a>.</p>
+<ol>
+<li>Sleep if there are not pending events or updates.
+<ul>
+<li>If the view-process is busy blocks until it sends a message, this is a mechanism to stop the app-process
+from overwhelming the view-process.</li>
+<li>Block until a message is received, from the view-process or from other app threads.</li>
+<li>If there are <a href="../timer/struct.TIMERS.html" title="struct zng::timer::TIMERS"><code>TIMERS</code></a> or <a href="../var/struct.VARS.html" title="struct zng::var::VARS"><code>VARS</code></a> animations the message block has a deadline to the nearest timer or animation frame.
+<ul>
+<li>Animations have a fixed frame-rate defined in <a href="../var/struct.VARS.html#method.frame_duration" title="method zng::var::VARS::frame_duration"><code>VARS.frame_duration</code></a>, it is 60 frames-per-second by default.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Calls elapsed timer handlers.</li>
+<li>Calls elapsed animation handlers.
+<ul>
+<li>These handlers mostly just request var updates are applied in the updates loop.</li>
+</ul>
+</li>
+<li>Does a <a href="#view-events-loop">view events loop</a>.</li>
+<li>Does an <a href="#updates-loop">updates loop</a>.</li>
+<li>Does an <a href="#update-events-loop">update events loop</a>.</li>
+<li>If the view-process is not busy does a <a href="#layout-loop-and-render">layout loop and render</a>.</li>
+<li>If exit was requested and not cancelled breaks the loop.
+<ul>
+<li>Exit is requested automatically when the last open window closes, this is controlled by <a href="../window/struct.WINDOWS.html#method.exit_on_last_close" title="method zng::window::WINDOWS::exit_on_last_close"><code>WINDOWS.exit_on_last_close</code></a>.</li>
+<li>Exit can also be requested using <a href="../struct.APP.html#method.exit" title="struct zng::APP"><code>APP.exit</code></a>.</li>
+</ul>
+</li>
+</ol>
+<h5 id="view-events-loop"><a class="doc-anchor" href="#view-events-loop">§</a>View Events Loop</h5>
+<p>All pending events send by the view-process are coalesced and notify sequentially.</p>
+<ol>
+<li>For each event in the received order (FIFO) that converts to a RAW event.
+<ol>
+<li>Calls <a href="trait.AppExtension.html#method.event_preview" title="method zng::app::AppExtension::event_preview"><code>AppExtension::event_preview</code></a>.</li>
+<li>Calls <a href="../event/struct.Event.html#method.on_pre_event" title="method zng::event::Event::on_pre_event"><code>Event::on_pre_event</code></a> handlers.</li>
+<li>Calls <a href="trait.AppExtension.html#method.event_ui" title="method zng::app::AppExtension::event_ui"><code>AppExtension::event_ui</code></a>.
+<ul>
+<li>Raw events don’t target any widget, but widgets can subscribe, subscribers receive the event in parallel by default.</li>
+</ul>
+</li>
+<li>Calls <a href="trait.AppExtension.html#method.event" title="method zng::app::AppExtension::event"><code>AppExtension::event</code></a>.</li>
+<li>Calls <a href="../event/struct.Event.html#method.on_event" title="method zng::event::Event::on_event"><code>Event::on_event</code></a> handlers.</li>
+<li>Does an <a href="#updates-loop">updates loop</a>.</li>
+</ol>
+</li>
+<li>Frame rendered raw event.
+<ul>
+<li>Same notification sequence as other view-events, just delayed.</li>
+</ul>
+</li>
+</ol>
+<h5 id="updates-loop"><a class="doc-anchor" href="#updates-loop">§</a>Updates Loop</h5>
+<p>The updates loop rebuilds info trees if needed , applies pending variable updates and hooks and collects event updates
+requested by the app.</p>
+<ol>
+<li>Takes info rebuild request flag.
+<ul>
+<li>Calls <a href="trait.AppExtension.html#method.info" title="method zng::app::AppExtension::info"><code>AppExtension::info</code></a> if needed.</li>
+<li>Windows and widgets that requested info (re)build are called.</li>
+<li>Info rebuild happens in parallel by default.</li>
+</ul>
+</li>
+<li>Takes events and updates requests.
+<ol>
+<li>Event hooks are called for new event requests.
+<ul>
+<li>Full event notification is delayed to after the updates loop.</li>
+</ul>
+</li>
+<li><a href="#var-updates-loop">var updates loop</a></li>
+<li>Calls <a href="trait.AppExtension.html#method.update_preview" title="method zng::app::AppExtension::update_preview"><code>AppExtension::update_preview</code></a> if any update was requested.</li>
+<li>Calls <a href="../update/struct.UPDATES.html#method.on_pre_update" title="method zng::update::UPDATES::on_pre_update"><code>UPDATES.on_pre_update</code></a> handlers if needed.</li>
+<li>Calls <a href="trait.AppExtension.html#method.update_ui" title="method zng::app::AppExtension::update_ui"><code>AppExtension::update_ui</code></a> if any update was requested.
+<ul>
+<li>Windows and widgets that requested update receive it here.</li>
+<li>All the pending updates are processed in one pass, all targeted widgets are visited once, in parallel by default.</li>
+</ul>
+</li>
+<li>Calls <a href="trait.AppExtension.html#method.update" title="method zng::app::AppExtension::update"><code>AppExtension::update</code></a> if any update was requested.</li>
+<li>Calls <a href="../update/struct.UPDATES.html#method.on_update" title="method zng::update::UPDATES::on_update"><code>UPDATES.on_update</code></a> handlers if needed.</li>
+</ol>
+</li>
+<li>The loop repeats immediately if any info rebuild or update was requested by update callbacks.
+<ul>
+<li>The loops breaks if it repeats over 1000 times.</li>
+<li>An error is logged with a trace the most frequent sources of update requests.</li>
+</ul>
+</li>
+</ol>
+<h5 id="var-updates-loop"><a class="doc-anchor" href="#var-updates-loop">§</a>Var Updates Loop</h5>
+<p>The variable updates loop applies pending modifications, calls hooks to update variable and bindings.</p>
+<ol>
+<li>Pending variable modifications are applied.</li>
+<li>Var hooks are called.
+<ul>
+<li>The mapping and binding mechanism is implemented using hooks.</li>
+</ul>
+</li>
+<li>The loop repeats until hooks have stopped modifying variables.
+<ul>
+<li>The loop breaks if it repeats over 1000 times.</li>
+<li>An error is logged if this happens.</li>
+</ul>
+</li>
+</ol>
+<h5 id="update-events-loop"><a class="doc-anchor" href="#update-events-loop">§</a>Update Events Loop</h5>
+<p>The update events loop notifies each event raised by the app code during previous updates.</p>
+<ol>
+<li>For each event in the request order (FIFO).
+<ol>
+<li>Calls <a href="trait.AppExtension.html#method.event_preview" title="method zng::app::AppExtension::event_preview"><code>AppExtension::event_preview</code></a>.</li>
+<li>Calls <a href="../event/struct.Event.html#method.on_pre_event" title="method zng::event::Event::on_pre_event"><code>Event::on_pre_event</code></a> handlers.</li>
+<li>Calls <a href="trait.AppExtension.html#method.event_ui" title="method zng::app::AppExtension::event_ui"><code>AppExtension::event_ui</code></a>.
+<ul>
+<li>Windows and widgets targeted by the event update receive it here.</li>
+<li>If the event targets multiple widgets they receive it in parallel by default.</li>
+</ul>
+</li>
+<li>Calls <a href="trait.AppExtension.html#method.event" title="method zng::app::AppExtension::event"><code>AppExtension::event</code></a>.</li>
+<li>Calls <a href="../event/struct.Event.html#method.on_event" title="method zng::event::Event::on_event"><code>Event::on_event</code></a> handlers.</li>
+<li>Does an <a href="#updates-loop">updates loop</a>.</li>
+</ol>
+</li>
+</ol>
+<h5 id="layout-loop-and-render"><a class="doc-anchor" href="#layout-loop-and-render">§</a>Layout Loop and Render</h5>
+<p>Layout and render requests are coalesced, multiple layout requests for the same widget update it once, multiple
+render requests become one frame, and if both render and render_update are requested for a window it will fully render.</p>
+<ol>
+<li>Take layout and render requests.</li>
+<li>Layout loop.
+<ol>
+<li>Calls <a href="trait.AppExtension.html#method.layout" title="method zng::app::AppExtension::layout"><code>AppExtension::layout</code></a>.
+<ul>
+<li>Windows and widgets that requested layout update in parallel by default.</li>
+</ul>
+</li>
+<li>Does an <a href="#updates-loop">updates loop</a>.</li>
+<li>Take layout and render requests, the loop repeats immediately if layout was requested again.
+<ul>
+<li>The loop breaks if it repeats over 1000 times.</li>
+<li>An error is logged with a trace the most frequent sources of update requests.</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>If render was requested, calls <a href="trait.AppExtension.html#method.render" title="method zng::app::AppExtension::render"><code>AppExtension::render</code></a>.
+<ul>
+<li>Windows and widgets that requested render (or render_update) do know in parallel by default.</li>
+<li>The render pass updates widget transforms and hit-test, generates a display list and sends it to the view-process.</li>
+</ul>
+</li>
+</ol>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>This module provides most of the app API needed to make and extend apps, some more advanced or experimental API
+may be available at the <a href="../../zng_app/index.html" title="mod zng_app"><code>zng_app</code></a> and <a href="../../zng_app_context/index.html" title="mod zng_app_context"><code>zng_app_context</code></a> base crates.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="raw_device_events/index.html" title="mod zng::app::raw_device_events">raw_device_events</a></div><div class="desc docblock-short">Input device hardware ID and events.</div></li></ul><h2 id="macros" class="section-header">Macros<a href="#macros" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.app_local.html" title="macro zng::app::app_local">app_local</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Declares new app local variable.</div></li><li><div class="item-name"><a class="macro" href="macro.context_local.html" title="macro zng::app::context_local">context_local</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Declares new app and context local variable.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.AppExtended.html" title="struct zng::app::AppExtended">AppExtended</a></div><div class="desc docblock-short">Application builder.</div></li><li><div class="item-name"><a class="struct" href="struct.AppExtensionInfo.html" title="struct zng::app::AppExtensionInfo">AppExtensionInfo</a></div><div class="desc docblock-short">Info about an app-extension.</div></li><li><div class="item-name"><a class="struct" href="struct.AppId.html" title="struct zng::app::AppId">AppId</a></div><div class="desc docblock-short">Identifies an app instance.</div></li><li><div class="item-name"><a class="struct" href="struct.AppLocal.html" title="struct zng::app::AppLocal">AppLocal</a></div><div class="desc docblock-short">An app local storage.</div></li><li><div class="item-name"><a class="struct" href="struct.AppScope.html" title="struct zng::app::AppScope">AppScope</a></div><div class="desc docblock-short">Represents an app lifetime, ends the app on drop.</div></li><li><div class="item-name"><a class="struct" href="struct.ContextLocal.html" title="struct zng::app::ContextLocal">ContextLocal</a></div><div class="desc docblock-short">Represents an <a href="struct.AppLocal.html" title="struct zng::app::AppLocal"><code>AppLocal&lt;T&gt;</code></a> value that can be temporarily overridden in a context.</div></li><li><div class="item-name"><a class="struct" href="struct.ContextValueSet.html" title="struct zng::app::ContextValueSet">ContextValueSet</a></div><div class="desc docblock-short">Identifies a selection of <a href="struct.LocalContext.html" title="struct zng::app::LocalContext"><code>LocalContext</code></a> values.</div></li><li><div class="item-name"><a class="struct" href="struct.DInstant.html" title="struct zng::app::DInstant">DInstant</a></div><div class="desc docblock-short">Duration elapsed since an epoch.</div></li><li><div class="item-name"><a class="struct" href="struct.Deadline.html" title="struct zng::app::Deadline">Deadline</a></div><div class="desc docblock-short">Represents a timeout instant.</div></li><li><div class="item-name"><a class="struct" href="struct.ExitRequestedArgs.html" title="struct zng::app::ExitRequestedArgs">ExitRequestedArgs</a></div><div class="desc docblock-short">Arguments for <a href="static.EXIT_REQUESTED_EVENT.html" title="static zng::app::EXIT_REQUESTED_EVENT"><code>EXIT_REQUESTED_EVENT</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.FullLocalContext.html" title="struct zng::app::FullLocalContext">FullLocalContext</a></div><div class="desc docblock-short">A local context that can be loaded cheaply.</div></li><li><div class="item-name"><a class="struct" href="struct.HeadlessApp.html" title="struct zng::app::HeadlessApp">HeadlessApp</a></div><div class="desc docblock-short">A headless app controller.</div></li><li><div class="item-name"><a class="struct" href="struct.INSTANT.html" title="struct zng::app::INSTANT">INSTANT</a></div><div class="desc docblock-short">Instant service.</div></li><li><div class="item-name"><a class="struct" href="struct.LocalContext.html" title="struct zng::app::LocalContext">LocalContext</a></div><div class="desc docblock-short">Tracks the current execution context.</div></li><li><div class="item-name"><a class="struct" href="struct.MappedRwLockReadGuardOwned.html" title="struct zng::app::MappedRwLockReadGuardOwned">MappedRwLockReadGuardOwned</a></div><div class="desc docblock-short">Represents a read guard for an <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> that owns a reference to it, mapped from another read guard.</div></li><li><div class="item-name"><a class="struct" href="struct.MappedRwLockWriteGuardOwned.html" title="struct zng::app::MappedRwLockWriteGuardOwned">MappedRwLockWriteGuardOwned</a></div><div class="desc docblock-short">Represents a write guard for an <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> that owns a reference to it, mapped from another read guard.</div></li><li><div class="item-name"><a class="struct" href="struct.ReadOnlyRwLock.html" title="struct zng::app::ReadOnlyRwLock">ReadOnlyRwLock</a></div><div class="desc docblock-short">Read-only wrapper on an <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> contextual value.</div></li><li><div class="item-name"><a class="struct" href="struct.RunOnDrop.html" title="struct zng::app::RunOnDrop">RunOnDrop</a></div><div class="desc docblock-short">Helper, runs a cleanup action once on drop.</div></li><li><div class="item-name"><a class="struct" href="struct.RwLockReadGuardOwned.html" title="struct zng::app::RwLockReadGuardOwned">RwLockReadGuardOwned</a></div><div class="desc docblock-short">Represents a read guard for an <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> that owns a reference to it.</div></li><li><div class="item-name"><a class="struct" href="struct.RwLockWriteGuardOwned.html" title="struct zng::app::RwLockWriteGuardOwned">RwLockWriteGuardOwned</a></div><div class="desc docblock-short">Represents a read guard for an <code>Arc&lt;RwLock&lt;T&gt;&gt;</code> that owns a reference to it.</div></li><li><div class="item-name"><a class="struct" href="struct.StaticAppId.html" title="struct zng::app::StaticAppId">StaticAppId</a></div><div class="desc docblock-short">Lazy inited <a href="struct.AppId.html" title="struct zng::app::AppId"><code>AppId</code></a>.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.AppControlFlow.html" title="enum zng::app::AppControlFlow">AppControlFlow</a></div><div class="desc docblock-short">Desired next step of app main loop.</div></li><li><div class="item-name"><a class="enum" href="enum.CaptureFilter.html" title="enum zng::app::CaptureFilter">CaptureFilter</a></div><div class="desc docblock-short">Defines a <a href="struct.LocalContext.html#method.capture_filtered" title="associated function zng::app::LocalContext::capture_filtered"><code>LocalContext::capture_filtered</code></a> filter.</div></li><li><div class="item-name"><a class="enum" href="enum.InstantMode.html" title="enum zng::app::InstantMode">InstantMode</a></div><div class="desc docblock-short">Defines how the <a href="struct.INSTANT.html#method.now" title="method zng::app::INSTANT::now"><code>INSTANT.now</code></a> value updates in the app.</div></li></ul><h2 id="statics" class="section-header">Statics<a href="#statics" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="static" href="static.EXIT_CMD.html" title="static zng::app::EXIT_CMD">EXIT_CMD</a></div><div class="desc docblock-short">Represents the app process <a href="../../zng_app/struct.APP.html#method.exit" title="method zng_app::APP::exit"><code>exit</code></a> request.</div></li><li><div class="item-name"><a class="static" href="static.EXIT_REQUESTED_EVENT.html" title="static zng::app::EXIT_REQUESTED_EVENT">EXIT_REQUESTED_EVENT</a></div><div class="desc docblock-short">Cancellable event raised when app process exit is requested.</div></li><li><div class="item-name"><a class="static" href="static.NEW_CMD.html" title="static zng::app::NEW_CMD">NEW_CMD</a></div><div class="desc docblock-short">Represents the <strong>new</strong> action.</div></li><li><div class="item-name"><a class="static" href="static.OPEN_CMD.html" title="static zng::app::OPEN_CMD">OPEN_CMD</a></div><div class="desc docblock-short">Represents the <strong>open</strong> action.</div></li><li><div class="item-name"><a class="static" href="static.SAVE_AS_CMD.html" title="static zng::app::SAVE_AS_CMD">SAVE_AS_CMD</a></div><div class="desc docblock-short">Represents the <strong>save-as</strong> action.</div></li><li><div class="item-name"><a class="static" href="static.SAVE_CMD.html" title="static zng::app::SAVE_CMD">SAVE_CMD</a></div><div class="desc docblock-short">Represents the <strong>save</strong> action.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.AppEventObserver.html" title="trait zng::app::AppEventObserver">AppEventObserver</a></div><div class="desc docblock-short">Observer for <a href="struct.HeadlessApp.html#method.update_observed" title="method zng::app::HeadlessApp::update_observed"><code>HeadlessApp::update_observed</code></a>.</div></li><li><div class="item-name"><a class="trait" href="trait.AppExtension.html" title="trait zng::app::AppExtension">AppExtension</a></div><div class="desc docblock-short">An app extension.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.on_new.html" title="fn zng::app::on_new">on_new</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On new command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_open.html" title="fn zng::app::on_open">on_open</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On open command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_new.html" title="fn zng::app::on_pre_new">on_pre_new</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_new.html"><code>on_new</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_open.html" title="fn zng::app::on_pre_open">on_pre_open</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_open.html"><code>on_open</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_save.html" title="fn zng::app::on_pre_save">on_pre_save</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_save.html"><code>on_save</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_save_as.html" title="fn zng::app::on_pre_save_as">on_pre_save_as</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_save_as.html"><code>on_save_as</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_save.html" title="fn zng::app::on_save">on_save</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On save command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_save_as.html" title="fn zng::app::on_save_as">on_save_as</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On save-as command.</div></li></ul></section></div></main></body></html>

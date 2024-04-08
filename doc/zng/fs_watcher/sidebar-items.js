@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["fs_event"],"static":["FS_CHANGES_EVENT"],"struct":["FsChange","FsChangeNoteHandle","FsChangesArgs","WATCHER","WatchFile","WatcherHandle","WriteFile"],"trait":["FsChangeNote","WatcherReadStatus","WatcherSyncStatus"]};

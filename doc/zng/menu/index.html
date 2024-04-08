@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Menu widgets, properties and other types."><title>zng::menu - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module menu</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">menu</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/menu.rs.html#1-116">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Menu widgets, properties and other types.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main_menu() -&gt; <span class="kw">impl </span>UiNode {
+    <span class="macro">Menu!</span>(<span class="macro">ui_vec!</span>[
+        <span class="macro">SubMenu!</span>(
+            <span class="string">"File"</span>,
+            <span class="macro">ui_vec!</span>[
+                <span class="macro">Button!</span>(zng::app::NEW_CMD.scoped(WINDOW.id())),
+                <span class="macro">Button!</span>(zng::app::OPEN_CMD.scoped(WINDOW.id())),
+                <span class="macro">Toggle! </span>{
+                    child = <span class="macro">Text!</span>(<span class="string">"Auto Save"</span>);
+                    checked = var(<span class="bool-val">true</span>);
+                },
+                <span class="macro">Hr!</span>(),
+                <span class="macro">SubMenu!</span>(
+                    <span class="string">"Recent"</span>,
+                    (<span class="number">0</span>..<span class="number">10</span>)
+                        .map(|i| <span class="macro">Button! </span>{ child = <span class="macro">Text!</span>(<span class="macro">formatx!</span>(<span class="string">"recent file {i}"</span>)) })
+                        .collect::&lt;UiNodeVec&gt;()
+                ),
+                <span class="macro">Hr!</span>(),
+                <span class="macro">Button!</span>(zng::app::EXIT_CMD),
+            ]
+        ),
+        <span class="macro">SubMenu!</span>(
+            <span class="string">"Help"</span>,
+            <span class="macro">ui_vec!</span>[<span class="macro">Button! </span>{
+                child = <span class="macro">Text!</span>(<span class="string">"About"</span>);
+                on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| { });
+            }]
+        ),
+    ])
+}
+
+<span class="macro">Window! </span>{
+    child_top = main_menu(), <span class="number">0</span>;
+    zng::app::on_new = <span class="macro">hn!</span>(|<span class="kw">_</span>| { });
+    zng::app::on_open = <span class="macro">hn!</span>(|<span class="kw">_</span>| { });
+    <span class="comment">// ..
+</span>}</code></pre></div>
+<p>The example above declares a <a href="struct.Menu.html" title="struct zng::menu::Menu"><code>Menu!</code></a> for a window, it demonstrates nested <a href="sub/struct.SubMenu.html" title="struct zng::menu::sub::SubMenu"><code>SubMenu!</code></a>,
+and menu items, <a href="../button/struct.Button.html" title="struct zng::button::Button"><code>Button!</code></a>,
+<a href="../toggle/struct.Toggle.html" title="struct zng::toggle::Toggle"><code>Toggle!</code></a> and <a href="../rule_line/hr/struct.Hr.html" title="struct zng::rule_line::hr::Hr"><code>Hr!</code></a>. There is no menu item widget,
+the <code>SubMenu!</code> widget re-styles button and toggle.</p>
+<h2 id="context-menu"><a class="doc-anchor" href="#context-menu">§</a>Context Menu</h2>
+<p>This module also provides a context menu. The example below declares a context menu for the window, it will show
+on context click, that is, by right-clicking the window, long pressing it or pressing the context menu key.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Window! </span>{
+    context_menu = <span class="macro">ContextMenu!</span>(<span class="macro">ui_vec!</span>[
+        <span class="macro">Button!</span>(zng::app::NEW_CMD.scoped(WINDOW.id())),
+        <span class="macro">Button!</span>(zng::app::OPEN_CMD.scoped(WINDOW.id())),
+        <span class="macro">Toggle! </span>{
+            child = <span class="macro">Text!</span>(<span class="string">"Auto Save"</span>);
+            checked = var(<span class="bool-val">true</span>);
+        },
+        <span class="macro">Hr!</span>(),
+        <span class="macro">SubMenu!</span>(<span class="string">"Help"</span>, <span class="macro">ui_vec!</span>[<span class="macro">Button! </span>{
+            child = <span class="macro">Text!</span>(<span class="string">"About"</span>);
+            on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| { });
+        }]),
+        <span class="macro">Hr!</span>(),
+        <span class="macro">Button!</span>(zng::app::EXIT_CMD),
+    ]);
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_wgt_menu/index.html" title="mod zng_wgt_menu"><code>zng_wgt_menu</code></a> for the full widget API.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="context/index.html" title="mod zng::menu::context">context</a></div><div class="desc docblock-short">Context menu widget and properties.</div></li><li><div class="item-name"><a class="mod" href="popup/index.html" title="mod zng::menu::popup">popup</a></div><div class="desc docblock-short">Sub-menu popup widget and properties.</div></li><li><div class="item-name"><a class="mod" href="sub/index.html" title="mod zng::menu::sub">sub</a></div><div class="desc docblock-short">Submenu widget and properties.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ButtonStyle.html" title="struct zng::menu::ButtonStyle">ButtonStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Style applied to all <a href="../button/struct.Button.html" title="struct zng::button::Button"><code>Button!</code></a> widgets inside <a href="struct.Menu.html" title="struct zng::menu::Menu"><code>Menu!</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.DefaultStyle.html" title="struct zng::menu::DefaultStyle">DefaultStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Default <a href="struct.Menu.html" title="struct zng::menu::Menu"><code>Menu!</code></a> style.</div></li><li><div class="item-name"><a class="struct" href="struct.Menu.html" title="struct zng::menu::Menu">Menu</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Menu root panel.</div></li><li><div class="item-name"><a class="struct" href="struct.ToggleStyle.html" title="struct zng::menu::ToggleStyle">ToggleStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Style applied to all <a href="../button/struct.Button.html" title="struct zng::button::Button"><code>Button!</code></a> widgets inside <a href="struct.Menu.html" title="struct zng::menu::Menu"><code>Menu!</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.TouchButtonStyle.html" title="struct zng::menu::TouchButtonStyle">TouchButtonStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Command button for touch.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.icon.html" title="fn zng::menu::icon">icon</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Menu item icon.</div></li><li><div class="item-name"><a class="fn" href="fn.icon_fn.html" title="fn zng::menu::icon_fn">icon_fn</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Menu item icon from widget function.</div></li><li><div class="item-name"><a class="fn" href="fn.panel_fn.html" title="fn zng::menu::panel_fn">panel_fn</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that generates the menu layout.</div></li><li><div class="item-name"><a class="fn" href="fn.shortcut_spacing.html" title="fn zng::menu::shortcut_spacing">shortcut_spacing</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Minimum space between a menu item child and the <a href="fn.shortcut_txt.html" title="fn zng::menu::shortcut_txt"><code>shortcut_txt</code></a> child.</div></li><li><div class="item-name"><a class="fn" href="fn.shortcut_txt.html" title="fn zng::menu::shortcut_txt">shortcut_txt</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Menu item shortcut text.</div></li><li><div class="item-name"><a class="fn" href="fn.style_fn.html" title="fn zng::menu::style_fn">style_fn</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Extends or replaces the widget style.</div></li></ul></section></div></main></body></html>

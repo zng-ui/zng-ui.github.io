@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["get_index","get_index_len","get_rev_index","is_even","is_first","is_last","is_odd"],"struct":["Row"]};

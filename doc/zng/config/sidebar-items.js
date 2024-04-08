@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ConfigStatus"],"struct":["CONFIG","FallbackConfig","MemoryConfig","RawConfigValue","ReadOnlyConfig","SwapConfig","SwitchConfig"],"trait":["AnyConfig","Config","ConfigValue","FallbackConfigReset"],"type":["ConfigKey","JsonConfig","RonConfig","TomlConfig","YamlConfig"]};

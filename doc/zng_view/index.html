@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="This crate is part of the `zng` project."><title>zng_view - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../static.files/favicon-2c020d218678b618.svg"></head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../zng_view/index.html">zng_view</a><span class="version">0.2.1</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#functions">Functions</a></li></ul></section></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../zng_view/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">zng_view</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/zng_view/lib.rs.html#1-2013">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><em>This crate is part of the <a href="https://github.com/zng-ui/zng"><code>zng</code></a> project.</em></p>
+<p>View-Process implementation using <a href="https://docs.rs/glutin/"><code>glutin</code></a>.</p>
+<p>This backend supports headed and headless apps.</p>
+<h2 id="usage"><a class="doc-anchor" href="#usage">§</a>Usage</h2>
+<p>First add this to your <code>Cargo.toml</code>:</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+zng = &quot;0.2.2&quot;
+zng-view = &quot;0.2.1&quot;
+</code></pre></div>
+<p>Then call <a href="fn.init.html" title="fn zng_view::init"><code>init</code></a> before any other code in <code>main</code> to setup a view-process that uses
+the same app executable:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main() {
+    zng_view::init();
+
+    APP.defaults().run_window(|ctx| {
+        <span class="macro">unimplemented!</span>()
+    })
+}</code></pre></div>
+<p>When the app is executed <code>init</code> setup its startup and returns, <code>run_window</code> gets called and
+internally starts the view-process, using the <code>init</code> setup. The current executable is started
+again, this time configured to be a view-process, <code>init</code> detects this and highjacks the process
+<strong>never returning</strong>.</p>
+<h2 id="software-backend"><a class="doc-anchor" href="#software-backend">§</a>Software Backend</h2>
+<p>The <code>webrender/swgl</code> software renderer can be used as fallback when no native OpenGL 3.2 driver is available, to build it
+the feature <code>&quot;software&quot;</code> must be enabled (it is by default) and on Windows MSVC the <code>clang-cl</code> dependency must be installed and
+associated with the <code>CC</code> and <code>CXX</code> environment variables, if requirements are not met a warning is emitted and the build fails.</p>
+<p>To install dependencies on Windows:</p>
+<ul>
+<li>Install LLVM (<a href="https://releases.llvm.org/">https://releases.llvm.org/</a>) and add it to the <code>PATH</code> variable:</li>
+</ul>
+<div class="example-wrap"><pre class="language-bat"><code>setx PATH %PATH%;C:\Program Files\LLVM\bin
+</code></pre></div>
+<ul>
+<li>Associate <code>CC</code> and <code>CXX</code> with <code>clang-cl</code>:</li>
+</ul>
+<div class="example-wrap"><pre class="language-bat"><code>setx CC clang-cl
+setx CXX clang-cl
+</code></pre></div>
+<p>Note that you may need to reopen the terminal for the environment variables to be available (setx always requires this).</p>
+<h2 id="pre-built"><a class="doc-anchor" href="#pre-built">§</a>Pre-built</h2>
+<p>There is a pre-built release of this crate, <a href="https://docs.rs/zng-view-prebuilt/"><code>zng-view-prebuilt</code></a>, it works as a drop-in replacement</p>
+<p>In the <code>Cargo.toml</code> file:</p>
+<div class="example-wrap"><pre class="language-toml"><code>zng-view-prebuilt = &quot;0.1&quot;
+</code></pre></div>
+<p>Then in the <code>main.rs</code> file:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_view_prebuilt <span class="kw">as </span>zng_view;
+
+<span class="kw">fn </span>main() {
+    zng_view::init();
+     
+    <span class="comment">// APP.defaults().run ..
+</span>}</code></pre></div>
+<p>The pre-built crate includes the <code>&quot;software&quot;</code> and <code>&quot;ipc&quot;</code> features, in fact <code>ipc</code> is required, even for running on the same process,
+you can also configure where the pre-build library is installed, see the <a href="https://docs.rs/zng-view-prebuilt/"><code>zng-view-prebuilt</code></a> documentation for details.</p>
+<p>The pre-build crate does not support <a href="extensions/index.html" title="mod zng_view::extensions"><code>extensions</code></a>.</p>
+<h2 id="api-extensions"><a class="doc-anchor" href="#api-extensions">§</a>API Extensions</h2>
+<p>This implementation of the view API provides one extension:</p>
+<ul>
+<li><code>&quot;zng-view.webrender_debug&quot;</code>: <code>{ flags: DebugFlags, profiler_ui: String }</code>, sets Webrender debug flags.
+<ul>
+<li>The <code>zng-wgt-webrender-debug</code> implements a property that uses this extension.</li>
+</ul>
+</li>
+</ul>
+<p>You can also inject your own extensions, see the <a href="extensions/index.html" title="mod zng_view::extensions"><code>extensions</code></a> module for more details.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="extensions/index.html" title="mod zng_view::extensions">extensions</a></div><div class="desc docblock-short">Extensions API</div></li><li><div class="item-name"><a class="mod" href="gleam/index.html" title="mod zng_view::gleam">gleam</a></div><div class="desc docblock-short">OpenGL bindings used by Webrender.</div></li><li><div class="item-name"><a class="mod" href="webrender/index.html" title="mod zng_view::webrender">webrender</a></div><div class="desc docblock-short">Webrender build used in the view-process.
+A GPU based renderer for the web.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.init.html" title="fn zng_view::init">init</a></div><div class="desc docblock-short">Runs the view-process server if called in the environment of a view-process.</div></li><li><div class="item-name"><a class="fn" href="fn.init_extended.html" title="fn zng_view::init_extended">init_extended</a></div><div class="desc docblock-short">Like <a href="fn.init.html" title="fn zng_view::init"><code>init</code></a> but with custom API extensions.</div></li><li><div class="item-name"><a class="fn" href="fn.run_same_process.html" title="fn zng_view::run_same_process">run_same_process</a></div><div class="desc docblock-short">Runs the view-process server in the current process and calls <code>run_app</code> to also
+run the app in the current process. Note that <code>run_app</code> will be called in a different thread.</div></li><li><div class="item-name"><a class="fn" href="fn.run_same_process_extended.html" title="fn zng_view::run_same_process_extended">run_same_process_extended</a></div><div class="desc docblock-short">Like <a href="fn.run_same_process.html" title="fn zng_view::run_same_process"><code>run_same_process</code></a> but with custom API extensions.</div></li></ul></section></div></main></body></html>

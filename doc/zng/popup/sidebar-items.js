@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ContextCapture","PopupCloseMode","PopupState"],"fn":["anchor_mode","close_delay","close_on_focus_leave","context_capture","is_close_delaying","on_popup_close_requested","on_pre_popup_close_requested","style_fn"],"static":["POPUP_CLOSE_CMD","POPUP_CLOSE_REQUESTED_EVENT"],"struct":["DefaultStyle","POPUP","Popup","PopupCloseRequestedArgs"]};

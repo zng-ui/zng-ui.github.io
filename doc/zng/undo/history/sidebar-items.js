@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["group_by_undo_interval","is_cap_hovered_timestamp","undo_button_style_fn"],"struct":["UndoEntryArgs","UndoHistory","UndoPanelArgs","UndoRedoButtonStyle","UndoStackArgs"]};

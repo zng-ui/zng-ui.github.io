@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bytes_channel","connect_view_process"],"struct":["Disconnected","EventSender","IpcBytes","IpcBytesReceiver","IpcBytesSender","RequestReceiver","ResponseSender","ViewChannels"]};

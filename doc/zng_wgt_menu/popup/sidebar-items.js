@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["children","default_panel_fn","panel_fn","parent_id","style_fn","sub_menu_popup_node"],"static":["PANEL_FN_VAR","STYLE_FN_VAR"],"struct":["DefaultStyle","SubMenuPopup"]};

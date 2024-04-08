@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AnchorSize","AnchorTransform"],"fn":["adorner","adorner_fn","layers_node"],"mod":["popup"],"struct":["AnchorMode","AnchorOffset","LAYERS","LayerIndex"]};

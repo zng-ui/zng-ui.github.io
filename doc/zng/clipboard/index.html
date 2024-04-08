@@ -1,0 +1,76 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Clipboard service, commands and other types."><title>zng::clipboard - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module clipboard</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#statics">Statics</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">clipboard</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/clipboard.rs.html#1-109">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Clipboard service, commands and other types.</p>
+<p>This module provides the <a href="struct.CLIPBOARD.html" title="struct zng::clipboard::CLIPBOARD"><code>CLIPBOARD</code></a> service and clipboard related commands and command handlers.
+The service does not implement the commands, widgets implement the commands and optionally use the service.</p>
+<p>Note that the <a href="struct.CLIPBOARD.html" title="struct zng::clipboard::CLIPBOARD"><code>CLIPBOARD</code></a> service uses the view-process the interact with the system clipboard, so it will only
+work if a headed app or headless app with renderer is running.</p>
+<h2 id="text"><a class="doc-anchor" href="#text">§</a>Text</h2>
+<p>The example below uses the service to copy text to the clipboard:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">let </span>txt = var(Txt::from(<span class="string">""</span>));
+<span class="kw">let </span>copied = var(<span class="bool-val">false</span>);
+<span class="macro">Container! </span>{
+    child = <span class="macro">TextInput!</span>(txt.clone());
+    child_end = <span class="macro">Button! </span>{
+        child = <span class="macro">Text!</span>(copied.map(|<span class="kw-2">&amp;</span>c| <span class="kw">if </span>!c { <span class="string">"Copy" </span>} <span class="kw">else </span>{ <span class="string">"Copied!" </span>}.into()));
+        on_click = <span class="macro">async_hn!</span>(txt, copied, |<span class="kw">_</span>| {
+            <span class="kw">if </span>zng::clipboard::CLIPBOARD.set_text(txt.get()).wait_rsp().<span class="kw">await</span>.is_ok() {
+                copied.set(<span class="bool-val">true</span>);
+            }
+        });
+    }, <span class="number">4</span>;
+}</code></pre></div>
+<p>The <code>TextInput</code> widget also implements the clipboard commands, the example below requests clipboard paste to the
+text input, that widget uses the clipboard service to get the text.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Container! </span>{
+    child = <span class="macro">TextInput! </span>{ id = <span class="string">"input-1"</span>; txt = var(Txt::from(<span class="string">""</span>)); };
+    child_end = <span class="macro">Button!</span>(zng::clipboard::PASTE_CMD.scoped(WidgetId::named(<span class="string">"input-1"</span>))), <span class="number">4</span>;
+}</code></pre></div>
+<h2 id="file-list"><a class="doc-anchor" href="#file-list">§</a>File List</h2>
+<p>The example below modifies the paste button to paste file paths, the paths can be used to read or move
+the each file, in the example they are converted to a text list.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Button! </span>{
+    child = <span class="macro">Text!</span>(<span class="string">"Paste"</span>);
+    on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(f)) = zng::clipboard::CLIPBOARD.file_list() {
+            txt.modify(<span class="kw">move </span>|txt| {
+                <span class="kw">let </span>txt = txt.to_mut();
+                txt.clear();
+                <span class="kw">for </span>f <span class="kw">in </span>f {
+                    <span class="kw">use </span>std::fmt::Write <span class="kw">as _</span>;
+                    <span class="kw">let _ </span>= <span class="macro">writeln!</span>(txt, <span class="string">"{}"</span>, f.display());
+                }
+            });
+        }
+    });
+}</code></pre></div>
+<h2 id="image"><a class="doc-anchor" href="#image">§</a>Image</h2>
+<p>The example below pastes an image from the clipboard. The example also demonstrates how to separate the
+paste button from the paste action, the button only needs to know that the window handles the paste command,
+the window implements the paste by setting an image variable.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng::clipboard;
+
+<span class="kw">let </span>img_source = var(ImageSource::flood(layout::PxSize::splat(layout::Px(<span class="number">1</span>)), colors::BLACK, <span class="prelude-val">None</span>));
+<span class="macro">Window! </span>{
+    child_top = <span class="macro">Button!</span>(clipboard::PASTE_CMD.scoped(WINDOW.id())), <span class="number">0</span>;
+    child = <span class="macro">Image!</span>(img_source.clone());
+    clipboard::on_paste = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(img)) = clipboard::CLIPBOARD.image() {
+            img_source.set(img);
+        }
+    });     
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_ext_clipboard/index.html" title="mod zng_ext_clipboard"><code>zng_ext_clipboard</code></a> for the full clipboard API.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.CLIPBOARD.html" title="struct zng::clipboard::CLIPBOARD">CLIPBOARD</a></div><div class="desc docblock-short">Clipboard service.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.ClipboardError.html" title="enum zng::clipboard::ClipboardError">ClipboardError</a></div><div class="desc docblock-short">Error getting or setting the clipboard.</div></li></ul><h2 id="statics" class="section-header">Statics<a href="#statics" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="static" href="static.COPY_CMD.html" title="static zng::clipboard::COPY_CMD">COPY_CMD</a></div><div class="desc docblock-short">Represents the clipboard <strong>copy</strong> action.</div></li><li><div class="item-name"><a class="static" href="static.CUT_CMD.html" title="static zng::clipboard::CUT_CMD">CUT_CMD</a></div><div class="desc docblock-short">Represents the clipboard <strong>cut</strong> action.</div></li><li><div class="item-name"><a class="static" href="static.PASTE_CMD.html" title="static zng::clipboard::PASTE_CMD">PASTE_CMD</a></div><div class="desc docblock-short">Represents the clipboard <strong>paste</strong> action.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.on_copy.html" title="fn zng::clipboard::on_copy">on_copy</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On copy command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_cut.html" title="fn zng::clipboard::on_cut">on_cut</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On cut command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_paste.html" title="fn zng::clipboard::on_paste">on_paste</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  On paste command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_copy.html" title="fn zng::clipboard::on_pre_copy">on_pre_copy</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_copy.html"><code>on_copy</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_cut.html" title="fn zng::clipboard::on_pre_cut">on_pre_cut</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_cut.html"><code>on_cut</code></a> command.</div></li><li><div class="item-name"><a class="fn" href="fn.on_pre_paste.html" title="fn zng::clipboard::on_pre_paste">on_pre_paste</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong> Preview <a href="fn.on_paste.html"><code>on_paste</code></a> command.</div></li></ul></section></div></main></body></html>

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["mask_align","mask_fit","mask_image","mask_image_cache","mask_image_downscale","mask_image_limits","mask_mode","mask_offset"],"static":["MASK_ALIGN_VAR","MASK_FIT_VAR","MASK_IMAGE_CACHE_VAR","MASK_IMAGE_DOWNSCALE_VAR","MASK_IMAGE_LIMITS_VAR","MASK_MODE_VAR","MASK_OFFSET_VAR"]};

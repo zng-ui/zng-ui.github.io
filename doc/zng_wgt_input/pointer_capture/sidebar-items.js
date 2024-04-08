@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CaptureMode"],"fn":["capture_pointer","capture_pointer_on_init","on_got_pointer_capture","on_lost_pointer_capture","on_pointer_capture_changed","on_pre_got_pointer_capture","on_pre_lost_pointer_capture","on_pre_pointer_capture_changed"]};

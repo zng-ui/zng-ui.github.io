@@ -1,0 +1,93 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content=" Declares new `Command` static items."><title>command in zng_app::event - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-16x16-8b506e7a72182f1c.png"><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-422f7d1d52889060.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-2c020d218678b618.svg"><script>
+// Hides tagged `macro_rules!` macros from crate root.
+
+document.addEventListener('DOMContentLoaded', function () {
+    let is_front_pg = false;
+    document.querySelectorAll('h1').forEach(function (h) {
+        if (h.innerText.trimStart().startsWith("Crate ")) {
+            is_front_pg = true;
+        }
+    });
+
+    if (is_front_pg) {
+        // remove tagged macros.
+        let removes = document.querySelectorAll('span[data-del-macro-root]');
+        for (let remove of removes) {
+            let div = remove.parentElement.parentElement;
+            if (div.previousElementSibling != null) {
+                div.previousElementSibling.remove();
+            }
+            div.remove();
+        }
+    }
+
+    // remove empty macros section.
+    let title = document.getElementById('macros');
+    if (title != null && title.nextElementSibling.querySelector('a') == null) {
+        title.nextElementSibling.remove();
+        title.remove();
+
+        let side_anchor = document.querySelector('a[href="#macros"]');
+        if (side_anchor != null) {
+            side_anchor.parentElement.remove();
+        }
+    }
+})
+</script>
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button></nav><nav class="sidebar"><div class="sidebar-crate"><h2><a href="../../zng_app/index.html">zng_app</a><span class="version">0.2.1</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng_app::event</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">zng_app</a>::<wbr><a href="index.html">event</a>::<wbr><a class="macro" href="#">command</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_app/event/command.rs.html#91-105">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>command {
+    ($(
+        $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
+        <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="macro-nonterminal">$COMMAND</span>:ident $(=&gt; |<span class="macro-nonterminal">$cmd</span>:ident|<span class="macro-nonterminal">$custom_meta_init</span>:expr ;)<span class="question-mark">? </span>$(= { $(<span class="macro-nonterminal">$meta_ident</span>:ident : <span class="macro-nonterminal">$meta_init</span>:expr),* $(,)<span class="question-mark">? </span>};)<span class="question-mark">? </span>$(;)<span class="question-mark">?
+    </span>)+) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Declares new <a href="struct.Command.html" title="struct zng_app::event::Command"><code>Command</code></a> static items.</p>
+<p>Command static items represent widget or service actions. Command items are also events, that is they dereference
+to <a href="struct.Event.html" title="struct zng_app::event::Event"><code>Event&lt;A&gt;</code></a> and <em>override</em> some event methods to enable communication from the command subscribers to the command
+notifier. Command static items also host metadata about the command.</p>
+<h2 id="conventions"><a class="doc-anchor" href="#conventions">§</a>Conventions</h2>
+<p>Command events have the <code>_CMD</code> suffix, for example a command for the clipboard <em>copy</em> action is called <code>COPY_CMD</code>.
+Public and user facing commands also set the <a href="trait.CommandNameExt.html" title="trait zng_app::event::CommandNameExt"><code>CommandNameExt</code></a> and <a href="trait.CommandInfoExt.html" title="trait zng_app::event::CommandInfoExt"><code>CommandInfoExt</code></a> with localized display text.</p>
+<h2 id="shortcuts"><a class="doc-anchor" href="#shortcuts">§</a>Shortcuts</h2>
+<p>You can give commands one or more shortcuts using the <a href="../shortcut/trait.CommandShortcutExt.html" title="trait zng_app::shortcut::CommandShortcutExt"><code>CommandShortcutExt</code></a>, the <code>GestureManager</code> notifies commands
+that match a pressed shortcut automatically.</p>
+<h2 id="properties"><a class="doc-anchor" href="#properties">§</a>Properties</h2>
+<p>If the command implementation is not specific you can use <code>command_property!</code> to declare properties that setup command handlers
+for the command.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>Declare two commands:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::event::command;
+
+<span class="macro">command! </span>{
+    <span class="kw">static </span>FOO_CMD;
+
+    <span class="doccomment">/// Command docs.
+    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">static </span>BAR_CMD;
+}</code></pre></div>
+<p>You can also initialize metadata:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+
+<span class="macro">command! </span>{
+    <span class="doccomment">/// Represents the **foo** action.
+    </span><span class="kw">pub static </span>FOO_CMD = {
+        name: <span class="string">"Foo!"</span>,
+        info: <span class="string">"Does the foo thing."</span>,
+        shortcut: <span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>],
+    };
+}</code></pre></div>
+<p>The initialization uses the <a href="struct.Command.html#extensions" title="struct zng_app::event::Command">command extensions</a> pattern and runs once for each app.</p>
+<p>Or you can use a custom closure to initialize the command:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+
+<span class="macro">command! </span>{
+    <span class="doccomment">/// Represents the **foo** action.
+    </span><span class="kw">pub static </span>FOO_CMD =&gt; |cmd| {
+        cmd.init_name(<span class="string">"Foo!"</span>);
+        cmd.init_info(<span class="string">"Does the foo thing."</span>);
+        cmd.init_shortcut(<span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>]);
+    };
+}</code></pre></div>
+<p>For the first kind of metadata initialization a documentation section is also generated with a table of metadata.</p>
+</div></details></section></div></main></body></html>

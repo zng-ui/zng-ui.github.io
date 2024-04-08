@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TreeFilter"],"struct":["Ancestors","Children","NextSiblings","PrevSiblings","RevTreeIter","TreeFilterIter","TreeIter"],"trait":["TreeIterator"]};

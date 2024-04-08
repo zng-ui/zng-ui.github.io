@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["children","children_align","direction","get_index","get_index_len","get_rev_index","is_even","is_first","is_last","is_odd","lazy_sample","lazy_size","node","spacing","stack_nodes","stack_nodes_layout_by"],"struct":["Stack","StackDirection"],"trait":["WidgetInfoStackExt"]};

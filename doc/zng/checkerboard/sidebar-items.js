@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["cb_origin","cb_size","colors"],"struct":["Checkerboard","Colors"]};

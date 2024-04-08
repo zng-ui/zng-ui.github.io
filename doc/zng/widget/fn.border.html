@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="P  Border widths, color and style."><title>border in zng::widget - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::widget</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../index.html">zng</a>::<wbr><a href="index.html">widget</a>::<wbr><a class="fn" href="#">border</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_wgt/border_props.rs.html#216">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn border(
+    child: impl <a class="trait" href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode">UiNode</a>,
+    widths: impl <a class="trait" href="../var/trait.IntoVar.html" title="trait zng::var::IntoVar">IntoVar</a>&lt;<a class="struct" href="../layout/struct.SideOffsets.html" title="struct zng::layout::SideOffsets">SideOffsets</a>&gt;,
+    sides: impl <a class="trait" href="../var/trait.IntoVar.html" title="trait zng::var::IntoVar">IntoVar</a>&lt;<a class="struct" href="struct.BorderSides.html" title="struct zng::widget::BorderSides">BorderSides</a>&gt;
+) -&gt; impl <a class="trait" href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode">UiNode</a></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><strong title='Property function' data-tag='P'><code>P</code></strong>  Border widths, color and style.</p>
+<p>This property coordinates with any other border in the widget to fit inside or outside the
+other borders, it also works with the <a href="fn.corner_radius.html" title="fn zng::widget::corner_radius"><code>corner_radius</code></a> property drawing round corners if configured.</p>
+<p>This property disables inline layout for the widget.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>A border of width <code>1.dip()</code>, solid color <code>BLUE</code> in all border sides and corner radius <code>4.dip()</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">Wgt! </span>{
+    border = <span class="number">1</span>, colors::BLUE;
+    corner_radius = <span class="number">4</span>;
+}</code></pre></div>
+<p>A border that sets each border line to a different width <code>top: 1, right: 2, bottom: 3, left: 4</code>, each corner
+radius to a different size <code>top_left: 1x1, top_right: 2x2, bottom_right: 3x3, bottom_left: 4x4</code> and each border
+line to a different style and color.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">Wgt! </span>{
+    border = {
+        widths: (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>),
+        sides: BorderSides::new(
+            BorderSide::solid(colors::RED),
+            BorderSide::dashed(colors::GREEN),
+            BorderSide::dotted(colors::BLUE),
+            BorderSide::double(colors::YELLOW),
+        ),
+    };
+    corner_radius = (<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);
+}</code></pre></div>
+<h3 id="multiple-borders"><a class="doc-anchor" href="#multiple-borders">§</a>Multiple Borders</h3>
+<p>The border fits in with other borders in the widget, in this example we declare a
+new border property by copying the signature of this one:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// Another border property.
+</span><span class="attr">#[property(BORDER, default(<span class="number">0</span>, BorderStyle::Hidden))]
+</span><span class="kw">pub fn </span>my_border(
+    child: <span class="kw">impl </span>UiNode,
+    widths: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;,
+    sides: <span class="kw">impl </span>IntoVar&lt;BorderSides&gt;
+) -&gt; <span class="kw">impl </span>UiNode {
+    zng_wgt::border(child, widths, sides)
+}</code></pre></div>
+<p>Now we can set two borders in the same widget:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">Wgt! </span>{
+    border = <span class="number">4</span>, colors::RED;
+    my_border = <span class="number">4</span>, colors::GREEN;
+    corner_radius = <span class="number">8</span>;
+}</code></pre></div>
+<p>This will render a <code>RED</code> border around a <code>GREEN</code> one, the inner border will fit perfectly inside the outer one,
+the <code>corner_radius</code> defines the outer radius, the inner radius is computed automatically to fit.</p>
+<p>Note that because both borders have the same <a href="builder/struct.NestGroup.html#associatedconstant.BORDER" title="associated constant zng::widget::builder::NestGroup::BORDER"><code>NestGroup::BORDER</code></a> the position they are declared in the widget matters:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">Wgt! </span>{
+    my_border = <span class="number">4</span>, colors::GREEN;
+    border = <span class="number">4</span>, colors::RED;
+    corner_radius = <span class="number">8</span>;
+}</code></pre></div>
+<p>Now the <code>GREEN</code> border is around the <code>RED</code>.</p>
+<p>You can adjust the nest group to cause a border to always be outside or inside:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// Border that is always around the other borders.
+</span><span class="attr">#[property(BORDER-<span class="number">1</span>, default(<span class="number">0</span>, BorderStyle::Hidden))]
+</span><span class="kw">pub fn </span>outside_border(child: <span class="kw">impl </span>UiNode, widths: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;, sides: <span class="kw">impl </span>IntoVar&lt;BorderSides&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    zng_wgt::border(child, widths, sides)
+}
+ 
+<span class="doccomment">/// Border that is always inside the other borders.
+</span><span class="attr">#[property(BORDER+<span class="number">1</span>, default(<span class="number">0</span>, BorderStyle::Hidden))]
+</span><span class="kw">pub fn </span>inside_border(child: <span class="kw">impl </span>UiNode, widths: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;, sides: <span class="kw">impl </span>IntoVar&lt;BorderSides&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    zng_wgt::border(child, widths, sides)
+}</code></pre></div>
+</div></details></section></div></main></body></html>

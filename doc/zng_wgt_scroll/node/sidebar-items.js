@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["access_scroll_node","h_scrollbar_presenter","overscroll_node","page_commands_node","scroll_commands_node","scroll_to_edge_commands_node","scroll_to_node","scroll_touch_node","scroll_wheel_node","scrollbar_joiner_presenter","v_scrollbar_presenter","viewport","zoom_commands_node"]};

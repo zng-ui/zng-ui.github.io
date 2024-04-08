@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AnsiColor","AnsiWeight"],"struct":["AnsiStyle","AnsiText","AnsiTextParser","AnsiTxt","LineFnArgs","PageFnArgs","PanelFnArgs","TextFnArgs"]};

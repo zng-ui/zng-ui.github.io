@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InlineConstraints","LayoutDirection","TextSegmentKind"],"static":["DIRECTION_VAR"],"struct":["InlineConstraintsLayout","InlineConstraintsMeasure","InlineSegment","InlineSegmentPos","LAYOUT","LayoutMask","LayoutMetrics","LayoutMetricsSnapshot","LayoutPassId"]};

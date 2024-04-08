@@ -1,0 +1,73 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content=" Declare one or more event properties."><title>event_property in zng::event - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::event</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">zng</a>::<wbr><a href="index.html">event</a>::<wbr><a class="macro" href="#">event_property</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_wgt/node.rs.html#286">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>event_property {
+    ($(
+        $(<span class="attr">#[<span class="macro-nonterminal">$on_event_attrs</span>:meta]</span>)*
+        <span class="macro-nonterminal">$vis</span>:vis <span class="kw">fn </span><span class="macro-nonterminal">$event</span>:ident {
+            event: <span class="macro-nonterminal">$EVENT</span>:path,
+            args: <span class="macro-nonterminal">$Args</span>:path,
+            $(filter: <span class="macro-nonterminal">$filter</span>:expr,)<span class="question-mark">?
+            </span>$(widget_impl: <span class="macro-nonterminal">$Wgt</span>:ty,)<span class="question-mark">?
+            </span>$(with: <span class="macro-nonterminal">$with</span>:expr,)<span class="question-mark">?
+        </span>}
+    )+) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Declare one or more event properties.</p>
+<p>Each declaration expands to two properties <code>on_$event</code> and <code>on_pre_$event</code>.
+The preview properties call <a href="fn.on_pre_event.html" title="fn zng::event::on_pre_event"><code>on_pre_event</code></a>, the main event properties call <a href="fn.on_event.html" title="fn zng::event::on_event"><code>on_event</code></a>.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">event_property! </span>{
+    <span class="doccomment">/// on_key_input docs.
+    </span><span class="kw">pub fn </span>key_input {
+        event: KEY_INPUT_EVENT,
+        args: KeyInputArgs,
+        <span class="comment">// default filter is |args| true,
+    </span>}
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>key_down {
+        event: KEY_INPUT_EVENT,
+        args: KeyInputArgs,
+        <span class="comment">// optional filter:
+        </span>filter: |args| args.state == KeyState::Pressed,
+    }
+}</code></pre></div>
+<h2 id="filter"><a class="doc-anchor" href="#filter">§</a>Filter</h2>
+<p>App events are delivered to all widgets that are both in the <a href="../update/struct.UpdateDeliveryList.html" title="struct zng::update::UpdateDeliveryList"><code>UpdateDeliveryList</code></a> and event subscribers list,
+event properties can specialize further by defining a filter predicate.</p>
+<p>The <code>filter:</code> predicate is called if <a href="trait.AnyEventArgs.html#tymethod.propagation" title="method zng::event::AnyEventArgs::propagation"><code>propagation</code></a> is not stopped. It must return <code>true</code> if the event arguments
+are relevant in the context of the widget and event property. If it returns <code>true</code> the <code>handler</code> closure is called.
+See <a href="fn.on_event.html" title="fn zng::event::on_event"><code>on_event</code></a> and <a href="fn.on_pre_event.html" title="fn zng::event::on_pre_event"><code>on_pre_event</code></a> for more information.</p>
+<p>If you don’t provide a filter predicate the default always allows, so all app events targeting the widget and not already handled
+are allowed by default. Note that events that represent an <em>interaction</em> with the widget are send for both <a href="../widget/info/struct.Interactivity.html#associatedconstant.ENABLED" title="associated constant zng::widget::info::Interactivity::ENABLED"><code>ENABLED</code></a> and <a href="../widget/info/struct.Interactivity.html#associatedconstant.DISABLED" title="associated constant zng::widget::info::Interactivity::DISABLED"><code>DISABLED</code></a>
+widgets, event properties should probably distinguish if they fire on normal interactions versus on <em>disabled</em> interactions.</p>
+<h2 id="async"><a class="doc-anchor" href="#async">§</a>Async</h2>
+<p>Async event handlers are supported by properties generated by this macro, but only the code before the first <code>.await</code> executes
+in the event track, subsequent code runs in widget updates.</p>
+<h2 id="commands"><a class="doc-anchor" href="#commands">§</a>Commands</h2>
+<p>You can use <a href="macro.command_property.html" title="macro zng::event::command_property"><code>command_property</code></a> to declare command event properties.</p>
+<h2 id="implement-for"><a class="doc-anchor" href="#implement-for">§</a>Implement For</h2>
+<p>You can implement the new properties for a widget or mix-in using the <code>widget_impl:</code> directive:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="doccomment">/// Keyboard events.
+</span><span class="attr">#[widget_mixin]
+</span><span class="kw">pub struct </span>KeyboardMix&lt;P&gt;(P);
+
+<span class="macro">event_property! </span>{
+    <span class="kw">pub fn </span>key_input {
+        event: KEY_INPUT_EVENT,
+        args: KeyInputArgs,
+        widget_impl: KeyboardMix&lt;P&gt;,
+    }
+}</code></pre></div>
+<h2 id="with-extra-nodes"><a class="doc-anchor" href="#with-extra-nodes">§</a>With Extra Nodes</h2>
+<p>You can wrap the event handler node with extra nodes by setting the optional <code>with:</code> closure:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">event_property! </span>{
+    <span class="kw">pub fn </span>key_input {
+        event: KEY_INPUT_EVENT,
+        args: KeyInputArgs,
+        with: |child, _preview| some_node(child),
+    }
+}</code></pre></div>
+<p>The closure receives two arguments, the handler <code>UiNode</code> and a <code>bool</code> that is <code>true</code> if the closure is called in the <em>on_pre_</em>
+property or <code>false</code> when called in the <em>on_</em> property.</p>
+</div></details></section></div></main></body></html>

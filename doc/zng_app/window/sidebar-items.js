@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["WindowMode"],"struct":["MonitorId","StaticMonitorId","StaticWindowId","WINDOW","WindowCtx","WindowId"]};

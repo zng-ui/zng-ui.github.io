@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["AccessKind","AccessMode","CreateKind","DataChange","ErrorKind","EventKind","MetadataKind","ModifyKind","RemoveKind","RenameMode"],"struct":["Error","Event"]};

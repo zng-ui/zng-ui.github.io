@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["conic_gradient","flood","gradient","linear_gradient","radial_gradient"],"struct":["ConicGradient","GradientBuilder","LinearGradient","RadialGradient","TiledConicGradient","TiledLinearGradient","TiledRadialGradient"]};

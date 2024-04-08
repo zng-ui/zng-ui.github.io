@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["HitTestMode"],"fn":["id"],"mod":["node"],"static":["HIT_TEST_MODE_VAR","PARALLEL_VAR"],"struct":["NonWidgetBase","Parallel","WidgetBase"],"trait":["WidgetImpl"]};

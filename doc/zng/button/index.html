@@ -1,0 +1,82 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Button widget, styles and properties."><title>zng::button - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module button</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">button</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/button.rs.html#1-126">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Button widget, styles and properties.</p>
+<p>A simple clickable container widget, it can be used by directly handling the click events or by setting it to
+operate a <a href="../event/struct.Command.html" title="struct zng::event::Command"><code>Command</code></a>.</p>
+<h2 id="click-events"><a class="doc-anchor" href="#click-events">§</a>Click Events</h2>
+<p>The button widget implements the <a href="../gesture/fn.on_click.html" title="fn zng::gesture::on_click"><code>gesture::on_click</code></a> event so you can use it directly, but like any
+other widget all events can be set. The example below demonstrates both ways of setting events.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">let </span>count = var(<span class="number">0u8</span>);
+<span class="macro">Button! </span>{
+    child = <span class="macro">Text!</span>(count.map(|c| <span class="kw">match </span><span class="kw-2">*</span>c {
+        <span class="number">0 </span>=&gt; Txt::from(<span class="string">"Click Me!"</span>),
+        <span class="number">1 </span>=&gt; Txt::from(<span class="string">"Clicked 1 time."</span>),
+        n =&gt; <span class="macro">formatx!</span>(<span class="string">"Clicked {n} times."</span>),
+    }));
+    on_click = <span class="macro">hn!</span>(count, |<span class="kw">_</span>| {
+        count.set(count.get() + <span class="number">1</span>);
+    });
+    gesture::on_pre_click = <span class="macro">hn!</span>(|args: <span class="kw-2">&amp;</span>gesture::ClickArgs| {
+        <span class="kw">if </span>count.get() == <span class="number">10 </span>{
+            args.propagation().stop();
+            count.set(<span class="number">0u8</span>);
+        }
+    });
+}</code></pre></div>
+<h2 id="command"><a class="doc-anchor" href="#command">§</a>Command</h2>
+<p>Instead of handling events directly the button widget can be set to represents a command.
+If the <a href="struct.Button.html#cmd" title="struct zng::button::Button"><code>cmd</code></a> property is set the button widget will automatically set properties
+from command metadata, you can manually set some of these properties to override the command default.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Stack!</span>(left_to_right, <span class="number">5</span>, <span class="macro">ui_vec!</span>[
+    <span class="comment">// shorthand
+    </span><span class="macro">Button!</span>(zng::clipboard::COPY_CMD),
+    <span class="comment">// cmd with custom child
+    </span><span class="macro">Button! </span>{
+        cmd = zng::clipboard::PASTE_CMD;
+        child = <span class="macro">Text!</span>(<span class="string">"Custom Label"</span>);
+    },
+])</code></pre></div>
+<p>The properties a command button sets are documented in the <a href="struct.Button.html#cmd" title="struct zng::button::Button"><code>cmd</code></a> property docs.
+Of particular importance is the <a href="../widget/fn.visibility.html" title="fn zng::widget::visibility"><code>widget::visibility</code></a>, it is set so that the button is only visible if
+the command has any handlers, enabled or disabled, this is done because commands are considered irrelevant
+in the current context if they don’t even have a disabled handler. The example above will only be
+visible if you set handlers for those commands.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>zng::clipboard::COPY_CMD.on_event(<span class="bool-val">true</span>, <span class="macro">app_hn!</span>(|<span class="kw">_</span>, <span class="kw">_</span>| { <span class="macro">println!</span>(<span class="string">"copy"</span>) })).perm();
+zng::clipboard::PASTE_CMD.on_event(<span class="bool-val">true</span>, <span class="macro">app_hn!</span>(|<span class="kw">_</span>, <span class="kw">_</span>| { <span class="macro">println!</span>(<span class="string">"paste"</span>) })).perm();
+<span class="macro">Window! </span>{
+    child = cmd_btn_example();
+}</code></pre></div>
+<h2 id="style"><a class="doc-anchor" href="#style">§</a>Style</h2>
+<p>The button widget is styleable, the <a href="fn.style_fn.html" title="fn zng::button::style_fn"><code>style_fn</code></a> property can be set in any parent widget or the button
+itself to extend or replace the button style.</p>
+<h3 id="base-colors"><a class="doc-anchor" href="#base-colors">§</a>Base Colors</h3>
+<p>The default style derive all colors from the <a href="fn.base_colors.html" title="fn zng::button::base_colors"><code>base_colors</code></a>, so if you
+only want to change color of buttons you can use this property.</p>
+<p>The example below extends the button style to change the button color to red when it represents
+an specific command.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng::button;
+
+<span class="macro">Window! </span>{
+    button::style_fn = <span class="macro">Style! </span>{
+        when <span class="kw-2">*</span>#{button::BUTTON.cmd()} == <span class="prelude-val">Some</span>(window::cmd::CLOSE_CMD) {
+            button::base_colors = color::ColorPair {
+                <span class="comment">// dark theme base
+                </span>dark: colors::BLACK.with_alpha(<span class="number">80</span>.pct()).mix_normal(colors::RED),
+                <span class="comment">// light theme base
+                </span>light: colors::WHITE.with_alpha(<span class="number">80</span>.pct()).mix_normal(colors::RED),
+            };
+        }
+    };
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_wgt_button/index.html" title="mod zng_wgt_button"><code>zng_wgt_button</code></a> for the full widget API.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.BUTTON.html" title="struct zng::button::BUTTON">BUTTON</a></div><div class="desc docblock-short">Button context.</div></li><li><div class="item-name"><a class="struct" href="struct.Button.html" title="struct zng::button::Button">Button</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  A clickable container.</div></li><li><div class="item-name"><a class="struct" href="struct.DefaultStyle.html" title="struct zng::button::DefaultStyle">DefaultStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Button default style.</div></li><li><div class="item-name"><a class="struct" href="struct.LinkStyle.html" title="struct zng::button::LinkStyle">LinkStyle</a></div><div class="desc docblock-short"><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Button link style.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.base_colors.html" title="fn zng::button::base_colors">base_colors</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Sets the colors used to compute all background and border colors in the button style.</div></li><li><div class="item-name"><a class="fn" href="fn.style_fn.html" title="fn zng::button::style_fn">style_fn</a></div><div class="desc docblock-short"><strong title='Property function' data-tag='P'><code>P</code></strong>  Extends or replaces the widget style.</div></li></ul></section></div></main></body></html>

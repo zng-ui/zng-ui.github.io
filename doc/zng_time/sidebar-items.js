@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InstantMode"],"struct":["DInstant","Deadline","INSTANT","INSTANT_APP","InstantUpdatePause"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["color","line_style","margin","stroke_thickness"],"struct":["Vr"]};

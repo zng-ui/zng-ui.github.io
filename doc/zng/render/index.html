@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Frame builder and other types."><title>zng::render - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><h2 class="location"><a href="#">Module render</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li></ul></section><h2><a href="../index.html">In crate zng</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng</a>::<wbr><a class="mod" href="#">render</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng/render.rs.html#1-111">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Frame builder and other types.</p>
+<p>Frame rendering means building a display list and updating all widget transforms, no actual pixel rendering happens
+during the render pass, the built display list is send to the view-process where it is actually rendered.</p>
+<p>Widgets render is centered around <a href="../widget/node/trait.UiNode.html#tymethod.render" title="method zng::widget::node::UiNode::render"><code>UiNode::render</code></a> and <a href="../widget/node/trait.UiNode.html#tymethod.render_update" title="method zng::widget::node::UiNode::render_update"><code>UiNode::render_update</code></a> using the <a href="struct.FrameBuilder.html" title="struct zng::render::FrameBuilder"><code>FrameBuilder</code></a>
+and <a href="struct.FrameUpdate.html" title="struct zng::render::FrameUpdate"><code>FrameUpdate</code></a> types. Render builds a display list, updates widget transforms and hit-test shapes, during
+render some values in the display list can be bound to a <a href="struct.FrameValueKey.html" title="struct zng::render::FrameValueKey"><code>FrameValueKey</code></a>, this key can be used during <code>render_update</code>
+to replace the value in the last display list instead of rebuilding it.</p>
+<p>Note that even without render-updates all widgets that do not request render and are not ancestor to one are reused.
+Reused widgets only include a range of display items to copy from the previous display list. A normal release built window
+can easily achieve 60FPS rendering even without render-updates, but reusable components should try to achieve best performance.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="doccomment">/// Fills the available space with a centered circle of the color.
+///
+/// This node disables inline layout for the widget.
+</span><span class="kw">pub fn </span>color_circle(color: <span class="kw">impl </span>IntoVar&lt;Rgba&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="kw">let </span>color = color.into_var();
+    <span class="kw">let </span><span class="kw-2">mut </span>area = PxRect::zero();
+
+    <span class="comment">// key to the color in a rendered frame,
+    // can be used to update the frame without rebuilding the display list
+    </span><span class="kw">let </span>color_key = FrameValueKey::new_unique();
+
+    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
+        UiNodeOp::Init =&gt; {
+            <span class="comment">// request a frame update when the color changes
+            </span>WIDGET.sub_var_render_update(<span class="kw-2">&amp;</span>color);
+        }
+        UiNodeOp::Measure { wm, desired_size } =&gt; {
+            wm.disable_inline(); <span class="comment">// is inline-block
+            </span><span class="kw-2">*</span>desired_size = LAYOUT.constraints().fill_size();
+        }
+        UiNodeOp::Layout { final_size, .. } =&gt; {
+            <span class="kw-2">*</span>final_size = LAYOUT.constraints().fill_size();
+
+            <span class="comment">// centered square
+            </span><span class="kw">let </span><span class="kw-2">mut </span>a = PxRect::from_size(<span class="kw-2">*</span>final_size);
+            <span class="kw">if </span>a.size.width &lt; a.size.height {
+                a.origin.y = (a.size.height - a.size.width) / Px(<span class="number">2</span>);
+                a.size.height = a.size.width;
+            } <span class="kw">else </span>{
+                a.origin.x = (a.size.width - a.size.height) / Px(<span class="number">2</span>);
+                a.size.width = a.size.height;
+            }
+
+            <span class="kw">if </span>a != area {
+                area = a;
+                <span class="comment">// request a full render because are is not keyed for updates
+                </span>WIDGET.render();
+            }
+        }
+        UiNodeOp::Render { frame } =&gt; {
+            <span class="comment">// clip a circle at the area
+            </span>frame.push_clip_rounded_rect(area, PxCornerRadius::new_all(area.size), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+                <span class="comment">// fill the are with color, bind the color_key to the color
+                </span>frame.push_color(area, color_key.bind_var(<span class="kw-2">&amp;</span>color, |<span class="kw-2">&amp;</span>c| c.into()));
+            });
+        }
+        UiNodeOp::RenderUpdate { update } =&gt; {
+            <span class="comment">// update the color in the existing frame, this is an optimization
+            </span>update.update_color_opt(color_key.update_var(<span class="kw-2">&amp;</span>color, |<span class="kw-2">&amp;</span>c| c.into()));
+        }
+        <span class="kw">_ </span>=&gt; {}
+    })
+}</code></pre></div>
+<p>The example above declares a simple node that draws a colored circle, the circle color is keyed for render updates.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>color = var(colors::RED);
+<span class="kw">let </span><span class="kw-2">mut </span>i = <span class="number">0u8</span>;
+<span class="macro">Container! </span>{
+    child = color_circle(color.easing_with(<span class="number">1</span>.secs(), easing::linear, color::rgba_sampler));
+    gesture::on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+        color.set(<span class="kw">match </span>i {
+            <span class="number">0 </span>=&gt; colors::YELLOW,
+            <span class="number">1 </span>=&gt; colors::GREEN,
+            <span class="number">2 </span>=&gt; colors::RED,
+            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+        });
+        i += <span class="number">1</span>;
+        <span class="kw">if </span>i == <span class="number">3 </span>{
+            i = <span class="number">0</span>;
+        }
+    });
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_app/render/index.html" title="mod zng_app::render"><code>zng_app::render</code></a> for the full API.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.ClipBuilder.html" title="struct zng::render::ClipBuilder">ClipBuilder</a></div><div class="desc docblock-short">Builder for a chain of render and hit-test clips.</div></li><li><div class="item-name"><a class="struct" href="struct.FontSynthesis.html" title="struct zng::render::FontSynthesis">FontSynthesis</a></div><div class="desc docblock-short">Configure if a synthetic font is generated for fonts that do not implement <strong>bold</strong> or <em>oblique</em> variants.</div></li><li><div class="item-name"><a class="struct" href="struct.FrameBuilder.html" title="struct zng::render::FrameBuilder">FrameBuilder</a></div><div class="desc docblock-short">A full frame builder.</div></li><li><div class="item-name"><a class="struct" href="struct.FrameId.html" title="struct zng::render::FrameId">FrameId</a></div><div class="desc docblock-short">Identifier of a frame or frame update.</div></li><li><div class="item-name"><a class="struct" href="struct.FrameUpdate.html" title="struct zng::render::FrameUpdate">FrameUpdate</a></div><div class="desc docblock-short">A frame quick update.</div></li><li><div class="item-name"><a class="struct" href="struct.FrameValueKey.html" title="struct zng::render::FrameValueKey">FrameValueKey</a></div><div class="desc docblock-short">Unique key of an updatable value in the view-process frame.</div></li><li><div class="item-name"><a class="struct" href="struct.FrameValueUpdate.html" title="struct zng::render::FrameValueUpdate">FrameValueUpdate</a></div><div class="desc docblock-short">Represents an update targeting a previously setup <a href="enum.FrameValue.html" title="enum zng::render::FrameValue"><code>FrameValue</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.HitTestBuilder.html" title="struct zng::render::HitTestBuilder">HitTestBuilder</a></div><div class="desc docblock-short">Builder for the hit-testable shape of the inner-bounds of a widget.</div></li><li><div class="item-name"><a class="struct" href="struct.HitTestClipBuilder.html" title="struct zng::render::HitTestClipBuilder">HitTestClipBuilder</a></div><div class="desc docblock-short">Builder for a chain of hit-test clips.</div></li><li><div class="item-name"><a class="struct" href="struct.ReferenceFrameId.html" title="struct zng::render::ReferenceFrameId">ReferenceFrameId</a></div><div class="desc docblock-short">Represents an unique key for a spatial reference frame that is recreated in multiple frames.</div></li><li><div class="item-name"><a class="struct" href="struct.ReuseRange.html" title="struct zng::render::ReuseRange">ReuseRange</a></div><div class="desc docblock-short">Represents a display list reuse range.</div></li><li><div class="item-name"><a class="struct" href="struct.SpatialFrameId.html" title="struct zng::render::SpatialFrameId">SpatialFrameId</a></div><div class="desc docblock-short">Unique ID of a reference frame.</div></li><li><div class="item-name"><a class="struct" href="struct.StaticSpatialFrameId.html" title="struct zng::render::StaticSpatialFrameId">StaticSpatialFrameId</a></div><div class="desc docblock-short">Lazy inited <a href="struct.SpatialFrameId.html" title="struct zng::render::SpatialFrameId"><code>SpatialFrameId</code></a>.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.FrameValue.html" title="enum zng::render::FrameValue">FrameValue</a></div><div class="desc docblock-short">Represents a frame value that may be updated.</div></li><li><div class="item-name"><a class="enum" href="enum.ImageRendering.html" title="enum zng::render::ImageRendering">ImageRendering</a></div><div class="desc docblock-short">Image scaling algorithm in the renderer.</div></li><li><div class="item-name"><a class="enum" href="enum.RepeatMode.html" title="enum zng::render::RepeatMode">RepeatMode</a></div><div class="desc docblock-short">Nine-patch border repeat mode.</div></li></ul></section></div></main></body></html>

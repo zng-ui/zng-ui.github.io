@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["WatchFileParseError"],"mod":["fs_event"],"static":["FS_CHANGES_EVENT"],"struct":["FsChange","FsChangeNoteHandle","FsChangesArgs","FsWatcherManager","WATCHER","WatchFile","WatcherHandle","WatcherSyncWriteNote","WriteFile"],"trait":["FsChangeNote","WatcherReadStatus","WatcherSyncStatus"]};

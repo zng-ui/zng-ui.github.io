@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["undo_enabled","undo_interval","undo_limit","undo_scope"],"struct":["UndoMix"]};

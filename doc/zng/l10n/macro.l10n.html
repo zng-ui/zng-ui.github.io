@@ -1,0 +1,65 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content=" Gets a variable that localizes and formats the text in a widget context."><title>l10n in zng::l10n - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::l10n</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">zng</a>::<wbr><a href="index.html">l10n</a>::<wbr><a class="macro" href="#">l10n</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_ext_l10n/lib.rs.html#157">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>l10n {
+    (<span class="macro-nonterminal">$message_id</span>:tt, <span class="macro-nonterminal">$message</span>:tt $(,)<span class="question-mark">?</span>) =&gt; { ... };
+    (<span class="macro-nonterminal">$message_id</span>:tt, <span class="macro-nonterminal">$message</span>:tt, $(<span class="macro-nonterminal">$arg</span>:ident = <span class="macro-nonterminal">$arg_expr</span>:expr),* $(,)<span class="question-mark">?</span>) =&gt; { ... };
+    ($(<span class="macro-nonterminal">$error</span>:tt)<span class="kw-2">*</span>) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Gets a variable that localizes and formats the text in a widget context.</p>
+<h2 id="syntax"><a class="doc-anchor" href="#syntax">§</a>Syntax</h2>
+<p>Macro expects a message key string literal a <em>message template</em> string literal that is also used
+as fallback, followed by optional named format arguments <code>arg = &lt;arg&gt;,..</code>.</p>
+<p>The message string syntax is the <a href="https://projectfluent.org/fluent/guide/">Fluent Project</a> syntax, interpolations in the form of <code>&quot;{$var}&quot;</code> are resolved to a local <code>$var</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>name = var(<span class="string">"World"</span>);
+<span class="kw">let </span>msg = <span class="macro">l10n!</span>(<span class="string">"file/id.attribute"</span>, <span class="string">"Hello {$name}!"</span>);</code></pre></div>
+<h3 id="key"><a class="doc-anchor" href="#key">§</a>Key</h3>
+<p>This message key can be just a Fluent identifier, <code>&quot;id&quot;</code>, a Fluent attribute identifier can be added <code>&quot;id.attr&quot;</code>, and finally
+a file name can be added <code>&quot;file/id&quot;</code>. The key syntax is validated at compile time.</p>
+<h4 id="id"><a class="doc-anchor" href="#id">§</a>Id</h4>
+<p>The only required part of a key is the ID, it must contain at least one character, it must start with an ASCII letter
+and can be followed by any ASCII alphanumeric, _ and -, <code>[a-zA-Z][a-zA-Z0-9_-]*</code>.</p>
+<h4 id="attribute"><a class="doc-anchor" href="#attribute">§</a>Attribute</h4>
+<p>An attribute identifier can be suffixed on the id, separated by a <code>.</code> followed by an identifier of the same pattern as the
+id, <code>.[a-zA-Z][a-zA-Z0-9_-]*</code>.</p>
+<h4 id="file"><a class="doc-anchor" href="#file">§</a>File</h4>
+<p>An optional file name can be prefixed on the id, separated by a <code>/</code>, it can be a single file name, no extension.</p>
+<p>Using the default directory resolver the key <code>&quot;file/id.attr&quot;</code> will search the id and attribute in the file <code>{dir}/{lang}/file.ftl</code>:</p>
+<div class="example-wrap"><pre class="language-ftl"><code>id =
+    .attr = message
+</code></pre></div>
+<p>And a key <code>&quot;id.attr&quot;</code> will be searched in the file <code>{dir}/{lang}.ftl</code>.</p>
+<h2 id="scrap-template"><a class="doc-anchor" href="#scrap-template">§</a>Scrap Template</h2>
+<p>The <code>zng-l10n-scraper</code> tool can be used to collect all localizable text of Rust code files, it is a text based search that
+matches this macro name and the two first input literals, avoid renaming this macro to support scrapping, otherwise you will
+have to declare the template file manually.</p>
+<p>The scrapper also has some support for comments, if the previous code line from a <a href="macro.l10n.html" title="macro zng::l10n::l10n"><code>l10n!</code></a> call is a comment starting with
+prefix <code>l10n-# </code> the text the follows is collected, same for a comment in the same line of the <a href="macro.l10n.html" title="macro zng::l10n::l10n"><code>l10n!</code></a> call. Sections
+can be declared using <code>l10n-##</code> and standalone notes can be added to the top of the template file from anywhere using <code>l10n-###</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>
+<span class="comment">// l10n-### Standalone Note
+
+// l10n-# Comment for `id`.
+</span><span class="kw">let </span>msg = <span class="macro">l10n!</span>(<span class="string">"id"</span>, <span class="string">"id message"</span>);
+
+<span class="comment">// l10n-# Comment for `id.attr`.
+</span><span class="kw">let </span>msg = <span class="macro">l10n!</span>(<span class="string">"id.attr"</span>, <span class="string">"attr message"</span>);
+
+<span class="comment">// l10n-## Section
+
+</span><span class="kw">let </span>msg = <span class="macro">l10n!</span>(<span class="string">"other"</span>, <span class="string">"other message"</span>); <span class="comment">// l10n-# Comment for `other`.</span></code></pre></div>
+<p>The example above is scrapped to a <code>template.ftl</code> file:</p>
+<div class="example-wrap"><pre class="language-ftl"><code>### Standalone Note
+
+# Comment for `id`.
+#
+# attr:
+#     Comment for `id.attr`.
+id = id message
+    .attr = attr message
+
+## Section
+
+# Commend for `other`.
+other = other message
+</code></pre></div></div></details></section></div></main></body></html>

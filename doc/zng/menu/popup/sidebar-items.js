@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["panel_fn","style_fn"],"struct":["DefaultStyle","SubMenuPopup"]};

@@ -1,0 +1,141 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Expands a function to a widget property."><title>property in zng::widget - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc attr"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::widget</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Attribute Macro <a href="../index.html">zng</a>::<wbr><a href="index.html">widget</a>::<wbr><a class="attr" href="#">property</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_app_proc_macros/lib.rs.html#41">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>#[property]</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Expands a function to a widget property.</p>
+<p>Property functions take one <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a> child input and one or more other inputs and produces an <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a> that implements
+the property feature.</p>
+<p>The attribute expansion does not modify the function, it can still be used as a function directly. Some
+properties are implemented by calling other property functions to generate a derived effect.</p>
+<p>The attribute expansion generates a hidden trait of the same name and visibility, the trait is implemented for widget builders,
+the widget macros use this to set the property. Because it has the same name it is imported together with the property
+function, in practice this only matters in doc links where you must use the <code>fn@</code> disambiguator.</p>
+<h2 id="attribute"><a class="doc-anchor" href="#attribute">§</a>Attribute</h2>
+<p>The property attribute has one required argument and three optional.</p>
+<h5 id="nest-group"><a class="doc-anchor" href="#nest-group">§</a>Nest Group</h5>
+<p>The first argument is the property <a href="builder/struct.NestGroup.html" title="struct zng::widget::builder::NestGroup"><code>NestGroup</code></a>. The group defines the overall nest position
+of the property, for example, <code>LAYOUT</code> properties always wrap <code>FILL</code> properties. This is important as widgets are open and any combination
+of properties may end-up instantiated in the same widget.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[property(LAYOUT)]
+</span><span class="kw">pub fn </span>align(child: <span class="kw">impl </span>UiNode, align: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="comment">// ..
+</span>}</code></pre></div>
+<p>The nest group can be tweaked, by adding or subtracting integers, in the example bellow both properties are in the <code>SIZE</code> group,
+but <code>size</code> is always inside <code>max_size</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[property(SIZE+<span class="number">1</span>)]
+</span><span class="kw">pub fn </span>size(child: <span class="kw">impl </span>UiNode, size: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="comment">// ..
+</span>}
+
+<span class="attr">#[property(SIZE)]
+</span><span class="kw">pub fn </span>max_size(child: <span class="kw">impl </span>UiNode, size: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="comment">// ..
+</span>}</code></pre></div>
+<h5 id="default"><a class="doc-anchor" href="#default">§</a>Default</h5>
+<p>The next argument is an optional <code>default(args..)</code>. It defines the value to use when the property must be instantiated and no value was provided.
+The defaults should cause the property to behave as if it is not set, as the default value will be used in widgets that only set the
+property in <code>when</code> blocks.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="attr">#[property(FILL, default(rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)))]
+</span><span class="kw">pub fn </span>background_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;Rgba&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="comment">// ..
+</span>}</code></pre></div>
+<p>In the example above the <code>background_color</code> defines a transparent color as the default, so if the background color is only set in a <code>when</code>
+block if will only be visible when it is active.</p>
+<p>For properties with multiple inputs the default args may be defined in a comma separated list of params, <code>default(dft0, ..)</code>.</p>
+<h5 id="impl-for"><a class="doc-anchor" href="#impl-for">§</a>Impl For</h5>
+<p>The last argument is an optional <code>impl(&lt;widget-type&gt;)</code>, it strongly associates
+the property with a widget, users can set this property on the widget without needing to import the property.</p>
+<p>Note that this makes the property have priority over all others of the same name, only a derived widget can override
+with another strongly associated property.</p>
+<p>Note that you can also use the <a href="macro.widget_impl.html" title="macro zng::widget::widget_impl"><code>widget_impl!</code></a> in widget declarations to implement existing properties for a widget.</p>
+<h5 id="capture"><a class="doc-anchor" href="#capture">§</a>Capture</h5>
+<p>After the nest group and before default the <code>, capture, </code> value indicates that the property is capture-only. This flag
+changes how the property must be declared, the first argument is a property input and the function can have only one input,
+no return type is allowed and the function body must be empty, unused input warnings are suppressed by the expanded code.</p>
+<p>Capture-only properties must be captured by a widget and implemented as part of the widget’s intrinsics, the reason for
+a property function is purely to define the property signature and metadata, the capture-only property function can also
+be used to set a property dynamically, such as in a style widget that is applied on the actual widget that captures the property.</p>
+<p>A documentation sections explaining capture-only properties is generated for the property, it is also tagged differently in the functions list.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude_wgt::<span class="kw-2">*</span>;
+
+<span class="doccomment">/// Children property, must be captured by panel widgets.
+</span><span class="attr">#[property(CONTEXT, capture)]
+</span><span class="kw">pub fn </span>children(children: <span class="kw">impl </span>UiNodeList) { }</code></pre></div>
+<h2 id="args"><a class="doc-anchor" href="#args">§</a>Args</h2>
+<p>The property function requires at least two args, the first is the child node and the other(s) the input values. The
+number and type of inputs is validated at compile time, the types are limited and are identified and validated by their
+token name, so you cannot use renamed types.</p>
+<h5 id="child"><a class="doc-anchor" href="#child">§</a>Child</h5>
+<p>The first function arg must be of type <code>impl UiNode</code>, it represents the child node and the property node must
+delegate to it so that the UI tree functions correctly. The type must be an <code>impl</code> generic, a full path to <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a>
+is allowed, but no import renames as the proc-macro attribute can only use tokens to identify the type.</p>
+<h5 id="inputs"><a class="doc-anchor" href="#inputs">§</a>Inputs</h5>
+<p>The second arg and optional other args define the property inputs. When a property is assigned in a widget only these inputs
+are defined by the user, the child arg is provided by the widget builder. Property inputs are limited, and must be identifiable
+by their token name alone. The types are validated at compile time, they must be declared using <code>impl</code> generics,
+a full path to the generic traits is allowed, but no import renames.</p>
+<h5 id="input-types"><a class="doc-anchor" href="#input-types">§</a>Input Types</h5>
+<p>These are the allowed input types:</p>
+<h6 id="impl-intovart"><a class="doc-anchor" href="#impl-intovart">§</a><code>impl IntoVar&lt;T&gt;</code></h6>
+<p>The most common type, accepts any value that can be converted <a href="../var/trait.IntoVar.html" title="trait zng::var::IntoVar"><code>IntoVar&lt;T&gt;</code></a>, usually the property defines the <code>T</code>, but it can be generic.
+The property node must respond to var updates. The input kind is <a href="builder/enum.InputKind.html#variant.Var" title="variant zng::widget::builder::InputKind::Var"><code>InputKind::Var</code></a>. No auto-default is generated for this type, property
+implementation should provide a default value that causes the property to behave as if it was not set.</p>
+<p>The input can be read in <code>when</code> expressions and can be assigned in <code>when</code> blocks.</p>
+<h6 id="impl-intovaluet"><a class="doc-anchor" href="#impl-intovaluet">§</a><code>impl IntoValue&lt;T&gt;</code></h6>
+<p>Accepts any value that can be converted <a href="../var/trait.IntoValue.html" title="trait zng::var::IntoValue"><code>IntoValue&lt;T&gt;</code></a> that does not change, usually the property
+defines the <code>T</code>, but it can be generic. The input kind is <a href="builder/enum.InputKind.html#variant.Value" title="variant zng::widget::builder::InputKind::Value"><code>InputKind::Value</code></a>. No auto-default is generated for this type.</p>
+<p>The input can be read in <code>when</code> expressions, but cannot be assigned in <code>when</code> blocks.</p>
+<h6 id="impl-uinode"><a class="doc-anchor" href="#impl-uinode">§</a><code>impl UiNode</code></h6>
+<p>This input accepts another <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a>, the implementation must handle it like it handles the child node, delegating all methods. The
+input kind is <a href="builder/enum.InputKind.html#variant.UiNode" title="variant zng::widget::builder::InputKind::UiNode"><code>InputKind::UiNode</code></a>. The <a href="node/struct.NilUiNode.html" title="struct zng::widget::node::NilUiNode"><code>NilUiNode</code></a> is used as the default value if no other is provided.</p>
+<p>The input cannot be read in <code>when</code> expressions, but can be assigned in <code>when</code> blocks.</p>
+<h6 id="impl-uinodelist"><a class="doc-anchor" href="#impl-uinodelist">§</a><code>impl UiNodeList</code></h6>
+<p>This input accepts an <a href="node/trait.UiNodeList.html" title="trait zng::widget::node::UiNodeList"><code>UiNodeList</code></a>, the implementation must handle it like it handles the child node, delegating all methods. The
+input kind is <a href="builder/enum.InputKind.html#variant.UiNodeList" title="variant zng::widget::builder::InputKind::UiNodeList"><code>InputKind::UiNodeList</code></a>. An empty list is used as the default value if no other is provided.</p>
+<p>The input cannot be read in <code>when</code> expressions, but can be assigned in <code>when</code> blocks.</p>
+<h6 id="impl-widgethandlera"><a class="doc-anchor" href="#impl-widgethandlera">§</a><code>impl WidgetHandler&lt;A&gt;</code></h6>
+<p>This input accepts any <a href="../handler/trait.WidgetHandler.html" title="trait zng::handler::WidgetHandler"><code>WidgetHandler&lt;A&gt;</code></a> for the argument type <code>A</code>, usually the property defines the <code>A</code>, but it can be generic.
+The input kind is <a href="builder/enum.InputKind.html#variant.WidgetHandler" title="variant zng::widget::builder::InputKind::WidgetHandler"><code>InputKind::WidgetHandler</code></a>. A no-op handler is used for the default if no other is provided.</p>
+<p>Event handler properties usually have the <code>on_</code> name prefix. You can use the <a href="../event/macro.event_property.html" title="macro zng::event::event_property"><code>event_property!</code></a> macro to generate standard event properties.</p>
+<p>The input cannot be read in <code>when</code> expressions, but can be assigned in <code>when</code> blocks.</p>
+<h2 id="getter-properties"><a class="doc-anchor" href="#getter-properties">§</a>Getter Properties</h2>
+<p>Most properties with var inputs are <em>setters</em>, that is the inputs affect the widget. Some properties
+can be <em>getters</em>, detecting widget state and setting it on the <em>input</em> variable. These properties are usually named with
+a prefix that indicates their input is actually for getting state, the prefixes <code>is_</code> and <code>has_</code> mark a property with
+a single <code>bool</code> input that reads a widget state, the prefix <code>get_</code> and <code>actual_</code> marks a property that reads a non-boolean state from
+the widget.</p>
+<p>Getter properties are configured with a default read-write variable, so that they can be used in <code>when</code> expressions directly,
+for example, <code>when *#is_pressed</code>, the <code>is_pressed</code> property has a <code>default(var(false))</code>, so it automatically initializes
+with a read-write variable that is used in the when condition. The property attribute generates defaults automatically
+based on the prefix, the default is <code>var(T::default())</code>, this can be overwritten just by setting the default,
+it is not possible to declare a getter property without default.</p>
+<h2 id="generics"><a class="doc-anchor" href="#generics">§</a>Generics</h2>
+<p>Apart from the <code>impl</code> generics of inputs and child, there is some support for named generic types, only one named generic is allowed
+for inputs <code>impl IntoVar&lt;T&gt;</code>, <code>impl IntoValue&lt;T&gt;</code> and <code>impl WidgetHandler&lt;A&gt;</code>.</p>
+<h2 id="output"><a class="doc-anchor" href="#output">§</a>Output</h2>
+<p>The property output type must be any type that implements <a href="node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>UiNode</code></a>, usually an opaque type <code>impl UiNode</code> is used. The property
+node can be anything, as long as it delegates to the child node, see <a href="node/fn.match_node.html" title="fn zng::widget::node::match_node"><code>match_node</code></a> or <a href="attr.ui_node.html" title="attr zng::widget::ui_node"><code>ui_node</code></a> about implementing a node.</p>
+<p>Some common property patterns have helper functions, for example, to setup a context var you can use the <a href="node/fn.with_context_var.html" title="fn zng::widget::node::with_context_var"><code>with_context_var</code></a> function.</p>
+<h2 id="more-details"><a class="doc-anchor" href="#more-details">§</a>More Details</h2>
+<p>See <a href="builder/macro.property_id.html" title="macro zng::widget::builder::property_id"><code>property_id!</code></a> and <a href="builder/macro.property_args.html" title="macro zng::widget::builder::property_args"><code>property_args!</code></a> for more details about what kind of meta-code is generated for properties.</p>
+<script>
+// hide re-exported docs
+let me = document.currentScript;
+document.addEventListener("DOMContentLoaded", function() {
+    while(me.nextElementSibling !== null) {
+        me.nextElementSibling.remove();
+    }
+});
+</script>
+<p>Expands a function to a widget property.</p>
+<h2 id="full-documentation"><a class="doc-anchor" href="#full-documentation">§</a>Full Documentation</h2>
+<p>Read the documentation in the <code>zng::widget::property</code> page.</p>
+</div></details></section></div></main></body></html>

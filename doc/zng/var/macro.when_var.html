@@ -1,0 +1,37 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content=" Initializes a new conditional var."><title>when_var in zng::var - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng::var</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Macro <a href="../index.html">zng</a>::<wbr><a href="index.html">var</a>::<wbr><a class="macro" href="#">when_var</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_var/when.rs.html#66">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><span class="macro">macro_rules! </span>when_var {
+    ($(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; { ... };
+}</pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Initializes a new conditional var.</p>
+<p>A condition var updates when the first <code>true</code> condition changes or the mapped var for the current condition changes.</p>
+<h2 id="syntax"><a class="doc-anchor" href="#syntax">§</a>Syntax</h2>
+<p>The macro expects a list of <code>condition-var =&gt; condition-value-var</code>, the list is separated by comma.
+The last condition must be the <code>_</code> token that maps to the value for when none of the conditions are <code>true</code>.</p>
+<p>The <code>condition-var</code> must be an expression that evaluates to an <code>impl Var&lt;bool&gt;</code> type. The <code>condition-value-var</code> must
+by any type that implements <code>IntoVar</code>. All condition values must be of the same <a href="trait.VarValue.html" title="trait zng::var::VarValue"><code>VarValue</code></a> type.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>condition = var(<span class="bool-val">true</span>);
+<span class="kw">let </span>when_false = var(<span class="string">"condition: false"</span>.to_txt());
+
+<span class="kw">let </span>t = <span class="macro">Text!</span>(<span class="macro">when_var! </span>{
+    condition.clone() =&gt; <span class="string">"condition: true"</span>.to_txt(),
+    <span class="kw">_ </span>=&gt; when_false.clone(),
+});</code></pre></div>
+<p>In the example if <code>condition</code> or <code>when_false</code> are modified the text updates.</p>
+<h2 id="cfg"><a class="doc-anchor" href="#cfg">§</a><code>cfg</code></h2>
+<p>Every condition can be annotated with attributes, including <code>#[cfg(..)]</code>.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>t = <span class="macro">Text!</span>(<span class="macro">when_var! </span>{
+    <span class="attr">#[cfg(some_flag)]
+    </span>condition0 =&gt; <span class="string">"is condition 0"</span>.to_txt(),
+    <span class="attr">#[cfg(not(some_flag))]
+    </span>condition1 =&gt; <span class="string">"is condition 1"</span>.to_txt(),
+    <span class="kw">_ </span>=&gt; <span class="string">"is default"</span>.to_txt(),
+});</code></pre></div>
+<p>In the example above only one of the conditions will be compiled, the generated variable is the same
+type as if you had written a single condition.</p>
+<h2 id="contextualized"><a class="doc-anchor" href="#contextualized">§</a>Contextualized</h2>
+<p>The when var is contextualized when needed, meaning if any input <a href="trait.AnyVar.html#tymethod.is_contextual" title="method zng::var::AnyVar::is_contextual"><code>is_contextual</code></a> at the moment the var is created it
+is also contextual. The full output type of this macro is a <code>BoxedVar&lt;T&gt;</code> that is either an <code>ArcWhenVar&lt;T&gt;</code> or
+a <code>ContextualizedVar&lt;T, ArcWhenVar&lt;T&gt;&gt;</code>.</p>
+</div></details></section></div></main></body></html>

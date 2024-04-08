@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["DeadlineArgs","DeadlineHandle","TIMERS","Timer","TimerArgs","TimerHandle","WeakDeadlineHandle","WeakTimerHandle"],"type":["DeadlineVar","TimerVar"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TxtRepr"],"macro":["formatx"],"struct":["Txt"],"trait":["ToTxt"]};

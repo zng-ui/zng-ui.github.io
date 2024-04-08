@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["on_copy","on_cut","on_new","on_open","on_paste","on_pre_copy","on_pre_cut","on_pre_new","on_pre_open","on_pre_paste","on_pre_save","on_pre_save_as","on_save","on_save_as"],"static":["CONTEXT_MENU_CMD","NEW_CMD","OPEN_CMD","SAVE_AS_CMD","SAVE_CMD"]};

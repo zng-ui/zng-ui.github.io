@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["context_menu","context_menu_anchor","context_menu_fn","disabled_context_menu","disabled_context_menu_fn","panel_fn","style_fn"],"struct":["ContextMenu","ContextMenuArgs","DefaultStyle","TouchStyle"]};

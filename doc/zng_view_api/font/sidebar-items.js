@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["FontFaceId","FontId","FontOptions","GlyphInstance"],"type":["FontVariationName","GlyphIndex","GlyphOptions"]};

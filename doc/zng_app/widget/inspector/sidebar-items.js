@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InstanceItem"],"struct":["InspectorActualVars","InspectorInfo"],"trait":["InspectPropertyPattern","InspectWidgetPattern","WidgetInfoInspectorExt"]};

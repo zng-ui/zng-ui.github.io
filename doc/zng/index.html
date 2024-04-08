@@ -1,0 +1,315 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Zng is a cross-platform GUI framework, it provides ready made highly customizable widgets, responsive layout, live data binding, easy localization, automatic focus navigation and accessibility, async and multi-threaded tasks, robust multi-process architecture and more."><title>zng - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-4c98445ec4002617.js"></script><script defer src="../crates.js"></script><script defer src="../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod crate"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../zng/index.html">zng</a><span class="version">0.2.2</span></h2></div><div class="sidebar-elems"><ul class="block">
+            <li><a id="all-types" href="all.html">All Items</a></li></ul><section><ul class="block"><li><a href="#modules">Modules</a></li><li><a href="#macros">Macros</a></li><li><a href="#structs">Structs</a></li></ul></section></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Crate <a class="mod" href="#">zng</a><button id="copy-path" title="Copy item path to clipboard"><img src="../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../src/zng/lib.rs.html#1-913">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Zng is a cross-platform GUI framework, it provides ready made highly customizable widgets, responsive layout,
+live data binding, easy localization, automatic focus navigation and accessibility, async and multi-threaded tasks, robust
+multi-process architecture and more.</p>
+<p>Zng is pronounced “zing”, or as an initialism: ZNG (z+nesting+graphics).</p>
+<p>Every component of the framework can be extended, you can create new widgets or add properties to existing ones,
+at a lower level you can introduce new events and services, seamless integrating custom hardware.</p>
+<h2 id="usage"><a class="doc-anchor" href="#usage">§</a>Usage</h2>
+<p>First add this to your <code>Cargo.toml</code>:</p>
+<div class="example-wrap"><pre class="language-toml"><code>[dependencies]
+zng = { version = &quot;0.2.2&quot;, features = [&quot;view_prebuilt&quot;] }
+</code></pre></div>
+<p>Then create your first app:</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main() {
+    zng::view_process::prebuilt::init();
+    app();
+}
+
+<span class="kw">fn </span>app() {
+    APP.defaults().run_window(<span class="kw">async </span>{
+        <span class="macro">Window! </span>{
+            child_align = Align::CENTER;
+            child = {
+                <span class="kw">let </span>size = var(<span class="number">28i32</span>);
+                <span class="macro">Button! </span>{
+                    child = <span class="macro">Text! </span>{
+                        txt = <span class="string">"Hello World!"</span>;
+
+                        <span class="attr">#[easing(<span class="number">200</span>.ms())]
+                        </span>font_size = size.map_into();
+                    };
+                    on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+                        <span class="kw">let </span>next = size.get() + <span class="number">10</span>;
+                        size.set(<span class="kw">if </span>next &gt; <span class="number">80 </span>{ <span class="number">28 </span>} <span class="kw">else </span>{ next });
+                    });
+                }
+            };
+        }
+    })
+}</code></pre></div>
+<p>You can also use a <a href="app/index.html#prebuild" title="mod zng::app">prebuild view</a> and run in the <a href="app/index.html#same-process" title="mod zng::app">same process</a>, see <a href="app/index.html" title="mod zng::app"><code>app</code></a> for more details.</p>
+<h2 id="widgets--properties"><a class="doc-anchor" href="#widgets--properties">§</a>Widgets &amp; Properties</h2>
+<p>The high-level building blocks of UI.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Button! </span>{
+    child = <span class="macro">Text!</span>(<span class="string">"Green?"</span>);
+    widget::background_color = colors::GREEN;
+    on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| <span class="macro">println!</span>(<span class="string">"SUPER GREEN!"</span>));
+}</code></pre></div>
+<p>In the example above <a href="button/struct.Button.html" title="struct zng::button::Button"><code>Button!</code></a> and <a href="text/struct.Text.html" title="struct zng::text::Text"><code>Text!</code></a> are widgets and <code>child</code>, <a href="widget/fn.background_color.html" title="fn zng::widget::background_color"><code>background_color</code></a> and <a href="gesture/fn.on_click.html" title="fn zng::gesture::on_click"><code>on_click</code></a> are properties.
+Widgets are mostly an aggregation of properties that define an specific function and presentation, most properties are standalone
+implementations of an specific behavior or appearance, in the example only <code>child</code> is implemented by the button widget, the
+other two properties can be set in any widget.</p>
+<p>Each widget is a dual macro and <code>struct</code> of the same name, in the documentation only the <code>struct</code> is visible, when
+an struct represents a widget it is tagged with <strong><code>W</code></strong>. Each properties is declared as a function,
+in the documentation property functions are tagged with <strong><code>P</code></strong>.</p>
+<p>Widget instances can be of any type, usually they are an opaque <a href="widget/node/trait.UiNode.html" title="trait zng::widget::node::UiNode"><code>impl UiNode</code></a>, some special widgets have an instance type,
+the <a href="window/struct.Window.html" title="struct zng::window::Window"><code>Window!</code></a> widget for example has the instance type <a href="window/struct.WindowRoot.html" title="struct zng::window::WindowRoot"><code>WindowRoot</code></a>. Property instances are always of type <code>impl UiNode</code>,
+each property function takes an <code>impl UiNode</code> input plus one or more value inputs and returns an <code>impl UiNode</code> output that
+wraps the input node adding the property behavior, the widgets take care of this node chaining nesting each property
+instance in the proper order, internally every widget instance is a tree of nested node instances.</p>
+<p>Widgets and properties are very versatile, each widget documentation page will promote the properties that the widget implementer
+explicitly associated with the widget, but that is only a starting point.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Wgt! </span>{
+    layout::align = layout::Align::CENTER;
+    layout::size = <span class="number">50</span>;
+     
+    <span class="attr">#[easing(<span class="number">200</span>.ms())]
+    </span>widget::background_color = colors::RED;
+     
+    when <span class="kw-2">*</span>#gesture::is_hovered {
+        widget::background_color = colors::GREEN;
+    }
+}</code></pre></div>
+<p>In the example above an <a href="widget/struct.Wgt.html" title="struct zng::widget::Wgt"><code>Wgt!</code></a> is completely defined by stand-alone properties, <a href="layout/fn.align.html" title="fn zng::layout::align"><code>align</code></a> and <a href="layout/fn.size.html" title="fn zng::layout::size"><code>size</code></a> define
+the bounds of the widget, <a href="widget/fn.background_color.html" title="fn zng::widget::background_color"><code>background_color</code></a> fills the bounds with color and <a href="gesture/fn.is_hovered.html" title="fn zng::gesture::is_hovered"><code>is_hovered</code></a> reacts to pointer interaction.</p>
+<p>The example also introduces <a href="widget/index.html#when" title="mod zng::widget"><code>when</code></a> blocks, <a href="widget/index.html#state-properties" title="mod zng::widget">state properties</a> and the <a href="widget/attr.easing.html" title="attr zng::widget::easing"><code>easing</code></a> property attribute. State properties
+compute an state from the widget, this state can be used to change the value of other properties. When blocks are a powerful
+feature of widgets, they declare conditional property values. The easing attribute can be set in any property with transitionable
+values to smoothly animate between changes.</p>
+<p>The <a href="widget/struct.WIDGET.html" title="struct zng::widget::WIDGET"><code>widget</code></a> module documentation provides an in-depth explanation of how widgets and properties work.</p>
+<h2 id="variables"><a class="doc-anchor" href="#variables">§</a>Variables</h2>
+<p>Observable values that glue most of the UI together.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">let </span>btn_pressed = var(<span class="bool-val">false</span>);
+
+<span class="macro">Stack! </span>{
+    direction = StackDirection::top_to_bottom();
+    spacing = <span class="number">10</span>;
+    children = <span class="macro">ui_vec!</span>[
+        <span class="macro">Button! </span>{
+            child = <span class="macro">Text! </span>{ txt = <span class="string">"Press Me!"</span>; };
+            gesture::is_pressed = btn_pressed.clone();   
+        },
+        <span class="macro">Text! </span>{
+            txt = btn_pressed.map(|<span class="kw-2">&amp;</span>b| {
+                <span class="kw">if </span>b {
+                    <span class="string">"Button is pressed!"
+                </span>} <span class="kw">else </span>{
+                    <span class="string">"Button is not pressed."
+                </span>}.into()
+            });
+        }
+    ]
+}</code></pre></div>
+<p>The example above binds the pressed state of a widget with the text content of another using a <a href="var/fn.var.html" title="fn zng::var::var"><code>var</code></a>. Variables
+are the most common property input kind, in the example <code>direction</code>, <code>spacing</code>, <code>is_pressed</code> and <code>txt</code> all accept
+an <a href="var/trait.IntoVar.html" title="trait zng::var::IntoVar"><code>IntoVar&lt;T&gt;</code></a> input that gets converted into a <a href="var/trait.Var.html" title="trait zng::var::Var"><code>Var&lt;T&gt;</code></a> when the property is instantiated.</p>
+<p>There are multiple variable types, they can be a simple static value, a shared observable and modifiable value or a
+contextual value. Variables can also depend on other variables automatically updating when input variables update.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>ui(txt: <span class="kw">impl </span>IntoVar&lt;Txt&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="macro">Text!</span>(txt)
+}
+
+ui(<span class="string">"static value"</span>);
+
+<span class="kw">let </span>txt = var(Txt::from(<span class="string">"dynamic value"</span>));
+ui(txt.clone());
+txt.set(<span class="string">"change applied next update"</span>);
+
+<span class="kw">let </span>show_txt = var(<span class="bool-val">true</span>);
+ui(<span class="macro">expr_var!</span>(<span class="kw">if </span><span class="kw-2">*</span>#{show_txt} { #{txt}.clone() } <span class="kw">else </span>{ Txt::from(<span class="string">""</span>) }));
+
+ui(text::FONT_COLOR_VAR.map(|s| <span class="macro">formatx!</span>(<span class="string">"font color is {s}"</span>)));</code></pre></div>
+<p>In the example a <a href="var/fn.var.html" title="fn zng::var::var"><code>var</code></a> clone is shared with the UI and a new value is scheduled for the next app update. Variable
+updates are batched, during each app update pass every property can observe the current value and schedule modifications to
+the value, the modifications are only applied after, potentially causing a new update pass if any value actually changed, see
+[var updates] in the <a href="var/index.html" title="mod zng::var">var module</a> documentation for more details.</p>
+<p>The example also demonstrates the <a href="var/macro.expr_var.html" title="macro zng::var::expr_var"><code>expr_var!</code></a>, a read-only observable variable that interpolates other variables, the
+value of this variable automatically update when any of the interpolated variables update.</p>
+<p>And finally the example demonstrates a context var, <code>FONT_COLOR_VAR</code>. Context variables get their value from the
+<em>environment</em> where they are used, the UI in the example can show different a different text depending on where it is placed.
+Context variables are usually encapsulated by properties strongly associated with a widget, most of <a href="text/struct.Text.html" title="struct zng::text::Text"><code>Text!</code></a> properties just
+set a context var that affects all text instances in the widget they are placed and descendant widgets.</p>
+<p>There are other useful variable types, see the <a href="var/index.html" title="mod zng::var">var module</a> module documentation for more details.</p>
+<h2 id="context"><a class="doc-anchor" href="#context">§</a>Context</h2>
+<p>Context or <em>ambient</em> values set on parent widgets affecting descendant widgets.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Stack! </span>{
+    direction = StackDirection::top_to_bottom();
+    spacing = <span class="number">10</span>;
+     
+    text::font_color = colors::RED;
+
+    children = <span class="macro">ui_vec!</span>[
+        <span class="macro">Button! </span>{ child = <span class="macro">Text!</span>(<span class="string">"Text 1"</span>); },
+        <span class="macro">Button! </span>{ child = <span class="macro">Text!</span>(<span class="string">"Text 2"</span>); },
+        <span class="macro">Button! </span>{
+            child = <span class="macro">Text!</span>(<span class="string">"Text 3"</span>);
+            text::font_color = colors::GREEN;
+        },
+    ];
+}</code></pre></div>
+<p>In the example above “Text 1” and “Text 2” are rendered in red and “Text 3” is rendered in green. The context
+of a widget is important, <code>text::font_color</code> sets text color in the <code>Stack!</code> widget and all descendant widgets,
+the color is overridden in the third <code>Button!</code> for the context of that button and descendants, the <code>Text!</code>
+widget has a different appearance just by being in a different context.</p>
+<p>Note that the text widget can also set the color directly, in the following example the “Text 4” is blue, this
+value is still contextual, but texts are usually leaf widgets so only the text is affected.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">Text! </span>{
+    txt = <span class="string">"Text 4"</span>;
+    font_color = colors::BLUE;
+}</code></pre></div>
+<p>In the example above a context variable defines the text color, but not just variables are contextual, layout
+units and widget services are also contextual, widget implementers may declare custom contextual values too,
+see <a href="app/index.html#context-local" title="mod zng::app">context local</a> in the app module documentation for more details.</p>
+<h2 id="services"><a class="doc-anchor" href="#services">§</a>Services</h2>
+<p>App or contextual value and function providers.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng::clipboard::CLIPBOARD;
+
+<span class="macro">Stack! </span>{
+    direction = StackDirection::top_to_bottom();
+    spacing = <span class="number">10</span>;
+
+    children = {
+        <span class="kw">let </span>txt = var(Txt::from(<span class="string">""</span>));
+        <span class="kw">let </span>txt_is_err = var(<span class="bool-val">false</span>);
+        <span class="macro">ui_vec!</span>[
+            <span class="macro">Button! </span>{
+                child = <span class="macro">Text!</span>(<span class="string">"Paste"</span>);
+                on_click = <span class="macro">hn!</span>(txt, txt_is_err, |<span class="kw">_</span>| {
+                    <span class="kw">match </span>CLIPBOARD.text() {
+                        <span class="prelude-val">Ok</span>(p) =&gt; <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = p {
+                            txt.set(t);
+                            txt_is_err.set(<span class="bool-val">false</span>);
+                        },
+                        <span class="prelude-val">Err</span>(e) =&gt; {
+                            <span class="kw">let </span>t = WIDGET.trace_path();
+                            txt.set(<span class="macro">formatx!</span>(<span class="string">"error in {t}: {e}"</span>));
+                            txt_is_err.set(<span class="bool-val">true</span>);
+                        }
+                    }
+                });
+            },
+            <span class="macro">Text! </span>{
+                txt;
+                when <span class="kw-2">*</span>#{txt_is_err} {
+                    font_color = colors::RED;
+                }
+            }
+        ]
+    };
+}</code></pre></div>
+<p>The example above uses two services, <code>CLIPBOARD</code> and <code>WIDGET</code>. Services are represented
+by an unit struct named like a static item, service functionality is available as methods on
+this unit struct. Services are contextual, <code>CLIPBOARD</code> exists on the app context, it can only operate
+in app threads, <code>WIDGET</code> represents the current widget and can only be used inside a widget.</p>
+<p>The default app provides multiple services, some common ones are <a href="struct.APP.html" title="struct zng::APP"><code>APP</code></a>, <a href="window/struct.WINDOWS.html" title="struct zng::window::WINDOWS"><code>WINDOWS</code></a>, <a href="window/struct.WINDOW.html" title="struct zng::window::WINDOW"><code>WINDOW</code></a>, <a href="widget/struct.WIDGET.html" title="struct zng::widget::WIDGET"><code>WIDGET</code></a>,
+<a href="focus/struct.FOCUS.html" title="struct zng::focus::FOCUS"><code>FOCUS</code></a>, <a href="popup/struct.POPUP.html" title="struct zng::popup::POPUP"><code>POPUP</code></a>, <a href="data_context/struct.DATA.html" title="struct zng::data_context::DATA"><code>DATA</code></a> and more. Services all follow the same pattern, they are a unit struct named like a static
+item, if you see such a type it is a service.</p>
+<p>Most services are synchronized with the update cycle. If the service provides a value that value does not change mid-update, all
+widgets read the same value in the same update. If the service run some operation it takes requests to run the operation, the
+requests are only applied after the current UI update. This is even true for the <a href="app/struct.INSTANT.html" title="struct zng::app::INSTANT"><code>INSTANT</code></a> service that provides the current
+time.</p>
+<h2 id="events--commands"><a class="doc-anchor" href="#events--commands">§</a>Events &amp; Commands</h2>
+<p>Targeted messages send from the system to widgets or from one widget to another.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::{prelude::<span class="kw-2">*</span>, clipboard::{on_paste, CLIPBOARD, PASTE_CMD}};
+
+APP.defaults().run_window(<span class="kw">async </span>{
+    <span class="kw">let </span>cmd = PASTE_CMD.scoped(WINDOW.id());
+    <span class="kw">let </span>paste_btn = <span class="macro">Button! </span>{
+        child = <span class="macro">Text!</span>(cmd.name());
+        widget::enabled = cmd.is_enabled();
+        widget::visibility = cmd.has_handlers().map_into();
+        tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(cmd.name_with_shortcut()));
+        on_click = <span class="macro">hn!</span>(|args: <span class="kw-2">&amp;</span>gesture::ClickArgs| {
+            args.propagation().stop();
+            cmd.notify();
+        });
+    };
+
+    <span class="kw">let </span>pasted_txt = var(Txt::from(<span class="string">""</span>));
+
+    <span class="macro">Window! </span>{
+        on_paste = <span class="macro">hn!</span>(pasted_txt, |<span class="kw">_</span>| {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = CLIPBOARD.text().ok().flatten() {
+                pasted_txt.set(t);
+            }
+        });
+         
+        child = <span class="macro">Stack! </span>{
+            children_align = Align::CENTER;
+            direction = StackDirection::top_to_bottom();
+            spacing = <span class="number">20</span>;             
+            children = <span class="macro">ui_vec!</span>[paste_btn, <span class="macro">Text!</span>(pasted_txt)];
+        };
+    }
+});</code></pre></div>
+<p>The example above uses events and command events. Events are represented by a static instance
+of <a href="event/struct.Event.html" title="struct zng::event::Event"><code>Event&lt;A&gt;</code></a> with name suffix <code>_EVENT</code>. Events are usually abstracted by
+one or more event property, event properties are named with prefix <code>on_</code> and accept one input of
+<a href="handler/trait.WidgetHandler.html" title="trait zng::handler::WidgetHandler"><code>impl WidgetHandler&lt;A&gt;</code></a>. Commands are specialized events represented by a static instance of <a href="event/struct.Command.html" title="struct zng::event::Command"><code>Command</code></a>
+with name suffix <code>_CMD</code>. Every command is also an <code>Event&lt;CommandArgs&gt;</code>, unlike other events it is common
+for the command instance to be used directly.</p>
+<p>The <code>on_click</code> property handles the <code>CLICK_EVENT</code> when the click was done with the primary button and targets
+the widget or a descendant of the widget. The <a href="handler/macro.hn.html" title="macro zng::handler::hn"><code>hn!</code></a> is a widget handler that synchronously handles the event.
+See the <a href="event/index.html" title="mod zng::event"><code>event</code></a> module documentation for details about event propagation, targeting and route. And see
+<a href="handler/index.html" title="mod zng::handler"><code>handler</code></a> module for other hander types, including <a href="handler/macro.async_hn.html" title="macro zng::handler::async_hn"><code>async_hn!</code></a> that enables async <code>.await</code> in any event property.</p>
+<p>The example above defines a button for the <code>PASTE_CMD</code> command scoped on the window. Scoped commands are different
+instances of <a href="event/struct.Command.html" title="struct zng::event::Command"><code>Command</code></a>, the command scope can be a window or widget ID, the scope is the target of the command and
+the context of the command metadata. In the example the button is only visible if the command scope (window) has
+a paste handler, the button is only enabled it at least one paste handler on the scope is enabled, the button also
+displays the command name and shortcut metadata, and finally on click the button notifies a command event that is
+received in <code>on_click</code>.</p>
+<p>Commands enable separation of concerns, the button in the example does not need to know what the window will do on paste,
+in fact the button does not even need to know what command it is requesting. Widgets can also be controlled using commands,
+the <code>Scroll!</code> widget for example can be controlled from anywhere else in the app using the <a href="scroll/cmd/index.html" title="mod zng::scroll::cmd"><code>scroll::cmd</code></a> commands. See
+the <a href="event/index.html#commands" title="mod zng::event">commands</a> section in the event module documentation for more details.</p>
+<h2 id="layout-1"><a class="doc-anchor" href="#layout-1">§</a>Layout</h2>
+<p>Contextual properties and constraints that affect how a widget is sized and placed on the screen.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="macro">Container! </span>{
+    layout::size = (<span class="number">400</span>, <span class="number">350</span>);
+    widget::background_color = colors::BLUE.darken(<span class="number">70</span>.pct());    
+
+    child = <span class="macro">Button! </span>{
+        child = <span class="macro">Text!</span>(<span class="string">"Text"</span>);
+     
+        layout::align = layout::Align::CENTER;
+        layout::size = (<span class="number">60</span>.pct(), <span class="number">70</span>.pct());
+    };
+}</code></pre></div>
+<p>In the example above the container widget sets an exact size using <code>layout::size</code> with exact units, the
+button widget sets a relative size using percentage units and positions itself in the container using <code>layout::align</code>.
+All the layout properties are stand-alone, in the example only the text widget implements layout directly. Layout
+properties modify the layout context by setting constraints and defining units, this context is available for all
+properties that need it during layout, see the <a href="layout/index.html" title="mod zng::layout"><code>layout</code></a> module documentation for more details.</p>
+<h2 id="in-depth-documentation"><a class="doc-anchor" href="#in-depth-documentation">§</a>In-Depth Documentation</h2>
+<p>This crate level documentation only gives an overview required to start making apps using existing widgets and properties.
+All top-level modules in this crate contains in-depth documentation about their subject, of particular importance the
+<a href="app/index.html" title="mod zng::app"><code>app</code></a>, <a href="widget/struct.WIDGET.html" title="struct zng::widget::WIDGET"><code>widget</code></a>, <a href="layout/index.html" title="mod zng::layout"><code>layout</code></a> and <a href="render/index.html" title="mod zng::render"><code>render</code></a> modules should give you a solid understanding of how everything works.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="mod" href="access/index.html" title="mod zng::access">access</a></div><div class="desc docblock-short">Accessibility service, events and properties.</div></li><li><div class="item-name"><a class="mod" href="ansi_text/index.html" title="mod zng::ansi_text">ansi_text</a></div><div class="desc docblock-short">ANSI text widget.</div></li><li><div class="item-name"><a class="mod" href="app/index.html" title="mod zng::app">app</a></div><div class="desc docblock-short">App extensions, context, events and commands API.</div></li><li><div class="item-name"><a class="mod" href="button/index.html" title="mod zng::button">button</a></div><div class="desc docblock-short">Button widget, styles and properties.</div></li><li><div class="item-name"><a class="mod" href="checkerboard/index.html" title="mod zng::checkerboard">checkerboard</a></div><div class="desc docblock-short">Checkerboard visual widget.</div></li><li><div class="item-name"><a class="mod" href="clipboard/index.html" title="mod zng::clipboard">clipboard</a></div><div class="desc docblock-short">Clipboard service, commands and other types.</div></li><li><div class="item-name"><a class="mod" href="color/index.html" title="mod zng::color">color</a></div><div class="desc docblock-short">Color and gradient types, functions, properties and macros.</div></li><li><div class="item-name"><a class="mod" href="config/index.html" title="mod zng::config">config</a></div><div class="desc docblock-short">Config service, sources and other types.</div></li><li><div class="item-name"><a class="mod" href="container/index.html" title="mod zng::container">container</a></div><div class="desc docblock-short">Container widget.</div></li><li><div class="item-name"><a class="mod" href="data_context/index.html" title="mod zng::data_context">data_context</a></div><div class="desc docblock-short">Data context service and properties.</div></li><li><div class="item-name"><a class="mod" href="data_view/index.html" title="mod zng::data_view">data_view</a></div><div class="desc docblock-short">Data view widgets and nodes.</div></li><li><div class="item-name"><a class="mod" href="event/index.html" title="mod zng::event">event</a></div><div class="desc docblock-short">Event and command API.</div></li><li><div class="item-name"><a class="mod" href="focus/index.html" title="mod zng::focus">focus</a></div><div class="desc docblock-short">Focus service, properties, events and other types.</div></li><li><div class="item-name"><a class="mod" href="font/index.html" title="mod zng::font">font</a></div><div class="desc docblock-short">Fonts service and text shaping.</div></li><li><div class="item-name"><a class="mod" href="fs_watcher/index.html" title="mod zng::fs_watcher">fs_watcher</a></div><div class="desc docblock-short">File system watcher service and other types.</div></li><li><div class="item-name"><a class="mod" href="gesture/index.html" title="mod zng::gesture">gesture</a></div><div class="desc docblock-short">Gesture service, properties, events, shortcuts and other types.</div></li><li><div class="item-name"><a class="mod" href="grid/index.html" title="mod zng::grid">grid</a></div><div class="desc docblock-short">Grid layout widgets.</div></li><li><div class="item-name"><a class="mod" href="handler/index.html" title="mod zng::handler">handler</a></div><div class="desc docblock-short">Event handler API.</div></li><li><div class="item-name"><a class="mod" href="icon/index.html" title="mod zng::icon">icon</a></div><div class="desc docblock-short">Icon widget and other types.</div></li><li><div class="item-name"><a class="mod" href="image/index.html" title="mod zng::image">image</a></div><div class="desc docblock-short">Images service, widget and other types.</div></li><li><div class="item-name"><a class="mod" href="keyboard/index.html" title="mod zng::keyboard">keyboard</a></div><div class="desc docblock-short">Keyboard service, properties, events and other types.</div></li><li><div class="item-name"><a class="mod" href="l10n/index.html" title="mod zng::l10n">l10n</a></div><div class="desc docblock-short">Localization service, sources and other types.</div></li><li><div class="item-name"><a class="mod" href="label/index.html" title="mod zng::label">label</a></div><div class="desc docblock-short">Label widget and properties.</div></li><li><div class="item-name"><a class="mod" href="layer/index.html" title="mod zng::layer">layer</a></div><div class="desc docblock-short">Window layers.</div></li><li><div class="item-name"><a class="mod" href="layout/index.html" title="mod zng::layout">layout</a></div><div class="desc docblock-short">Layout service, units and other types.</div></li><li><div class="item-name"><a class="mod" href="markdown/index.html" title="mod zng::markdown">markdown</a></div><div class="desc docblock-short">Markdown widget, properties and other types.</div></li><li><div class="item-name"><a class="mod" href="menu/index.html" title="mod zng::menu">menu</a></div><div class="desc docblock-short">Menu widgets, properties and other types.</div></li><li><div class="item-name"><a class="mod" href="mouse/index.html" title="mod zng::mouse">mouse</a></div><div class="desc docblock-short">Mouse service, properties, events and other types.</div></li><li><div class="item-name"><a class="mod" href="panel/index.html" title="mod zng::panel">panel</a></div><div class="desc docblock-short">Panel layout widget.</div></li><li><div class="item-name"><a class="mod" href="pointer_capture/index.html" title="mod zng::pointer_capture">pointer_capture</a></div><div class="desc docblock-short">Pointer capture service, properties, events and other types.</div></li><li><div class="item-name"><a class="mod" href="popup/index.html" title="mod zng::popup">popup</a></div><div class="desc docblock-short">Popup widget and properties.</div></li><li><div class="item-name"><a class="mod" href="prelude/index.html" title="mod zng::prelude">prelude</a></div><div class="desc docblock-short">Types for general app development.</div></li><li><div class="item-name"><a class="mod" href="prelude_wgt/index.html" title="mod zng::prelude_wgt">prelude_wgt</a></div><div class="desc docblock-short">Prelude for declaring new properties and widgets.</div></li><li><div class="item-name"><a class="mod" href="render/index.html" title="mod zng::render">render</a></div><div class="desc docblock-short">Frame builder and other types.</div></li><li><div class="item-name"><a class="mod" href="rule_line/index.html" title="mod zng::rule_line">rule_line</a></div><div class="desc docblock-short">Rule line widgets and properties.</div></li><li><div class="item-name"><a class="mod" href="scroll/index.html" title="mod zng::scroll">scroll</a></div><div class="desc docblock-short">Scroll widgets, commands and properties.</div></li><li><div class="item-name"><a class="mod" href="selectable/index.html" title="mod zng::selectable">selectable</a></div><div class="desc docblock-short">Selectable text widget and properties.</div></li><li><div class="item-name"><a class="mod" href="stack/index.html" title="mod zng::stack">stack</a></div><div class="desc docblock-short">Stack layout widget, nodes and properties.</div></li><li><div class="item-name"><a class="mod" href="state_map/index.html" title="mod zng::state_map">state_map</a></div><div class="desc docblock-short">Hash-map of type erased values, useful for storing assorted dynamic state.</div></li><li><div class="item-name"><a class="mod" href="style/index.html" title="mod zng::style">style</a></div><div class="desc docblock-short">Style mix-in and other types.</div></li><li><div class="item-name"><a class="mod" href="task/index.html" title="mod zng::task">task</a></div><div class="desc docblock-short">Parallel async tasks and async task runners.</div></li><li><div class="item-name"><a class="mod" href="text/index.html" title="mod zng::text">text</a></div><div class="desc docblock-short">Text widget, properties and other types.</div></li><li><div class="item-name"><a class="mod" href="text_input/index.html" title="mod zng::text_input">text_input</a></div><div class="desc docblock-short">Text input widget and properties.</div></li><li><div class="item-name"><a class="mod" href="timer/index.html" title="mod zng::timer">timer</a></div><div class="desc docblock-short">App timers service and other types.</div></li><li><div class="item-name"><a class="mod" href="tip/index.html" title="mod zng::tip">tip</a></div><div class="desc docblock-short">Tooltip properties and widget.</div></li><li><div class="item-name"><a class="mod" href="toggle/index.html" title="mod zng::toggle">toggle</a></div><div class="desc docblock-short">Toggle button widget and styles for check box, combo box, radio button and switch button.</div></li><li><div class="item-name"><a class="mod" href="touch/index.html" title="mod zng::touch">touch</a></div><div class="desc docblock-short">Touch service, properties, events and other types.</div></li><li><div class="item-name"><a class="mod" href="undo/index.html" title="mod zng::undo">undo</a></div><div class="desc docblock-short">Undo service, commands and other types.</div></li><li><div class="item-name"><a class="mod" href="update/index.html" title="mod zng::update">update</a></div><div class="desc docblock-short">App update service and other types.</div></li><li><div class="item-name"><a class="mod" href="var/index.html" title="mod zng::var">var</a></div><div class="desc docblock-short">Variables API.</div></li><li><div class="item-name"><a class="mod" href="view_process/index.html" title="mod zng::view_process">view_process</a></div><div class="desc docblock-short">View process implementations.</div></li><li><div class="item-name"><a class="mod" href="widget/index.html" title="mod zng::widget">widget</a></div><div class="desc docblock-short">Widget info, builder and base, UI node and list.</div></li><li><div class="item-name"><a class="mod" href="window/index.html" title="mod zng::window">window</a></div><div class="desc docblock-short">Window service, widget, events, commands and other types.</div></li><li><div class="item-name"><a class="mod" href="wrap/index.html" title="mod zng::wrap">wrap</a></div><div class="desc docblock-short">Wrap layout widget and properties.</div></li></ul><h2 id="macros" class="section-header">Macros<a href="#macros" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="macro" href="macro.async_clmv.html" title="macro zng::async_clmv">async_clmv</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Async clone move block.</div></li><li><div class="item-name"><a class="macro" href="macro.async_clmv_fn.html" title="macro zng::async_clmv_fn">async_clmv_fn</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Async clone move closure.</div></li><li><div class="item-name"><a class="macro" href="macro.async_clmv_fn_once.html" title="macro zng::async_clmv_fn_once">async_clmv_fn_once</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Async clone move closure that can only be called once.</div></li><li><div class="item-name"><a class="macro" href="macro.clmv.html" title="macro zng::clmv">clmv</a></div><div class="desc docblock-short"><span data-del-macro-root></span> Clone move closure.</div></li></ul><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.APP.html" title="struct zng::APP">APP</a></div><div class="desc docblock-short">Start and manage an app process.</div></li></ul></section></div></main></body></html>

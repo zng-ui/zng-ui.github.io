@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ApiExtensionNameError","ApiExtensionRecvError"],"struct":["ApiExtensionId","ApiExtensionName","ApiExtensionPayload","ApiExtensions"]};

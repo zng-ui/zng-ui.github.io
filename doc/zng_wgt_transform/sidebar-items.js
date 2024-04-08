@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["backface_visibility","perspective","perspective_origin","rotate","rotate_x","rotate_y","rotate_z","scale","scale_x","scale_xy","scale_y","skew","skew_x","skew_y","transform","transform_origin","transform_style","translate","translate_x","translate_y","translate_z"],"static":["PERSPECTIVE_ORIGIN_VAR","TRANSFORM_ORIGIN_VAR"]};

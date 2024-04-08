@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CaptureMode"],"static":["POINTER_CAPTURE_EVENT"],"struct":["CaptureInfo","POINTER_CAPTURE","PointerCaptureArgs","PointerCaptureManager"]};
