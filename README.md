@@ -1,5 +1,3 @@
 # zng-ui
 
-Zng crates documentation.
-
-See [`/docs/zng`](zng-ui.github.io/docs/zng).
+Zng crates [documentation](https://zng-ui.github.io/docs/zng).
