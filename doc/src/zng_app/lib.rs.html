@@ -1460,6 +1460,32 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1422" id="1422">1422</a>
 <a href="#1423" id="1423">1423</a>
 <a href="#1424" id="1424">1424</a>
+<a href="#1425" id="1425">1425</a>
+<a href="#1426" id="1426">1426</a>
+<a href="#1427" id="1427">1427</a>
+<a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
+<a href="#1435" id="1435">1435</a>
+<a href="#1436" id="1436">1436</a>
+<a href="#1437" id="1437">1437</a>
+<a href="#1438" id="1438">1438</a>
+<a href="#1439" id="1439">1439</a>
+<a href="#1440" id="1440">1440</a>
+<a href="#1441" id="1441">1441</a>
+<a href="#1442" id="1442">1442</a>
+<a href="#1443" id="1443">1443</a>
+<a href="#1444" id="1444">1444</a>
+<a href="#1445" id="1445">1445</a>
+<a href="#1446" id="1446">1446</a>
+<a href="#1447" id="1447">1447</a>
+<a href="#1448" id="1448">1448</a>
+<a href="#1449" id="1449">1449</a>
+<a href="#1450" id="1450">1450</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 #![doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">"../"</span>, <span class="macro">std::env!</span>(<span class="string">"CARGO_PKG_README"</span>)))]
@@ -2619,6 +2645,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Starts building an application with no extensions.
     </span><span class="attr">#[cfg(dyn_app_extension)]
     </span><span class="kw">pub fn </span>minimal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt;&gt; {
+        <span class="attr">#[cfg(debug_assertions)]
+        </span>print_tracing(tracing::Level::INFO);
         assert_not_view_process();
         <span class="self">Self</span>::assert_can_run();
         check_deadlock();
@@ -2634,6 +2662,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Starts building an application with no extensions.
     </span><span class="attr">#[cfg(not(dyn_app_extension))]
     </span><span class="kw">pub fn </span>minimal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AppExtended&lt;()&gt; {
+        <span class="attr">#[cfg(debug_assertions)]
+        </span>print_tracing(tracing::Level::INFO);
         assert_not_view_process();
         <span class="self">Self</span>::assert_can_run();
         check_deadlock();
@@ -2818,37 +2848,39 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub trait </span>Sealed {}
 }
 
-<span class="doccomment">/// Sets a `tracing` subscriber that writes warnings to stderr and panics on errors.
+<span class="doccomment">/// Print [`tracing`] events if a subscriber is not already set.
 ///
-/// Panics if another different subscriber is already set.
-</span><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
-</span><span class="kw">pub fn </span>test_log() {
-    <span class="kw">use </span>std::sync::atomic::<span class="kw-2">*</span>;
+/// All non-fatal errors in the Zng project are logged using tracing.
+///
+/// In debug builds this function is called automatically with level INFO on app start.
+///
+/// See also [`test_log`] to enable panicking for errors.
+</span><span class="kw">pub fn </span>print_tracing(max: tracing::Level) -&gt; bool {
+    <span class="kw">use </span>tracing_subscriber::prelude::<span class="kw-2">*</span>;
 
-    <span class="kw">use </span>tracing::<span class="kw-2">*</span>;
+    tracing_subscriber::registry()
+        .with(FilterLayer(max))
+        .with(tracing_subscriber::fmt::layer().without_time())
+        .try_init()
+        .is_ok()
+}
 
-    <span class="kw">struct </span>TestSubscriber;
-    <span class="kw">impl </span>Subscriber <span class="kw">for </span>TestSubscriber {
-        <span class="kw">fn </span>enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, metadata: <span class="kw-2">&amp;</span>Metadata&lt;<span class="lifetime">'_</span>&gt;) -&gt; bool {
-            metadata.is_event() &amp;&amp; metadata.level() &lt; <span class="kw-2">&amp;</span>Level::WARN
-        }
+<span class="kw">struct </span>FilterLayer(tracing::Level);
+<span class="kw">impl</span>&lt;S: tracing::Subscriber&gt; tracing_subscriber::Layer&lt;S&gt; <span class="kw">for </span>FilterLayer {
+    <span class="kw">fn </span>enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, metadata: <span class="kw-2">&amp;</span>tracing::Metadata&lt;<span class="lifetime">'_</span>&gt;, <span class="kw">_</span>: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) -&gt; bool {
+        filter(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, metadata)
+    }
 
-        <span class="kw">fn </span>new_span(<span class="kw-2">&amp;</span><span class="self">self</span>, _span: <span class="kw-2">&amp;</span>span::Attributes&lt;<span class="lifetime">'_</span>&gt;) -&gt; span::Id {
-            <span class="macro">unimplemented!</span>()
-        }
+    <span class="kw">fn </span>max_level_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;tracing::metadata::LevelFilter&gt; {
+        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="number">0</span>.into())
+    }
 
-        <span class="kw">fn </span>record(<span class="kw-2">&amp;</span><span class="self">self</span>, _span: <span class="kw-2">&amp;</span>span::Id, _values: <span class="kw-2">&amp;</span>span::Record&lt;<span class="lifetime">'_</span>&gt;) {
-            <span class="macro">unimplemented!</span>()
-        }
-
-        <span class="kw">fn </span>record_follows_from(<span class="kw-2">&amp;</span><span class="self">self</span>, _span: <span class="kw-2">&amp;</span>span::Id, _follows: <span class="kw-2">&amp;</span>span::Id) {
-            <span class="macro">unimplemented!</span>()
-        }
-
-        <span class="kw">fn </span>event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>Event&lt;<span class="lifetime">'_</span>&gt;) {
+    <span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+    </span><span class="kw">fn </span>on_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>tracing::Event&lt;<span class="lifetime">'_</span>&gt;, _ctx: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) {
+        <span class="kw">if </span>event.metadata().level() == <span class="kw-2">&amp;</span>tracing::Level::ERROR &amp;&amp; APP.is_running() &amp;&amp; TEST_LOG.get() {
             <span class="kw">struct </span>MsgCollector&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>String);
-            <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; field::Visit <span class="kw">for </span>MsgCollector&lt;<span class="lifetime">'a</span>&gt; {
-                <span class="kw">fn </span>record_debug(<span class="kw-2">&amp;mut </span><span class="self">self</span>, field: <span class="kw-2">&amp;</span>field::Field, value: <span class="kw-2">&amp;</span><span class="kw">dyn </span>fmt::Debug) {
+            <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; tracing::field::Visit <span class="kw">for </span>MsgCollector&lt;<span class="lifetime">'a</span>&gt; {
+                <span class="kw">fn </span>record_debug(<span class="kw-2">&amp;mut </span><span class="self">self</span>, field: <span class="kw-2">&amp;</span>tracing::field::Field, value: <span class="kw-2">&amp;</span><span class="kw">dyn </span>fmt::Debug) {
                     <span class="kw">use </span>std::fmt::Write;
                     <span class="macro">write!</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="string">"\n  {} = {:?}"</span>, field.name(), value).unwrap();
                 }
@@ -2861,27 +2893,47 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="kw">let </span><span class="kw-2">mut </span>msg = <span class="macro">format!</span>(<span class="string">"[{file}:{line}]"</span>);
             event.record(<span class="kw-2">&amp;mut </span>MsgCollector(<span class="kw-2">&amp;mut </span>msg));
 
-            <span class="kw">if </span>meta.level() == <span class="kw-2">&amp;</span>Level::ERROR {
-                <span class="macro">panic!</span>(<span class="string">"[LOG-ERROR]{msg}"</span>);
-            } <span class="kw">else </span>{
-                <span class="macro">eprintln!</span>(<span class="string">"[LOG-WARN]{msg}"</span>);
-            }
+            <span class="macro">panic!</span>(<span class="string">"[LOG-ERROR]{msg}"</span>)
         }
+    }
+}
+<span class="kw">fn </span>filter(level: <span class="kw-2">&amp;</span>tracing::Level, metadata: <span class="kw-2">&amp;</span>tracing::Metadata) -&gt; bool {
+    <span class="kw">if </span>metadata.level() &gt; level {
+        <span class="kw">return </span><span class="bool-val">false</span>;
+    }
 
-        <span class="kw">fn </span>enter(<span class="kw-2">&amp;</span><span class="self">self</span>, _span: <span class="kw-2">&amp;</span>span::Id) {
-            <span class="macro">unimplemented!</span>()
-        }
-        <span class="kw">fn </span>exit(<span class="kw-2">&amp;</span><span class="self">self</span>, _span: <span class="kw-2">&amp;</span>span::Id) {
-            <span class="macro">unimplemented!</span>()
+    <span class="comment">// suppress webrender warnings:
+    //
+    </span><span class="kw">if </span>metadata.target() == <span class="string">"webrender::device::gl" </span>{
+        <span class="comment">// Suppress "Cropping texture upload Box2D((0, 0), (0, 1)) to None"
+        // This happens when an empty frame is rendered.
+        </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">4661</span>) {
+            <span class="kw">return </span><span class="bool-val">false</span>;
         }
     }
 
-    <span class="kw">static </span>IS_SET: AtomicBool = AtomicBool::new(<span class="bool-val">false</span>);
-
-    <span class="kw">if </span>!IS_SET.swap(<span class="bool-val">true</span>, Ordering::Relaxed) {
-        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = subscriber::set_global_default(TestSubscriber) {
-            <span class="macro">panic!</span>(<span class="string">"failed to set test log subscriber, {e:?}"</span>);
+    <span class="comment">// suppress font-kit warnings:
+    //
+    </span><span class="kw">if </span>metadata.target() == <span class="string">"font_kit::loaders::freetype" </span>{
+        <span class="comment">// Suppress "$fn(): found invalid platform ID $n"
+        // This does not look fully implemented and generates a lot of warns
+        // with the default Ubuntu font set all with valid platform IDs.
+        </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">735</span>) {
+            <span class="kw">return </span><span class="bool-val">false</span>;
         }
     }
+
+    <span class="bool-val">true
+</span>}
+
+<span class="doccomment">/// Modifies the [`print_tracing`] subscriber to panic for error logs in the current app.
+</span><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+</span><span class="kw">pub fn </span>test_log() {
+    TEST_LOG.set(<span class="bool-val">true</span>);
+}
+
+<span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+</span><span class="macro">zng_app_context::app_local! </span>{
+    <span class="kw">static </span>TEST_LOG: bool = <span class="bool-val">false</span>;
 }
 </code></pre></div></section></main></body></html>
