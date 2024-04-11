@@ -1829,7 +1829,7 @@
     }
 
     <span class="doccomment">/// If the focus is still in the same widget but [`highlight`](FocusChangedArgs::highlight) changed.
-    </span><span class="kw">pub fn </span>is_hightlight_changed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+    </span><span class="kw">pub fn </span>is_highlight_changed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.prev_focus == <span class="self">self</span>.new_focus
     }
 
@@ -2763,13 +2763,13 @@
     </span><span class="kw">fn </span>new_focus_for_alt_exit(<span class="kw-2">&amp;mut </span><span class="self">self</span>, prev_w: WidgetFocusInfo, is_info_retry: bool, highlight: bool) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt; {
         <span class="kw">let </span>(<span class="kw">_</span>, return_path) = <span class="self">self</span>.alt_return.as_ref().unwrap();
 
-        <span class="kw">let </span>return_interac = return_path.interactivity();
+        <span class="kw">let </span>return_int = return_path.interactivity();
         <span class="kw">let </span>return_id = return_path.widget_id();
         <span class="kw">let </span>info = prev_w.focus_tree();
 
         <span class="kw">let </span>r = info.get_or_parent(return_path);
         <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = <span class="kw-2">&amp;</span>r {
-            <span class="kw">if </span>w.info().id() != return_id &amp;&amp; !is_info_retry &amp;&amp; return_interac.is_blocked() {
+            <span class="kw">if </span>w.info().id() != return_id &amp;&amp; !is_info_retry &amp;&amp; return_int.is_blocked() {
                 <span class="comment">// blocked return may not have unblocked yet
 
                 </span><span class="kw">if let </span><span class="prelude-val">Some</span>(exists) = info.tree().get(return_id) {
@@ -2882,7 +2882,7 @@
         widget_id: WidgetId,
         navigation_origin: bool,
         highlight: bool,
-        fallback_to_childs: bool,
+        fallback_to_children: bool,
         fallback_to_parents: bool,
         request: FocusRequest,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;FocusChangedArgs&gt; {
@@ -2897,7 +2897,7 @@
             <span class="kw">if </span>w.is_focusable() {
                 <span class="kw">let </span>enable = w.enabled_nav_with_frame();
                 target = <span class="prelude-val">Some</span>((FocusedInfo::new(w), enable));
-            } <span class="kw">else if </span>fallback_to_childs {
+            } <span class="kw">else if </span>fallback_to_children {
                 <span class="kw">let </span>enable = <span class="kw">if </span>navigation_origin {
                     next_origin = <span class="prelude-val">Some</span>(widget_id);
                     <span class="prelude-val">Some</span>(w.enabled_nav_with_frame())

@@ -2220,14 +2220,14 @@
 /// operations.
 ///
 /// See [`rayon::join`] for more details about join.
-</span><span class="kw">pub fn </span>join&lt;A, B, RA, RB&gt;(oper_a: A, oper_b: B) -&gt; (RA, RB)
+</span><span class="kw">pub fn </span>join&lt;A, B, RA, RB&gt;(op_a: A, op_b: B) -&gt; (RA, RB)
 <span class="kw">where
     </span>A: FnOnce() -&gt; RA + Send,
     B: FnOnce() -&gt; RB + Send,
     RA: Send,
     RB: Send,
 {
-    <span class="self">self</span>::join_context(<span class="kw">move </span>|<span class="kw">_</span>| oper_a(), <span class="kw">move </span>|<span class="kw">_</span>| oper_b())
+    <span class="self">self</span>::join_context(<span class="kw">move </span>|<span class="kw">_</span>| op_a(), <span class="kw">move </span>|<span class="kw">_</span>| op_b())
 }
 
 <span class="doccomment">/// Rayon join context with local context.
@@ -2236,7 +2236,7 @@
 /// operations.
 ///
 /// See [`rayon::join_context`] for more details about join.
-</span><span class="kw">pub fn </span>join_context&lt;A, B, RA, RB&gt;(oper_a: A, oper_b: B) -&gt; (RA, RB)
+</span><span class="kw">pub fn </span>join_context&lt;A, B, RA, RB&gt;(op_a: A, op_b: B) -&gt; (RA, RB)
 <span class="kw">where
     </span>A: FnOnce(rayon::FnContext) -&gt; RA + Send,
     B: FnOnce(rayon::FnContext) -&gt; RB + Send,
@@ -2248,16 +2248,16 @@
     rayon::join_context(
         <span class="kw">move </span>|a| {
             <span class="kw">if </span>a.migrated() {
-                ctx.clone().with_context(|| oper_a(a))
+                ctx.clone().with_context(|| op_a(a))
             } <span class="kw">else </span>{
-                oper_a(a)
+                op_a(a)
             }
         },
         <span class="kw">move </span>|b| {
             <span class="kw">if </span>b.migrated() {
-                ctx.clone().with_context(|| oper_b(b))
+                ctx.clone().with_context(|| op_b(b))
             } <span class="kw">else </span>{
-                oper_b(b)
+                op_b(b)
             }
         },
     )
@@ -3959,7 +3959,7 @@
     }
 
     <span class="attr">#[test]
-    </span><span class="kw">pub fn </span>run_wake_imediatly() {
+    </span><span class="kw">pub fn </span>run_wake_immediately() {
         async_test(<span class="kw">async </span>{
             run(<span class="kw">async </span>{
                 yield_now().<span class="kw">await</span>;

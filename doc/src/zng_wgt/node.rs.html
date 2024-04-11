@@ -2788,7 +2788,7 @@ document.addEventListener('DOMContentLoaded', function () {
     F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;A&gt;,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>filter: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send&gt; = Box::new(filter);
     on_event_impl(child.cfg_boxed(), event, filter, handler.cfg_boxed()).cfg_boxed()
 }
@@ -2856,7 +2856,7 @@ document.addEventListener('DOMContentLoaded', function () {
     F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;A&gt;,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>filter: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send&gt; = Box::new(filter);
     on_pre_event_impl(child.cfg_boxed(), event, filter, handler.cfg_boxed()).cfg_boxed()
 }
@@ -3056,9 +3056,9 @@ document.addEventListener('DOMContentLoaded', function () {
     EB: FnMut() -&gt; E + Send + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;CommandArgs&gt;,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>command_builder: Box&lt;<span class="kw">dyn </span>FnMut() -&gt; Command + Send&gt; = Box::new(command_builder);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>enabled_builder: Box&lt;<span class="kw">dyn </span>FnMut() -&gt; E + Send&gt; = Box::new(enabled_builder);
 
     on_command_impl(child.boxed(), command_builder, enabled_builder, handler.cfg_boxed()).cfg_boxed()
@@ -3151,9 +3151,9 @@ document.addEventListener('DOMContentLoaded', function () {
     EB: FnMut() -&gt; E + Send + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;CommandArgs&gt;,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>command_builder: Box&lt;<span class="kw">dyn </span>FnMut() -&gt; Command + Send&gt; = Box::new(command_builder);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>enabled_builder: Box&lt;<span class="kw">dyn </span>FnMut() -&gt; E + Send&gt; = Box::new(enabled_builder);
 
     on_pre_command_impl(child.cfg_boxed(), command_builder, enabled_builder, handler.cfg_boxed()).cfg_boxed()
@@ -3819,7 +3819,7 @@ document.addEventListener('DOMContentLoaded', function () {
     context: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>ContextLocal&lt;T&gt;,
     init_value: <span class="kw">impl </span>FnMut() -&gt; T + Send + <span class="lifetime">'static</span>,
 ) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>init_value: Box&lt;<span class="kw">dyn </span>FnMut() -&gt; T + Send&gt; = Box::new(init_value);
     with_context_local_init_impl(child.cfg_boxed(), context, init_value).cfg_boxed()
 }
@@ -3929,7 +3929,7 @@ document.addEventListener('DOMContentLoaded', function () {
     I: Fn() -&gt; T + Send + <span class="lifetime">'static</span>,
     T: StateValue + VarValue,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>default: Box&lt;<span class="kw">dyn </span>Fn() -&gt; T + Send&gt; = Box::new(default);
     with_widget_state_impl(child.cfg_boxed(), id.into(), default, value.into_var()).cfg_boxed()
 }
@@ -3983,9 +3983,9 @@ document.addEventListener('DOMContentLoaded', function () {
     I: Fn() -&gt; S + Send + <span class="lifetime">'static</span>,
     M: FnMut(<span class="kw-2">&amp;mut </span>S, <span class="kw-2">&amp;</span>V) + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>default: Box&lt;<span class="kw">dyn </span>Fn() -&gt; S + Send&gt; = Box::new(default);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>modify: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span>S, <span class="kw-2">&amp;</span>V) + Send&gt; = Box::new(modify);
 
     with_widget_state_modify_impl(child.cfg_boxed(), id.into(), value.into_var(), default, modify)

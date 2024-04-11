@@ -2455,7 +2455,7 @@
 
 <span class="macro">thread_local! </span>{
     <span class="kw">static </span>SUPPRESS: Cell&lt;bool&gt; = <span class="kw">const </span>{ Cell::new(<span class="bool-val">false</span>) };
-    <span class="kw">static </span>SUPPRESSED_PANIC: RefCell&lt;<span class="prelude-ty">Option</span>&lt;SupressedPanic&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
+    <span class="kw">static </span>SUPPRESSED_PANIC: RefCell&lt;<span class="prelude-ty">Option</span>&lt;SuppressedPanic&gt;&gt; = <span class="kw">const </span>{ RefCell::new(<span class="prelude-val">None</span>) };
 }
 
 <span class="doccomment">/// If `true` our custom panic hook must not log anything.
@@ -2463,12 +2463,12 @@
     SUPPRESS.get()
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_supressed_panic(panic: SupressedPanic) {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_suppressed_panic(panic: SuppressedPanic) {
     SUPPRESSED_PANIC.set(<span class="prelude-val">Some</span>(panic));
 }
 
 <span class="attr">#[derive(Debug)]
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>SupressedPanic {
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>SuppressedPanic {
     <span class="kw">pub </span>thread: Txt,
     <span class="kw">pub </span>msg: Txt,
     <span class="kw">pub </span>file: Txt,
@@ -2476,7 +2476,7 @@
     <span class="kw">pub </span>column: u32,
     <span class="kw">pub </span>backtrace: Backtrace,
 }
-<span class="kw">impl </span>SupressedPanic {
+<span class="kw">impl </span>SuppressedPanic {
     <span class="kw">pub fn </span>from_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, backtrace: Backtrace) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>current_thread = std::thread::current();
         <span class="kw">let </span>thread = current_thread.name().unwrap_or(<span class="string">"&lt;unnamed&gt;"</span>);
@@ -2519,8 +2519,8 @@
         .to_txt()
     }
 }
-<span class="kw">impl </span>std::error::Error <span class="kw">for </span>SupressedPanic {}
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>SupressedPanic {
+<span class="kw">impl </span>std::error::Error <span class="kw">for </span>SuppressedPanic {}
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>SuppressedPanic {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="macro">write!</span>(
             f,
@@ -2531,13 +2531,13 @@
 }
 
 <span class="doccomment">/// Like [`std::panic::catch_unwind`], but flags [`suppress_panic`] for our custom panic hook.
-</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>catch_supress&lt;T&gt;(f: <span class="kw">impl </span>FnOnce() -&gt; T + std::panic::UnwindSafe) -&gt; <span class="prelude-ty">Result</span>&lt;T, Box&lt;SupressedPanic&gt;&gt; {
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>catch_suppress&lt;T&gt;(f: <span class="kw">impl </span>FnOnce() -&gt; T + std::panic::UnwindSafe) -&gt; <span class="prelude-ty">Result</span>&lt;T, Box&lt;SuppressedPanic&gt;&gt; {
     SUPPRESS.set(<span class="bool-val">true</span>);
     <span class="kw">let </span>_cleanup = RunOnDrop::new(|| SUPPRESS.set(<span class="bool-val">false</span>));
     std::panic::catch_unwind(f).map_err(|e| {
         SUPPRESSED_PANIC.with_borrow_mut(|p| <span class="kw">match </span>p.take() {
             <span class="prelude-val">Some</span>(p) =&gt; Box::new(p),
-            <span class="prelude-val">None </span>=&gt; Box::new(SupressedPanic::from_catch(e)),
+            <span class="prelude-val">None </span>=&gt; Box::new(SuppressedPanic::from_catch(e)),
         })
     })
 }

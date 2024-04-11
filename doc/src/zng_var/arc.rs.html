@@ -542,7 +542,7 @@
 }
 
 <span class="kw">impl</span>&lt;T: VarValue&gt; ArcVar&lt;T&gt; {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">fn </span>modify_impl(<span class="kw-2">&amp;</span><span class="self">self</span>, modify: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + Send + <span class="lifetime">'static</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), VarIsReadOnlyError&gt; {
         <span class="kw">let </span>me = <span class="self">self</span>.clone();
         VARS.schedule_update(
@@ -554,7 +554,7 @@
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="attr">#[cfg(not(dyn_closure))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
     </span><span class="kw">fn </span>modify_impl(<span class="kw-2">&amp;</span><span class="self">self</span>, modify: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + Send + <span class="lifetime">'static</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), VarIsReadOnlyError&gt; {
         <span class="kw">let </span>me = <span class="self">self</span>.clone();
         VARS.schedule_update(
@@ -602,7 +602,7 @@
     <span class="kw">where
         </span>F: FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + Send + <span class="lifetime">'static</span>,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>modify: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + Send + <span class="lifetime">'static</span>&gt; = Box::new(modify);
         <span class="self">self</span>.modify_impl(modify)
     }

@@ -2029,8 +2029,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.2.5"
-//! zng-view = "0.2.3"
+//! zng = "0.3.0"
+//! zng-view = "0.2.4"
 //! ```
 //!
 //! Then call [`init`] before any other code in `main` to setup a view-process that uses
@@ -2286,10 +2286,10 @@
 <span class="kw">fn </span>panic_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, details: <span class="kw-2">&amp;</span>str) {
     <span class="comment">// see `default_hook` in https://doc.rust-lang.org/src/std/panicking.rs.html#182
 
-    </span><span class="kw">let </span>panic = util::SupressedPanic::from_hook(info, std::backtrace::Backtrace::force_capture());
+    </span><span class="kw">let </span>panic = util::SuppressedPanic::from_hook(info, std::backtrace::Backtrace::force_capture());
 
     <span class="kw">if </span><span class="kw">crate</span>::util::suppress_panic() {
-        <span class="kw">crate</span>::util::set_supressed_panic(panic);
+        <span class="kw">crate</span>::util::set_suppressed_panic(panic);
     } <span class="kw">else </span>{
         <span class="macro">eprintln!</span>(<span class="string">"{panic}\n{details}"</span>);
         std::process::exit(<span class="number">101</span>) <span class="comment">// Rust panic exit code.

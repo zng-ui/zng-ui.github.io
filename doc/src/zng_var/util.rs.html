@@ -828,36 +828,36 @@
     }
 
     <span class="kw">fn </span>skip_modify(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>curr_anim = VARS.current_modify();
-        <span class="kw">if </span>curr_anim.importance() &lt; <span class="self">self</span>.animation.importance() {
+        <span class="kw">let </span>cur_anim = VARS.current_modify();
+        <span class="kw">if </span>cur_anim.importance() &lt; <span class="self">self</span>.animation.importance() {
             <span class="kw">return </span><span class="bool-val">true</span>;
         }
-        <span class="self">self</span>.animation = curr_anim;
+        <span class="self">self</span>.animation = cur_anim;
         <span class="bool-val">false
     </span>}
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">struct </span>VarDataInner {
     value: Box&lt;<span class="kw">dyn </span><span class="kw">crate</span>::AnyVarValue&gt;,
     meta: VarMeta,
 }
 
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">struct </span>VarDataInner&lt;T&gt; {
     value: T,
     meta: VarMeta,
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>VarData&lt;T: VarValue&gt;(RwLock&lt;VarDataInner&gt;, std::marker::PhantomData&lt;T&gt;);
 
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>VarData&lt;T: VarValue&gt;(RwLock&lt;VarDataInner&lt;T&gt;&gt;);
 
 <span class="kw">impl</span>&lt;T: VarValue&gt; VarData&lt;T&gt; {
     <span class="kw">pub fn </span>new(value: T) -&gt; <span class="self">Self </span>{
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>value = Box::new(value);
         <span class="kw">let </span>inner = RwLock::new(VarDataInner {
             value,
@@ -868,23 +868,23 @@
             },
         });
 
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span>{
             <span class="self">Self</span>(inner, std::marker::PhantomData)
         }
 
-        <span class="attr">#[cfg(not(dyn_closure))]
+        <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
         </span>{
             <span class="self">Self</span>(inner)
         }
     }
 
     <span class="kw">pub fn </span>into_value(<span class="self">self</span>) -&gt; T {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span>{
             <span class="kw-2">*</span><span class="self">self</span>.<span class="number">0</span>.into_inner().value.into_any().downcast::&lt;T&gt;().unwrap()
         }
-        <span class="attr">#[cfg(not(dyn_closure))]
+        <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
         </span>{
             <span class="self">self</span>.<span class="number">0</span>.into_inner().value
         }
@@ -892,12 +892,12 @@
 
     <span class="doccomment">/// Read the value.
     </span><span class="kw">pub fn </span>with&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>T) -&gt; R) -&gt; R {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span>{
             f(<span class="self">self</span>.<span class="number">0</span>.read().value.as_any().downcast_ref::&lt;T&gt;().unwrap())
         }
 
-        <span class="attr">#[cfg(not(dyn_closure))]
+        <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
         </span>{
             f(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.read().value)
         }
@@ -923,7 +923,7 @@
         <span class="self">self</span>.<span class="number">0</span>.write().meta.animation.hook_animation_stop(handler)
     }
 
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">pub fn </span>apply_modify(<span class="kw-2">&amp;</span><span class="self">self</span>, modify: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + <span class="lifetime">'static</span>&gt;) {
         apply_modify(
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>,
@@ -945,13 +945,13 @@
         )
     }
 
-    <span class="attr">#[cfg(not(dyn_closure))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
     </span><span class="kw">pub fn </span>apply_modify(<span class="kw-2">&amp;</span><span class="self">self</span>, modify: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + <span class="lifetime">'static</span>) {
         apply_modify(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, modify)
     }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">fn </span>apply_modify(
     inner: <span class="kw-2">&amp;</span>RwLock&lt;VarDataInner&gt;,
     modify: Box&lt;
@@ -1009,7 +1009,7 @@
     }
 }
 
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">fn </span>apply_modify&lt;T: VarValue&gt;(inner: <span class="kw-2">&amp;</span>RwLock&lt;VarDataInner&lt;T&gt;&gt;, modify: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;)) {
     <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
     <span class="kw">if </span>data.meta.skip_modify() {

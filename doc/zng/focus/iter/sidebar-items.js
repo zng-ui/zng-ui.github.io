@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["FocusTreeFilterIter","FocusTreeIter","IterFocusuable"],"trait":["IterFocusableExt"]};
+window.SIDEBAR_ITEMS = {"struct":["FocusTreeFilterIter","FocusTreeIter","IterFocusable"],"trait":["IterFocusableExt"]};

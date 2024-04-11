@@ -2104,7 +2104,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>run_headed(<span class="kw-2">mut </span><span class="self">self</span>) {
         <span class="attr">#[allow(clippy::let_unit_value)]
         </span><span class="kw">let </span><span class="kw-2">mut </span>observer = ();
-        <span class="attr">#[cfg(dyn_app_extension)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
         </span><span class="kw">let </span><span class="kw-2">mut </span>observer = observer.as_dyn();
 
         <span class="self">self</span>.apply_updates(<span class="kw-2">&amp;mut </span>observer);
@@ -2159,7 +2159,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }) =&gt; {
                     <span class="comment">// notify immediately.
                     </span><span class="kw">if </span>is_respawn {
-                        VIEW_PROCESS.on_respawed(generation);
+                        VIEW_PROCESS.on_respawned(generation);
                     }
 
                     VIEW_PROCESS.handle_inited(generation, extensions.clone());
@@ -2215,9 +2215,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>poll&lt;O: AppEventObserver&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wait_app_event: bool, observer: <span class="kw-2">&amp;mut </span>O) -&gt; AppControlFlow {
-        <span class="attr">#[cfg(dyn_app_extension)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
         </span><span class="kw">let </span><span class="kw-2">mut </span>observer = observer.as_dyn();
-        <span class="attr">#[cfg(dyn_app_extension)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
         </span><span class="kw">let </span>observer = <span class="kw-2">&amp;mut </span>observer;
         <span class="self">self</span>.poll_impl(wait_app_event, observer)
     }
@@ -3161,7 +3161,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">loop </span>{
             <span class="kw">if let </span><span class="prelude-val">Some</span>(d) = deadline.<span class="number">0</span>.checked_duration_since(INSTANT.now()) {
                 <span class="kw">if </span><span class="macro">matches!</span>(INSTANT.mode(), zng_time::InstantMode::Manual) {
-                    <span class="comment">// manual time is probably desynched from `Instant`, so we use `recv_timeout` that
+                    <span class="comment">// manual time is probably desynced from `Instant`, so we use `recv_timeout` that
                     // is slightly less precise, but an app in manual mode probably does not care.
                     </span><span class="kw">match </span><span class="self">self</span>.recv_timeout(d.checked_sub(WORST_SLEEP_ERR).unwrap_or_default()) {
                         <span class="prelude-val">Err</span>(flume::RecvTimeoutError::Timeout) =&gt; <span class="kw">continue</span>, <span class="comment">// continue to try_recv spin

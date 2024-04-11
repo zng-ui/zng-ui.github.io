@@ -204,14 +204,14 @@
     ///
     /// [`FOCUS.focus_disabled_widgets`]: crate::focus::FOCUS::focus_disabled_widgets
     /// [`FOCUS.focus_hidden_widgets`]: crate::focus::FOCUS::focus_hidden_widgets
-    </span><span class="kw">fn </span>focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; IterFocusuable&lt;I&gt;;
+    </span><span class="kw">fn </span>focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; IterFocusable&lt;I&gt;;
 }
 <span class="kw">impl</span>&lt;I&gt; IterFocusableExt&lt;I&gt; <span class="kw">for </span>I
 <span class="kw">where
     </span>I: Iterator&lt;Item = WidgetInfo&gt;,
 {
-    <span class="kw">fn </span>focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; IterFocusuable&lt;I&gt; {
-        IterFocusuable {
+    <span class="kw">fn </span>focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; IterFocusable&lt;I&gt; {
+        IterFocusable {
             iter: <span class="self">self</span>,
             mode: FocusMode::new(focus_disabled_widgets, focus_hidden_widgets),
         }
@@ -221,11 +221,11 @@
 <span class="doccomment">/// Filter a widget info iterator to only focusable items.
 ///
 /// Use [`IterFocusableExt::focusable`] to create.
-</span><span class="kw">pub struct </span>IterFocusuable&lt;I: Iterator&lt;Item = WidgetInfo&gt;&gt; {
+</span><span class="kw">pub struct </span>IterFocusable&lt;I: Iterator&lt;Item = WidgetInfo&gt;&gt; {
     iter: I,
     mode: FocusMode,
 }
-<span class="kw">impl</span>&lt;I&gt; Iterator <span class="kw">for </span>IterFocusuable&lt;I&gt;
+<span class="kw">impl</span>&lt;I&gt; Iterator <span class="kw">for </span>IterFocusable&lt;I&gt;
 <span class="kw">where
     </span>I: Iterator&lt;Item = WidgetInfo&gt;,
 {
@@ -240,7 +240,7 @@
         <span class="prelude-val">None
     </span>}
 }
-<span class="kw">impl</span>&lt;I&gt; DoubleEndedIterator <span class="kw">for </span>IterFocusuable&lt;I&gt;
+<span class="kw">impl</span>&lt;I&gt; DoubleEndedIterator <span class="kw">for </span>IterFocusable&lt;I&gt;
 <span class="kw">where
     </span>I: Iterator&lt;Item = WidgetInfo&gt; + DoubleEndedIterator,
 {

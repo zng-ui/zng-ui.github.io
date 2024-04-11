@@ -506,39 +506,39 @@
 
 <span class="kw">use super</span>::{types::WeakContextInitHandle, <span class="kw-2">*</span>};
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="macro">macro_rules! </span>ActualLock {
     (<span class="macro-nonterminal">$T</span>:ident) =&gt; {
         parking_lot::RwLock&lt;Vec&lt;(WeakContextInitHandle, Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;)&gt;&gt;
     }
 }
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="macro">macro_rules! </span>ActualLock {
     (<span class="macro-nonterminal">$T</span>:ident) =&gt; {
         parking_lot::RwLock&lt;Vec&lt;(WeakContextInitHandle, BoxedVar&lt;<span class="macro-nonterminal">$T</span>&gt;)&gt;&gt;
     }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="macro">macro_rules! </span>ActualInit {
     (<span class="macro-nonterminal">$T</span>:ident) =&gt; {
         Arc&lt;<span class="kw">dyn </span>Fn() -&gt; Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt; + Send + Sync&gt;
     }
 }
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="macro">macro_rules! </span>ActualInit {
     (<span class="macro-nonterminal">$T</span>:ident) =&gt; {
         Arc&lt;<span class="kw">dyn </span>Fn() -&gt; BoxedVar&lt;<span class="macro-nonterminal">$T</span>&gt; + Send + Sync&gt;
     }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="macro">macro_rules! </span>ActualReadGuard {
     (<span class="macro-nonterminal">$a</span>:tt, <span class="macro-nonterminal">$T</span>:ident) =&gt; {
         parking_lot::MappedRwLockReadGuard&lt;<span class="macro-nonterminal">$a</span>, Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;&gt;
     }
 }
-<span class="attr">#[cfg(not(dyn_closure))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="macro">macro_rules! </span>ActualReadGuard {
     (<span class="macro-nonterminal">$a</span>:tt, <span class="macro-nonterminal">$T</span>:ident) =&gt; {
         parking_lot::MappedRwLockReadGuard&lt;<span class="macro-nonterminal">$a</span>, BoxedVar&lt;<span class="macro-nonterminal">$T</span>&gt;&gt;
@@ -626,9 +626,9 @@
         <span class="self">Self </span>{
             _type: PhantomData,
 
-            <span class="attr">#[cfg(dyn_closure)]
+            <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
             </span>init: Arc::new(<span class="kw">move </span>|| Box::new(init().boxed())),
-            <span class="attr">#[cfg(not(dyn_closure))]
+            <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
             </span>init: Arc::new(<span class="kw">move </span>|| init().boxed()),
 
             actual: RwLock::new(Vec::with_capacity(<span class="number">1</span>)),
@@ -637,13 +637,13 @@
 
     <span class="doccomment">/// Borrow/initialize the actual var.
     </span><span class="kw">pub fn </span>borrow_init(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; parking_lot::MappedRwLockReadGuard&lt;BoxedVar&lt;T&gt;&gt; {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span>{
             parking_lot::MappedRwLockReadGuard::map(borrow_init_impl::&lt;()&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>.actual, <span class="kw-2">&amp;</span><span class="self">self</span>.init, std::any::type_name::&lt;T&gt;()), |v| {
                 v.downcast_ref().unwrap()
             })
         }
-        <span class="attr">#[cfg(not(dyn_closure))]
+        <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
         </span>{
             borrow_init_impl(<span class="kw-2">&amp;</span><span class="self">self</span>.actual, <span class="kw-2">&amp;</span><span class="self">self</span>.init)
         }
@@ -655,20 +655,20 @@
         <span class="kw">let </span>current_ctx = ContextInitHandle::current().downgrade();
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = act.iter().position(|(h, <span class="kw">_</span>)| h == <span class="kw-2">&amp;</span>current_ctx) {
-            <span class="attr">#[cfg(dyn_closure)]
+            <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
             </span>{
                 <span class="kw-2">*</span>act.swap_remove(i).<span class="number">1</span>.downcast().unwrap()
             }
-            <span class="attr">#[cfg(not(dyn_closure))]
+            <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
             </span>{
                 act.swap_remove(i).<span class="number">1
             </span>}
         } <span class="kw">else </span>{
-            <span class="attr">#[cfg(dyn_closure)]
+            <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
             </span>{
                 <span class="kw-2">*</span>(<span class="self">self</span>.init)().downcast().unwrap()
             }
-            <span class="attr">#[cfg(not(dyn_closure))]
+            <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
             </span>{
                 (<span class="self">self</span>.init)()
             }
@@ -680,10 +680,10 @@
 </span><span class="kw">pub struct </span>WeakContextualizedVar&lt;T&gt; {
     _type: PhantomData&lt;T&gt;,
 
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span>init: Weak&lt;<span class="kw">dyn </span>Fn() -&gt; Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt; + Send + Sync&gt;,
 
-    <span class="attr">#[cfg(not(dyn_closure))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
     </span>init: Weak&lt;<span class="kw">dyn </span>Fn() -&gt; BoxedVar&lt;T&gt; + Send + Sync&gt;,
 }
 
@@ -695,12 +695,12 @@
             <span class="kw">return </span><span class="self">Self </span>{
                 _type: PhantomData,
                 init: <span class="self">self</span>.init.clone(),
-                <span class="attr">#[cfg(dyn_closure)]
+                <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
                 </span>actual: RwLock::new(<span class="macro">vec!</span>[(
                     act[i].<span class="number">0</span>.clone(),
                     Box::new(act[i].<span class="number">1</span>.downcast_ref::&lt;BoxedVar&lt;T&gt;&gt;().unwrap().clone()),
                 )]),
-                <span class="attr">#[cfg(not(dyn_closure))]
+                <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
                 </span>actual: RwLock::new(<span class="macro">vec!</span>[act[i].clone()]),
             };
         }

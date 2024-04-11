@@ -8086,18 +8086,18 @@
         // - Ignore curves, everything is direct line.
         // - If a line-y crosses `line_y_range` register the min-x and max-x from the two points.
         // - Same if a line is inside `line_y_range`.
-        </span><span class="kw">struct </span>InterseptsSink {
+        </span><span class="kw">struct </span>InterceptsSink {
             start: <span class="prelude-ty">Option</span>&lt;euclid::Point2D&lt;f32, Px&gt;&gt;,
-            curr: euclid::Point2D&lt;f32, Px&gt;,
+            current: euclid::Point2D&lt;f32, Px&gt;,
             under: (bool, bool),
 
             line_y_range: (f32, f32),
             hit: <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt;,
         }
-        <span class="kw">impl </span>OutlineSink <span class="kw">for </span>InterseptsSink {
+        <span class="kw">impl </span>OutlineSink <span class="kw">for </span>InterceptsSink {
             <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
                 <span class="self">self</span>.start = <span class="prelude-val">Some</span>(to);
-                <span class="self">self</span>.curr = to;
+                <span class="self">self</span>.current = to;
                 <span class="self">self</span>.under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
             }
 
@@ -8108,10 +8108,10 @@
                     <span class="comment">// crossed one or two y-range boundaries or both points are inside
                     </span><span class="self">self</span>.under = under;
 
-                    <span class="kw">let </span>(x0, x1) = <span class="kw">if </span><span class="self">self</span>.curr.x &lt; to.x {
-                        (<span class="self">self</span>.curr.x, to.x)
+                    <span class="kw">let </span>(x0, x1) = <span class="kw">if </span><span class="self">self</span>.current.x &lt; to.x {
+                        (<span class="self">self</span>.current.x, to.x)
                     } <span class="kw">else </span>{
-                        (to.x, <span class="self">self</span>.curr.x)
+                        (to.x, <span class="self">self</span>.current.x)
                     };
                     <span class="kw">if let </span><span class="prelude-val">Some</span>((min, max)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.hit {
                         <span class="kw-2">*</span>min = min.min(x0);
@@ -8121,7 +8121,7 @@
                     }
                 }
 
-                <span class="self">self</span>.curr = to;
+                <span class="self">self</span>.current = to;
                 <span class="self">self</span>.under = under;
             }
 
@@ -8135,15 +8135,15 @@
 
             <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.start.take() {
-                    <span class="kw">if </span>s != <span class="self">self</span>.curr {
+                    <span class="kw">if </span>s != <span class="self">self</span>.current {
                         <span class="self">self</span>.line_to(s);
                     }
                 }
             }
         }
-        <span class="kw">let </span><span class="kw-2">mut </span>sink = InterseptsSink {
+        <span class="kw">let </span><span class="kw-2">mut </span>sink = InterceptsSink {
             start: <span class="prelude-val">None</span>,
-            curr: euclid::point2(<span class="number">0.0</span>, <span class="number">0.0</span>),
+            current: euclid::point2(<span class="number">0.0</span>, <span class="number">0.0</span>),
             under: (<span class="bool-val">false</span>, <span class="bool-val">false</span>),
 
             line_y_range,
@@ -8170,7 +8170,7 @@
     </span>Vertical(f32),
 
     <span class="doccomment">/// Hinting is performed only in the vertical direction, and further tweaks are applied to make
-    /// subpixel antialiasing look better. The specified point size is used for grid fitting.
+    /// subpixel anti-aliasing look better. The specified point size is used for grid fitting.
     ///
     /// This matches DirectWrite, GDI in its ClearType mode, and FreeType in its LCD hinting mode.
     </span>VerticalSubpixel(f32),

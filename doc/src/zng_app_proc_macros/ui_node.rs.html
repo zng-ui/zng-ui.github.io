@@ -888,7 +888,7 @@
     //
     // we only have one lint, `zng::missing_delegate`.
     </span><span class="kw">let </span>missing_delegate_level =
-        take_missing_deletate_level(<span class="kw-2">&amp;mut </span>input.attrs, <span class="kw-2">&amp;mut </span>errors, <span class="kw-2">&amp;</span>HashSet::new()).unwrap_or(util::LintLevel::Deny);
+        take_missing_delegate_level(<span class="kw-2">&amp;mut </span>input.attrs, <span class="kw-2">&amp;mut </span>errors, <span class="kw-2">&amp;</span>HashSet::new()).unwrap_or(util::LintLevel::Deny);
     <span class="kw">let </span>missing_delegate_ident = <span class="macro">ident!</span>(<span class="string">"missing_delegate"</span>);
     <span class="kw">let </span><span class="kw-2">mut </span>forbidden_lints = HashSet::new();
     <span class="kw">if let </span>util::LintLevel::Forbid = missing_delegate_level {
@@ -916,7 +916,7 @@
             }
 
             <span class="kw">if </span>is_node {
-                <span class="kw">let </span>item_level = take_missing_deletate_level(<span class="kw-2">&amp;mut </span>m.attrs, <span class="kw-2">&amp;mut </span>errors, <span class="kw-2">&amp;</span>forbidden_lints).unwrap_or(missing_delegate_level);
+                <span class="kw">let </span>item_level = take_missing_delegate_level(<span class="kw-2">&amp;mut </span>m.attrs, <span class="kw-2">&amp;mut </span>errors, <span class="kw-2">&amp;</span>forbidden_lints).unwrap_or(missing_delegate_level);
                 node_items_missing_del_level.push(item_level);
             }
         }
@@ -1467,7 +1467,7 @@
 }
 
 <span class="doccomment">/// Removes and returns the `zng::missing_delegate` level.
-</span><span class="kw">fn </span>take_missing_deletate_level(
+</span><span class="kw">fn </span>take_missing_delegate_level(
     attrs: <span class="kw-2">&amp;mut </span>Vec&lt;Attribute&gt;,
     errors: <span class="kw-2">&amp;mut </span>util::Errors,
     forbidden: <span class="kw-2">&amp;</span>HashSet&lt;<span class="kw-2">&amp;</span>Ident&gt;,

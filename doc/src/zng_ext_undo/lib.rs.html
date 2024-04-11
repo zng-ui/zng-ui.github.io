@@ -2728,12 +2728,12 @@
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
     {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(urfo) = args.next.as_any().downcast_mut::&lt;<span class="self">Self</span>&gt;() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(u) = args.next.as_any().downcast_mut::&lt;<span class="self">Self</span>&gt;() {
             <span class="kw">let </span><span class="kw-2">mut </span>merged = <span class="bool-val">false</span>;
             (<span class="self">self</span>.op)(
                 <span class="kw-2">&amp;mut </span><span class="self">self</span>.data,
                 UndoFullOp::Merge {
-                    next_data: <span class="kw-2">&amp;mut </span>urfo.data,
+                    next_data: <span class="kw-2">&amp;mut </span>u.data,
                     prev_timestamp: args.prev_timestamp,
                     within_undo_interval: args.within_undo_interval,
                     merged: <span class="kw-2">&amp;mut </span>merged,

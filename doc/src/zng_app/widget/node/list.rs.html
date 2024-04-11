@@ -2843,7 +2843,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode),
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode)&gt; = Box::new(f);
     vec_for_each_impl(self_, f)
 }
@@ -2858,7 +2858,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync&gt; = Box::new(f);
     par_each_impl(self_, f)
 }
@@ -2876,11 +2876,11 @@ document.addEventListener('DOMContentLoaded', function () {
     F: Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync,
     R: Fn(T, T) -&gt; T + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>identity: Box&lt;<span class="kw">dyn </span>Fn() -&gt; T + Send + Sync&gt; = Box::new(identity);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fold: Box&lt;<span class="kw">dyn </span>Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync&gt; = Box::new(fold);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>reduce: Box&lt;<span class="kw">dyn </span>Fn(T, T) -&gt; T + Send + Sync&gt; = Box::new(reduce);
 
     par_fold_reduce_impl(self_, identity, fold, reduce)
@@ -3082,7 +3082,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode),
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode)&gt; = Box::new(f);
     chain_for_each_impl(self_, f)
 }
@@ -3099,7 +3099,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync&gt; = Box::new(f);
     chain_par_each_impl(self_, f)
 }
@@ -3118,11 +3118,11 @@ document.addEventListener('DOMContentLoaded', function () {
     F: Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync,
     R: Fn(T, T) -&gt; T + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>identity: Box&lt;<span class="kw">dyn </span>Fn() -&gt; T + Send + Sync&gt; = Box::new(identity);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fold: Box&lt;<span class="kw">dyn </span>Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync&gt; = Box::new(fold);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>reduce: Box&lt;<span class="kw">dyn </span>Fn(T, T) -&gt; T + Send + Sync&gt; = Box::new(reduce);
 
     chain_par_fold_reduce_impl(self_, identity, fold, reduce)
@@ -3838,7 +3838,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.ctrl.clone()
     }
 
-    <span class="kw">fn </span>fullfill_requests(<span class="kw-2">&amp;mut </span><span class="self">self</span>, observer: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>UiNodeListObserver) {
+    <span class="kw">fn </span>fulfill_requests(<span class="kw-2">&amp;mut </span><span class="self">self</span>, observer: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>UiNodeListObserver) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="self">self</span>.ctrl.take_requests() {
             <span class="kw">if </span>r.clear {
                 <span class="comment">// if reset
@@ -4058,7 +4058,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="kw">fn </span>update_all(<span class="kw-2">&amp;mut </span><span class="self">self</span>, updates: <span class="kw-2">&amp;</span>WidgetUpdates, observer: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>UiNodeListObserver) {
         <span class="self">self</span>.vec.update_all(updates, <span class="kw-2">&amp;mut </span>());
-        <span class="self">self</span>.fullfill_requests(observer);
+        <span class="self">self</span>.fulfill_requests(observer);
     }
 
     <span class="kw">fn </span>measure_each&lt;F, S&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wm: <span class="kw-2">&amp;mut </span>WidgetMeasure, measure: F, fold_size: S) -&gt; PxSize
@@ -4179,7 +4179,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Request an update for the removal of the widget identified by `id`.
     ///
-    /// The widget will be deinitialized, dropped and the info tree will update. Nothing happens
+    /// The widget will be deinited, dropped and the info tree will update. Nothing happens
     /// if the widget is not found.
     </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw">impl </span>Into&lt;WidgetId&gt;) {
         <span class="kw">fn </span>remove_impl(id: WidgetId) -&gt; <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; bool + Send + <span class="lifetime">'static </span>{
@@ -4190,7 +4190,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Request a filtered mass removal of nodes in the list.
     ///
-    /// Each node not retained will be deinitialized, dropped and the info tree will update if any was removed.
+    /// Each node not retained will be deinited, dropped and the info tree will update if any was removed.
     ///
     /// Note that the `predicate` may be called on the same node multiple times or called in any order.
     </span><span class="kw">pub fn </span>retain(<span class="kw-2">&amp;</span><span class="self">self</span>, predicate: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; bool + Send + <span class="lifetime">'static</span>) {
@@ -4329,7 +4329,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode),
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode)&gt; = Box::new(f);
 
     vec_list_for_each_impl(self_, f)
@@ -4349,7 +4349,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">where
     </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) + Send + Sync&gt; = Box::new(f);
     vec_list_par_each_impl(self_, f)
 }
@@ -4377,11 +4377,11 @@ document.addEventListener('DOMContentLoaded', function () {
     F: Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync,
     R: Fn(T, T) -&gt; T + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>identity: Box&lt;<span class="kw">dyn </span>Fn() -&gt; T + Send + Sync&gt; = Box::new(identity);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fold: Box&lt;<span class="kw">dyn </span>Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; T + Send + Sync&gt; = Box::new(fold);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>reduce: Box&lt;<span class="kw">dyn </span>Fn(T, T) -&gt; T + Send + Sync&gt; = Box::new(reduce);
 
     vec_list_par_fold_reduce_impl(self_, identity, fold, reduce)
@@ -4773,7 +4773,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">where
         </span>F: FnOnce(<span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) -&gt; R,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) -&gt; R&gt; = Box::new(f);
         <span class="self">self</span>.with_node_impl(index, f)
     }
@@ -4790,7 +4790,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">where
         </span>F: FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D),
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D)&gt; = Box::new(f);
         <span class="self">self</span>.for_each_impl(f)
     }
@@ -4808,7 +4808,7 @@ document.addEventListener('DOMContentLoaded', function () {
         </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) + Send + Sync,
         D: Sync,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) + Send + Sync&gt; = Box::new(f);
         <span class="self">self</span>.par_each_impl(f)
     }
@@ -4837,11 +4837,11 @@ document.addEventListener('DOMContentLoaded', function () {
         F: Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) -&gt; T + Send + Sync,
         R: Fn(T, T) -&gt; T + Send + Sync,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>identity: Box&lt;<span class="kw">dyn </span>Fn() -&gt; T + Send + Sync&gt; = Box::new(identity);
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>fold: Box&lt;<span class="kw">dyn </span>Fn(T, usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D) -&gt; T + Send + Sync&gt; = Box::new(fold);
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>reduce: Box&lt;<span class="kw">dyn </span>Fn(T, T) -&gt; T + Send + Sync&gt; = Box::new(reduce);
 
         <span class="self">self</span>.par_fold_reduce_impl(identity, fold, reduce)
@@ -4876,9 +4876,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D, <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize + Send + Sync,
         S: Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>measure: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D, <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize + Send + Sync&gt; = Box::new(measure);
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>fold_size: Box&lt;<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync&gt; = Box::new(fold_size);
 
         <span class="self">self</span>.measure_each_impl(wm, measure, fold_size)
@@ -4911,9 +4911,9 @@ document.addEventListener('DOMContentLoaded', function () {
         </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D, <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize + Send + Sync,
         S: Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync,
     {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>layout: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D, <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize + Send + Sync&gt; = Box::new(layout);
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>fold_size: Box&lt;<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync&gt; = Box::new(fold_size);
 
         <span class="self">self</span>.layout_each_impl(wl, layout, fold_size)
@@ -4940,7 +4940,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Iterate over the list in the Z order.
     </span><span class="kw">pub fn </span>for_each_z_sorted(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D)) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>D)&gt; = Box::new(f);
         <span class="self">self</span>.for_each_z_sorted_impl(f)
     }

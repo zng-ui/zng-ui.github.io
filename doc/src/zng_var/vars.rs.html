@@ -668,7 +668,7 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(trace) = <span class="kw-2">&amp;</span>vars.modify_trace {
             trace(type_name);
         }
-        <span class="kw">let </span>curr_modify = <span class="kw">match </span>VARS_MODIFY_CTX.get_clone() {
+        <span class="kw">let </span>cur_modify = <span class="kw">match </span>VARS_MODIFY_CTX.get_clone() {
             <span class="prelude-val">Some</span>(current) =&gt; current, <span class="comment">// override set by modify and animation closures.
             </span><span class="prelude-val">None </span>=&gt; vars.ans.current_modify.clone(),
         };
@@ -676,14 +676,14 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = vars.updating_thread {
             <span class="kw">if </span>std::thread::current().id() == id {
                 <span class="comment">// is binding request, enqueue for immediate exec.
-                </span>vars.updates.lock().push((curr_modify, update));
+                </span>vars.updates.lock().push((cur_modify, update));
             } <span class="kw">else </span>{
                 <span class="comment">// is request from app task thread when we are already updating, enqueue for exec after current update.
-                </span>vars.updates_after.lock().push((curr_modify, update));
+                </span>vars.updates_after.lock().push((cur_modify, update));
             }
         } <span class="kw">else </span>{
             <span class="comment">// request from any app thread,
-            </span>vars.updates.lock().push((curr_modify, update));
+            </span>vars.updates.lock().push((cur_modify, update));
             vars.wake_app();
         }
     }

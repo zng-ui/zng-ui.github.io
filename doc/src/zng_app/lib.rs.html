@@ -2484,7 +2484,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="attr">#[cfg(dyn_app_extension)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
 </span><span class="kw">impl </span>AppExtension <span class="kw">for </span>Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt; {
     <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="kw">for </span>ext <span class="kw">in </span><span class="self">self </span>{
@@ -2643,7 +2643,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">impl </span>APP {
     <span class="doccomment">/// Starts building an application with no extensions.
-    </span><span class="attr">#[cfg(dyn_app_extension)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
     </span><span class="kw">pub fn </span>minimal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt;&gt; {
         <span class="attr">#[cfg(debug_assertions)]
         </span>print_tracing(tracing::Level::INFO);
@@ -2660,7 +2660,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Starts building an application with no extensions.
-    </span><span class="attr">#[cfg(not(dyn_app_extension))]
+    </span><span class="attr">#[cfg(not(feature = <span class="string">"dyn_app_extension"</span>))]
     </span><span class="kw">pub fn </span>minimal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AppExtended&lt;()&gt; {
         <span class="attr">#[cfg(debug_assertions)]
         </span>print_tracing(tracing::Level::INFO);
@@ -2686,7 +2686,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="comment">// cleanup on drop.
     </span>_cleanup: AppScope,
 }
-<span class="attr">#[cfg(dyn_app_extension)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
 </span><span class="kw">impl </span>AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt;&gt; {
     <span class="doccomment">/// Includes an application extension.
     </span><span class="kw">pub fn </span>extend&lt;F: AppExtension&gt;(<span class="kw-2">mut </span><span class="self">self</span>, extension: F) -&gt; AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt;&gt; {
@@ -2731,7 +2731,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 <span class="comment">// Monomorphize dyn app. Without this the entire RunningApp code is generic that must build on the dependent crates.
-</span><span class="attr">#[cfg(dyn_app_extension)]
+</span><span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
 </span><span class="kw">impl</span>&lt;E: AppExtension&gt; AppExtended&lt;E&gt; {
     <span class="kw">fn </span>cast_app(<span class="self">self</span>) -&gt; AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>AppExtensionBoxed&gt;&gt;&gt; {
         <span class="kw">let </span>app: Box&lt;<span class="kw">dyn </span>std::any::Any&gt; = Box::new(<span class="self">self</span>);
@@ -2757,7 +2757,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="attr">#[cfg(not(dyn_app_extension))]
+<span class="attr">#[cfg(not(feature = <span class="string">"dyn_app_extension"</span>))]
 </span><span class="kw">impl</span>&lt;E: AppExtension&gt; AppExtended&lt;E&gt; {
     <span class="doccomment">/// Includes an application extension.
     </span><span class="kw">pub fn </span>extend&lt;F: AppExtension&gt;(<span class="self">self</span>, extension: F) -&gt; AppExtended&lt;<span class="kw">impl </span>AppExtension&gt; {
@@ -2825,7 +2825,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// The `start` task runs in a [`UiTask`] in the app context, note that it only needs to start the app, usually
     /// by opening a window, the app will keep running after `start` is finished.
     </span><span class="kw">pub fn </span>run(<span class="self">self</span>, start: <span class="kw">impl </span>Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>start = Box::pin(start);
         <span class="self">self</span>.run_impl(start)
     }

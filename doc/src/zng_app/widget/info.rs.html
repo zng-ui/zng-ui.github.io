@@ -3338,7 +3338,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <span class="kw">let _ </span>= <span class="macro">write!</span>(<span class="kw-2">&amp;mut </span>s, <span class="string">"{:?}/"</span>, <span class="self">self</span>.tree.window_id());
         <span class="kw">for </span>w <span class="kw">in </span>ws {
-            <span class="attr">#[cfg(inspector)]
+            <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
             </span>{
                 <span class="kw">use </span><span class="kw">crate</span>::widget::inspector::<span class="kw-2">*</span>;
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = w.inspector_info() {
@@ -3361,7 +3361,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            <span class="attr">#[cfg(not(inspector))]
+            <span class="attr">#[cfg(not(feature = <span class="string">"inspector"</span>))]
             </span>{
                 <span class="kw">let _ </span>= <span class="macro">write!</span>(<span class="kw-2">&amp;mut </span>s, <span class="string">"/{}"</span>, w.id());
             }
@@ -3374,7 +3374,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// If the inspector metadata is present the widget type is included.
     </span><span class="kw">pub fn </span>trace_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt {
-        <span class="attr">#[cfg(inspector)]
+        <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
         </span>{
             <span class="kw">use </span><span class="kw">crate</span>::widget::inspector::<span class="kw-2">*</span>;
             <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = <span class="self">self</span>.inspector_info() {

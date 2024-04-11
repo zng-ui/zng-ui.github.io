@@ -1448,16 +1448,16 @@ document.addEventListener('DOMContentLoaded', function () {
     {
         Box::new(<span class="self">self</span>)
     }
-    <span class="doccomment">/// Boxes the handler if the `dyn_closure` feature is active, otherwise retains the same handler type.    
-    </span><span class="attr">#[cfg(dyn_closure)]
+    <span class="doccomment">/// Boxes the handler if the `feature = "dyn_closure"` is active, otherwise retains the same handler type.    
+    </span><span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>WidgetHandler&lt;A&gt;&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
     {
         <span class="self">self</span>.boxed()
     }
-    <span class="doccomment">/// Boxes the handler if the `dyn_closure` feature is active, otherwise retains the same handler type.
-    </span><span class="attr">#[cfg(not(dyn_closure))]
+    <span class="doccomment">/// Boxes the handler if the `feature = "dyn_closure"` is active, otherwise retains the same handler type.
+    </span><span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span><span class="self">Self</span>: Sized,
@@ -1498,7 +1498,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>hn&lt;A, H&gt;(handler: H) -&gt; FnMutWidgetHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1507,7 +1507,7 @@ document.addEventListener('DOMContentLoaded', function () {
     FnMutWidgetHandler { handler }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>hn&lt;A, H&gt;(handler: H) -&gt; FnMutWidgetHandler&lt;Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>A) + Send&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1607,7 +1607,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>}
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>hn_once&lt;A, H&gt;(handler: H) -&gt; FnOnceWidgetHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1616,7 +1616,7 @@ document.addEventListener('DOMContentLoaded', function () {
     FnOnceWidgetHandler { handler: <span class="prelude-val">Some</span>(handler) }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>hn_once&lt;A, H&gt;(handler: H) -&gt; FnOnceWidgetHandler&lt;Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;</span>A) + Send&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1706,7 +1706,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>async_hn&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnMutWidgetHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1716,11 +1716,11 @@ document.addEventListener('DOMContentLoaded', function () {
     AsyncFnMutWidgetHandler { handler, tasks: <span class="macro">vec!</span>[] }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">type </span>BoxedAsyncHn&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnMut(A) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>async_hn&lt;A, F, H&gt;(<span class="kw-2">mut </span>handler: H) -&gt; AsyncFnMutWidgetHandler&lt;BoxedAsyncHn&lt;A&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1878,7 +1878,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>async_hn_once&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnOnceWidgetHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -1890,11 +1890,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">type </span>BoxedAsyncHnOnce&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnOnce(A) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>async_hn_once&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnOnceWidgetHandler&lt;BoxedAsyncHnOnce&lt;A&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2024,8 +2024,8 @@ document.addEventListener('DOMContentLoaded', function () {
         Box::new(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Boxes the handler if the `dyn_closure` feature is enabled, otherwise maintain the same type.
-    </span><span class="attr">#[cfg(dyn_closure)]
+    <span class="doccomment">/// Boxes the handler if the `feature = "dyn_closure"` is enabled, otherwise maintain the same type.
+    </span><span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>AppHandler&lt;A&gt;&gt;
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
@@ -2033,8 +2033,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.boxed()
     }
 
-    <span class="doccomment">/// Boxes the handler if the `dyn_closure` feature is enabled, otherwise maintain the same type.    
-    </span><span class="attr">#[cfg(not(dyn_closure))]
+    <span class="doccomment">/// Boxes the handler if the `feature = "dyn_closure"` is enabled, otherwise maintain the same type.    
+    </span><span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span><span class="self">Self</span>: Sized,
@@ -2066,7 +2066,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>app_hn&lt;A, H&gt;(handler: H) -&gt; FnMutAppHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2075,11 +2075,11 @@ document.addEventListener('DOMContentLoaded', function () {
     FnMutAppHandler { handler }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">type </span>BoxedAppHn&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>A, <span class="kw-2">&amp;</span><span class="kw">dyn </span>AppWeakHandle) + Send&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>app_hn&lt;A, H&gt;(handler: H) -&gt; FnMutAppHandler&lt;BoxedAppHn&lt;A&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2182,7 +2182,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>app_hn_once&lt;A, H&gt;(handler: H) -&gt; FnOnceAppHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2191,7 +2191,7 @@ document.addEventListener('DOMContentLoaded', function () {
     FnOnceAppHandler { handler: <span class="prelude-val">Some</span>(handler) }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
 </span><span class="kw">pub fn </span>app_hn_once&lt;A, H&gt;(handler: H) -&gt; FnOnceAppHandler&lt;Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;</span>A) + Send&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2291,7 +2291,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>async_app_hn&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnMutAppHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2301,12 +2301,12 @@ document.addEventListener('DOMContentLoaded', function () {
     AsyncFnMutAppHandler { handler }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
-</span><span class="kw">type </span>BoxedAsynAppHn&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnMut(A, Box&lt;<span class="kw">dyn </span>AppWeakHandle&gt;) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
+</span><span class="kw">type </span>BoxedAsyncAppHn&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnMut(A, Box&lt;<span class="kw">dyn </span>AppWeakHandle&gt;) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
-</span><span class="kw">pub fn </span>async_app_hn&lt;A, F, H&gt;(<span class="kw-2">mut </span>handler: H) -&gt; AsyncFnMutAppHandler&lt;BoxedAsynAppHn&lt;A&gt;&gt;
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
+</span><span class="kw">pub fn </span>async_app_hn&lt;A, F, H&gt;(<span class="kw-2">mut </span>handler: H) -&gt; AsyncFnMutAppHandler&lt;BoxedAsyncAppHn&lt;A&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
     F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>,
@@ -2464,7 +2464,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 <span class="attr">#[doc(hidden)]
-#[cfg(not(dyn_closure))]
+#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">pub fn </span>async_app_hn_once&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnOnceAppHandler&lt;H&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
@@ -2474,12 +2474,12 @@ document.addEventListener('DOMContentLoaded', function () {
     AsyncFnOnceAppHandler { handler: <span class="prelude-val">Some</span>(handler) }
 }
 
-<span class="attr">#[cfg(dyn_closure)]
-</span><span class="kw">type </span>BoxedAsynAppHnOnce&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnOnce(A) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
+<span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
+</span><span class="kw">type </span>BoxedAsyncAppHnOnce&lt;A&gt; = Box&lt;<span class="kw">dyn </span>FnOnce(A) -&gt; std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = ()&gt; + Send&gt;&gt; + Send&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[cfg(dyn_closure)]
-</span><span class="kw">pub fn </span>async_app_hn_once&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnOnceAppHandler&lt;BoxedAsynAppHnOnce&lt;A&gt;&gt;
+#[cfg(feature = <span class="string">"dyn_closure"</span>)]
+</span><span class="kw">pub fn </span>async_app_hn_once&lt;A, F, H&gt;(handler: H) -&gt; AsyncFnOnceAppHandler&lt;BoxedAsyncAppHnOnce&lt;A&gt;&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
     F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>,
@@ -2556,12 +2556,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span><span class="kw">crate</span>::widget::{UiTaskWidget, WIDGET};
 
 <span class="doccomment">/// Widget handler wrapper that filters the events, only delegating to `self` when `filter` returns `true`.
-</span><span class="kw">pub struct </span>FilteWidgetHandler&lt;A, H, F&gt; {
+</span><span class="kw">pub struct </span>FilterWidgetHandler&lt;A, H, F&gt; {
     _args: PhantomData&lt;<span class="kw">fn</span>() -&gt; A&gt;,
     handler: H,
     filter: F,
 }
-<span class="kw">impl</span>&lt;A, H, F&gt; FilteWidgetHandler&lt;A, H, F&gt;
+<span class="kw">impl</span>&lt;A, H, F&gt; FilterWidgetHandler&lt;A, H, F&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;A&gt;,
@@ -2576,7 +2576,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 }
-<span class="kw">impl</span>&lt;A, H, F&gt; WidgetHandler&lt;A&gt; <span class="kw">for </span>FilteWidgetHandler&lt;A, H, F&gt;
+<span class="kw">impl</span>&lt;A, H, F&gt; WidgetHandler&lt;A&gt; <span class="kw">for </span>FilterWidgetHandler&lt;A, H, F&gt;
 <span class="kw">where
     </span>A: Clone + <span class="lifetime">'static</span>,
     H: WidgetHandler&lt;A&gt;,

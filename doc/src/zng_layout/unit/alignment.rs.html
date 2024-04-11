@@ -897,7 +897,7 @@
 #[serde(untagged)]
 </span><span class="kw">enum </span>AlignSerde&lt;<span class="lifetime">'s</span>&gt; {
     Named(<span class="kw-2">&amp;</span><span class="lifetime">'s </span>str),
-    Unamed { x: Factor, x_rtl_aware: bool, y: Factor },
+    Unnamed { x: Factor, x_rtl_aware: bool, y: Factor },
 }
 <span class="kw">impl </span>serde::Serialize <span class="kw">for </span>Align {
     <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
@@ -910,7 +910,7 @@
             }
         }
 
-        AlignSerde::Unamed {
+        AlignSerde::Unnamed {
             x: <span class="self">self</span>.x,
             x_rtl_aware: <span class="self">self</span>.x_rtl_aware,
             y: <span class="self">self</span>.y,
@@ -930,7 +930,7 @@
                 <span class="prelude-val">Some</span>(a) =&gt; <span class="prelude-val">Ok</span>(a),
                 <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(D::Error::custom(<span class="string">"unknown align name"</span>)),
             },
-            AlignSerde::Unamed { x, x_rtl_aware, y } =&gt; <span class="prelude-val">Ok</span>(Align { x, x_rtl_aware, y }),
+            AlignSerde::Unnamed { x, x_rtl_aware, y } =&gt; <span class="prelude-val">Ok</span>(Align { x, x_rtl_aware, y }),
         }
     }
 }

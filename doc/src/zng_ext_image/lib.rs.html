@@ -1690,11 +1690,11 @@
         <span class="kw">if </span><span class="self">self</span>.download_accept.is_empty() {
             <span class="kw">if </span>VIEW_PROCESS.is_available() {
                 <span class="kw">let </span><span class="kw-2">mut </span>r = String::new();
-                <span class="kw">let </span><span class="kw-2">mut </span>fmts = VIEW_PROCESS.image_decoders().unwrap_or_default().into_iter();
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(fmt) = fmts.next() {
+                <span class="kw">let </span><span class="kw-2">mut </span>decoders = VIEW_PROCESS.image_decoders().unwrap_or_default().into_iter();
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(fmt) = decoders.next() {
                     r.push_str(<span class="string">"image/"</span>);
                     r.push_str(<span class="kw-2">&amp;</span>fmt);
-                    <span class="kw">for </span>fmt <span class="kw">in </span>fmts {
+                    <span class="kw">for </span>fmt <span class="kw">in </span>decoders {
                         r.push_str(<span class="string">",image/"</span>);
                         r.push_str(<span class="kw-2">&amp;</span>fmt);
                     }

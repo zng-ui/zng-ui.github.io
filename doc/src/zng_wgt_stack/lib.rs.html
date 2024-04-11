@@ -1146,7 +1146,7 @@
     index: <span class="kw">impl </span>IntoVar&lt;usize&gt;,
     constraints: <span class="kw">impl </span>Fn(PxConstraints2d, usize, PxSize) -&gt; PxConstraints2d + Send + <span class="lifetime">'static</span>,
 ) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>constraints: Box&lt;<span class="kw">dyn </span>Fn(PxConstraints2d, usize, PxSize) -&gt; PxConstraints2d + Send&gt; = Box::new(constraints);
     stack_nodes_layout_by_impl(nodes, index, constraints)
 }

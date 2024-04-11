@@ -1620,7 +1620,7 @@
         <span class="kw">let </span>name = <span class="self">self</span>.name();
         <span class="kw">if </span>name.is_empty() {
             <span class="kw">use </span>serde::ser::Error;
-            <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">"cannot serialize unammed `AppId`"</span>));
+            <span class="kw">return </span><span class="prelude-val">Err</span>(S::Error::custom(<span class="string">"cannot serialize unnamed `AppId`"</span>));
         }
         name.serialize(serializer)
     }
@@ -1991,7 +1991,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="prelude-val">None</span>;
         <span class="kw">let </span>f = |l: <span class="kw-2">&amp;</span>LocalData| r = <span class="prelude-val">Some</span>(f(l));
 
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;</span>LocalData)&gt; = Box::new(f);
 
         <span class="self">self</span>.with_borrow(f);
@@ -2003,7 +2003,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="prelude-val">None</span>;
         <span class="kw">let </span>f = |l: <span class="kw-2">&amp;mut </span>LocalData| r = <span class="prelude-val">Some</span>(f(l));
 
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;mut </span>LocalData)&gt; = Box::new(f);
 
         <span class="self">self</span>.with_borrow_mut(f);
@@ -2321,7 +2321,7 @@
 
     <span class="doccomment">/// Try to create a read lock and `map` it to a sub-value.
     </span><span class="attr">#[inline]
-    </span><span class="kw">pub fn </span>try_wread_map&lt;O&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>T) -&gt; <span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;MappedRwLockReadGuard&lt;O&gt;&gt; {
+    </span><span class="kw">pub fn </span>try_read_map&lt;O&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>T) -&gt; <span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;MappedRwLockReadGuard&lt;O&gt;&gt; {
         <span class="kw">let </span>lock = <span class="self">self</span>.try_read()<span class="question-mark">?</span>;
         <span class="prelude-val">Some</span>(MappedRwLockReadGuard::map(lock, map))
     }
@@ -2352,20 +2352,20 @@
 ///
 /// # Multi App
 ///
-/// If the crate is compiled with the `multi_app` feature a different internal implementation is used that supports multiple
+/// If the crate is compiled with the `"multi_app"` feature a different internal implementation is used that supports multiple
 /// apps, either running in parallel in different threads or one after the other. This backing implementation has some small overhead,
 /// but usually you only want multiple app instances per-process when running tests.
 ///
-/// The lifetime of `multi_app` locals is also more limited, trying to use an app-local before starting to build an app will panic,
-/// the app-local value will be dropped when the app is dropped. Without the `multi_app` feature the app-locals can be used at
+/// The lifetime of `"multi_app"` locals is also more limited, trying to use an app-local before starting to build an app will panic,
+/// the app-local value will be dropped when the app is dropped. Without the `"multi_app"` feature the app-locals can be used at
 /// any point before or after the app lifetime, values are not explicitly dropped, just unloaded with the process.
 ///
 /// # Const
 ///
-/// The initialization expression can be wrapped in a `const { .. }` block, if the `multi_app` feature is **not** enabled
+/// The initialization expression can be wrapped in a `const { .. }` block, if the `"multi_app"` feature is **not** enabled
 /// a faster implementation is used that is equivalent to a direct `static LOCAL: RwLock&lt;T&gt;` in terms of performance.
 ///
-/// Note that this syntax is available even if the `multi_app` feature is enabled, the expression must be const either way,
+/// Note that this syntax is available even if the `"multi_app"` feature is enabled, the expression must be const either way,
 /// but with the feature the same dynamic implementation is used.
 ///
 /// Note that `const` initialization does not automatically convert the value into the static type.
@@ -2533,7 +2533,7 @@
     </span><span class="kw">pub fn </span>with_context&lt;R&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>, value: <span class="kw-2">&amp;mut </span><span class="prelude-ty">Option</span>&lt;Arc&lt;T&gt;&gt;, f: <span class="kw">impl </span>FnOnce() -&gt; R) -&gt; R {
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="prelude-val">None</span>;
         <span class="kw">let </span>f = || r = <span class="prelude-val">Some</span>(f());
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce()&gt; = Box::new(f);
 
         LocalContext::with_value_ctx(<span class="self">self</span>, LocalValueKind::Local, value, f);
@@ -2550,7 +2550,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="prelude-val">None</span>;
         <span class="kw">let </span>f = || r = <span class="prelude-val">Some</span>(f());
 
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce()&gt; = Box::new(f);
 
         LocalContext::with_value_ctx(<span class="self">self</span>, LocalValueKind::Var, value, f);
@@ -2563,7 +2563,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="prelude-val">None</span>;
         <span class="kw">let </span>f = || r = <span class="prelude-val">Some</span>(f());
 
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>f: Box&lt;<span class="kw">dyn </span>FnOnce()&gt; = Box::new(f);
         LocalContext::with_default_ctx(<span class="self">self</span>, f);
 

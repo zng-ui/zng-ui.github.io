@@ -1722,9 +1722,9 @@ document.addEventListener('DOMContentLoaded', function () {
         Box::new(<span class="self">self</span>)
     }
 
-    <span class="doccomment">/// Helper for complying with the `dyn_node` feature, boxes the node or just returns it depending of the
+    <span class="doccomment">/// Helper for complying with the `"dyn_node"` feature, boxes the node or just returns it depending of the
     /// compile time feature.
-    </span><span class="attr">#[cfg(dyn_node)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"dyn_node"</span>)]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; BoxedUiNode
     <span class="kw">where
         </span><span class="self">Self</span>: Sized,
@@ -1732,9 +1732,9 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.boxed()
     }
 
-    <span class="doccomment">/// Helper for complying with the `dyn_node` feature, boxes the node or just returns it depending of the
+    <span class="doccomment">/// Helper for complying with the `"dyn_node"` feature, boxes the node or just returns it depending of the
     /// compile time feature.
-    </span><span class="attr">#[cfg(not(dyn_node))]
+    </span><span class="attr">#[cfg(not(feature = <span class="string">"dyn_node"</span>))]
     </span><span class="kw">fn </span>cfg_boxed(<span class="self">self</span>) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span><span class="self">Self</span>: Sized,
@@ -2224,9 +2224,9 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize + Send + Sync,
     S: Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>measure: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize + Send + Sync&gt; = Box::new(measure);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fold_size: Box&lt;<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync&gt; = Box::new(fold_size);
 
     default_measure_each_impl(self_, wm, measure, fold_size)
@@ -2240,17 +2240,17 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="comment">// fold a tuple of `(wm, size)`
         </span><span class="kw">let </span>(pwm, size) = self_.par_fold_reduce(
             || (wm.parallel_split(), PxSize::zero()),
-            |(<span class="kw-2">mut </span>awm, asize), i, n| {
-                <span class="kw">let </span>bsize = measure(i, n, <span class="kw-2">&amp;mut </span>awm);
-                (awm, fold_size(asize, bsize))
+            |(<span class="kw-2">mut </span>a_wm, a_size), i, n| {
+                <span class="kw">let </span>b_size = measure(i, n, <span class="kw-2">&amp;mut </span>a_wm);
+                (a_wm, fold_size(a_size, b_size))
             },
-            |(<span class="kw-2">mut </span>awm, asize), (bwm, bsize)| {
+            |(<span class="kw-2">mut </span>awm, a_size), (bwm, b_size)| {
                 (
                     {
                         awm.parallel_fold(bwm);
                         awm
                     },
-                    fold_size(asize, bsize),
+                    fold_size(a_size, b_size),
                 )
             },
         );
@@ -2271,9 +2271,9 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>F: Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize + Send + Sync,
     S: Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>layout: Box&lt;<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>BoxedUiNode, <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize + Send + Sync&gt; = Box::new(layout);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fold_size: Box&lt;<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Send + Sync&gt; = Box::new(fold_size);
 
     default_layout_each_impl(self_, wl, layout, fold_size)
@@ -2287,17 +2287,17 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="comment">// fold a tuple of `(wl, size)`
         </span><span class="kw">let </span>(pwl, size) = self_.par_fold_reduce(
             || (wl.parallel_split(), PxSize::zero()),
-            |(<span class="kw-2">mut </span>awl, asize), i, n| {
-                <span class="kw">let </span>bsize = layout(i, n, <span class="kw-2">&amp;mut </span>awl);
-                (awl, fold_size(asize, bsize))
+            |(<span class="kw-2">mut </span>awl, a_size), i, n| {
+                <span class="kw">let </span>b_size = layout(i, n, <span class="kw-2">&amp;mut </span>awl);
+                (awl, fold_size(a_size, b_size))
             },
-            |(<span class="kw-2">mut </span>awl, asize), (bwl, bsize)| {
+            |(<span class="kw-2">mut </span>awl, a_size), (bwl, b_size)| {
                 (
                     {
                         awl.parallel_fold(bwl);
                         awl
                     },
-                    fold_size(asize, bsize),
+                    fold_size(a_size, b_size),
                 )
             },
         );

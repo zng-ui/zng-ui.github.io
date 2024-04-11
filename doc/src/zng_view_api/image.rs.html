@@ -319,6 +319,10 @@
 <a href="#317" id="317">317</a>
 <a href="#318" id="318">318</a>
 <a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Image types.
 
 </span><span class="kw">use </span>std::fmt;
@@ -392,7 +396,7 @@
 
 <span class="doccomment">/// Defines how an image is downscaled after decoding.
 ///
-/// The image aspect ratio is preserved in both modes, the image is not upsized, if it already fits the size
+/// The image aspect ratio is preserved in both modes, the image is not upscaled, if it already fits the size
 /// constraints if will not be resized.
 </span><span class="attr">#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq, Hash)]
 </span><span class="kw">pub enum </span>ImageDownscale {
@@ -423,13 +427,17 @@
     <span class="doccomment">/// Compute the expected final size if the downscale is applied on an image of `source_size`.
     </span><span class="kw">pub fn </span>resize_dimensions(<span class="self">self</span>, source_size: PxSize) -&gt; PxSize {
         <span class="comment">// code from image crate
-        </span><span class="kw">fn </span>resize_dimensions(width: u32, height: u32, nwidth: u32, nheight: u32, fill: bool) -&gt; (u32, u32) {
+        </span><span class="kw">fn </span>resize_dimensions(width: u32, height: u32, n_width: u32, n_height: u32, fill: bool) -&gt; (u32, u32) {
             <span class="kw">use </span>std::cmp::max;
 
-            <span class="kw">let </span>wratio = nwidth <span class="kw">as </span>f64 / width <span class="kw">as </span>f64;
-            <span class="kw">let </span>hratio = nheight <span class="kw">as </span>f64 / height <span class="kw">as </span>f64;
+            <span class="kw">let </span>w_ratio = n_width <span class="kw">as </span>f64 / width <span class="kw">as </span>f64;
+            <span class="kw">let </span>h_ratio = n_height <span class="kw">as </span>f64 / height <span class="kw">as </span>f64;
 
-            <span class="kw">let </span>ratio = <span class="kw">if </span>fill { f64::max(wratio, hratio) } <span class="kw">else </span>{ f64::min(wratio, hratio) };
+            <span class="kw">let </span>ratio = <span class="kw">if </span>fill {
+                f64::max(w_ratio, h_ratio)
+            } <span class="kw">else </span>{
+                f64::min(w_ratio, h_ratio)
+            };
 
             <span class="kw">let </span>nw = max((width <span class="kw">as </span>f64 * ratio).round() <span class="kw">as </span>u64, <span class="number">1</span>);
             <span class="kw">let </span>nh = max((height <span class="kw">as </span>f64 * ratio).round() <span class="kw">as </span>u64, <span class="number">1</span>);

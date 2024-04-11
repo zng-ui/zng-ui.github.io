@@ -3079,11 +3079,11 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">pub struct </span>WgtInfo;
 <span class="kw">impl </span>WidgetExt <span class="kw">for </span>WgtInfo {
     <span class="kw">fn </span>ext_property__(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Box&lt;<span class="kw">dyn </span>PropertyArgs&gt;) {
-        <span class="macro">panic!</span>(<span class="string">"WgtInfo is for extrating info only"</span>)
+        <span class="macro">panic!</span>(<span class="string">"WgtInfo is for extracting info only"</span>)
     }
 
     <span class="kw">fn </span>ext_property_unset__(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: PropertyId) {
-        <span class="macro">panic!</span>(<span class="string">"WgtInfo is for extrating info only"</span>)
+        <span class="macro">panic!</span>(<span class="string">"WgtInfo is for extracting info only"</span>)
     }
 }
 
@@ -3540,7 +3540,7 @@ document.addEventListener('DOMContentLoaded', function () {
 #[serde(untagged)]
 </span><span class="kw">enum </span>NestGroupSerde&lt;<span class="lifetime">'s</span>&gt; {
     Named(<span class="kw-2">&amp;</span><span class="lifetime">'s </span>str),
-    Unamed(u16),
+    Unnamed(u16),
 }
 <span class="kw">impl </span>serde::Serialize <span class="kw">for </span>NestGroup {
     <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
@@ -3566,7 +3566,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="prelude-val">Ok</span>(g) =&gt; <span class="prelude-val">Ok</span>(g),
                 <span class="prelude-val">Err</span>(e) =&gt; <span class="prelude-val">Err</span>(D::Error::custom(e)),
             },
-            NestGroupSerde::Unamed(i) =&gt; <span class="prelude-val">Ok</span>(NestGroup(i)),
+            NestGroupSerde::Unnamed(i) =&gt; <span class="prelude-val">Ok</span>(NestGroup(i)),
         }
     }
 }
@@ -5014,8 +5014,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`default_build`]: Self::default_build
     </span><span class="kw">pub fn </span>build(<span class="self">self</span>) -&gt; BoxedUiNode {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(cust) = <span class="self">self</span>.custom_build.clone() {
-            <span class="kw">match </span>cust.try_lock() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(custom) = <span class="self">self</span>.custom_build.clone() {
+            <span class="kw">match </span>custom.try_lock() {
                 <span class="prelude-val">Some</span>(<span class="kw-2">mut </span>c) =&gt; c(<span class="self">self</span>),
                 <span class="prelude-val">None </span>=&gt; <span class="self">self</span>.default_build(),
             }
@@ -5028,15 +5028,15 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// Runs all build actions, but ignores custom build.
     </span><span class="kw">pub fn </span>default_build(<span class="self">self</span>) -&gt; BoxedUiNode {
-        <span class="attr">#[cfg(inspector)]
+        <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
         </span><span class="kw">let </span>builder = <span class="self">self</span>.clone();
 
         <span class="kw">let </span><span class="kw-2">mut </span>building = WidgetBuilding {
-            <span class="attr">#[cfg(inspector)]
+            <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
             </span>builder: <span class="prelude-val">Some</span>(builder),
-            <span class="attr">#[cfg(trace_widget)]
+            <span class="attr">#[cfg(feature = <span class="string">"trace_widget"</span>)]
             </span>trace_widget: <span class="bool-val">true</span>,
-            <span class="attr">#[cfg(trace_wgt_item)]
+            <span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
             </span>trace_wgt_item: <span class="bool-val">true</span>,
 
             widget_type: <span class="self">self</span>.widget_type,
@@ -5086,11 +5086,11 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [build action]: WidgetBuilder::push_build_action
 </span><span class="kw">pub struct </span>WidgetBuilding {
-    <span class="attr">#[cfg(inspector)]
+    <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
     </span>builder: <span class="prelude-ty">Option</span>&lt;WidgetBuilder&gt;,
-    <span class="attr">#[cfg(trace_widget)]
+    <span class="attr">#[cfg(feature = <span class="string">"trace_widget"</span>)]
     </span>trace_widget: bool,
-    <span class="attr">#[cfg(trace_wgt_item)]
+    <span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
     </span>trace_wgt_item: bool,
 
     widget_type: WidgetType,
@@ -5118,7 +5118,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Don't insert the inspector node and inspector metadata on build.
     ///
     /// The inspector metadata is inserted by default when `feature="inspector"` is active.
-    </span><span class="attr">#[cfg(inspector)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
     </span><span class="kw">pub fn </span>disable_inspector(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.builder = <span class="prelude-val">None</span>;
     }
@@ -5126,7 +5126,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Don't insert the widget trace node on build.
     ///
     /// The trace node is inserted by default when `feature="trace_widget"` is active.
-    </span><span class="attr">#[cfg(trace_widget)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"trace_widget"</span>)]
     </span><span class="kw">pub fn </span>disable_trace_widget(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.trace_widget = <span class="bool-val">false</span>;
     }
@@ -5134,7 +5134,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Don't insert property/intrinsic trace nodes on build.
     ///
     /// The trace nodes is inserted by default when `feature="trace_wgt_item"` is active.
-    </span><span class="attr">#[cfg(trace_wgt_item)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
     </span><span class="kw">pub fn </span>disable_trace_wgt_item(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.trace_wgt_item = <span class="bool-val">false</span>;
     }
@@ -5201,7 +5201,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Flags the property as captured and returns a reference to it.
     ///
     /// Note that captured properties are not instantiated in the final build, but they also are not removed like *unset*.
-    /// A property can be "captured" more then once, and if the `inspector` feature is enabled they can be inspected.
+    /// A property can be "captured" more then once, and if the `"inspector"` feature is enabled they can be inspected.
     </span><span class="kw">pub fn </span>capture_property(<span class="kw-2">&amp;mut </span><span class="self">self</span>, property_id: PropertyId) -&gt; <span class="prelude-ty">Option</span>&lt;BuilderPropertyRef&gt; {
         <span class="self">self</span>.capture_property_impl(property_id)
     }
@@ -5559,7 +5559,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="comment">// sort by group, index and insert index.
         </span><span class="self">self</span>.items.sort_unstable_by_key(|b| b.sort_key());
 
-        <span class="attr">#[cfg(inspector)]
+        <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
         </span><span class="kw">let </span><span class="kw-2">mut </span>inspector_items = Vec::with_capacity(<span class="self">self</span>.p.items.len());
 
         <span class="kw">let </span><span class="kw-2">mut </span>node = <span class="self">self</span>.child.take().unwrap_or_else(|| FillUiNode.boxed());
@@ -5569,14 +5569,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     <span class="kw">if </span>!captured {
                         node = args.instantiate(node);
 
-                        <span class="attr">#[cfg(trace_wgt_item)]
+                        <span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
                         </span><span class="kw">if </span><span class="self">self</span>.trace_wgt_item {
-                            <span class="kw">let </span>name = args.instance().name;
-                            node = node.trace(|<span class="kw">_</span>, mtd| <span class="kw">crate</span>::update::UpdatesTrace::property_span(name, mtd));
+                            <span class="kw">let </span>name = args.property().name;
+                            node = node.trace(<span class="kw">move </span>|mtd| <span class="kw">crate</span>::update::UpdatesTrace::property_span(name, mtd.mtd_name()));
                         }
                     }
 
-                    <span class="attr">#[cfg(inspector)]
+                    <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
                     </span>{
                         <span class="kw">if </span>args.property().inputs.iter().any(|i| <span class="macro">matches!</span>(i.kind, InputKind::Var)) {
                             node = <span class="kw">crate</span>::widget::inspector::actualize_var_info(node, args.id()).boxed();
@@ -5588,24 +5588,24 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="attr">#[allow(unused_variables)]
                 </span>WidgetItem::Intrinsic { new, name } =&gt; {
                     node = new(node);
-                    <span class="attr">#[cfg(trace_wgt_item)]
+                    <span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
                     </span><span class="kw">if </span><span class="self">self</span>.trace_wgt_item {
-                        node = node.trace(|<span class="kw">_</span>, mtd| ctate::context::UpdatesTrace::intrinsic_span(name, mtd));
+                        node = node.trace(<span class="kw">move </span>|mtd| <span class="kw">crate</span>::update::UpdatesTrace::intrinsic_span(name, mtd.mtd_name()));
                     }
 
-                    <span class="attr">#[cfg(inspector)]
+                    <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
                     </span>inspector_items.push(<span class="kw">crate</span>::widget::inspector::InstanceItem::Intrinsic {
                         group: position.group,
                         name,
                     });
 
-                    <span class="attr">#[cfg(not(inspector))]
+                    <span class="attr">#[cfg(not(feature = <span class="string">"inspector"</span>))]
                     </span><span class="kw">let _ </span>= position;
                 }
             }
         }
 
-        <span class="attr">#[cfg(inspector)]
+        <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.builder {
             node = <span class="kw">crate</span>::widget::inspector::insert_widget_builder_info(
                 node,
@@ -5618,7 +5618,7 @@ document.addEventListener('DOMContentLoaded', function () {
             .boxed();
         }
 
-        <span class="attr">#[cfg(trace_widget)]
+        <span class="attr">#[cfg(feature = <span class="string">"trace_widget"</span>)]
         </span><span class="kw">if </span><span class="self">self</span>.trace_widget {
             <span class="kw">let </span>name = <span class="self">self</span>.widget_type.name();
             node = node

@@ -3836,24 +3836,24 @@
     }
 }
 
-<span class="kw">fn </span>update_headless_vars(mfactor: <span class="prelude-ty">Option</span>&lt;Factor&gt;, hvars: <span class="kw-2">&amp;</span>WindowVars) -&gt; VarHandles {
+<span class="kw">fn </span>update_headless_vars(m_factor: <span class="prelude-ty">Option</span>&lt;Factor&gt;, h_vars: <span class="kw-2">&amp;</span>WindowVars) -&gt; VarHandles {
     <span class="kw">let </span><span class="kw-2">mut </span>handles = VarHandles::dummy();
 
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = mfactor {
-        hvars.<span class="number">0</span>.scale_factor.set(f);
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = m_factor {
+        h_vars.<span class="number">0</span>.scale_factor.set(f);
     }
 
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent_vars) = hvars.parent().get().and_then(|id| WINDOWS.vars(id).ok()) {
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent_vars) = h_vars.parent().get().and_then(|id| WINDOWS.vars(id).ok()) {
         <span class="comment">// bind parent factor
-        </span><span class="kw">if </span>mfactor.is_none() {
-            hvars.<span class="number">0</span>.scale_factor.set_from(<span class="kw-2">&amp;</span>parent_vars.<span class="number">0</span>.scale_factor);
-            handles.push(parent_vars.<span class="number">0</span>.scale_factor.bind(<span class="kw-2">&amp;</span>hvars.<span class="number">0</span>.scale_factor));
+        </span><span class="kw">if </span>m_factor.is_none() {
+            h_vars.<span class="number">0</span>.scale_factor.set_from(<span class="kw-2">&amp;</span>parent_vars.<span class="number">0</span>.scale_factor);
+            handles.push(parent_vars.<span class="number">0</span>.scale_factor.bind(<span class="kw-2">&amp;</span>h_vars.<span class="number">0</span>.scale_factor));
         }
 
         <span class="comment">// merge bind color scheme.
-        </span><span class="kw">let </span>user = hvars.color_scheme();
+        </span><span class="kw">let </span>user = h_vars.color_scheme();
         <span class="kw">let </span>parent = <span class="kw-2">&amp;</span>parent_vars.<span class="number">0</span>.actual_color_scheme;
-        <span class="kw">let </span>actual = <span class="kw-2">&amp;</span>hvars.<span class="number">0</span>.actual_color_scheme;
+        <span class="kw">let </span>actual = <span class="kw-2">&amp;</span>h_vars.<span class="number">0</span>.actual_color_scheme;
 
         handles.push(user.hook(<span class="macro">clmv!</span>(parent, actual, |args| {
             <span class="kw">let </span>value = <span class="kw-2">*</span>args.value();
@@ -3874,8 +3874,8 @@
         }));
     } <span class="kw">else </span>{
         <span class="comment">// set-bind color scheme
-        </span><span class="kw">let </span>from = hvars.color_scheme();
-        <span class="kw">let </span>to = <span class="kw-2">&amp;</span>hvars.<span class="number">0</span>.actual_color_scheme;
+        </span><span class="kw">let </span>from = h_vars.color_scheme();
+        <span class="kw">let </span>to = <span class="kw-2">&amp;</span>h_vars.<span class="number">0</span>.actual_color_scheme;
 
         to.set_from_map(<span class="kw-2">&amp;</span>from, |<span class="kw-2">&amp;</span>s| s.unwrap_or_default());
         handles.push(from.bind_map(to, |<span class="kw-2">&amp;</span>s| s.unwrap_or_default()));

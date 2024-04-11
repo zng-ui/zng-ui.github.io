@@ -558,13 +558,13 @@ Offset32 = uint32
         <span class="kw">let </span>_num_color_records = cursor.read_u16::&lt;BigEndian&gt;()<span class="question-mark">?</span>;
         <span class="kw">let </span>color_records_array_offset = cursor.read_u32::&lt;BigEndian&gt;()<span class="question-mark">? </span><span class="kw">as </span>u64;
 
-        <span class="kw">let </span>color_record_indicies = cursor.position();
+        <span class="kw">let </span>color_record_indices = cursor.position();
         <span class="kw">let </span><span class="kw-2">mut </span>colors = Vec::with_capacity(num_palettes <span class="kw">as </span>usize * num_palette_entries <span class="kw">as </span>usize);
         <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..num_palettes {
-            cursor.set_position(color_record_indicies + i <span class="kw">as </span>u64 * size_of::&lt;u16&gt;() <span class="kw">as </span>u64);
+            cursor.set_position(color_record_indices + i <span class="kw">as </span>u64 * size_of::&lt;u16&gt;() <span class="kw">as </span>u64);
 
-            <span class="kw">let </span>color_record_indice = cursor.read_u16::&lt;BigEndian&gt;()<span class="question-mark">? </span><span class="kw">as </span>u64;
-            <span class="kw">let </span>color_record_offset = color_records_array_offset + color_record_indice * size_of::&lt;(u8, u8, u8, u8)&gt;() <span class="kw">as </span>u64;
+            <span class="kw">let </span>color_record_index = cursor.read_u16::&lt;BigEndian&gt;()<span class="question-mark">? </span><span class="kw">as </span>u64;
+            <span class="kw">let </span>color_record_offset = color_records_array_offset + color_record_index * size_of::&lt;(u8, u8, u8, u8)&gt;() <span class="kw">as </span>u64;
 
             cursor.set_position(color_record_offset);
             <span class="kw">for _ in </span><span class="number">0</span>..num_palette_entries {
@@ -580,7 +580,7 @@ Offset32 = uint32
         <span class="kw">let </span><span class="kw-2">mut </span>palette_types = <span class="macro">vec!</span>[];
 
         <span class="kw">if </span>version &gt;= <span class="number">1 </span>{
-            cursor.set_position(color_record_indicies + num_palettes <span class="kw">as </span>u64 * size_of::&lt;u16&gt;() <span class="kw">as </span>u64);
+            cursor.set_position(color_record_indices + num_palettes <span class="kw">as </span>u64 * size_of::&lt;u16&gt;() <span class="kw">as </span>u64);
 
             <span class="comment">/*
             CPAL version 1

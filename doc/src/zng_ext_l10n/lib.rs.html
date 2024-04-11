@@ -482,6 +482,12 @@
 <a href="#480" id="480">480</a>
 <a href="#481" id="481">481</a>
 <a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 #![doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">"../"</span>, <span class="macro">std::env!</span>(<span class="string">"CARGO_PKG_README"</span>)))]
@@ -636,6 +642,12 @@
 ///
 /// # Commend for `other`.
 /// other = other message
+/// ```
+///
+/// You an install the scraper tool using cargo:
+///
+/// ```console
+/// cargo install zng-l10n-scraper
 /// ```
 ///
 /// [Fluent Project]: https://projectfluent.org/fluent/guide/
@@ -823,8 +835,8 @@
     ///
     /// The lang file resource is lazy loaded and stays in memory only when there are variables alive linked to it, each lang
     /// in the list is matched to available resources if no match is available the `fallback` message is used. The variable
-    /// may temporary contain the `fallback` as lang resources are loaded asynchrony.
-    </span><span class="kw">pub fn </span>localized_messsage(
+    /// may temporary contain the `fallback` as lang resources are loaded asynchronous.
+    </span><span class="kw">pub fn </span>localized_message(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         lang: <span class="kw">impl </span>Into&lt;Langs&gt;,
         file: <span class="kw">impl </span>Into&lt;Txt&gt;,
@@ -835,7 +847,7 @@
     ) -&gt; BoxedVar&lt;Txt&gt; {
         L10N_SV
             .write()
-            .localized_messsage(lang.into(), file.into(), id.into(), attribute.into(), fallback.into(), args.into())
+            .localized_message(lang.into(), file.into(), id.into(), attribute.into(), fallback.into(), args.into())
     }
 
     <span class="doccomment">/// Gets a handle to the lang file resource.

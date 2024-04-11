@@ -1542,14 +1542,14 @@ document.addEventListener('DOMContentLoaded', function () {
 /// See also [`match_node_list`] that delegates to multiple children, [`match_node_leaf`] that declares a leaf node (no child)
 /// and [`match_widget`] that can extend a widget node.
 ///
-/// Note that the child type is changed to [`BoxedUiNode`] when build with the `dyn_node` feature, if you want to access the
+/// Note that the child type is changed to [`BoxedUiNode`] when build with the `feature = "dyn_node"`, if you want to access the
 /// child directly using [`MatchNodeChild::child`] you can use [`match_node_typed`] instead.
 ///
 /// [`match_node_typed`]: fn@match_node_typed
 /// [`match_widget`]: fn@match_widget
-</span><span class="attr">#[cfg(dyn_node)]
+</span><span class="attr">#[cfg(feature = <span class="string">"dyn_node"</span>)]
 </span><span class="kw">pub fn </span>match_node&lt;C: UiNode&gt;(child: C, closure: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>MatchNodeChild&lt;BoxedUiNode&gt;, UiNodeOp) + Send + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>closure: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span>MatchNodeChild&lt;BoxedUiNode&gt;, UiNodeOp) + Send&gt; = Box::new(closure);
 
     match_node_impl(child.boxed(), closure)
@@ -1609,12 +1609,12 @@ document.addEventListener('DOMContentLoaded', function () {
 /// See also [`match_node_list`] that delegates to multiple children, [`match_node_leaf`] that declares a leaf node (no child)
 /// and [`match_widget`] that can extend a widget node.
 ///
-/// Note that the child type is changed to [`BoxedUiNode`] when build with the `dyn_node` feature, if you want to access the
+/// Note that the child type is changed to [`BoxedUiNode`] when build with the `feature = "dyn_node"`, if you want to access the
 /// child directly using [`MatchNodeChild::child`] you can use [`match_node_typed`] instead.
 ///
 /// [`match_node_typed`]: fn@match_node_typed
 /// [`match_widget`]: fn@match_widget
-</span><span class="attr">#[cfg(not(dyn_node))]
+</span><span class="attr">#[cfg(not(feature = <span class="string">"dyn_node"</span>))]
 </span><span class="kw">pub fn </span>match_node&lt;C: UiNode&gt;(child: C, closure: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>MatchNodeChild&lt;C&gt;, UiNodeOp) + Send + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>UiNode {
     match_node_typed(child, closure)
 }
@@ -1623,7 +1623,7 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`match_node`]: fn@match_node
 </span><span class="kw">pub fn </span>match_node_typed&lt;C: UiNode&gt;(child: C, closure: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span>MatchNodeChild&lt;C&gt;, UiNodeOp) + Send + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>closure: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span>MatchNodeChild&lt;C&gt;, UiNodeOp) + Send&gt; = Box::new(closure);
 
     match_node_impl(child, closure)
@@ -1783,7 +1783,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// Note that if you delegate using this reference you must call [`delegated`].
     ///
-    /// **Warning:** that [`match_node`] changes the child type to [`BoxedUiNode`] when build with the `dyn_node` feature.
+    /// **Warning:** that [`match_node`] changes the child type to [`BoxedUiNode`] when build with the `"dyn_node"` feature.
     /// To get a consistent child type use the [`BoxedUiNode`] directly or use [`match_node_typed`].
     ///
     /// [`delegated`]: Self::delegated

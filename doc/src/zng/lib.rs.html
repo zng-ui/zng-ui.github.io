@@ -933,7 +933,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.2.5", features = ["view_prebuilt"] }
+//! zng = { version = "0.3.0", features = ["view_prebuilt"] }
 //! ```
 //!
 //! Then create your first app:
@@ -1301,7 +1301,7 @@
 //! The `on_click` property handles the `CLICK_EVENT` when the click was done with the primary button and targets
 //! the widget or a descendant of the widget. The [`hn!`] is a widget handler that synchronously handles the event.
 //! See the [`event`] module documentation for details about event propagation, targeting and route. And see
-//! [`handler`] module for other hander types, including [`async_hn!`] that enables async `.await` in any event property.
+//! [`handler`] module for other handler types, including [`async_hn!`] that enables async `.await` in any event property.
 //!
 //! The example above defines a button for the `PASTE_CMD` command scoped on the window. Scoped commands are different
 //! instances of [`Command`], the command scope can be a window or widget ID, the scope is the target of the command and
@@ -1697,13 +1697,13 @@
     <span class="kw">use </span>zng_ext_undo::UndoManager;
     <span class="kw">use </span>zng_ext_window::WindowManager;
 
-    <span class="attr">#[cfg(dyn_app_extension)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
     </span><span class="macro">macro_rules! </span>DefaultsAppExtended {
         () =&gt; {
             AppExtended&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>zng_app::AppExtensionBoxed&gt;&gt;&gt;
         }
     }
-    <span class="attr">#[cfg(not(dyn_app_extension))]
+    <span class="attr">#[cfg(not(feature = <span class="string">"dyn_app_extension"</span>))]
     </span><span class="macro">macro_rules! </span>DefaultsAppExtended {
         () =&gt; {
             AppExtended&lt;<span class="kw">impl </span>AppExtension&gt;
@@ -1770,7 +1770,7 @@
             zng_ext_window::WINDOWS.register_root_extender(|a| {
                 <span class="kw">let </span>child = a.root;
 
-                <span class="attr">#[cfg(inspector)]
+                <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
                 </span><span class="kw">let </span>child = zng_wgt_inspector::inspector(child, zng_wgt_inspector::live_inspector(<span class="bool-val">true</span>));
 
                 <span class="comment">// setup COLOR_SCHEME_VAR for all windows, this is not done in `Window!` because

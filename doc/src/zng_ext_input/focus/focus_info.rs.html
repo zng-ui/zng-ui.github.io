@@ -2267,7 +2267,7 @@
 #[serde(untagged)]
 </span><span class="kw">enum </span>TabIndexSerde&lt;<span class="lifetime">'s</span>&gt; {
     Named(<span class="kw-2">&amp;</span><span class="lifetime">'s </span>str),
-    Unamed(u32),
+    Unnamed(u32),
 }
 <span class="kw">impl </span>serde::Serialize <span class="kw">for </span>TabIndex {
     <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
@@ -2286,7 +2286,7 @@
                 <span class="kw">return </span>TabIndexSerde::Named(name).serialize(serializer);
             }
         }
-        TabIndexSerde::Unamed(<span class="self">self</span>.<span class="number">0</span>).serialize(serializer)
+        TabIndexSerde::Unnamed(<span class="self">self</span>.<span class="number">0</span>).serialize(serializer)
     }
 }
 <span class="kw">impl</span>&lt;<span class="lifetime">'de</span>&gt; serde::Deserialize&lt;<span class="lifetime">'de</span>&gt; <span class="kw">for </span>TabIndex {
@@ -2302,7 +2302,7 @@
                 <span class="string">"SKIP" </span>=&gt; <span class="prelude-val">Ok</span>(TabIndex::SKIP),
                 unknown =&gt; <span class="prelude-val">Err</span>(D::Error::unknown_variant(unknown, <span class="kw-2">&amp;</span>[<span class="string">"AUTO"</span>, <span class="string">"SKIP"</span>])),
             },
-            TabIndexSerde::Unamed(i) =&gt; <span class="prelude-val">Ok</span>(TabIndex(i)),
+            TabIndexSerde::Unnamed(i) =&gt; <span class="prelude-val">Ok</span>(TabIndex(i)),
         }
     }
 }
@@ -3432,15 +3432,15 @@
                 <span class="kw">let </span><span class="kw-2">mut </span>is_ancestor = || <span class="kw-2">*</span>is_ancestor.get_or_insert_with(|| w.info.is_ancestor(<span class="kw-2">&amp;</span><span class="self">self</span>.info));
 
                 <span class="kw">let </span><span class="kw-2">mut </span>is_sibling = <span class="prelude-val">None</span>;
-                <span class="kw">let </span><span class="kw-2">mut </span>is_sibing = || <span class="kw-2">*</span>is_sibling.get_or_insert_with(|| parent_range.contains(<span class="kw-2">&amp;</span>w.info));
+                <span class="kw">let </span><span class="kw-2">mut </span>is_sibling = || <span class="kw-2">*</span>is_sibling.get_or_insert_with(|| parent_range.contains(<span class="kw-2">&amp;</span>w.info));
 
                 <span class="kw">if </span>dist &lt;= ancestor_dist &amp;&amp; is_ancestor() {
                     ancestor_dist = dist;
                     ancestor = <span class="prelude-val">Some</span>(w);
-                } <span class="kw">else if </span>dist &lt;= sibling_dist &amp;&amp; is_sibing() {
+                } <span class="kw">else if </span>dist &lt;= sibling_dist &amp;&amp; is_sibling() {
                     sibling_dist = dist;
                     sibling = <span class="prelude-val">Some</span>(w);
-                } <span class="kw">else if </span>dist &lt;= other_dist &amp;&amp; !is_ancestor() &amp;&amp; !is_sibing() {
+                } <span class="kw">else if </span>dist &lt;= other_dist &amp;&amp; !is_ancestor() &amp;&amp; !is_sibling() {
                     other_dist = dist;
                     other = <span class="prelude-val">Some</span>(w);
                 }

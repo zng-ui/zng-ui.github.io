@@ -3126,7 +3126,7 @@
 /// This can represent a widget subscriber, a var binding, var app handler or animation, dropping the handler stops
 /// the behavior it represents.
 </span><span class="attr">#[derive(Clone)]
-#[must_use = <span class="string">"var handle stops the behaviour it represents on drop"</span>]
+#[must_use = <span class="string">"var handle stops the behavior it represents on drop"</span>]
 </span><span class="kw">pub struct </span>VarHandle(<span class="prelude-ty">Option</span>&lt;Arc&lt;VarHandleData&gt;&gt;);
 <span class="kw">impl </span>VarHandle {
     <span class="doccomment">/// New handle, the `action` depends on the behavior the handle represents.
@@ -3199,7 +3199,7 @@
 }
 
 <span class="doccomment">/// Represents a collection of var handles.
-</span><span class="attr">#[must_use = <span class="string">"var handles stops the behaviour they represents on drop"</span>]
+</span><span class="attr">#[must_use = <span class="string">"var handles stops the behavior they represents on drop"</span>]
 #[derive(Clone, Default)]
 </span><span class="kw">pub struct </span>VarHandles(<span class="kw">pub </span>Vec&lt;VarHandle&gt;);
 <span class="kw">impl </span>VarHandles {
@@ -4795,7 +4795,7 @@
     V2: Var&lt;T2&gt;,
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; T2 + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; T2 + Send&gt; = Box::new(map);
     var_bind_map_impl(source, other, map)
 }
@@ -4825,7 +4825,7 @@
     V2: Var&lt;T2&gt;,
     F: FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;T2&gt; + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;T2&gt; + Send&gt; = Box::new(map);
     var_bind_filter_map_impl(source, other, map)
 }
@@ -4857,9 +4857,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; T2 + Send + <span class="lifetime">'static</span>,
     B: FnMut(<span class="kw-2">&amp;</span>T2) -&gt; T + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; T2 + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T2) -&gt; T + Send + <span class="lifetime">'static</span>&gt; = Box::new(map_back);
 
     var_bind_map_bidi_impl(source, other, map, map_back)
@@ -4920,9 +4920,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;T2&gt; + Send + <span class="lifetime">'static</span>,
     B: FnMut(<span class="kw-2">&amp;</span>T2) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;T2&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T2) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map_back);
 
     var_bind_filter_map_bidi_impl(source, other, map, map_back)
@@ -4986,7 +4986,7 @@
 }
 
 <span class="kw">fn </span>var_map&lt;T: VarValue, O: VarValue&gt;(source: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;T&gt;, map: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>) -&gt; ReadOnlyArcVar&lt;O&gt; {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
     var_map_impl(source, map)
 }
@@ -5000,7 +5000,7 @@
     source: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;T&gt;,
     map: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>,
 ) -&gt; contextualized::ContextualizedVar&lt;O&gt; {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
     var_map_ctx_impl(source, map)
 }
@@ -5018,7 +5018,7 @@
     })
 }
 <span class="kw">fn </span>var_map_mixed&lt;T: VarValue, O: VarValue&gt;(source: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;T&gt;, map: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>) -&gt; BoxedVar&lt;O&gt; {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
 
     <span class="kw">if </span>source.is_contextual() {
@@ -5037,9 +5037,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>,
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send&gt; = Box::new(map_back);
 
     var_map_bidi_impl(source, map, map_back)
@@ -5063,9 +5063,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>,
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send&gt; = Box::new(map_back);
 
     var_map_bidi_ctx_impl(source, map, map_back)
@@ -5095,9 +5095,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>,
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; T + Send&gt; = Box::new(map_back);
 
     <span class="kw">if </span>source.is_contextual() {
@@ -5116,7 +5116,7 @@
     V: Var&lt;O&gt;,
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
 
     var_flat_map_impl(source, map)
@@ -5137,7 +5137,7 @@
     V: Var&lt;O&gt;,
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
 
     var_flat_map_ctx_impl(source, map)
@@ -5163,7 +5163,7 @@
     V: Var&lt;O&gt;,
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; V + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
 
     <span class="kw">if </span>source.is_contextual() {
@@ -5182,9 +5182,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     var_filter_map_impl(source, map, fallback)
@@ -5208,9 +5208,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     var_filter_map_ctx_impl(source, map, fallback)
@@ -5238,9 +5238,9 @@
     M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     <span class="kw">if </span>source.is_contextual() {
@@ -5260,11 +5260,11 @@
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map_back);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     var_filter_map_bidi_impl(source, map, map_back, fallback)
@@ -5290,11 +5290,11 @@
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map_back);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     var_filter_map_bidi_ctx_impl(source, map, map_back, fallback)
@@ -5327,11 +5327,11 @@
     B: FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>,
     I: Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>,
 {
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>T) -&gt; <span class="prelude-ty">Option</span>&lt;O&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>map_back: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>O) -&gt; <span class="prelude-ty">Option</span>&lt;T&gt; + Send + <span class="lifetime">'static</span>&gt; = Box::new(map_back);
-    <span class="attr">#[cfg(dyn_closure)]
+    <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
     </span><span class="kw">let </span>fallback: Box&lt;<span class="kw">dyn </span>Fn() -&gt; O + Send + Sync + <span class="lifetime">'static</span>&gt; = Box::new(fallback);
 
     <span class="kw">if </span>source.is_contextual() {
@@ -5587,7 +5587,7 @@
     <span class="kw">if </span>input.capabilities().is_always_static() || output.capabilities().is_always_read_only() {
         VarHandle::dummy()
     } <span class="kw">else </span>{
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>update_output: Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>I, <span class="kw-2">&amp;</span>AnyVarHookArgs, &lt;V::Downgrade <span class="kw">as </span>WeakVar&lt;O&gt;&gt;::Upgrade) + Send + <span class="lifetime">'static</span>&gt; =
             Box::new(update_output);
 

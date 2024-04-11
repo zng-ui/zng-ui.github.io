@@ -692,7 +692,7 @@
             <span class="kw">let </span>new_value = (m.merge)(<span class="kw-2">&amp;</span>m.inputs);
             {
                 <span class="kw">let </span>modify = |v: <span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;| v.set(new_value);
-                <span class="attr">#[cfg(dyn_closure)]
+                <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
                 </span><span class="kw">let </span>modify = Box::new(modify);
                 rc_merge.value.apply_modify(modify)
             };

@@ -2569,7 +2569,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Opens a widget span.
-    </span><span class="attr">#[cfg(trace_widget)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"trace_widget"</span>)]
     </span><span class="kw">pub fn </span>widget_span(id: WidgetId, name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, node_mtd: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; tracing::span::EnteredSpan {
         <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
             <span class="macro">tracing::trace_span!</span>(target: UpdatesTrace::UPDATES_TARGET, <span class="string">"widget"</span>, %id, raw_id = id.get(), name, %node_mtd).entered()
@@ -2579,7 +2579,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Opens a property span.
-    </span><span class="attr">#[cfg(trace_wgt_item)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
     </span><span class="kw">pub fn </span>property_span(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, node_mtd: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; tracing::span::EnteredSpan {
         <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
             <span class="macro">tracing::trace_span!</span>(target: UpdatesTrace::UPDATES_TARGET, <span class="string">"property"</span>, name, %node_mtd).entered()
@@ -2589,7 +2589,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Opens an intrinsic span.
-    </span><span class="attr">#[cfg(trace_wgt_item)]
+    </span><span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]
     </span><span class="kw">pub fn </span>intrinsic_span(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, node_mtd: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; tracing::span::EnteredSpan {
         <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
             <span class="macro">tracing::trace_span!</span>(target: UpdatesTrace::UPDATES_TARGET, <span class="string">"intrinsic"</span>, name, %node_mtd).entered()

@@ -1583,7 +1583,7 @@
     <span class="doccomment">/// Set the vertical offset to a new offset derived from the last, blending into the active smooth
     /// scrolling chase animation, or starting a new one, or just setting the var if smooth scrolling is disabled.
     </span><span class="kw">pub fn </span>chase_vertical(<span class="kw-2">&amp;</span><span class="self">self</span>, modify_offset: <span class="kw">impl </span>FnOnce(Factor) -&gt; Factor) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>modify_offset: Box&lt;<span class="kw">dyn </span>FnOnce(Factor) -&gt; Factor&gt; = Box::new(modify_offset);
         <span class="self">self</span>.chase(<span class="bool-val">true</span>, SCROLL_VERTICAL_OFFSET_VAR, modify_offset);
     }
@@ -1591,7 +1591,7 @@
     <span class="doccomment">/// Set the horizontal offset to a new offset derived from the last set offset, blending into the active smooth
     /// scrolling chase animation, or starting a new one, or just setting the var if smooth scrolling is disabled.
     </span><span class="kw">pub fn </span>chase_horizontal(<span class="kw-2">&amp;</span><span class="self">self</span>, modify_offset: <span class="kw">impl </span>FnOnce(Factor) -&gt; Factor) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>modify_offset: Box&lt;<span class="kw">dyn </span>FnOnce(Factor) -&gt; Factor&gt; = Box::new(modify_offset);
         <span class="self">self</span>.chase(<span class="bool-val">false</span>, SCROLL_HORIZONTAL_OFFSET_VAR, modify_offset);
     }
@@ -1627,7 +1627,7 @@
     <span class="doccomment">/// Set the zoom scale to a new scale derived from the last set scale, blending into the active
     /// smooth scaling chase animation, or starting a new or, or just setting the var if smooth scrolling is disabled.
     </span><span class="kw">pub fn </span>chase_zoom(<span class="kw-2">&amp;</span><span class="self">self</span>, modify_scale: <span class="kw">impl </span>FnOnce(Factor) -&gt; Factor) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>modify_scale: Box&lt;<span class="kw">dyn </span>FnOnce(Factor) -&gt; Factor&gt; = Box::new(modify_scale);
         <span class="self">self</span>.chase_zoom_impl(modify_scale);
     }
@@ -1670,7 +1670,7 @@
     <span class="doccomment">/// Zoom in or out keeping the `origin` point in the viewport aligned with the same point
     /// in the content.
     </span><span class="kw">pub fn </span>zoom(<span class="kw-2">&amp;</span><span class="self">self</span>, modify_scale: <span class="kw">impl </span>FnOnce(Factor) -&gt; Factor, origin: PxPoint) {
-        <span class="attr">#[cfg(dyn_closure)]
+        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>modify_scale: Box&lt;<span class="kw">dyn </span>FnOnce(Factor) -&gt; Factor&gt; = Box::new(modify_scale);
         <span class="self">self</span>.zoom_impl(modify_scale, origin);
     }

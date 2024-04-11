@@ -670,12 +670,12 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span><span class="kw-2">mut </span>path = Vec::with_capacity(iter.size_hint().<span class="number">0</span>);
         <span class="kw">let </span><span class="kw-2">mut </span>blocked = <span class="prelude-val">None</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>disabled = <span class="prelude-val">None</span>;
-        <span class="kw">for </span>(i, (w, intera)) <span class="kw">in </span>iter.enumerate() {
+        <span class="kw">for </span>(i, (w, interactivity)) <span class="kw">in </span>iter.enumerate() {
             path.push(w);
-            <span class="kw">if </span>blocked.is_none() &amp;&amp; intera.contains(Interactivity::BLOCKED) {
+            <span class="kw">if </span>blocked.is_none() &amp;&amp; interactivity.contains(Interactivity::BLOCKED) {
                 blocked = <span class="prelude-val">Some</span>(i);
             }
-            <span class="kw">if </span>disabled.is_none() &amp;&amp; intera.contains(Interactivity::DISABLED) {
+            <span class="kw">if </span>disabled.is_none() &amp;&amp; interactivity.contains(Interactivity::DISABLED) {
                 disabled = <span class="prelude-val">Some</span>(i);
             }
         }
@@ -741,14 +741,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
                 <span class="self">self</span>.range.next().map(|i| {
-                    <span class="kw">let </span><span class="kw-2">mut </span>intera = Interactivity::ENABLED;
+                    <span class="kw">let </span><span class="kw-2">mut </span>interactivity = Interactivity::ENABLED;
                     <span class="kw">if </span><span class="self">self</span>.blocked &lt;= i {
-                        intera |= Interactivity::BLOCKED;
+                        interactivity |= Interactivity::BLOCKED;
                     }
                     <span class="kw">if </span><span class="self">self</span>.disabled &lt;= i {
-                        intera |= Interactivity::DISABLED;
+                        interactivity |= Interactivity::DISABLED;
                     }
-                    intera
+                    interactivity
                 })
             }
         }
@@ -763,28 +763,28 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Search for the interactivity value associated with the widget in the path.
     </span><span class="kw">pub fn </span>interactivity_of(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Interactivity&gt; {
         <span class="self">self</span>.path.widgets_path().iter().position(|<span class="kw-2">&amp;</span>w| w == widget_id).map(|i| {
-            <span class="kw">let </span><span class="kw-2">mut </span>intera = Interactivity::ENABLED;
+            <span class="kw">let </span><span class="kw-2">mut </span>interactivity = Interactivity::ENABLED;
             <span class="kw">if </span><span class="self">self</span>.blocked &lt;= i {
-                intera |= Interactivity::BLOCKED;
+                interactivity |= Interactivity::BLOCKED;
             }
             <span class="kw">if </span><span class="self">self</span>.disabled &lt;= i {
-                intera |= Interactivity::DISABLED;
+                interactivity |= Interactivity::DISABLED;
             }
-            intera
+            interactivity
         })
     }
 
     <span class="doccomment">/// Interactivity of the widget.
     </span><span class="kw">pub fn </span>interactivity(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Interactivity {
-        <span class="kw">let </span><span class="kw-2">mut </span>intera = Interactivity::ENABLED;
+        <span class="kw">let </span><span class="kw-2">mut </span>interactivity = Interactivity::ENABLED;
         <span class="kw">let </span>len = <span class="self">self</span>.path.path.len();
         <span class="kw">if </span><span class="self">self</span>.blocked &lt; len {
-            intera |= Interactivity::BLOCKED;
+            interactivity |= Interactivity::BLOCKED;
         }
         <span class="kw">if </span><span class="self">self</span>.disabled &lt; len {
-            intera |= Interactivity::DISABLED;
+            interactivity |= Interactivity::DISABLED;
         }
-        intera
+        interactivity
     }
 
     <span class="doccomment">/// Zip widgets and interactivity.

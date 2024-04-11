@@ -623,9 +623,9 @@
 
 <span class="doccomment">/// Immutable shared memory that can be send fast over IPC.
 ///
-/// # `not(ipc)`
+/// # `not(feature="ipc")`
 ///
-/// If the default `ipc` feature is disabled this is only a `Vec&lt;u8&gt;`.
+/// If the default `"ipc"` feature is disabled this is only a `Vec&lt;u8&gt;`.
 </span><span class="attr">#[derive(Clone, Serialize, Deserialize)]
 </span><span class="kw">pub struct </span>IpcBytes {
     <span class="comment">// `IpcSharedMemory` cannot have zero length, we use `None` in this case.
@@ -668,7 +668,7 @@
         }
     }
 
-    <span class="doccomment">/// If the `ipc` feature is enabled copy the bytes to a new shared memory region, if not
+    <span class="doccomment">/// If the `"ipc"` feature is enabled copy the bytes to a new shared memory region, if not
     /// just wraps the `bytes` in a shared pointer.
     </span><span class="kw">pub fn </span>from_vec(bytes: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
         <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
@@ -684,7 +684,7 @@
 
     <span class="doccomment">/// Copy the shared bytes to a new vec.
     ///
-    /// If the `ipc` feature is not enabled and `self` is the only reference this operation is zero-cost.
+    /// If the `"ipc"` feature is not enabled and `self` is the only reference this operation is zero-cost.
     </span><span class="kw">pub fn </span>to_vec(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
         <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
         </span>{
