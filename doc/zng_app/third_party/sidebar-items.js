@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"static":["OPEN_LICENSES_CMD"],"struct":["LICENSES","License","LicenseUsed","User","UserLicense"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["collect_cargo_about","decode_licenses","encode_licenses","merge_licenses","parse_cargo_about","sort_licenses","user_licenses","write_bundle"],"macro":["include_bundle"],"struct":["License","LicenseUsed","User","UserLicense"]};
