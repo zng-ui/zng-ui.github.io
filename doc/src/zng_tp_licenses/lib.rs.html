@@ -264,6 +264,13 @@
 <a href="#262" id="262">262</a>
 <a href="#263" id="263">263</a>
 <a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 #![doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">"../"</span>, <span class="macro">std::env!</span>(<span class="string">"CARGO_PKG_README"</span>)))]
@@ -388,13 +395,20 @@
 ///
 /// This method must be used in build scripts (`build.rs`).
 ///
+/// Returns an empty vec if the [`DOCS_RS`] env var is set to any value or if `ZNG_TP_LICENSES=false` is set.
+///
 /// # Panics
 ///
 /// Panics for any error, including `cargo about` errors and JSON deserialization errors.
 ///
 /// [`cargo about`]: https://github.com/EmbarkStudios/cargo-about
+/// [`DOCS_RS`]: https://docs.rs/about/builds#detecting-docsrs
 </span><span class="attr">#[cfg(feature = <span class="string">"build"</span>)]
 </span><span class="kw">pub fn </span>collect_cargo_about(about_cfg_path: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;LicenseUsed&gt; {
+    <span class="kw">if </span>std::env::var(<span class="string">"DOCS_RS"</span>).is_ok() || std::env::var(<span class="string">"ZNG_TP_LICENSES"</span>).unwrap_or_default() == <span class="string">"false" </span>{
+        <span class="kw">return </span><span class="macro">vec!</span>[];
+    }
+
     <span class="kw">let </span><span class="kw-2">mut </span>cargo_about = std::process::Command::new(<span class="string">"cargo"</span>);
     cargo_about
         .arg(<span class="string">"about"</span>)
