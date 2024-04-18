@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.1 (7cf61ebde 2024-03-27)" data-channel="1.77.1" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_view/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1399,6 +1399,7 @@
 <a href="#1397" id="1397">1397</a>
 <a href="#1398" id="1398">1398</a>
 <a href="#1399" id="1399">1399</a>
+<a href="#1400" id="1400">1400</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, sync::Arc};
 
 <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
@@ -2601,10 +2602,7 @@
 <span class="kw">mod </span>capture {
     <span class="kw">use </span>std::sync::Arc;
 
-    <span class="kw">use </span>webrender::{
-        api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat},
-        Renderer,
-    };
+    <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
     <span class="kw">use </span>zng_txt::formatx;
     <span class="kw">use </span>zng_unit::{Factor, PxRect};
     <span class="kw">use </span>zng_view_api::{
@@ -2616,20 +2614,18 @@
 
     <span class="kw">use crate</span>::{
         image_cache::{Image, ImageData},
-        px_wr::{PxToWr <span class="kw">as _</span>, WrToPx <span class="kw">as _</span>},
         AppEvent,
     };
 
     <span class="kw">use </span><span class="kw">super</span>::ImageCache;
 
     <span class="kw">impl </span>ImageCache {
-        <span class="doccomment">/// Create frame_image for a `Api::frame_image` request.
+        <span class="doccomment">/// Create frame_image for an `Api::frame_image` request.
         </span><span class="attr">#[allow(clippy::too_many_arguments)]
         </span><span class="kw">pub fn </span>frame_image(
             <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-            renderer: <span class="kw-2">&amp;mut </span>Renderer,
+            gl: <span class="kw-2">&amp;</span><span class="kw">dyn </span>gleam::gl::Gl,
             rect: PxRect,
-            capture_mode: bool,
             window_id: WindowId,
             frame_id: FrameId,
             scale_factor: Factor,
@@ -2650,7 +2646,7 @@
                 <span class="kw">return </span>id;
             }
 
-            <span class="kw">let </span>data = <span class="self">self</span>.frame_image_data(renderer, rect, capture_mode, scale_factor, mask);
+            <span class="kw">let </span>data = <span class="self">self</span>.frame_image_data(gl, rect, scale_factor, mask);
 
             <span class="kw">let </span>id = data.id;
 
@@ -2668,13 +2664,12 @@
         <span class="doccomment">/// Create frame_image for a capture request in the FrameRequest.
         </span><span class="kw">pub fn </span>frame_image_data(
             <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-            renderer: <span class="kw-2">&amp;mut </span>Renderer,
+            gl: <span class="kw-2">&amp;</span><span class="kw">dyn </span>gleam::gl::Gl,
             rect: PxRect,
-            capture_mode: bool,
             scale_factor: Factor,
             mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
         ) -&gt; ImageLoadedData {
-            <span class="kw">let </span>data = <span class="self">self</span>.frame_image_data_impl(renderer, rect, capture_mode, scale_factor, mask);
+            <span class="kw">let </span>data = <span class="self">self</span>.frame_image_data_impl(gl, rect, scale_factor, mask);
 
             <span class="kw">let </span>flags = <span class="kw">if </span>data.is_opaque {
                 ImageDescriptorFlags::IS_OPAQUE
@@ -2700,72 +2695,79 @@
             data
         }
 
-        <span class="kw">pub fn </span>frame_image_data_impl(
+        <span class="kw">fn </span>frame_image_data_impl(
             <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-            renderer: <span class="kw-2">&amp;mut </span>Renderer,
+            gl: <span class="kw-2">&amp;</span><span class="kw">dyn </span>gleam::gl::Gl,
             rect: PxRect,
-            capture_mode: bool,
             scale_factor: Factor,
             mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
         ) -&gt; ImageLoadedData {
-            <span class="comment">// Firefox uses this API here:
-            // https://searchfox.org/mozilla-central/source/gfx/webrender_bindings/RendererScreenshotGrabber.cpp#87
-            </span><span class="kw">let </span>(handle, s) = renderer.get_screenshot_async(rect.to_wr_device(), rect.size.to_wr_device(), ImageFormat::BGRA8);
-            <span class="kw">let </span><span class="kw-2">mut </span>buf = <span class="macro">vec!</span>[<span class="number">0</span>; s.width <span class="kw">as </span>usize * s.height <span class="kw">as </span>usize * <span class="number">4</span>];
-            <span class="kw">if </span>renderer.map_and_recycle_screenshot(handle, <span class="kw-2">&amp;mut </span>buf, s.width <span class="kw">as </span>usize * <span class="number">4</span>) {
-                <span class="kw">if </span>!capture_mode {
-                    renderer.release_profiler_structures();
+            <span class="kw">let </span>pixels_flipped = gl.read_pixels(
+                rect.origin.x.<span class="number">0</span>,
+                rect.origin.y.<span class="number">0</span>,
+                rect.size.width.<span class="number">0</span>,
+                rect.size.height.<span class="number">0</span>,
+                gleam::gl::BGRA,
+                gleam::gl::UNSIGNED_BYTE,
+            );
+            <span class="kw">let </span><span class="kw-2">mut </span>buf = <span class="macro">vec!</span>[<span class="number">0u8</span>; pixels_flipped.len()];
+            <span class="macro">assert_eq!</span>(rect.size.width.<span class="number">0 </span><span class="kw">as </span>usize * rect.size.height.<span class="number">0 </span><span class="kw">as </span>usize * <span class="number">4</span>, buf.len());
+            <span class="kw">let </span>stride = <span class="number">4 </span>* rect.size.width.<span class="number">0 </span><span class="kw">as </span>usize;
+            <span class="kw">for </span>(px, buf) <span class="kw">in </span>pixels_flipped.chunks_exact(stride).rev().zip(buf.chunks_exact_mut(stride)) {
+                buf.copy_from_slice(px);
+            }
+
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(mask) = mask {
+                <span class="kw">for </span>bgra <span class="kw">in </span>buf.chunks_exact_mut(<span class="number">4</span>) {
+                    bgra.swap(<span class="number">0</span>, <span class="number">3</span>);
                 }
+                <span class="kw">let </span>(pixels, size, ppi, is_opaque, is_mask) = <span class="self">Self</span>::convert_decoded(
+                    image::DynamicImage::ImageRgba8(
+                        image::ImageBuffer::from_raw(rect.size.width.<span class="number">0 </span><span class="kw">as </span>u32, rect.size.height.<span class="number">0 </span><span class="kw">as </span>u32, buf).unwrap(),
+                    ),
+                    <span class="prelude-val">Some</span>(mask),
+                );
 
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(mask) = mask {
-                    <span class="kw">let </span>(pixels, size, ppi, is_opaque, is_mask) = <span class="self">Self</span>::convert_decoded(
-                        image::DynamicImage::ImageRgba8(image::ImageBuffer::from_raw(s.width <span class="kw">as </span>u32, s.height <span class="kw">as </span>u32, buf).unwrap()),
-                        <span class="prelude-val">Some</span>(mask),
-                    );
+                <span class="kw">let </span>id = <span class="self">self</span>.add(ImageRequest {
+                    format: ImageDataFormat::A8 { size },
+                    data: pixels.clone(),
+                    max_decoded_len: u64::MAX,
+                    downscale: <span class="prelude-val">None</span>,
+                    mask: <span class="prelude-val">Some</span>(mask),
+                });
 
-                    <span class="kw">let </span>id = <span class="self">self</span>.add(ImageRequest {
-                        format: ImageDataFormat::A8 { size },
-                        data: pixels.clone(),
-                        max_decoded_len: u64::MAX,
-                        downscale: <span class="prelude-val">None</span>,
-                        mask: <span class="prelude-val">Some</span>(mask),
-                    });
-
-                    ImageLoadedData {
-                        id,
-                        size,
-                        ppi,
-                        is_opaque,
-                        is_mask,
-                        pixels,
-                    }
-                } <span class="kw">else </span>{
-                    <span class="kw">let </span>is_opaque = buf.chunks_exact(<span class="number">4</span>).all(|bgra| bgra[<span class="number">3</span>] == <span class="number">255</span>);
-
-                    <span class="kw">let </span>data = IpcBytes::from_vec(buf);
-                    <span class="kw">let </span>ppi = <span class="number">96.0 </span>* scale_factor.<span class="number">0</span>;
-                    <span class="kw">let </span>ppi = <span class="prelude-val">Some</span>(ImagePpi::splat(ppi));
-                    <span class="kw">let </span>size = s.to_px();
-
-                    <span class="kw">let </span>id = <span class="self">self</span>.add(ImageRequest {
-                        format: ImageDataFormat::Bgra8 { size, ppi },
-                        data: data.clone(),
-                        max_decoded_len: u64::MAX,
-                        downscale: <span class="prelude-val">None</span>,
-                        mask,
-                    });
-
-                    ImageLoadedData {
-                        id,
-                        size,
-                        ppi,
-                        is_opaque,
-                        pixels: data,
-                        is_mask: <span class="bool-val">false</span>,
-                    }
+                ImageLoadedData {
+                    id,
+                    size,
+                    ppi,
+                    is_opaque,
+                    is_mask,
+                    pixels,
                 }
             } <span class="kw">else </span>{
-                <span class="macro">panic!</span>(<span class="string">"map_and_recycle_screenshot failed"</span>);
+                <span class="kw">let </span>is_opaque = buf.chunks_exact(<span class="number">4</span>).all(|bgra| bgra[<span class="number">3</span>] == <span class="number">255</span>);
+
+                <span class="kw">let </span>data = IpcBytes::from_vec(buf);
+                <span class="kw">let </span>ppi = <span class="number">96.0 </span>* scale_factor.<span class="number">0</span>;
+                <span class="kw">let </span>ppi = <span class="prelude-val">Some</span>(ImagePpi::splat(ppi));
+                <span class="kw">let </span>size = rect.size;
+
+                <span class="kw">let </span>id = <span class="self">self</span>.add(ImageRequest {
+                    format: ImageDataFormat::Bgra8 { size, ppi },
+                    data: data.clone(),
+                    max_decoded_len: u64::MAX,
+                    downscale: <span class="prelude-val">None</span>,
+                    mask,
+                });
+
+                ImageLoadedData {
+                    id,
+                    size,
+                    ppi,
+                    is_opaque,
+                    pixels: data,
+                    is_mask: <span class="bool-val">false</span>,
+                }
             }
         }
     }
