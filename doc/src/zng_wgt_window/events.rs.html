@@ -143,6 +143,22 @@
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window events, [`on_window_open`](fn@on_window_open) and [`on_window_close_requested`](fn@on_window_close_requested).
 //!
 //! These events are re-exported by [`Window!`](struct@crate::Window) as `on_open` and `on_close_requested`, but you can
@@ -152,6 +168,8 @@
 //! after the window is deinited. You can use [`on_deinit`](fn@zng_wgt::on_deinit) in the
 //! [`Window!`](struct@crate::Window) widget to handle a window closing, or create an app level handler for the
 //! event using [`EVENTS`](zng_app::event::EVENTS).
+//!
+//! [`WINDOW_CLOSE_EVENT`]: zng_ext_window::WINDOW_CLOSE_EVENT
 
 </span><span class="kw">use </span>zng_ext_window::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
@@ -171,7 +189,7 @@
     /// This event notifies once per window, after the first layout and all [`WindowLoadingHandle`]
     /// have expired or dropped.
     ///
-    /// [`WindowLoadingHandle`]: zng_app::window::WindowLoadingHandle
+    /// [`WindowLoadingHandle`]: zng_ext_window::WindowLoadingHandle
     </span><span class="kw">pub fn </span>window_load {
         event: WINDOW_LOAD_EVENT,
         args: WindowOpenArgs,
@@ -205,9 +223,7 @@
 
     <span class="doccomment">/// On window close requested.
     ///
-    /// Calling [`propagation().stop()`] on this event cancels the window close.
-    ///
-    /// [`propagation().stop()`]: crate::event::EventPropagationHandle::stop
+    /// Calling `propagation().stop()` on this event cancels the window close.
     </span><span class="kw">pub fn </span>window_close_requested {
         event: WINDOW_CLOSE_REQUESTED_EVENT,
         args: WindowCloseRequestedArgs,
@@ -217,6 +233,8 @@
     <span class="doccomment">/// On window state changed.
     ///
     /// This event notifies every time the user or the app changes the [`WindowVars::state`].
+    ///
+    /// [`WindowVars::state`]: zng_ext_window::WindowVars
     </span><span class="kw">pub fn </span>window_state_changed {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -224,6 +242,8 @@
     }
 
     <span class="doccomment">/// On window state changed to [`WindowState::Maximized`].
+    ///
+    /// [`WindowState::Maximized`]: zng_ext_window::WindowState::Maximized
     </span><span class="kw">pub fn </span>window_maximized {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -231,6 +251,8 @@
     }
 
     <span class="doccomment">/// On window state changed from [`WindowState::Maximized`].
+    ///
+    /// [`WindowState::Maximized`]: zng_ext_window::WindowState::Maximized
     </span><span class="kw">pub fn </span>window_unmaximized {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -238,6 +260,8 @@
     }
 
     <span class="doccomment">/// On window state changed to [`WindowState::Minimized`].
+    ///
+    /// [`WindowState::Minimized`]: zng_ext_window::WindowState::Minimized
     </span><span class="kw">pub fn </span>window_minimized {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -245,6 +269,8 @@
     }
 
     <span class="doccomment">/// On window state changed from [`WindowState::Minimized`].
+    ///
+    /// [`WindowState::Minimized`]: zng_ext_window::WindowState::Minimized
     </span><span class="kw">pub fn </span>window_unminimized {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -252,6 +278,8 @@
     }
 
     <span class="doccomment">/// On window state changed to [`WindowState::Normal`].
+    ///
+    /// [`WindowState::Normal`]: zng_ext_window::WindowState::Normal
     </span><span class="kw">pub fn </span>window_restored {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -259,6 +287,8 @@
     }
 
     <span class="doccomment">/// On window state changed to [`WindowState::is_fullscreen`].
+    ///
+    /// [`WindowState::is_fullscreen`]: zng_ext_window::WindowState::is_fullscreen
     </span><span class="kw">pub fn </span>window_fullscreen {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,
@@ -266,6 +296,8 @@
     }
 
     <span class="doccomment">/// On window state changed from [`WindowState::is_fullscreen`].
+    ///
+    /// [`WindowState::is_fullscreen`]: zng_ext_window::WindowState::is_fullscreen
     </span><span class="kw">pub fn </span>window_exited_fullscreen {
         event: WINDOW_CHANGED_EVENT,
         args: WindowChangedArgs,

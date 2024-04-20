@@ -222,6 +222,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#184" id="184">184</a>
 <a href="#185" id="185">185</a>
 <a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 
 <span class="kw">use </span>zng_layout::context::DIRECTION_VAR;
@@ -269,6 +275,8 @@ document.addEventListener('DOMContentLoaded', function () {
 /// This property disables inline layout for the widget.
 ///
 /// See [`Align`] for more details.
+///
+///  [`Align`]: zng_layout::unit::Align
 </span><span class="attr">#[property(LAYOUT, default(Align::FILL))]
 </span><span class="kw">pub fn </span>align(child: <span class="kw">impl </span>UiNode, alignment: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>alignment = alignment.into_var();
@@ -298,6 +306,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="doccomment">/// If the layout direction is right-to-left.
 ///
 /// The `state` is bound to [`DIRECTION_VAR`].
+///
+/// [`DIRECTION_VAR`]: zng_layout::context::DIRECTION_VAR
 </span><span class="attr">#[property(LAYOUT)]
 </span><span class="kw">pub fn </span>is_rtl(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     bind_state(child, DIRECTION_VAR.map(|s| s.is_rtl()), state)
@@ -306,6 +316,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="doccomment">/// If the layout direction is left-to-right.
 ///
 /// The `state` is bound to [`DIRECTION_VAR`].
+///
+/// [`DIRECTION_VAR`]: zng_layout::context::DIRECTION_VAR
 </span><span class="attr">#[property(LAYOUT)]
 </span><span class="kw">pub fn </span>is_ltr(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     bind_state(child, DIRECTION_VAR.map(|s| s.is_ltr()), state)

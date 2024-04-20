@@ -1556,8 +1556,6 @@
 <a href="#1554" id="1554">1554</a>
 <a href="#1555" id="1555">1555</a>
 <a href="#1556" id="1556">1556</a>
-<a href="#1557" id="1557">1557</a>
-<a href="#1558" id="1558">1558</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
@@ -2766,18 +2764,6 @@
     })
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>access_tree_init(root_id: AccessNodeId) -&gt; accesskit::TreeUpdate {
-    <span class="kw">let </span>root_id = access_id_to_kit(root_id);
-    <span class="kw">let </span><span class="kw-2">mut </span>classes = accesskit::NodeClassSet::new();
-    <span class="kw">let </span>root = accesskit::NodeBuilder::new(accesskit::Role::Application).build(<span class="kw-2">&amp;mut </span>classes);
-
-    accesskit::TreeUpdate {
-        nodes: <span class="macro">vec!</span>[(root_id, root)],
-        tree: <span class="prelude-val">Some</span>(accesskit::Tree::new(root_id)),
-        focus: root_id,
-    }
-}
-
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>access_tree_update_to_kit(update: zng_view_api::access::AccessTreeUpdate) -&gt; accesskit::TreeUpdate {
     <span class="kw">let </span><span class="kw-2">mut </span>classes = accesskit::NodeClassSet::new();
     <span class="kw">let </span><span class="kw-2">mut </span>nodes = Vec::with_capacity(update.updates.iter().map(|t| t.len()).sum());
@@ -2817,6 +2803,9 @@
         builder.set_bounds(bounds);
     }
 
+    <span class="comment">// action that will be performed on click.
+    </span><span class="kw">let </span><span class="kw-2">mut </span>default_verb = <span class="prelude-val">None</span>;
+
     <span class="comment">// add actions
     </span><span class="kw">for </span>cmd <span class="kw">in </span><span class="kw-2">&amp;</span>node.commands {
         <span class="kw">use </span>zng_view_api::access::AccessCmdName::<span class="kw-2">*</span>;
@@ -2825,11 +2814,14 @@
             Click =&gt; {
                 builder.add_action(accesskit::Action::Default);
                 builder.add_action(accesskit::Action::ShowContextMenu);
-                builder.set_default_action_verb(accesskit::DefaultActionVerb::Click);
+                default_verb = <span class="prelude-val">Some</span>(accesskit::DefaultActionVerb::Click);
             }
             Focus =&gt; {
                 builder.add_action(accesskit::Action::Focus);
                 builder.add_action(accesskit::Action::Blur);
+                <span class="kw">if </span>default_verb.is_none() {
+                    default_verb = <span class="prelude-val">Some</span>(accesskit::DefaultActionVerb::Focus);
+                }
             }
             SetExpanded =&gt; {
                 builder.add_action(accesskit::Action::Expand);
@@ -2866,6 +2858,10 @@
             }
             <span class="kw">_ </span>=&gt; {}
         }
+    }
+
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(v) = default_verb {
+        builder.set_default_action_verb(v);
     }
 
     <span class="comment">// add state

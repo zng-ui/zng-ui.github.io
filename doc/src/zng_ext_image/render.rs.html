@@ -409,6 +409,13 @@
 <a href="#407" id="407">407</a>
 <a href="#408" id="408">408</a>
 <a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, sync::Arc};
 
 <span class="kw">use </span>zng_app::{
@@ -559,6 +566,7 @@
     /// ```
     ///
     /// [`IMAGES.render`]: crate::IMAGES::render
+    /// [`UiNode`]: zng_app::widget::node::UiNode
     </span><span class="kw">pub fn </span>render_node&lt;U, N&gt;(render_mode: RenderMode, render: N) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>U: UiNode,
@@ -588,6 +596,7 @@
     /// The closure runs in the [`WINDOW`] context of the headless window.
     ///
     /// [`IMAGE_RENDER.retain`]: IMAGE_RENDER::retain
+    /// [`WINDOW`]: zng_app::window::WINDOW
     </span><span class="kw">pub fn </span>render&lt;N, R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;, render: N) -&gt; ImageVar
     <span class="kw">where
         </span>N: FnOnce() -&gt; R + Send + Sync + <span class="lifetime">'static</span>,
@@ -602,6 +611,7 @@
     /// a headless window is still used, the node does not have the same context as the calling widget.
     ///
     /// [`render`]: Self::render
+    /// [`UiNode`]: zng_app::widget::node::UiNode
     </span><span class="kw">pub fn </span>render_node&lt;U, N&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         render_mode: RenderMode,
@@ -797,11 +807,15 @@
     /// If `mask` is set captures only the given channel, if not set will capture the full BGRA image.
     ///
     /// Called inside the [`WINDOW`] context for the new window.
+    ///
+    /// [`WINDOW`]: zng_app::window::WINDOW
     </span><span class="kw">fn </span>enable_frame_capture_in_window_context(<span class="kw-2">&amp;</span><span class="self">self</span>, mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;);
 
     <span class="doccomment">/// Open the window.
     ///
     /// The `new_window_root` is called inside the [`WINDOW`] context for the new window.
+    ///
+    /// [`WINDOW`]: zng_app::window::WINDOW
     </span><span class="kw">fn </span>open_headless_window(<span class="kw-2">&amp;</span><span class="self">self</span>, new_window_root: Box&lt;<span class="kw">dyn </span>FnOnce() -&gt; Box&lt;<span class="kw">dyn </span>ImageRenderWindowRoot&gt; + Send&gt;);
 
     <span class="doccomment">/// Returns the rendered frame image if it is ready for reading.

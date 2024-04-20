@@ -940,14 +940,6 @@
 <a href="#938" id="938">938</a>
 <a href="#939" id="939">939</a>
 <a href="#940" id="940">940</a>
-<a href="#941" id="941">941</a>
-<a href="#942" id="942">942</a>
-<a href="#943" id="943">943</a>
-<a href="#944" id="944">944</a>
-<a href="#945" id="945">945</a>
-<a href="#946" id="946">946</a>
-<a href="#947" id="947">947</a>
-<a href="#948" id="948">948</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window, surface and frame types.
 
 </span><span class="kw">use </span>std::fmt;
@@ -956,7 +948,6 @@
 <span class="kw">use </span>zng_txt::Txt;
 
 <span class="kw">use crate</span>::{
-    access::AccessNodeId,
     api_extension::{ApiExtensionId, ApiExtensionPayload},
     config::ColorScheme,
     display_list::{DisplayList, FrameValueUpdate},
@@ -1102,6 +1093,8 @@
 ///
 /// Note that actual system video mode is selected by approximation,
 /// closest `size`, then `bit_depth`, then `refresh_rate`.
+///
+/// [`MonitorInfo::video_modes`]: crate::window::MonitorInfo::video_modes
 </span><span class="attr">#[derive(Debug, Clone, Copy, Serialize, Deserialize, PartialEq, Eq)]
 </span><span class="kw">pub struct </span>VideoMode {
     <span class="doccomment">/// Resolution of this video mode.
@@ -1357,15 +1350,6 @@
     ///
     /// The `zng-view` crate implements this by calling `RendererExtension::configure` with the payload.
     </span><span class="kw">pub </span>extensions: Vec&lt;(ApiExtensionId, ApiExtensionPayload)&gt;,
-
-    <span class="doccomment">/// Initial accessibility info tree root widget.
-    ///
-    /// This is used to declare a placeholder node on the first request for accessibility info, the [`Event::AccessInit`] event
-    /// is send to the window if any accessibility service requests the tree, the window must send the full info at that moment,
-    /// after the init the window should assume that accessibility info is required for the lifetime of the window and updates must be send.
-    ///
-    /// [`Event::AccessInit`]: crate::Event::AccessInit
-    </span><span class="kw">pub </span>access_root: AccessNodeId,
 
     <span class="doccomment">/// IME cursor area, if IME is enabled.
     </span><span class="kw">pub </span>ime_area: <span class="prelude-ty">Option</span>&lt;DipRect&gt;,

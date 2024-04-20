@@ -1585,6 +1585,10 @@
 <a href="#1583" id="1583">1583</a>
 <a href="#1584" id="1584">1584</a>
 <a href="#1585" id="1585">1585</a>
+<a href="#1586" id="1586">1586</a>
+<a href="#1587" id="1587">1587</a>
+<a href="#1588" id="1588">1588</a>
+<a href="#1589" id="1589">1589</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1639,6 +1643,7 @@
 ///
 ///
 /// [`insert_anchored`]: Self::insert_anchored
+/// [`WidgetBoundsInfo`]: zng_wgt::prelude::WidgetBoundsInfo
 </span><span class="kw">pub struct </span>LAYERS;
 <span class="kw">impl </span>LAYERS {
     <span class="doccomment">/// Insert the `widget` in the layer identified by a [`LayerIndex`].
@@ -1707,6 +1712,7 @@
     /// This is the equivalent of calling [`insert`] with the node wrapped in [`UiNode::init_widget`].
     ///
     /// [`insert`]: Self::insert
+    /// [`UiNode::init_widget`]: zng_wgt::prelude::UiNode::init_widget
     </span><span class="kw">pub fn </span>insert_node(<span class="kw-2">&amp;</span><span class="self">self</span>, layer: <span class="kw">impl </span>IntoVar&lt;LayerIndex&gt;, maybe_widget: <span class="kw">impl </span>UiNode) -&gt; ResponseVar&lt;WidgetId&gt; {
         <span class="kw">let </span>(widget, rsp) = maybe_widget.init_widget();
         <span class="self">self</span>.insert(layer, widget);
@@ -2214,6 +2220,7 @@
     /// [`insert`]: Self::insert
     ///
     /// [`insert_anchored`]: Self::insert_anchored
+    /// [`UiNode::init_widget`]: zng_wgt::prelude::UiNode::init_widget
     </span><span class="kw">pub fn </span>insert_anchored_node(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         layer: <span class="kw">impl </span>IntoVar&lt;LayerIndex&gt;,
@@ -2346,7 +2353,7 @@
     /// Adorner widgets are related to another widget but not as a visual part of it, examples of adorners
     /// are resize handles in a widget visual editor, or an interactive help/guide feature.
     ///
-    /// This is the [`TOP_MOST - u16::MAX`] value.
+    /// This is the `TOP_MOST - u16::MAX` value.
     </span><span class="kw">pub const </span>ADORNER: LayerIndex = LayerIndex(<span class="self">Self</span>::TOP_MOST.<span class="number">0 </span>- u16::MAX <span class="kw">as </span>u32);
 
     <span class="doccomment">/// The default layer, just above the normal window content.
@@ -3145,6 +3152,7 @@
 /// This is the equivalent of setting [`adorner_fn`] to a [`WidgetFn::singleton`].
 ///
 /// [`adorner_fn`]: fn@adorner_fn
+/// [`WidgetFn::singleton`]: zng_wgt::prelude::WidgetFn::singleton
 </span><span class="attr">#[property(FILL, default(NilUiNode))]
 </span><span class="kw">pub fn </span>adorner(child: <span class="kw">impl </span>UiNode, adorner: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
     adorner_fn(child, WidgetFn::singleton(adorner))

@@ -2578,6 +2578,27 @@
 <a href="#2576" id="2576">2576</a>
 <a href="#2577" id="2577">2577</a>
 <a href="#2578" id="2578">2578</a>
+<a href="#2579" id="2579">2579</a>
+<a href="#2580" id="2580">2580</a>
+<a href="#2581" id="2581">2581</a>
+<a href="#2582" id="2582">2582</a>
+<a href="#2583" id="2583">2583</a>
+<a href="#2584" id="2584">2584</a>
+<a href="#2585" id="2585">2585</a>
+<a href="#2586" id="2586">2586</a>
+<a href="#2587" id="2587">2587</a>
+<a href="#2588" id="2588">2588</a>
+<a href="#2589" id="2589">2589</a>
+<a href="#2590" id="2590">2590</a>
+<a href="#2591" id="2591">2591</a>
+<a href="#2592" id="2592">2592</a>
+<a href="#2593" id="2593">2593</a>
+<a href="#2594" id="2594">2594</a>
+<a href="#2595" id="2595">2595</a>
+<a href="#2596" id="2596">2596</a>
+<a href="#2597" id="2597">2597</a>
+<a href="#2598" id="2598">2598</a>
+<a href="#2599" id="2599">2599</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Touch events and service.
 //!
 //! The app extension [`TouchManager`] provides the events and service. It is included in the default application.
@@ -2731,6 +2752,8 @@
     /// In headless apps the default is [`TouchConfig::default`] and does not change.
     ///
     /// Internally the [`RAW_TOUCH_CONFIG_CHANGED_EVENT`] is listened to update this variable.
+    ///
+    /// [`RAW_TOUCH_CONFIG_CHANGED_EVENT`]: zng_app::view_process::raw_events::RAW_TOUCH_CONFIG_CHANGED_EVENT
     </span><span class="kw">pub fn </span>touch_config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;TouchConfig&gt; {
         TOUCH_SV.read().touch_config.read_only()
     }
@@ -3135,6 +3158,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -3145,6 +3169,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -3267,6 +3292,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -3287,31 +3313,43 @@
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not touched, but now is.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_enter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !<span class="self">self</span>.was_touched() &amp;&amp; <span class="self">self</span>.is_touched()
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was touched, but now isn't.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_leave(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_touched() &amp;&amp; !<span class="self">self</span>.is_touched()
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not touched or was disabled, but now is touched and enabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_enter_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         (!<span class="self">self</span>.was_touched() || <span class="self">self</span>.was_disabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_touched() &amp;&amp; <span class="self">self</span>.is_enabled(WIDGET.id())
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was touched and enabled, but now is not touched or is disabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_leave_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_touched() &amp;&amp; <span class="self">self</span>.was_enabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_touched() || <span class="self">self</span>.is_disabled(WIDGET.id()))
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not touched or was enabled, but now is touched and disabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_enter_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         (!<span class="self">self</span>.was_touched() || <span class="self">self</span>.was_enabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_touched() &amp;&amp; <span class="self">self</span>.is_disabled(WIDGET.id())
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was touched and disabled, but now is not touched or is enabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touch_leave_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_touched() &amp;&amp; <span class="self">self</span>.was_disabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_touched() || <span class="self">self</span>.is_enabled(WIDGET.id()))
     }
@@ -3320,6 +3358,7 @@
     ///
     /// [`prev_target`]: Self::prev_target
     /// [`prev_capture`]: Self::prev_capture
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>was_touched(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(cap) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture {
             <span class="kw">if </span>!cap.allows() {
@@ -3338,6 +3377,7 @@
     ///
     /// [`target`]: Self::target
     /// [`capture`]: Self::capture
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_touched(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(cap) = <span class="kw-2">&amp;</span><span class="self">self</span>.capture {
             <span class="kw">if </span>!cap.allows() {
@@ -3402,6 +3442,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -3424,6 +3465,7 @@
     ///
     /// [`first_info`]: Self::first_info
     /// [`latest_info`]: Self::latest_info
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>local_info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; [TouchTransformInfo; <span class="number">2</span>] {
         <span class="kw">let </span><span class="kw-2">mut </span>first = <span class="self">self</span>.first_info.clone();
         <span class="kw">let </span><span class="kw-2">mut </span>latest = <span class="self">self</span>.latest_info.clone();

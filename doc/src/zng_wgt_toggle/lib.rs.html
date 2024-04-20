@@ -1284,6 +1284,12 @@
 <a href="#1282" id="1282">1282</a>
 <a href="#1283" id="1283">1283</a>
 <a href="#1284" id="1284">1284</a>
+<a href="#1285" id="1285">1285</a>
+<a href="#1286" id="1286">1286</a>
+<a href="#1287" id="1287">1287</a>
+<a href="#1288" id="1288">1288</a>
+<a href="#1289" id="1289">1289</a>
+<a href="#1290" id="1290">1290</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1753,6 +1759,7 @@
 /// access role to [`AccessRole::RadioGroup`].
 ///
 /// [`value`]: fn@value
+/// [`AccessRole::RadioGroup`]: zng_wgt_access::AccessRole::RadioGroup
 </span><span class="attr">#[property(CONTEXT, default(Selector::nil()), widget_impl(Toggle))]
 </span><span class="kw">pub fn </span>selector(child: <span class="kw">impl </span>UiNode, selector: <span class="kw">impl </span>IntoValue&lt;Selector&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>_select_handle = CommandHandle::dummy();
@@ -1851,7 +1858,7 @@
     /// Use the [`deselect_on_new`] property to set. By default is `false`.
     ///
     /// [`value`]: fn@value
-    /// [`select_on_new`]: fn@select_on_new
+    /// [`deselect_on_new`]: fn@deselect_on_new
     </span><span class="kw">pub static </span>DESELECT_ON_NEW_VAR: bool = <span class="bool-val">false</span>;
 
     <span class="doccomment">/// If [`value`] scrolls into view when selected.
@@ -1865,6 +1872,8 @@
 <span class="doccomment">/// Represents a [`Selector`] implementation.
 </span><span class="kw">pub trait </span>SelectorImpl: Send + <span class="lifetime">'static </span>{
     <span class="doccomment">/// Add the selector subscriptions in the [`WIDGET`].
+    ///
+    /// [`WIDGET`]: zng_wgt::prelude::WIDGET
     </span><span class="kw">fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>);
 
     <span class="doccomment">/// Insert the `value` in the selection, returns `Ok(())` if the value was inserted or was already selected.
@@ -2107,6 +2116,8 @@
     }
 
     <span class="doccomment">/// Add the selector subscriptions in [`WIDGET`].
+    ///
+    /// [`WIDGET`]: zng_wgt::prelude::WIDGET
     </span><span class="kw">pub fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.<span class="number">0</span>.lock().subscribe();
     }
@@ -2193,7 +2204,7 @@
 ///
 /// Extends the [`button::DefaultStyle`] to have the *pressed* look when [`is_checked`].
 ///
-/// [`button::DefaultStyle`]: struct@crate::widgets::button::DefaultStyle
+/// [`button::DefaultStyle`]: struct@zng_wgt_button::DefaultStyle
 /// [`is_checked`]: fn@is_checked
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
 </span><span class="kw">pub struct </span>DefaultStyle(zng_wgt_button::DefaultStyle);
@@ -2373,6 +2384,7 @@
 /// [`ComboStyle!`]: struct@ComboStyle
 /// [`Popup!`]: struct@zng_wgt_layer::popup::Popup
 /// [`LAYERS`]: layers::LAYERS
+/// [`POPUP`]: zng_wgt_layer::popup::POPUP
 </span><span class="attr">#[property(CHILD, widget_impl(Toggle))]
 </span><span class="kw">pub fn </span>checked_popup(child: <span class="kw">impl </span>UiNode, popup: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>popup = popup.into_var();
@@ -2449,7 +2461,7 @@
 ///
 /// Style a [`Toggle!`] widget to look like a *switch*.
 ///
-/// [`Toggle!`]: struct@crate::widgets::Toggle
+/// [`Toggle!`]: struct@crate::Toggle
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::SwitchStyle</span>)]
 </span><span class="kw">pub struct </span>SwitchStyle(Style);
 <span class="kw">impl </span>SwitchStyle {

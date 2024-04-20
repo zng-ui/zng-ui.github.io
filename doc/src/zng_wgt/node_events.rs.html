@@ -321,6 +321,41 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#283" id="283">283</a>
 <a href="#284" id="284">284</a>
 <a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_app::widget::node::UiNodeOpMethod;
 
 <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
@@ -332,6 +367,9 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// Event args must be static so access to the full [`UiNodeOp`] is not possible, you can quickly
     /// declare a new property with [`property`] and [`match_node`] if you want to affect the widget this way.
+    ///
+    /// [`UiNodeOp`]: zng_app::widget::node::UiNodeOp
+    /// [`match_node`]: zng_app::widget::node::match_node
     </span><span class="kw">pub </span>op: UiNodeOpMethod,
     <span class="doccomment">/// Number of times the handler was called.
     ///
@@ -369,6 +407,11 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`on_pre_node_op`]: fn@on_pre_node_op
 /// [`NestGroup::EVENT`]: zng_app::widget::builder::NestGroup::EVENT
+/// [`hn!`]: zng_app::handler::hn!
+/// [`async_hn!`]: zng_app::handler::async_hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
+/// [`async_hn_once!`]: zng_app::handler::async_hn_once!
+/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_node_op(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_node_op_impl(child, handler, |<span class="kw">_</span>| <span class="bool-val">true</span>)
@@ -413,6 +456,11 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`on_node_op`]: fn@on_node_op
 /// [`NestGroup::EVENT`]: zng_app::widget::builder::NestGroup::EVENT
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
+/// [`async_hn!`]: zng_app::handler::async_hn!
+/// [`async_hn_once!`]: zng_app::handler::async_hn_once!
+/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_pre_node_op(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_pre_node_op_impl(child, handler, |<span class="kw">_</span>| <span class="bool-val">true</span>)
@@ -459,6 +507,11 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`on_info_init`]: fn@on_info_init
 /// [`WidgetInfoTree`]: zng_app::widget::info::WidgetInfoTree
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
+/// [`async_hn!`]: zng_app::handler::async_hn!
+/// [`async_hn_once!`]: zng_app::handler::async_hn_once!
+/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_init(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_node_op_impl(child, handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Init))
@@ -488,6 +541,14 @@ document.addEventListener('DOMContentLoaded', function () {
 /// so the task *pauses* when the widget is deinited, and is *canceled* when the widget is dropped.
 ///
 /// [`WidgetInfoTree`]: zng_app::widget::info::WidgetInfoTree
+///
+/// [`UiNode::info`]: zng_app::widget::node::UiNode::info
+/// [`UiNode::init`]: zng_app::widget::node::UiNode::init
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
+/// [`async_hn!`]: zng_app::handler::async_hn!
+/// [`async_hn_once!`]: zng_app::handler::async_hn_once!
+/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_info_init(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.cfg_boxed();
@@ -532,6 +593,9 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// You can use one of the handler macros, [`hn!`] or [`hn_once!`], to declare a handler closure. You must avoid using the async
 /// handlers as they cause an update every time the UI task advances from an await point causing another task to spawn.
+///
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_update(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_node_op_impl(child, handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
@@ -549,6 +613,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`on_update`]: fn@on_update
 /// [`on_init`]: fn@on_init
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_pre_update(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_pre_node_op_impl(child, handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
@@ -576,6 +642,10 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// [`UPDATES.run`]: zng_app::update::UPDATES::run
 /// [`on_pre_deinit`]: fn@on_pre_deinit
+/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
+/// [`hn!`]: zng_app::handler::hn!
+/// [`hn_once!`]: zng_app::handler::hn_once!
+/// [`task::spawn`]: zng_task::spawn
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>on_deinit(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     on_node_op_impl(child, handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Deinit))

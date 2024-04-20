@@ -232,6 +232,11 @@
 <a href="#230" id="230">230</a>
 <a href="#231" id="231">231</a>
 <a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, ops};
 
 <span class="kw">use crate</span>::{about_eq, about_eq_hash, Factor, FactorPercent};
@@ -241,6 +246,8 @@
 /// # Equality
 ///
 /// Equality is determined using [`about_eq`] with `0.00001` epsilon.
+///
+/// [`about_eq`]: crate::about_eq
 </span><span class="attr">#[repr(C)]
 #[derive(Default, Copy, Clone, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>Rgba {
@@ -429,9 +436,12 @@
 /// Don't use this value directly, if a function takes `Into&lt;RgbaComponent&gt;` you can use one of the
 /// types this converts from:
 ///
-/// * [`f32`], [`f64`] and [`Factor`] for a value in the `0.0` to `1.0` range.
-/// * [`u8`] for a value in the `0` to `255` range.
+/// * `f32`, `f64` and [`Factor`] for a value in the `0.0` to `1.0` range.
+/// * `u8` for a value in the `0` to `255` range.
 /// * [`FactorPercent`] for a percentage value.
+///
+/// [`Factor`]: crate::Factor
+/// [`FactorPercent`]: crate::FactorPercent
 </span><span class="attr">#[derive(Clone, Copy)]
 </span><span class="kw">pub struct </span>RgbaComponent(<span class="kw">pub </span>f32);
 <span class="doccomment">/// Color channel value is in the [0..=1] range.

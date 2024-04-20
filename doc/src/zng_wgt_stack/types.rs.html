@@ -320,6 +320,17 @@
 <a href="#318" id="318">318</a>
 <a href="#319" id="319">319</a>
 <a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, ops};
 <span class="kw">use </span>zng_layout::context::LayoutMask;
 <span class="kw">use </span>zng_var::animation::{easing::EasingStep, Transitionable};
@@ -354,6 +365,8 @@
     </span><span class="kw">pub </span>origin: Point,
 
     <span class="doccomment">/// If `place.x` and `origin.x` are swapped in [`LayoutDirection::RTL`] contexts.
+    ///
+    /// [`LayoutDirection::RTL`]: zng_wgt::prelude::LayoutDirection::RTL
     </span><span class="kw">pub </span>is_rtl_aware: bool,
 }
 
@@ -426,6 +439,8 @@
     /// In [`LayoutDirection::RTL`] contexts the `place.x` and `origin.x` values are swapped before they are computed.
     ///
     /// Alignment works on the `y` direction because it is not affected.
+    ///
+    /// [`LayoutDirection::RTL`]: zng_wgt::prelude::LayoutDirection::RTL
     </span><span class="kw">pub fn </span>start_to_end() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             place: (<span class="number">100</span>.pct(), <span class="number">0</span>).into(),
@@ -439,6 +454,8 @@
     /// In [`LayoutDirection::RTL`] contexts the `place.x` and `origin.x` values are swapped before they are computed.
     ///
     /// Alignment works on the `y` direction because it is not affected.
+    ///
+    /// [`LayoutDirection::RTL`]: zng_wgt::prelude::LayoutDirection::RTL
     </span><span class="kw">pub fn </span>end_to_start() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             place: (<span class="number">0</span>, <span class="number">0</span>).into(),
@@ -485,6 +502,8 @@
     }
 
     <span class="doccomment">/// Compute offset of the next item in the current [`LAYOUT`] context.
+    ///
+    /// [`LAYOUT`]: zng_wgt::prelude::LAYOUT
     </span><span class="kw">pub fn </span>layout(<span class="kw-2">&amp;</span><span class="self">self</span>, prev_item: PxRect, next_item: PxSize) -&gt; PxVector {
         <span class="kw">if </span><span class="self">self</span>.is_rtl_aware &amp;&amp; LAYOUT.direction().is_rtl() {
             <span class="kw">let </span><span class="kw-2">mut </span>d = <span class="self">self</span>.clone();
@@ -537,11 +556,14 @@
     <span class="doccomment">/// Compute a [`LayoutMask`] that flags all contextual values that affect the result of [`layout`].
     ///
     /// [`layout`]: Self::layout
+    /// [`LayoutMask`]: zng_layout::context::LayoutMask
     </span><span class="kw">pub fn </span>affect_mask(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; LayoutMask {
         <span class="self">self</span>.place.affect_mask() | <span class="self">self</span>.origin.affect_mask()
     }
 
     <span class="doccomment">/// Returns `true` if all values are [`Length::Default`].
+    ///
+    /// [`Length::Default`]: zng_wgt::prelude::Length::Default
     </span><span class="kw">pub fn </span>is_default(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.place.is_default() &amp;&amp; <span class="self">self</span>.origin.is_default()
     }

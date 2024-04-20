@@ -564,6 +564,10 @@
 <a href="#562" id="562">562</a>
 <a href="#563" id="563">563</a>
 <a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -909,6 +913,7 @@
 /// This property sets the [`TOOLTIP_ANCHOR_VAR`].
 ///
 /// [`access_tooltip_anchor`]: fn@access_tooltip_anchor
+/// [`POPUP`]: zng_wgt_layer::popup::POPUP::force_close
 </span><span class="attr">#[property(CONTEXT, default(TOOLTIP_ANCHOR_VAR))]
 </span><span class="kw">pub fn </span>tooltip_anchor(child: <span class="kw">impl </span>UiNode, mode: <span class="kw">impl </span>IntoVar&lt;AnchorMode&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, TOOLTIP_ANCHOR_VAR, mode)
@@ -1021,9 +1026,10 @@
 
     <span class="doccomment">/// Id of the current open tooltip.
     ///
-    /// Custom tooltip implementers must take the ID and [`POPUP::force_close`] it to integrate with the [`tooltip`] implementation.
+    /// Custom tooltip implementers must take the ID and [`POPUP.force_close`] it to integrate with the [`tooltip`] implementation.
     ///
     /// [`tooltip`]: fn@tooltip
+    /// [`POPUP.force_close`]: zng_wgt_layer::popup::POPUP::force_close
     </span><span class="kw">pub static </span>OPEN_TOOLTIP: <span class="prelude-ty">Option</span>&lt;WidgetId&gt; = <span class="prelude-val">None</span>;
 }
 
@@ -1057,6 +1063,8 @@
     <span class="doccomment">/// Tooltip context capture.
     ///
     /// Is [`ContextCapture::NoCapture`] by default.
+    ///
+    ///  [`ContextCapture::NoCapture`]: zng_wgt_layer::popup::ContextCapture
     </span><span class="kw">pub static </span>TOOLTIP_CONTEXT_CAPTURE_VAR: ContextCapture = ContextCapture::NoCapture;
 }
 

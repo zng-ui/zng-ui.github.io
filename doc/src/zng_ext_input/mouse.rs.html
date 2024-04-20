@@ -1478,6 +1478,25 @@
 <a href="#1476" id="1476">1476</a>
 <a href="#1477" id="1477">1477</a>
 <a href="#1478" id="1478">1478</a>
+<a href="#1479" id="1479">1479</a>
+<a href="#1480" id="1480">1480</a>
+<a href="#1481" id="1481">1481</a>
+<a href="#1482" id="1482">1482</a>
+<a href="#1483" id="1483">1483</a>
+<a href="#1484" id="1484">1484</a>
+<a href="#1485" id="1485">1485</a>
+<a href="#1486" id="1486">1486</a>
+<a href="#1487" id="1487">1487</a>
+<a href="#1488" id="1488">1488</a>
+<a href="#1489" id="1489">1489</a>
+<a href="#1490" id="1490">1490</a>
+<a href="#1491" id="1491">1491</a>
+<a href="#1492" id="1492">1492</a>
+<a href="#1493" id="1493">1493</a>
+<a href="#1494" id="1494">1494</a>
+<a href="#1495" id="1495">1495</a>
+<a href="#1496" id="1496">1496</a>
+<a href="#1497" id="1497">1497</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Mouse events and service.
 //!
 //! The app extension [`MouseManager`] provides the events and service. It is included in the default application.
@@ -1763,6 +1782,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -1783,31 +1803,43 @@
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered, but now is.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_enter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !<span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.is_over()
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered, but now isn't.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_leave(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_over() &amp;&amp; !<span class="self">self</span>.is_over()
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was disabled, but now is hovered and enabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_enter_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_disabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_enabled(WIDGET.id())
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and enabled, but now is not hovered or is disabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_leave_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_enabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_disabled(WIDGET.id()))
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was enabled, but now is hovered and disabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_enter_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_enabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_disabled(WIDGET.id())
     }
 
     <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and disabled, but now is not hovered or is enabled.
+    ///
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_mouse_leave_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_disabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_enabled(WIDGET.id()))
     }
@@ -1816,6 +1848,7 @@
     ///
     /// [`prev_target`]: Self::prev_target
     /// [`prev_capture`]: Self::prev_capture
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>was_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(cap) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture {
             <span class="kw">if </span>!cap.allows() {
@@ -1834,6 +1867,7 @@
     ///
     /// [`target`]: Self::target
     /// [`capture`]: Self::capture
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>is_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(cap) = <span class="kw-2">&amp;</span><span class="self">self</span>.capture {
             <span class="kw">if </span>!cap.allows() {
@@ -1903,6 +1937,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -1918,6 +1953,7 @@
     ///
     /// [`capture`]: Self::capture
     /// [`allows`]: CaptureInfo::allows
+    /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>capture_allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.capture.as_ref().map(|c| c.allows()).unwrap_or(<span class="bool-val">true</span>)
     }
@@ -2900,6 +2936,8 @@
     /// In headless apps the default is [`MultiClickConfig::default`] and does not change.
     ///
     /// Internally the [`RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT`] is listened to update this variable.
+    ///
+    /// [`RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT`]: zng_app::view_process::raw_events::RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT
     </span><span class="kw">pub fn </span>multi_click_config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;MultiClickConfig&gt; {
         MOUSE_SV.read().multi_click_config.read_only()
     }

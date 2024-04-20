@@ -204,6 +204,13 @@
 <a href="#202" id="202">202</a>
 <a href="#203" id="203">203</a>
 <a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -224,6 +231,9 @@
 ///
 /// If `true` the widget will handle [`UNDO_CMD`] and [`REDO_CMD`] for all undo actions
 /// that happen inside it.
+///
+/// [`UNDO_CMD`]: static@zng_ext_undo::UNDO_CMD
+/// [`REDO_CMD`]: static@zng_ext_undo::REDO_CMD
 </span><span class="attr">#[property(CONTEXT - <span class="number">10</span>, default(<span class="bool-val">false</span>))]
 </span><span class="kw">pub fn </span>undo_scope(child: <span class="kw">impl </span>UiNode, is_scope: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>scope = WidgetUndoScope::new();
@@ -356,6 +366,8 @@
 <span class="doccomment">/// Sets the maximum length for undo/redo stacks in the widget and descendants.
 ///
 /// This property sets the [`UNDO_LIMIT_VAR`].
+///
+/// [`UNDO_LIMIT_VAR`]: zng_ext_undo::UNDO_LIMIT_VAR
 </span><span class="attr">#[property(CONTEXT - <span class="number">11</span>, default(UNDO_LIMIT_VAR))]
 </span><span class="kw">pub fn </span>undo_limit(child: <span class="kw">impl </span>UiNode, max: <span class="kw">impl </span>IntoVar&lt;u32&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, UNDO_LIMIT_VAR, max)
@@ -367,6 +379,8 @@
 /// previous are undone.
 ///
 /// This property sets the [`UNDO_INTERVAL_VAR`].
+///
+/// [`UNDO_INTERVAL_VAR`]: zng_ext_undo::UNDO_INTERVAL_VAR
 </span><span class="attr">#[property(CONTEXT - <span class="number">11</span>, default(UNDO_INTERVAL_VAR))]
 </span><span class="kw">pub fn </span>undo_interval(child: <span class="kw">impl </span>UiNode, interval: <span class="kw">impl </span>IntoVar&lt;Duration&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, UNDO_INTERVAL_VAR, interval)

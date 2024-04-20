@@ -2004,6 +2004,19 @@
 <a href="#2002" id="2002">2002</a>
 <a href="#2003" id="2003">2003</a>
 <a href="#2004" id="2004">2004</a>
+<a href="#2005" id="2005">2005</a>
+<a href="#2006" id="2006">2006</a>
+<a href="#2007" id="2007">2007</a>
+<a href="#2008" id="2008">2008</a>
+<a href="#2009" id="2009">2009</a>
+<a href="#2010" id="2010">2010</a>
+<a href="#2011" id="2011">2011</a>
+<a href="#2012" id="2012">2012</a>
+<a href="#2013" id="2013">2013</a>
+<a href="#2014" id="2014">2014</a>
+<a href="#2015" id="2015">2015</a>
+<a href="#2016" id="2016">2016</a>
+<a href="#2017" id="2017">2017</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2064,7 +2077,7 @@
 ///
 /// # Parallel
 ///
-/// The task runs in the primary [`rayon`] thread-pool, every [`poll`](Future::poll) happens inside a call to [`rayon::spawn`].
+/// The task runs in the primary [`rayon`] thread-pool, every [`poll`](Future::poll) happens inside a call to `rayon::spawn`.
 ///
 /// You can use parallel iterators, `join` or any of rayon's utilities inside `task` to make it multi-threaded,
 /// otherwise it will run in a single thread at a time, still not blocking the UI.
@@ -2078,7 +2091,7 @@
 /// block the thread from being used by other tasks reducing overall performance. You can use [`wait`] for IO
 /// or blocking operations and for networking you can use any of the async crates, as long as they start their own *event reactor*.
 ///
-/// The `task` lives inside the [`Waker`] when awaiting and inside [`rayon::spawn`] when running.
+/// The `task` lives inside the [`Waker`] when awaiting and inside `rayon::spawn` when running.
 ///
 /// # Examples
 ///
@@ -2125,6 +2138,9 @@
 ///
 /// [unwind safety validation]: std::panic::UnwindSafe
 /// [`Waker`]: std::task::Waker
+/// [`rayon`]: https://docs.rs/rayon
+/// [`LocalContext`]: zng_app_context::LocalContext
+/// [`response_var`]: zng_var::response_var
 </span><span class="kw">pub fn </span>spawn&lt;F&gt;(task: F)
 <span class="kw">where
     </span>F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>,
@@ -2223,7 +2239,9 @@
 /// This function captures the [`LocalContext`] of the calling thread and propagates it to the threads that run the
 /// operations.
 ///
-/// See [`rayon::join`] for more details about join.
+/// See `rayon::join` for more details about join.
+///
+/// [`LocalContext`]: zng_app_context::LocalContext
 </span><span class="kw">pub fn </span>join&lt;A, B, RA, RB&gt;(op_a: A, op_b: B) -&gt; (RA, RB)
 <span class="kw">where
     </span>A: FnOnce() -&gt; RA + Send,
@@ -2239,7 +2257,9 @@
 /// This function captures the [`LocalContext`] of the calling thread and propagates it to the threads that run the
 /// operations.
 ///
-/// See [`rayon::join_context`] for more details about join.
+/// See `rayon::join_context` for more details about join.
+///
+/// [`LocalContext`]: zng_app_context::LocalContext
 </span><span class="kw">pub fn </span>join_context&lt;A, B, RA, RB&gt;(op_a: A, op_b: B) -&gt; (RA, RB)
 <span class="kw">where
     </span>A: FnOnce(rayon::FnContext) -&gt; RA + Send,
@@ -2272,7 +2292,9 @@
 /// This function captures the [`LocalContext`] of the calling thread and propagates it to the threads that run the
 /// operations.
 ///
-/// See [`rayon::scope`] for more details about scope.
+/// See `rayon::scope` for more details about scope.
+///
+/// [`LocalContext`]: zng_app_context::LocalContext
 </span><span class="kw">pub fn </span>scope&lt;<span class="lifetime">'scope</span>, OP, R&gt;(op: OP) -&gt; R
 <span class="kw">where
     </span>OP: FnOnce(ScopeCtx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'scope</span>&gt;) -&gt; R + Send,
@@ -2312,7 +2334,7 @@
 <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, <span class="lifetime">'scope</span>: <span class="lifetime">'a</span>&gt; ScopeCtx&lt;<span class="lifetime">'a</span>, <span class="lifetime">'scope</span>&gt; {
     <span class="doccomment">/// Spawns a job into the fork-join scope `self`. The job runs in the captured thread context.
     ///
-    /// See [`rayon::Scope::spawn`] for more details.
+    /// See `rayon::Scope::spawn` for more details.
     </span><span class="kw">pub fn </span>spawn&lt;F&gt;(<span class="self">self</span>, f: F)
     <span class="kw">where
         </span>F: FnOnce(ScopeCtx&lt;<span class="lifetime">'_</span>, <span class="lifetime">'scope</span>&gt;) + Send + <span class="lifetime">'scope</span>,
@@ -2327,7 +2349,7 @@
 ///
 /// # Parallel
 ///
-/// The task runs in the primary [`rayon`] thread-pool, every [`poll`](Future::poll) happens inside a call to [`rayon::spawn`].
+/// The task runs in the primary [`rayon`] thread-pool, every [`poll`](Future::poll) happens inside a call to `rayon::spawn`.
 ///
 /// You can use parallel iterators, `join` or any of rayon's utilities inside `task` to make it multi-threaded,
 /// otherwise it will run in a single thread at a time, still not blocking the UI.
@@ -2341,7 +2363,7 @@
 /// block the thread from being used by other tasks reducing overall performance. You can use [`wait`] for IO
 /// or blocking operations and for networking you can use any of the async crates, as long as they start their own *event reactor*.
 ///
-/// The `task` lives inside the [`Waker`] when awaiting and inside [`rayon::spawn`] when running.
+/// The `task` lives inside the [`Waker`] when awaiting and inside `rayon::spawn` when running.
 ///
 /// # Examples
 ///
@@ -2378,6 +2400,8 @@
 ///
 /// [`resume_unwind`]: panic::resume_unwind
 /// [`Waker`]: std::task::Waker
+/// [`rayon`]: https://docs.rs/rayon
+/// [`LocalContext`]: zng_app_context::LocalContext
 </span><span class="kw">pub async fn </span>run&lt;R, T&gt;(task: T) -&gt; R
 <span class="kw">where
     </span>R: Send + <span class="lifetime">'static</span>,
@@ -2468,7 +2492,7 @@
     receiver.recv().<span class="kw">await</span>.unwrap()
 }
 
-<span class="doccomment">/// Spawn a parallel async task that will send its result to a [`ResponseVar`].
+<span class="doccomment">/// Spawn a parallel async task that will send its result to a [`ResponseVar&lt;R&gt;`].
 ///
 /// The [`run`] documentation explains how `task` is *parallel* and *async*. The `task` starts executing immediately.
 ///
@@ -2509,6 +2533,8 @@
 /// [`spawn`] for more information about the panic handling of this function.
 ///
 /// [`resume_unwind`]: panic::resume_unwind
+/// [`ResponseVar&lt;R&gt;`]: zng_var::ResponseVar
+/// [`response_var`]: zng_var::response_var
 </span><span class="kw">pub fn </span>respond&lt;R, F&gt;(task: F) -&gt; ResponseVar&lt;R&gt;
 <span class="kw">where
     </span>R: VarValue,

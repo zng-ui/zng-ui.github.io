@@ -645,6 +645,12 @@
 <a href="#643" id="643">643</a>
 <a href="#644" id="644">644</a>
 <a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Sub-menu widget and properties.
 
 </span><span class="kw">use </span>std::time::Duration;
@@ -978,6 +984,7 @@
 /// See also [`start_column_fn`] for use in styles.
 ///
 /// [`start_column_fn`]: fn@start_column_fn
+/// [`Align::START`]: zng_wgt::prelude::Align::START
 </span><span class="attr">#[property(FILL)]
 </span><span class="kw">pub fn </span>start_column(child: <span class="kw">impl </span>UiNode, cell: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>cell = width(cell, START_COLUMN_WIDTH_VAR);
@@ -994,6 +1001,7 @@
 /// See also [`end_column_fn`] for use in styles.
 ///
 /// [`end_column_fn`]: fn@end_column_fn
+/// [`Align::END`]: zng_wgt::prelude::Align::END
 </span><span class="attr">#[property(FILL)]
 </span><span class="kw">pub fn </span>end_column(child: <span class="kw">impl </span>UiNode, cell: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>cell = width(cell, END_COLUMN_WIDTH_VAR);
@@ -1008,6 +1016,7 @@
 ///
 /// [`start_column`]: fn@start_column
 /// [`WidgetFn&lt;()&gt;`]: WidgetFn
+/// [`Align::START`]: zng_wgt::prelude::Align::START
 </span><span class="attr">#[property(FILL)]
 </span><span class="kw">pub fn </span>start_column_fn(child: <span class="kw">impl </span>UiNode, cell_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     start_column(child, presenter((), cell_fn))
@@ -1020,6 +1029,7 @@
 ///
 /// [`end_column`]: fn@end_column
 /// [`WidgetFn&lt;()&gt;`]: WidgetFn
+/// [`Align::END`]: zng_wgt::prelude::Align::END
 </span><span class="attr">#[property(FILL)]
 </span><span class="kw">pub fn </span>end_column_fn(child: <span class="kw">impl </span>UiNode, cell_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     end_column(child, presenter((), cell_fn))
@@ -1158,6 +1168,8 @@
 }
 
 <span class="doccomment">/// Extension methods for [`WidgetInfo`].
+///
+///  [`WidgetInfo`]: zng_wgt::prelude::WidgetInfo
 </span><span class="kw">pub trait </span>SubMenuWidgetInfoExt {
     <span class="doccomment">/// If this widget is a [`SubMenu!`] instance.
     ///

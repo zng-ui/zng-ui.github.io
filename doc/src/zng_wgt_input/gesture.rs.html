@@ -168,6 +168,14 @@
 <a href="#166" id="166">166</a>
 <a href="#167" id="167">167</a>
 <a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Gesture events and control, [`on_click`](fn@on_click), [`click_shortcut`](fn@click_shortcut) and more.
 //!
 //! These events aggregate multiple lower-level events to represent a user interaction.
@@ -184,8 +192,10 @@
     <span class="doccomment">/// On widget click from any source and of any click count and the widget is enabled.
     ///
     /// This is the most general click handler, it raises for all possible sources of the [`CLICK_EVENT`] and any number
-    /// of consecutive clicks. Use [`click`](fn@click) to handle only primary button clicks or [`on_any_single_click`](fn@on_any_single_click)
+    /// of consecutive clicks. Use [`on_click`](fn@on_click) to handle only primary button clicks or [`on_any_single_click`](fn@on_any_single_click)
     /// to not include double/triple clicks.
+    ///
+    /// [`CLICK_EVENT`]: zng_ext_input::gesture::CLICK_EVENT
     </span><span class="kw">pub fn </span>any_click {
         event: CLICK_EVENT,
         args: ClickArgs,
@@ -205,6 +215,8 @@
     ///
     /// This raises for all possible sources of [`CLICK_EVENT`], but only when the click count is one. Use
     /// [`on_single_click`](fn@on_single_click) to handle only primary button clicks.
+        ///
+    /// [`CLICK_EVENT`]: zng_ext_input::gesture::CLICK_EVENT
     </span><span class="kw">pub fn </span>any_single_click {
         event: CLICK_EVENT,
         args: ClickArgs,
@@ -216,6 +228,8 @@
     ///
     /// This raises for all possible sources of [`CLICK_EVENT`], but only when the click count is two. Use
     /// [`on_double_click`](fn@on_double_click) to handle only primary button clicks.
+        ///
+    /// [`CLICK_EVENT`]: zng_ext_input::gesture::CLICK_EVENT
     </span><span class="kw">pub fn </span>any_double_click {
         event: CLICK_EVENT,
         args: ClickArgs,
@@ -226,6 +240,8 @@
     ///
     /// This raises for all possible sources of [`CLICK_EVENT`], but only when the click count is three. Use
     /// [`on_triple_click`](fn@on_triple_click) to handle only primary button clicks.
+        ///
+    /// [`CLICK_EVENT`]: zng_ext_input::gesture::CLICK_EVENT
     </span><span class="kw">pub fn </span>any_triple_click {
         event: CLICK_EVENT,
         args: ClickArgs,

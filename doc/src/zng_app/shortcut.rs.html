@@ -980,6 +980,15 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#942" id="942">942</a>
 <a href="#943" id="943">943</a>
 <a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Key combination types.
 //!
 //! This is declared on this crate mostly to support shortcuts in commands, shortcut events
@@ -1002,6 +1011,10 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// Note that not all keys work well as gesture keys, you can use `try_into` to filter [`Key`] or [`KeyCode`] values
 /// that do not work.
+///
+/// [`Key::Char`]: zng_view_api::keyboard::Key::Char
+/// [`Key`]: zng_view_api::keyboard::Key
+/// [`KeyCode`]: zng_view_api::keyboard::KeyCode
 </span><span class="attr">#[derive(Clone, Debug, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub enum </span>GestureKey {
     <span class="doccomment">/// Gesture key identified by the semantic key.
@@ -1791,9 +1804,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub struct </span>ShortcutFilter: u8 {
         <span class="doccomment">/// Shortcut only applies if the scope is enabled.
         </span><span class="kw">const </span>ENABLED = <span class="number">0b001</span>;
-        <span class="doccomment">/// Shortcut only applies if the scope is in the [`FOCUS.focused`] path.
-        ///
-        /// [`FOCUS.focused`]: FOCUS::focused
+        <span class="doccomment">/// Shortcut only applies if the scope is in the focused path.
         </span><span class="kw">const </span>FOCUSED = <span class="number">0b010</span>;
         <span class="doccomment">/// Shortcut only applies if the command is enabled.
         </span><span class="kw">const </span>CMD_ENABLED = <span class="number">0b100</span>;
@@ -1872,6 +1883,13 @@ document.addEventListener('DOMContentLoaded', function () {
 ///     shortcut!(Alt)
 /// }
 /// ```
+///
+/// [`Key`]: zng_view_api::keyboard::Key
+/// [`Key::Char`]: zng_view_api::keyboard::Key::Char
+/// [`Key::Str`]: zng_view_api::keyboard::Key::Str
+/// [`KeyCode`]: zng_view_api::keyboard::KeyCode
+/// [`Key::is_modifier`]: zng_view_api::keyboard::Key::is_modifier
+/// [`Key::is_composition`]: zng_view_api::keyboard::Key::is_composition
 </span><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>shortcut_macro {
     (Super) =&gt; {

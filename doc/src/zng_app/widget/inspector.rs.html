@@ -352,6 +352,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#314" id="314">314</a>
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Helper types for inspecting an UI tree.
 //!
 //! When compiled with the `"inspector"` feature all widget instances are instrumented with inspection node
@@ -459,7 +460,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="prelude-val">Some</span>(b.map_debug())
     }
 
-    <span class="kw">fn </span>insert(<span class="kw-2">&amp;</span><span class="self">self</span>, property: PropertyId, member: usize, var: BoxedAnyVar) {
+    <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
+    </span><span class="kw">fn </span>insert(<span class="kw-2">&amp;</span><span class="self">self</span>, property: PropertyId, member: usize, var: BoxedAnyVar) {
         <span class="self">self</span>.<span class="number">0</span>.write().insert((property, member), var);
     }
 }

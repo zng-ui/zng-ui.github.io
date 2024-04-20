@@ -251,16 +251,6 @@
 <a href="#249" id="249">249</a>
 <a href="#250" id="250">250</a>
 <a href="#251" id="251">251</a>
-<a href="#252" id="252">252</a>
-<a href="#253" id="253">253</a>
-<a href="#254" id="254">254</a>
-<a href="#255" id="255">255</a>
-<a href="#256" id="256">256</a>
-<a href="#257" id="257">257</a>
-<a href="#258" id="258">258</a>
-<a href="#259" id="259">259</a>
-<a href="#260" id="260">260</a>
-<a href="#261" id="261">261</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt,
     hash::{BuildHasher, Hash},
@@ -440,13 +430,8 @@
 
             <span class="doccomment">/// Calls [`named`] in a debug build and [`new_unique`] in a release build.
             ///
-            /// The [`named`] function causes a hash-map lookup, but if you are only naming a widget to find
-            /// it in the Inspector you don't need that lookup in a release build, so you can set the [`id`]
-            /// to this function call instead.
-            ///
-            /// [`named`]: WidgetId::named
-            /// [`new_unique`]: WidgetId::new_unique
-            /// [`id`]: fn@crate::widget_base::id
+            /// [`named`]: Self::named
+            /// [`new_unique`]: Self::new_unique
             </span><span class="kw">pub fn </span>debug_named(name: <span class="kw">impl </span>Into&lt;<span class="macro-nonterminal">$crate::Txt</span>&gt;) -&gt; <span class="self">Self </span>{
                 <span class="attr">#[cfg(debug_assertions)]
                 </span><span class="kw">return </span><span class="self">Self</span>::named(name);
@@ -460,10 +445,8 @@
 
             <span class="doccomment">/// Generate a new ID with associated name.
             ///
-            /// If the `name` is already associated with an ID, returns the [`NameUsed`] error.
+            /// If the `name` is already associated with an ID, returns the `NameUsed` error.
             /// If the `name` is an empty string just returns a new ID.
-            ///
-            /// [`NameUsed`]: IdNameError::NameUsed
             </span><span class="kw">pub fn </span>named_new(name: <span class="kw">impl </span>Into&lt;<span class="macro-nonterminal">$crate::Txt</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="macro-nonterminal">$crate::IdNameError</span>&lt;<span class="self">Self</span>&gt;&gt; {
                 <span class="self">Self</span>::names_store().named_new(name.into(), <span class="self">Self</span>::new_unique)
             }
@@ -475,12 +458,9 @@
 
             <span class="doccomment">/// Associate a `name` with the ID, if it is not named.
             ///
-            /// If the `name` is already associated with a different ID, returns the [`NameUsed`] error.
-            /// If the ID is already named, with a name different from `name`, returns the [`AlreadyNamed`] error.
+            /// If the `name` is already associated with a different ID, returns the `NameUsed` error.
+            /// If the ID is already named, with a name different from `name`, returns the `AlreadyNamed` error.
             /// If the `name` is an empty string or already is the name of the ID, does nothing.
-            ///
-            /// [`NameUsed`]: IdNameError::NameUsed
-            /// [`AlreadyNamed`]: IdNameError::AlreadyNamed
             </span><span class="kw">pub fn </span>set_name(<span class="self">self</span>, name: <span class="kw">impl </span>Into&lt;<span class="macro-nonterminal">$crate::Txt</span>&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), <span class="macro-nonterminal">$crate::IdNameError</span>&lt;<span class="self">Self</span>&gt;&gt; {
                 <span class="self">Self</span>::names_store().set_name(name.into(), <span class="self">self</span>)
             }

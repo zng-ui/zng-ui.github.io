@@ -683,6 +683,7 @@
 <a href="#681" id="681">681</a>
 <a href="#682" id="682">682</a>
 <a href="#683" id="683">683</a>
+<a href="#684" id="684">684</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt,
     path::{Path, PathBuf},
@@ -842,6 +843,8 @@
 ///
 /// The startup position affects the window once, at the moment the window
 /// is open just after the first [`UiNode::layout`] call.
+///
+///  [`UiNode::layout`]: zng_app::widget::node::UiNode::layout
 </span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub enum </span>StartPosition {
     <span class="doccomment">/// Resolves to [`position`](crate::WindowVars::position).
@@ -948,6 +951,8 @@
     /// )
     /// # ;
     /// ```
+    ///
+    /// [`UiNode`]: zng_app::widget::node::UiNode
     </span><span class="kw">pub fn </span>render&lt;I, F&gt;(new_icon: F) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>I: UiNode,
@@ -1188,9 +1193,7 @@
 
     <span class="doccomment">/// [`WINDOW_CLOSE_REQUESTED_EVENT`] args.
     ///
-    /// Requesting [`propagation().stop()`] on this event cancels the window close.
-    ///
-    /// [`propagation().stop()`]: crate::event::EventPropagationHandle::stop
+    /// Requesting `propagation().stop()` on this event cancels the window close.
     </span><span class="kw">pub struct </span>WindowCloseRequestedArgs {
         <span class="doccomment">/// Windows closing.
         ///
@@ -1325,9 +1328,7 @@
 
     <span class="doccomment">/// Window close requested event.
     ///
-    /// Calling [`propagation().stop()`] on this event cancels the window close.
-    ///
-    /// [`propagation().stop()`]: crate::event::EventPropagationHandle::stop
+    /// Calling `propagation().stop()` on this event cancels the window close.
     </span><span class="kw">pub static </span>WINDOW_CLOSE_REQUESTED_EVENT: WindowCloseRequestedArgs;
 
     <span class="doccomment">/// Window closed event.
@@ -1358,6 +1359,7 @@
 <span class="doccomment">/// Error when a [`WindowId`] is not opened by the [`WINDOWS`] service.
 ///
 /// [`WINDOWS`]: crate::WINDOWS
+/// [`WindowId`]: crate::WindowId
 </span><span class="attr">#[derive(Debug, PartialEq, Eq, Clone, Copy)]
 </span><span class="kw">pub struct </span>WindowNotFound(<span class="kw">pub </span>WindowId);
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>WindowNotFound {

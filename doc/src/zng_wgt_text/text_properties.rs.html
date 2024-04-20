@@ -1913,6 +1913,24 @@
 <a href="#1911" id="1911">1911</a>
 <a href="#1912" id="1912">1912</a>
 <a href="#1913" id="1913">1913</a>
+<a href="#1914" id="1914">1914</a>
+<a href="#1915" id="1915">1915</a>
+<a href="#1916" id="1916">1916</a>
+<a href="#1917" id="1917">1917</a>
+<a href="#1918" id="1918">1918</a>
+<a href="#1919" id="1919">1919</a>
+<a href="#1920" id="1920">1920</a>
+<a href="#1921" id="1921">1921</a>
+<a href="#1922" id="1922">1922</a>
+<a href="#1923" id="1923">1923</a>
+<a href="#1924" id="1924">1924</a>
+<a href="#1925" id="1925">1925</a>
+<a href="#1926" id="1926">1926</a>
+<a href="#1927" id="1927">1927</a>
+<a href="#1928" id="1928">1928</a>
+<a href="#1929" id="1929">1929</a>
+<a href="#1930" id="1930">1930</a>
+<a href="#1931" id="1931">1931</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, num::NonZeroU32, time::Duration};
 
 <span class="kw">use </span>zng_app::render::FontSynthesis;
@@ -2004,6 +2022,9 @@
 /// This property affects all texts inside the widget and the [`Length::Em`] unit.
 ///
 /// Sets the [`FONT_SIZE_VAR`] context var and the [`LayoutMetrics::font_size`].
+///
+/// [`LayoutMetrics::font_size`]: zng_wgt::prelude::LayoutMetrics::font_size
+/// [`Length::Em`]: zng_wgt::prelude::Length::Em
 </span><span class="attr">#[property(CONTEXT, default(FONT_SIZE_VAR), widget_impl(FontMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>font_size(child: <span class="kw">impl </span>UiNode, size: <span class="kw">impl </span>IntoVar&lt;FontSize&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>child = match_node(child, |child, op| <span class="kw">match </span>op {
@@ -2073,7 +2094,7 @@
 /// Sets the [`FONT_SYNTHESIS_VAR`].
 ///
 /// [`font_weight`]: fn@font_weight
-/// [`font_style`]: fn@font_style_VAR`].
+/// [`font_style`]: fn@font_style
 </span><span class="attr">#[property(CONTEXT, default(FONT_SYNTHESIS_VAR), widget_impl(FontMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>font_synthesis(child: <span class="kw">impl </span>UiNode, enabled: <span class="kw">impl </span>IntoVar&lt;FontSynthesis&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, FONT_SYNTHESIS_VAR, enabled)
@@ -2246,6 +2267,7 @@
 ///
 /// [`Text!`]: struct@crate::Text
 /// [`txt_overflow`]: fn@txt_overflow
+/// [`Align::TOP_START`]: zng_wgt::prelude::Align::TOP_START
 </span><span class="attr">#[property(CONTEXT, default(TEXT_OVERFLOW_ALIGN_VAR), widget_impl(TextAlignMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>txt_overflow_align(child: <span class="kw">impl </span>UiNode, mode: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, TEXT_OVERFLOW_ALIGN_VAR, mode)
@@ -2258,6 +2280,9 @@
 /// enabled, that is set to `None`, fill alignment is the same as [`Align::START`].
 ///
 /// Sets the [`JUSTIFY_VAR`].
+///
+/// [`Align::FILL`]: zng_wgt::prelude::Align::FILL
+/// [`Align::START`]: zng_wgt::prelude::Align::START
 </span><span class="attr">#[property(CONTEXT, default(JUSTIFY_VAR), widget_impl(TextAlignMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>justify(child: <span class="kw">impl </span>UiNode, mode: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;Justify&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, JUSTIFY_VAR, mode)
@@ -2773,6 +2798,8 @@
 /// [`Default`]: Length::Default
 ///
 /// Sets the [`LINE_SPACING_VAR`].
+///
+/// [`LineHeight`]: zng_ext_font::LineHeight
 </span><span class="attr">#[property(CONTEXT, default(LINE_SPACING_VAR), widget_impl(TextSpacingMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>line_spacing(child: <span class="kw">impl </span>UiNode, extra: <span class="kw">impl </span>IntoVar&lt;LineSpacing&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, LINE_SPACING_VAR, extra)
@@ -2795,6 +2822,8 @@
 /// [`Default`]: Length::Default
 ///
 /// This property sets the [`WORD_SPACING_VAR`] context var that affects all inner widgets.
+///
+/// [`WhiteSpace`]: zng_ext_font::WhiteSpace
 </span><span class="attr">#[property(CONTEXT, default(WORD_SPACING_VAR), widget_impl(TextSpacingMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>word_spacing(child: <span class="kw">impl </span>UiNode, extra: <span class="kw">impl </span>IntoVar&lt;WordSpacing&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, WORD_SPACING_VAR, extra)
@@ -2848,6 +2877,7 @@
 /// Sets the [`WHITE_SPACE_VAR`].
 ///
 /// [`txt_editable`]: fn@txt_editable
+/// [`WhiteSpace::Preserve`]: zng_ext_font::WhiteSpace::Preserve
 </span><span class="attr">#[property(CONTEXT, default(WHITE_SPACE_VAR), widget_impl(TextTransformMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>white_space(child: <span class="kw">impl </span>UiNode, transform: <span class="kw">impl </span>IntoVar&lt;WhiteSpace&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, WHITE_SPACE_VAR, transform)
@@ -2881,6 +2911,9 @@
 /// Also sets the [`access::lang`] when accessibility is enabled.
 ///
 /// [`access::lang`]: fn@zng_wgt_access::lang
+/// [`LANG_VAR`]: zng_ext_l10n::LANG_VAR
+/// [`DIRECTION_VAR`]: zng_wgt::prelude::DIRECTION_VAR
+/// [`LayoutMetrics::direction`]: zng_wgt::prelude::LayoutMetrics::direction
 </span><span class="attr">#[property(CONTEXT, default(LANG_VAR), widget_impl(LangMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>lang(child: <span class="kw">impl </span>UiNode, lang: <span class="kw">impl </span>IntoVar&lt;Langs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>lang = lang.into_var();
@@ -2896,6 +2929,9 @@
 /// Sets the [`DIRECTION_VAR`] context var and the [`LayoutMetrics::direction`].
 ///
 /// [`lang`]: fn@lang
+///
+/// [`DIRECTION_VAR`]: zng_wgt::prelude::DIRECTION_VAR
+/// [`LayoutMetrics::direction`]: zng_wgt::prelude::LayoutMetrics::direction
 </span><span class="attr">#[property(CONTEXT+<span class="number">1</span>, default(DIRECTION_VAR), widget_impl(LangMix&lt;P&gt;))]
 </span><span class="kw">pub fn </span>direction(child: <span class="kw">impl </span>UiNode, direction: <span class="kw">impl </span>IntoVar&lt;LayoutDirection&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>child = match_node(child, |child, op| <span class="kw">match </span>op {

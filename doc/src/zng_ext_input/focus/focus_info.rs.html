@@ -2144,6 +2144,14 @@
 <a href="#2142" id="2142">2142</a>
 <a href="#2143" id="2143">2143</a>
 <a href="#2144" id="2144">2144</a>
+<a href="#2145" id="2145">2145</a>
+<a href="#2146" id="2146">2146</a>
+<a href="#2147" id="2147">2147</a>
+<a href="#2148" id="2148">2148</a>
+<a href="#2149" id="2149">2149</a>
+<a href="#2150" id="2150">2150</a>
+<a href="#2151" id="2151">2151</a>
+<a href="#2152" id="2152">2152</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::sync::atomic::Ordering::Relaxed;
 
@@ -2604,6 +2612,8 @@
 }
 
 <span class="doccomment">/// A [`WidgetInfoTree`] wrapper for querying focus info out of the widget tree.
+///
+/// [`WidgetInfoTree`]: zng_app::widget::info::WidgetInfoTree
 </span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>FocusInfoTree {
     tree: WidgetInfoTree,
@@ -2703,6 +2713,8 @@
 }
 
 <span class="doccomment">/// [`WidgetInfo`] extensions that build a [`WidgetFocusInfo`].
+///
+/// [`WidgetInfo`]: zng_app::widget::info::WidgetInfo
 </span><span class="kw">pub trait </span>WidgetInfoFocusExt {
     <span class="doccomment">/// Wraps the [`WidgetInfo`] in a [`WidgetFocusInfo`] even if it is not focusable.
     ///
@@ -2710,6 +2722,7 @@
     ///
     /// [`FOCUS.focus_disabled_widgets`]: crate::focus::FOCUS::focus_disabled_widgets
     /// [`FOCUS.focus_hidden_widgets`]: crate::focus::FOCUS::focus_hidden_widgets
+    /// [`WidgetInfo`]: zng_app::widget::info::WidgetInfo
     </span><span class="kw">fn </span>into_focus_info(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; WidgetFocusInfo;
     <span class="doccomment">/// Returns a wrapped [`WidgetFocusInfo`] if the [`WidgetInfo`] is focusable.
     ///
@@ -2717,6 +2730,7 @@
     ///
     /// [`FOCUS.focus_disabled_widgets`]: crate::focus::FOCUS::focus_disabled_widgets
     /// [`FOCUS.focus_hidden_widgets`]: crate::focus::FOCUS::focus_hidden_widgets
+    /// [`WidgetInfo`]: zng_app::widget::info::WidgetInfo
     </span><span class="kw">fn </span>into_focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt;;
 }
 <span class="kw">impl </span>WidgetInfoFocusExt <span class="kw">for </span>WidgetInfo {
@@ -2734,6 +2748,8 @@
 }
 
 <span class="doccomment">/// [`WidgetInfo`] wrapper that adds focus information for each widget.
+///
+/// [`WidgetInfo`]: zng_app::widget::info::WidgetInfo
 </span><span class="attr">#[derive(Clone, Eq, PartialEq, Hash, Debug)]
 </span><span class="kw">pub struct </span>WidgetFocusInfo {
     info: WidgetInfo,

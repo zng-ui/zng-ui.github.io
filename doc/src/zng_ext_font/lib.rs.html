@@ -3311,6 +3311,8 @@
 <a href="#3309" id="3309">3309</a>
 <a href="#3310" id="3310">3310</a>
 <a href="#3311" id="3311">3311</a>
+<a href="#3312" id="3312">3312</a>
+<a href="#3313" id="3313">3313</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3459,6 +3461,8 @@
     ///
     /// Font names are case insensitive but the input casing is preserved, this casing shows during display and in
     /// the value of [`name`](Self::name).
+    ///
+    /// [`Txt`]: zng_txt::Txt
     </span><span class="kw">pub fn </span>new(name: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>text = name.into();
         FontName {
@@ -3510,6 +3514,8 @@
     }
 
     <span class="doccomment">/// Unwraps into a [`Txt`].
+    ///
+    /// [`Txt`]: zng_txt::Txt
     </span><span class="kw">pub fn </span>into_text(<span class="self">self</span>) -&gt; Txt {
         <span class="self">self</span>.text
     }
@@ -3915,6 +3921,8 @@
     <span class="doccomment">/// One of the [`GenericFonts`] was set for the language.
     ///
     /// The font name is one of [`FontName`] generic names.
+    ///
+    /// [`GenericFonts`]: struct@GenericFonts
     </span>GenericFont(FontName, Lang),
 
     <span class="doccomment">/// A new [fallback](GenericFonts::fallback) font was set for the language.
@@ -4014,10 +4022,6 @@
 }
 
 <span class="doccomment">/// Font loading, custom fonts and app font configuration.
-///
-/// # Provider
-///
-/// This service is provided by the [`FontManager`] extension.
 </span><span class="kw">pub struct </span>FONTS;
 <span class="kw">impl </span>FONTS {
     <span class="doccomment">/// Clear cache and notify `Refresh` in [`FONT_CHANGED_EVENT`].

@@ -2637,7 +2637,7 @@
 
     <span class="doccomment">/// Locks this `RwLock` with shared read access, blocking the current thread until it can be acquired.
     ///
-    /// See [`RwLock::read`] for more details.
+    /// See `parking_lot::RwLock::read` for more details.
     </span><span class="kw">pub fn </span>read(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; RwLockReadGuardOwned&lt;T&gt; {
         RwLockReadGuardOwned::lock(<span class="self">self</span>.get())
     }
@@ -2647,7 +2647,7 @@
     /// Unlike `read`, this method is guaranteed to succeed without blocking if
     /// another read lock is held at the time of the call.
     ///
-    /// See [`RwLock::read`] for more details.
+    /// See `parking_lot::RwLock::read` for more details.
     </span><span class="kw">pub fn </span>read_recursive(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; RwLockReadGuardOwned&lt;T&gt; {
         RwLockReadGuardOwned::lock_recursive(<span class="self">self</span>.get())
     }
@@ -2655,21 +2655,21 @@
     <span class="doccomment">/// Locks this `RwLock` with exclusive write access, blocking the current
     /// thread until it can be acquired.
     ///
-    /// See [`RwLock::write`] for more details.
+    /// See `parking_lot::RwLock::write` for more details.
     </span><span class="kw">pub fn </span>write(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; RwLockWriteGuardOwned&lt;T&gt; {
         RwLockWriteGuardOwned::lock(<span class="self">self</span>.get())
     }
 
     <span class="doccomment">/// Try lock this `RwLock` with shared read access, blocking the current thread until it can be acquired.
     ///
-    /// See [`RwLock::try_read`] for more details.
+    /// See `parking_lot::RwLock::try_read` for more details.
     </span><span class="kw">pub fn </span>try_read(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;RwLockReadGuardOwned&lt;T&gt;&gt; {
         RwLockReadGuardOwned::try_lock(<span class="self">self</span>.get())
     }
 
     <span class="doccomment">/// Locks this `RwLock` with shared read access, blocking the current thread until it can be acquired.
     ///
-    /// See [`RwLock::try_read_recursive`] for more details.
+    /// See `parking_lot::RwLock::try_read_recursive` for more details.
     </span><span class="kw">pub fn </span>try_read_recursive(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;RwLockReadGuardOwned&lt;T&gt;&gt; {
         RwLockReadGuardOwned::try_lock_recursive(<span class="self">self</span>.get())
     }
@@ -2677,7 +2677,7 @@
     <span class="doccomment">/// Locks this `RwLock` with exclusive write access, blocking the current
     /// thread until it can be acquired.
     ///
-    /// See [`RwLock::try_write`] for more details.
+    /// See `parking_lot::RwLock::try_write` for more details.
     </span><span class="kw">pub fn </span>try_write(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;RwLockWriteGuardOwned&lt;T&gt;&gt; {
         RwLockWriteGuardOwned::try_lock(<span class="self">self</span>.get())
     }
@@ -2691,7 +2691,7 @@
 <span class="kw">impl</span>&lt;T&gt; RwLockReadGuardOwned&lt;T&gt; {
     <span class="doccomment">/// Lock owned.    
     ///
-    /// See [`RwLock::read`] for more details.
+    /// See `parking_lot::RwLock::read` for more details.
     </span><span class="kw">pub fn </span>lock(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             <span class="comment">// SAFETY: we cast to 'static only for storage, `lock`` is dropped before `_owned`.
@@ -2702,7 +2702,7 @@
 
     <span class="doccomment">/// Locks this `RwLock` with shared read access, blocking the current thread until it can be acquired.
     ///
-    /// See [`RwLock::read_recursive`] for more details.
+    /// See `parking_lot::RwLock::read_recursive` for more details.
     </span><span class="kw">pub fn </span>lock_recursive(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             <span class="comment">// SAFETY: we cast to 'static only for storage, `lock`` is dropped before `_owned`.
@@ -2713,7 +2713,7 @@
 
     <span class="doccomment">/// Try lock owned.
     ///
-    /// See [`RwLock::try_read`] for more details.
+    /// See `parking_lot::RwLock::try_read` for more details.
     </span><span class="kw">pub fn </span>try_lock(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>lock = own.try_read()<span class="question-mark">?</span>;
         <span class="prelude-val">Some</span>(<span class="self">Self </span>{
@@ -2725,7 +2725,7 @@
 
     <span class="doccomment">/// Try lock owned.
     ///
-    /// See [`RwLock::try_read`] for more details.
+    /// See `parking_lot::RwLock::try_read` for more details.
     </span><span class="kw">pub fn </span>try_lock_recursive(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>lock = own.try_read_recursive()<span class="question-mark">?</span>;
         <span class="prelude-val">Some</span>(<span class="self">Self </span>{
@@ -2789,7 +2789,7 @@
 <span class="kw">impl</span>&lt;T&gt; RwLockWriteGuardOwned&lt;T&gt; {
     <span class="doccomment">/// Lock owned.
     ///
-    /// See [`RwLock::write`] for more details.
+    /// See `parking_lot::RwLock::write` for more details.
     </span><span class="kw">pub fn </span>lock(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             <span class="comment">// SAFETY: we cast to 'static only for storage, `lock`` is dropped before `_owned`.
@@ -2800,7 +2800,7 @@
 
     <span class="doccomment">/// Lock owned.
     ///
-    /// See [`RwLock::try_write`] for more details.
+    /// See `parking_lot::RwLock::try_write` for more details.
     </span><span class="kw">pub fn </span>try_lock(own: Arc&lt;RwLock&lt;T&gt;&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span>lock = own.try_write()<span class="question-mark">?</span>;
         <span class="prelude-val">Some</span>(<span class="self">Self </span>{
@@ -2881,7 +2881,7 @@
 
     <span class="doccomment">/// Locks this `RwLock` with shared read access, blocking the current thread until it can be acquired.
     ///
-    /// See [`RwLock::read`] for more details.
+    /// See `parking_lot::RwLock::read` for more details.
     </span><span class="kw">pub fn </span>read(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; parking_lot::RwLockReadGuard&lt;T&gt; {
         <span class="self">self</span>.<span class="number">0</span>.read()
     }
@@ -2891,21 +2891,21 @@
     /// Unlike `read`, this method is guaranteed to succeed without blocking if
     /// another read lock is held at the time of the call.
     ///
-    /// See [`RwLock::read_recursive`] for more details.
+    /// See `parking_lot::RwLock::read_recursive` for more details.
     </span><span class="kw">pub fn </span>read_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; parking_lot::RwLockReadGuard&lt;T&gt; {
         <span class="self">self</span>.<span class="number">0</span>.read_recursive()
     }
 
     <span class="doccomment">/// Attempts to acquire this `RwLock` with shared read access.
     ///
-    /// See [`RwLock::try_read`] for more details.
+    /// See `parking_lot::RwLock::try_read` for more details.
     </span><span class="kw">pub fn </span>try_read(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;parking_lot::RwLockReadGuard&lt;T&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.try_read()
     }
 
     <span class="doccomment">/// Attempts to acquire this `RwLock` with shared read access.
     ///
-    /// See [`RwLock::try_read_recursive`] for more details.
+    /// See `parking_lot::RwLock::try_read_recursive` for more details.
     </span><span class="kw">pub fn </span>try_read_recursive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;parking_lot::RwLockReadGuard&lt;T&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.try_read_recursive()
     }

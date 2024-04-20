@@ -1750,6 +1750,16 @@
 <a href="#1748" id="1748">1748</a>
 <a href="#1749" id="1749">1749</a>
 <a href="#1750" id="1750">1750</a>
+<a href="#1751" id="1751">1751</a>
+<a href="#1752" id="1752">1752</a>
+<a href="#1753" id="1753">1753</a>
+<a href="#1754" id="1754">1754</a>
+<a href="#1755" id="1755">1755</a>
+<a href="#1756" id="1756">1756</a>
+<a href="#1757" id="1757">1757</a>
+<a href="#1758" id="1758">1758</a>
+<a href="#1759" id="1759">1759</a>
+<a href="#1760" id="1760">1760</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, fmt, future::Future, mem, sync::Arc};
 
 <span class="kw">use </span>parking_lot::Mutex;
@@ -2012,6 +2022,8 @@
     /// This setting does not consider headless windows and is fully ignored in headless apps.
     ///
     /// This is also set to `true` on [`EXIT_REQUESTED_EVENT`] when there are open headed windows.
+    ///
+    /// [`EXIT_REQUESTED_EVENT`]: zng_app::EXIT_REQUESTED_EVENT
     </span><span class="kw">pub fn </span>exit_on_last_close(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;bool&gt; {
         WINDOWS_SV.read().exit_on_last_close.clone()
     }
@@ -2046,6 +2058,8 @@
     /// can use the context [`WINDOW`] to set variables that will be read on init with the new value.
     ///
     /// [loaded]: Self::is_loaded
+    /// [`UiTask`]: zng_task::UiTask
+    /// [`WINDOW`]: zng_app::window::WINDOW
     </span><span class="kw">pub fn </span>open(<span class="kw-2">&amp;</span><span class="self">self</span>, new_window: <span class="kw">impl </span>Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>) -&gt; ResponseVar&lt;WindowId&gt; {
         WINDOWS_SV
             .write()
@@ -2396,6 +2410,10 @@
     ///
     /// The payload is dropped after it is send, this method must be called again on [`VIEW_PROCESS_INITED_EVENT`]
     /// to reinitialize the extensions after view-process respawn.
+    ///
+    /// [`UiNode::init`]: zng_app::widget::node::UiNode::init
+    /// [`UiNode::layout`]: zng_app::widget::node::UiNode::layout
+    /// [`VIEW_PROCESS_INITED_EVENT`]: zng_app::view_process::VIEW_PROCESS_INITED_EVENT
     </span><span class="kw">pub fn </span>view_extensions_init(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         window_id: WindowId,
@@ -3290,6 +3308,8 @@
 }
 
 <span class="doccomment">/// Extensions methods for [`WINDOW`] contexts of windows open by [`WINDOWS`].
+///
+/// [`WINDOW`]: zng_app::window::WINDOW
 </span><span class="attr">#[allow(non_camel_case_types)]
 </span><span class="kw">pub trait </span>WINDOW_Ext {
     <span class="doccomment">/// Clone a reference to the variables that get and set window properties.

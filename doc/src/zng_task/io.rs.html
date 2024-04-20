@@ -911,6 +911,11 @@
 <a href="#909" id="909">909</a>
 <a href="#910" id="910">910</a>
 <a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! IO tasks.
 //!
 //! Most of the types in this module are re-exported from [`futures_lite::io`].
@@ -919,6 +924,7 @@
 
 </span><span class="kw">use </span>std::{
     fmt,
+    io::ErrorKind,
     pin::Pin,
     sync::Arc,
     task::{<span class="self">self</span>, Poll},
@@ -928,8 +934,12 @@
 <span class="kw">use </span><span class="kw">crate</span>::McWaker;
 
 <span class="attr">#[doc(no_inline)]
-</span><span class="kw">pub use </span>futures_lite::io::<span class="kw-2">*</span>;
+</span><span class="kw">pub use </span>futures_lite::io::{
+    copy, empty, repeat, sink, split, AsyncBufRead, AsyncBufReadExt, AsyncRead, AsyncReadExt, AsyncSeek, AsyncSeekExt, AsyncWrite,
+    AsyncWriteExt, BoxedReader, BoxedWriter, BufReader, BufWriter, Cursor, ReadHalf, WriteHalf,
+};
 <span class="kw">use </span>parking_lot::Mutex;
+<span class="kw">use </span>std::io::{Error, <span class="prelude-ty">Result</span>};
 <span class="kw">use </span>zng_time::{DInstant, INSTANT};
 <span class="kw">use </span>zng_unit::{ByteLength, ByteUnits};
 
@@ -1134,7 +1144,7 @@
 /// Clone an instance to create a new consumer, already read bytes stay in the buffer until all clones have read it,
 /// clones continue reading from the same offset as the reader they cloned.
 ///
-/// A single instance of this reader behaves like a [`BufReader`] but uses slightly more memory.
+/// A single instance of this reader behaves like a `BufReader`.
 ///
 /// # Result
 ///
@@ -1421,7 +1431,7 @@
     }
 }
 
-<span class="doccomment">/// Represents a future that generates an error if an [`AsyncRead`] exceeds a limit.
+<span class="doccomment">/// Represents a future that generates an error if an `AsyncRead` exceeds a limit.
 </span><span class="kw">pub struct </span>ReadLimited&lt;S, L&gt; {
     source: S,
     limit: usize,

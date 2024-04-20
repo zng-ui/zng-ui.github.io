@@ -865,6 +865,59 @@
 <a href="#863" id="863">863</a>
 <a href="#864" id="864">864</a>
 <a href="#865" id="865">865</a>
+<a href="#866" id="866">866</a>
+<a href="#867" id="867">867</a>
+<a href="#868" id="868">868</a>
+<a href="#869" id="869">869</a>
+<a href="#870" id="870">870</a>
+<a href="#871" id="871">871</a>
+<a href="#872" id="872">872</a>
+<a href="#873" id="873">873</a>
+<a href="#874" id="874">874</a>
+<a href="#875" id="875">875</a>
+<a href="#876" id="876">876</a>
+<a href="#877" id="877">877</a>
+<a href="#878" id="878">878</a>
+<a href="#879" id="879">879</a>
+<a href="#880" id="880">880</a>
+<a href="#881" id="881">881</a>
+<a href="#882" id="882">882</a>
+<a href="#883" id="883">883</a>
+<a href="#884" id="884">884</a>
+<a href="#885" id="885">885</a>
+<a href="#886" id="886">886</a>
+<a href="#887" id="887">887</a>
+<a href="#888" id="888">888</a>
+<a href="#889" id="889">889</a>
+<a href="#890" id="890">890</a>
+<a href="#891" id="891">891</a>
+<a href="#892" id="892">892</a>
+<a href="#893" id="893">893</a>
+<a href="#894" id="894">894</a>
+<a href="#895" id="895">895</a>
+<a href="#896" id="896">896</a>
+<a href="#897" id="897">897</a>
+<a href="#898" id="898">898</a>
+<a href="#899" id="899">899</a>
+<a href="#900" id="900">900</a>
+<a href="#901" id="901">901</a>
+<a href="#902" id="902">902</a>
+<a href="#903" id="903">903</a>
+<a href="#904" id="904">904</a>
+<a href="#905" id="905">905</a>
+<a href="#906" id="906">906</a>
+<a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Accessibility and automation types.
 
 </span><span class="kw">use </span>std::{num::NonZeroU32, ops};
@@ -884,6 +937,8 @@
     <span class="doccomment">/// checkable interactive widget.
     ///
     /// Must also set [`AccessState::Checked`].
+    ///
+    /// [`AccessState::Checked`]: crate::access::AccessState::Checked
     </span>CheckBox,
     <span class="doccomment">/// Identifies a cell in a grid widget.
     </span>GridCell,
@@ -894,6 +949,8 @@
     <span class="doccomment">/// Widget is a checkable option in a menu.
     ///
     /// Must also set [`AccessState::Checked`].
+    ///
+    /// [`AccessState::Checked`]: crate::access::AccessState::Checked
     </span>MenuItemCheckBox,
     <span class="doccomment">/// Widget is a selectable option in a menu where only one option can be selected at a time.
     </span>MenuItemRadio,
@@ -902,6 +959,8 @@
     <span class="doccomment">/// Defines a widget that displays the progress status for tasks that take a long time.
     ///
     /// The [`AccessState::Value`] and other value states define the progress.
+    ///
+    /// [`AccessState::Value`]: crate::access::AccessState::Value
     </span>ProgressBar,
     <span class="doccomment">/// Selectable items in a list where only one item may be selected at a time.
     </span>Radio,
@@ -909,12 +968,17 @@
     ///
     /// Must also set [`AccessState::Controls`] and [`AccessState::Value`] to define
     /// the scroll widget and amount scrolled. By default the value min/max is 0/100.
+    ///
+    /// [`AccessState::Controls`]: crate::access::AccessState::Controls
+    /// [`AccessState::Value`]: crate::access::AccessState::Value
     </span>ScrollBar,
     <span class="doccomment">/// Identifies a text-box that is used for searching.
     </span>SearchBox,
     <span class="doccomment">/// Defines an input where the user selects a value from within a given range.
     ///
     /// The [`AccessState::Value`] and other value states define the range and value.
+    ///
+    /// [`AccessState::Value`]: crate::access::AccessState::Value
     </span>Slider,
     <span class="doccomment">/// Defines a type of range that expects the user to select a value from among discrete choices.
     </span>SpinButton,
@@ -976,6 +1040,8 @@
     /// summary or table of contents by assistive technologies.
     </span>Group,
     <span class="doccomment">/// Defines a heading to a page or section, with [`AccessState::Level`] defining structure.
+    ///
+    /// [`AccessState::Level`]: crate::access::AccessState::Level
     </span>Heading,
     <span class="doccomment">/// Identifies a widget container that should be considered as a single image.
     </span>Image,
@@ -1020,6 +1086,8 @@
     <span class="doccomment">/// Identifies major groups of links used for navigating the app.
     </span>Navigation,
     <span class="doccomment">/// Identifies significant areas. Usually set with [`AccessState::Label`].
+    ///
+    /// [`AccessState::Label`]: crate::access::AccessState::Label
     </span>Region,
     <span class="doccomment">/// Identifies the search area or form.
     </span>Search,
@@ -1229,7 +1297,9 @@
 
 <span class="doccomment">/// Defines how a live update is communicated to the user.
 ///
-/// See [`AccessState::Sort`]
+/// See [`AccessState::Live`] for more details.
+///
+/// [`AccessState::Live`]: crate::access::AccessState::Live
 </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>LiveIndicator {
     <span class="doccomment">/// Indicates that updates to the region have the highest priority and should be presented to the user immediately.
@@ -1248,7 +1318,9 @@
 
 <span class="doccomment">/// Sort direction.
 ///
-/// See [`AccessState::Sort`]
+/// See [`AccessState::Sort`] for more details.
+///
+/// [`AccessState::Sort`]: crate::access::AccessState::Sort
 </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>SortDirection {
     <span class="doccomment">/// Items are sorted in ascending order by this column.
@@ -1264,7 +1336,9 @@
 
 <span class="doccomment">/// Widget orientation.
 ///
-/// See [`AccessState::Orientation`].
+/// See [`AccessState::Orientation`] for more details.
+///
+/// [`AccessState::Orientation`]: crate::access::AccessState::Orientation
 </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>Orientation {
     <span class="doccomment">/// Widget is horizontal.
@@ -1281,6 +1355,8 @@
 <span class="doccomment">/// Popup type.
 ///
 /// See [`AccessState::Popup`].
+///
+/// [`AccessState::Popup`]: crate::access::AccessState::Popup
 </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>Popup {
     <span class="doccomment">/// The popup is a menu.
@@ -1303,7 +1379,9 @@
 <span class="macro">bitflags! </span>{
     <span class="doccomment">/// Defines how inputting text could trigger display of one or more predictions of the user's intended value.
     ///
-    /// See [`AccessState::AutoComplete`].
+    /// See [`AccessState::AutoComplete`] for more details.
+    ///
+    /// [`AccessState::AutoComplete`]: crate::access::AccessState::AutoComplete
     </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
     </span><span class="kw">pub struct </span>AutoComplete: u8 {
 
@@ -1323,7 +1401,9 @@
 
     <span class="doccomment">/// Defines the kind of invalid data error of a widget.
     ///
-    /// See [`AccessState::Invalid`].
+    /// See [`AccessState::Invalid`] for more details.
+    ///
+    /// [`AccessState::Invalid`]: crate::access::AccessState::Invalid
     </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Serialize, Deserialize)]
     </span><span class="kw">pub struct </span>Invalid: u8 {
         <span class="doccomment">/// Indicates the entered value does not conform to the format expected by the application.
@@ -1435,39 +1515,63 @@
 <span class="doccomment">/// Accessibility command without associated data.
 ///
 /// See [`AccessCmd::name`] for more details.
+///
+/// [`AccessCmd::name`]: crate::access::AccessCmd::name
 </span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
 #[non_exhaustive]
 </span><span class="kw">pub enum </span>AccessCmdName {
     <span class="doccomment">/// [`AccessCmd::Click`]
+    ///
+    /// [`AccessCmd::Click`]: crate::access::AccessCmd::Click
     </span>Click,
 
     <span class="doccomment">/// [`AccessCmd::Focus`]
+    ///
+    /// [`AccessCmd::Focus`]: crate::access::AccessCmd::Focus
     </span>Focus,
     <span class="doccomment">/// [`AccessCmd::FocusNavOrigin`]
+    ///
+    /// [`AccessCmd::FocusNavOrigin`]: crate::access::AccessCmd::FocusNavOrigin
     </span>FocusNavOrigin,
 
     <span class="doccomment">/// [`AccessCmd::SetExpanded`]
+    ///
+    /// [`AccessCmd::SetExpanded`]: crate::access::AccessCmd::SetExpanded
     </span>SetExpanded,
 
     <span class="doccomment">/// [`AccessCmd::Increment`]
+    ///
+    /// [`AccessCmd::Increment`]: crate::access::AccessCmd::Increment
     </span>Increment,
 
     <span class="doccomment">/// [`AccessCmd::SetToolTipVis`]
+    ///
+    /// [`AccessCmd::SetToolTipVis`]: crate::access::AccessCmd::SetToolTipVis
     </span>SetToolTipVis,
 
     <span class="doccomment">/// [`AccessCmd::Scroll`]
+    ///
+    /// [`AccessCmd::Scroll`]: crate::access::AccessCmd::Scroll
     </span>Scroll,
 
     <span class="doccomment">/// [`AccessCmd::ReplaceSelectedText`]
+    ///
+    /// [`AccessCmd::ReplaceSelectedText`]: crate::access::AccessCmd::ReplaceSelectedText
     </span>ReplaceSelectedText,
 
     <span class="doccomment">/// [`AccessCmd::SelectText`]
+    ///
+    /// [`AccessCmd::SelectText`]: crate::access::AccessCmd::SelectText
     </span>SelectText,
 
     <span class="doccomment">/// [`AccessCmd::SetString`]
+    ///
+    /// [`AccessCmd::SetString`]: crate::access::AccessCmd::SetString
     </span>SetString,
 
     <span class="doccomment">/// [`AccessCmd::SetNumber`]
+    ///
+    /// [`AccessCmd::SetNumber`]: crate::access::AccessCmd::SetNumber
     </span>SetNumber,
 }
 
@@ -1479,6 +1583,8 @@
 <span class="doccomment">/// Accessibility scroll command.
 ///
 /// The command must run in the context of the target widow and widget, see [`AccessCmd::Scroll`] for more details.
+///
+/// [`AccessCmd::Scroll`]: crate::access::AccessCmd::Scroll
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 </span><span class="kw">pub enum </span>ScrollCmd {
     <span class="doccomment">/// Scroll page up.

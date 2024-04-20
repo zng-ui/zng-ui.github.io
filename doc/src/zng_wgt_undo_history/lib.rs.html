@@ -461,6 +461,10 @@
 <a href="#459" id="459">459</a>
 <a href="#460" id="460">460</a>
 <a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
+<a href="#463" id="463">463</a>
+<a href="#464" id="464">464</a>
+<a href="#465" id="465">465</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -522,9 +526,11 @@
     /// [`UndoHistory!`]: struct@UndoHistory
     </span><span class="kw">pub static </span>UNDO_PANEL_FN_VAR: WidgetFn&lt;UndoPanelArgs&gt; = WidgetFn::new(default_undo_panel_fn);
 
-    <span class="doccomment">/// If undo entries are grouped by the [`UNDO::undo_interval`].
+    <span class="doccomment">/// If undo entries are grouped by the [`UNDO.undo_interval`].
     ///
     /// Enabled by default.
+    ///
+    /// [`UNDO.undo_interval`]: zng_ext_undo::UNDO::undo_interval
     </span><span class="kw">pub static </span>GROUP_BY_UNDO_INTERVAL_VAR: bool = <span class="bool-val">true</span>;
 }
 
@@ -579,6 +585,8 @@
 /// undo parent of the caller not of the button.
 ///
 /// [`UndoRedoButtonStyle!`]: struct@UndoRedoButtonStyle
+/// [`UNDO_CMD`]: zng_ext_undo::UNDO_CMD
+/// [`REDO_CMD`]: zng_ext_undo::REDO_CMD
 </span><span class="kw">pub fn </span>default_undo_entry_fn(args: UndoEntryArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>ts = args.timestamp();
     <span class="kw">let </span>cmd = args.cmd;

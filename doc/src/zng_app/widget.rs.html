@@ -1702,6 +1702,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1664" id="1664">1664</a>
 <a href="#1665" id="1665">1665</a>
 <a href="#1666" id="1666">1666</a>
+<a href="#1667" id="1667">1667</a>
+<a href="#1668" id="1668">1668</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget, UI node API.
 
 </span><span class="kw">pub mod </span>base;
@@ -3053,6 +3055,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// Variables without the [`NEW`] capability return [`VarHandle::dummy`].
     ///
     /// [`NEW`]: zng_var::VarCapabilities::NEW
+    /// [`VarHandle::dummy`]: zng_var::VarHandle
     </span><span class="kw">fn </span>subscribe(<span class="kw-2">&amp;</span><span class="self">self</span>, op: UpdateOp, widget_id: WidgetId) -&gt; VarHandle;
 }
 <span class="kw">impl</span>&lt;V: AnyVar&gt; AnyVarSubscribe <span class="kw">for </span>V {
@@ -3074,6 +3077,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// Variables without the [`NEW`] capability return [`VarHandle::dummy`].
     ///
     /// [`NEW`]: zng_var::VarCapabilities::NEW
+    /// [`VarHandle::dummy`]: zng_var::VarHandle
     </span><span class="kw">fn </span>subscribe_when(<span class="kw-2">&amp;</span><span class="self">self</span>, op: UpdateOp, widget_id: WidgetId, predicate: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>T) -&gt; bool + Send + Sync + <span class="lifetime">'static</span>) -&gt; VarHandle;
 
     <span class="doccomment">/// Add a preview `handler` that is called every time this variable updates,

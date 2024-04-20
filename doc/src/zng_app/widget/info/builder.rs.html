@@ -1676,6 +1676,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1638" id="1638">1638</a>
 <a href="#1639" id="1639">1639</a>
 <a href="#1640" id="1640">1640</a>
+<a href="#1641" id="1641">1641</a>
+<a href="#1642" id="1642">1642</a>
+<a href="#1643" id="1643">1643</a>
+<a href="#1644" id="1644">1644</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraints, InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegment, InlineSegmentPos, LayoutMask, LAYOUT},
@@ -2678,6 +2682,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// Returns the inline requirements of the child and its desired bounds size, returns `None` requirements if the child
     /// disables inline or is not a full widget.
+    ///
+    /// [`InlineConstraintsMeasure`]: zng_layout::context::InlineConstraintsMeasure
     </span><span class="kw">pub fn </span>measure_inline(<span class="kw-2">&amp;mut </span><span class="self">self</span>, first_max: Px, mid_clear_min: Px, child: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>UiNode) -&gt; (<span class="prelude-ty">Option</span>&lt;WidgetInlineMeasure&gt;, PxSize) {
         <span class="kw">let </span>constraints = InlineConstraints::Measure(InlineConstraintsMeasure { first_max, mid_clear_min });
         <span class="kw">let </span>metrics = LAYOUT.metrics().with_inline_constraints(<span class="prelude-val">Some</span>(constraints));
@@ -3105,7 +3111,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Collapse the layout of `self` and descendants, the size and offsets are set to zero.
     ///
-    /// Nodes that set the visibility to the equivalent of [`Collapsed`] must skip layout and return [`PxSize::zero`] as
+    /// Nodes that set the visibility to the equivalent of [`Collapsed`] must skip layout and return `PxSize::zero` as
     /// the size, ignoring the min-size constraints, and call this method to update all the descendant
     /// bounds information to be a zero-sized point.
     ///
@@ -3254,6 +3260,8 @@ document.addEventListener('DOMContentLoaded', function () {
     /// the `child` context.
     ///
     /// Returns the child final size.
+    ///
+    /// [`InlineConstraintsLayout`]: zng_layout::context::InlineConstraintsLayout
     </span><span class="attr">#[allow(clippy::too_many_arguments)]
     </span><span class="kw">pub fn </span>layout_inline(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,

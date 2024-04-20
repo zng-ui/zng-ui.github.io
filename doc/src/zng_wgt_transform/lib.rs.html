@@ -352,6 +352,9 @@
 <a href="#350" id="350">350</a>
 <a href="#351" id="351">351</a>
 <a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -371,6 +374,7 @@
 /// for relative values.
 ///
 /// [`transform_origin`]: fn@transform_origin
+/// [`Transform`]: zng_wgt::prelude::Transform
 </span><span class="attr">#[property(LAYOUT, default(Transform::identity()))]
 </span><span class="kw">pub fn </span>transform(child: <span class="kw">impl </span>UiNode, transform: <span class="kw">impl </span>IntoVar&lt;Transform&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>binding_key = FrameValueKey::new_unique();
@@ -605,6 +609,8 @@
 ///
 /// [`Length::Default`] is an infinite distance, the lower the value the *closest* the viewer is and therefore
 /// the 3D transforms are more noticeable. Distances less then `1.px()` are coerced to it.
+///
+/// [`Length::Default`]: zng_wgt::prelude::Length::Default
 </span><span class="attr">#[property(LAYOUT-<span class="number">20</span>, default(Length::Default))]
 </span><span class="kw">pub fn </span>perspective(child: <span class="kw">impl </span>UiNode, distance: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>distance = distance.into_var();
@@ -692,14 +698,14 @@
 <span class="macro">context_var! </span>{
     <span class="doccomment">/// Point relative to the widget inner bounds around which the [`transform`] is applied.
     ///
-    /// Default origin is [`Point::center()`].
+    /// Default origin is `Point::center`.
     ///
     /// [`transform`]: fn@transform
     </span><span class="kw">pub static </span>TRANSFORM_ORIGIN_VAR: Point = Point::center();
 
     <span class="doccomment">/// Vanishing point used by [`transform`] when it is 3D.
     ///
-    /// Default origin is [`Point::center()`].
+    /// Default origin is `Point::center`.
     ///
     /// [`transform`]: fn@transform
     </span><span class="kw">pub static </span>PERSPECTIVE_ORIGIN_VAR: Point = Point::center();

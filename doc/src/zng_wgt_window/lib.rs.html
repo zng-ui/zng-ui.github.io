@@ -326,6 +326,12 @@
 <a href="#324" id="324">324</a>
 <a href="#325" id="325">325</a>
 <a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -361,7 +367,10 @@
 /// The instance type is [`WindowRoot`], it can be given to the [`WINDOWS`](zng_ext_window::WINDOWS) service
 /// to open a system window that is kept in sync with the window properties set in the widget.
 ///
-/// See [`run_window`](zng_ext_window::AppRunWindowExt::run_window) for more details.
+/// See [`run_window`] for more details.
+///
+/// [`WindowRoot`]: zng_ext_window::WindowRoot
+/// [`run_window`]: zng_ext_window::AppRunWindowExt::run_window
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::Window</span>)]
 </span><span class="kw">pub struct </span>Window(zng_wgt_container::Container);
 <span class="kw">impl </span>Window {
@@ -402,6 +411,8 @@
     }
 
     <span class="doccomment">/// Build a [`WindowRoot`].
+    ///
+    /// [`WindowRoot`]: zng_ext_window::WindowRoot
     </span><span class="kw">pub fn </span>widget_build(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; WindowRoot {
         <span class="kw">let </span><span class="kw-2">mut </span>wgt = <span class="self">self</span>.widget_take();
         WindowRoot::new(
@@ -456,6 +467,7 @@
 /// see [`RenderMode`] for more details about each mode and fallbacks.
 ///
 /// [`WINDOWS.default_render_mode`]: zng_ext_window::WINDOWS::default_render_mode
+/// [`RenderMode`]: crate::RenderMode
 </span><span class="attr">#[property(CONTEXT, capture, widget_impl(Window))]
 </span><span class="kw">pub fn </span>render_mode(mode: <span class="kw">impl </span>IntoValue&lt;<span class="prelude-ty">Option</span>&lt;RenderMode&gt;&gt;) {}
 

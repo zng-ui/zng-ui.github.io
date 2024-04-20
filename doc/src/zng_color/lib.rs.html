@@ -1235,6 +1235,8 @@
 ///
 /// Equality is determined using [`about_eq`] with `0.001` epsilon for [`hue`](Hsla::hue)
 /// and `0.00001` epsilon for the others.
+///
+/// [`about_eq`]: zng_layout::unit::about_eq
 </span><span class="attr">#[derive(Copy, Clone, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>Hsla {
     <span class="doccomment">/// Hue color angle in the `[0.0..=360.0]` range.
@@ -1413,6 +1415,8 @@
 ///
 /// Equality is determined using [`about_eq`] with `0.001` epsilon for [`hue`](Hsva::hue)
 /// and `0.00001` epsilon for the others.
+///
+/// [`about_eq`]: zng_layout::unit::about_eq
 </span><span class="attr">#[derive(Copy, Clone, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>Hsva {
     <span class="doccomment">/// Hue color angle in the `[0.0..=360.0]` range.
@@ -1796,7 +1800,7 @@
 /// let green = hsl(115.deg(), 1.0, 0.5);
 /// ```
 ///
-/// [angle unit]: zng_layout::unit::AngleUnits
+/// [angle unit]: trait@zng_layout::unit::AngleUnits
 </span><span class="kw">pub fn </span>hsl&lt;H: Into&lt;AngleDegree&gt;, N: Into&lt;Factor&gt;&gt;(hue: H, saturation: N, lightness: N) -&gt; Hsla {
     hsla(hue, saturation, lightness, <span class="number">1.0</span>)
 }
@@ -1821,7 +1825,7 @@
 /// let transparent = hsla(0.deg(), 1.0, 0.5, 0.0);
 /// ```
 ///
-/// [angle unit]: zng_layout::unit::AngleUnits
+/// [angle unit]: trait@zng_layout::unit::AngleUnits
 </span><span class="kw">pub fn </span>hsla&lt;H: Into&lt;AngleDegree&gt;, N: Into&lt;Factor&gt;, A: Into&lt;Factor&gt;&gt;(hue: H, saturation: N, lightness: N, alpha: A) -&gt; Hsla {
     Hsla {
         hue: hue.into().<span class="number">0</span>,
@@ -1850,7 +1854,7 @@
 /// let green = hsv(115.deg(), 1.0, 0.5);
 /// ```
 ///
-/// [angle unit]: zng_layout::unit::AngleUnits
+/// [angle unit]: trait@zng_layout::unit::AngleUnits
 </span><span class="kw">pub fn </span>hsv&lt;H: Into&lt;AngleDegree&gt;, N: Into&lt;Factor&gt;&gt;(hue: H, saturation: N, value: N) -&gt; Hsva {
     hsva(hue, saturation, value, <span class="number">1.0</span>)
 }
@@ -1875,7 +1879,7 @@
 /// let transparent = hsva(0.deg(), 1.0, 0.5, 0.0);
 /// ```
 ///
-/// [angle unit]: zng_layout::unit::AngleUnits
+/// [angle unit]: trait@zng_layout::unit::AngleUnits
 </span><span class="kw">pub fn </span>hsva&lt;H: Into&lt;AngleDegree&gt;, N: Into&lt;Factor&gt;, A: Into&lt;Factor&gt;&gt;(hue: H, saturation: N, value: N, alpha: A) -&gt; Hsva {
     Hsva {
         hue: hue.into().<span class="number">0</span>,
@@ -1887,10 +1891,6 @@
 
 <span class="macro">context_var! </span>{
     <span class="doccomment">/// Defines the preferred color scheme in a context.
-    ///
-    /// Can be set using the [`color_scheme`] property.
-    ///
-    /// [`color_scheme`]: fn@color_scheme
     </span><span class="kw">pub static </span>COLOR_SCHEME_VAR: ColorScheme = ColorScheme::default();
 }
 

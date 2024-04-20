@@ -9,7 +9,7 @@
     },
     Merge {
         next_data: &amp;'r mut dyn <a class="trait" href="https://doc.rust-lang.org/1.77.2/core/any/trait.Any.html" title="trait core::any::Any">Any</a>,
-        prev_timestamp: DInstant,
+        prev_timestamp: <a class="struct" href="../zng_time/struct.DInstant.html" title="struct zng_time::DInstant">DInstant</a>,
         within_undo_interval: <a class="primitive" href="https://doc.rust-lang.org/1.77.2/std/primitive.bool.html">bool</a>,
         merged: &amp;'r mut <a class="primitive" href="https://doc.rust-lang.org/1.77.2/std/primitive.bool.html">bool</a>,
     },
@@ -29,7 +29,7 @@ can be used to skip registering no-ops.</p>
 </div><section id="variant.Merge" class="variant"><a href="#variant.Merge" class="anchor">§</a><h3 class="code-header">Merge</h3></section><div class="sub-variant" id="variant.Merge.fields"><h4>Fields</h4><div class="sub-variant-field"><span id="variant.Merge.field.next_data" class="section-header"><a href="#variant.Merge.field.next_data" class="anchor field">§</a><code>next_data: &amp;'r mut dyn <a class="trait" href="https://doc.rust-lang.org/1.77.2/core/any/trait.Any.html" title="trait core::any::Any">Any</a></code></span><div class="docblock"><p>Closure data for the next undo action.</p>
 <p>The data can be from any full undo closure action, only merge if the data
 indicates that is comes from actions that can be covered by the <code>self</code> closure.</p>
-</div></div><div class="sub-variant-field"><span id="variant.Merge.field.prev_timestamp" class="section-header"><a href="#variant.Merge.field.prev_timestamp" class="anchor field">§</a><code>prev_timestamp: DInstant</code></span><div class="docblock"><p>Timestamp of the previous action registered.</p>
+</div></div><div class="sub-variant-field"><span id="variant.Merge.field.prev_timestamp" class="section-header"><a href="#variant.Merge.field.prev_timestamp" class="anchor field">§</a><code>prev_timestamp: <a class="struct" href="../zng_time/struct.DInstant.html" title="struct zng_time::DInstant">DInstant</a></code></span><div class="docblock"><p>Timestamp of the previous action registered.</p>
 </div></div><div class="sub-variant-field"><span id="variant.Merge.field.within_undo_interval" class="section-header"><a href="#variant.Merge.field.within_undo_interval" class="anchor field">§</a><code>within_undo_interval: <a class="primitive" href="https://doc.rust-lang.org/1.77.2/std/primitive.bool.html">bool</a></code></span><div class="docblock"><p>If the <code>prev_timestamp</code> is within the <a href="struct.UNDO.html#method.undo_interval" title="method zng_ext_undo::UNDO::undo_interval"><code>UNDO.undo_interval</code></a>. Undo actions
 can choose to ignore this and merge anyway.</p>
 </div></div><div class="sub-variant-field"><span id="variant.Merge.field.merged" class="section-header"><a href="#variant.Merge.field.merged" class="anchor field">§</a><code>merged: &amp;'r mut <a class="primitive" href="https://doc.rust-lang.org/1.77.2/std/primitive.bool.html">bool</a></code></span><div class="docblock"><p>Set this to <code>true</code> if the next action can be dropped because the <code>self</code> closure

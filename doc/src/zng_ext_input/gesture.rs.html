@@ -1175,6 +1175,14 @@
 <a href="#1173" id="1173">1173</a>
 <a href="#1174" id="1174">1174</a>
 <a href="#1175" id="1175">1175</a>
+<a href="#1176" id="1176">1176</a>
+<a href="#1177" id="1177">1177</a>
+<a href="#1178" id="1178">1178</a>
+<a href="#1179" id="1179">1179</a>
+<a href="#1180" id="1180">1180</a>
+<a href="#1181" id="1181">1181</a>
+<a href="#1182" id="1182">1182</a>
+<a href="#1183" id="1183">1183</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Aggregate events.
 
 </span><span class="kw">use </span>parking_lot::Mutex;
@@ -1275,6 +1283,8 @@
 
 <span class="macro">event_args! </span>{
     <span class="doccomment">/// [`CLICK_EVENT`] arguments.
+    ///
+    /// [`CLICK_EVENT`]: crate::gesture::CLICK_EVENT
     </span><span class="kw">pub struct </span>ClickArgs {
         <span class="doccomment">/// Id of window that received the event.
         </span><span class="kw">pub </span>window_id: WindowId,
@@ -1519,6 +1529,8 @@
     /// Event happens every time a full [`Shortcut`] is completed by key press.
     ///
     /// This event is not send to any widget, use the [`GESTURES`] service to setup widget targets for shortcuts.
+    ///
+    /// [`Shortcut`]: zng_app::shortcut::Shortcut
     </span><span class="kw">pub static </span>SHORTCUT_EVENT: ShortcutArgs;
 }
 
@@ -1797,6 +1809,8 @@
 /// [`event_ui`]: AppExtension::event_ui
 /// [`event`]: AppExtension::event
 /// [`propagation`]: EventArgs::propagation
+/// [`KeyChord::starter`]: zng_app::shortcut::KeyChord::starter
+/// [`CommandShortcutExt`]: zng_app::shortcut::CommandShortcutExt
 </span><span class="kw">pub struct </span>GESTURES;
 <span class="kw">struct </span>ShortcutTarget {
     widget_id: WidgetId,
@@ -2247,6 +2261,8 @@
 }
 
 <span class="doccomment">/// Extension trait that adds gesture simulation methods to [`HeadlessApp`].
+///
+/// [`HeadlessApp`]: zng_app::HeadlessApp
 </span><span class="kw">pub trait </span>HeadlessAppGestureExt {
     <span class="doccomment">/// Generates key press events to mimic the shortcut and updates.
     </span><span class="kw">fn </span>press_shortcut(<span class="kw-2">&amp;mut </span><span class="self">self</span>, window_id: WindowId, shortcut: <span class="kw">impl </span>Into&lt;Shortcut&gt;);

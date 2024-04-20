@@ -671,6 +671,16 @@
 <a href="#669" id="669">669</a>
 <a href="#670" id="670">670</a>
 <a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
+<a href="#674" id="674">674</a>
+<a href="#675" id="675">675</a>
+<a href="#676" id="676">676</a>
+<a href="#677" id="677">677</a>
+<a href="#678" id="678">678</a>
+<a href="#679" id="679">679</a>
+<a href="#680" id="680">680</a>
+<a href="#681" id="681">681</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -861,6 +871,7 @@
     /// reference clone.
     ///
     /// [`icon`]: Self::icon
+    /// [`Img`]: zng_ext_image::Img
     </span><span class="kw">pub fn </span>actual_icon(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;<span class="prelude-ty">Option</span>&lt;Img&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.actual_icon.read_only()
     }
@@ -870,6 +881,9 @@
     /// See [`CursorIcon`] for details.
     ///
     /// The default is [`CursorIcon::Default`], if set to `None` no cursor icon is shown.
+    ///
+    /// [`CursorIcon`]: zng_view_api::window::CursorIcon
+    /// [`CursorIcon::Default`]: zng_view_api::window::CursorIcon::Default
     </span><span class="kw">pub fn </span>cursor(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;CursorIcon&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.cursor.clone()
     }
@@ -890,6 +904,8 @@
     /// This is `None` if [`cursor_img`] is not set, otherwise it is an [`Img`] reference clone with computed hotspot [`PxPoint`].
     ///
     /// [`cursor_img`]: Self::cursor_img
+    /// [`Img`]: zng_ext_image::Img
+    /// [`PxPoint`]: zng_layout::unit::PxPoint
     </span><span class="kw">pub fn </span>actual_cursor_img(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;<span class="prelude-ty">Option</span>&lt;(Img, PxPoint)&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.actual_cursor_img.read_only()
     }
@@ -1048,6 +1064,7 @@
     /// [`actual_position`]: WindowVars::actual_position
     /// [`monitor`]: WindowVars::monitor
     /// [`Normal`]: WindowState::Normal
+    /// [`Length::Default`]: zng_layout::unit::Length::Default
     </span><span class="kw">pub fn </span>position(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;Point&gt; {
         <span class="self">self</span>.<span class="number">0</span>.position.clone()
     }
@@ -1117,6 +1134,7 @@
     /// [`auto_size`]: Self::auto_size
     /// [`monitor`]: WindowVars::monitor
     /// [`StartPosition`]: crate::StartPosition
+    /// [`Point::top_left`]: zng_layout::unit::Point::top_left
     </span><span class="kw">pub fn </span>auto_size_origin(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;Point&gt; {
         <span class="self">self</span>.<span class="number">0</span>.auto_size_origin.clone()
     }
@@ -1326,8 +1344,10 @@
 
     <span class="doccomment">/// If an accessibility service has requested info from this window.
     ///
-    /// This variable can only update with more bit flags, you can enable it in the app-process using [`enable_access`], the
+    /// You can enable this in the app-process using [`enable_access`], the
     /// view-process can also enable it on the first request for accessibility info by an external tool.
+    ///
+    /// This variable does not update to fully disabled after first enable, but the VIEW bit can disable and re-enable.
     ///
     /// [`enable_access`]: crate::WINDOW_Ext::enable_access
     </span><span class="kw">pub fn </span>access_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;AccessEnabled&gt; {

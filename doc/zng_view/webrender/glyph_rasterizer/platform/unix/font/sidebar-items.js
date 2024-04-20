@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["mozilla_glyphslot_embolden_less","unimplemented"],"struct":["FontContext"]};

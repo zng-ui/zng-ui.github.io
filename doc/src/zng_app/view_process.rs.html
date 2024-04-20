@@ -1459,6 +1459,39 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1421" id="1421">1421</a>
 <a href="#1422" id="1422">1422</a>
 <a href="#1423" id="1423">1423</a>
+<a href="#1424" id="1424">1424</a>
+<a href="#1425" id="1425">1425</a>
+<a href="#1426" id="1426">1426</a>
+<a href="#1427" id="1427">1427</a>
+<a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
+<a href="#1435" id="1435">1435</a>
+<a href="#1436" id="1436">1436</a>
+<a href="#1437" id="1437">1437</a>
+<a href="#1438" id="1438">1438</a>
+<a href="#1439" id="1439">1439</a>
+<a href="#1440" id="1440">1440</a>
+<a href="#1441" id="1441">1441</a>
+<a href="#1442" id="1442">1442</a>
+<a href="#1443" id="1443">1443</a>
+<a href="#1444" id="1444">1444</a>
+<a href="#1445" id="1445">1445</a>
+<a href="#1446" id="1446">1446</a>
+<a href="#1447" id="1447">1447</a>
+<a href="#1448" id="1448">1448</a>
+<a href="#1449" id="1449">1449</a>
+<a href="#1450" id="1450">1450</a>
+<a href="#1451" id="1451">1451</a>
+<a href="#1452" id="1452">1452</a>
+<a href="#1453" id="1453">1453</a>
+<a href="#1454" id="1454">1454</a>
+<a href="#1455" id="1455">1455</a>
+<a href="#1456" id="1456">1456</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process connection and other types.
 
 </span><span class="kw">use </span>std::{
@@ -1619,6 +1652,10 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// This function returns immediately, the [`ViewImage`] will update when
     /// [`Event::ImageMetadataLoaded`], [`Event::ImageLoaded`] and [`Event::ImageLoadError`] events are received.
+    ///
+    /// [`Event::ImageMetadataLoaded`]: zng_view_api::Event::ImageMetadataLoaded
+    /// [`Event::ImageLoaded`]: zng_view_api::Event::ImageLoaded
+    /// [`Event::ImageLoadError`]: zng_view_api::Event::ImageLoadError
     </span><span class="kw">pub fn </span>add_image(<span class="kw-2">&amp;</span><span class="self">self</span>, request: ImageRequest&lt;IpcBytes&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ViewImage&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>app = <span class="self">self</span>.write();
         <span class="kw">let </span>id = app.process.add_image(request)<span class="question-mark">?</span>;
@@ -1644,6 +1681,11 @@ document.addEventListener('DOMContentLoaded', function () {
     /// This function returns immediately, the [`ViewImage`] will update when
     /// [`Event::ImageMetadataLoaded`], [`Event::ImagePartiallyLoaded`],
     /// [`Event::ImageLoaded`] and [`Event::ImageLoadError`] events are received.
+    ///
+    /// [`Event::ImageMetadataLoaded`]: zng_view_api::Event::ImageMetadataLoaded
+    /// [`Event::ImageLoaded`]: zng_view_api::Event::ImageLoaded
+    /// [`Event::ImageLoadError`]: zng_view_api::Event::ImageLoadError
+    /// [`Event::ImagePartiallyLoaded`]: zng_view_api::Event::ImagePartiallyLoaded
     </span><span class="kw">pub fn </span>add_image_pro(<span class="kw-2">&amp;</span><span class="self">self</span>, request: ImageRequest&lt;IpcBytesReceiver&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ViewImage&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>app = <span class="self">self</span>.write();
         <span class="kw">let </span>id = app.process.add_image_pro(request)<span class="question-mark">?</span>;
@@ -1695,6 +1737,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Reopen the view-process, causing another [`Event::Inited`].
+    ///
+    /// [`Event::Inited`]: zng_view_api::Event::Inited
     </span><span class="kw">pub fn </span>respawn(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="self">self</span>.write().process.respawn()
     }
@@ -1740,6 +1784,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Handle an [`Event::Disconnected`].
     ///
     /// The process will exit if the view-process was killed by the user.
+    ///
+    /// [`Event::Disconnected`]: zng_view_api::Event::Disconnected
     </span><span class="kw">pub fn </span>handle_disconnect(<span class="kw-2">&amp;</span><span class="self">self</span>, gen: ViewProcessGen) {
         <span class="self">self</span>.write().process.handle_disconnect(gen)
     }
@@ -1795,6 +1841,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Handle an [`Event::Inited`].
     ///
     /// The view-process becomes online only after this call.
+    ///
+    /// [`Event::Inited`]: zng_view_api::Event::Inited
     </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>handle_inited(<span class="kw-2">&amp;</span><span class="self">self</span>, gen: ViewProcessGen, extensions: ApiExtensions) {
         <span class="kw">let </span><span class="kw-2">mut </span>me = <span class="self">self</span>.write();
         me.extensions = extensions;
@@ -2315,6 +2363,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// This is only a weak reference, every method returns [`ViewProcessOffline`] if the
 /// window is closed or view is disposed.
+///
+/// [`ViewProcessOffline`]: zng_view_api::ViewProcessOffline
 </span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>ViewRenderer(sync::Weak&lt;ViewWindowData&gt;);
 <span class="kw">impl </span>PartialEq <span class="kw">for </span>ViewRenderer {
@@ -2692,7 +2742,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// The `format` must be one of the [`image_encoders`] supported by the view-process backend.
     ///
-    /// [`image_encoders`]: View::image_encoders.
+    /// [`image_encoders`]: VIEW_PROCESS::image_encoders
     </span><span class="kw">pub async fn </span>encode(<span class="kw-2">&amp;</span><span class="self">self</span>, format: Txt) -&gt; std::result::Result&lt;IpcBytes, EncodeError&gt; {
         <span class="self">self</span>.awaiter().<span class="kw">await</span>;
 
@@ -2794,6 +2844,8 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">pub struct </span>ViewClipboard {}
 <span class="kw">impl </span>ViewClipboard {
     <span class="doccomment">/// Read [`ClipboardType::Text`].
+    ///
+    /// [`ClipboardType::Text`]: zng_view_api::clipboard::ClipboardType::Text
     </span><span class="kw">pub fn </span>read_text(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;Txt&gt;&gt; {
         <span class="kw">match </span>VIEW_PROCESS.try_write()<span class="question-mark">?</span>.process.read_clipboard(ClipboardType::Text)<span class="question-mark">? </span>{
             <span class="prelude-val">Ok</span>(ClipboardData::Text(t)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(t)),
@@ -2803,11 +2855,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Write [`ClipboardType::Text`].
+    ///
+    /// [`ClipboardType::Text`]: zng_view_api::clipboard::ClipboardType::Text
     </span><span class="kw">pub fn </span>write_text(<span class="kw-2">&amp;</span><span class="self">self</span>, txt: Txt) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;()&gt;&gt; {
         VIEW_PROCESS.try_write()<span class="question-mark">?</span>.process.write_clipboard(ClipboardData::Text(txt))
     }
 
     <span class="doccomment">/// Read [`ClipboardType::Image`].
+    ///
+    /// [`ClipboardType::Image`]: zng_view_api::clipboard::ClipboardType::Image
     </span><span class="kw">pub fn </span>read_image(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;ViewImage&gt;&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>app = VIEW_PROCESS.try_write()<span class="question-mark">?</span>;
         <span class="kw">match </span>app.process.read_clipboard(ClipboardType::Image)<span class="question-mark">? </span>{
@@ -2838,6 +2894,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Write [`ClipboardType::Image`].
+    ///
+    /// [`ClipboardType::Image`]: zng_view_api::clipboard::ClipboardType::Image
     </span><span class="kw">pub fn </span>write_image(<span class="kw-2">&amp;</span><span class="self">self</span>, img: <span class="kw-2">&amp;</span>ViewImage) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;()&gt;&gt; {
         <span class="kw">if </span>img.is_loaded() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = img.id() {
@@ -2848,6 +2906,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Read [`ClipboardType::FileList`].
+    ///
+    /// [`ClipboardType::FileList`]: zng_view_api::clipboard::ClipboardType::FileList
     </span><span class="kw">pub fn </span>read_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;Vec&lt;PathBuf&gt;&gt;&gt; {
         <span class="kw">match </span>VIEW_PROCESS.try_write()<span class="question-mark">?</span>.process.read_clipboard(ClipboardType::FileList)<span class="question-mark">? </span>{
             <span class="prelude-val">Ok</span>(ClipboardData::FileList(f)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(f)),
@@ -2857,11 +2917,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Write [`ClipboardType::FileList`].
+    ///
+    /// [`ClipboardType::FileList`]: zng_view_api::clipboard::ClipboardType::FileList
     </span><span class="kw">pub fn </span>write_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: Vec&lt;PathBuf&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;()&gt;&gt; {
         VIEW_PROCESS.try_write()<span class="question-mark">?</span>.process.write_clipboard(ClipboardData::FileList(list))
     }
 
     <span class="doccomment">/// Read [`ClipboardType::Extension`].
+    ///
+    /// [`ClipboardType::Extension`]: zng_view_api::clipboard::ClipboardType::Extension
     </span><span class="kw">pub fn </span>read_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, data_type: Txt) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;IpcBytes&gt;&gt; {
         <span class="kw">match </span>VIEW_PROCESS
             .try_write()<span class="question-mark">?
@@ -2875,6 +2939,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Write [`ClipboardType::Extension`].
+    ///
+    /// [`ClipboardType::Extension`]: zng_view_api::clipboard::ClipboardType::Extension
     </span><span class="kw">pub fn </span>write_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, data_type: Txt, data: IpcBytes) -&gt; <span class="prelude-ty">Result</span>&lt;ClipboardResult&lt;()&gt;&gt; {
         VIEW_PROCESS
             .try_write()<span class="question-mark">?

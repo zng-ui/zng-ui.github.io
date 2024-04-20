@@ -224,6 +224,15 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#186" id="186">186</a>
 <a href="#187" id="187">187</a>
 <a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, ops, sync::Arc};
 
 <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
@@ -273,6 +282,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Function that always produces the [`NilUiNode`].
     ///
     /// No heap allocation happens to create this value.
+    ///
+    /// [`NilUiNode`]: zng_app::widget::node::NilUiNode
     </span><span class="kw">pub const fn </span>nil() -&gt; <span class="self">Self </span>{
         WidgetFn(<span class="prelude-val">None</span>)
     }
@@ -286,6 +297,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`nil`]: WidgetFn::nil
     /// [`call_checked`]: Self::call_checked
+    /// [`UiNode::is_nil`]: zng_app::widget::node::UiNode::is_nil
     </span><span class="kw">pub fn </span>is_nil(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.<span class="number">0</span>.is_none()
     }
@@ -316,6 +328,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// Returns `None` if [`is_nil`] or [`UiNode::is_nil`].
     ///
     /// [`is_nil`]: Self::is_nil
+    /// [`UiNode::is_nil`]: zng_app::widget::node::UiNode::is_nil
     </span><span class="kw">pub fn </span>call_checked(<span class="kw-2">&amp;</span><span class="self">self</span>, data: D) -&gt; <span class="prelude-ty">Option</span>&lt;BoxedUiNode&gt; {
         <span class="kw">let </span>r = <span class="self">self</span>.<span class="number">0</span>.as_ref()<span class="question-mark">?</span>(data);
         <span class="kw">if </span>r.is_nil() {
@@ -330,6 +343,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /// The `widget` is wrapped in an [`ArcNode`] and every function call returns an [`ArcNode::take_on_init`] node.
     /// Note that `take_on_init` is not always the `widget` on init as it needs to wait for it to deinit first if
     /// it is already in use, this could have an effect if the widget function caller always expects a full widget.
+    ///
+    /// [`ArcNode`]: zng_app::widget::node::ArcNode
+    /// [`ArcNode::take_on_init`]: zng_app::widget::node::ArcNode::take_on_init
     </span><span class="kw">pub fn </span>singleton(widget: <span class="kw">impl </span>UiNode) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>widget = ArcNode::new(widget);
         <span class="self">Self</span>::new(<span class="kw">move </span>|<span class="kw">_</span>| widget.take_on_init())
@@ -398,6 +414,8 @@ document.addEventListener('DOMContentLoaded', function () {
 /// });
 /// # ; }
 /// ```
+///
+/// [`clmv!`]: zng_clone_move::clmv
 </span><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules! </span>wgt_fn {
     (<span class="macro-nonterminal">$</span><span class="kw">fn</span>:<span class="macro-nonterminal">path</span>) =&gt; {

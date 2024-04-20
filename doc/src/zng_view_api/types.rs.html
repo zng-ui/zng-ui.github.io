@@ -1009,6 +1009,13 @@
 <a href="#1007" id="1007">1007</a>
 <a href="#1008" id="1008">1008</a>
 <a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+<a href="#1016" id="1016">1016</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! General event types.
 
 </span><span class="kw">use crate</span>::{
@@ -1529,12 +1536,11 @@
     <span class="doccomment">/// User responded to a native file dialog.
     </span>FileDialogResponse(DialogId, FileDialogResponse),
 
-    <span class="doccomment">/// Accessibility info tree was requested for the first time on a window.
+    <span class="doccomment">/// Accessibility info tree is now required for the window.
     </span>AccessInit {
-        <span class="doccomment">/// Window that received the first accessibility request.
+        <span class="doccomment">/// Window that must now build access info.
         </span>window: WindowId,
     },
-
     <span class="doccomment">/// Accessibility command.
     </span>AccessCommand {
         <span class="doccomment">/// Window that had pixels copied.
@@ -1543,6 +1549,14 @@
         </span>target: AccessNodeId,
         <span class="doccomment">/// Command.
         </span>command: AccessCmd,
+    },
+    <span class="doccomment">/// Accessibility info tree is no longer needed for the window.
+    ///
+    /// Note that accessibility may be enabled again after this. It is not an error
+    /// to send access updates after this, but they will be ignored.
+    </span>AccessDeinit {
+        <span class="doccomment">/// Window that can release access info.
+        </span>window: WindowId,
     },
 
     <span class="doccomment">/// System low memory warning, some platforms may kill the app if it does not release memory.

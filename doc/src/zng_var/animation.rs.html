@@ -991,6 +991,10 @@
 <a href="#989" id="989">989</a>
 <a href="#990" id="990">990</a>
 <a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Var animation types and functions.
 
 </span><span class="kw">use </span>std::{mem, time::Duration};
@@ -1146,8 +1150,10 @@
 
     <span class="doccomment">/// The instant the current animation update started.
     ///
-    /// Use this value instead of [`INSTANT::now`], animations update sequentially, but should behave as if
+    /// Use this value instead of [`INSTANT.now`], animations update sequentially, but should behave as if
     /// they are updating exactly in parallel, using this timestamp ensures that.
+    ///
+    /// [`INSTANT.now`]: zng_time::INSTANT::now
     </span><span class="kw">pub fn </span>now(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; DInstant {
         <span class="self">self</span>.<span class="number">0</span>.lock().now
     }
@@ -1296,6 +1302,8 @@
 ///
 /// This trait is auto-implemented for all [`Copy`] types that can add, subtract and multiply by [`Factor`], [`Clone`]
 /// only types must implement this trait manually.
+///
+/// [`Factor`]: zng_unit::Factor
 </span><span class="kw">pub trait </span>Transitionable: VarValue {
     <span class="doccomment">/// Sample the linear interpolation from `self` -&gt; `to` by `step`.  
     </span><span class="kw">fn </span>lerp(<span class="self">self</span>, to: <span class="kw-2">&amp;</span><span class="self">Self</span>, step: EasingStep) -&gt; <span class="self">Self</span>;

@@ -516,6 +516,12 @@
 <a href="#514" id="514">514</a>
 <a href="#515" id="515">515</a>
 <a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Popup widget.
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
@@ -542,11 +548,12 @@
 /// sets the [`modal_included`] to [`anchor_id`] enabling the popup to be interactive when anchored to modal widgets.
 ///
 /// [`alt_focus_scope`]: fn@alt_focus_scope
-/// [`focus_on_init`]: fn@focus_on_init
+/// [`focus_on_init`]: fn@zng_wgt_input::focus::focus_on_init
 /// [`directional_nav`]: fn@directional_nav
 /// [`tab_nav`]: fn@tab_nav
 /// [`modal_included`]: fn@modal_included
 /// [`anchor_id`]: POPUP::anchor_id
+/// [`FocusClickBehavior::ExitEnabled`]: zng_wgt_input::focus::FocusClickBehavior::ExitEnabled
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::popup::Popup </span>{
     (<span class="macro-nonterminal">$child</span>:expr) =&gt; {
         child = <span class="macro-nonterminal">$child</span>;
@@ -573,7 +580,9 @@
     <span class="macro">widget_impl! </span>{
         <span class="doccomment">/// Popup focus behavior when it or a descendant receives a click.
         ///
-        /// Is [`FocusClickBehavior::ExitEnabled`] by default;
+        /// Is [`FocusClickBehavior::ExitEnabled`] by default.
+        ///
+        /// [`FocusClickBehavior::ExitEnabled`]: zng_wgt_input::focus::FocusClickBehavior::ExitEnabled
         </span><span class="kw">pub </span>focus_click_behavior(behavior: <span class="kw">impl </span>IntoVar&lt;FocusClickBehavior&gt;);
     }
 }
@@ -849,12 +858,15 @@
 /// If enabled (default), the popup will build [`with_context_blend`].
 ///
 /// [`Popup!`]: struct@Popup
+/// [`with_context_blend`]: zng_wgt::prelude::with_context_blend
 </span><span class="attr">#[derive(Clone, PartialEq, Eq, Debug)]
 </span><span class="kw">pub enum </span>ContextCapture {
     <span class="doccomment">/// No context capture or blending, the popup will have
     /// the context it is inited in, like any other widget.
     </span>NoCapture,
     <span class="doccomment">/// Build/instantiation context is captured and blended with the node context during all [`UiNodeOp`].
+    ///
+    /// [`UiNodeOp`]: zng_wgt::prelude::UiNodeOp
     </span>CaptureBlend {
         <span class="doccomment">/// What context values are captured.
         </span>filter: CaptureFilter,
@@ -909,7 +921,7 @@
     ///
     /// Requesting [`propagation().stop()`] on this event cancels the popup close.
     ///
-    /// [`propagation().stop()`]: crate::core::event::EventPropagationHandle::stop
+    /// [`propagation().stop()`]: zng_app::event::EventPropagationHandle::stop
     </span><span class="kw">pub static </span>POPUP_CLOSE_REQUESTED_EVENT: PopupCloseRequestedArgs;
 }
 <span class="macro">event_property! </span>{
@@ -917,7 +929,7 @@
     ///
     /// Requesting [`propagation().stop()`] on this event cancels the popup close.
     ///
-    /// [`propagation().stop()`]: crate::core::event::EventPropagationHandle::stop
+    /// [`propagation().stop()`]: zng_app::event::EventPropagationHandle::stop
     </span><span class="kw">pub fn </span>popup_close_requested {
         event: POPUP_CLOSE_REQUESTED_EVENT,
         args: PopupCloseRequestedArgs,

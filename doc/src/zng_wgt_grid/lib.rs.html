@@ -1695,6 +1695,11 @@
 <a href="#1693" id="1693">1693</a>
 <a href="#1694" id="1694">1694</a>
 <a href="#1695" id="1695">1695</a>
+<a href="#1696" id="1696">1696</a>
+<a href="#1697" id="1697">1697</a>
+<a href="#1698" id="1698">1698</a>
+<a href="#1699" id="1699">1699</a>
+<a href="#1700" id="1700">1700</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1778,6 +1783,8 @@
 ///
 /// [`Column!`]: struct@Column
 /// [`lft`]: zng_layout::unit::LengthUnits::lft
+/// [`WIDGET_SIZE`]: zng_wgt_size_offset::WIDGET_SIZE
+/// [`Length::Default`]: zng_layout::unit::Length::Default
 </span><span class="attr">#[property(CHILD, capture, widget_impl(Grid))]
 </span><span class="kw">pub fn </span>columns(cells: <span class="kw">impl </span>UiNodeList) {}
 
@@ -1795,6 +1802,7 @@
 /// the function is [`WidgetFn::nil`].
 ///
 /// [`auto_grow_mode`]: fn@auto_grow_mode
+/// [`WidgetFn::nil`]: zng_wgt::prelude::WidgetFn::nil
 </span><span class="attr">#[property(CONTEXT, capture, default(WidgetFn::nil()), widget_impl(Grid))]
 </span><span class="kw">pub fn </span>auto_grow_fn(auto_grow: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;AutoGrowFnArgs&gt;&gt;) {}
 
@@ -2076,9 +2084,9 @@
     })
 }
 
-<span class="doccomment">/// Arguments for [`grid::auto_grow_fn`].
+<span class="doccomment">/// Arguments for [`auto_grow_fn`].
 ///
-/// [`grid::auto_grow_fn`]: fn@grid::auto_grow_fn.
+/// [`auto_grow_fn`]: fn@auto_grow_fn
 </span><span class="attr">#[derive(Clone, Debug)]
 </span><span class="kw">pub struct </span>AutoGrowFnArgs {
     <span class="doccomment">/// Auto-grow direction.
@@ -2517,6 +2525,8 @@
         </span>}
 
         <span class="doccomment">/// Get the cell info stored in the [`WIDGET`] state.
+        ///
+        /// [`WIDGET`]: zng_wgt::prelude::WIDGET
         </span><span class="kw">pub fn </span>get() -&gt; <span class="self">Self </span>{
             WIDGET.get_state(<span class="kw-2">&amp;</span>INFO_ID).unwrap_or_default()
         }

@@ -1428,6 +1428,14 @@
 <a href="#1426" id="1426">1426</a>
 <a href="#1427" id="1427">1427</a>
 <a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
+<a href="#1435" id="1435">1435</a>
+<a href="#1436" id="1436">1436</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Gradient types.
 
 </span><span class="kw">use </span>std::{fmt, ops::Range};
@@ -1585,6 +1593,8 @@
     </span>}
 
     <span class="doccomment">/// Compute the radius in the current [`LAYOUT`] context.
+    ///
+    /// [`LAYOUT`]: zng_layout::context::LAYOUT
     </span><span class="kw">pub fn </span>layout(<span class="kw-2">&amp;</span><span class="self">self</span>, center: PxPoint) -&gt; PxSize {
         <span class="kw">let </span>size = LAYOUT.constraints().fill_size();
 
@@ -1832,6 +1842,7 @@
     ///
     /// [`color`]: ColorStop::color
     /// [is positional]: ColorStop::is_positional
+    /// [`Length::Default`]: zng_layout::unit::Length::Default
     </span><span class="kw">pub </span>offset: Length,
 }
 <span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ColorStop {
@@ -1886,6 +1897,8 @@
     /// # Note
     ///
     /// Use [`ColorStop::is_layout_positional`] if you already have the layout offset.
+    ///
+    /// [`Length::Default`]: zng_layout::unit::Length::Default
     </span><span class="kw">pub fn </span>is_positional(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="self">self</span>.offset.is_default()
     }
@@ -1908,6 +1921,7 @@
     /// You can use [`ColorStop::is_layout_positional`] to check a layout offset.
     ///
     /// [is positional]: Self::is_positional
+    /// [`LAYOUT`]: zng_layout::context::LAYOUT
     </span><span class="kw">pub fn </span>layout(<span class="kw-2">&amp;</span><span class="self">self</span>, axis: LayoutAxis) -&gt; RenderGradientStop {
         RenderGradientStop {
             offset: <span class="kw">if </span><span class="self">self</span>.offset.is_default() {
@@ -2276,6 +2290,8 @@
     /// The `render_stops` content is replaced with stops with offset in the `0..=1` range.
     ///
     /// The `line` points are moved to accommodate input offsets outside the line bounds.
+    ///
+    /// [`LAYOUT`]: zng_layout::context::LAYOUT
     </span><span class="kw">pub fn </span>layout_linear(<span class="kw-2">&amp;</span><span class="self">self</span>, axis: LayoutAxis, extend_mode: ExtendMode, line: <span class="kw-2">&amp;mut </span>PxLine, render_stops: <span class="kw-2">&amp;mut </span>Vec&lt;RenderGradientStop&gt;) {
         <span class="kw">let </span>(start_offset, end_offset) = <span class="self">self</span>.layout(axis, extend_mode, render_stops);
 

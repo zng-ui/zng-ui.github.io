@@ -1747,6 +1747,28 @@
 <a href="#1745" id="1745">1745</a>
 <a href="#1746" id="1746">1746</a>
 <a href="#1747" id="1747">1747</a>
+<a href="#1748" id="1748">1748</a>
+<a href="#1749" id="1749">1749</a>
+<a href="#1750" id="1750">1750</a>
+<a href="#1751" id="1751">1751</a>
+<a href="#1752" id="1752">1752</a>
+<a href="#1753" id="1753">1753</a>
+<a href="#1754" id="1754">1754</a>
+<a href="#1755" id="1755">1755</a>
+<a href="#1756" id="1756">1756</a>
+<a href="#1757" id="1757">1757</a>
+<a href="#1758" id="1758">1758</a>
+<a href="#1759" id="1759">1759</a>
+<a href="#1760" id="1760">1760</a>
+<a href="#1761" id="1761">1761</a>
+<a href="#1762" id="1762">1762</a>
+<a href="#1763" id="1763">1763</a>
+<a href="#1764" id="1764">1764</a>
+<a href="#1765" id="1765">1765</a>
+<a href="#1766" id="1766">1766</a>
+<a href="#1767" id="1767">1767</a>
+<a href="#1768" id="1768">1768</a>
+<a href="#1769" id="1769">1769</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::VecDeque,
     fmt,
@@ -2095,17 +2117,17 @@
 
         drop(wr_scope);
 
-        <span class="kw">let </span>access_root = cfg.access_root;
-        <span class="kw">let </span><span class="kw-2">mut </span>first = <span class="prelude-val">Some</span>((event_sender.clone(), id));
-        <span class="kw">let </span>access = accesskit_winit::Adapter::with_action_handler(
+        <span class="kw">let </span>access = accesskit_winit::Adapter::with_direct_handlers(
             <span class="kw-2">&amp;</span>winit_window,
-            <span class="kw">move </span>|| {
-                <span class="kw">if let </span><span class="prelude-val">Some</span>((first, window_id)) = first.take() {
-                    <span class="kw">let _ </span>= first.send(AppEvent::Notify(Event::AccessInit { window: window_id }));
-                }
-                <span class="kw">crate</span>::util::access_tree_init(access_root)
+            AccessActivateHandler {
+                id,
+                event_sender: event_sender.clone(),
             },
-            Box::new(AccessSender { id, event_sender }),
+            AccessActionSender {
+                id,
+                event_sender: event_sender.clone(),
+            },
+            AccessDeactivateHandler { id, event_sender },
         );
 
         <span class="kw">let </span><span class="kw-2">mut </span>win = <span class="self">Self </span>{
@@ -3403,18 +3425,18 @@
     }
 
     <span class="doccomment">/// Pump the accessibility adapter.
-    </span><span class="kw">pub fn </span>pump_access(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>winit::event::WindowEvent) {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="kw-2">&amp;</span><span class="self">self</span>.access {
+    </span><span class="kw">pub fn </span>pump_access(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>winit::event::WindowEvent) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.access {
             a.process_event(<span class="kw-2">&amp;</span><span class="self">self</span>.window, event);
         }
     }
 
     <span class="doccomment">/// Update the accessibility info.
     </span><span class="kw">pub fn </span>access_update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: zng_view_api::access::AccessTreeUpdate, event_sender: <span class="kw-2">&amp;</span>AppEventSender) {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="kw-2">&amp;</span><span class="self">self</span>.access {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.access {
             <span class="comment">// SAFETY: we drop `access` in case of panic.
-            </span><span class="kw">let </span>a = std::panic::AssertUnwindSafe(a);
-            <span class="kw">let </span>panic = <span class="kw">crate</span>::util::catch_suppress(|| {
+            </span><span class="kw">let </span><span class="kw-2">mut </span>a = std::panic::AssertUnwindSafe(a);
+            <span class="kw">let </span>panic = <span class="kw">crate</span>::util::catch_suppress(<span class="kw">move </span>|| {
                 a.update_if_active(|| <span class="kw">crate</span>::util::access_tree_update_to_kit(update));
             });
             <span class="kw">if let </span><span class="prelude-val">Err</span>(p) = panic {
@@ -3483,11 +3505,33 @@
     <span class="kw">pub </span>first_frame: bool,
 }
 
-<span class="kw">struct </span>AccessSender {
+<span class="kw">struct </span>AccessActivateHandler {
     id: WindowId,
     event_sender: AppEventSender,
 }
-<span class="kw">impl </span>accesskit::ActionHandler <span class="kw">for </span>AccessSender {
+<span class="kw">impl </span>accesskit::ActivationHandler <span class="kw">for </span>AccessActivateHandler {
+    <span class="kw">fn </span>request_initial_tree(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;accesskit::TreeUpdate&gt; {
+        <span class="kw">let _ </span>= <span class="self">self</span>.event_sender.send(AppEvent::Notify(Event::AccessInit { window: <span class="self">self</span>.id }));
+        <span class="prelude-val">None
+    </span>}
+}
+
+<span class="kw">struct </span>AccessDeactivateHandler {
+    id: WindowId,
+    event_sender: AppEventSender,
+}
+
+<span class="kw">impl </span>accesskit::DeactivationHandler <span class="kw">for </span>AccessDeactivateHandler {
+    <span class="kw">fn </span>deactivate_accessibility(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">let _ </span>= <span class="self">self</span>.event_sender.send(AppEvent::Notify(Event::AccessDeinit { window: <span class="self">self</span>.id }));
+    }
+}
+
+<span class="kw">struct </span>AccessActionSender {
+    id: WindowId,
+    event_sender: AppEventSender,
+}
+<span class="kw">impl </span>accesskit::ActionHandler <span class="kw">for </span>AccessActionSender {
     <span class="kw">fn </span>do_action(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: accesskit::ActionRequest) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(ev) = <span class="kw">crate</span>::util::accesskit_to_event(<span class="self">self</span>.id, request) {
             <span class="kw">let _ </span>= <span class="self">self</span>.event_sender.send(AppEvent::Notify(ev));

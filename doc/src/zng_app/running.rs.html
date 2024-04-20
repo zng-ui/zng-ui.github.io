@@ -1616,7 +1616,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1578" id="1578">1578</a>
 <a href="#1579" id="1579">1579</a>
 <a href="#1580" id="1580">1580</a>
-<a href="#1581" id="1581">1581</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt, mem,
     path::PathBuf,
@@ -1995,6 +1994,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(update) = <span class="kw">crate</span>::access::on_access_command(window_id(win_id), WidgetId::from_raw(wgt_id.<span class="number">0</span>), command) {
                     <span class="self">self</span>.notify_event(update, observer);
                 }
+            }
+            Event::AccessDeinit { window: w_id } =&gt; {
+                <span class="self">self</span>.notify_event(<span class="kw">crate</span>::access::on_access_deinit(window_id(w_id)), observer);
             }
 
             <span class="comment">// native dialog responses
@@ -2943,7 +2945,7 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// A Clone of the sender is available in [`UPDATES.sender`].
 ///
-/// [`Updates.sender`]: crate::update::UPDATES.sender
+/// [`UPDATES.sender`]: crate::update::UPDATES::sender
 </span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>AppEventSender(flume::Sender&lt;AppEvent&gt;);
 <span class="kw">impl </span>AppEventSender {
@@ -3122,9 +3124,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="macro">event_args! </span>{
     <span class="doccomment">/// Arguments for [`EXIT_REQUESTED_EVENT`].
     ///
-    /// Requesting [`propagation().stop()`] on this event cancels the exit.
-    ///
-    /// [`propagation().stop()`]: crate::event::EventPropagationHandle::stop
+    /// Requesting `propagation().stop()` on this event cancels the exit.
     </span><span class="kw">pub struct </span>ExitRequestedArgs {
         ..
         <span class="doccomment">/// Broadcast to all.
@@ -3141,9 +3141,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// also request exit if some conditions are met, `WindowManager` requests it after the last window
     /// is closed for example.
     ///
-    /// Requesting [`propagation().stop()`] on this event cancels the exit.
-    ///
-    /// [`propagation().stop()`]: crate::event::EventPropagationHandle::stop
+    /// Requesting `propagation().stop()` on this event cancels the exit.
     </span><span class="kw">pub static </span>EXIT_REQUESTED_EVENT: ExitRequestedArgs;
 }
 

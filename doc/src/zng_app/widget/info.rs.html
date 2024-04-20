@@ -2300,6 +2300,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2262" id="2262">2262</a>
 <a href="#2263" id="2263">2263</a>
 <a href="#2264" id="2264">2264</a>
+<a href="#2265" id="2265">2265</a>
+<a href="#2266" id="2266">2266</a>
+<a href="#2267" id="2267">2267</a>
+<a href="#2268" id="2268">2268</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget info tree.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt, mem, ops, sync::Arc, time::Duration};
@@ -2360,7 +2364,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Last window frame that rendered this tree.
     ///
-    /// Before the first render this is [`FrameId::INVALID`].
+    /// Before the first render this is `FrameId::INVALID`.
     </span><span class="kw">pub </span>last_frame: FrameId,
 
     <span class="doccomment">/// Last window frame that moved or resized the inner bounds of at least one widget.
@@ -2478,6 +2482,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// View-process generation.
     ///
     /// Is [`ViewProcessGen::INVALID`] before first render and in headless apps.
+    ///
+    /// [`ViewProcessGen::INVALID`]: zng_view_api::ViewProcessGen::INVALID
     </span><span class="kw">pub fn </span>view_process_gen(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ViewProcessGen {
         <span class="self">self</span>.<span class="number">0</span>.frame.read().view_process_gen
     }
@@ -4099,12 +4105,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Spatial iterator over all widgets, self and descendants, with [`center`] in the direction defined by `orientation` and
     /// within `max_distance` of the `origin`, widgets are only visited once and the distance is clipped by the [`spatial_bounds`].
     ///
-    /// Use [`Px::MAX`] on the distance to visit all widgets in the direction.
+    /// Use `Px::MAX` on the distance to visit all widgets in the direction.
     ///
     /// The direction is defined by a 45º frustum cast from the `origin`, see [`Orientation2D::point_is`] for more details.
     ///
     /// [`spatial_bounds`]: WidgetInfoTree::spatial_bounds
     /// [`center`]: WidgetInfo::center
+    /// [`Orientation2D::point_is`]: zng_layout::unit::Orientation2D::point_is
     </span><span class="kw">pub fn </span>oriented(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxPoint, max_distance: Px, orientation: Orientation2D) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
         <span class="kw">let </span>distance_bounded = max_distance != Px::MAX;
         <span class="kw">let </span>distance_key = <span class="kw">if </span>distance_bounded {
@@ -4133,13 +4140,14 @@ document.addEventListener('DOMContentLoaded', function () {
     /// in relation to `origin` and with [`center`] within `max_distance` of the `origin` center. Widgets are only visited once and
     /// the distance is clipped by the [`spatial_bounds`].
     ///
-    /// Use [`Px::MAX`] on the distance to visit all widgets in the direction.
+    /// Use `Px::MAX` on the distance to visit all widgets in the direction.
     ///
     /// The direction is a collision check between inner-bounds and origin, see [`Orientation2D::box_is`] for more details.
     ///
     /// [`spatial_bounds`]: WidgetInfoTree::spatial_bounds
     /// [`inner_bounds`]: WidgetInfo::inner_bounds
     /// [`center`]: WidgetInfo::center
+    /// [`Orientation2D::box_is`]: zng_layout::unit::Orientation2D::box_is
     </span><span class="kw">pub fn </span>oriented_box(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxBox, max_distance: Px, orientation: Orientation2D) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
         <span class="kw">let </span>distance_bounded = max_distance != Px::MAX;
         <span class="kw">let </span>distance_key = <span class="kw">if </span>distance_bounded {

@@ -332,6 +332,7 @@
 <a href="#330" id="330">330</a>
 <a href="#331" id="331">331</a>
 <a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>rayon::{
     iter::plumbing::<span class="kw-2">*</span>,
     prelude::{IndexedParallelIterator, ParallelIterator},
@@ -339,7 +340,7 @@
 
 <span class="kw">use </span>zng_app_context::LocalContext;
 
-<span class="doccomment">/// Extends [`ParallelIterator`] with thread context.
+<span class="doccomment">/// Extends rayon's `ParallelIterator` with thread context.
 </span><span class="kw">pub trait </span>ParallelIteratorExt: ParallelIterator {
     <span class="doccomment">/// Captures the current [`LocalContext`] and propagates it to all rayon tasks
     /// generated running this parallel iterator.
@@ -349,6 +350,7 @@
     ///
     /// [`context_local!`]: zng_app_context::context_local
     /// [`app_local!`]: zng_app_context::app_local
+    /// [`LocalContext`]: zng_app_context::LocalContext
     </span><span class="kw">fn </span>with_ctx(<span class="self">self</span>) -&gt; ParallelIteratorWithCtx&lt;<span class="self">Self</span>&gt; {
         ParallelIteratorWithCtx {
             base: <span class="self">self</span>,

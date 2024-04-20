@@ -545,6 +545,24 @@
 <a href="#543" id="543">543</a>
 <a href="#544" id="544">544</a>
 <a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>std::fmt;
 
@@ -632,7 +650,7 @@
 <span class="macro">context_var! </span>{
     <span class="doccomment">/// The Image scaling algorithm in the renderer.
     ///
-    /// Is [`ImageRendering::Auto`] by default.
+    /// Is `ImageRendering::Auto` by default.
     </span><span class="kw">pub static </span>IMAGE_RENDERING_VAR: ImageRendering = ImageRendering::Auto;
 
     <span class="doccomment">/// If the image is cached.
@@ -648,7 +666,9 @@
 
     <span class="doccomment">/// Custom image load and decode limits.
     ///
-    /// Set to `None` to use the [`IMAGES::limits`].
+    /// Set to `None` to use the [`IMAGES.limits`].
+    ///
+    /// [`IMAGES.limits`]: zng_ext_image::IMAGES::limits
     </span><span class="kw">pub static </span>IMAGE_LIMITS_VAR: <span class="prelude-ty">Option</span>&lt;ImageLimits&gt; = <span class="prelude-val">None</span>;
 
     <span class="doccomment">/// Custom resize applied during image decode.
@@ -678,7 +698,7 @@
 
     <span class="doccomment">/// Align of the image in relation to the image widget final size.
     ///
-    /// Is [`Align::CENTER`] by default.
+    /// Is `Align::CENTER` by default.
     </span><span class="kw">pub static </span>IMAGE_ALIGN_VAR: Align = Align::CENTER;
 
     <span class="doccomment">/// Offset applied to the image after all measure and arrange.
@@ -691,12 +711,12 @@
 
     <span class="doccomment">/// Pattern repeat applied on the final image.
     ///
-    /// Is [`ImageRepeat::None`] by default.
+    /// Is `ImageRepeat::None` by default.
     </span><span class="kw">pub static </span>IMAGE_REPEAT_VAR: ImageRepeat = ImageRepeat::None;
 
     <span class="doccomment">/// Spacing between repeated image copies.
     ///
-    /// is [`Size::zero()`] by default.
+    /// is `Size::zero` by default.
     </span><span class="kw">pub static </span>IMAGE_REPEAT_SPACING_VAR: Size = Size::zero();
 }
 
@@ -762,11 +782,11 @@
 ///
 /// By default the alignment is [`CENTER`]. The [`BASELINE`] alignment is treaded the same as [`BOTTOM`].
 ///
-/// [`BOTTOM_RIGHT`]: Align::BOTTOM_RIGHT
-/// [`CENTER`]: Align::CENTER
-/// [`BASELINE`]: Align::BASELINE
-/// [`BOTTOM`]: Align::BOTTOM
-///
+/// [`BOTTOM_RIGHT`]: zng_wgt::prelude::Align::BOTTOM_RIGHT
+/// [`CENTER`]: zng_wgt::prelude::Align::CENTER
+/// [`BASELINE`]: zng_wgt::prelude::Align::BASELINE
+/// [`BOTTOM`]: zng_wgt::prelude::Align::BOTTOM
+/// [`Align`]: zng_wgt::prelude::Align
 /// [`img_align`]: fn@crate::img_align
 </span><span class="attr">#[property(CONTEXT, default(IMAGE_ALIGN_VAR), widget_impl(Image))]
 </span><span class="kw">pub fn </span>img_align(child: <span class="kw">impl </span>UiNode, fit: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
@@ -781,6 +801,7 @@
 /// This property sets the [`IMAGE_OFFSET_VAR`]. By default no offset is applied.
 ///
 /// [`img_offset`]: fn@crate::img_offset
+/// [`Point`]: zng_wgt::prelude::Point
 </span><span class="attr">#[property(CONTEXT, default(IMAGE_OFFSET_VAR), widget_impl(Image))]
 </span><span class="kw">pub fn </span>img_offset(child: <span class="kw">impl </span>UiNode, offset: <span class="kw">impl </span>IntoVar&lt;Vector&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, IMAGE_OFFSET_VAR, offset)
@@ -797,6 +818,7 @@
 /// [`img_scale_ppi`]: #fn@img_scale_ppi
 /// [texture atlas]: https://en.wikipedia.org/wiki/Texture_atlas///
 /// [`crop`]: fn@crate::crop
+/// [`Rect`]: zng_wgt::prelude::Rect
 </span><span class="attr">#[property(CONTEXT, default(IMAGE_CROP_VAR), widget_impl(Image))]
 </span><span class="kw">pub fn </span>img_crop(child: <span class="kw">impl </span>UiNode, crop: <span class="kw">impl </span>IntoVar&lt;Rect&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, IMAGE_CROP_VAR, crop)
@@ -844,6 +866,8 @@
 /// This is [`ImageRendering::Auto`] by default.
 ///
 /// [`rendering`]: fn@crate::rendering
+/// [`ImageRendering`]: zng_app::render::ImageRendering
+/// [`ImageRendering::Auto`]: zng_app::render::ImageRendering::Auto
 </span><span class="attr">#[property(CONTEXT, default(IMAGE_RENDERING_VAR), widget_impl(Image))]
 </span><span class="kw">pub fn </span>img_rendering(child: <span class="kw">impl </span>UiNode, rendering: <span class="kw">impl </span>IntoVar&lt;ImageRendering&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, IMAGE_RENDERING_VAR, rendering)
@@ -979,6 +1003,12 @@
 /// # Route
 ///
 /// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
+///
+/// [`WidgetHandler`]: zng_wgt::prelude::WidgetHandler
+/// [`hn!`]: zng_wgt::prelude::hn!
+/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
 </span><span class="attr">#[property(EVENT, widget_impl(Image))]
 </span><span class="kw">pub fn </span>on_error(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;ImgErrorArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.cfg_boxed();
@@ -1033,6 +1063,12 @@
 /// # Route
 ///
 /// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
+///
+/// [`WidgetHandler`]: zng_wgt::prelude::WidgetHandler
+/// [`hn!`]: zng_wgt::prelude::hn!
+/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
 </span><span class="attr">#[property(EVENT, widget_impl(Image))]
 </span><span class="kw">pub fn </span>on_load(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;ImgLoadArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.cfg_boxed();

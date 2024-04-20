@@ -401,6 +401,27 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#363" id="363">363</a>
 <a href="#364" id="364">364</a>
 <a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Accessibility/automation events.
 
 </span><span class="kw">use </span>zng_txt::Txt;
@@ -418,6 +439,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>on_access_init(window_id: WindowId) -&gt; EventUpdate {
     <span class="kw">let </span>args = AccessInitedArgs::now(window_id);
     ACCESS_INITED_EVENT.new_update(args)
+}
+
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>on_access_deinit(window_id: WindowId) -&gt; EventUpdate {
+    <span class="kw">let </span>args = AccessDeinitedArgs::now(window_id);
+    ACCESS_DEINITED_EVENT.new_update(args)
 }
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>on_access_command(window_id: WindowId, widget_id: WidgetId, command: AccessCmd) -&gt; <span class="prelude-ty">Option</span>&lt;EventUpdate&gt; {
@@ -491,6 +517,19 @@ document.addEventListener('DOMContentLoaded', function () {
             list.search_all()
         }
     }
+
+        <span class="doccomment">/// Arguments for the [`ACCESS_DEINITED_EVENT`].
+        </span><span class="kw">pub struct </span>AccessDeinitedArgs {
+            <span class="doccomment">/// Target window.
+            </span><span class="kw">pub </span>window_id: WindowId,
+
+            ..
+
+            <span class="doccomment">/// Event is broadcast.
+            </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
+                list.search_all()
+            }
+        }
 
     <span class="doccomment">/// Arguments for the [`ACCESS_CLICK_EVENT`].
     </span><span class="kw">pub struct </span>AccessClickArgs {
@@ -703,8 +742,11 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 <span class="macro">event! </span>{
-    <span class="doccomment">/// Accessibility info was requested for the first time in a window.
+    <span class="doccomment">/// Accessibility info is now required for the window.
     </span><span class="kw">pub static </span>ACCESS_INITED_EVENT: AccessInitedArgs;
+
+    <span class="doccomment">/// Accessibility info is no longer required for the window.
+    </span><span class="kw">pub static </span>ACCESS_DEINITED_EVENT: AccessDeinitedArgs;
 
     <span class="doccomment">/// Run the primary or context click action.
     </span><span class="kw">pub static </span>ACCESS_CLICK_EVENT: AccessClickArgs;
