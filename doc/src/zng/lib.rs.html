@@ -926,6 +926,56 @@
 <a href="#923" id="923">923</a>
 <a href="#924" id="924">924</a>
 <a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
+<a href="#948" id="948">948</a>
+<a href="#949" id="949">949</a>
+<a href="#950" id="950">950</a>
+<a href="#951" id="951">951</a>
+<a href="#952" id="952">952</a>
+<a href="#953" id="953">953</a>
+<a href="#954" id="954">954</a>
+<a href="#955" id="955">955</a>
+<a href="#956" id="956">956</a>
+<a href="#957" id="957">957</a>
+<a href="#958" id="958">958</a>
+<a href="#959" id="959">959</a>
+<a href="#960" id="960">960</a>
+<a href="#961" id="961">961</a>
+<a href="#962" id="962">962</a>
+<a href="#963" id="963">963</a>
+<a href="#964" id="964">964</a>
+<a href="#965" id="965">965</a>
+<a href="#966" id="966">966</a>
+<a href="#967" id="967">967</a>
+<a href="#968" id="968">968</a>
+<a href="#969" id="969">969</a>
+<a href="#970" id="970">970</a>
+<a href="#971" id="971">971</a>
+<a href="#972" id="972">972</a>
+<a href="#973" id="973">973</a>
+<a href="#974" id="974">974</a>
+<a href="#975" id="975">975</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::needless_doctest_main)]
 #![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
@@ -934,7 +984,7 @@
 //! live data binding, easy localization, automatic focus navigation and accessibility, async and multi-threaded tasks, robust
 //! multi-process architecture and more.
 //!
-//! Zng is pronounced "zing", or as an initialism: ZNG (z+nesting+graphics).
+//! Zng is pronounced "zing", or as an initialism: ZNG (Z Nesting Graphics).
 //!
 //! Every component of the framework can be extended, you can create new widgets or add properties to existing ones,
 //! at a lower level you can introduce new events and services, seamless integrating custom hardware.
@@ -945,7 +995,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.3.4", features = ["view_prebuilt"] }
+//! zng = { version = "0.4.0", features = ["view_prebuilt"] }
 //! ```
 //!
 //! Then create your first app:
@@ -1362,13 +1412,32 @@
 //! properties modify the layout context by setting constraints and defining units, this context is available for all
 //! properties that need it during layout, see the [`layout`] module documentation for more details.
 //!
+//! # Error Handling
+//!
+//! Recoverable errors handled internally are logged using [`tracing`], in debug builds tracing events (info, warn and error)
+//! are printed using [`app::print_tracing`] by default if no tracing subscriber is set before the app starts building.
+//!
+//! Components always attempt to recover from errors when possible, or at least attempt to contain errors and turn then into
+//! a displayable message. The general idea is to at least give the end user a chance to workaround the issue.
+//!
+//! Components do not generally attempt to recover from panics, with some notable exceptions. The view-process will attempt to respawn
+//! if it crashes, because all state is safe in the app-process all windows and frames can be recreated, this lets the app survive
+//! some catastrophic video driver errors, like a forced disconnect caused by a driver update. The [`task::spawn`] and related
+//! fire-and-forget task runners will also just log the panic as an error.
+//!
+//! You can also use the [`zng::app::crash_handler`] to collect panic backtraces, crash minidumps, show a crash dialog to the user
+//! and restart the app. During development you can use [`zng::app::crash_handler::init_debug`] to quickly setup a crash dialog that
+//! helps you debug the app.
+//!
+//! [`tracing`]: https://docs.rs/tracing
+//!
 //! # In-Depth Documentation
 //!
 //! This crate level documentation only gives an overview required to start making apps using existing widgets and properties.
 //! All top-level modules in this crate contains in-depth documentation about their subject, of particular importance the
 //! [`app`], [`widget`], [`layout`] and [`render`] modules should give you a solid understanding of how everything works.
 //!
-//! ### Cargo Features
+//! ## Cargo Features
 //!
 //! See the [Cargo Features] section in the crate README for Cargo features documentation.
 //!
@@ -1750,9 +1819,11 @@
         /// * [`ImageManager`]
         /// * [`ClipboardManager`]
         /// * [`UndoManager`]
+        /// * [`SingleInstanceManager`] if the `"single_instance"` feature is enabled.
         /// * [`MaterialFonts`] if any `"material_icons*"` feature is enabled.
         ///
         /// [`MaterialFonts`]: zng_wgt_material_icons::MaterialFonts
+        /// [`SingleInstanceManager`]: zng_ext_single_instance::SingleInstanceManager
         /// [`ConfigManager`]: zng_ext_config::ConfigManager
         /// [`L10nManager`]: zng_ext_l10n::L10nManager
         /// [`FontManager`]: zng_ext_font::FontManager
@@ -1773,6 +1844,9 @@
                 .extend(ImageManager::default())
                 .extend(ClipboardManager::default())
                 .extend(UndoManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"single_instance"</span>)]
+            </span><span class="kw">let </span>r = r.extend(zng_ext_single_instance::SingleInstanceManager::default());
 
             <span class="attr">#[cfg(any(
                 feature = <span class="string">"material_icons_outlined"</span>,
@@ -1804,8 +1878,32 @@
                     zng_app::window::WINDOW.vars().actual_color_scheme().boxed()
                 })
             });
+            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, root_extender set"</span>);
 
             <span class="kw">crate</span>::third_party::setup_default_view();
+            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, third_party set"</span>);
+
+            <span class="attr">#[cfg(feature = <span class="string">"single_instance"</span>)]
+            </span>{
+                <span class="kw">crate</span>::app::APP_INSTANCE_EVENT
+                    .on_pre_event(<span class="macro">crate::handler::app_hn!</span>(|args: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::AppInstanceArgs, <span class="kw">_</span>| {
+                        <span class="kw">use </span><span class="kw">crate</span>::window::<span class="kw-2">*</span>;
+
+                        <span class="comment">// focus a window if none are focused.
+                        </span><span class="kw">if </span>!args.is_current() &amp;&amp; WINDOWS.focused_window_id().is_none() {
+                            <span class="kw">for </span>w <span class="kw">in </span>WINDOWS.widget_trees() {
+                                <span class="kw">if </span>w.is_rendered()
+                                    &amp;&amp; WINDOWS.mode(w.window_id()) == <span class="prelude-val">Ok</span>(WindowMode::Headed)
+                                    &amp;&amp; WINDOWS.focus(w.window_id()).is_ok()
+                                {
+                                    <span class="kw">break</span>;
+                                }
+                            }
+                        }
+                    }))
+                    .perm();
+                <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, single_instance set"</span>);
+            }
 
             <span class="attr">#[cfg(feature = <span class="string">"material_icons_outlined"</span>)]
             </span>{
@@ -1843,6 +1941,8 @@
                 ZOOM_OUT_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::ZOOM_OUT)));
 
                 OPEN_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::FILE_OPEN)));
+
+                <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, command_icons set"</span>);
             }
         }
     }

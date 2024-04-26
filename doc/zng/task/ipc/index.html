@@ -1,0 +1,108 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="IPC tasks."><title>zng::task::ipc - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../../zng/index.html">zng</a><span class="version">0.4.0</span></h2></div><h2 class="location"><a href="#">Module ipc</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#enums">Enums</a></li><li><a href="#constants">Constants</a></li><li><a href="#traits">Traits</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In zng::task</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../../index.html">zng</a>::<wbr><a href="../index.html">task</a>::<wbr><a class="mod" href="#">ipc</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../../src/zng_task/lib.rs.html#52">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>IPC tasks.</p>
+<p>This module uses <a href="https://docs.rs/ipc-channel"><code>ipc_channel</code></a> and <a href="https://docs.rs/duct"><code>duct</code></a> crates to define a worker process that can run tasks in a separate process instance.</p>
+<p>Each worker process can run multiple tasks in parallel, the worker type is <a href="struct.Worker.html" title="struct zng::task::ipc::Worker"><code>Worker</code></a>. Note that this module does not offer a fork
+implementation, the worker processes begin from the start state. The primary use of process tasks is to make otherwise fatal tasks
+recoverable, if the task calls unsafe code or code that can potentially terminate the entire process it should run using a <a href="struct.Worker.html" title="struct zng::task::ipc::Worker"><code>Worker</code></a>.
+If you only want to recover from panics in safe code consider using <a href="../fn.run_catch.html" title="fn zng::task::run_catch"><code>task::run_catch</code></a> or <a href="../fn.wait_catch.html" title="fn zng::task::wait_catch"><code>task::wait_catch</code></a> instead.</p>
+<p>This module also re-exports some <a href="https://docs.rs/ipc-channel"><code>ipc_channel</code></a> types and functions. You can send IPC channels in the task request messages, this
+can be useful for implementing progress reporting or to transfer large byte blobs.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>The example below demonstrates a worker-process setup that uses the same executable as the app-process.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>main() {
+    <span class="comment">// this must be called before the app start, when the process
+    // is a worker this function never returns.
+    </span>task::ipc::run_worker(worker);
+
+    <span class="comment">// normal app init..
+</span>}
+
+<span class="comment">// All tasks for the same worker-process instance must be defined on the same type.
+</span><span class="attr">#[derive(Debug, serde::Serialize, serde::Deserialize)]
+</span><span class="kw">enum </span>IpcRequest {
+    Task1,
+    Task2,
+}
+<span class="attr">#[derive(Debug, serde::Serialize, serde::Deserialize)]
+</span><span class="kw">enum </span>IpcResponse {
+    Result1,
+    Result2,
+}
+
+<span class="comment">// This handler is called for every worker task, in the worker-process.
+</span><span class="kw">async fn </span>worker(args: task::ipc::RequestArgs&lt;IpcRequest&gt;) -&gt; IpcResponse {
+   <span class="macro">println!</span>(<span class="string">"received request `{:?}` in worker-process #{}"</span>, <span class="kw-2">&amp;</span>args.request, std::process::id());
+    <span class="kw">match </span>args.request {
+        IpcRequest::Task1 =&gt; IpcResponse::Result1,
+        IpcRequest::Task2 =&gt; IpcResponse::Result2,
+    }
+}
+
+<span class="comment">// This runs in the app-process, it starts a worker process and requests a task run.
+</span><span class="kw">async fn </span>on_click() {
+    <span class="macro">println!</span>(<span class="string">"app-process #{} starting a worker"</span>, std::process::id());
+    <span class="kw">let </span><span class="kw-2">mut </span>worker = <span class="kw">match </span>task::ipc::Worker::start().<span class="kw">await </span>{
+        <span class="prelude-val">Ok</span>(w) =&gt; w,
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            <span class="macro">eprintln!</span>(<span class="string">"error: {e}"</span>);
+            <span class="kw">return</span>;
+        },
+    };
+    <span class="comment">// request a task run and await it.
+    </span><span class="kw">match </span>worker.run(IpcRequest::Task1).<span class="kw">await </span>{
+        <span class="prelude-val">Ok</span>(IpcResponse::Result1) =&gt; <span class="macro">println!</span>(<span class="string">"ok."</span>),
+        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"error: {e}"</span>),
+        <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+    }
+    <span class="comment">// multiple tasks can be requested in parallel, use `task::all!` to await ..
+
+    // the worker process can be gracefully shutdown, awaits all pending tasks.
+    </span><span class="kw">let _ </span>= worker.shutdown().<span class="kw">await</span>;
+}
+</code></pre></div>
+<p>Note that you can setup different worker types on the same executable using <a href="struct.Worker.html#method.start_with" title="associated function zng::task::ipc::Worker::start_with"><code>Worker::start_with</code></a> with a custom
+environment variable that switches the <a href="fn.run_worker.html" title="fn zng::task::ipc::run_worker"><code>run_worker</code></a> call.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>run_workers() {
+    <span class="kw">match </span>std::env::var(<span class="string">"MY_APP_WORKER"</span>) {
+        <span class="prelude-val">Ok</span>(name) =&gt; <span class="kw">match </span>name.as_str() {
+            <span class="string">"worker_a" </span>=&gt; task::ipc::run_worker(worker_a),
+            <span class="string">"worker_b" </span>=&gt; task::ipc::run_worker(worker_b),
+            unknown =&gt; <span class="macro">panic!</span>(<span class="string">"unknown worker, {unknown:?}"</span>),
+        },
+        <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">match </span>e {
+            std::env::VarError::NotPresent =&gt; {} <span class="comment">// not a worker run
+            </span>e =&gt; <span class="macro">panic!</span>(<span class="string">"invalid worker name, {e}"</span>),
+        },
+    }
+}
+
+<span class="kw">async fn </span>worker_a(args: task::ipc::RequestArgs&lt;bool&gt;) -&gt; char {
+    <span class="kw">if </span>args.request {
+        <span class="string">'A'
+    </span>} <span class="kw">else </span>{
+        <span class="string">'a'
+    </span>}
+}
+
+<span class="kw">async fn </span>worker_b(args: task::ipc::RequestArgs&lt;char&gt;) -&gt; bool {
+    args.request == <span class="string">'B' </span>|| args.request == <span class="string">'b'
+</span>}
+
+<span class="kw">fn </span>main() {
+    <span class="self">self</span>::run_workers();
+
+    <span class="comment">// normal app init..
+</span>}
+
+<span class="comment">// And in the app side:
+</span><span class="kw">async fn </span>on_click() {
+    <span class="kw">let </span><span class="kw-2">mut </span>worker_a = task::ipc::Worker::start_with(<span class="kw-2">&amp;</span>[(<span class="string">"MY_APP_WORKER"</span>, <span class="string">"worker_a"</span>)], <span class="kw-2">&amp;</span>[]).<span class="kw">await</span>.unwrap();
+    <span class="kw">let </span>r = worker_a.run(<span class="bool-val">true</span>).<span class="kw">await</span>.ok();
+    <span class="macro">assert_eq!</span>(r, <span class="prelude-val">Some</span>(<span class="string">'A'</span>));
+}</code></pre></div>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.IpcBytesReceiver.html" title="struct zng::task::ipc::IpcBytesReceiver">IpcBytesReceiver</a></div><div class="desc docblock-short">Receiving end of a channel that does not used serialized messages.</div></li><li><div class="item-name"><a class="struct" href="struct.IpcBytesSender.html" title="struct zng::task::ipc::IpcBytesSender">IpcBytesSender</a></div><div class="desc docblock-short">Sending end of a channel that does not used serialized messages.</div></li><li><div class="item-name"><a class="struct" href="struct.IpcReceiver.html" title="struct zng::task::ipc::IpcReceiver">IpcReceiver</a></div><div class="desc docblock-short">Receiving end of a channel using serialized messages.</div></li><li><div class="item-name"><a class="struct" href="struct.IpcSender.html" title="struct zng::task::ipc::IpcSender">IpcSender</a></div><div class="desc docblock-short">Sending end of a channel using serialized messages.</div></li><li><div class="item-name"><a class="struct" href="struct.RequestArgs.html" title="struct zng::task::ipc::RequestArgs">RequestArgs</a></div><div class="desc docblock-short">Arguments for <a href="fn.run_worker.html" title="fn zng::task::ipc::run_worker"><code>run_worker</code></a>.</div></li><li><div class="item-name"><a class="struct" href="struct.Worker.html" title="struct zng::task::ipc::Worker">Worker</a></div><div class="desc docblock-short">Represents a running worker process.</div></li><li><div class="item-name"><a class="struct" href="struct.WorkerCrashError.html" title="struct zng::task::ipc::WorkerCrashError">WorkerCrashError</a></div><div class="desc docblock-short">Info about a worker process crash.</div></li></ul><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="enum" href="enum.RunError.html" title="enum zng::task::ipc::RunError">RunError</a></div><div class="desc docblock-short">Worker run error.</div></li></ul><h2 id="constants" class="section-header">Constants<a href="#constants" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="constant" href="constant.VERSION.html" title="constant zng::task::ipc::VERSION">VERSION</a></div><div class="desc docblock-short">The <em>App Process</em> and <em>Worker Process</em> must be build using the same exact version and this is
+validated during run-time, causing a panic if the versions don’t match.</div></li></ul><h2 id="traits" class="section-header">Traits<a href="#traits" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="trait" href="trait.IpcValue.html" title="trait zng::task::ipc::IpcValue">IpcValue</a></div><div class="desc docblock-short">Represents a type that can be an input and output of IPC workers.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.bytes_channel.html" title="fn zng::task::ipc::bytes_channel">bytes_channel</a></div><div class="desc docblock-short">Create a connected <a href="struct.IpcBytesSender.html">IpcBytesSender</a> and <a href="struct.IpcBytesReceiver.html">IpcBytesReceiver</a>.</div></li><li><div class="item-name"><a class="fn" href="fn.run_worker.html" title="fn zng::task::ipc::run_worker">run_worker</a></div><div class="desc docblock-short">If the process was started by a <a href="struct.Worker.html" title="struct zng::task::ipc::Worker"><code>Worker</code></a> runs the worker loop and never returns. If
+not started as worker does nothing.</div></li></ul></section></div></main></body></html>

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["IdNameError"],"macro":["impl_unique_id_fmt","impl_unique_id_name","unique_id_32","unique_id_64"],"struct":["BuildIdHasher","IdHasher","IdMap","IdSet"],"type":["IdEntry","IdOccupiedEntry","IdVacantEntry"]};
+window.SIDEBAR_ITEMS = {"enum":["IdNameError"],"macro":["impl_unique_id_bytemuck","impl_unique_id_fmt","impl_unique_id_name","unique_id_32","unique_id_64"],"struct":["BuildIdHasher","IdHasher","IdMap","IdSet"],"type":["IdEntry","IdOccupiedEntry","IdVacantEntry"]};

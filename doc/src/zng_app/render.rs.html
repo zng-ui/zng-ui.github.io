@@ -3014,6 +3014,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2976" id="2976">2976</a>
 <a href="#2977" id="2977">2977</a>
 <a href="#2978" id="2978">2978</a>
+<a href="#2979" id="2979">2979</a>
+<a href="#2980" id="2980">2980</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
 
 </span><span class="kw">use </span>std::{marker::PhantomData, mem, sync::Arc};
@@ -3032,7 +3034,7 @@ document.addEventListener('DOMContentLoaded', function () {
     euclid, AngleRadian, Factor, FactorUnits, Px, PxCornerRadius, PxLine, PxPoint, PxRect, PxSideOffsets, PxSize, PxTransform, PxVector,
 };
 <span class="kw">use </span>zng_task::rayon::iter::{ParallelBridge, ParallelIterator};
-<span class="kw">use </span>zng_unique_id::unique_id_32;
+<span class="kw">use </span>zng_unique_id::{impl_unique_id_bytemuck, unique_id_32};
 <span class="kw">use </span>zng_var::{impl_from_and_into_var, Var, VarCapabilities, VarValue};
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
@@ -5688,12 +5690,14 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="attr">#[derive(Debug)]
     </span><span class="kw">struct </span>FrameBindingKeyId;
 }
+<span class="macro">impl_unique_id_bytemuck!</span>(FrameBindingKeyId);
 
 <span class="macro">unique_id_32! </span>{
     <span class="doccomment">/// Unique ID of a reference frame.
     </span><span class="attr">#[derive(Debug)]
     </span><span class="kw">pub struct </span>SpatialFrameId;
 }
+<span class="macro">impl_unique_id_bytemuck!</span>(SpatialFrameId);
 
 <span class="attr">#[derive(Clone, Copy, PartialEq, Eq)]
 </span><span class="kw">enum </span>ReferenceFrameIdInner {

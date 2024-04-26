@@ -1616,6 +1616,14 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1578" id="1578">1578</a>
 <a href="#1579" id="1579">1579</a>
 <a href="#1580" id="1580">1580</a>
+<a href="#1581" id="1581">1581</a>
+<a href="#1582" id="1582">1582</a>
+<a href="#1583" id="1583">1583</a>
+<a href="#1584" id="1584">1584</a>
+<a href="#1585" id="1585">1585</a>
+<a href="#1586" id="1586">1586</a>
+<a href="#1587" id="1587">1587</a>
+<a href="#1588" id="1588">1588</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt, mem,
     path::PathBuf,
@@ -2888,6 +2896,13 @@ document.addEventListener('DOMContentLoaded', function () {
         extensions: <span class="prelude-val">None</span>,
         device_events: <span class="bool-val">false</span>,
         pause_time_for_updates: zng_var::var(<span class="bool-val">true</span>),
+        about: zng_var::var(<span class="kw">crate</span>::AboutApp {
+            name: <span class="string">""</span>.into(),
+            description: <span class="string">"A ZNG app."</span>.into(),
+            version: <span class="string">""</span>.into(),
+            home_page: <span class="string">""</span>.into(),
+            help_page: <span class="string">""</span>.into(),
+        }),
     };
 }
 
@@ -2896,6 +2911,7 @@ document.addEventListener('DOMContentLoaded', function () {
     extensions: <span class="prelude-ty">Option</span>&lt;Arc&lt;AppExtensionsInfo&gt;&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) device_events: bool,
     pause_time_for_updates: ArcVar&lt;bool&gt;,
+    <span class="kw">pub</span>(<span class="kw">super</span>) about: ArcVar&lt;<span class="kw">crate</span>::AboutApp&gt;,
 }
 <span class="kw">impl </span>AppProcessService {
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>take_requests(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ResponderVar&lt;ExitCancelled&gt;&gt; {

@@ -1997,7 +1997,7 @@
 
     <span class="doccomment">/// Allow any file inside the current executable directory or sub-directories.
     </span><span class="kw">pub fn </span>allow_exe_dir() -&gt; <span class="self">Self </span>{
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>p) = env::current_exe() {
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>p) = env::current_exe().and_then(|p| p.canonicalize()) {
             <span class="kw">if </span>p.pop() {
                 <span class="kw">return </span><span class="self">Self</span>::allow_dir(p);
             }

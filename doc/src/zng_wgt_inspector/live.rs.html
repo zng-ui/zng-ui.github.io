@@ -1354,14 +1354,6 @@
 <a href="#1352" id="1352">1352</a>
 <a href="#1353" id="1353">1353</a>
 <a href="#1354" id="1354">1354</a>
-<a href="#1355" id="1355">1355</a>
-<a href="#1356" id="1356">1356</a>
-<a href="#1357" id="1357">1357</a>
-<a href="#1358" id="1358">1358</a>
-<a href="#1359" id="1359">1359</a>
-<a href="#1360" id="1360">1360</a>
-<a href="#1361" id="1361">1361</a>
-<a href="#1362" id="1362">1362</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_app::access::ACCESS_CLICK_EVENT;
 <span class="kw">use </span>zng_ext_config::CONFIG;
 <span class="kw">use </span>zng_ext_input::{
@@ -1635,15 +1627,15 @@
     <span class="kw">use </span>zng_app::widget::{
         border::{BorderSide, BorderSides},
         builder::{Importance, PropertyArgs, PropertyInfo, WidgetType},
-        inspector::{InspectorActualVars, InstanceItem, WidgetInfoInspectorExt <span class="kw">as _</span>},
+        inspector::{InspectorActualVars, InstanceItem},
         OnVarArgs,
     };
     <span class="kw">use </span>zng_color::Rgba;
     <span class="kw">use </span>zng_ext_font::{FontStyle, FontWeight};
     <span class="kw">use </span>zng_ext_input::focus::FOCUS;
     <span class="kw">use </span>zng_ext_l10n::lang;
-    <span class="kw">use </span>zng_ext_window::{WindowIcon, WindowRoot, WINDOWS};
-    <span class="kw">use </span>zng_var::{animation::easing, var_from};
+    <span class="kw">use </span>zng_ext_window::{WindowRoot, WINDOWS};
+    <span class="kw">use </span>zng_var::animation::easing;
     <span class="kw">use </span>zng_wgt::{border, corner_radius, margin, prelude::<span class="kw-2">*</span>, visibility, Wgt};
     <span class="kw">use </span>zng_wgt_access::{access_role, AccessRole};
     <span class="kw">use </span>zng_wgt_button::Button;
@@ -1677,24 +1669,16 @@
     ) -&gt; WindowRoot {
         <span class="kw">let </span>parent = WINDOWS.vars(inspected).unwrap().parent().get().unwrap_or(inspected);
 
-        <span class="kw">let </span>tree = WINDOWS.widget_tree(inspected).unwrap();
-        <span class="kw">let </span>info = tree.root().inspector_info();
-        <span class="kw">let </span>title = <span class="kw">if let </span>(<span class="prelude-val">Some</span>(info), <span class="prelude-val">Some</span>(title)) = (<span class="kw-2">&amp;</span>info, tree.root().inspect_property(<span class="macro">property_id!</span>(window::title))) {
-            info.actual_vars
-                .downcast::&lt;Txt&gt;(<span class="macro">property_id!</span>(window::title), <span class="number">0</span>)
-                .unwrap_or_else(|| title.downcast_var::&lt;Txt&gt;(<span class="number">0</span>).clone())
-                .map(|t| <span class="macro">formatx!</span>(<span class="string">"{t} - Inspector"</span>))
-                .boxed()
-        } <span class="kw">else </span>{
-            var_from(<span class="string">"Inspector"</span>).boxed()
-        };
-        <span class="kw">let </span>icon = <span class="kw">if let </span>(<span class="prelude-val">Some</span>(info), <span class="prelude-val">Some</span>(icon)) = (info, tree.root().inspect_property(<span class="macro">property_id!</span>(window::icon))) {
-            info.actual_vars
-                .downcast::&lt;WindowIcon&gt;(<span class="macro">property_id!</span>(window::icon), <span class="number">0</span>)
-                .unwrap_or_else(|| icon.downcast_var::&lt;WindowIcon&gt;(<span class="number">0</span>).clone())
-        } <span class="kw">else </span>{
-            var(WindowIcon::Default).boxed()
-        };
+        <span class="kw">let </span>vars = WINDOWS.vars(inspected).unwrap();
+
+        <span class="kw">let </span>title = vars.title().map(|t| {
+            <span class="kw">if </span>!t.is_empty() {
+                <span class="macro">formatx!</span>(<span class="string">"{t} - Inspector"</span>)
+            } <span class="kw">else </span>{
+                <span class="string">"Inspector"</span>.into()
+            }
+        });
+        <span class="kw">let </span>icon = vars.icon();
 
         <span class="kw">let </span>wgt_filter = var(Txt::from_static(<span class="string">""</span>));
 

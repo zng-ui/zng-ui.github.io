@@ -644,14 +644,6 @@
 <a href="#642" id="642">642</a>
 <a href="#643" id="643">643</a>
 <a href="#644" id="644">644</a>
-<a href="#645" id="645">645</a>
-<a href="#646" id="646">646</a>
-<a href="#647" id="647">647</a>
-<a href="#648" id="648">648</a>
-<a href="#649" id="649">649</a>
-<a href="#650" id="650">650</a>
-<a href="#651" id="651">651</a>
-<a href="#652" id="652">652</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -788,23 +780,17 @@
     };
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"bytemuck"</span>)]
-#[doc(hidden)]
-#[macro_export]
-</span><span class="macro">macro_rules! </span>impl_bytemuck {
+<span class="doccomment">/// Implement [`bytemuck`] trait for the unique ID.
+///
+/// [`bytemuck`]: https://docs.rs/bytemuck/
+</span><span class="attr">#[macro_export]
+</span><span class="macro">macro_rules! </span>impl_unique_id_bytemuck {
     (<span class="macro-nonterminal">$Type</span>:ident $(&lt; <span class="macro-nonterminal">$T</span>:ident $(:($(<span class="macro-nonterminal">$bounds</span>:tt)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">?</span>) =&gt; {
         <span class="comment">// SAFETY: $Type a transparent wrapper on a std non-zero integer.
         </span><span class="kw">unsafe impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>bytemuck::NoUninit <span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{ }
         <span class="kw">unsafe impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>bytemuck::ZeroableInOption <span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{ }
         <span class="kw">unsafe impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>bytemuck::PodInOption <span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{ }
     }
-}
-
-<span class="attr">#[cfg(not(feature = <span class="string">"bytemuck"</span>))]
-#[doc(hidden)]
-#[macro_export]
-</span><span class="macro">macro_rules! </span>impl_bytemuck {
-    (<span class="macro-nonterminal">$Type</span>:ident $(&lt; <span class="macro-nonterminal">$T</span>:ident $(:($(<span class="macro-nonterminal">$bounds</span>:tt)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">?</span>) =&gt; {};
 }
 
 <span class="attr">#[doc(hidden)]
@@ -837,8 +823,6 @@
         $(<span class="attr">#[<span class="macro-nonterminal">$attrs</span>]</span>)*
         <span class="attr">#[repr(transparent)]
         </span><span class="macro-nonterminal">$vis </span><span class="kw">struct </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>(<span class="macro-nonterminal">$non_zero </span>$(, std::marker::PhantomData&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>);
-
-        <span class="macro-nonterminal">$</span><span class="macro">crate::impl_bytemuck!</span>{ <span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T </span>$(: ( $(<span class="macro-nonterminal">$bounds</span>)+ ) )<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>}
 
         <span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>Clone <span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
             <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{

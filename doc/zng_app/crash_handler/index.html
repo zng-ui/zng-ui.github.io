@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="App-process crash handler."><title>zng_app::crash_handler - Rust</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
+// Hides tagged `macro_rules!` macros from crate root.
+
+document.addEventListener('DOMContentLoaded', function () {
+    let is_front_pg = false;
+    document.querySelectorAll('h1').forEach(function (h) {
+        if (h.innerText.trimStart().startsWith("Crate ")) {
+            is_front_pg = true;
+        }
+    });
+
+    if (is_front_pg) {
+        // remove tagged macros.
+        let removes = document.querySelectorAll('span[data-del-macro-root]');
+        for (let remove of removes) {
+            let div = remove.parentElement.parentElement;
+            if (div.previousElementSibling != null) {
+                div.previousElementSibling.remove();
+            }
+            div.remove();
+        }
+    }
+
+    // remove empty macros section.
+    let title = document.getElementById('macros');
+    if (title != null && title.nextElementSibling.querySelector('a') == null) {
+        title.nextElementSibling.remove();
+        title.remove();
+
+        let side_anchor = document.querySelector('a[href="#macros"]');
+        if (side_anchor != null) {
+            side_anchor.parentElement.remove();
+        }
+    }
+})
+</script>
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng_app/index.html">zng_app</a><span class="version">0.3.5</span></h2></div><h2 class="location"><a href="#">Module crash_handler</a></h2><div class="sidebar-elems"><section><ul class="block"><li><a href="#structs">Structs</a></li><li><a href="#functions">Functions</a></li></ul></section><h2><a href="../index.html">In crate zng_app</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Module <a href="../index.html">zng_app</a>::<wbr><a class="mod" href="#">crash_handler</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_app/crash_handler.rs.html#1-1050">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>App-process crash handler.</p>
+<p>See the <code>zng::app::crash_handler</code> documentation for more details.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="struct" href="struct.BacktraceFrame.html" title="struct zng_app::crash_handler::BacktraceFrame">BacktraceFrame</a></div><div class="desc docblock-short">Represents a frame parsed from a stack backtrace.</div></li><li><div class="item-name"><a class="struct" href="struct.CrashArgs.html" title="struct zng_app::crash_handler::CrashArgs">CrashArgs</a></div><div class="desc docblock-short">Arguments for the crash handler dialog function.</div></li><li><div class="item-name"><a class="struct" href="struct.CrashConfig.html" title="struct zng_app::crash_handler::CrashConfig">CrashConfig</a></div><div class="desc docblock-short">Crash handler config.</div></li><li><div class="item-name"><a class="struct" href="struct.CrashError.html" title="struct zng_app::crash_handler::CrashError">CrashError</a></div><div class="desc docblock-short">Info about an app-process crash.</div></li><li><div class="item-name"><a class="struct" href="struct.CrashPanic.html" title="struct zng_app::crash_handler::CrashPanic">CrashPanic</a></div><div class="desc docblock-short">Panic parsed from a <code>stderr</code> dump.</div></li></ul><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><ul class="item-table"><li><div class="item-name"><a class="fn" href="fn.init.html" title="fn zng_app::crash_handler::init">init</a></div><div class="desc docblock-short">Starts the current app-process in a monitored instance.</div></li><li><div class="item-name"><a class="fn" href="fn.remove_ansi_csi.html" title="fn zng_app::crash_handler::remove_ansi_csi">remove_ansi_csi</a></div><div class="desc docblock-short">Remove ANSI escape sequences (CSI) from <code>s</code>.</div></li><li><div class="item-name"><a class="fn" href="fn.restart_count.html" title="fn zng_app::crash_handler::restart_count">restart_count</a></div><div class="desc docblock-short">Gets the number of crash restarts in the app-process.</div></li></ul></section></div></main></body></html>

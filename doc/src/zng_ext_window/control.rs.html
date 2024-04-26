@@ -2238,16 +2238,6 @@
 <a href="#2236" id="2236">2236</a>
 <a href="#2237" id="2237">2237</a>
 <a href="#2238" id="2238">2238</a>
-<a href="#2239" id="2239">2239</a>
-<a href="#2240" id="2240">2240</a>
-<a href="#2241" id="2241">2241</a>
-<a href="#2242" id="2242">2242</a>
-<a href="#2243" id="2243">2243</a>
-<a href="#2244" id="2244">2244</a>
-<a href="#2245" id="2245">2245</a>
-<a href="#2246" id="2246">2246</a>
-<a href="#2247" id="2247">2247</a>
-<a href="#2248" id="2248">2248</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -2280,8 +2270,8 @@
 <span class="kw">use </span>zng_layout::{
     context::{LayoutMetrics, LayoutPassId, DIRECTION_VAR, LAYOUT},
     unit::{
-        Dip, DipRect, DipSize, DipToPx, Factor, FactorUnits, Layout1d, Layout2d, Length, Ppi, Px, PxPoint, PxRect, PxSize, PxToDip,
-        PxVector, TimeUnits,
+        Dip, DipRect, DipSize, DipToPx, Factor, FactorUnits, Layout1d, Layout2d, Length, Ppi, Px, PxConstraints, PxPoint, PxRect, PxSize,
+        PxToDip, PxVector, TimeUnits,
     },
 };
 <span class="kw">use </span>zng_var::{AnyVar, ReadOnlyArcVar, Var, VarHandle, VarHandles};
@@ -4229,37 +4219,27 @@
 
         <span class="kw">let </span>auto_size = <span class="self">self</span>.vars.auto_size().get();
 
-        <span class="kw">let </span><span class="kw-2">mut </span>viewport_size = size;
-        <span class="kw">if </span>!skip_auto_size {
-            <span class="kw">if </span>auto_size.contains(AutoSize::CONTENT_WIDTH) {
-                viewport_size.width = max_size.width;
-            }
-            <span class="kw">if </span>auto_size.contains(AutoSize::CONTENT_HEIGHT) {
-                viewport_size.height = max_size.height;
-            }
-        }
-
         <span class="self">self</span>.layout_pass = <span class="self">self</span>.layout_pass.next();
 
         WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
-            <span class="kw">let </span>metrics = LayoutMetrics::new(scale_factor, viewport_size, root_font_size)
+            <span class="kw">let </span>metrics = LayoutMetrics::new(scale_factor, size, root_font_size)
                 .with_screen_ppi(screen_ppi)
                 .with_direction(DIRECTION_VAR.get());
             LAYOUT.with_root_context(<span class="self">self</span>.layout_pass, metrics, || {
                 <span class="kw">let </span><span class="kw-2">mut </span>root_cons = LAYOUT.constraints();
                 <span class="kw">if </span>!skip_auto_size {
                     <span class="kw">if </span>auto_size.contains(AutoSize::CONTENT_WIDTH) {
-                        root_cons = root_cons.with_unbounded_x();
+                        root_cons.x = PxConstraints::new_range(min_size.width, max_size.width);
                     }
                     <span class="kw">if </span>auto_size.contains(AutoSize::CONTENT_HEIGHT) {
-                        root_cons = root_cons.with_unbounded_y();
+                        root_cons.y = PxConstraints::new_range(min_size.height, max_size.height);
                     }
                 }
                 <span class="kw">let </span>desired_size = LAYOUT.with_constraints(root_cons, || {
                     WidgetLayout::with_root_widget(layout_widgets, |wl| <span class="self">self</span>.root.layout(wl))
                 });
 
-                <span class="kw">let </span><span class="kw-2">mut </span>final_size = viewport_size;
+                <span class="kw">let </span><span class="kw-2">mut </span>final_size = size;
                 <span class="kw">if </span>!skip_auto_size {
                     <span class="kw">if </span>auto_size.contains(AutoSize::CONTENT_WIDTH) {
                         final_size.width = desired_size.width.max(min_size.width).min(max_size.width);

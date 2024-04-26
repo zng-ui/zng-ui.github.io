@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["VERSION"],"enum":["RunError"],"fn":["bytes_channel","run_worker"],"struct":["IpcBytesReceiver","IpcBytesSender","IpcReceiver","IpcSender","RequestArgs","Worker","WorkerCrashError"],"trait":["IpcValue"]};

@@ -1384,13 +1384,13 @@
 
 <span class="doccomment">/// Default code block view.
 ///
-/// Is [`AnsiText!`] for the `ansi` language, and only raw text for the rest.
+/// Is [`AnsiText!`] for the `ansi` and `console` languages, and only raw text for the rest.
 ///
 /// See [`CODE_BLOCK_FN_VAR`] for more details.
 ///
 /// [`AnsiText!`]: struct@zng_wgt_ansi_text::AnsiText
 </span><span class="kw">pub fn </span>default_code_block_fn(args: CodeBlockFnArgs) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">if </span>args.lang == <span class="string">"ansi" </span>{
+    <span class="kw">if </span>[<span class="string">"ansi"</span>, <span class="string">"console"</span>].contains(<span class="kw-2">&amp;</span>args.lang.as_str()) {
         <span class="macro">zng_wgt_ansi_text::AnsiText! </span>{
             txt = args.txt;
             padding = <span class="number">6</span>;

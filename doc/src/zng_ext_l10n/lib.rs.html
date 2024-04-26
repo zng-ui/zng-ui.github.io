@@ -708,7 +708,7 @@
             <span class="macro">tracing::warn!</span>(<span class="string">"absolute path in `load_exe_dir`"</span>);
             <span class="self">self</span>.load_dir(dir);
         } <span class="kw">else </span>{
-            <span class="kw">match </span>std::env::current_exe() {
+            <span class="kw">match </span>std::env::current_exe().and_then(|p| p.canonicalize()) {
                 <span class="prelude-val">Ok</span>(p) =&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = p.parent() {
                         <span class="self">self</span>.load_dir(p.join(dir));

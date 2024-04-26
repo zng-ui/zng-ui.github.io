@@ -1413,6 +1413,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1375" id="1375">1375</a>
 <a href="#1376" id="1376">1376</a>
 <a href="#1377" id="1377">1377</a>
+<a href="#1378" id="1378">1378</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::TypeId,
     collections::{hash_map, HashMap},
@@ -2260,6 +2261,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`StateId`]: zng_state_map::StateId
     </span><span class="kw">pub struct </span>CommandMetaVarId&lt;T: (StateValue + VarValue)&gt;: StateId;
 }
+<span class="macro">zng_unique_id::impl_unique_id_bytemuck!</span>(CommandMetaVarId&lt;T: (StateValue + VarValue)&gt;);
 <span class="kw">impl</span>&lt;T: StateValue + VarValue&gt; CommandMetaVarId&lt;T&gt; {
     <span class="kw">fn </span>app(<span class="self">self</span>) -&gt; StateId&lt;ArcVar&lt;T&gt;&gt; {
         <span class="kw">let </span>id = <span class="self">self</span>.get();

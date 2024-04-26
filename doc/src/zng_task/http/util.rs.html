@@ -351,7 +351,7 @@
         TestTempDir { path: <span class="prelude-val">Some</span>(path) }
     }
     <span class="kw">fn </span>try_target() -&gt; <span class="prelude-ty">Option</span>&lt;std::path::PathBuf&gt; {
-        <span class="kw">let </span>p = std::env::current_exe().ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>p = std::env::current_exe().ok()<span class="question-mark">?</span>.canonicalize().ok()<span class="question-mark">?</span>;
         <span class="comment">// target/debug/deps/../../..
         </span><span class="kw">let </span>target = p.parent()<span class="question-mark">?</span>.parent()<span class="question-mark">?</span>.parent()<span class="question-mark">?</span>;
         <span class="kw">if </span>target.file_name()<span class="question-mark">?</span>.to_str()<span class="question-mark">? </span>!= <span class="string">"target" </span>{
