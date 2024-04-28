@@ -1556,6 +1556,38 @@
 <a href="#1554" id="1554">1554</a>
 <a href="#1555" id="1555">1555</a>
 <a href="#1556" id="1556">1556</a>
+<a href="#1557" id="1557">1557</a>
+<a href="#1558" id="1558">1558</a>
+<a href="#1559" id="1559">1559</a>
+<a href="#1560" id="1560">1560</a>
+<a href="#1561" id="1561">1561</a>
+<a href="#1562" id="1562">1562</a>
+<a href="#1563" id="1563">1563</a>
+<a href="#1564" id="1564">1564</a>
+<a href="#1565" id="1565">1565</a>
+<a href="#1566" id="1566">1566</a>
+<a href="#1567" id="1567">1567</a>
+<a href="#1568" id="1568">1568</a>
+<a href="#1569" id="1569">1569</a>
+<a href="#1570" id="1570">1570</a>
+<a href="#1571" id="1571">1571</a>
+<a href="#1572" id="1572">1572</a>
+<a href="#1573" id="1573">1573</a>
+<a href="#1574" id="1574">1574</a>
+<a href="#1575" id="1575">1575</a>
+<a href="#1576" id="1576">1576</a>
+<a href="#1577" id="1577">1577</a>
+<a href="#1578" id="1578">1578</a>
+<a href="#1579" id="1579">1579</a>
+<a href="#1580" id="1580">1580</a>
+<a href="#1581" id="1581">1581</a>
+<a href="#1582" id="1582">1582</a>
+<a href="#1583" id="1583">1583</a>
+<a href="#1584" id="1584">1584</a>
+<a href="#1585" id="1585">1585</a>
+<a href="#1586" id="1586">1586</a>
+<a href="#1587" id="1587">1587</a>
+<a href="#1588" id="1588">1588</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
@@ -1570,7 +1602,7 @@
 <span class="kw">use </span>zng_view_api::access::AccessNodeId;
 <span class="kw">use </span>zng_view_api::clipboard <span class="kw">as </span>clipboard_api;
 <span class="kw">use </span>zng_view_api::keyboard::NativeKeyCode;
-<span class="kw">use </span>zng_view_api::window::{FrameCapture, FrameRequest, FrameUpdateRequest};
+<span class="kw">use </span>zng_view_api::window::{FrameCapture, FrameRequest, FrameUpdateRequest, ResizeDirection, WindowButton};
 <span class="kw">use </span>zng_view_api::{
     config::ColorScheme,
     keyboard::{Key, KeyCode, KeyState},
@@ -1763,6 +1795,38 @@
 
     <span class="kw">fn </span>to_px(<span class="self">self</span>) -&gt; <span class="self">Self</span>::AsPx {
         PxSize::new(Px(<span class="self">self</span>.width <span class="kw">as </span>i32), Px(<span class="self">self</span>.height <span class="kw">as </span>i32))
+    }
+}
+<span class="kw">pub trait </span>ResizeDirectionToWinit {
+    <span class="kw">fn </span>to_winit(<span class="self">self</span>) -&gt; winit::window::ResizeDirection;
+}
+<span class="kw">impl </span>ResizeDirectionToWinit <span class="kw">for </span>ResizeDirection {
+    <span class="kw">fn </span>to_winit(<span class="self">self</span>) -&gt; winit::window::ResizeDirection {
+        <span class="kw">use </span>winit::window::ResizeDirection::<span class="kw-2">*</span>;
+        <span class="kw">match </span><span class="self">self </span>{
+            ResizeDirection::East =&gt; East,
+            ResizeDirection::North =&gt; North,
+            ResizeDirection::NorthEast =&gt; NorthEast,
+            ResizeDirection::NorthWest =&gt; NorthWest,
+            ResizeDirection::South =&gt; South,
+            ResizeDirection::SouthEast =&gt; SouthEast,
+            ResizeDirection::SouthWest =&gt; SouthWest,
+            ResizeDirection::West =&gt; West,
+        }
+    }
+}
+
+<span class="kw">pub trait </span>WindowButtonsToWinit {
+    <span class="kw">fn </span>to_winit(<span class="self">self</span>) -&gt; winit::window::WindowButtons;
+}
+<span class="kw">impl </span>WindowButtonsToWinit <span class="kw">for </span>WindowButton {
+    <span class="kw">fn </span>to_winit(<span class="self">self</span>) -&gt; winit::window::WindowButtons {
+        <span class="kw">let </span><span class="kw-2">mut </span>r = winit::window::WindowButtons::empty();
+        r.set(winit::window::WindowButtons::CLOSE, <span class="self">self</span>.contains(WindowButton::CLOSE));
+        r.set(winit::window::WindowButtons::MINIMIZE, <span class="self">self</span>.contains(WindowButton::MINIMIZE));
+        r.set(winit::window::WindowButtons::MAXIMIZE, <span class="self">self</span>.contains(WindowButton::MAXIMIZE));
+
+        r
     }
 }
 

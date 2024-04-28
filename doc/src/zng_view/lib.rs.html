@@ -2027,6 +2027,22 @@
 <a href="#2025" id="2025">2025</a>
 <a href="#2026" id="2026">2026</a>
 <a href="#2027" id="2027">2027</a>
+<a href="#2028" id="2028">2028</a>
+<a href="#2029" id="2029">2029</a>
+<a href="#2030" id="2030">2030</a>
+<a href="#2031" id="2031">2031</a>
+<a href="#2032" id="2032">2032</a>
+<a href="#2033" id="2033">2033</a>
+<a href="#2034" id="2034">2034</a>
+<a href="#2035" id="2035">2035</a>
+<a href="#2036" id="2036">2036</a>
+<a href="#2037" id="2037">2037</a>
+<a href="#2038" id="2038">2038</a>
+<a href="#2039" id="2039">2039</a>
+<a href="#2040" id="2040">2040</a>
+<a href="#2041" id="2041">2041</a>
+<a href="#2042" id="2042">2042</a>
+<a href="#2043" id="2043">2043</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3493,7 +3509,7 @@
     }
 
     <span class="kw">fn </span>open_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>config: WindowRequest) {
-        <span class="kw">let </span>_s = <span class="macro">tracing::debug_span!</span>(<span class="string">"open_window"</span>, <span class="question-mark">?</span>config).entered();
+        <span class="kw">let </span>_s = <span class="macro">tracing::debug_span!</span>(<span class="string">"open"</span>, <span class="question-mark">?</span>config).entered();
 
         config.state.clamp_size();
         config.enforce_kiosk();
@@ -3566,7 +3582,7 @@
         <span class="self">self</span>.notify(Event::HeadlessOpened(id, msg));
     }
 
-    <span class="kw">fn </span>close_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
+    <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
         <span class="kw">let </span>_s = <span class="macro">tracing::debug_span!</span>(<span class="string">"close_window"</span>, <span class="question-mark">?</span>id);
 
         <span class="self">self</span>.assert_started();
@@ -3643,7 +3659,7 @@
         <span class="self">self</span>.with_window(id, |w| w.set_focus_request(request), || ())
     }
 
-    <span class="kw">fn </span>focus_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
+    <span class="kw">fn </span>focus(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
         <span class="attr">#[cfg(windows)]
         </span>{
             <span class="self">self</span>.skip_ralt = <span class="self">self</span>.with_window(id, |w| w.focus(), || <span class="bool-val">false</span>);
@@ -3653,6 +3669,22 @@
         </span>{
             <span class="self">self</span>.with_window(id, |w| w.focus(), || ());
         }
+    }
+
+    <span class="kw">fn </span>drag_move(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
+        <span class="self">self</span>.with_window(id, |w| w.drag_move(), || ())
+    }
+
+    <span class="kw">fn </span>drag_resize(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, direction: zng_view_api::window::ResizeDirection) {
+        <span class="self">self</span>.with_window(id, |w| w.drag_resize(direction), || ())
+    }
+
+    <span class="kw">fn </span>set_enabled_buttons(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, buttons: zng_view_api::window::WindowButton) {
+        <span class="self">self</span>.with_window(id, |w| w.set_enabled_buttons(buttons), || ())
+    }
+
+    <span class="kw">fn </span>open_title_bar_context_menu(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, position: DipPoint) {
+        <span class="self">self</span>.with_window(id, |w| w.open_title_bar_context_menu(position), || ())
     }
 
     <span class="kw">fn </span>set_cursor(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, icon: <span class="prelude-ty">Option</span>&lt;CursorIcon&gt;) {

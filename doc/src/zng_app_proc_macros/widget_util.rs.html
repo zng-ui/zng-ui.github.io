@@ -584,6 +584,12 @@
 <a href="#582" id="582">582</a>
 <a href="#583" id="583">583</a>
 <a href="#584" id="584">584</a>
+<a href="#585" id="585">585</a>
+<a href="#586" id="586">586</a>
+<a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
+<a href="#589" id="589">589</a>
+<a href="#590" id="590">590</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fmt, mem};
 
 <span class="kw">use </span>proc_macro2::{Ident, Span, TokenStream, TokenTree};
@@ -600,6 +606,12 @@
     util::{<span class="self">self</span>, parse_outer_attrs, parse_punct_terminated2, path_span, peek_any3, Attributes, ErrorRecoverable, Errors},
     wgt_property_attrs::PropertyAttrData,
 };
+
+<span class="doccomment">/// Represents a property assign or when block.
+</span><span class="kw">pub enum </span>WgtItem {
+    Property(WgtProperty),
+    When(WgtWhen),
+}
 
 <span class="doccomment">/// Represents a property assign.
 </span><span class="kw">pub struct </span>WgtProperty {

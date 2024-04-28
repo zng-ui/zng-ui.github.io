@@ -715,7 +715,7 @@
 
 <span class="kw">use crate</span>::{
     util::{<span class="self">self</span>, parse_outer_attrs, ErrorRecoverable, Errors},
-    widget_util::{<span class="self">self</span>, WgtProperty, WgtWhen},
+    widget_util::{<span class="self">self</span>, WgtItem, WgtProperty, WgtWhen},
 };
 
 <span class="macro">lazy_static! </span>{
@@ -1084,14 +1084,12 @@
 
 <span class="kw">struct </span>Properties {
     errors: Errors,
-    properties: Vec&lt;WgtProperty&gt;,
-    whens: Vec&lt;WgtWhen&gt;,
+    items: Vec&lt;WgtItem&gt;,
 }
 <span class="kw">impl </span>Parse <span class="kw">for </span>Properties {
     <span class="kw">fn </span>parse(input: parse::ParseStream) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>errors = Errors::default();
-        <span class="kw">let </span><span class="kw-2">mut </span>properties = <span class="macro">vec!</span>[];
-        <span class="kw">let </span><span class="kw-2">mut </span>whens = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>items = <span class="macro">vec!</span>[];
 
         <span class="kw">while </span>!input.is_empty() {
             <span class="kw">let </span>attrs = parse_outer_attrs(input, <span class="kw-2">&amp;mut </span>errors);
@@ -1099,7 +1097,7 @@
             <span class="kw">if </span>input.peek(widget_util::keyword::when) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>when) = WgtWhen::parse(input, <span class="kw-2">&amp;mut </span>errors) {
                     when.attrs = util::Attributes::new(attrs);
-                    whens.push(when);
+                    items.push(WgtItem::When(when));
                 }
             } <span class="kw">else if </span>input.peek(<span class="macro">Token!</span>[<span class="kw">pub</span>])
                 || input.peek(Ident::peek_any)
@@ -1124,7 +1122,7 @@
                                 </span><span class="kw">let _ </span>= input.parse::&lt;TokenTree&gt;();
                             }
                         }
-                        properties.push(p);
+                        items.push(WgtItem::Property(p));
                     }
                     <span class="prelude-val">Err</span>(e) =&gt; {
                         <span class="kw">let </span>(recoverable, e) = e.recoverable();
@@ -1143,7 +1141,7 @@
             }
         }
 
-        <span class="prelude-val">Ok</span>(Properties { errors, properties, whens })
+        <span class="prelude-val">Ok</span>(Properties { errors, items })
     }
 }
 
@@ -1168,114 +1166,117 @@
 
     <span class="kw">let </span>core = util::crate_core();
 
-    <span class="kw">let </span><span class="kw-2">mut </span>set_props = <span class="macro">quote!</span>();
-    <span class="kw">for </span>prop <span class="kw">in </span><span class="kw-2">&amp;</span>p.properties {
-        set_props.extend(prop_assign(prop, <span class="kw-2">&amp;mut </span>p.errors, <span class="bool-val">false</span>));
-    }
+    <span class="kw">let </span><span class="kw-2">mut </span>items = <span class="macro">quote!</span>();
 
-    <span class="kw">let </span><span class="kw-2">mut </span>set_whens = <span class="macro">quote!</span>();
-    <span class="kw">for </span>when <span class="kw">in </span><span class="kw-2">&amp;</span>p.whens {
-        <span class="kw">let </span>when_expr = <span class="kw">match </span>syn::parse2::&lt;widget_util::WhenExpr&gt;(when.condition_expr.clone()) {
-            <span class="prelude-val">Ok</span>(w) =&gt; w,
-            <span class="prelude-val">Err</span>(e) =&gt; {
-                p.errors.push_syn(e);
-                <span class="kw">continue</span>;
+    <span class="kw">for </span>item <span class="kw">in </span><span class="kw-2">&amp;</span>p.items {
+        <span class="kw">match </span>item {
+            WgtItem::Property(prop) =&gt; {
+                items.extend(prop_assign(prop, <span class="kw-2">&amp;mut </span>p.errors, <span class="bool-val">false</span>));
             }
-        };
-
-        <span class="kw">let </span><span class="kw-2">mut </span>when_expr_vars = <span class="macro">quote!</span>();
-        <span class="kw">let </span><span class="kw-2">mut </span>inputs = <span class="macro">quote!</span>();
-        <span class="kw">for </span>((property, member), var) <span class="kw">in </span>when_expr.inputs {
-            <span class="kw">let </span>(property, generics) = widget_util::split_path_generics(property).unwrap();
-            <span class="kw">let </span>p_ident = <span class="kw-2">&amp;</span>property.segments.last().unwrap().ident;
-            <span class="kw">let </span>p_meta = <span class="macro">ident_spanned!</span>(p_ident.span()=&gt; <span class="string">"{p_ident}_"</span>);
-            <span class="kw">let </span>var_input = <span class="macro">ident!</span>(<span class="string">"{var}_in__"</span>);
-            <span class="kw">let </span>member_ident = <span class="macro">ident_spanned!</span>(property.span()=&gt; <span class="string">"__w_{member}__"</span>);
-
-            <span class="kw">let </span>member = <span class="kw">match </span>member {
-                widget_util::WhenInputMember::Named(ident) =&gt; {
-                    <span class="kw">let </span>ident_str = ident.to_string();
-                    <span class="macro">quote! </span>{
-                        Named(#ident_str)
+            WgtItem::When(when) =&gt; {
+                <span class="kw">let </span>when_expr = <span class="kw">match </span>syn::parse2::&lt;widget_util::WhenExpr&gt;(when.condition_expr.clone()) {
+                    <span class="prelude-val">Ok</span>(w) =&gt; w,
+                    <span class="prelude-val">Err</span>(e) =&gt; {
+                        p.errors.push_syn(e);
+                        <span class="kw">continue</span>;
                     }
-                }
-                widget_util::WhenInputMember::Index(i) =&gt; <span class="macro">quote! </span>{
-                    Index(#i)
-                },
-            };
-
-            <span class="macro">macro_rules! </span>quote_call {
-                (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
-                    <span class="kw">if </span>property.get_ident().is_some() {
-                        <span class="macro">quote! </span>{
-                            wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
-                        }
-                    } <span class="kw">else </span>{
-                        <span class="macro">quote! </span>{
-                            #property::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
-                        }
-                    }
-                }
-            }
-
-            <span class="kw">let </span>get_meta = <span class="macro">quote_call!</span>(#p_meta());
-
-            when_expr_vars.extend(<span class="macro">quote! </span>{
-                <span class="kw">let </span>(#var_input, #var) = {
-                    <span class="kw">let </span>meta__ = #get_meta
-                    meta__.allowed_in_when_expr();
-                    meta__.inputs #generics().#member_ident()
                 };
-            });
 
-            inputs.extend(<span class="macro">quote! </span>{
-                {
-                    <span class="kw">let </span>meta__ = #get_meta
-                    #core::widget::builder::WhenInput {
-                        property: meta__.id(),
-                        member: #core::widget::builder::WhenInputMember::#member,
-                        var: #var_input,
-                        property_default: meta__ .default_fn #generics(),
+                <span class="kw">let </span><span class="kw-2">mut </span>when_expr_vars = <span class="macro">quote!</span>();
+                <span class="kw">let </span><span class="kw-2">mut </span>inputs = <span class="macro">quote!</span>();
+                <span class="kw">for </span>((property, member), var) <span class="kw">in </span>when_expr.inputs {
+                    <span class="kw">let </span>(property, generics) = widget_util::split_path_generics(property).unwrap();
+                    <span class="kw">let </span>p_ident = <span class="kw-2">&amp;</span>property.segments.last().unwrap().ident;
+                    <span class="kw">let </span>p_meta = <span class="macro">ident_spanned!</span>(p_ident.span()=&gt; <span class="string">"{p_ident}_"</span>);
+                    <span class="kw">let </span>var_input = <span class="macro">ident!</span>(<span class="string">"{var}_in__"</span>);
+                    <span class="kw">let </span>member_ident = <span class="macro">ident_spanned!</span>(property.span()=&gt; <span class="string">"__w_{member}__"</span>);
+
+                    <span class="kw">let </span>member = <span class="kw">match </span>member {
+                        widget_util::WhenInputMember::Named(ident) =&gt; {
+                            <span class="kw">let </span>ident_str = ident.to_string();
+                            <span class="macro">quote! </span>{
+                                Named(#ident_str)
+                            }
+                        }
+                        widget_util::WhenInputMember::Index(i) =&gt; <span class="macro">quote! </span>{
+                            Index(#i)
+                        },
+                    };
+
+                    <span class="macro">macro_rules! </span>quote_call {
+                        (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
+                            <span class="kw">if </span>property.get_ident().is_some() {
+                                <span class="macro">quote! </span>{
+                                    wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
+                                }
+                            } <span class="kw">else </span>{
+                                <span class="macro">quote! </span>{
+                                    #property::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
+                                }
+                            }
+                        }
                     }
-                },
-            });
-        }
 
-        <span class="kw">let </span><span class="kw-2">mut </span>assigns = <span class="macro">quote!</span>();
-        <span class="kw">for </span>prop <span class="kw">in </span><span class="kw-2">&amp;</span>when.assigns {
-            assigns.extend(prop_assign(prop, <span class="kw-2">&amp;mut </span>p.errors, <span class="bool-val">true</span>));
-        }
+                    <span class="kw">let </span>get_meta = <span class="macro">quote_call!</span>(#p_meta());
 
-        <span class="kw">let </span>attrs = when.attrs.cfg_and_lints();
-        <span class="kw">let </span>expr = when_expr.expr;
-        <span class="kw">let </span>expr_str = <span class="kw-2">&amp;</span>when.condition_expr_str;
+                    when_expr_vars.extend(<span class="macro">quote! </span>{
+                        <span class="kw">let </span>(#var_input, #var) = {
+                            <span class="kw">let </span>meta__ = #get_meta
+                            meta__.allowed_in_when_expr();
+                            meta__.inputs #generics().#member_ident()
+                        };
+                    });
 
-        <span class="kw">let </span>box_expr = <span class="macro">quote_spanned! </span>{expr.span()=&gt;
-            {
-                <span class="kw">let </span>expr_var = #<span class="macro">core::var::expr_var!</span>{#expr};
-                #core::widget::builder::when_condition_expr_var(expr_var)
+                    inputs.extend(<span class="macro">quote! </span>{
+                        {
+                            <span class="kw">let </span>meta__ = #get_meta
+                            #core::widget::builder::WhenInput {
+                                property: meta__.id(),
+                                member: #core::widget::builder::WhenInputMember::#member,
+                                var: #var_input,
+                                property_default: meta__ .default_fn #generics(),
+                            }
+                        },
+                    });
+                }
+
+                <span class="kw">let </span><span class="kw-2">mut </span>assigns = <span class="macro">quote!</span>();
+                <span class="kw">for </span>prop <span class="kw">in </span><span class="kw-2">&amp;</span>when.assigns {
+                    assigns.extend(prop_assign(prop, <span class="kw-2">&amp;mut </span>p.errors, <span class="bool-val">true</span>));
+                }
+
+                <span class="kw">let </span>attrs = when.attrs.cfg_and_lints();
+                <span class="kw">let </span>expr = when_expr.expr;
+                <span class="kw">let </span>expr_str = <span class="kw-2">&amp;</span>when.condition_expr_str;
+
+                <span class="kw">let </span>box_expr = <span class="macro">quote_spanned! </span>{expr.span()=&gt;
+                    {
+                        <span class="kw">let </span>expr_var = #<span class="macro">core::var::expr_var!</span>{#expr};
+                        #core::widget::builder::when_condition_expr_var(expr_var)
+                    }
+                };
+
+                <span class="kw">let </span>source_location = widget_util::source_location(<span class="kw-2">&amp;</span>core, Span::call_site());
+                items.extend(<span class="macro">quote! </span>{
+                    #attrs {
+                        #when_expr_vars
+                        <span class="kw">let </span>inputs__ = std::boxed::Box::new([
+                            #inputs
+                        ]);
+                        #core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__).start_when_block(
+                            inputs__,
+                            #box_expr,
+                            #expr_str,
+                            #source_location,
+                        );
+
+                        #assigns
+
+                        #core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__).end_when_block();
+                    }
+                });
             }
-        };
-
-        <span class="kw">let </span>source_location = widget_util::source_location(<span class="kw-2">&amp;</span>core, Span::call_site());
-        set_whens.extend(<span class="macro">quote! </span>{
-            #attrs {
-                #when_expr_vars
-                <span class="kw">let </span>inputs__ = std::boxed::Box::new([
-                    #inputs
-                ]);
-                #core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__).start_when_block(
-                    inputs__,
-                    #box_expr,
-                    #expr_str,
-                    #source_location,
-                );
-
-                #assigns
-
-                #core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__).end_when_block();
-            }
-        });
+        }
     }
 
     <span class="kw">let </span>errors = p.errors;
@@ -1285,8 +1286,7 @@
             #errors
 
             #start
-            #set_props
-            #set_whens
+            #items
             #end
         }
     };

@@ -1492,6 +1492,30 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1454" id="1454">1454</a>
 <a href="#1455" id="1455">1455</a>
 <a href="#1456" id="1456">1456</a>
+<a href="#1457" id="1457">1457</a>
+<a href="#1458" id="1458">1458</a>
+<a href="#1459" id="1459">1459</a>
+<a href="#1460" id="1460">1460</a>
+<a href="#1461" id="1461">1461</a>
+<a href="#1462" id="1462">1462</a>
+<a href="#1463" id="1463">1463</a>
+<a href="#1464" id="1464">1464</a>
+<a href="#1465" id="1465">1465</a>
+<a href="#1466" id="1466">1466</a>
+<a href="#1467" id="1467">1467</a>
+<a href="#1468" id="1468">1468</a>
+<a href="#1469" id="1469">1469</a>
+<a href="#1470" id="1470">1470</a>
+<a href="#1471" id="1471">1471</a>
+<a href="#1472" id="1472">1472</a>
+<a href="#1473" id="1473">1473</a>
+<a href="#1474" id="1474">1474</a>
+<a href="#1475" id="1475">1475</a>
+<a href="#1476" id="1476">1476</a>
+<a href="#1477" id="1477">1477</a>
+<a href="#1478" id="1478">1478</a>
+<a href="#1479" id="1479">1479</a>
+<a href="#1480" id="1480">1480</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process connection and other types.
 
 </span><span class="kw">use </span>std::{
@@ -1525,7 +1549,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ipc::{IpcBytes, IpcBytesReceiver},
     window::{
         CursorIcon, FocusIndicator, FrameRequest, FrameUpdateRequest, HeadlessOpenData, HeadlessRequest, MonitorInfo, RenderMode,
-        VideoMode, WindowRequest, WindowStateAll,
+        ResizeDirection, VideoMode, WindowButton, WindowRequest, WindowStateAll,
     },
     Event, ViewProcessGen, ViewProcessOffline,
 };
@@ -2245,6 +2269,11 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.set_video_mode(id, mode))
     }
 
+    <span class="doccomment">/// Set enabled window chrome buttons.
+    </span><span class="kw">pub fn </span>set_enabled_buttons(<span class="kw-2">&amp;</span><span class="self">self</span>, buttons: WindowButton) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.set_enabled_buttons(id, buttons))
+    }
+
     <span class="doccomment">/// Reference the window renderer.
     </span><span class="kw">pub fn </span>renderer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ViewRenderer {
         ViewRenderer(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>))
@@ -2262,13 +2291,32 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// This request can steal focus from other apps disrupting the user, be careful with it.
     </span><span class="kw">pub fn </span>focus(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.focus_window(id))
+        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.focus(id))
     }
 
     <span class="doccomment">/// Sets the user attention request indicator, the indicator is cleared when the window is focused or
     /// if canceled by setting to `None`.
     </span><span class="kw">pub fn </span>set_focus_indicator(<span class="kw-2">&amp;</span><span class="self">self</span>, indicator: <span class="prelude-ty">Option</span>&lt;FocusIndicator&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.set_focus_indicator(id, indicator))
+    }
+
+    <span class="doccomment">/// Moves the window with the left mouse button until the button is released.
+    ///
+    /// There's no guarantee that this will work unless the left mouse button was pressed immediately before this function is called.
+    </span><span class="kw">pub fn </span>drag_move(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.drag_move(id))
+    }
+
+    <span class="doccomment">/// Resizes the window with the left mouse button until the button is released.
+    ///
+    /// There's no guarantee that this will work unless the left mouse button was pressed immediately before this function is called.
+    </span><span class="kw">pub fn </span>drag_resize(<span class="kw-2">&amp;</span><span class="self">self</span>, direction: ResizeDirection) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.drag_resize(id, direction))
+    }
+
+    <span class="doccomment">/// Open system title bar context menu.
+    </span><span class="kw">pub fn </span>open_title_bar_context_menu(<span class="kw-2">&amp;</span><span class="self">self</span>, position: DipPoint) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.open_title_bar_context_menu(id, position))
     }
 
     <span class="doccomment">/// Shows a native message dialog for the window.
@@ -2328,7 +2376,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">if </span>VIEW_PROCESS.is_available() {
             <span class="kw">let </span><span class="kw-2">mut </span>app = VIEW_PROCESS.handle_write(<span class="self">self</span>.app_id);
             <span class="kw">if </span><span class="self">self</span>.generation == app.process.generation() {
-                <span class="kw">let _ </span>= app.process.close_window(<span class="self">self</span>.id);
+                <span class="kw">let _ </span>= app.process.close(<span class="self">self</span>.id);
             }
         }
     }

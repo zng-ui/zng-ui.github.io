@@ -153,6 +153,28 @@
 <a href="#151" id="151">151</a>
 <a href="#152" id="152">152</a>
 <a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Commands that control the scoped window.
 
 </span><span class="kw">use </span>zng_app::{
@@ -165,6 +187,8 @@
 <span class="kw">use </span>zng_view_api::window::WindowState;
 
 <span class="kw">use crate</span>::{WindowVars, WINDOWS};
+
+<span class="kw">pub use </span>zng_view_api::window::ResizeDirection;
 
 <span class="macro">command! </span>{
     <span class="doccomment">/// Represents the window **close** action.
@@ -228,6 +252,27 @@
     ///
     /// If any IME preview is active close it without committing.
     </span><span class="kw">pub static </span>CANCEL_IME_CMD;
+
+    <span class="doccomment">/// Represents the window **drag-move** and **drag-resize** actions.
+    ///
+    /// There's no guarantee that this will work unless the left mouse button was pressed immediately before this command is called.
+    ///
+    /// # Parameter
+    ///
+    /// If this command is called without parameter the window will drag-move, if it is called with a [`ResizeDirection`] the
+    /// window will drag-resize.
+    </span><span class="kw">pub static </span>DRAG_MOVE_RESIZE_CMD;
+
+    <span class="doccomment">/// Represents the window **open title bar context menu** action.
+    ///
+    /// # Parameter
+    ///
+    /// This command supports an optional parameter, it can be a [`DipPoint`] or [`PxPoint`] that defines
+    /// the menu position.
+    ///
+    /// [`DipPoint`]: zng_layout::unit::DipPoint
+    /// [`PxPoint`]: zng_layout::unit::PxPoint
+    </span><span class="kw">pub static </span>OPEN_TITLE_BAR_CONTEXT_MENU_CMD;
 }
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>WindowCommands {
@@ -248,7 +293,6 @@
             restore_handle: RESTORE_CMD.scoped(window_id).subscribe(<span class="bool-val">false</span>),
             fullscreen_handle: FULLSCREEN_CMD.scoped(window_id).subscribe(<span class="bool-val">true</span>),
             exclusive_handle: EXCLUSIVE_FULLSCREEN_CMD.scoped(window_id).subscribe(<span class="bool-val">true</span>),
-
             close_handle: CLOSE_CMD.scoped(window_id).subscribe(<span class="bool-val">true</span>),
         }
     }

@@ -2238,6 +2238,50 @@
 <a href="#2236" id="2236">2236</a>
 <a href="#2237" id="2237">2237</a>
 <a href="#2238" id="2238">2238</a>
+<a href="#2239" id="2239">2239</a>
+<a href="#2240" id="2240">2240</a>
+<a href="#2241" id="2241">2241</a>
+<a href="#2242" id="2242">2242</a>
+<a href="#2243" id="2243">2243</a>
+<a href="#2244" id="2244">2244</a>
+<a href="#2245" id="2245">2245</a>
+<a href="#2246" id="2246">2246</a>
+<a href="#2247" id="2247">2247</a>
+<a href="#2248" id="2248">2248</a>
+<a href="#2249" id="2249">2249</a>
+<a href="#2250" id="2250">2250</a>
+<a href="#2251" id="2251">2251</a>
+<a href="#2252" id="2252">2252</a>
+<a href="#2253" id="2253">2253</a>
+<a href="#2254" id="2254">2254</a>
+<a href="#2255" id="2255">2255</a>
+<a href="#2256" id="2256">2256</a>
+<a href="#2257" id="2257">2257</a>
+<a href="#2258" id="2258">2258</a>
+<a href="#2259" id="2259">2259</a>
+<a href="#2260" id="2260">2260</a>
+<a href="#2261" id="2261">2261</a>
+<a href="#2262" id="2262">2262</a>
+<a href="#2263" id="2263">2263</a>
+<a href="#2264" id="2264">2264</a>
+<a href="#2265" id="2265">2265</a>
+<a href="#2266" id="2266">2266</a>
+<a href="#2267" id="2267">2267</a>
+<a href="#2268" id="2268">2268</a>
+<a href="#2269" id="2269">2269</a>
+<a href="#2270" id="2270">2270</a>
+<a href="#2271" id="2271">2271</a>
+<a href="#2272" id="2272">2272</a>
+<a href="#2273" id="2273">2273</a>
+<a href="#2274" id="2274">2274</a>
+<a href="#2275" id="2275">2275</a>
+<a href="#2276" id="2276">2276</a>
+<a href="#2277" id="2277">2277</a>
+<a href="#2278" id="2278">2278</a>
+<a href="#2279" id="2279">2279</a>
+<a href="#2280" id="2280">2280</a>
+<a href="#2281" id="2281">2281</a>
+<a href="#2282" id="2282">2282</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -2270,8 +2314,8 @@
 <span class="kw">use </span>zng_layout::{
     context::{LayoutMetrics, LayoutPassId, DIRECTION_VAR, LAYOUT},
     unit::{
-        Dip, DipRect, DipSize, DipToPx, Factor, FactorUnits, Layout1d, Layout2d, Length, Ppi, Px, PxConstraints, PxPoint, PxRect, PxSize,
-        PxToDip, PxVector, TimeUnits,
+        Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Layout1d, Layout2d, Length, Ppi, Px, PxConstraints, PxPoint, PxRect,
+        PxSize, PxToDip, PxVector, TimeUnits,
     },
 };
 <span class="kw">use </span>zng_var::{AnyVar, ReadOnlyArcVar, Var, VarHandle, VarHandles};
@@ -2346,6 +2390,8 @@
     render_access_update: <span class="prelude-ty">Option</span>&lt;WidgetInfoTree&gt;, <span class="comment">// previous info tree
     </span>ime_info: <span class="prelude-ty">Option</span>&lt;ImeInfo&gt;,
     cancel_ime_handle: CommandHandle,
+    open_title_menu_handle: CommandHandle,
+    drag_move_handle: CommandHandle,
 }
 <span class="kw">impl </span>HeadedCtrl {
     <span class="kw">pub fn </span>new(vars: <span class="kw-2">&amp;</span>WindowVars, commands: WindowCommands, content: WindowRoot) -&gt; <span class="self">Self </span>{
@@ -2376,6 +2422,8 @@
             render_access_update: <span class="prelude-val">None</span>,
             ime_info: <span class="prelude-val">None</span>,
             cancel_ime_handle: CommandHandle::dummy(),
+            open_title_menu_handle: CommandHandle::dummy(),
+            drag_move_handle: CommandHandle::dummy(),
         }
     }
 
@@ -2535,6 +2583,12 @@
                 <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
                     <span class="kw">let _</span>: Ignore = view.set_resizable(resizable);
                 });
+            }
+
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(buttons) = <span class="self">self</span>.vars.enabled_buttons().get_new() {
+                <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
+                    <span class="kw">let _</span>: Ignore = view.set_enabled_buttons(buttons);
+                })
             }
 
             <span class="kw">if </span>prev_state != new_state {
@@ -2911,6 +2965,8 @@
 
                 <span class="self">self</span>.window = <span class="prelude-val">Some</span>(args.window.clone());
                 <span class="self">self</span>.cancel_ime_handle = <span class="kw">super</span>::cmd::CANCEL_IME_CMD.scoped(WINDOW.id()).subscribe(<span class="bool-val">true</span>);
+                <span class="self">self</span>.open_title_menu_handle = <span class="kw">super</span>::cmd::OPEN_TITLE_BAR_CONTEXT_MENU_CMD.scoped(WINDOW.id()).subscribe(<span class="bool-val">true</span>);
+                <span class="self">self</span>.drag_move_handle = <span class="kw">super</span>::cmd::DRAG_MOVE_RESIZE_CMD.scoped(WINDOW.id()).subscribe(<span class="bool-val">true</span>);
 
                 <span class="self">self</span>.vars.<span class="number">0</span>.render_mode.set(args.data.render_mode);
                 <span class="self">self</span>.vars.state().set(args.data.state.state);
@@ -3008,6 +3064,8 @@
 
                     <span class="self">self</span>.window = <span class="prelude-val">None</span>;
                     <span class="self">self</span>.cancel_ime_handle = CommandHandle::dummy();
+                    <span class="self">self</span>.open_title_menu_handle = CommandHandle::dummy();
+                    <span class="self">self</span>.drag_move_handle = CommandHandle::dummy();
                     <span class="self">self</span>.waiting_view = <span class="bool-val">false</span>;
                     <span class="self">self</span>.delayed_view_updates = <span class="macro">vec!</span>[];
                     <span class="self">self</span>.respawned = <span class="bool-val">true</span>;
@@ -3029,7 +3087,34 @@
             <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = <span class="kw-2">&amp;</span><span class="self">self</span>.window {
                 <span class="kw">let _ </span>= w.set_ime_area(<span class="prelude-val">None</span>);
             }
-        }
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = <span class="kw">super</span>::cmd::DRAG_MOVE_RESIZE_CMD.scoped(WINDOW.id()).on(update) {
+            <span class="kw">let </span>r = args.handle_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>.drag_move_handle, |args| args.param::&lt;<span class="kw">crate</span>::cmd::ResizeDirection&gt;().copied());
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = r {
+                <span class="self">self</span>.view_task(Box::new(<span class="kw">move </span>|w| {
+                    <span class="kw">let _ </span>= <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = r {
+                        w.unwrap().drag_resize(r)
+                    } <span class="kw">else </span>{
+                        w.unwrap().drag_move()
+                    };
+                }));
+            }
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = <span class="kw">super</span>::cmd::OPEN_TITLE_BAR_CONTEXT_MENU_CMD.scoped(WINDOW.id()).on(update) {
+            <span class="kw">let </span>pos = args.handle_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>.open_title_menu_handle, |args| {
+                <span class="kw">let </span>pos = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = args.param::&lt;DipPoint&gt;() {
+                    <span class="kw-2">*</span>p
+                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(p) = args.param::&lt;PxPoint&gt;() {
+                    p.to_dip(<span class="self">self</span>.vars.scale_factor().get())
+                } <span class="kw">else </span>{
+                    DipPoint::splat(Dip::new(<span class="number">24</span>))
+                };
+                pos
+            });
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(pos) = pos {
+                <span class="self">self</span>.view_task(Box::new(<span class="kw">move </span>|w| {
+                    <span class="kw">let _ </span>= w.unwrap().open_title_bar_context_menu(pos);
+                }));
+            }
+        };
     }
 
     <span class="kw">pub fn </span>ui_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;</span>EventUpdate) {
@@ -3299,6 +3384,7 @@
             always_on_top: <span class="self">self</span>.vars.always_on_top().get(),
             movable: <span class="self">self</span>.vars.movable().get(),
             resizable: <span class="self">self</span>.vars.resizable().get(),
+            enabled_buttons: <span class="self">self</span>.vars.enabled_buttons().get(),
             icon: <span class="self">self
                 </span>.img_res
                 .icon_var
@@ -3424,6 +3510,7 @@
             always_on_top: <span class="self">self</span>.vars.always_on_top().get(),
             movable: <span class="self">self</span>.vars.movable().get(),
             resizable: <span class="self">self</span>.vars.resizable().get(),
+            enabled_buttons: <span class="self">self</span>.vars.enabled_buttons().get(),
             icon: <span class="self">self
                 </span>.img_res
                 .icon_var
@@ -3528,6 +3615,7 @@
     <span class="kw">pub fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.content.close();
         <span class="self">self</span>.window = <span class="prelude-val">None</span>;
+        <span class="self">self</span>.cancel_ime_handle = CommandHandle::dummy();
         <span class="self">self</span>.cancel_ime_handle = CommandHandle::dummy();
     }
 

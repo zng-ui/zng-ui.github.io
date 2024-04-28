@@ -514,6 +514,22 @@
 <a href="#512" id="512">512</a>
 <a href="#513" id="513">513</a>
 <a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -574,7 +590,7 @@
 <span class="kw">use </span>image::{ImageId, ImageMaskMode, ImageRequest, ImageTextureId};
 <span class="kw">use </span>ipc::{IpcBytes, IpcBytesReceiver};
 <span class="kw">use </span>window::WindowId;
-<span class="kw">use </span>zng_unit::{DipRect, DipSize, Factor, Px, PxRect};
+<span class="kw">use </span>zng_unit::{DipPoint, DipRect, DipSize, Factor, Px, PxRect};
 
 <span class="doccomment">/// Packaged API request.
 </span><span class="attr">#[derive(Debug)]
@@ -803,7 +819,7 @@
     <span class="doccomment">/// Close the window or headless surface.
     ///
     /// All documents associated with the window or surface are also closed.
-    </span><span class="kw">pub fn </span>close_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId);
+    </span><span class="kw">pub fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId);
 
     <span class="doccomment">/// Set window title.
     </span><span class="kw">pub fn </span>set_title(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, title: Txt);
@@ -847,13 +863,29 @@
     /// if canceled by setting to `None`.
     </span><span class="kw">pub fn </span>set_focus_indicator(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, indicator: <span class="prelude-ty">Option</span>&lt;window::FocusIndicator&gt;);
 
+    <span class="doccomment">/// Set enabled window chrome buttons.
+    </span><span class="kw">pub fn </span>set_enabled_buttons(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, buttons: window::WindowButton);
+
     <span class="doccomment">/// Brings the window to the front and sets input focus.
     ///
     /// Sends an [`Event::FocusChanged`] if the window is focused, the request can be ignored by the window manager, or if the
     /// window is not visible, minimized or already focused.
     ///
     /// This request can steal focus from other apps disrupting the user, be careful with it.
-    </span><span class="kw">pub fn </span>focus_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId);
+    </span><span class="kw">pub fn </span>focus(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId);
+
+    <span class="doccomment">/// Moves the window with the left mouse button until the button is released.
+    ///
+    /// There's no guarantee that this will work unless the left mouse button was pressed immediately before this function is called.
+    </span><span class="kw">pub fn </span>drag_move(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId);
+
+    <span class="doccomment">/// Resizes the window with the left mouse button until the button is released.
+    ///
+    /// There's no guarantee that this will work unless the left mouse button was pressed immediately before this function is called.
+    </span><span class="kw">pub fn </span>drag_resize(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, direction: window::ResizeDirection);
+
+    <span class="doccomment">/// Open the system title bar context menu.
+    </span><span class="kw">pub fn </span>open_title_bar_context_menu(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, position: DipPoint);
 
     <span class="doccomment">/// Cache an image resource.
     ///
