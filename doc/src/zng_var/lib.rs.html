@@ -3048,7 +3048,7 @@
     ///
     /// You can get the current capabilities of a var by using the [`AnyVar::capabilities`] method.
     </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-    </span><span class="kw">pub struct </span>VarCapabilities: u8 {
+    </span><span class="kw">pub struct </span>VarCapability: u8 {
         <span class="doccomment">/// Var value can change.
         ///
         /// If this is set the [`AnyVar::is_new`] can be `true` in some updates, a variable can `NEW`
@@ -3069,7 +3069,7 @@
         </span><span class="kw">const </span>CAPS_CHANGE = <span class="number">0b1000_0000</span>;
     }
 }
-<span class="kw">impl </span>VarCapabilities {
+<span class="kw">impl </span>VarCapability {
     <span class="doccomment">/// Remove only the `MODIFY` flag without removing `NEW`.
     </span><span class="kw">pub fn </span>as_read_only(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::from_bits_truncate(<span class="self">self</span>.bits() &amp; <span class="number">0b1111_1110</span>)
@@ -3093,11 +3093,11 @@
 
 <span class="doccomment">/// Error when an attempt to modify a variable without the [`MODIFY`] capability is made.
 ///
-/// [`MODIFY`]: VarCapabilities::MODIFY
+/// [`MODIFY`]: VarCapability::MODIFY
 </span><span class="attr">#[derive(Debug, Clone, Copy)]
 </span><span class="kw">pub struct </span>VarIsReadOnlyError {
     <span class="doccomment">/// Variable capabilities when the request was made.
-    </span><span class="kw">pub </span>capabilities: VarCapabilities,
+    </span><span class="kw">pub </span>capabilities: VarCapability,
 }
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>VarIsReadOnlyError {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
@@ -3353,7 +3353,7 @@
     </span><span class="kw">fn </span>is_contextual(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool;
 
     <span class="doccomment">/// Flags that indicate what operations the variable is capable of in this update.
-    </span><span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapabilities;
+    </span><span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapability;
 
     <span class="doccomment">/// Gets if the [`last_update`] is the current update, meaning the variable value just changed.
     ///
@@ -3392,7 +3392,7 @@
     ///
     /// If the variable does not have [`MODIFY`] capability the value returned is undefined.
     ///
-    /// [`MODIFY`]: VarCapabilities::MODIFY
+    /// [`MODIFY`]: VarCapability::MODIFY
     /// [`VARS.current_modify`]: VARS::current_modify
     /// [`VARS.animate`]: VARS::animate
     </span><span class="kw">fn </span>modify_importance(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize;
@@ -5612,7 +5612,7 @@
     <span class="kw">let </span>update_output = Mutex::new(update_output);
     input.hook_any(Box::new(<span class="kw">move </span>|args| {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(output) = wk_output.upgrade() {
-            <span class="kw">if </span>output.capabilities().contains(VarCapabilities::MODIFY) {
+            <span class="kw">if </span>output.capabilities().contains(VarCapability::MODIFY) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = args.downcast_value::&lt;I&gt;() {
                     update_output.lock()(value, args, output);
                 }

@@ -3035,7 +3035,7 @@ document.addEventListener('DOMContentLoaded', function () {
 };
 <span class="kw">use </span>zng_task::rayon::iter::{ParallelBridge, ParallelIterator};
 <span class="kw">use </span>zng_unique_id::{impl_unique_id_bytemuck, unique_id_32};
-<span class="kw">use </span>zng_var::{impl_from_and_into_var, Var, VarCapabilities, VarValue};
+<span class="kw">use </span>zng_var::{impl_from_and_into_var, Var, VarCapability, VarValue};
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
     config::FontAntiAliasing,
@@ -5891,7 +5891,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`bind_var`]: Self::bind_var
     </span><span class="kw">pub fn </span>bind_var_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; FrameValue&lt;T&gt; {
-        <span class="kw">if </span>var.capabilities().contains(VarCapabilities::NEW) {
+        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
             FrameValue::Bind {
                 id: <span class="self">self</span>.to_wr_child(child_index),
                 value: var.with(map),
@@ -5911,7 +5911,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`bind_var_mapped`]: Self::bind_var_mapped
     </span><span class="kw">pub fn </span>bind_var_mapped_child&lt;VT: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;VT&gt;, value: T) -&gt; FrameValue&lt;T&gt; {
-        <span class="kw">if </span>var.capabilities().contains(VarCapabilities::NEW) {
+        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
             FrameValue::Bind {
                 id: <span class="self">self</span>.to_wr_child(child_index),
                 value,
@@ -5936,7 +5936,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;VT&gt;,
         map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-        <span class="kw">if </span>var.capabilities().contains(VarCapabilities::NEW) {
+        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
             <span class="prelude-val">Some</span>(FrameValueUpdate {
                 id: <span class="self">self</span>.to_wr_child(child_index),
                 value: var.with(map),
@@ -5956,7 +5956,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`update_var_mapped`]: Self::update_var_mapped
     </span><span class="kw">pub fn </span>update_var_mapped_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span><span class="kw">impl </span>Var&lt;VT&gt;, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-        <span class="kw">if </span>var.capabilities().contains(VarCapabilities::NEW) {
+        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
             <span class="prelude-val">Some</span>(FrameValueUpdate {
                 id: <span class="self">self</span>.to_wr_child(child_index),
                 value,

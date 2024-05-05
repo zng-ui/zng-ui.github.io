@@ -647,7 +647,7 @@
             .iter()
             .enumerate()
             .filter_map(|(i, var)| {
-                <span class="kw">if </span>var.capabilities().contains(VarCapabilities::NEW) {
+                <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
                     <span class="kw">let </span>wk_merge = wk_merge.clone();
                     <span class="kw">let </span>handle = var.hook_any(Box::new(<span class="kw">move </span>|args| {
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(rc_merge) = wk_merge.upgrade() {
@@ -763,11 +763,11 @@
         <span class="bool-val">false </span><span class="comment">// if inputs are contextual Self::new uses a ContextualizedVar wrapper.
     </span>}
 
-    <span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapabilities {
+    <span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapability {
         <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.m.lock().inputs.is_empty() {
-            VarCapabilities::empty()
+            VarCapability::empty()
         } <span class="kw">else </span>{
-            VarCapabilities::NEW
+            VarCapability::NEW
         }
     }
 

@@ -2043,6 +2043,57 @@
 <a href="#2041" id="2041">2041</a>
 <a href="#2042" id="2042">2042</a>
 <a href="#2043" id="2043">2043</a>
+<a href="#2044" id="2044">2044</a>
+<a href="#2045" id="2045">2045</a>
+<a href="#2046" id="2046">2046</a>
+<a href="#2047" id="2047">2047</a>
+<a href="#2048" id="2048">2048</a>
+<a href="#2049" id="2049">2049</a>
+<a href="#2050" id="2050">2050</a>
+<a href="#2051" id="2051">2051</a>
+<a href="#2052" id="2052">2052</a>
+<a href="#2053" id="2053">2053</a>
+<a href="#2054" id="2054">2054</a>
+<a href="#2055" id="2055">2055</a>
+<a href="#2056" id="2056">2056</a>
+<a href="#2057" id="2057">2057</a>
+<a href="#2058" id="2058">2058</a>
+<a href="#2059" id="2059">2059</a>
+<a href="#2060" id="2060">2060</a>
+<a href="#2061" id="2061">2061</a>
+<a href="#2062" id="2062">2062</a>
+<a href="#2063" id="2063">2063</a>
+<a href="#2064" id="2064">2064</a>
+<a href="#2065" id="2065">2065</a>
+<a href="#2066" id="2066">2066</a>
+<a href="#2067" id="2067">2067</a>
+<a href="#2068" id="2068">2068</a>
+<a href="#2069" id="2069">2069</a>
+<a href="#2070" id="2070">2070</a>
+<a href="#2071" id="2071">2071</a>
+<a href="#2072" id="2072">2072</a>
+<a href="#2073" id="2073">2073</a>
+<a href="#2074" id="2074">2074</a>
+<a href="#2075" id="2075">2075</a>
+<a href="#2076" id="2076">2076</a>
+<a href="#2077" id="2077">2077</a>
+<a href="#2078" id="2078">2078</a>
+<a href="#2079" id="2079">2079</a>
+<a href="#2080" id="2080">2080</a>
+<a href="#2081" id="2081">2081</a>
+<a href="#2082" id="2082">2082</a>
+<a href="#2083" id="2083">2083</a>
+<a href="#2084" id="2084">2084</a>
+<a href="#2085" id="2085">2085</a>
+<a href="#2086" id="2086">2086</a>
+<a href="#2087" id="2087">2087</a>
+<a href="#2088" id="2088">2088</a>
+<a href="#2089" id="2089">2089</a>
+<a href="#2090" id="2090">2090</a>
+<a href="#2091" id="2091">2091</a>
+<a href="#2092" id="2092">2092</a>
+<a href="#2093" id="2093">2093</a>
+<a href="#2094" id="2094">2094</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2056,8 +2107,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.4.0"
-//! zng-view = "0.2.9"
+//! zng = "0.5.0"
+//! zng-view = "0.3.0"
 //! ```
 //!
 //! Then call [`init`] before any other code in `main` to setup a view-process that uses
@@ -2160,7 +2211,7 @@
 <span class="kw">use </span>util::WinitToPx;
 <span class="kw">use </span>winit::{
     event::{DeviceEvent, WindowEvent},
-    event_loop::{ControlFlow, EventLoopBuilder, EventLoopProxy, EventLoopWindowTarget},
+    event_loop::{ActiveEventLoop, EventLoop, EventLoopProxy},
     keyboard::ModifiersState,
     monitor::MonitorHandle,
     platform::modifier_supplement::KeyEventExtModifierSupplement,
@@ -2282,7 +2333,7 @@
 
 <span class="doccomment">/// Like [`run_same_process`] but with custom API extensions.
 </span><span class="kw">pub fn </span>run_same_process_extended(run_app: <span class="kw">impl </span>FnOnce() + Send + <span class="lifetime">'static</span>, ext: <span class="kw">fn</span>() -&gt; ViewExtensions) {
-    thread::Builder::new().name(<span class="string">"app"</span>.to_owned()).spawn(run_app).unwrap();
+    <span class="kw">let </span>r = thread::Builder::new().name(<span class="string">"app"</span>.to_owned()).spawn(run_app).unwrap();
 
     <span class="kw">let </span>config = ViewConfig::wait_same_process();
     config.assert_version(<span class="bool-val">true</span>);
@@ -2293,6 +2344,10 @@
         App::run_headless(c, ext());
     } <span class="kw">else </span>{
         App::run_headed(c, ext());
+    }
+
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(p) = r.join() {
+        std::panic::resume_unwind(p);
     }
 }
 
@@ -2334,7 +2389,8 @@
     exts: ViewExtensions,
 
     gl_manager: GlContextManager,
-    window_target: <span class="kw-2">*const </span>EventLoopWindowTarget&lt;AppEvent&gt;,
+    winit_loop: util::WinitEventLoop,
+    idle: IdleTrace,
     app_sender: AppEventSender,
     request_recv: flume::Receiver&lt;RequestEvent&gt;,
 
@@ -2389,288 +2445,10 @@
             .finish_non_exhaustive()
     }
 }
-<span class="kw">impl </span>App {
-    <span class="kw">fn </span>init_device_events(<span class="kw-2">&amp;mut </span><span class="self">self</span>, enabled: bool, t: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt;&gt;) {
-        <span class="self">self</span>.device_events = enabled;
+<span class="kw">impl </span>winit::application::ApplicationHandler&lt;AppEvent&gt; <span class="kw">for </span>App {
+    <span class="kw">fn </span>resumed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop) {}
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = t {
-            <span class="kw">if </span>enabled {
-                t.listen_device_events(winit::event_loop::DeviceEvents::Always);
-            } <span class="kw">else </span>{
-                t.listen_device_events(winit::event_loop::DeviceEvents::Never);
-            }
-        } <span class="kw">else </span>{
-            <span class="self">self</span>.device_events = <span class="bool-val">false</span>;
-        }
-    }
-
-    <span class="kw">pub fn </span>run_headless(c: ipc::ViewChannels, ext: ViewExtensions) {
-        <span class="macro">tracing::info!</span>(<span class="string">"running headless view-process"</span>);
-
-        gl::warmup();
-
-        <span class="kw">let </span>(app_sender, app_receiver) = flume::unbounded();
-        <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
-        <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
-            AppEventSender::Headless(app_sender, request_sender),
-            c.response_sender,
-            c.event_sender,
-            request_receiver,
-            ext,
-        );
-        app.headless = <span class="bool-val">true</span>;
-
-        <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
-        <span class="kw">let </span>event_loop = EventLoopBuilder::&lt;AppEvent&gt;::with_user_event().build().unwrap();
-
-        drop(winit_span);
-
-        <span class="kw">let </span>window_target: <span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt; = <span class="kw-2">&amp;</span>event_loop;
-        app.window_target = window_target <span class="kw">as </span><span class="kw-2">*const </span><span class="kw">_</span>;
-
-        app.start_receiving(c.request_receiver);
-
-        <span class="lifetime">'app_loop</span>: <span class="kw">while </span>!app.exited {
-            <span class="kw">match </span>app_receiver.recv() {
-                <span class="prelude-val">Ok</span>(app_ev) =&gt; <span class="kw">match </span>app_ev {
-                    AppEvent::Request =&gt; {
-                        <span class="kw">while let </span><span class="prelude-val">Ok</span>(request) = app.request_recv.try_recv() {
-                            <span class="kw">match </span>request {
-                                RequestEvent::Request(request) =&gt; {
-                                    <span class="kw">let </span>response = app.respond(request);
-                                    <span class="kw">if </span>response.must_be_send() &amp;&amp; app.response_sender.send(response).is_err() {
-                                        app.exited = <span class="bool-val">true</span>;
-                                        <span class="kw">break </span><span class="lifetime">'app_loop</span>;
-                                    }
-                                }
-                                RequestEvent::FrameReady(id, msg) =&gt; {
-                                    <span class="kw">let </span>r = <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = app.surfaces.iter_mut().find(|s| s.id() == id) {
-                                        <span class="prelude-val">Some</span>(s.on_frame_ready(msg, <span class="kw-2">&amp;mut </span>app.image_cache))
-                                    } <span class="kw">else </span>{
-                                        <span class="prelude-val">None
-                                    </span>};
-                                    <span class="kw">if let </span><span class="prelude-val">Some</span>((frame_id, image)) = r {
-                                        app.notify(Event::FrameRendered(EventFrameRendered {
-                                            window: id,
-                                            frame: frame_id,
-                                            frame_image: image,
-                                        }));
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    AppEvent::Notify(ev) =&gt; {
-                        <span class="kw">if </span>app.event_sender.send(ev).is_err() {
-                            app.exited = <span class="bool-val">true</span>;
-                            <span class="kw">break </span><span class="lifetime">'app_loop</span>;
-                        }
-                    }
-                    AppEvent::RefreshMonitors =&gt; {
-                        <span class="macro">panic!</span>(<span class="string">"no monitor info in headless mode"</span>)
-                    }
-                    AppEvent::WinitFocused(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {
-                        <span class="macro">panic!</span>(<span class="string">"no winit event loop in headless mode"</span>)
-                    }
-                    AppEvent::ParentProcessExited =&gt; {
-                        app.exited = <span class="bool-val">true</span>;
-                        <span class="kw">break </span><span class="lifetime">'app_loop</span>;
-                    }
-                    AppEvent::ImageLoaded(data) =&gt; {
-                        app.image_cache.loaded(data);
-                    }
-                    AppEvent::MonitorPowerChanged =&gt; {} <span class="comment">// headless
-                    </span>AppEvent::InitDeviceEvents(enabled) =&gt; {
-                        app.init_device_events(enabled, <span class="prelude-val">None</span>);
-                    }
-                },
-                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                    app.exited = <span class="bool-val">true</span>;
-                    <span class="kw">break</span>;
-                }
-            }
-        }
-    }
-
-    <span class="kw">pub fn </span>run_headed(c: ipc::ViewChannels, ext: ViewExtensions) {
-        <span class="macro">tracing::info!</span>(<span class="string">"running headed view-process"</span>);
-
-        gl::warmup();
-
-        <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
-        <span class="kw">let </span>event_loop = EventLoopBuilder::with_user_event().build().unwrap();
-        drop(winit_span);
-        <span class="kw">let </span>app_sender = event_loop.create_proxy();
-
-        <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
-        <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
-            AppEventSender::Headed(app_sender, request_sender),
-            c.response_sender,
-            c.event_sender,
-            request_receiver,
-            ext,
-        );
-        app.start_receiving(c.request_receiver);
-
-        <span class="attr">#[cfg(windows)]
-        </span>config::spawn_listener(app.app_sender.clone());
-
-        <span class="kw">struct </span>IdleTrace(<span class="prelude-ty">Option</span>&lt;tracing::span::EnteredSpan&gt;);
-        <span class="kw">impl </span>IdleTrace {
-            <span class="kw">pub fn </span>enter(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-                <span class="self">self</span>.<span class="number">0 </span>= <span class="prelude-val">Some</span>(<span class="macro">tracing::trace_span!</span>(<span class="string">"&lt;winit-idle&gt;"</span>).entered());
-            }
-            <span class="kw">pub fn </span>exit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-                <span class="self">self</span>.<span class="number">0 </span>= <span class="prelude-val">None</span>;
-            }
-        }
-        <span class="kw">let </span><span class="kw-2">mut </span>idle = IdleTrace(<span class="prelude-val">None</span>);
-        idle.enter();
-
-        event_loop
-            .run(<span class="kw">move </span>|event, target| {
-                idle.exit();
-
-                app.window_target = target;
-                target.set_control_flow(ControlFlow::Wait);
-
-                <span class="kw">if </span>app.exited {
-                    target.exit();
-                } <span class="kw">else </span>{
-                    <span class="kw">use </span>winit::event::Event <span class="kw">as </span>WEvent;
-                    <span class="kw">match </span>event {
-                        WEvent::NewEvents(<span class="kw">_</span>) =&gt; {}
-                        WEvent::WindowEvent { window_id, event } =&gt; app.on_window_event(window_id, event),
-                        WEvent::DeviceEvent { device_id, event } =&gt; app.on_device_event(device_id, event),
-                        WEvent::UserEvent(ev) =&gt; <span class="kw">match </span>ev {
-                            AppEvent::Request =&gt; {
-                                <span class="kw">while let </span><span class="prelude-val">Ok</span>(req) = app.request_recv.try_recv() {
-                                    <span class="kw">match </span>req {
-                                        RequestEvent::Request(req) =&gt; {
-                                            <span class="kw">let </span>rsp = app.respond(req);
-                                            <span class="kw">if </span>rsp.must_be_send() &amp;&amp; app.response_sender.send(rsp).is_err() {
-                                                <span class="comment">// lost connection to app-process
-                                                </span>app.exited = <span class="bool-val">true</span>;
-                                                target.exit();
-                                            }
-                                        }
-                                        RequestEvent::FrameReady(wid, msg) =&gt; app.on_frame_ready(wid, msg),
-                                    }
-                                }
-                            }
-                            AppEvent::Notify(ev) =&gt; app.notify(ev),
-                            AppEvent::WinitFocused(window_id, focused) =&gt; app.on_window_event(window_id, WindowEvent::Focused(focused)),
-                            AppEvent::RefreshMonitors =&gt; app.refresh_monitors(),
-                            AppEvent::ParentProcessExited =&gt; {
-                                app.exited = <span class="bool-val">true</span>;
-                                target.exit();
-                            }
-                            AppEvent::ImageLoaded(data) =&gt; {
-                                app.image_cache.loaded(data);
-                            }
-                            AppEvent::MonitorPowerChanged =&gt; {
-                                <span class="comment">// if a window opens in power-off it is blank until redraw.
-                                </span><span class="kw">for </span>w <span class="kw">in </span><span class="kw-2">&amp;mut </span>app.windows {
-                                    w.redraw();
-                                }
-                            }
-                            AppEvent::InitDeviceEvents(enabled) =&gt; {
-                                app.init_device_events(enabled, <span class="prelude-val">Some</span>(target));
-                            }
-                        },
-                        WEvent::Suspended =&gt; {}
-                        WEvent::Resumed =&gt; {}
-                        WEvent::AboutToWait =&gt; {
-                            app.finish_cursor_entered_move();
-                            app.update_modifiers();
-                            app.flush_coalesced();
-                            <span class="attr">#[cfg(windows)]
-                            </span>{
-                                app.skip_ralt = <span class="bool-val">false</span>;
-                            }
-                        }
-                        WEvent::MemoryWarning =&gt; {
-                            app.on_low_memory();
-                        }
-                        WEvent::LoopExiting =&gt; {}
-                    }
-                }
-
-                app.window_target = std::ptr::null();
-
-                idle.enter();
-            })
-            .unwrap();
-    }
-
-    <span class="kw">fn </span>new(
-        app_sender: AppEventSender,
-        response_sender: ipc::ResponseSender,
-        event_sender: ipc::EventSender,
-        request_recv: flume::Receiver&lt;RequestEvent&gt;,
-        <span class="kw-2">mut </span>ext: ViewExtensions,
-    ) -&gt; <span class="self">Self </span>{
-        ext.renderer(<span class="string">"zng-view.webrender_debug"</span>, extensions::RendererDebugExt::new);
-        ext.init(<span class="kw-2">&amp;</span>app_sender);
-        App {
-            headless: <span class="bool-val">false</span>,
-            started: <span class="bool-val">false</span>,
-            exts: ext,
-            gl_manager: GlContextManager::default(),
-            image_cache: ImageCache::new(app_sender.clone()),
-            app_sender,
-            request_recv,
-            response_sender,
-            event_sender,
-            window_target: std::ptr::null(),
-            gen: ViewProcessGen::INVALID,
-            device_events: <span class="bool-val">false</span>,
-            windows: <span class="macro">vec!</span>[],
-            surfaces: <span class="macro">vec!</span>[],
-            monitors: <span class="macro">vec!</span>[],
-            monitor_id_gen: MonitorId::INVALID,
-            devices: <span class="macro">vec!</span>[],
-            device_id_gen: DeviceId::INVALID,
-            dialog_id_gen: DialogId::INVALID,
-            resize_frame_wait_id_gen: FrameWaitId::INVALID,
-            coalescing_event: <span class="prelude-val">None</span>,
-            cursor_entered_expect_move: Vec::with_capacity(<span class="number">1</span>),
-            exited: <span class="bool-val">false</span>,
-            <span class="attr">#[cfg(windows)]
-            </span>skip_ralt: <span class="bool-val">false</span>,
-            pressed_modifiers: FxHashMap::default(),
-            pending_modifiers_update: <span class="prelude-val">None</span>,
-            pending_modifiers_focus_clear: <span class="bool-val">false</span>,
-
-            <span class="attr">#[cfg(not(windows))]
-            </span>arboard: <span class="prelude-val">None</span>,
-        }
-    }
-
-    <span class="kw">fn </span>start_receiving(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>request_recv: ipc::RequestReceiver) {
-        <span class="kw">let </span>app_sender = <span class="self">self</span>.app_sender.clone();
-        thread::spawn(<span class="kw">move </span>|| {
-            <span class="kw">while let </span><span class="prelude-val">Ok</span>(r) = request_recv.recv() {
-                <span class="kw">if let </span><span class="prelude-val">Err</span>(ipc::Disconnected) = app_sender.request(r) {
-                    <span class="kw">break</span>;
-                }
-            }
-        });
-    }
-
-    <span class="kw">fn </span>on_low_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.image_cache.on_low_memory();
-        <span class="kw">for </span>w <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.windows {
-            w.on_low_memory();
-        }
-        <span class="kw">for </span>s <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.surfaces {
-            s.on_low_memory();
-        }
-        <span class="self">self</span>.exts.on_low_memory();
-        <span class="self">self</span>.notify(Event::LowMemory);
-    }
-
-    <span class="kw">fn </span>on_window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, window_id: winit::window::WindowId, event: WindowEvent) {
+    <span class="kw">fn </span>window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop, window_id: winit::window::WindowId, event: WindowEvent) {
         <span class="kw">let </span>i = <span class="kw">if let </span><span class="prelude-val">Some</span>((i, <span class="kw">_</span>)) = <span class="self">self</span>.windows.iter_mut().enumerate().find(|(<span class="kw">_</span>, w)| w.window_id() == window_id) {
             i
         } <span class="kw">else </span>{
@@ -2679,7 +2457,9 @@
 
         <span class="kw">let </span>_s = <span class="macro">tracing::trace_span!</span>(<span class="string">"on_window_event"</span>, <span class="question-mark">?</span>event).entered();
 
-        <span class="self">self</span>.windows[i].pump_access(<span class="kw-2">&amp;</span>event);
+        <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+
+        <span class="self">self</span>.windows[i].on_window_event(<span class="kw-2">&amp;</span>event);
 
         <span class="kw">let </span>id = <span class="self">self</span>.windows[i].id();
         <span class="kw">let </span>scale_factor = <span class="self">self</span>.windows[i].scale_factor();
@@ -2704,6 +2484,7 @@
         </span><span class="macro">macro_rules! </span>linux_modal_dialog_bail {
             () =&gt; {
                 <span class="kw">if </span>modal_dialog_active {
+                    winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
                     <span class="kw">return</span>;
                 }
             };
@@ -2725,6 +2506,7 @@
                 <span class="kw">let </span>size = <span class="kw">if let </span><span class="prelude-val">Some</span>(size) = <span class="self">self</span>.windows[i].resized() {
                     size
                 } <span class="kw">else </span>{
+                    winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
                     <span class="kw">return</span>;
                 };
 
@@ -2805,6 +2587,7 @@
                             </span><span class="kw">break</span>;
                         }
                         <span class="prelude-val">Err</span>(flume::RecvTimeoutError::Disconnected) =&gt; {
+                            winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
                             <span class="macro">unreachable!</span>()
                         }
                     }
@@ -2835,6 +2618,7 @@
                 <span class="kw">let </span>(global_position, position) = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.windows[i].moved() {
                     p
                 } <span class="kw">else </span>{
+                    winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
                     <span class="kw">return</span>;
                 };
 
@@ -2897,6 +2681,7 @@
                     </span><span class="attr">#[cfg(windows)]
                     </span><span class="kw">if </span><span class="self">self</span>.skip_ralt {
                         <span class="kw">if let </span>winit::keyboard::PhysicalKey::Code(winit::keyboard::KeyCode::AltRight) = event.physical_key {
+                            winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
                             <span class="kw">return</span>;
                         }
                     }
@@ -3113,10 +2898,351 @@
             }
             WindowEvent::Occluded(<span class="kw">_</span>) =&gt; {}
             WindowEvent::ActivationTokenDone { .. } =&gt; {}
-            WindowEvent::TouchpadMagnify { .. } =&gt; {}
-            WindowEvent::TouchpadRotate { .. } =&gt; {}
-            WindowEvent::SmartMagnify { .. } =&gt; {}
+            WindowEvent::PinchGesture { .. } =&gt; {}
+            WindowEvent::RotationGesture { .. } =&gt; {}
+            WindowEvent::DoubleTapGesture { .. } =&gt; {}
+            WindowEvent::PanGesture { .. } =&gt; {}
         }
+
+        winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+    }
+
+    <span class="kw">fn </span>new_events(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop, <span class="kw">_</span>: winit::event::StartCause) {
+        <span class="self">self</span>.idle.exit();
+    }
+
+    <span class="kw">fn </span>user_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop, ev: AppEvent) {
+        <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+        <span class="kw">match </span>ev {
+            AppEvent::Request =&gt; {
+                <span class="kw">while let </span><span class="prelude-val">Ok</span>(req) = <span class="self">self</span>.request_recv.try_recv() {
+                    <span class="kw">match </span>req {
+                        RequestEvent::Request(req) =&gt; {
+                            <span class="kw">let </span>rsp = <span class="self">self</span>.respond(req);
+                            <span class="kw">if </span>rsp.must_be_send() &amp;&amp; <span class="self">self</span>.response_sender.send(rsp).is_err() {
+                                <span class="comment">// lost connection to app-process
+                                </span><span class="self">self</span>.exited = <span class="bool-val">true</span>;
+                                <span class="self">self</span>.winit_loop.exit();
+                            }
+                        }
+                        RequestEvent::FrameReady(wid, msg) =&gt; <span class="self">self</span>.on_frame_ready(wid, msg),
+                    }
+                }
+            }
+            AppEvent::Notify(ev) =&gt; <span class="self">self</span>.notify(ev),
+            AppEvent::WinitFocused(window_id, focused) =&gt; <span class="self">self</span>.window_event(winit_loop, window_id, WindowEvent::Focused(focused)),
+            AppEvent::RefreshMonitors =&gt; <span class="self">self</span>.refresh_monitors(),
+            AppEvent::ParentProcessExited =&gt; {
+                <span class="self">self</span>.exited = <span class="bool-val">true</span>;
+                <span class="self">self</span>.winit_loop.exit();
+            }
+            AppEvent::ImageLoaded(data) =&gt; {
+                <span class="self">self</span>.image_cache.loaded(data);
+            }
+            AppEvent::MonitorPowerChanged =&gt; {
+                <span class="comment">// if a window opens in power-off it is blank until redraw.
+                </span><span class="kw">for </span>w <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.windows {
+                    w.redraw();
+                }
+            }
+            AppEvent::InitDeviceEvents(enabled) =&gt; {
+                <span class="self">self</span>.init_device_events(enabled, <span class="prelude-val">Some</span>(winit_loop));
+            }
+        }
+        winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+    }
+
+    <span class="kw">fn </span>device_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop, device_id: winit::event::DeviceId, event: DeviceEvent) {
+        <span class="kw">if </span><span class="self">self</span>.device_events {
+            <span class="kw">let </span>_s = <span class="macro">tracing::trace_span!</span>(<span class="string">"on_device_event"</span>, <span class="question-mark">?</span>event);
+
+            <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+
+            <span class="kw">let </span>d_id = <span class="self">self</span>.device_id(device_id);
+            <span class="kw">match </span>event {
+                DeviceEvent::Added =&gt; <span class="self">self</span>.notify(Event::DeviceAdded(d_id)),
+                DeviceEvent::Removed =&gt; <span class="self">self</span>.notify(Event::DeviceRemoved(d_id)),
+                DeviceEvent::MouseMotion { delta } =&gt; <span class="self">self</span>.notify(Event::DeviceMouseMotion {
+                    device: d_id,
+                    delta: euclid::vec2(delta.<span class="number">0</span>, delta.<span class="number">1</span>),
+                }),
+                DeviceEvent::MouseWheel { delta } =&gt; <span class="self">self</span>.notify(Event::DeviceMouseWheel {
+                    device: d_id,
+                    delta: util::winit_mouse_wheel_delta_to_zui(delta),
+                }),
+                DeviceEvent::Motion { axis, value } =&gt; <span class="self">self</span>.notify(Event::DeviceMotion {
+                    device: d_id,
+                    axis: AxisId(axis),
+                    value,
+                }),
+                DeviceEvent::Button { button, state } =&gt; <span class="self">self</span>.notify(Event::DeviceButton {
+                    device: d_id,
+                    button: ButtonId(button),
+                    state: util::element_state_to_button_state(state),
+                }),
+                DeviceEvent::Key(k) =&gt; <span class="self">self</span>.notify(Event::DeviceKey {
+                    device: d_id,
+                    key_code: util::winit_physical_key_to_key_code(k.physical_key),
+                    state: util::element_state_to_key_state(k.state),
+                }),
+            }
+
+            winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+        }
+    }
+
+    <span class="kw">fn </span>about_to_wait(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+        <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+
+        <span class="self">self</span>.finish_cursor_entered_move();
+        <span class="self">self</span>.update_modifiers();
+        <span class="self">self</span>.flush_coalesced();
+        <span class="attr">#[cfg(windows)]
+        </span>{
+            <span class="self">self</span>.skip_ralt = <span class="bool-val">false</span>;
+        }
+        <span class="self">self</span>.idle.enter();
+
+        winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+    }
+
+    <span class="kw">fn </span>suspended(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+        <span class="macro">unimplemented!</span>()
+    }
+
+    <span class="kw">fn </span>exiting(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+        <span class="kw">let _ </span>= event_loop;
+    }
+
+    <span class="kw">fn </span>memory_warning(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+        <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+
+        <span class="self">self</span>.image_cache.on_low_memory();
+        <span class="kw">for </span>w <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.windows {
+            w.on_low_memory();
+        }
+        <span class="kw">for </span>s <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.surfaces {
+            s.on_low_memory();
+        }
+        <span class="self">self</span>.exts.on_low_memory();
+        <span class="self">self</span>.notify(Event::LowMemory);
+
+        winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+    }
+}
+<span class="kw">struct </span>IdleTrace(<span class="prelude-ty">Option</span>&lt;tracing::span::EnteredSpan&gt;);
+<span class="kw">impl </span>IdleTrace {
+    <span class="kw">pub fn </span>enter(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="number">0 </span>= <span class="prelude-val">Some</span>(<span class="macro">tracing::trace_span!</span>(<span class="string">"&lt;winit-idle&gt;"</span>).entered());
+    }
+    <span class="kw">pub fn </span>exit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.<span class="number">0 </span>= <span class="prelude-val">None</span>;
+    }
+}
+<span class="kw">impl </span>App {
+    <span class="kw">fn </span>init_device_events(<span class="kw-2">&amp;mut </span><span class="self">self</span>, enabled: bool, t: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>ActiveEventLoop&gt;) {
+        <span class="self">self</span>.device_events = enabled;
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = t {
+            <span class="kw">if </span>enabled {
+                t.listen_device_events(winit::event_loop::DeviceEvents::Always);
+            } <span class="kw">else </span>{
+                t.listen_device_events(winit::event_loop::DeviceEvents::Never);
+            }
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.device_events = <span class="bool-val">false</span>;
+        }
+    }
+
+    <span class="kw">pub fn </span>run_headless(c: ipc::ViewChannels, ext: ViewExtensions) {
+        <span class="macro">tracing::info!</span>(<span class="string">"running headless view-process"</span>);
+
+        gl::warmup();
+
+        <span class="kw">let </span>(app_sender, app_receiver) = flume::unbounded();
+        <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
+        <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
+            AppEventSender::Headless(app_sender, request_sender),
+            c.response_sender,
+            c.event_sender,
+            request_receiver,
+            ext,
+        );
+        app.headless = <span class="bool-val">true</span>;
+
+        <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
+        <span class="kw">let </span>event_loop = EventLoop::new().unwrap();
+        drop(winit_span);
+
+        event_loop
+            .run_app(<span class="kw-2">&amp;mut </span>HeadlessApp {
+                app,
+                request_receiver: <span class="prelude-val">Some</span>(c.request_receiver),
+                app_receiver,
+            })
+            .unwrap();
+
+        <span class="kw">struct </span>HeadlessApp {
+            app: App,
+            request_receiver: <span class="prelude-ty">Option</span>&lt;ipc::RequestReceiver&gt;,
+            app_receiver: flume::Receiver&lt;AppEvent&gt;,
+        }
+        <span class="kw">impl </span>winit::application::ApplicationHandler&lt;()&gt; <span class="kw">for </span>HeadlessApp {
+            <span class="kw">fn </span>resumed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+                <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.app.winit_loop.set(winit_loop);
+
+                <span class="self">self</span>.app.start_receiving(<span class="self">self</span>.request_receiver.take().unwrap());
+
+                <span class="lifetime">'app_loop</span>: <span class="kw">while </span>!<span class="self">self</span>.app.exited {
+                    <span class="kw">match </span><span class="self">self</span>.app_receiver.recv() {
+                        <span class="prelude-val">Ok</span>(app_ev) =&gt; <span class="kw">match </span>app_ev {
+                            AppEvent::Request =&gt; {
+                                <span class="kw">while let </span><span class="prelude-val">Ok</span>(request) = <span class="self">self</span>.app.request_recv.try_recv() {
+                                    <span class="kw">match </span>request {
+                                        RequestEvent::Request(request) =&gt; {
+                                            <span class="kw">let </span>response = <span class="self">self</span>.app.respond(request);
+                                            <span class="kw">if </span>response.must_be_send() &amp;&amp; <span class="self">self</span>.app.response_sender.send(response).is_err() {
+                                                <span class="self">self</span>.app.exited = <span class="bool-val">true</span>;
+                                                <span class="kw">break </span><span class="lifetime">'app_loop</span>;
+                                            }
+                                        }
+                                        RequestEvent::FrameReady(id, msg) =&gt; {
+                                            <span class="kw">let </span>r = <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.app.surfaces.iter_mut().find(|s| s.id() == id) {
+                                                <span class="prelude-val">Some</span>(s.on_frame_ready(msg, <span class="kw-2">&amp;mut </span><span class="self">self</span>.app.image_cache))
+                                            } <span class="kw">else </span>{
+                                                <span class="prelude-val">None
+                                            </span>};
+                                            <span class="kw">if let </span><span class="prelude-val">Some</span>((frame_id, image)) = r {
+                                                <span class="self">self</span>.app.notify(Event::FrameRendered(EventFrameRendered {
+                                                    window: id,
+                                                    frame: frame_id,
+                                                    frame_image: image,
+                                                }));
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            AppEvent::Notify(ev) =&gt; {
+                                <span class="kw">if </span><span class="self">self</span>.app.event_sender.send(ev).is_err() {
+                                    <span class="self">self</span>.app.exited = <span class="bool-val">true</span>;
+                                    <span class="kw">break </span><span class="lifetime">'app_loop</span>;
+                                }
+                            }
+                            AppEvent::RefreshMonitors =&gt; {
+                                <span class="macro">panic!</span>(<span class="string">"no monitor info in headless mode"</span>)
+                            }
+                            AppEvent::WinitFocused(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {
+                                <span class="macro">panic!</span>(<span class="string">"no winit event loop in headless mode"</span>)
+                            }
+                            AppEvent::ParentProcessExited =&gt; {
+                                <span class="self">self</span>.app.exited = <span class="bool-val">true</span>;
+                                <span class="kw">break </span><span class="lifetime">'app_loop</span>;
+                            }
+                            AppEvent::ImageLoaded(data) =&gt; {
+                                <span class="self">self</span>.app.image_cache.loaded(data);
+                            }
+                            AppEvent::MonitorPowerChanged =&gt; {} <span class="comment">// headless
+                            </span>AppEvent::InitDeviceEvents(enabled) =&gt; {
+                                <span class="self">self</span>.app.init_device_events(enabled, <span class="prelude-val">None</span>);
+                            }
+                        },
+                        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
+                            <span class="self">self</span>.app.exited = <span class="bool-val">true</span>;
+                            <span class="kw">break</span>;
+                        }
+                    }
+                }
+
+                winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.app.winit_loop);
+            }
+
+            <span class="kw">fn </span>window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop, <span class="kw">_</span>: winit::window::WindowId, <span class="kw">_</span>: WindowEvent) {}
+        }
+    }
+
+    <span class="kw">pub fn </span>run_headed(c: ipc::ViewChannels, ext: ViewExtensions) {
+        <span class="macro">tracing::info!</span>(<span class="string">"running headed view-process"</span>);
+
+        gl::warmup();
+
+        <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
+        <span class="kw">let </span>event_loop = EventLoop::with_user_event().build().unwrap();
+        drop(winit_span);
+        <span class="kw">let </span>app_sender = event_loop.create_proxy();
+
+        <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
+        <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
+            AppEventSender::Headed(app_sender, request_sender),
+            c.response_sender,
+            c.event_sender,
+            request_receiver,
+            ext,
+        );
+        app.start_receiving(c.request_receiver);
+
+        <span class="attr">#[cfg(windows)]
+        </span>config::spawn_listener(app.app_sender.clone());
+
+        event_loop.run_app(<span class="kw-2">&amp;mut </span>app).unwrap();
+    }
+
+    <span class="kw">fn </span>new(
+        app_sender: AppEventSender,
+        response_sender: ipc::ResponseSender,
+        event_sender: ipc::EventSender,
+        request_recv: flume::Receiver&lt;RequestEvent&gt;,
+        <span class="kw-2">mut </span>ext: ViewExtensions,
+    ) -&gt; <span class="self">Self </span>{
+        ext.renderer(<span class="string">"zng-view.webrender_debug"</span>, extensions::RendererDebugExt::new);
+        ext.init(<span class="kw-2">&amp;</span>app_sender);
+        <span class="kw">let </span><span class="kw-2">mut </span>idle = IdleTrace(<span class="prelude-val">None</span>);
+        idle.enter();
+        App {
+            headless: <span class="bool-val">false</span>,
+            started: <span class="bool-val">false</span>,
+            exts: ext,
+            idle,
+            gl_manager: GlContextManager::default(),
+            image_cache: ImageCache::new(app_sender.clone()),
+            app_sender,
+            request_recv,
+            response_sender,
+            event_sender,
+            winit_loop: util::WinitEventLoop::default(),
+            gen: ViewProcessGen::INVALID,
+            device_events: <span class="bool-val">false</span>,
+            windows: <span class="macro">vec!</span>[],
+            surfaces: <span class="macro">vec!</span>[],
+            monitors: <span class="macro">vec!</span>[],
+            monitor_id_gen: MonitorId::INVALID,
+            devices: <span class="macro">vec!</span>[],
+            device_id_gen: DeviceId::INVALID,
+            dialog_id_gen: DialogId::INVALID,
+            resize_frame_wait_id_gen: FrameWaitId::INVALID,
+            coalescing_event: <span class="prelude-val">None</span>,
+            cursor_entered_expect_move: Vec::with_capacity(<span class="number">1</span>),
+            exited: <span class="bool-val">false</span>,
+            <span class="attr">#[cfg(windows)]
+            </span>skip_ralt: <span class="bool-val">false</span>,
+            pressed_modifiers: FxHashMap::default(),
+            pending_modifiers_update: <span class="prelude-val">None</span>,
+            pending_modifiers_focus_clear: <span class="bool-val">false</span>,
+
+            <span class="attr">#[cfg(not(windows))]
+            </span>arboard: <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="kw">fn </span>start_receiving(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>request_recv: ipc::RequestReceiver) {
+        <span class="kw">let </span>app_sender = <span class="self">self</span>.app_sender.clone();
+        thread::spawn(<span class="kw">move </span>|| {
+            <span class="kw">while let </span><span class="prelude-val">Ok</span>(r) = request_recv.recv() {
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(ipc::Disconnected) = app_sender.request(r) {
+                    <span class="kw">break</span>;
+                }
+            }
+        });
     }
 
     <span class="kw">fn </span>monitor_handle_to_id(<span class="kw-2">&amp;mut </span><span class="self">self</span>, handle: <span class="kw-2">&amp;</span>MonitorHandle) -&gt; MonitorId {
@@ -3211,9 +3337,7 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>changed = <span class="bool-val">false</span>;
 
-        <span class="kw">let </span>window_target = <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.window_target };
-
-        <span class="kw">for </span>(fresh_handle, (id, handle)) <span class="kw">in </span>window_target.available_monitors().zip(<span class="kw-2">&amp;</span><span class="self">self</span>.monitors) {
+        <span class="kw">for </span>(fresh_handle, (id, handle)) <span class="kw">in </span><span class="self">self</span>.winit_loop.available_monitors().zip(<span class="kw-2">&amp;</span><span class="self">self</span>.monitors) {
             <span class="kw">let </span>id = <span class="kw">if </span><span class="kw-2">&amp;</span>fresh_handle == handle {
                 <span class="kw-2">*</span>id
             } <span class="kw">else </span>{
@@ -3338,41 +3462,6 @@
         }
     }
 
-    <span class="kw">fn </span>on_device_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, device_id: winit::event::DeviceId, event: DeviceEvent) {
-        <span class="kw">if </span><span class="self">self</span>.device_events {
-            <span class="kw">let </span>_s = <span class="macro">tracing::trace_span!</span>(<span class="string">"on_device_event"</span>, <span class="question-mark">?</span>event);
-
-            <span class="kw">let </span>d_id = <span class="self">self</span>.device_id(device_id);
-            <span class="kw">match </span>event {
-                DeviceEvent::Added =&gt; <span class="self">self</span>.notify(Event::DeviceAdded(d_id)),
-                DeviceEvent::Removed =&gt; <span class="self">self</span>.notify(Event::DeviceRemoved(d_id)),
-                DeviceEvent::MouseMotion { delta } =&gt; <span class="self">self</span>.notify(Event::DeviceMouseMotion {
-                    device: d_id,
-                    delta: euclid::vec2(delta.<span class="number">0</span>, delta.<span class="number">1</span>),
-                }),
-                DeviceEvent::MouseWheel { delta } =&gt; <span class="self">self</span>.notify(Event::DeviceMouseWheel {
-                    device: d_id,
-                    delta: util::winit_mouse_wheel_delta_to_zui(delta),
-                }),
-                DeviceEvent::Motion { axis, value } =&gt; <span class="self">self</span>.notify(Event::DeviceMotion {
-                    device: d_id,
-                    axis: AxisId(axis),
-                    value,
-                }),
-                DeviceEvent::Button { button, state } =&gt; <span class="self">self</span>.notify(Event::DeviceButton {
-                    device: d_id,
-                    button: ButtonId(button),
-                    state: util::element_state_to_button_state(state),
-                }),
-                DeviceEvent::Key(k) =&gt; <span class="self">self</span>.notify(Event::DeviceKey {
-                    device: d_id,
-                    key_code: util::winit_physical_key_to_key_code(k.physical_key),
-                    state: util::element_state_to_key_state(k.state),
-                }),
-            }
-        }
-    }
-
     <span class="kw">fn </span>assert_started(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">if </span>!<span class="self">self</span>.started {
             <span class="macro">panic!</span>(<span class="string">"not started"</span>)
@@ -3412,11 +3501,8 @@
 
         <span class="self">self</span>.assert_started();
 
-        <span class="kw">let </span>window_target = <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.window_target };
-
-        <span class="kw">let </span>primary = window_target.primary_monitor();
-
-        window_target
+        <span class="kw">let </span>primary = <span class="self">self</span>.winit_loop.primary_monitor();
+        <span class="self">self</span>.winit_loop
             .available_monitors()
             .map(|m| {
                 <span class="kw">let </span>id = <span class="self">self</span>.monitor_id(<span class="kw-2">&amp;</span>m);
@@ -3447,7 +3533,7 @@
         <span class="kw">let </span>surf = Surface::open(
             <span class="self">self</span>.gen,
             config,
-            <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.window_target },
+            <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop,
             <span class="kw-2">&amp;mut </span><span class="self">self</span>.gl_manager,
             <span class="self">self</span>.exts.new_renderer(),
             <span class="self">self</span>.app_sender.clone(),
@@ -3506,6 +3592,8 @@
         <span class="self">self</span>.assert_started();
         <span class="self">self</span>.started = <span class="bool-val">false</span>;
         <span class="self">self</span>.exited = <span class="bool-val">true</span>;
+        <span class="comment">// not really, but just to exit winit loop
+        </span><span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::ParentProcessExited);
     }
 
     <span class="kw">fn </span>open_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw-2">mut </span>config: WindowRequest) {
@@ -3546,13 +3634,16 @@
             <span class="self">self</span>.assert_started();
 
             <span class="kw">let </span>id = config.id;
-
             <span class="kw">let </span>win = Window::open(
                 <span class="self">self</span>.gen,
                 config.icon.and_then(|i| <span class="self">self</span>.image_cache.get(i)).and_then(|i| i.icon()),
+                config
+                    .cursor_image
+                    .and_then(|(i, h)| <span class="self">self</span>.image_cache.get(i).and_then(|i| i.cursor(h, <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop))),
                 config,
-                <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.window_target },
+                <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop,
                 <span class="kw-2">&amp;mut </span><span class="self">self</span>.gl_manager,
+                <span class="self">self</span>.exts.new_window(),
                 <span class="self">self</span>.exts.new_renderer(),
                 <span class="self">self</span>.app_sender.clone(),
             );
@@ -3692,14 +3783,8 @@
     }
 
     <span class="kw">fn </span>set_cursor_image(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, icon: <span class="prelude-ty">Option</span>&lt;CursorImage&gt;) {
-        <span class="kw">let </span>icon = icon.and_then(|img| <span class="self">self</span>.image_cache.get(img.img).and_then(|i| i.cursor(img.hotspot)));
-        <span class="self">self</span>.with_window(
-            id,
-            |w| {
-                <span class="kw">let _ </span>= (w, icon); <span class="comment">// TODO after https://github.com/rust-windowing/winit/issues/3306
-            </span>},
-            || (),
-        );
+        <span class="kw">let </span>icon = icon.and_then(|img| <span class="self">self</span>.image_cache.get(img.img).and_then(|i| i.cursor(img.hotspot, <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop)));
+        <span class="self">self</span>.with_window(id, |w| w.set_cursor_image(icon), || ());
     }
 
     <span class="kw">fn </span>set_ime_area(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, area: <span class="prelude-ty">Option</span>&lt;DipRect&gt;) {
@@ -3953,6 +4038,10 @@
         }
     }
 
+    <span class="kw">fn </span>set_system_shutdown_warn(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, reason: Txt) {
+        <span class="self">self</span>.with_window(id, <span class="kw">move </span>|w| w.set_system_shutdown_warn(reason), || ())
+    }
+
     <span class="kw">fn </span>third_party_licenses(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;zng_tp_licenses::LicenseUsed&gt; {
         <span class="attr">#[cfg(feature = <span class="string">"bundle_licenses"</span>)]
         </span>{
@@ -3966,6 +4055,19 @@
 
     <span class="kw">fn </span>app_extension(<span class="kw-2">&amp;mut </span><span class="self">self</span>, extension_id: ApiExtensionId, extension_request: ApiExtensionPayload) -&gt; ApiExtensionPayload {
         <span class="self">self</span>.exts.call_command(extension_id, extension_request)
+    }
+
+    <span class="kw">fn </span>window_extension(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        id: WindowId,
+        extension_id: ApiExtensionId,
+        extension_request: ApiExtensionPayload,
+    ) -&gt; ApiExtensionPayload {
+        <span class="self">self</span>.with_window(
+            id,
+            |w| w.window_extension(extension_id, extension_request),
+            || ApiExtensionPayload::invalid_request(extension_id, <span class="string">"window not found"</span>),
+        )
     }
 
     <span class="kw">fn </span>render_extension(

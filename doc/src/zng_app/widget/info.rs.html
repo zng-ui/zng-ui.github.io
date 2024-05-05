@@ -2304,6 +2304,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2266" id="2266">2266</a>
 <a href="#2267" id="2267">2267</a>
 <a href="#2268" id="2268">2268</a>
+<a href="#2269" id="2269">2269</a>
+<a href="#2270" id="2270">2270</a>
+<a href="#2271" id="2271">2271</a>
+<a href="#2272" id="2272">2272</a>
+<a href="#2273" id="2273">2273</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget info tree.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt, mem, ops, sync::Arc, time::Duration};
@@ -2597,8 +2602,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span><span class="kw-2">mut </span>spatial_bounds = <span class="self">self</span>.root().outer_bounds().to_box2d();
         <span class="kw">for </span>out <span class="kw">in </span>frame.out_of_bounds.iter() {
             <span class="kw">let </span>b = WidgetInfo::new(<span class="self">self</span>.clone(), <span class="kw-2">*</span>out).inner_bounds().to_box2d();
-            spatial_bounds.min = spatial_bounds.min.min(b.min);
-            spatial_bounds.max = spatial_bounds.max.max(b.max);
+            spatial_bounds = spatial_bounds.union(<span class="kw-2">&amp;</span>b);
         }
         frame.spatial_bounds = spatial_bounds;
 
@@ -3413,11 +3417,11 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span><span class="kw-2">mut </span>disabled = <span class="prelude-val">None</span>;
 
         <span class="kw">for </span>w <span class="kw">in </span><span class="self">self</span>.self_and_ancestors() {
-            <span class="kw">let </span>intera = w.interactivity();
-            <span class="kw">if </span>intera.contains(Interactivity::BLOCKED) {
+            <span class="kw">let </span>interactivity = w.interactivity();
+            <span class="kw">if </span>interactivity.contains(Interactivity::BLOCKED) {
                 blocked = <span class="prelude-val">Some</span>(path.len());
             }
-            <span class="kw">if </span>intera.contains(Interactivity::DISABLED) {
+            <span class="kw">if </span>interactivity.contains(Interactivity::DISABLED) {
                 disabled = <span class="prelude-val">Some</span>(path.len());
             }
 
@@ -3645,6 +3649,12 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub fn </span>inner_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PxRect {
         <span class="kw">let </span>info = <span class="self">self</span>.info();
         info.bounds_info.inner_bounds()
+    }
+
+    <span class="doccomment">/// Compute the bounding box that envelops self and descendants inner bounds.
+    </span><span class="kw">pub fn </span>spatial_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PxBox {
+        <span class="self">self</span>.out_of_bounds()
+            .fold(<span class="self">self</span>.inner_bounds().to_box2d(), |acc, w| acc.union(<span class="kw-2">&amp;</span>w.inner_bounds().to_box2d()))
     }
 
     <span class="doccomment">/// Widget inner bounds center in the window space.

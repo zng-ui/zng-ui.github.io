@@ -2152,6 +2152,13 @@
 <a href="#2150" id="2150">2150</a>
 <a href="#2151" id="2151">2151</a>
 <a href="#2152" id="2152">2152</a>
+<a href="#2153" id="2153">2153</a>
+<a href="#2154" id="2154">2154</a>
+<a href="#2155" id="2155">2155</a>
+<a href="#2156" id="2156">2156</a>
+<a href="#2157" id="2157">2157</a>
+<a href="#2158" id="2158">2158</a>
+<a href="#2159" id="2159">2159</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::sync::atomic::Ordering::Relaxed;
 
@@ -2998,7 +3005,8 @@
     /// # Input
     ///
     /// * `last_focused`: A function that returns the last focused widget within a focus scope identified by `WidgetId`.
-    /// * `reverse`: If the focus is *reversing* into `self`.
+    /// * `is_tab_cycle_reentry`: If the focus returned to `self` immediately after leaving because the parent scope is `TabNav::Cycle`.
+    /// * `reverse`: If the focus *reversed* into `self`.
     ///
     /// # Returns
     ///
@@ -3008,6 +3016,7 @@
     </span><span class="kw">pub fn </span>on_focus_scope_move&lt;<span class="lifetime">'f</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         last_focused: <span class="kw">impl </span>FnOnce(WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="lifetime">'f </span>WidgetPath&gt;,
+        is_tab_cycle_reentry: bool,
         reverse: bool,
     ) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt; {
         <span class="kw">match </span><span class="self">self</span>.focus_info() {
@@ -3020,23 +3029,25 @@
                             <span class="self">self</span>.first_tab_descendant()
                         }
                     }
-                    FocusScopeOnFocus::LastFocused | FocusScopeOnFocus::LastFocusedIgnoreBounds =&gt; last_focused(<span class="self">self</span>.info.id())
-                        .and_then(|path| <span class="self">self</span>.info.tree().get(path.widget_id()))
-                        .and_then(|w| w.into_focusable(<span class="self">self</span>.focus_disabled_widgets(), <span class="self">self</span>.focus_hidden_widgets()))
-                        .and_then(|f| {
-                            <span class="kw">if </span>f.info.is_descendant(<span class="kw-2">&amp;</span><span class="self">self</span>.info) {
-                                <span class="prelude-val">Some</span>(f) <span class="comment">// valid last focused
-                            </span>} <span class="kw">else </span>{
-                                <span class="prelude-val">None
-                            </span>}
-                        })
-                        .or_else(|| {
-                            <span class="kw">if </span>reverse {
-                                <span class="self">self</span>.last_tab_descendant()
-                            } <span class="kw">else </span>{
-                                <span class="self">self</span>.first_tab_descendant()
-                            }
-                        }), <span class="comment">// fallback
+                    FocusScopeOnFocus::LastFocused | FocusScopeOnFocus::LastFocusedIgnoreBounds =&gt; {
+                        <span class="kw">if </span>is_tab_cycle_reentry { <span class="prelude-val">None </span>} <span class="kw">else </span>{ last_focused(<span class="self">self</span>.info.id()) }
+                            .and_then(|path| <span class="self">self</span>.info.tree().get(path.widget_id()))
+                            .and_then(|w| w.into_focusable(<span class="self">self</span>.focus_disabled_widgets(), <span class="self">self</span>.focus_hidden_widgets()))
+                            .and_then(|f| {
+                                <span class="kw">if </span>f.info.is_descendant(<span class="kw-2">&amp;</span><span class="self">self</span>.info) {
+                                    <span class="prelude-val">Some</span>(f) <span class="comment">// valid last focused
+                                </span>} <span class="kw">else </span>{
+                                    <span class="prelude-val">None
+                                </span>}
+                            })
+                            .or_else(|| {
+                                <span class="kw">if </span>reverse {
+                                    <span class="self">self</span>.last_tab_descendant()
+                                } <span class="kw">else </span>{
+                                    <span class="self">self</span>.first_tab_descendant()
+                                }
+                            })
+                    } <span class="comment">// fallback
                     </span>FocusScopeOnFocus::Widget =&gt; <span class="prelude-val">None</span>,
                 };
 
@@ -3518,9 +3529,9 @@
                 DirectionalNav::Contained =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Above, origin),
                 DirectionalNav::Cycle =&gt; {
                     <span class="self">self</span>.directional_next_from(Orientation2D::Above, origin).or_else(|| {
-                        <span class="comment">// next up from the same X but from the bottom segment of scope.
+                        <span class="comment">// next up from the same X but from the bottom segment of scope spatial bounds.
                         </span><span class="kw">let </span><span class="kw-2">mut </span>from_pt = origin.center();
-                        from_pt.y = scope.info.inner_bounds().max().y;
+                        from_pt.y = scope.info.spatial_bounds().max.y;
                         <span class="self">self</span>.directional_from(
                             <span class="kw-2">&amp;</span>scope,
                             PxRect::new(from_pt, PxSize::splat(Px(<span class="number">1</span>))).to_box2d(),
@@ -3554,9 +3565,9 @@
                 }),
                 DirectionalNav::Contained =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Right, origin),
                 DirectionalNav::Cycle =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Right, origin).or_else(|| {
-                    <span class="comment">// next right from the same Y but from the left segment of scope.
+                    <span class="comment">// next right from the same Y but from the left segment of scope spatial bounds.
                     </span><span class="kw">let </span><span class="kw-2">mut </span>from_pt = origin.center();
-                    from_pt.x = scope.info.inner_bounds().min().x;
+                    from_pt.x = scope.info.spatial_bounds().min.x;
                     <span class="self">self</span>.directional_from(
                         <span class="kw-2">&amp;</span>scope,
                         PxRect::new(from_pt, PxSize::splat(Px(<span class="number">1</span>))).to_box2d(),
@@ -3589,9 +3600,9 @@
                 }),
                 DirectionalNav::Contained =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Below, origin),
                 DirectionalNav::Cycle =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Below, origin).or_else(|| {
-                    <span class="comment">// next down from the same X but from the top segment of scope.
+                    <span class="comment">// next down from the same X but from the top segment of scope spatial bounds.
                     </span><span class="kw">let </span><span class="kw-2">mut </span>from_pt = origin.center();
-                    from_pt.y = scope.info.inner_bounds().min().y;
+                    from_pt.y = scope.info.spatial_bounds().min.y;
                     <span class="self">self</span>.directional_from(
                         <span class="kw-2">&amp;</span>scope,
                         PxRect::new(from_pt, PxSize::splat(Px(<span class="number">1</span>))).to_box2d(),
@@ -3624,9 +3635,9 @@
                 }),
                 DirectionalNav::Contained =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Left, origin),
                 DirectionalNav::Cycle =&gt; <span class="self">self</span>.directional_next_from(Orientation2D::Left, origin).or_else(|| {
-                    <span class="comment">// next left from the same Y but from the right segment of scope.
+                    <span class="comment">// next left from the same Y but from the right segment of scope spatial bounds.
                     </span><span class="kw">let </span><span class="kw-2">mut </span>from_pt = origin.center();
-                    from_pt.x = scope.info.inner_bounds().max().x;
+                    from_pt.x = scope.info.spatial_bounds().max.x;
                     <span class="self">self</span>.directional_from(
                         <span class="kw-2">&amp;</span>scope,
                         PxRect::new(from_pt, PxSize::splat(Px(<span class="number">1</span>))).to_box2d(),
@@ -3892,6 +3903,9 @@
     </span>FirstDescendant,
     <span class="doccomment">/// Focus the descendant that was last focused before focus moved out of the scope. If the
     /// scope cannot return focus, behaves like [`FirstDescendant`].
+    ///
+    /// If the scope is the only child of a parent that is `TabNav::Cycle` and the focus just exited and
+    /// returned in a cycle action, behaves like [`FirstDescendant`].
     ///
     /// Behaves like [`Widget`] if the first(or last) descendant inner-bounds is not fully contained
     /// by the scope inner-bounds.

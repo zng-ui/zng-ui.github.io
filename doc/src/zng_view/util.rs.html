@@ -1588,14 +1588,63 @@
 <a href="#1586" id="1586">1586</a>
 <a href="#1587" id="1587">1587</a>
 <a href="#1588" id="1588">1588</a>
+<a href="#1589" id="1589">1589</a>
+<a href="#1590" id="1590">1590</a>
+<a href="#1591" id="1591">1591</a>
+<a href="#1592" id="1592">1592</a>
+<a href="#1593" id="1593">1593</a>
+<a href="#1594" id="1594">1594</a>
+<a href="#1595" id="1595">1595</a>
+<a href="#1596" id="1596">1596</a>
+<a href="#1597" id="1597">1597</a>
+<a href="#1598" id="1598">1598</a>
+<a href="#1599" id="1599">1599</a>
+<a href="#1600" id="1600">1600</a>
+<a href="#1601" id="1601">1601</a>
+<a href="#1602" id="1602">1602</a>
+<a href="#1603" id="1603">1603</a>
+<a href="#1604" id="1604">1604</a>
+<a href="#1605" id="1605">1605</a>
+<a href="#1606" id="1606">1606</a>
+<a href="#1607" id="1607">1607</a>
+<a href="#1608" id="1608">1608</a>
+<a href="#1609" id="1609">1609</a>
+<a href="#1610" id="1610">1610</a>
+<a href="#1611" id="1611">1611</a>
+<a href="#1612" id="1612">1612</a>
+<a href="#1613" id="1613">1613</a>
+<a href="#1614" id="1614">1614</a>
+<a href="#1615" id="1615">1615</a>
+<a href="#1616" id="1616">1616</a>
+<a href="#1617" id="1617">1617</a>
+<a href="#1618" id="1618">1618</a>
+<a href="#1619" id="1619">1619</a>
+<a href="#1620" id="1620">1620</a>
+<a href="#1621" id="1621">1621</a>
+<a href="#1622" id="1622">1622</a>
+<a href="#1623" id="1623">1623</a>
+<a href="#1624" id="1624">1624</a>
+<a href="#1625" id="1625">1625</a>
+<a href="#1626" id="1626">1626</a>
+<a href="#1627" id="1627">1627</a>
+<a href="#1628" id="1628">1628</a>
+<a href="#1629" id="1629">1629</a>
+<a href="#1630" id="1630">1630</a>
+<a href="#1631" id="1631">1631</a>
+<a href="#1632" id="1632">1632</a>
+<a href="#1633" id="1633">1633</a>
+<a href="#1634" id="1634">1634</a>
+<a href="#1635" id="1635">1635</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
-<span class="kw">use </span>std::fmt;
+<span class="kw">use </span>std::marker::PhantomData;
 <span class="kw">use </span>std::{cell::Cell, sync::Arc};
+<span class="kw">use </span>std::{fmt, ops};
 
 <span class="kw">use </span>rayon::ThreadPoolBuilder;
 <span class="kw">use </span>webrender::api <span class="kw">as </span>wr;
+<span class="kw">use </span>winit::event_loop::ActiveEventLoop;
 <span class="kw">use </span>winit::{event::ElementState, monitor::MonitorHandle};
 <span class="kw">use </span>zng_txt::{ToTxt, Txt};
 <span class="kw">use </span>zng_unit::<span class="kw-2">*</span>;
@@ -1889,7 +1938,7 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>glutin_video_mode_to_video_mode(v: winit::monitor::VideoMode) -&gt; VideoMode {
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>glutin_video_mode_to_video_mode(v: winit::monitor::VideoModeHandle) -&gt; VideoMode {
     <span class="kw">let </span>size = v.size();
     VideoMode {
         size: PxSize::new(Px(size.width <span class="kw">as </span>i32), Px(size.height <span class="kw">as </span>i32)),
@@ -2829,11 +2878,10 @@
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>access_tree_update_to_kit(update: zng_view_api::access::AccessTreeUpdate) -&gt; accesskit::TreeUpdate {
-    <span class="kw">let </span><span class="kw-2">mut </span>classes = accesskit::NodeClassSet::new();
     <span class="kw">let </span><span class="kw-2">mut </span>nodes = Vec::with_capacity(update.updates.iter().map(|t| t.len()).sum());
 
     <span class="kw">for </span>update <span class="kw">in </span>update.updates {
-        access_node_to_kit(update.root(), <span class="kw-2">&amp;mut </span>classes, <span class="kw-2">&amp;mut </span>nodes);
+        access_node_to_kit(update.root(), <span class="kw-2">&amp;mut </span>nodes);
     }
 
     accesskit::TreeUpdate {
@@ -2845,7 +2893,6 @@
 
 <span class="kw">fn </span>access_node_to_kit(
     node: zng_view_api::access::AccessNodeRef,
-    class_set: <span class="kw-2">&amp;mut </span>accesskit::NodeClassSet,
     output: <span class="kw-2">&amp;mut </span>Vec&lt;(accesskit::NodeId, accesskit::Node)&gt;,
 ) -&gt; accesskit::NodeId {
     <span class="kw">let </span>node_id = access_id_to_kit(node.id);
@@ -2942,10 +2989,10 @@
                     builder.set_auto_complete(accesskit::AutoComplete::List)
                 }
             }
-            Checked(b) =&gt; builder.set_checked(<span class="kw">match </span>b {
-                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) =&gt; accesskit::Checked::True,
-                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) =&gt; accesskit::Checked::False,
-                <span class="prelude-val">None </span>=&gt; accesskit::Checked::Mixed,
+            Checked(b) =&gt; builder.set_toggled(<span class="kw">match </span>b {
+                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) =&gt; accesskit::Toggled::True,
+                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) =&gt; accesskit::Toggled::False,
+                <span class="prelude-val">None </span>=&gt; accesskit::Toggled::Mixed,
             }),
             Current(kind) =&gt; <span class="kw">match </span>kind {
                 access::CurrentKind::Page =&gt; builder.set_aria_current(accesskit::AriaCurrent::Page),
@@ -2975,7 +3022,7 @@
                 }
             }
             Label(s) =&gt; builder.set_name(s.clone().into_owned().into_boxed_str()),
-            Level(n) =&gt; builder.set_hierarchical_level(n.get() <span class="kw">as </span>usize),
+            Level(n) =&gt; builder.set_level(n.get() <span class="kw">as </span>usize),
             Modal =&gt; builder.set_modal(),
             MultiSelectable =&gt; builder.set_multiselectable(),
             Orientation(o) =&gt; <span class="kw">match </span>o {
@@ -3008,9 +3055,9 @@
                 }
             }
             ActiveDescendant(id) =&gt; builder.set_active_descendant(access_id_to_kit(<span class="kw-2">*</span>id)),
-            ColCount(c) =&gt; builder.set_table_column_count(<span class="kw-2">*</span>c),
-            ColIndex(i) =&gt; builder.set_table_column_index(<span class="kw-2">*</span>i),
-            ColSpan(s) =&gt; builder.set_table_cell_column_span(<span class="kw-2">*</span>s),
+            ColCount(c) =&gt; builder.set_column_count(<span class="kw-2">*</span>c),
+            ColIndex(i) =&gt; builder.set_column_index(<span class="kw-2">*</span>i),
+            ColSpan(s) =&gt; builder.set_column_span(<span class="kw-2">*</span>s),
             Controls(ids) =&gt; builder.set_controls(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
             DescribedBy(ids) =&gt; builder.set_described_by(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
             Details(ids) =&gt; builder.set_details(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
@@ -3030,9 +3077,9 @@
                 }
             }
             ItemIndex(p) =&gt; builder.set_position_in_set(<span class="kw-2">*</span>p),
-            RowCount(c) =&gt; builder.set_table_row_count(<span class="kw-2">*</span>c),
-            RowIndex(i) =&gt; builder.set_table_row_index(<span class="kw-2">*</span>i),
-            RowSpan(s) =&gt; builder.set_table_cell_row_span(<span class="kw-2">*</span>s),
+            RowCount(c) =&gt; builder.set_row_count(<span class="kw-2">*</span>c),
+            RowIndex(i) =&gt; builder.set_row_index(<span class="kw-2">*</span>i),
+            RowSpan(s) =&gt; builder.set_row_span(<span class="kw-2">*</span>s),
             ItemCount(s) =&gt; builder.set_size_of_set(<span class="kw-2">*</span>s),
             Lang(l) =&gt; builder.set_language(l.to_string()),
 
@@ -3053,7 +3100,7 @@
     <span class="comment">// add descendants
     </span><span class="kw">if </span>node.children.is_empty() {
         <span class="kw">for </span>child <span class="kw">in </span>node.children() {
-            <span class="kw">let </span>child_id = access_node_to_kit(child, class_set, output);
+            <span class="kw">let </span>child_id = access_node_to_kit(child, output);
             builder.push_child(child_id);
         }
     } <span class="kw">else </span>{
@@ -3061,11 +3108,11 @@
             builder.push_child(access_id_to_kit(<span class="kw-2">*</span>id));
         }
         <span class="kw">for </span>child <span class="kw">in </span>node.children() {
-            <span class="kw">let _ </span>= access_node_to_kit(child, class_set, output);
+            <span class="kw">let _ </span>= access_node_to_kit(child, output);
         }
     }
 
-    <span class="kw">let </span>node = builder.build(class_set);
+    <span class="kw">let </span>node = builder.build();
     output.push((node_id, node));
     node_id
 }
@@ -3121,7 +3168,6 @@
         ListItem =&gt; Role::ListItem,
         Math =&gt; Role::Math,
         Note =&gt; Role::Note,
-        Column =&gt; Role::Column,
         Row =&gt; Role::Row,
         RowGroup =&gt; Role::RowGroup,
         RowHeader =&gt; Role::RowHeader,
@@ -3175,5 +3221,53 @@
     }
 
     reasons
+}
+
+<span class="attr">#[must_use = <span class="string">"call .unset before drop"</span>]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoop(<span class="kw-2">*const </span>ActiveEventLoop);
+<span class="kw">impl </span>WinitEventLoop {
+    <span class="kw">pub fn </span>set&lt;<span class="lifetime">'l</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop) -&gt; WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+        <span class="self">self</span>.<span class="number">0 </span>= winit_loop;
+        WinitEventLoopGuard {
+            defused: <span class="bool-val">false</span>,
+            _loop_lifetime: PhantomData,
+        }
+    }
+}
+<span class="kw">impl </span>Default <span class="kw">for </span>WinitEventLoop {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(std::ptr::null())
+    }
+}
+<span class="kw">impl </span>ops::Deref <span class="kw">for </span>WinitEventLoop {
+    <span class="kw">type </span>Target = ActiveEventLoop;
+
+    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+        <span class="macro">assert!</span>(!<span class="self">self</span>.<span class="number">0</span>.is_null(), <span class="string">"winit event loop not active"</span>);
+        <span class="comment">// SAFETY: just checked, and can only set pointer with `set`
+        </span><span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0 </span>}
+    }
+}
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+    defused: bool,
+    _loop_lifetime: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop&gt;,
+}
+<span class="kw">impl</span>&lt;<span class="lifetime">'l</span>&gt; WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+    <span class="kw">pub fn </span>unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: <span class="kw-2">&amp;mut </span>WinitEventLoop) {
+        <span class="self">self</span>.defused = <span class="bool-val">true</span>;
+        l.<span class="number">0 </span>= std::ptr::null();
+    }
+}
+<span class="kw">impl</span>&lt;<span class="lifetime">'l</span>&gt; Drop <span class="kw">for </span>WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if </span>!<span class="self">self</span>.defused {
+            <span class="kw">let </span>msg = <span class="string">"unsafe pointer to winit ActiveEventLoop not cleared"</span>;
+            <span class="kw">if </span>std::thread::panicking() {
+                <span class="macro">tracing::error!</span>(<span class="string">"{msg}"</span>);
+            } <span class="kw">else </span>{
+                <span class="macro">panic!</span>(<span class="string">"{msg}"</span>);
+            }
+        }
+    }
 }
 </code></pre></div></section></main></body></html>

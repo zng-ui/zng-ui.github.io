@@ -1400,10 +1400,47 @@
 <a href="#1398" id="1398">1398</a>
 <a href="#1399" id="1399">1399</a>
 <a href="#1400" id="1400">1400</a>
+<a href="#1401" id="1401">1401</a>
+<a href="#1402" id="1402">1402</a>
+<a href="#1403" id="1403">1403</a>
+<a href="#1404" id="1404">1404</a>
+<a href="#1405" id="1405">1405</a>
+<a href="#1406" id="1406">1406</a>
+<a href="#1407" id="1407">1407</a>
+<a href="#1408" id="1408">1408</a>
+<a href="#1409" id="1409">1409</a>
+<a href="#1410" id="1410">1410</a>
+<a href="#1411" id="1411">1411</a>
+<a href="#1412" id="1412">1412</a>
+<a href="#1413" id="1413">1413</a>
+<a href="#1414" id="1414">1414</a>
+<a href="#1415" id="1415">1415</a>
+<a href="#1416" id="1416">1416</a>
+<a href="#1417" id="1417">1417</a>
+<a href="#1418" id="1418">1418</a>
+<a href="#1419" id="1419">1419</a>
+<a href="#1420" id="1420">1420</a>
+<a href="#1421" id="1421">1421</a>
+<a href="#1422" id="1422">1422</a>
+<a href="#1423" id="1423">1423</a>
+<a href="#1424" id="1424">1424</a>
+<a href="#1425" id="1425">1425</a>
+<a href="#1426" id="1426">1426</a>
+<a href="#1427" id="1427">1427</a>
+<a href="#1428" id="1428">1428</a>
+<a href="#1429" id="1429">1429</a>
+<a href="#1430" id="1430">1430</a>
+<a href="#1431" id="1431">1431</a>
+<a href="#1432" id="1432">1432</a>
+<a href="#1433" id="1433">1433</a>
+<a href="#1434" id="1434">1434</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, sync::Arc};
 
 <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
-<span class="kw">use </span>winit::window::Icon;
+<span class="kw">use </span>winit::{
+    event_loop::ActiveEventLoop,
+    window::{CustomCursor, Icon},
+};
 <span class="kw">use </span>zng_txt::{formatx, ToTxt, Txt};
 <span class="kw">use </span>zng_unit::{Px, PxPoint, PxSize};
 <span class="kw">use </span>zng_view_api::{
@@ -2316,32 +2353,63 @@
         <span class="kw">let </span>height = size.height.<span class="number">0 </span><span class="kw">as </span>u32;
         <span class="kw">if </span>width == <span class="number">0 </span>|| height == <span class="number">0 </span>|| <span class="self">self</span>.<span class="number">0</span>.is_mask() {
             <span class="prelude-val">None
-        </span>} <span class="kw">else if </span>width &gt; <span class="number">255 </span>|| height &gt; <span class="number">255 </span>{
-            <span class="comment">// resize to max 255
-            </span><span class="kw">let </span><span class="kw-2">mut </span>buf = pixels.as_ref().to_vec();
-            <span class="comment">// BGRA to RGBA
-            </span>buf.chunks_exact_mut(<span class="number">4</span>).for_each(|c| c.swap(<span class="number">0</span>, <span class="number">2</span>));
-            <span class="kw">let </span>img = image::ImageBuffer::from_raw(width, height, buf).unwrap();
-            <span class="kw">let </span>img = image::DynamicImage::ImageRgba8(img);
-            img.resize(<span class="number">255</span>, <span class="number">255</span>, image::imageops::FilterType::Lanczos3);
+        </span>} <span class="kw">else </span>{
+            <span class="kw">let </span>r = <span class="kw">if </span>width &gt; <span class="number">255 </span>|| height &gt; <span class="number">255 </span>{
+                <span class="comment">// resize to max 255
+                </span><span class="kw">let </span><span class="kw-2">mut </span>buf = pixels.as_ref().to_vec();
+                <span class="comment">// BGRA to RGBA
+                </span>buf.chunks_exact_mut(<span class="number">4</span>).for_each(|c| c.swap(<span class="number">0</span>, <span class="number">2</span>));
+                <span class="kw">let </span>img = image::ImageBuffer::from_raw(width, height, buf).unwrap();
+                <span class="kw">let </span>img = image::DynamicImage::ImageRgba8(img);
+                img.resize(<span class="number">255</span>, <span class="number">255</span>, image::imageops::FilterType::Lanczos3);
 
-            <span class="kw">use </span>image::GenericImageView;
-            <span class="kw">let </span>(width, height) = img.dimensions();
-            <span class="kw">let </span>buf = img.into_rgba8().into_raw();
-            winit::window::Icon::from_rgba(buf, width, height).ok()
-        } <span class="kw">else </span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>buf = pixels.as_ref().to_vec();
-            <span class="comment">// BGRA to RGBA
-            </span>buf.chunks_exact_mut(<span class="number">4</span>).for_each(|c| c.swap(<span class="number">0</span>, <span class="number">2</span>));
-            winit::window::Icon::from_rgba(buf, width, height).ok()
+                <span class="kw">use </span>image::GenericImageView;
+                <span class="kw">let </span>(width, height) = img.dimensions();
+                <span class="kw">let </span>buf = img.into_rgba8().into_raw();
+                winit::window::Icon::from_rgba(buf, width, height)
+            } <span class="kw">else </span>{
+                <span class="kw">let </span><span class="kw-2">mut </span>buf = pixels.as_ref().to_vec();
+                <span class="comment">// BGRA to RGBA
+                </span>buf.chunks_exact_mut(<span class="number">4</span>).for_each(|c| c.swap(<span class="number">0</span>, <span class="number">2</span>));
+                winit::window::Icon::from_rgba(buf, width, height)
+            };
+            <span class="kw">match </span>r {
+                <span class="prelude-val">Ok</span>(i) =&gt; <span class="prelude-val">Some</span>(i),
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="macro">tracing::error!</span>(<span class="string">"failed to convert image to custom icon, {e}"</span>);
+                    <span class="prelude-val">None
+                </span>}
+            }
         }
     }
 
     <span class="doccomment">/// Generate a cursor from the image.
-    </span><span class="kw">pub fn </span>cursor(<span class="kw-2">&amp;</span><span class="self">self</span>, hotspot: PxPoint) -&gt; <span class="prelude-ty">Option</span>&lt;()&gt; {
-        <span class="kw">let </span>_hotspot = hotspot;
-        <span class="prelude-val">None </span><span class="comment">// TODO after https://github.com/rust-windowing/winit/issues/3306
-    </span>}
+    </span><span class="kw">pub fn </span>cursor(<span class="kw-2">&amp;</span><span class="self">self</span>, hotspot: PxPoint, event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) -&gt; <span class="prelude-ty">Option</span>&lt;CustomCursor&gt; {
+        <span class="kw">let </span>(size, pixels) = <span class="kw">match </span><span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0 </span>{
+            ImageData::RawData { size, pixels, .. } =&gt; (size, pixels),
+            ImageData::NativeTexture { .. } =&gt; <span class="macro">unreachable!</span>(),
+        };
+
+        <span class="kw">let </span>width: u16 = size.width.<span class="number">0</span>.try_into().ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>height: u16 = size.height.<span class="number">0</span>.try_into().ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>hotspot_x: u16 = hotspot.x.<span class="number">0</span>.try_into().ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>hotspot_y: u16 = hotspot.y.<span class="number">0</span>.try_into().ok()<span class="question-mark">?</span>;
+
+        <span class="kw">if </span>width == <span class="number">0 </span>|| height == <span class="number">0 </span>|| hotspot_x &gt; width || hotspot_y &gt; height || <span class="self">self</span>.<span class="number">0</span>.is_mask() {
+            <span class="prelude-val">None
+        </span>} <span class="kw">else </span>{
+            <span class="kw">let </span><span class="kw-2">mut </span>buf = pixels.as_ref().to_vec();
+            <span class="comment">// BGRA to RGBA
+            </span>buf.chunks_exact_mut(<span class="number">4</span>).for_each(|c| c.swap(<span class="number">0</span>, <span class="number">2</span>));
+            <span class="kw">match </span>CustomCursor::from_rgba(buf, width, height, hotspot_x, hotspot_y) {
+                <span class="prelude-val">Ok</span>(c) =&gt; <span class="prelude-val">Some</span>(event_loop.create_custom_cursor(c)),
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="macro">tracing::error!</span>(<span class="string">"failed to convert image to custom cursor, {e}"</span>);
+                    <span class="prelude-val">None
+                </span>}
+            }
+        }
+    }
 
     <span class="kw">pub fn </span>encode(<span class="kw-2">&amp;</span><span class="self">self</span>, format: image::ImageFormat, buffer: <span class="kw-2">&amp;mut </span>Vec&lt;u8&gt;) -&gt; image::ImageResult&lt;()&gt; {
         <span class="kw">let </span>(size, pixels, ppi) = <span class="kw">match </span><span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0 </span>{

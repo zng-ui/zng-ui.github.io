@@ -1035,6 +1035,10 @@
 <a href="#1033" id="1033">1033</a>
 <a href="#1034" id="1034">1034</a>
 <a href="#1035" id="1035">1035</a>
+<a href="#1036" id="1036">1036</a>
+<a href="#1037" id="1037">1037</a>
+<a href="#1038" id="1038">1038</a>
+<a href="#1039" id="1039">1039</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, sync::Arc, time::Duration};
 
 <span class="kw">use </span>atomic::{Atomic, Ordering};
@@ -1818,56 +1822,60 @@
         }
     }
 
-    <span class="doccomment">/// Returns `true` if the content height is greater then the viewport height.
-    </span><span class="kw">pub fn </span>can_scroll_vertical(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().height;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().height;
-
-        content &gt; viewport
+    <span class="kw">fn </span>can_scroll(<span class="kw-2">&amp;</span><span class="self">self</span>, predicate: <span class="kw">impl </span>Fn(PxSize, PxSize) -&gt; bool + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="macro">merge_var!</span>(SCROLL_VIEWPORT_SIZE_VAR, SCROLL_CONTENT_SIZE_VAR, <span class="kw">move </span>|<span class="kw-2">&amp;</span>vp, <span class="kw-2">&amp;</span>ct| predicate(vp, ct))
     }
 
-    <span class="doccomment">/// Returns `true` if the content width is greater then the viewport with.
-    </span><span class="kw">pub fn </span>can_scroll_horizontal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().width;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().width;
-
-        content &gt; viewport
+    <span class="doccomment">/// Gets a var that is `true` when the content height is greater then the viewport height.
+    </span><span class="kw">pub fn </span>can_scroll_vertical(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll(|vp, ct| ct.height &gt; vp.height)
     }
 
-    <span class="doccomment">/// Returns `true` if the content height is greater then the viewport height and the vertical offset
+    <span class="doccomment">/// Gets a var that is `true` when the content width is greater then the viewport with.
+    </span><span class="kw">pub fn </span>can_scroll_horizontal(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll(|vp, ct| ct.width &gt; vp.width)
+    }
+
+    <span class="kw">fn </span>can_scroll_v(<span class="kw-2">&amp;</span><span class="self">self</span>, predicate: <span class="kw">impl </span>Fn(PxSize, PxSize, Factor) -&gt; bool + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="macro">merge_var!</span>(
+            SCROLL_VIEWPORT_SIZE_VAR,
+            SCROLL_CONTENT_SIZE_VAR,
+            SCROLL_VERTICAL_OFFSET_VAR,
+            <span class="kw">move </span>|<span class="kw-2">&amp;</span>vp, <span class="kw-2">&amp;</span>ct, <span class="kw-2">&amp;</span>vo| predicate(vp, ct, vo)
+        )
+    }
+
+    <span class="doccomment">/// Gets a var that is `true` when the content height is greater then the viewport height and the vertical offset
     /// is not at the maximum.
-    </span><span class="kw">pub fn </span>can_scroll_down(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().height;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().height;
-
-        content &gt; viewport &amp;&amp; <span class="number">1</span>.fct() &gt; SCROLL_VERTICAL_OFFSET_VAR.get()
+    </span><span class="kw">pub fn </span>can_scroll_down(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll_v(|vp, ct, vo| ct.height &gt; vp.height &amp;&amp; <span class="number">1</span>.fct() &gt; vo)
     }
 
-    <span class="doccomment">/// Returns `true` if the content height is greater then the viewport height and the vertical offset
+    <span class="doccomment">/// Gets a var that is `true` when the content height is greater then the viewport height and the vertical offset
     /// is not at the minimum.
-    </span><span class="kw">pub fn </span>can_scroll_up(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().height;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().height;
-
-        content &gt; viewport &amp;&amp; <span class="number">0</span>.fct() &lt; SCROLL_VERTICAL_OFFSET_VAR.get()
+    </span><span class="kw">pub fn </span>can_scroll_up(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll_v(|vp, ct, vo| ct.height &gt; vp.height &amp;&amp; <span class="number">0</span>.fct() &lt; vo)
     }
 
-    <span class="doccomment">/// Returns `true` if the content width is greater then the viewport width and the horizontal offset
+    <span class="kw">fn </span>can_scroll_h(<span class="kw-2">&amp;</span><span class="self">self</span>, predicate: <span class="kw">impl </span>Fn(PxSize, PxSize, Factor) -&gt; bool + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="macro">merge_var!</span>(
+            SCROLL_VIEWPORT_SIZE_VAR,
+            SCROLL_CONTENT_SIZE_VAR,
+            SCROLL_HORIZONTAL_OFFSET_VAR,
+            <span class="kw">move </span>|<span class="kw-2">&amp;</span>vp, <span class="kw-2">&amp;</span>ct, <span class="kw-2">&amp;</span>ho| predicate(vp, ct, ho)
+        )
+    }
+
+    <span class="doccomment">/// Gets a var that is `true` when the content width is greater then the viewport width and the horizontal offset
     /// is not at the minimum.
-    </span><span class="kw">pub fn </span>can_scroll_left(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().width;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().width;
-
-        content &gt; viewport &amp;&amp; <span class="number">0</span>.fct() &lt; SCROLL_HORIZONTAL_OFFSET_VAR.get()
+    </span><span class="kw">pub fn </span>can_scroll_left(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll_h(|vp, ct, ho| ct.width &gt; vp.width &amp;&amp; <span class="number">0</span>.fct() &lt; ho)
     }
 
-    <span class="doccomment">/// Returns `true` if the content width is greater then the viewport width and the horizontal offset
+    <span class="doccomment">/// Gets a var that is `true` when the content width is greater then the viewport width and the horizontal offset
     /// is not at the maximum.
-    </span><span class="kw">pub fn </span>can_scroll_right(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().width;
-        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().width;
-
-        content &gt; viewport &amp;&amp; <span class="number">1</span>.fct() &gt; SCROLL_HORIZONTAL_OFFSET_VAR.get()
+    </span><span class="kw">pub fn </span>can_scroll_right(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+        <span class="self">self</span>.can_scroll_h(|vp, ct, ho| ct.width &gt; vp.width &amp;&amp; <span class="number">1</span>.fct() &gt; ho)
     }
 
     <span class="doccomment">/// Scroll the [`WIDGET`] into view.

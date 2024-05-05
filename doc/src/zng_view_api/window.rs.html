@@ -1014,6 +1014,10 @@
 <a href="#1012" id="1012">1012</a>
 <a href="#1013" id="1013">1013</a>
 <a href="#1014" id="1014">1014</a>
+<a href="#1015" id="1015">1015</a>
+<a href="#1016" id="1016">1016</a>
+<a href="#1017" id="1017">1017</a>
+<a href="#1018" id="1018">1018</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window, surface and frame types.
 
 </span><span class="kw">use </span>std::fmt;
@@ -1133,7 +1137,8 @@
 
     <span class="doccomment">/// Initial payload for API extensions.
     ///
-    /// The `zng-view` crate implements this by calling `RendererExtension::configure` with the payload.
+    /// The `zng-view` crate implements this by calling `WindowExtension::configure` and `RendererExtension::configure`
+    /// with the payload.
     </span><span class="kw">pub </span>extensions: Vec&lt;(ApiExtensionId, ApiExtensionPayload)&gt;,
 }
 
@@ -1399,8 +1404,8 @@
     </span><span class="kw">pub </span>icon: <span class="prelude-ty">Option</span>&lt;ImageId&gt;,
     <span class="doccomment">/// Window cursor icon and visibility.
     </span><span class="kw">pub </span>cursor: <span class="prelude-ty">Option</span>&lt;CursorIcon&gt;,
-    <span class="doccomment">/// Window custom cursor.
-    </span><span class="kw">pub </span>cursor_image: <span class="prelude-ty">Option</span>&lt;ImageId&gt;,
+    <span class="doccomment">/// Window custom cursor with hotspot.
+    </span><span class="kw">pub </span>cursor_image: <span class="prelude-ty">Option</span>&lt;(ImageId, PxPoint)&gt;,
     <span class="doccomment">/// If the window is see-through in pixels that are not fully opaque.
     </span><span class="kw">pub </span>transparent: bool,
 
@@ -1422,7 +1427,7 @@
 
     <span class="doccomment">/// Initial payload for API extensions.
     ///
-    /// The `zng-view` crate implements this by calling `RendererExtension::configure` with the payload.
+    /// The `zng-view` crate implements this by calling `WindowExtension::configure` and `RendererExtension::configure` with the payload.
     </span><span class="kw">pub </span>extensions: Vec&lt;(ApiExtensionId, ApiExtensionPayload)&gt;,
 
     <span class="doccomment">/// IME cursor area, if IME is enabled.
@@ -1430,6 +1435,9 @@
 
     <span class="doccomment">/// Enabled window chrome buttons.
     </span><span class="kw">pub </span>enabled_buttons: WindowButton,
+
+    <span class="doccomment">/// System shutdown warning associated with the window.
+    </span><span class="kw">pub </span>system_shutdown_warn: Txt,
 }
 <span class="kw">impl </span>WindowRequest {
     <span class="doccomment">/// Corrects invalid values if [`kiosk`] is `true`.
@@ -1545,7 +1553,7 @@
     }
 }
 
-<span class="doccomment">/// Describes the appearance of the mouse cursor.
+<span class="doccomment">/// Named system dependent cursor icon.
 </span><span class="attr">#[non_exhaustive]
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 </span><span class="kw">pub enum </span>CursorIcon {

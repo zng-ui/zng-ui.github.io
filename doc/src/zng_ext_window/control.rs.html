@@ -2282,6 +2282,22 @@
 <a href="#2280" id="2280">2280</a>
 <a href="#2281" id="2281">2281</a>
 <a href="#2282" id="2282">2282</a>
+<a href="#2283" id="2283">2283</a>
+<a href="#2284" id="2284">2284</a>
+<a href="#2285" id="2285">2285</a>
+<a href="#2286" id="2286">2286</a>
+<a href="#2287" id="2287">2287</a>
+<a href="#2288" id="2288">2288</a>
+<a href="#2289" id="2289">2289</a>
+<a href="#2290" id="2290">2290</a>
+<a href="#2291" id="2291">2291</a>
+<a href="#2292" id="2292">2292</a>
+<a href="#2293" id="2293">2293</a>
+<a href="#2294" id="2294">2294</a>
+<a href="#2295" id="2295">2295</a>
+<a href="#2296" id="2296">2296</a>
+<a href="#2297" id="2297">2297</a>
+<a href="#2298" id="2298">2298</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -2330,9 +2346,9 @@
 
 <span class="kw">use crate</span>::{
     cmd::{WindowCommands, MINIMIZE_CMD, RESTORE_CMD},
-    AutoSize, CursorImg, FrameCaptureMode, FrameImageReadyArgs, HeadlessMonitor, MonitorInfo, StartPosition, WidgetInfoImeArea,
-    WindowChangedArgs, WindowIcon, WindowRoot, WindowVars, FRAME_IMAGE_READY_EVENT, MONITORS, MONITORS_CHANGED_EVENT, WINDOWS,
-    WINDOW_CHANGED_EVENT, WINDOW_FOCUS,
+    AutoSize, FrameCaptureMode, FrameImageReadyArgs, HeadlessMonitor, MonitorInfo, StartPosition, WidgetInfoImeArea, WindowChangedArgs,
+    WindowIcon, WindowRoot, WindowVars, FRAME_IMAGE_READY_EVENT, MONITORS, MONITORS_CHANGED_EVENT, WINDOWS, WINDOW_CHANGED_EVENT,
+    WINDOW_FOCUS,
 };
 
 <span class="kw">struct </span>ImageResources {
@@ -2591,6 +2607,12 @@
                 })
             }
 
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(reason) = <span class="self">self</span>.vars.system_shutdown_warn().get_new() {
+                <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
+                    <span class="kw">let _</span>: Ignore = view.set_system_shutdown_warn(reason);
+                })
+            }
+
             <span class="kw">if </span>prev_state != new_state {
                 <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
                     <span class="kw">let _</span>: Ignore = view.set_state(new_state);
@@ -2655,24 +2677,41 @@
             });
         }
 
-        <span class="comment">// cursor_image:
-        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(cur) = <span class="self">self</span>.vars.cursor_img().get_new() {
-            <span class="self">self</span>.img_res.cursor_var = <span class="kw">match </span>cur {
-                <span class="prelude-val">None </span>=&gt; <span class="prelude-val">None</span>,
-                <span class="prelude-val">Some</span>(CursorImg { source, .. }) =&gt; <span class="kw">match </span>source {
-                    ImageSource::Render(cur, <span class="kw">_</span>) =&gt; <span class="prelude-val">Some</span>(IMAGES.cache(ImageSource::Render(
-                        cur.clone(),
-                        <span class="prelude-val">Some</span>(ImageRenderArgs { parent: <span class="prelude-val">Some</span>(WINDOW.id()) }),
-                    ))),
-                    source =&gt; <span class="prelude-val">Some</span>(IMAGES.cache(source)),
-                },
-            };
+        <span class="comment">// cursor (image):
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(cursor) = <span class="self">self</span>.vars.cursor().get_new() {
+            <span class="kw">match </span>cursor {
+                <span class="kw">crate</span>::CursorSource::Icon(ico) =&gt; {
+                    <span class="self">self</span>.img_res.cursor_var = <span class="prelude-val">None</span>;
+                    <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
+                        <span class="kw">let _</span>: Ignore = view.set_cursor(<span class="prelude-val">Some</span>(ico));
+                        <span class="kw">let _</span>: Ignore = view.set_cursor_image(<span class="prelude-val">None</span>, PxPoint::zero());
+                    });
+                }
+                <span class="kw">crate</span>::CursorSource::Img(img) =&gt; {
+                    <span class="self">self</span>.img_res.cursor_var = <span class="prelude-val">Some</span>(<span class="kw">match </span>img.source {
+                        ImageSource::Render(cur, <span class="kw">_</span>) =&gt; IMAGES.cache(ImageSource::Render(
+                            cur.clone(),
+                            <span class="prelude-val">Some</span>(ImageRenderArgs { parent: <span class="prelude-val">Some</span>(WINDOW.id()) }),
+                        )),
+                        source =&gt; IMAGES.cache(source),
+                    });
+
+                    <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
+                        <span class="kw">let _</span>: Ignore = view.set_cursor(<span class="prelude-val">Some</span>(img.fallback));
+                        <span class="kw">let _</span>: Ignore = view.set_cursor_image(<span class="prelude-val">None</span>, PxPoint::zero());
+                    });
+                }
+                <span class="kw">crate</span>::CursorSource::Hidden =&gt; {
+                    <span class="self">self</span>.img_res.cursor_var = <span class="prelude-val">None</span>;
+                    <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
+                        <span class="kw">let _</span>: Ignore = view.set_cursor(<span class="prelude-val">None</span>);
+                        <span class="kw">let _</span>: Ignore = view.set_cursor_image(<span class="prelude-val">None</span>, PxPoint::zero());
+                    });
+                }
+            }
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(cur) = <span class="kw-2">&amp;</span><span class="self">self</span>.img_res.cursor_var {
-                <span class="kw">let </span>hotspot = <span class="self">self
-                    </span>.vars
-                    .cursor_img()
-                    .with(|i| i.as_ref().map(|s| s.hotspot.clone()).unwrap_or_default());
+                <span class="kw">let </span>hotspot = <span class="self">self</span>.vars.cursor().with(|i| i.hotspot().cloned().unwrap_or_default());
 
                 <span class="kw">let </span>cursor_img_to_actual = <span class="kw">move </span>|img: <span class="kw-2">&amp;</span>Img| -&gt; <span class="prelude-ty">Option</span>&lt;(Img, PxPoint)&gt; {
                     <span class="kw">let </span>hotspot = <span class="kw">if </span>img.is_loaded() {
@@ -2688,7 +2727,6 @@
 
                     <span class="prelude-val">Some</span>((img.clone(), hotspot))
                 };
-
                 <span class="self">self</span>.vars.<span class="number">0</span>.actual_cursor_img.set_from_map(cur, cursor_img_to_actual.clone());
                 <span class="self">self</span>.img_res.cursor_binding = cur.bind_map(<span class="kw-2">&amp;</span><span class="self">self</span>.vars.<span class="number">0</span>.actual_cursor_img, cursor_img_to_actual);
 
@@ -2740,12 +2778,6 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(mode) = <span class="self">self</span>.vars.video_mode().get_new() {
             <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
                 <span class="kw">let _</span>: Ignore = view.set_video_mode(mode);
-            });
-        }
-
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(cursor) = <span class="self">self</span>.vars.cursor().get_new() {
-            <span class="self">self</span>.update_gen(<span class="kw">move </span>|view| {
-                <span class="kw">let _</span>: Ignore = view.set_cursor(cursor);
             });
         }
 
@@ -2961,7 +2993,7 @@
             <span class="kw">if </span>args.window_id == WINDOW.id() {
                 <span class="self">self</span>.waiting_view = <span class="bool-val">false</span>;
 
-                WINDOWS.set_renderer(args.window_id, args.window.renderer());
+                WINDOWS.set_view(args.window_id, args.window.clone().into());
 
                 <span class="self">self</span>.window = <span class="prelude-val">Some</span>(args.window.clone());
                 <span class="self">self</span>.cancel_ime_handle = <span class="kw">super</span>::cmd::CANCEL_IME_CMD.scoped(WINDOW.id()).subscribe(<span class="bool-val">true</span>);
@@ -3391,13 +3423,12 @@
                 .as_ref()
                 .and_then(|ico| ico.get().view().map(|ico| ico.id()))
                 .flatten(),
-            cursor: <span class="self">self</span>.vars.cursor().get(),
+            cursor: <span class="self">self</span>.vars.cursor().with(|c| c.icon()),
             cursor_image: <span class="self">self
-                </span>.img_res
-                .cursor_var
-                .as_ref()
-                .and_then(|cur| cur.get().view().map(|cur| cur.id()))
-                .flatten(),
+                </span>.vars
+                .actual_cursor_img()
+                .get()
+                .and_then(|(i, h)| i.view().and_then(|i| i.id()).map(|i| (i, h))),
             transparent: <span class="self">self</span>.transparent,
             capture_mode: <span class="macro">matches!</span>(<span class="self">self</span>.vars.frame_capture_mode().get(), FrameCaptureMode::All),
             render_mode: <span class="self">self</span>.render_mode.unwrap_or_else(|| WINDOWS.default_render_mode().get()),
@@ -3408,6 +3439,7 @@
                 <span class="kw">let </span>area = WINDOW.info().get(a.target.widget_id())<span class="question-mark">?</span>.ime_area().to_dip(scale_factor);
                 <span class="prelude-val">Some</span>(area)
             }),
+            system_shutdown_warn: <span class="self">self</span>.vars.system_shutdown_warn().get(),
 
             extensions: WINDOWS.take_view_extensions_init(window_id),
         };
@@ -3517,13 +3549,12 @@
                 .as_ref()
                 .and_then(|ico| ico.get().view().map(|ico| ico.id()))
                 .flatten(),
-            cursor: <span class="self">self</span>.vars.cursor().get(),
+            cursor: <span class="self">self</span>.vars.cursor().with(|c| c.icon()),
             cursor_image: <span class="self">self
-                </span>.img_res
-                .cursor_var
-                .as_ref()
-                .and_then(|cur| cur.get().view().map(|cur| cur.id()))
-                .flatten(),
+                </span>.vars
+                .actual_cursor_img()
+                .get()
+                .and_then(|(i, h)| i.view().and_then(|i| i.id()).map(|i| (i, h))),
             transparent: <span class="self">self</span>.transparent,
             capture_mode: <span class="macro">matches!</span>(<span class="self">self</span>.vars.frame_capture_mode().get(), FrameCaptureMode::All),
             render_mode: <span class="self">self</span>.render_mode.unwrap_or_else(|| WINDOWS.default_render_mode().get()),
@@ -3536,6 +3567,7 @@
                 <span class="kw">let </span>area = info.get(a.target.widget_id())<span class="question-mark">?</span>.ime_area().to_dip(info.scale_factor());
                 <span class="prelude-val">Some</span>(area)
             }),
+            system_shutdown_warn: <span class="self">self</span>.vars.system_shutdown_warn().get(),
 
             extensions: WINDOWS.take_view_extensions_init(window_id),
         };
@@ -3782,7 +3814,7 @@
             <span class="kw">if </span>args.window_id == WINDOW.id() {
                 <span class="self">self</span>.waiting_view = <span class="bool-val">false</span>;
 
-                WINDOWS.set_renderer(args.window_id, args.surface.renderer());
+                WINDOWS.set_view(args.window_id, args.surface.clone().into());
 
                 <span class="self">self</span>.surface = <span class="prelude-val">Some</span>(args.surface.clone());
                 <span class="self">self</span>.vars.<span class="number">0</span>.render_mode.set(args.data.render_mode);

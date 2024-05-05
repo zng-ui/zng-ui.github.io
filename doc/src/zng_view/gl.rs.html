@@ -1088,7 +1088,7 @@
     surface::{Surface, SurfaceAttributesBuilder, WindowSurface},
 };
 <span class="kw">use </span>rustc_hash::FxHashSet;
-<span class="kw">use </span>winit::{dpi::PhysicalSize, event_loop::EventLoopWindowTarget};
+<span class="kw">use </span>winit::{dpi::PhysicalSize, event_loop::ActiveEventLoop};
 <span class="kw">use </span>zng_txt::ToTxt <span class="kw">as _</span>;
 <span class="kw">use </span>zng_view_api::window::{RenderMode, WindowId};
 
@@ -1118,8 +1118,8 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>create_headed(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         id: WindowId,
-        window: winit::window::WindowBuilder,
-        window_target: <span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt;,
+        window: winit::window::WindowAttributes,
+        winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         render_mode: RenderMode,
         sender: <span class="kw-2">&amp;</span>AppEventSender,
     ) -&gt; (winit::window::Window, GlContext) {
@@ -1131,7 +1131,7 @@
                 <span class="kw">continue</span>;
             }
 
-            <span class="kw">let </span>window = window.clone().build(window_target).unwrap();
+            <span class="kw">let </span>window = winit_loop.create_window(window.clone()).unwrap();
 
             <span class="kw">let </span>r = util::catch_suppress(std::panic::AssertUnwindSafe(|| <span class="kw">match </span>config.mode {
                 RenderMode::Dedicated =&gt; <span class="self">self</span>.create_headed_glutin(id, <span class="kw-2">&amp;</span>window, config.hardware_acceleration),
@@ -1176,7 +1176,7 @@
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>create_headless(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         id: WindowId,
-        window_target: <span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt;,
+        winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         render_mode: RenderMode,
         sender: <span class="kw-2">&amp;</span>AppEventSender,
     ) -&gt; GlContext {
@@ -1189,8 +1189,8 @@
             }
 
             <span class="kw">let </span>r = util::catch_suppress(std::panic::AssertUnwindSafe(|| <span class="kw">match </span>config.mode {
-                RenderMode::Dedicated =&gt; <span class="self">self</span>.create_headless_glutin(id, window_target, config.hardware_acceleration),
-                RenderMode::Integrated =&gt; <span class="self">self</span>.create_headless_glutin(id, window_target, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)),
+                RenderMode::Dedicated =&gt; <span class="self">self</span>.create_headless_glutin(id, winit_loop, config.hardware_acceleration),
+                RenderMode::Integrated =&gt; <span class="self">self</span>.create_headless_glutin(id, winit_loop, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)),
                 RenderMode::Software =&gt; <span class="self">self</span>.create_headless_swgl(id),
             }));
 
@@ -1365,17 +1365,17 @@
     <span class="kw">fn </span>create_headless_glutin(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         id: WindowId,
-        window_target: <span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt;,
+        winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         hardware: <span class="prelude-ty">Option</span>&lt;bool&gt;,
     ) -&gt; <span class="prelude-ty">Result</span>&lt;GlContext, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
-        <span class="kw">let </span>hidden_window = winit::window::WindowBuilder::new()
+        <span class="kw">let </span>hidden_window = winit::window::WindowAttributes::default()
             .with_transparent(<span class="bool-val">true</span>)
             .with_inner_size(PhysicalSize::new(<span class="number">1u32</span>, <span class="number">1u32</span>))
             .with_visible(<span class="bool-val">false</span>)
-            .with_decorations(<span class="bool-val">false</span>)
-            .build(window_target)<span class="question-mark">?</span>;
+            .with_decorations(<span class="bool-val">false</span>);
+        <span class="kw">let </span>hidden_window = winit_loop.create_window(hidden_window)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>display_handle = window_target.raw_display_handle();
+        <span class="kw">let </span>display_handle = winit_loop.raw_display_handle();
         <span class="kw">let </span>window_handle = hidden_window.raw_window_handle();
 
         <span class="attr">#[cfg(windows)]

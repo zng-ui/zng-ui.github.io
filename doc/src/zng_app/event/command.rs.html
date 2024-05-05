@@ -1414,6 +1414,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1376" id="1376">1376</a>
 <a href="#1377" id="1377">1377</a>
 <a href="#1378" id="1378">1378</a>
+<a href="#1379" id="1379">1379</a>
+<a href="#1380" id="1380">1380</a>
+<a href="#1381" id="1381">1381</a>
+<a href="#1382" id="1382">1382</a>
+<a href="#1383" id="1383">1383</a>
+<a href="#1384" id="1384">1384</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::TypeId,
     collections::{hash_map, HashMap},
@@ -1525,7 +1531,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_state_map::{OwnedStateMap, StateId, StateMapMut, StateValue};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_unique_id::unique_id_64;
-<span class="kw">use </span>zng_var::{types::ArcCowVar, var, AnyVar, ArcVar, BoxedVar, ReadOnlyArcVar, Var, VarValue};
+<span class="kw">use </span>zng_var::{impl_from_and_into_var, types::ArcCowVar, var, AnyVar, ArcVar, BoxedVar, ReadOnlyArcVar, Var, VarValue};
 
 <span class="attr">#[doc(hidden)]
 </span><span class="kw">pub use </span>zng_app_context::app_local;
@@ -1964,14 +1970,20 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Scope of a widget.
     </span>Widget(WidgetId),
 }
-<span class="kw">impl </span>From&lt;WidgetId&gt; <span class="kw">for </span>CommandScope {
-    <span class="kw">fn </span>from(id: WidgetId) -&gt; <span class="self">Self </span>{
+<span class="macro">impl_from_and_into_var! </span>{
+    <span class="kw">fn </span>from(id: WidgetId) -&gt; CommandScope {
         CommandScope::Widget(id)
     }
-}
-<span class="kw">impl </span>From&lt;WindowId&gt; <span class="kw">for </span>CommandScope {
     <span class="kw">fn </span>from(id: WindowId) -&gt; CommandScope {
         CommandScope::Window(id)
+    }
+    <span class="doccomment">/// Widget scope.
+    </span><span class="kw">fn </span>from(widget_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; CommandScope {
+        WidgetId::named(widget_name).into()
+    }
+    <span class="doccomment">/// Widget scope.
+    </span><span class="kw">fn </span>from(widget_name: Txt) -&gt; CommandScope {
+        WidgetId::named(widget_name).into()
     }
 }
 

@@ -478,6 +478,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#440" id="440">440</a>
 <a href="#441" id="441">441</a>
 <a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
 </pre></div><pre class="rust"><code><span class="kw">use crate</span>::{widget::WidgetId, window::WindowId};
 
 <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -547,6 +552,11 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// The widget.
     </span><span class="kw">pub fn </span>widget_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; WidgetId {
         <span class="self">self</span>.path[<span class="self">self</span>.path.len() - <span class="number">1</span>]
+    }
+
+    <span class="doccomment">/// The widget parent, if it is not the root widget.
+    </span><span class="kw">pub fn </span>parent_id(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetId&gt; {
+        <span class="self">self</span>.ancestors().iter().copied().next_back()
     }
 
     <span class="doccomment">/// [`ancestors`](WidgetPath::ancestors) and [`widget_id`](WidgetPath::widget_id), root first.

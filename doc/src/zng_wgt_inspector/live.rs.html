@@ -1354,6 +1354,8 @@
 <a href="#1352" id="1352">1352</a>
 <a href="#1353" id="1353">1353</a>
 <a href="#1354" id="1354">1354</a>
+<a href="#1355" id="1355">1355</a>
+<a href="#1356" id="1356">1356</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_app::access::ACCESS_CLICK_EVENT;
 <span class="kw">use </span>zng_ext_config::CONFIG;
 <span class="kw">use </span>zng_ext_input::{
@@ -1364,6 +1366,7 @@
 <span class="kw">use </span>zng_ext_window::{WINDOW_Ext <span class="kw">as _</span>, WINDOWS};
 <span class="kw">use </span>zng_view_api::window::CursorIcon;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng_wgt_input::CursorSource;
 
 <span class="kw">use </span><span class="kw">crate</span>::INSPECT_CMD;
 
@@ -1540,13 +1543,14 @@
                     <span class="kw">let </span>cursor = WINDOW.vars().cursor();
 
                     <span class="comment">// set cursor to Crosshair and lock it in by resetting on a hook.
-                    </span>cursor.set(CursorIcon::Crosshair);
+                    </span><span class="kw">let </span>locked_cur = CursorSource::Icon(CursorIcon::Crosshair);
+                    cursor.set(locked_cur.clone());
                     <span class="kw">let </span>weak_cursor = cursor.downgrade();
                     _cursor_handle = cursor.hook(<span class="kw">move </span>|a| {
-                        <span class="kw">let </span>icon = <span class="kw-2">*</span>a.value();
-                        <span class="kw">if </span>icon != <span class="prelude-val">Some</span>(CursorIcon::Crosshair) {
+                        <span class="kw">let </span>icon = a.value();
+                        <span class="kw">if </span>icon != <span class="kw-2">&amp;</span>locked_cur {
                             <span class="kw">let </span>cursor = weak_cursor.upgrade().unwrap();
-                            cursor.set(CursorIcon::Crosshair);
+                            cursor.set(locked_cur.clone());
                         }
                         <span class="bool-val">true
                     </span>});

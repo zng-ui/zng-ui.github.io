@@ -231,7 +231,7 @@
     <span class="kw">type </span>Output = ();
 
     <span class="kw">fn </span>poll(<span class="kw-2">mut </span><span class="self">self</span>: Pin&lt;<span class="kw-2">&amp;mut </span><span class="self">Self</span>&gt;, cx: <span class="kw-2">&amp;mut </span>std::task::Context&lt;<span class="lifetime">'_</span>&gt;) -&gt; Poll&lt;()&gt; {
-        <span class="kw">if </span>!<span class="self">self</span>.var.capabilities().contains(VarCapabilities::NEW) {
+        <span class="kw">if </span>!<span class="self">self</span>.var.capabilities().contains(VarCapability::NEW) {
             <span class="comment">// var cannot have new value, ready to avoid deadlock.
             </span><span class="self">self</span>.observed_animation_start = <span class="bool-val">false</span>;
             <span class="kw">return </span>Poll::Ready(());
@@ -243,7 +243,7 @@
                 <span class="comment">// still animating, but received poll so an animation was overridden and stopped.
                 // try hook with new animation.
 
-                </span><span class="kw">while </span><span class="self">self</span>.var.capabilities().contains(VarCapabilities::NEW) {
+                </span><span class="kw">while </span><span class="self">self</span>.var.capabilities().contains(VarCapability::NEW) {
                     <span class="kw">let </span>waker = cx.waker().clone();
                     <span class="kw">let </span>r = <span class="self">self</span>.var.hook_animation_stop(Box::new(<span class="kw">move </span>|| {
                         waker.wake_by_ref();
@@ -286,7 +286,7 @@
                 <span class="comment">// observed `is_animating` already, changed in other thread during the `hook` setup.
                 </span><span class="self">self</span>.observed_animation_start = <span class="bool-val">true</span>;
 
-                <span class="kw">while </span><span class="self">self</span>.var.capabilities().contains(VarCapabilities::NEW) {
+                <span class="kw">while </span><span class="self">self</span>.var.capabilities().contains(VarCapability::NEW) {
                     <span class="comment">// hook with animation stop.
                     </span><span class="kw">let </span>waker = cx.waker().clone();
                     <span class="kw">let </span>r = <span class="self">self</span>.var.hook_animation_stop(Box::new(<span class="kw">move </span>|| {

@@ -1310,6 +1310,28 @@
 <a href="#1308" id="1308">1308</a>
 <a href="#1309" id="1309">1309</a>
 <a href="#1310" id="1310">1310</a>
+<a href="#1311" id="1311">1311</a>
+<a href="#1312" id="1312">1312</a>
+<a href="#1313" id="1313">1313</a>
+<a href="#1314" id="1314">1314</a>
+<a href="#1315" id="1315">1315</a>
+<a href="#1316" id="1316">1316</a>
+<a href="#1317" id="1317">1317</a>
+<a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a>
+<a href="#1321" id="1321">1321</a>
+<a href="#1322" id="1322">1322</a>
+<a href="#1323" id="1323">1323</a>
+<a href="#1324" id="1324">1324</a>
+<a href="#1325" id="1325">1325</a>
+<a href="#1326" id="1326">1326</a>
+<a href="#1327" id="1327">1327</a>
+<a href="#1328" id="1328">1328</a>
+<a href="#1329" id="1329">1329</a>
+<a href="#1330" id="1330">1330</a>
+<a href="#1331" id="1331">1331</a>
+<a href="#1332" id="1332">1332</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! UI nodes used for building the scroll widget.
 //!
 
@@ -1628,10 +1650,10 @@
 
             <span class="kw">let </span>scope = WIDGET.id();
 
-            up = SCROLL_UP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up());
-            down = SCROLL_DOWN_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down());
-            left = SCROLL_LEFT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left());
-            right = SCROLL_RIGHT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right());
+            up = SCROLL_UP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up().get());
+            down = SCROLL_DOWN_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down().get());
+            left = SCROLL_LEFT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left().get());
+            right = SCROLL_RIGHT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right().get());
         }
         UiNodeOp::Deinit =&gt; {
             child.deinit();
@@ -1694,10 +1716,10 @@
         UiNodeOp::Layout { wl, final_size } =&gt; {
             <span class="kw-2">*</span>final_size = child.layout(wl);
 
-            up.set_enabled(SCROLL.can_scroll_up());
-            down.set_enabled(SCROLL.can_scroll_down());
-            left.set_enabled(SCROLL.can_scroll_left());
-            right.set_enabled(SCROLL.can_scroll_right());
+            up.set_enabled(SCROLL.can_scroll_up().get());
+            down.set_enabled(SCROLL.can_scroll_down().get());
+            left.set_enabled(SCROLL.can_scroll_left().get());
+            right.set_enabled(SCROLL.can_scroll_right().get());
 
             <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get();
             LAYOUT.with_constraints(PxConstraints2d::new_fill_size(viewport), || {
@@ -1729,10 +1751,10 @@
 
             <span class="kw">let </span>scope = WIDGET.id();
 
-            up = PAGE_UP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up());
-            down = PAGE_DOWN_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down());
-            left = PAGE_LEFT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left());
-            right = PAGE_RIGHT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right());
+            up = PAGE_UP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up().get());
+            down = PAGE_DOWN_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down().get());
+            left = PAGE_LEFT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left().get());
+            right = PAGE_RIGHT_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right().get());
         }
         UiNodeOp::Deinit =&gt; {
             child.deinit();
@@ -1788,10 +1810,10 @@
         UiNodeOp::Layout { wl, final_size } =&gt; {
             <span class="kw-2">*</span>final_size = child.layout(wl);
 
-            up.set_enabled(SCROLL.can_scroll_up());
-            down.set_enabled(SCROLL.can_scroll_down());
-            left.set_enabled(SCROLL.can_scroll_left());
-            right.set_enabled(SCROLL.can_scroll_right());
+            up.set_enabled(SCROLL.can_scroll_up().get());
+            down.set_enabled(SCROLL.can_scroll_down().get());
+            left.set_enabled(SCROLL.can_scroll_left().get());
+            right.set_enabled(SCROLL.can_scroll_right().get());
 
             <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get();
             LAYOUT.with_constraints(PxConstraints2d::new_fill_size(viewport), || {
@@ -1817,10 +1839,10 @@
         UiNodeOp::Init =&gt; {
             <span class="kw">let </span>scope = WIDGET.id();
 
-            top = SCROLL_TO_TOP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up());
-            bottom = SCROLL_TO_BOTTOM_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down());
-            leftmost = SCROLL_TO_LEFTMOST_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left());
-            rightmost = SCROLL_TO_RIGHTMOST_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right());
+            top = SCROLL_TO_TOP_CMD.scoped(scope).subscribe(SCROLL.can_scroll_up().get());
+            bottom = SCROLL_TO_BOTTOM_CMD.scoped(scope).subscribe(SCROLL.can_scroll_down().get());
+            leftmost = SCROLL_TO_LEFTMOST_CMD.scoped(scope).subscribe(SCROLL.can_scroll_left().get());
+            rightmost = SCROLL_TO_RIGHTMOST_CMD.scoped(scope).subscribe(SCROLL.can_scroll_right().get());
         }
         UiNodeOp::Deinit =&gt; {
             child.deinit();
@@ -1831,10 +1853,10 @@
             rightmost = CommandHandle::dummy();
         }
         UiNodeOp::Layout { .. } =&gt; {
-            top.set_enabled(SCROLL.can_scroll_up());
-            bottom.set_enabled(SCROLL.can_scroll_down());
-            leftmost.set_enabled(SCROLL.can_scroll_left());
-            rightmost.set_enabled(SCROLL.can_scroll_right());
+            top.set_enabled(SCROLL.can_scroll_up().get());
+            bottom.set_enabled(SCROLL.can_scroll_down().get());
+            leftmost.set_enabled(SCROLL.can_scroll_left().get());
+            rightmost.set_enabled(SCROLL.can_scroll_right().get());
         }
         UiNodeOp::Event { update } =&gt; {
             child.event(update);
@@ -1952,6 +1974,7 @@
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
             _handle = SCROLL_TO_CMD.scoped(WIDGET.id()).subscribe(<span class="bool-val">true</span>);
+            WIDGET.sub_event(<span class="kw-2">&amp;</span>FOCUS_CHANGED_EVENT);
         }
         UiNodeOp::Deinit =&gt; {
             _handle = CommandHandle::dummy();
@@ -1960,14 +1983,21 @@
             <span class="kw">let </span>self_id = WIDGET.id();
             <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = FOCUS_CHANGED_EVENT.on(update) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(path) = <span class="kw-2">&amp;</span>args.new_focus {
-                    <span class="kw">if </span>(scroll_to.is_none() || !scroll_to_from_cmd) &amp;&amp; path.contains(self_id) &amp;&amp; path.widget_id() != self_id {
+                    <span class="kw">if </span>(scroll_to.is_none() || !scroll_to_from_cmd)
+                        &amp;&amp; path.contains(self_id)
+                        &amp;&amp; path.widget_id() != self_id
+                        &amp;&amp; !args.is_enabled_change()
+                        &amp;&amp; !args.is_highlight_changed()
+                    {
                         <span class="comment">// focus move inside.
                         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(mode) = SCROLL_TO_FOCUSED_MODE_VAR.get() {
                             <span class="comment">// scroll_to_focused enabled
 
-                            </span><span class="kw">if </span>SCROLL.can_scroll_vertical() || SCROLL.can_scroll_horizontal() {
-                                <span class="comment">// can scroll AND focus did not change by a click on the Scroll! scope restoring focus
-                                // back to a child.
+                            </span><span class="kw">let </span>can_scroll_v = SCROLL.can_scroll_vertical().get();
+                            <span class="kw">let </span>can_scroll_h = SCROLL.can_scroll_horizontal().get();
+                            <span class="kw">if </span>can_scroll_v || can_scroll_h {
+                                <span class="comment">// auto scroll if can scroll AND focus did not change by a click on the
+                                // Scroll! scope restoring focus back to a child AND the target is not already visible.
 
                                 </span><span class="kw">let </span>tree = WINDOW.info();
                                 <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>target) = tree.get(path.widget_id()) {
@@ -2007,8 +2037,22 @@
                                             }
                                         }
 
-                                        scroll_to = <span class="prelude-val">Some</span>((Rect::from(target.inner_bounds()), mode, <span class="prelude-val">None</span>, <span class="bool-val">false</span>));
-                                        WIDGET.layout();
+                                        <span class="comment">// check if widget is not large and already visible.
+                                        </span><span class="kw">let </span><span class="kw-2">mut </span>scroll = <span class="bool-val">true</span>;
+                                        <span class="kw">let </span>scroll_bounds = tree.get(self_id).unwrap().inner_bounds();
+                                        <span class="kw">let </span>target_bounds = target.inner_bounds();
+                                        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = scroll_bounds.intersection(<span class="kw-2">&amp;</span>target_bounds) {
+                                            <span class="kw">let </span>is_large_visible_v =
+                                                can_scroll_v &amp;&amp; r.height() &gt; Px(<span class="number">20</span>) &amp;&amp; target_bounds.height() &gt; scroll_bounds.height();
+                                            <span class="kw">let </span>is_large_visible_h =
+                                                can_scroll_h &amp;&amp; r.width() &gt; Px(<span class="number">20</span>) &amp;&amp; target_bounds.width() &gt; scroll_bounds.width();
+
+                                            scroll = !is_large_visible_v &amp;&amp; !is_large_visible_h;
+                                        }
+                                        <span class="kw">if </span>scroll {
+                                            scroll_to = <span class="prelude-val">Some</span>((Rect::from(target_bounds), mode, <span class="prelude-val">None</span>, <span class="bool-val">false</span>));
+                                            WIDGET.layout();
+                                        }
                                     }
                                 }
                             }
@@ -2315,16 +2359,16 @@
                     <span class="kw">match </span>delta {
                         MouseScrollDelta::LineDelta(x, y) =&gt; {
                             <span class="kw">let </span>scroll_x = <span class="kw">if </span>x &gt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_left()
+                                SCROLL.can_scroll_left().get()
                             } <span class="kw">else if </span>x &lt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_right()
+                                SCROLL.can_scroll_right().get()
                             } <span class="kw">else </span>{
                                 <span class="bool-val">false
                             </span>};
                             <span class="kw">let </span>scroll_y = <span class="kw">if </span>y &gt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_up()
+                                SCROLL.can_scroll_up().get()
                             } <span class="kw">else if </span>y &lt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_down()
+                                SCROLL.can_scroll_down().get()
                             } <span class="kw">else </span>{
                                 <span class="bool-val">false
                             </span>};
@@ -2342,16 +2386,16 @@
                         }
                         MouseScrollDelta::PixelDelta(x, y) =&gt; {
                             <span class="kw">let </span>scroll_x = <span class="kw">if </span>x &gt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_left()
+                                SCROLL.can_scroll_left().get()
                             } <span class="kw">else if </span>x &lt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_right()
+                                SCROLL.can_scroll_right().get()
                             } <span class="kw">else </span>{
                                 <span class="bool-val">false
                             </span>};
                             <span class="kw">let </span>scroll_y = <span class="kw">if </span>y &gt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_up()
+                                SCROLL.can_scroll_up().get()
                             } <span class="kw">else if </span>y &lt; <span class="number">0.0 </span>{
-                                SCROLL.can_scroll_down()
+                                SCROLL.can_scroll_down().get()
                             } <span class="kw">else </span>{
                                 <span class="bool-val">false
                             </span>};

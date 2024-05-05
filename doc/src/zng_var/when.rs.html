@@ -878,7 +878,7 @@
 
             <span class="comment">// capacity can be n*2+1, but we only bet on conditions being `NEW`.
             </span><span class="kw">let </span><span class="kw-2">mut </span>input_handles = Vec::with_capacity(rc_when.conditions.len());
-            <span class="kw">if </span>rc_when.default.capabilities().contains(VarCapabilities::NEW) {
+            <span class="kw">if </span>rc_when.default.capabilities().contains(VarCapability::NEW) {
                 input_handles.push(rc_when.default.hook_any(ArcWhenVar::handle_value(wk_when.clone(), usize::MAX)));
             }
             <span class="kw">for </span>(i, (c, v)) <span class="kw">in </span>rc_when.conditions.iter().enumerate() {
@@ -886,10 +886,10 @@
                     data.active = i;
                 }
 
-                <span class="kw">if </span>c.capabilities().contains(VarCapabilities::NEW) {
+                <span class="kw">if </span>c.capabilities().contains(VarCapability::NEW) {
                     input_handles.push(c.hook_any(ArcWhenVar::handle_condition(wk_when.clone(), i)));
                 }
-                <span class="kw">if </span>v.capabilities().contains(VarCapabilities::NEW) {
+                <span class="kw">if </span>v.capabilities().contains(VarCapability::NEW) {
                     input_handles.push(v.hook_any(ArcWhenVar::handle_value(wk_when.clone(), i)));
                 }
             }
@@ -1243,11 +1243,11 @@
         }
     }
 
-    <span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapabilities {
+    <span class="kw">fn </span>capabilities(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarCapability {
         <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.conditions.is_empty() {
             <span class="self">self</span>.<span class="number">0</span>.default.capabilities()
         } <span class="kw">else </span>{
-            <span class="self">self</span>.active().capabilities() | VarCapabilities::NEW | VarCapabilities::CAPS_CHANGE
+            <span class="self">self</span>.active().capabilities() | VarCapability::NEW | VarCapability::CAPS_CHANGE
         }
     }
 

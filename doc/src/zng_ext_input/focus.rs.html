@@ -1712,6 +1712,14 @@
 <a href="#1710" id="1710">1710</a>
 <a href="#1711" id="1711">1711</a>
 <a href="#1712" id="1712">1712</a>
+<a href="#1713" id="1713">1713</a>
+<a href="#1714" id="1714">1714</a>
+<a href="#1715" id="1715">1715</a>
+<a href="#1716" id="1716">1716</a>
+<a href="#1717" id="1717">1717</a>
+<a href="#1718" id="1718">1718</a>
+<a href="#1719" id="1719">1719</a>
+<a href="#1720" id="1720">1720</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Keyboard focus manager.
 
 </span><span class="kw">pub mod </span>iter;
@@ -1975,11 +1983,11 @@
     </span>Recovery,
 }
 <span class="kw">impl </span>FocusChangedCause {
-    <span class="doccomment">/// If the change cause by a request to the previous widget, by tab index.
-    </span><span class="kw">pub fn </span>is_prev_request(<span class="self">self</span>) -&gt; bool {
+    <span class="doccomment">/// Get focus request target.
+    </span><span class="kw">pub fn </span>request_target(<span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;FocusTarget&gt; {
         <span class="kw">match </span><span class="self">self </span>{
-            FocusChangedCause::Request(r) =&gt; <span class="macro">matches!</span>(r.target, FocusTarget::Prev),
-            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+            <span class="self">Self</span>::Request(r) =&gt; <span class="prelude-val">Some</span>(r.target),
+            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
         }
     }
 }
@@ -2215,12 +2223,19 @@
                 focus.is_highlighting_var.set(<span class="bool-val">true</span>);
             }
 
-            <span class="kw">let </span>reverse = args.cause.is_prev_request();
+            <span class="comment">// reentering single child of parent scope that cycles
+            </span><span class="kw">let </span>is_tab_cycle_reentry = <span class="macro">matches!</span>(args.cause.request_target(), <span class="prelude-val">Some</span>(FocusTarget::Prev | FocusTarget::Next))
+                &amp;&amp; <span class="kw">match </span>(<span class="kw-2">&amp;</span>args.prev_focus, <span class="kw-2">&amp;</span>args.new_focus) {
+                    (<span class="prelude-val">Some</span>(p), <span class="prelude-val">Some</span>(n)) =&gt; p.contains(n.widget_id()),
+                    <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+                };
+
+            <span class="kw">let </span>reverse = <span class="macro">matches!</span>(args.cause.request_target(), <span class="prelude-val">Some</span>(FocusTarget::Prev));
             <span class="kw">let </span>prev_focus = args.prev_focus.clone();
             FOCUS_CHANGED_EVENT.notify(args);
 
             <span class="comment">// may have focused scope.
-            </span><span class="kw">while let </span><span class="prelude-val">Some</span>(after_args) = focus.move_after_focus(reverse) {
+            </span><span class="kw">while let </span><span class="prelude-val">Some</span>(after_args) = focus.move_after_focus(is_tab_cycle_reentry, reverse) {
                 FOCUS_CHANGED_EVENT.notify(after_args);
             }
 
@@ -3046,14 +3061,15 @@
     }
 
     <span class="attr">#[must_use]
-    </span><span class="kw">fn </span>move_after_focus(<span class="kw-2">&amp;mut </span><span class="self">self</span>, reverse: bool) -&gt; <span class="prelude-ty">Option</span>&lt;FocusChangedArgs&gt; {
+    </span><span class="kw">fn </span>move_after_focus(<span class="kw-2">&amp;mut </span><span class="self">self</span>, is_tab_cycle_reentry: bool, reverse: bool) -&gt; <span class="prelude-ty">Option</span>&lt;FocusChangedArgs&gt; {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(focused) = <span class="kw-2">&amp;</span><span class="self">self</span>.focused {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = WINDOWS.focused_info() {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(widget) = FocusInfoTree::new(info, <span class="self">self</span>.focus_disabled_widgets.get(), <span class="self">self</span>.focus_hidden_widgets.get())
                     .get(focused.path.widget_id())
                 {
                     <span class="kw">if </span>widget.is_scope() {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(widget) = widget.on_focus_scope_move(|id| <span class="self">self</span>.return_focused.get(<span class="kw-2">&amp;</span>id).map(|p| p.as_path()), reverse) {
+                        <span class="kw">let </span>last_focused = |id| <span class="self">self</span>.return_focused.get(<span class="kw-2">&amp;</span>id).map(|p| p.as_path());
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(widget) = widget.on_focus_scope_move(last_focused, is_tab_cycle_reentry, reverse) {
                             <span class="self">self</span>.enabled_nav = widget.enabled_nav_with_frame();
                             <span class="kw">return </span><span class="self">self</span>.move_focus(
                                 <span class="prelude-val">Some</span>(FocusedInfo::new(widget)),

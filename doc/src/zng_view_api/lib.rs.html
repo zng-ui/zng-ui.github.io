@@ -530,6 +530,24 @@
 <a href="#528" id="528">528</a>
 <a href="#529" id="529">529</a>
 <a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1036,6 +1054,18 @@
     <span class="doccomment">/// Enable or disable IME by setting a cursor area.
     </span><span class="kw">pub fn </span>set_ime_area(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, area: <span class="prelude-ty">Option</span>&lt;DipRect&gt;);
 
+    <span class="doccomment">/// Attempt to set a system wide shutdown warning associated with the window.
+    ///
+    /// Operating systems that support this show the `reason` in a warning for the user, it must be a short text
+    /// that identifies the critical operation that cannot be cancelled.
+    ///
+    /// Note that there is no guarantee that the view-process or operating system will actually set a block, there
+    /// is no error result because operating systems can silently ignore block requests at any moment, even after
+    /// an initial successful block.
+    ///
+    /// Set to an empty text to remove the warning.
+    </span><span class="kw">pub fn </span>set_system_shutdown_warn(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, reason: Txt);
+
     <span class="doccomment">/// Licenses that may be required to be displayed in the app about screen.
     ///
     /// This is specially important for prebuilt view users, as the tools that scrap licenses
@@ -1051,6 +1081,12 @@
     /// not on the list, or [`ApiExtensionPayload::invalid_request`] if the `extension_request` is not in a
     /// format expected by the extension.
     </span><span class="kw">pub fn </span>app_extension(<span class="kw-2">&amp;mut </span><span class="self">self</span>, extension_id: ApiExtensionId, extension_request: ApiExtensionPayload) -&gt; ApiExtensionPayload;
+
+    <span class="doccomment">/// Call the API extension.
+    ///
+    /// This is similar to [`Api::app_extension`], but is targeting the instance of an extension associated
+    /// with the `id` window or headless surface.
+    </span><span class="kw">pub fn </span>window_extension(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, extension_id: ApiExtensionId, extension_request: ApiExtensionPayload) -&gt; ApiExtensionPayload;
 
     <span class="doccomment">/// Call the API extension.
     ///

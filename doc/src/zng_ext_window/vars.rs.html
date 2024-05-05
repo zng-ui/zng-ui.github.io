@@ -691,6 +691,23 @@
 <a href="#689" id="689">689</a>
 <a href="#690" id="690">690</a>
 <a href="#691" id="691">691</a>
+<a href="#692" id="692">692</a>
+<a href="#693" id="693">693</a>
+<a href="#694" id="694">694</a>
+<a href="#695" id="695">695</a>
+<a href="#696" id="696">696</a>
+<a href="#697" id="697">697</a>
+<a href="#698" id="698">698</a>
+<a href="#699" id="699">699</a>
+<a href="#700" id="700">700</a>
+<a href="#701" id="701">701</a>
+<a href="#702" id="702">702</a>
+<a href="#703" id="703">703</a>
+<a href="#704" id="704">704</a>
+<a href="#705" id="705">705</a>
+<a href="#706" id="706">706</a>
+<a href="#707" id="707">707</a>
+<a href="#708" id="708">708</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -702,20 +719,19 @@
 <span class="kw">use </span>zng_state_map::StaticStateId;
 <span class="kw">use </span>zng_txt::{ToTxt, Txt};
 <span class="kw">use </span>zng_unique_id::IdSet;
-<span class="kw">use </span>zng_var::{merge_var, var, ArcVar, BoxedVar, ReadOnlyArcVar, Var};
+<span class="kw">use </span>zng_var::{merge_var, var, var_from, ArcVar, BoxedVar, ReadOnlyArcVar, Var};
 <span class="kw">use </span>zng_view_api::{
     config::ColorScheme,
     window::{CursorIcon, FocusIndicator, RenderMode, VideoMode, WindowButton, WindowState},
 };
 
-<span class="kw">use crate</span>::{AutoSize, CursorImg, FrameCaptureMode, MonitorQuery, WindowIcon};
+<span class="kw">use crate</span>::{AutoSize, CursorSource, FrameCaptureMode, MonitorQuery, WindowIcon};
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>WindowVarsData {
     chrome: ArcVar&lt;bool&gt;,
     icon: ArcVar&lt;WindowIcon&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) actual_icon: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;Img&gt;&gt;,
-    cursor: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;CursorIcon&gt;&gt;,
-    cursor_img: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;CursorImg&gt;&gt;,
+    cursor: ArcVar&lt;CursorSource&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) actual_cursor_img: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;(Img, PxPoint)&gt;&gt;,
     title: ArcVar&lt;Txt&gt;,
 
@@ -768,6 +784,7 @@
     <span class="kw">pub</span>(<span class="kw">super</span>) render_mode: ArcVar&lt;RenderMode&gt;,
 
     <span class="kw">pub</span>(<span class="kw">super</span>) access_enabled: ArcVar&lt;AccessEnabled&gt;,
+    system_shutdown_warn: ArcVar&lt;Txt&gt;,
 }
 
 <span class="doccomment">/// Variables that configure the opening or open window.
@@ -786,8 +803,7 @@
             chrome: var(<span class="bool-val">true</span>),
             icon: var(WindowIcon::Default),
             actual_icon: var(<span class="prelude-val">None</span>),
-            cursor: var(<span class="prelude-val">Some</span>(CursorIcon::Default)),
-            cursor_img: var(<span class="prelude-val">None</span>),
+            cursor: var_from(CursorIcon::Default),
             actual_cursor_img: var(<span class="prelude-val">None</span>),
             title: var(<span class="string">""</span>.to_txt()),
 
@@ -844,6 +860,7 @@
             render_mode: var(default_render_mode),
 
             access_enabled: var(AccessEnabled::empty()),
+            system_shutdown_warn: var(Txt::from(<span class="string">""</span>)),
         });
         zng_app::APP.about().map_ref(|i| <span class="kw-2">&amp;</span>i.name).set_bind(<span class="kw-2">&amp;</span>vars.title).perm();
         <span class="self">Self</span>(vars)
@@ -893,32 +910,22 @@
 
     <span class="doccomment">/// Window cursor icon and visibility.
     ///
-    /// See [`CursorIcon`] for details.
+    /// See [`CursorSource`] for details.
     ///
-    /// The default is [`CursorIcon::Default`], if set to `None` no cursor icon is shown.
+    /// The default is [`CursorIcon::Default`].
     ///
     /// [`CursorIcon`]: zng_view_api::window::CursorIcon
     /// [`CursorIcon::Default`]: zng_view_api::window::CursorIcon::Default
-    </span><span class="kw">pub fn </span>cursor(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;CursorIcon&gt;&gt; {
+    </span><span class="kw">pub fn </span>cursor(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;CursorSource&gt; {
         <span class="self">self</span>.<span class="number">0</span>.cursor.clone()
-    }
-
-    <span class="doccomment">/// Window custom cursor.
-    ///
-    /// When this is set to a loaded image it is used as a cursor, falls back to [`cursor`].
-    ///
-    /// See [`CursorImg`] for details.
-    ///
-    /// [`cursor`]: Self::cursor
-    </span><span class="kw">pub fn </span>cursor_img(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;CursorImg&gt;&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.cursor_img.clone()
     }
 
     <span class="doccomment">/// Window custom cursor image.
     ///
-    /// This is `None` if [`cursor_img`] is not set, otherwise it is an [`Img`] reference clone with computed hotspot [`PxPoint`].
+    /// This is `None` if [`cursor`] is not set to a custom image, otherwise it is an [`Img`]
+    /// reference clone with computed hotspot [`PxPoint`].
     ///
-    /// [`cursor_img`]: Self::cursor_img
+    /// [`cursor`]: Self::cursor
     /// [`Img`]: zng_ext_image::Img
     /// [`PxPoint`]: zng_layout::unit::PxPoint
     </span><span class="kw">pub fn </span>actual_cursor_img(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;<span class="prelude-ty">Option</span>&lt;(Img, PxPoint)&gt;&gt; {
@@ -1372,6 +1379,33 @@
     /// [`enable_access`]: crate::WINDOW_Ext::enable_access
     </span><span class="kw">pub fn </span>access_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;AccessEnabled&gt; {
         <span class="self">self</span>.<span class="number">0</span>.access_enabled.read_only()
+    }
+
+    <span class="doccomment">/// Attempt to set a system wide shutdown warning associated with the window.
+    ///
+    /// Operating systems that support this show the text in a warning for the user, it must be a short text
+    /// that identifies the critical operation that cannot be cancelled.
+    ///
+    /// Set to an empty text to remove the warning.
+    ///
+    /// Note that this does not stop the window from closing or the app from exiting normally, you must
+    /// handle window close requests and show some feedback to the user, the view-process will send a window close
+    /// request when a system shutdown attempt is detected.
+    ///
+    /// Note that there is no guarantee that the view-process or operating system will actually set a block, there
+    /// is no error result because operating systems can silently ignore block requests at any moment, even after
+    /// an initial successful block.
+    ///
+    /// ## Current Limitations
+    ///
+    /// The current `zng::view_process` or `zng-view` only implements this feature on Windows and it will only work properly
+    /// under these conditions:
+    ///
+    /// * It must be running in `run_same_process` mode. Windows kills all other processes, so in a run with `init` the the app-process
+    /// will be lost. Note that this also mean that the crash handler and worker processes are also killed.
+    /// * Must be built with `#![windows_subsystem = "windows"]` and must be running from the Windows Explorer (desktop).
+    </span><span class="kw">pub fn </span>system_shutdown_warn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;Txt&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.system_shutdown_warn.clone()
     }
 }
 <span class="kw">impl </span>PartialEq <span class="kw">for </span>WindowVars {

@@ -103,84 +103,70 @@
 <a href="#101" id="101">101</a>
 <a href="#102" id="102">102</a>
 <a href="#103" id="103">103</a>
-<a href="#104" id="104">104</a>
-<a href="#105" id="105">105</a>
-<a href="#106" id="106">106</a>
-<a href="#107" id="107">107</a>
-<a href="#108" id="108">108</a>
-<a href="#109" id="109">109</a>
-<a href="#110" id="110">110</a>
-<a href="#111" id="111">111</a>
-<a href="#112" id="112">112</a>
-<a href="#113" id="113">113</a>
-<a href="#114" id="114">114</a>
-<a href="#115" id="115">115</a>
-<a href="#116" id="116">116</a>
-<a href="#117" id="117">117</a>
-<a href="#118" id="118">118</a>
-<a href="#119" id="119">119</a>
-<a href="#120" id="120">120</a>
-<a href="#121" id="121">121</a>
-<a href="#122" id="122">122</a>
-<a href="#123" id="123">123</a>
-<a href="#124" id="124">124</a>
-<a href="#125" id="125">125</a>
-<a href="#126" id="126">126</a>
-<a href="#127" id="127">127</a>
-<a href="#128" id="128">128</a>
-<a href="#129" id="129">129</a>
-<a href="#130" id="130">130</a>
-<a href="#131" id="131">131</a>
-<a href="#132" id="132">132</a>
-<a href="#133" id="133">133</a>
-<a href="#134" id="134">134</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>zng_ext_input::mouse::{ClickMode, WidgetInfoBuilderMouseExt <span class="kw">as _</span>, MOUSE_HOVERED_EVENT};
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::{
+    atomic::{AtomicBool, Ordering},
+    Arc,
+};
+
+<span class="kw">use </span>zng_ext_input::mouse::{ClickMode, WidgetInfoBuilderMouseExt <span class="kw">as _</span>, MOUSE_HOVERED_EVENT};
 <span class="kw">use </span>zng_ext_window::WINDOW_Ext <span class="kw">as _</span>;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 
 <span class="kw">pub use </span>zng_view_api::window::CursorIcon;
 
-<span class="kw">pub use </span>zng_ext_window::CursorImg;
+<span class="kw">pub use </span>zng_ext_window::{CursorImg, CursorSource};
 
-<span class="doccomment">/// Sets the [`CursorIcon`] displayed when hovering the widget.
+<span class="macro">context_local! </span>{
+    <span class="kw">static </span>CHILD_SETS_CURSOR: AtomicBool = AtomicBool::new(<span class="bool-val">false</span>);
+}
+
+<span class="doccomment">/// Sets the mouse pointer cursor displayed when hovering the widget.
 ///
-/// This cursor is only used if [`cursor_img`] is not set on the widget, or the cursor image cannot be shown.
-/// Note that this property clears the `cursor_img` in the context so if a parent has a `cursor_img` if
-/// will be overridden by this cursor, but if the widget also sets `cursor_img` the custom cursor is used instead.
-///
-/// If set to `None` no cursor is shown.
-///
-/// [`cursor_img`]: fn@cursor_img
+/// You can set this property to a [`CursorIcon`] for a named platform dependent icon, [`CursorImg`] for a custom image,
+/// or to `false` that converts to [`CursorSource::Hidden`].
 </span><span class="attr">#[property(CONTEXT, default(CursorIcon::Default))]
-</span><span class="kw">pub fn </span>cursor(child: <span class="kw">impl </span>UiNode, cursor: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;CursorIcon&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>cursor(child: <span class="kw">impl </span>UiNode, cursor: <span class="kw">impl </span>IntoVar&lt;CursorSource&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>cursor = cursor.into_var();
-    <span class="kw">let </span><span class="kw-2">mut </span>hovered_binding = <span class="prelude-val">None</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>binding = <span class="prelude-val">None</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>child_sets_ctx = <span class="prelude-val">None</span>::&lt;Arc&lt;AtomicBool&gt;&gt;;
 
-    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
-        <span class="kw">let </span><span class="kw-2">mut </span>restore = <span class="bool-val">false</span>;
+    match_node(child, <span class="kw">move </span>|c, op| {
+        <span class="kw">let </span><span class="kw-2">mut </span>unbind_restore = <span class="bool-val">false</span>;
         <span class="kw">match </span>op {
             UiNodeOp::Init =&gt; {
                 WIDGET.sub_event(<span class="kw-2">&amp;</span>MOUSE_HOVERED_EVENT);
             }
             UiNodeOp::Deinit =&gt; {
-                restore = <span class="bool-val">true</span>;
+                unbind_restore = <span class="bool-val">true</span>;
+                child_sets_ctx = <span class="prelude-val">None</span>;
             }
             UiNodeOp::Event { update } =&gt; {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_HOVERED_EVENT.on(update) {
+                    <span class="kw">let </span><span class="kw-2">mut </span>bind = <span class="bool-val">false</span>;
                     <span class="kw">if </span>args.is_over() {
-                        <span class="kw">if </span>hovered_binding.is_none() {
+                        <span class="kw">if </span>child_sets_ctx.is_none() {
+                            child_sets_ctx = <span class="prelude-val">Some</span>(Arc::new(AtomicBool::new(<span class="bool-val">false</span>)));
+                        }
+
+                        <span class="comment">// if a child also sets cursor, it will flag our context.
+                        </span>CHILD_SETS_CURSOR.with_context(<span class="kw-2">&amp;mut </span>child_sets_ctx, || c.event(update));
+
+                        <span class="kw">if </span>!child_sets_ctx.as_ref().unwrap().swap(<span class="bool-val">false</span>, Ordering::Relaxed) {
+                            <span class="comment">// no descendant sets cursor, it is ours.
+                            </span>bind = <span class="bool-val">true</span>;
+                        }
+
+                        <span class="comment">// flag parent context.
+                        </span>CHILD_SETS_CURSOR.get().store(<span class="bool-val">true</span>, Ordering::Relaxed);
+                    }
+
+                    <span class="kw">if </span>bind {
+                        <span class="kw">if </span>binding.is_none() {
                             <span class="comment">// we are not already set, setup binding.
-
-                            </span><span class="kw">let </span>vars = WINDOW.vars();
-
-                            vars.cursor_img().set(<span class="prelude-val">None</span>);
-
-                            <span class="kw">let </span>c = vars.cursor();
-                            c.set_from(<span class="kw-2">&amp;</span>cursor);
-                            hovered_binding = <span class="prelude-val">Some</span>(cursor.bind(<span class="kw-2">&amp;</span>c));
+                            </span>binding = <span class="prelude-val">Some</span>(cursor.set_bind(<span class="kw-2">&amp;</span>WINDOW.vars().cursor()));
                         }
                     } <span class="kw">else </span>{
-                        restore = <span class="bool-val">true</span>;
+                        unbind_restore = <span class="bool-val">true</span>;
                     }
                 }
             }
@@ -188,63 +174,15 @@
         }
 
         <span class="comment">// restore to default, if not set to other value already
-        </span><span class="kw">if </span>restore &amp;&amp; hovered_binding.is_some() {
-            hovered_binding = <span class="prelude-val">None</span>;
+        </span><span class="kw">if </span>unbind_restore &amp;&amp; binding.is_some() {
+            binding = <span class="prelude-val">None</span>;
             <span class="kw">let </span>value = cursor.get();
             WINDOW.vars().cursor().modify(<span class="kw">move </span>|c| {
                 <span class="kw">if </span>c.as_ref() == <span class="kw-2">&amp;</span>value {
-                    <span class="kw-2">*</span>c.to_mut() = <span class="prelude-val">Some</span>(CursorIcon::Default);
+                    <span class="kw-2">*</span>c.to_mut() = CursorIcon::Default.into();
                 }
             });
         }
-    })
-}
-
-<span class="doccomment">/// Sets the custom [`CursorImg`] displayed when hovering the widget.
-///
-/// If set to `None`, or when the cursor image cannot be shown the [`cursor`] value is used as fallback.
-///
-/// [`cursor`]: fn@cursor
-</span><span class="attr">#[property(CONTEXT+<span class="number">1</span>, default(<span class="prelude-val">None</span>))]
-</span><span class="kw">pub fn </span>cursor_img(child: <span class="kw">impl </span>UiNode, img: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;CursorImg&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span>img = img.into_var();
-    <span class="kw">let </span><span class="kw-2">mut </span>hovered_binding = <span class="prelude-val">None</span>;
-
-    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-        UiNodeOp::Init =&gt; {
-            WIDGET.sub_event(<span class="kw-2">&amp;</span>MOUSE_HOVERED_EVENT);
-        }
-        UiNodeOp::Deinit =&gt; {
-            hovered_binding = <span class="prelude-val">None</span>;
-        }
-        UiNodeOp::Event { update } =&gt; {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_HOVERED_EVENT.on(update) {
-                <span class="kw">let </span>is_over = args.target.as_ref().map(|t| t.as_path().contains(WIDGET.id())).unwrap_or(<span class="bool-val">false</span>);
-                <span class="kw">if </span>is_over {
-                    <span class="kw">if </span>hovered_binding.is_none() {
-                        <span class="comment">// we are not already set, setup binding.
-
-                        </span><span class="kw">let </span>vars = WINDOW.vars();
-
-                        <span class="kw">let </span>c = vars.cursor_img();
-                        c.set_from(<span class="kw-2">&amp;</span>img);
-                        hovered_binding = <span class="prelude-val">Some</span>(img.bind(<span class="kw-2">&amp;</span>c));
-                    }
-                } <span class="kw">else </span>{
-                    <span class="comment">// restore to default, if not set to other value already
-                    </span><span class="kw">if </span>hovered_binding.is_some() {
-                        hovered_binding = <span class="prelude-val">None</span>;
-                        <span class="kw">let </span>value = img.get();
-                        WINDOW.vars().cursor_img().modify(<span class="kw">move </span>|c| {
-                            <span class="kw">if </span>c.as_ref() == <span class="kw-2">&amp;</span>value {
-                                <span class="kw-2">*</span>c.to_mut() = <span class="prelude-val">None</span>;
-                            }
-                        });
-                    }
-                }
-            }
-        }
-        <span class="kw">_ </span>=&gt; {}
     })
 }
 

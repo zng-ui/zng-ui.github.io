@@ -488,13 +488,12 @@
 <a href="#486" id="486">486</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::VecDeque, fmt};
 
-<span class="kw">use </span>winit::event_loop::EventLoopWindowTarget;
-
 <span class="kw">use </span>tracing::span::EnteredSpan;
 <span class="kw">use </span>webrender::{
     api::{DocumentId, DynamicProperties, FontInstanceKey, FontKey, FontVariation, PipelineId},
     RenderApi, Renderer, Transaction,
 };
+<span class="kw">use </span>winit::event_loop::ActiveEventLoop;
 <span class="kw">use </span>zng_unit::{DipSize, DipToPx, Factor, Px, PxRect, Rgba};
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
@@ -514,7 +513,7 @@
     image_cache::{Image, ImageCache, ImageUseMap, WrImageCache},
     px_wr::PxToWr <span class="kw">as _</span>,
     util::{frame_render_reasons, frame_update_render_reasons, PxToWinit},
-    AppEvent, AppEventSender, FrameReadyMsg, WrNotifier,
+    AppEventSender, FrameReadyMsg, WrNotifier,
 };
 
 <span class="doccomment">/// A headless "window".
@@ -552,18 +551,18 @@
 <span class="kw">impl </span>Surface {
     <span class="kw">pub fn </span>open(
         gen: ViewProcessGen,
-        <span class="kw-2">mut </span>cfg: HeadlessRequest,
-        window_target: <span class="kw-2">&amp;</span>EventLoopWindowTarget&lt;AppEvent&gt;,
+        cfg: HeadlessRequest,
+        winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         gl_manager: <span class="kw-2">&amp;mut </span>GlContextManager,
         <span class="kw-2">mut </span>renderer_exts: Vec&lt;(ApiExtensionId, Box&lt;<span class="kw">dyn </span>RendererExtension&gt;)&gt;,
         event_sender: AppEventSender,
     ) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>id = cfg.id;
 
-        <span class="kw">let </span><span class="kw-2">mut </span>context = gl_manager.create_headless(id, window_target, cfg.render_mode, <span class="kw-2">&amp;</span>event_sender);
+        <span class="kw">let </span><span class="kw-2">mut </span>context = gl_manager.create_headless(id, winit_loop, cfg.render_mode, <span class="kw-2">&amp;</span>event_sender);
+
         <span class="kw">let </span>size = cfg.size.to_px(cfg.scale_factor);
         context.resize(size.to_winit());
-        <span class="kw">let </span>context = context;
 
         <span class="kw">let </span><span class="kw-2">mut </span>opts = webrender::WebRenderOptions {
             <span class="comment">// text-aa config from Firefox.
@@ -587,15 +586,12 @@
         };
         <span class="kw">let </span><span class="kw-2">mut </span>blobs = BlobExtensionsImgHandler(<span class="macro">vec!</span>[]);
         <span class="kw">for </span>(id, ext) <span class="kw">in </span><span class="kw-2">&amp;mut </span>renderer_exts {
-            <span class="kw">let </span>cfg = cfg
-                .extensions
-                .iter()
-                .position(|(k, <span class="kw">_</span>)| k == id)
-                .map(|i| cfg.extensions.swap_remove(i).<span class="number">1</span>);
             ext.configure(<span class="kw-2">&amp;mut </span>RendererConfigArgs {
-                config: cfg,
+                config: cfg.extensions.iter().find(|(k, <span class="kw">_</span>)| k == id).map(|(<span class="kw">_</span>, v)| v),
                 options: <span class="kw-2">&amp;mut </span>opts,
                 blobs: <span class="kw-2">&amp;mut </span>blobs.<span class="number">0</span>,
+                window: <span class="prelude-val">None</span>,
+                context: <span class="kw-2">&amp;mut </span>context,
             });
         }
         <span class="kw">if </span>!opts.enable_multithreading {
@@ -625,9 +621,10 @@
                 api: <span class="kw-2">&amp;mut </span>api,
                 document_id,
                 pipeline_id,
-                gl: <span class="kw-2">&amp;**</span>context.gl(),
+                window: <span class="prelude-val">None</span>,
+                context: <span class="kw-2">&amp;mut </span>context,
             });
-            !ext.is_config_only()
+            !ext.is_init_only()
         });
 
         <span class="self">Self </span>{
@@ -882,7 +879,7 @@
                 ext.redraw(<span class="kw-2">&amp;mut </span>RedrawArgs {
                     scale_factor: <span class="self">self</span>.scale_factor,
                     size,
-                    gl: <span class="kw-2">&amp;**</span><span class="self">self</span>.context.gl(),
+                    context: <span class="kw-2">&amp;mut </span><span class="self">self</span>.context,
                 });
             }
 
@@ -931,7 +928,9 @@
                     renderer: <span class="self">self</span>.renderer.as_mut().unwrap(),
                     api: <span class="kw-2">&amp;mut </span><span class="self">self</span>.api,
                     request,
+                    window: <span class="prelude-val">None</span>,
                     redraw: <span class="kw-2">&amp;mut </span>redraw,
+                    context: <span class="kw-2">&amp;mut </span><span class="self">self</span>.context,
                 }));
                 <span class="kw">break</span>;
             }
@@ -943,7 +942,7 @@
                 ext.redraw(<span class="kw-2">&amp;mut </span>RedrawArgs {
                     scale_factor: <span class="self">self</span>.scale_factor,
                     size,
-                    gl: <span class="kw-2">&amp;**</span><span class="self">self</span>.context.gl(),
+                    context: <span class="kw-2">&amp;mut </span><span class="self">self</span>.context,
                 });
             }
         }
@@ -967,7 +966,8 @@
             ext.renderer_deinited(<span class="kw-2">&amp;mut </span>RendererDeinitedArgs {
                 document_id: <span class="self">self</span>.document_id,
                 pipeline_id: <span class="self">self</span>.pipeline_id,
-                gl: <span class="kw-2">&amp;**</span><span class="self">self</span>.context.gl(),
+                context: <span class="kw-2">&amp;mut </span><span class="self">self</span>.context,
+                window: <span class="prelude-val">None</span>,
             })
         }
     }
