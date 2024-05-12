@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/ui_node.rs`."><title>ui_node.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/ui_node.rs`."><title>ui_node.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app_proc_macros/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -872,7 +872,7 @@
             <span class="macro">abort!</span>(
                 path.span(),
                 <span class="string">"expected inherent impl or `UiNode` trait impl, found `{}`"</span>,
-                <span class="macro">quote! </span>{#path}
+                <span class="macro">quote!</span> {#path}
             )
         }
     }
@@ -1055,7 +1055,7 @@
     // to avoid an unused import warning.
     </span><span class="kw">let </span>ui_node_path = ui_node_path
         .map(|p| p.to_token_stream())
-        .unwrap_or_else(|| <span class="macro">quote! </span>{ #crate_::widget::node::UiNode });
+        .unwrap_or_else(|| <span class="macro">quote!</span> { #crate_::widget::node::UiNode });
 
     <span class="comment">// modify impl header for new_node and collect
     </span><span class="kw">let </span>(impl_generics, self_ty, decl) = <span class="kw">if let </span><span class="prelude-val">Some</span>(new_node) = new_node {
@@ -1090,15 +1090,15 @@
         }
         <span class="kw">let </span>node_gen = new_node.node_generics;
 
-        <span class="kw">let </span>impl_generics = <span class="macro">quote! </span>{ &lt;#custom_gen #sep #gen&gt; };
-        <span class="kw">let </span>self_ty = <span class="macro">quote! </span>{ #node_ident&lt;#node_custom_gen #node_sep #node_gen&gt; };
+        <span class="kw">let </span>impl_generics = <span class="macro">quote!</span> { &lt;#custom_gen #sep #gen&gt; };
+        <span class="kw">let </span>self_ty = <span class="macro">quote!</span> { #node_ident&lt;#node_custom_gen #node_sep #node_gen&gt; };
 
         <span class="kw">let </span><span class="kw-2">mut </span>decl = new_node.decl;
 
         <span class="kw">if </span>!new_node.auto_subs.is_empty() {
             <span class="kw">let </span>init = new_node.auto_subs;
 
-            decl.extend(<span class="macro">quote! </span>{
+            decl.extend(<span class="macro">quote!</span> {
                 <span class="kw">impl </span>#impl_generics #self_ty #where_clause {
                     <span class="doccomment">/// Init auto-generated event and var subscriptions.
                     </span><span class="kw">fn </span>auto_subs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
@@ -1114,7 +1114,7 @@
     };
 
     <span class="kw">let </span>result = <span class="kw">if </span>in_node_impl {
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
             #errors
 
             #decl
@@ -1127,7 +1127,7 @@
         }
     } <span class="kw">else </span>{
         <span class="kw">let </span>input_attrs = input.attrs;
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
             #errors
 
             #decl
@@ -1152,13 +1152,13 @@
     </span>result.into()
 }
 
-<span class="macro">macro_rules! </span>make_absents {
+<span class="macro">macro_rules!</span> make_absents {
     (<span class="macro-nonterminal">$user_mtds</span>:ident $([<span class="kw">fn </span><span class="macro-nonterminal">$ident</span>:ident $(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>])+) =&gt; {{
         <span class="kw">let </span><span class="kw-2">mut </span>absents = <span class="macro">vec!</span>[];
         <span class="kw">let </span>user_mtds = <span class="macro-nonterminal">$user_mtds</span>;
         $(
         <span class="kw">if </span>!user_mtds.contains(<span class="kw-2">&amp;</span><span class="macro">ident!</span>(<span class="macro">stringify!</span>(<span class="macro-nonterminal">$ident</span>))) {
-            absents.push(<span class="macro">parse_quote! </span>{
+            absents.push(<span class="macro">parse_quote!</span> {
 
                 <span class="attr">#[allow(clippy::borrow_deref_ref)]
                 </span><span class="kw">fn </span><span class="macro-nonterminal">$ident </span>$(<span class="macro-nonterminal">$tt</span>)*
@@ -1170,7 +1170,7 @@
 }
 
 <span class="kw">fn </span>no_delegate_absents(crate_: TokenStream, user_mtds: HashSet&lt;Ident&gt;, auto_init: TokenStream) -&gt; Vec&lt;ImplItem&gt; {
-    <span class="macro">make_absents! </span>{ user_mtds
+    <span class="macro">make_absents!</span> { user_mtds
         [<span class="kw">fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>#crate_::widget::info::WidgetInfoBuilder) { }]
 
         [<span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) { #auto_init }]
@@ -1197,11 +1197,11 @@
 <span class="kw">fn </span>delegate_absents(crate_: TokenStream, user_mtds: HashSet&lt;Ident&gt;, borrow: Expr, auto_init: TokenStream) -&gt; Vec&lt;ImplItem&gt; {
     <span class="kw">let </span>child = <span class="macro">ident_spanned!</span>(borrow.span()=&gt; <span class="string">"child"</span>);
 
-    <span class="kw">let </span>deref = <span class="macro">quote_spanned! </span>{borrow.span()=&gt;
+    <span class="kw">let </span>deref = <span class="macro">quote_spanned!</span> {borrow.span()=&gt;
         <span class="kw-2">&amp;mut *</span>#child
     };
 
-    <span class="macro">make_absents! </span>{ user_mtds
+    <span class="macro">make_absents!</span> { user_mtds
         [<span class="kw">fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>#crate_::widget::info::WidgetInfoBuilder) {
             <span class="kw">let </span><span class="kw-2">mut </span>#child = {#borrow};
             #crate_::widget::node::UiNode::info(#deref, info);
@@ -1252,10 +1252,10 @@
 
 <span class="kw">fn </span>delegate_list_absents(crate_: TokenStream, user_mtds: HashSet&lt;Ident&gt;, borrow: Expr, auto_init: TokenStream) -&gt; Vec&lt;ImplItem&gt; {
     <span class="kw">let </span>children = <span class="macro">ident_spanned!</span>(borrow.span()=&gt; <span class="string">"children"</span>);
-    <span class="kw">let </span>deref = <span class="macro">quote_spanned! </span>{borrow.span()=&gt;
+    <span class="kw">let </span>deref = <span class="macro">quote_spanned!</span> {borrow.span()=&gt;
         <span class="kw-2">&amp;mut *</span>#children
     };
-    <span class="macro">make_absents! </span>{ user_mtds
+    <span class="macro">make_absents!</span> { user_mtds
         [<span class="kw">fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>#crate_::widget::info::WidgetInfoBuilder) {
             <span class="kw">let </span>#children = {#borrow};
             #crate_::widget::node::ui_node_list_default::info_all(#deref, info);
@@ -1568,7 +1568,7 @@
 
                 <span class="kw">let </span>cfg = util::Attributes::new(t.attrs).cfg;
                 <span class="kw">let </span>ident = t.ident;
-                node_generics.extend(<span class="macro">quote! </span>{
+                node_generics.extend(<span class="macro">quote!</span> {
                     #cfg #ident ,
                 });
             } <span class="kw">else </span>{
@@ -1594,25 +1594,25 @@
         <span class="kw">match </span>ty {
             Type::ImplTrait(t) =&gt; {
                 <span class="kw">let </span>t_ident = <span class="macro">ident!</span>(<span class="string">"T_{ident}"</span>);
-                node_fields.extend(<span class="macro">quote! </span>{
+                node_fields.extend(<span class="macro">quote!</span> {
                     #cfg
                     #(#member_attrs)*
                     #ident: #t_ident,
                 });
 
                 <span class="kw">let </span>bounds = t.bounds;
-                impl_generics.extend(<span class="macro">quote! </span>{
+                impl_generics.extend(<span class="macro">quote!</span> {
                     #cfg
                     #t_ident: #bounds,
                 });
 
-                node_generics.extend(<span class="macro">quote! </span>{
+                node_generics.extend(<span class="macro">quote!</span> {
                     #cfg
                     #t_ident,
                 });
             }
             t =&gt; {
-                node_fields.extend(<span class="macro">quote! </span>{
+                node_fields.extend(<span class="macro">quote!</span> {
                     #cfg
                     #(#member_attrs)*
                     #ident: #t,
@@ -1622,13 +1622,13 @@
 
         <span class="kw">match </span>kind {
             ArgsNewNodeFieldKind::Var =&gt; {
-                auto_subs.extend(<span class="macro">quote! </span>{
+                auto_subs.extend(<span class="macro">quote!</span> {
                     #cfg
                     #crate_::widget::WIDGET.sub_var(<span class="kw-2">&amp;</span><span class="self">self</span>.#ident);
                 });
             }
             ArgsNewNodeFieldKind::Event =&gt; {
-                auto_subs.extend(<span class="macro">quote! </span>{
+                auto_subs.extend(<span class="macro">quote!</span> {
                     #cfg
                     #crate_::widget::WIDGET.sub_event(<span class="kw-2">&amp;</span><span class="self">self</span>.#ident);
                 });
@@ -1638,7 +1638,7 @@
     }
 
     <span class="kw">let </span>ident = args.ident;
-    <span class="kw">let </span>decl = <span class="macro">quote! </span>{
+    <span class="kw">let </span>decl = <span class="macro">quote!</span> {
         <span class="kw">struct </span>#ident&lt;#impl_generics&gt; {
             #node_fields
         }

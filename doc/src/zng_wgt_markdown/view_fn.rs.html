@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-markdown/src/view_fn.rs`."><title>view_fn.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_markdown" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-markdown/src/view_fn.rs`."><title>view_fn.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_markdown" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_markdown/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1109,7 +1109,7 @@
     </span><span class="kw">pub </span>items: UiNodeVec,
 }
 
-<span class="macro">context_var! </span>{
+<span class="macro">context_var!</span> {
     <span class="doccomment">/// Widget function for a markdown text segment.
     </span><span class="kw">pub static </span>TEXT_FN_VAR: WidgetFn&lt;TextFnArgs&gt; = WidgetFn::new(default_text_fn);
 
@@ -1297,26 +1297,26 @@
 <span class="kw">fn </span>text_view_builder(txt: Txt, style: MarkdownStyle) -&gt; Text {
     <span class="kw">let </span><span class="kw-2">mut </span>builder = Text::widget_new();
 
-    <span class="macro">widget_set! </span>{
+    <span class="macro">widget_set!</span> {
         <span class="kw-2">&amp;mut </span>builder;
         txt;
         <span class="comment">// white_space = WhiteSpace::Merge;
     </span>}
 
     <span class="kw">if </span>style.strong {
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="kw-2">&amp;mut </span>builder;
             font_weight = FontWeight::BOLD;
         }
     }
     <span class="kw">if </span>style.emphasis {
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="kw-2">&amp;mut </span>builder;
             font_style = FontStyle::Italic;
         }
     }
     <span class="kw">if </span>style.strikethrough {
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="kw-2">&amp;mut </span>builder;
             strikethrough = <span class="number">1</span>, LineStyle::Solid;
         }
@@ -1339,7 +1339,7 @@
 </span><span class="kw">pub fn </span>default_code_inline_fn(args: CodeInlineFnArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span><span class="kw-2">mut </span>builder = text_view_builder(args.txt, args.style);
 
-    <span class="macro">widget_set! </span>{
+    <span class="macro">widget_set!</span> {
         <span class="kw-2">&amp;mut </span>builder;
         font_family = [<span class="string">"JetBrains Mono"</span>, <span class="string">"Consolas"</span>, <span class="string">"monospace"</span>];
         background_color = color_scheme_map(rgb(<span class="number">0.05</span>, <span class="number">0.05</span>, <span class="number">0.05</span>), rgb(<span class="number">0.95</span>, <span class="number">0.95</span>, <span class="number">0.95</span>));
@@ -1361,13 +1361,13 @@
         <span class="kw">let </span>items = <span class="kw">if </span>items.len() == <span class="number">1 </span>{
             items.remove(<span class="number">0</span>)
         } <span class="kw">else </span>{
-            <span class="macro">Wrap! </span>{
+            <span class="macro">Wrap!</span> {
                 children = items;
             }
             .boxed()
         };
 
-        <span class="macro">Button! </span>{
+        <span class="macro">Button!</span> {
             style_fn = <span class="macro">LinkStyle!</span>();
             child = items;
 
@@ -1391,7 +1391,7 @@
 /// [`AnsiText!`]: struct@zng_wgt_ansi_text::AnsiText
 </span><span class="kw">pub fn </span>default_code_block_fn(args: CodeBlockFnArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">if </span>[<span class="string">"ansi"</span>, <span class="string">"console"</span>].contains(<span class="kw-2">&amp;</span>args.lang.as_str()) {
-        <span class="macro">zng_wgt_ansi_text::AnsiText! </span>{
+        <span class="macro">zng_wgt_ansi_text::AnsiText!</span> {
             txt = args.txt;
             padding = <span class="number">6</span>;
             corner_radius = <span class="number">4</span>;
@@ -1399,7 +1399,7 @@
         }
         .boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Text! </span>{
+        <span class="macro">Text!</span> {
             txt = args.txt;
             padding = <span class="number">6</span>;
             corner_radius = <span class="number">4</span>;
@@ -1419,7 +1419,7 @@
     } <span class="kw">else if </span>args.items.len() == <span class="number">1 </span>{
         args.items.remove(<span class="number">0</span>)
     } <span class="kw">else </span>{
-        <span class="macro">Wrap! </span>{
+        <span class="macro">Wrap!</span> {
             children = args.items;
         }
         .boxed()
@@ -1433,7 +1433,7 @@
     <span class="kw">if </span>args.items.is_empty() {
         NilUiNode.boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Wrap! </span>{
+        <span class="macro">Wrap!</span> {
             access_role = AccessRole::Heading;
             access::level = NonZeroU32::new(args.level <span class="kw">as _</span>).unwrap();
             font_size = <span class="kw">match </span>args.level {
@@ -1462,7 +1462,7 @@
     <span class="kw">if </span>args.items.is_empty() {
         NilUiNode.boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Grid! </span>{
+        <span class="macro">Grid!</span> {
             grid::cell::at = grid::cell::AT_AUTO; <span class="comment">// in case it is nested
 
             </span>access_role = AccessRole::List;
@@ -1470,7 +1470,7 @@
             cells = args.items;
             columns = <span class="macro">ui_vec!</span>[
                 <span class="macro">grid::Column!</span>(),
-                <span class="macro">grid::Column! </span>{ width = <span class="number">1</span>.lft() },
+                <span class="macro">grid::Column!</span> { width = <span class="number">1</span>.lft() },
             ];
         }
         .boxed()
@@ -1482,7 +1482,7 @@
 /// See [`LIST_ITEM_BULLET_FN_VAR`] for more details.
 </span><span class="kw">pub fn </span>default_list_item_bullet_fn(args: ListItemBulletFnArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">if let </span><span class="prelude-val">Some</span>(checked) = args.checked {
-        <span class="macro">Text! </span>{
+        <span class="macro">Text!</span> {
             grid::cell::at = grid::cell::AT_AUTO;
             align = Align::TOP;
             txt = <span class="string">" ✓ "</span>;
@@ -1494,7 +1494,7 @@
         }
         .boxed()
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(n) = args.num {
-        <span class="macro">Text! </span>{
+        <span class="macro">Text!</span> {
             grid::cell::at = grid::cell::AT_AUTO;
             txt = <span class="macro">formatx!</span>(<span class="string">"{n}. "</span>);
             align = Align::RIGHT;
@@ -1502,7 +1502,7 @@
         .boxed()
     } <span class="kw">else </span>{
         <span class="kw">match </span>args.depth {
-            <span class="number">0 </span>=&gt; <span class="macro">Wgt! </span>{
+            <span class="number">0 </span>=&gt; <span class="macro">Wgt!</span> {
                 grid::cell::at = grid::cell::AT_AUTO;
                 align = Align::TOP;
                 size = (<span class="number">5</span>, <span class="number">5</span>);
@@ -1510,7 +1510,7 @@
                 margin = (<span class="number">0.6</span>.em(), <span class="number">0.5</span>.em(), <span class="number">0</span>, <span class="number">0</span>);
                 background_color = FONT_COLOR_VAR;
             },
-            <span class="number">1 </span>=&gt; <span class="macro">Wgt! </span>{
+            <span class="number">1 </span>=&gt; <span class="macro">Wgt!</span> {
                 grid::cell::at = grid::cell::AT_AUTO;
                 align = Align::TOP;
                 size = (<span class="number">5</span>, <span class="number">5</span>);
@@ -1518,7 +1518,7 @@
                 margin = (<span class="number">0.6</span>.em(), <span class="number">0.5</span>.em(), <span class="number">0</span>, <span class="number">0</span>);
                 border = <span class="number">1</span>.px(), FONT_COLOR_VAR.map_into();
             },
-            <span class="kw">_ </span>=&gt; <span class="macro">Wgt! </span>{
+            <span class="kw">_ </span>=&gt; <span class="macro">Wgt!</span> {
                 grid::cell::at = grid::cell::AT_AUTO;
                 align = Align::TOP;
                 size = (<span class="number">5</span>, <span class="number">5</span>);
@@ -1547,7 +1547,7 @@
     }
 
     <span class="kw">if </span>blocks.len() &gt; <span class="number">1 </span>{
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             access_role = AccessRole::ListItem;
             grid::cell::at = grid::cell::AT_AUTO;
             direction = StackDirection::top_to_bottom();
@@ -1555,7 +1555,7 @@
         }
         .boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Container! </span>{
+        <span class="macro">Container!</span> {
             access_role = AccessRole::ListItem;
             grid::cell::at = grid::cell::AT_AUTO;
             child = blocks.remove(<span class="number">0</span>);
@@ -1578,7 +1578,7 @@
     <span class="kw">let </span>alt_txt = args.alt_txt;
     <span class="kw">let </span><span class="kw-2">mut </span>alt_items = args.alt_items;
     <span class="kw">if </span>alt_items.is_empty() {
-        <span class="macro">zng_wgt_image::Image! </span>{
+        <span class="macro">zng_wgt_image::Image!</span> {
             align = Align::TOP_LEFT;
             tooltip_fn;
             access::label = alt_txt;
@@ -1588,13 +1588,13 @@
         <span class="kw">let </span>alt_items = <span class="kw">if </span>alt_items.len() == <span class="number">1 </span>{
             alt_items.remove(<span class="number">0</span>)
         } <span class="kw">else </span>{
-            <span class="macro">zng_wgt_wrap::Wrap! </span>{
+            <span class="macro">zng_wgt_wrap::Wrap!</span> {
                 children = alt_items;
             }
             .boxed()
         };
         <span class="kw">let </span>alt_items = ArcNode::new(alt_items);
-        <span class="macro">zng_wgt_image::Image! </span>{
+        <span class="macro">zng_wgt_image::Image!</span> {
             align = Align::TOP_LEFT;
             source = args.source;
             tooltip_fn;
@@ -1610,7 +1610,7 @@
 ///
 /// See [`RULE_FN_VAR`] for more details.
 </span><span class="kw">pub fn </span>default_rule_fn(<span class="kw">_</span>: RuleFnArgs) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">zng_wgt_rule_line::hr::Hr! </span>{
+    <span class="macro">zng_wgt_rule_line::hr::Hr!</span> {
         opacity = <span class="number">50</span>.pct();
     }
 }
@@ -1622,7 +1622,7 @@
     <span class="kw">if </span>args.items.is_empty() {
         NilUiNode.boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             spacing = PARAGRAPH_SPACING_VAR;
             children = args.items;
@@ -1646,13 +1646,13 @@
 ///
 /// See [`TABLE_FN_VAR`] for more details.
 </span><span class="kw">pub fn </span>default_table_fn(args: TableFnArgs) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">Grid! </span>{
+    <span class="macro">Grid!</span> {
         access_role = AccessRole::Table;
         background_color = FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">5</span>.pct()));
         border = <span class="number">1</span>, FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">30</span>.pct()).into());
         align = Align::LEFT;
         auto_grow_fn = <span class="macro">wgt_fn!</span>(|args: grid::AutoGrowFnArgs| {
-            <span class="macro">grid::Row! </span>{
+            <span class="macro">grid::Row!</span> {
                 border = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">0</span>), FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()).into());
                 background_color = {
                     <span class="kw">let </span>alpha = <span class="kw">if </span>args.index % <span class="number">2 </span>== <span class="number">0 </span>{
@@ -1680,7 +1680,7 @@
     <span class="kw">if </span>args.items.is_empty() {
         NilUiNode.boxed()
     } <span class="kw">else if </span>args.is_heading {
-        <span class="macro">Wrap! </span>{
+        <span class="macro">Wrap!</span> {
             access_role = AccessRole::Cell;
             grid::cell::at = grid::cell::AT_AUTO;
             font_weight = FontWeight::BOLD;
@@ -1690,7 +1690,7 @@
         }
         .boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Wrap! </span>{
+        <span class="macro">Wrap!</span> {
             access_role = AccessRole::Cell;
             grid::cell::at = grid::cell::AT_AUTO;
             padding = <span class="number">6</span>;
@@ -1708,7 +1708,7 @@
     <span class="kw">if </span>args.items.is_empty() {
         NilUiNode.boxed()
     } <span class="kw">else </span>{
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             spacing = PARAGRAPH_SPACING_VAR;
             children = args.items;
@@ -1722,7 +1722,7 @@
 /// See [`FOOTNOTE_REF_FN_VAR`] for more details.
 </span><span class="kw">pub fn </span>default_footnote_ref_fn(args: FootnoteRefFnArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>url = <span class="macro">formatx!</span>(<span class="string">"#footnote-{}"</span>, args.label);
-    <span class="macro">Button! </span>{
+    <span class="macro">Button!</span> {
         style_fn = <span class="macro">LinkStyle!</span>();
         font_size = <span class="number">0.7</span>.em();
         offset = (<span class="number">0</span>, (-<span class="number">0.5</span>).em());
@@ -1747,7 +1747,7 @@
     } <span class="kw">else if </span>items.len() == <span class="number">1 </span>{
         items.remove(<span class="number">0</span>)
     } <span class="kw">else </span>{
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             children = items;
         }
@@ -1755,12 +1755,12 @@
     };
 
     <span class="kw">let </span>url_back = <span class="macro">formatx!</span>(<span class="string">"#footnote-ref-{}"</span>, args.label);
-    <span class="macro">Stack! </span>{
+    <span class="macro">Stack!</span> {
         direction = StackDirection::left_to_right();
         spacing = <span class="number">0.5</span>.em();
         anchor = <span class="macro">formatx!</span>(<span class="string">"footnote-{}"</span>, args.label);
         children = <span class="macro">ui_vec!</span>[
-            <span class="macro">Button! </span>{
+            <span class="macro">Button!</span> {
                 style_fn = <span class="macro">LinkStyle!</span>();
                 child = <span class="macro">Text!</span>(<span class="string">"[^{}]"</span>, args.label);
                 on_click = <span class="macro">hn!</span>(|args: <span class="kw-2">&amp;</span>ClickArgs| {

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/event/command.rs`."><title>command.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/event/command.rs`."><title>command.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1510,13 +1510,13 @@ document.addEventListener('DOMContentLoaded', function () {
 /// [command extensions]: crate::event::Command#extensions
 /// [`CommandShortcutExt`]: crate::shortcut::CommandShortcutExt
 </span><span class="attr">#[macro_export]
-</span><span class="macro">macro_rules! </span>command {
+</span><span class="macro">macro_rules!</span> command {
     ($(
         $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
         <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="macro-nonterminal">$COMMAND</span>:ident $(=&gt; |<span class="macro-nonterminal">$cmd</span>:ident|<span class="macro-nonterminal">$custom_meta_init</span>:expr ;)<span class="question-mark">? </span>$(= { $(<span class="macro-nonterminal">$meta_ident</span>:ident : <span class="macro-nonterminal">$meta_init</span>:expr),* $(,)<span class="question-mark">? </span>};)<span class="question-mark">? </span>$(;)<span class="question-mark">?
     </span>)+) =&gt; {
         $(
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__command! </span>{
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__command!</span> {
                 $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
                 <span class="macro-nonterminal">$vis </span><span class="kw">static </span><span class="macro-nonterminal">$COMMAND </span>$(=&gt; |<span class="macro-nonterminal">$cmd</span>|<span class="macro-nonterminal">$custom_meta_init</span>)<span class="question-mark">? </span>$(= {
                     $(<span class="macro-nonterminal">$meta_ident</span>: <span class="macro-nonterminal">$meta_init</span>,)+
@@ -1541,7 +1541,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="attr">#[doc(hidden)]
 #[macro_export]
-</span><span class="macro">macro_rules! </span>__command {
+</span><span class="macro">macro_rules!</span> __command {
     (
         $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
         <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="macro-nonterminal">$COMMAND</span>:ident =&gt; |<span class="macro-nonterminal">$cmd</span>:ident| <span class="macro-nonterminal">$meta_init</span>:expr;
@@ -1551,7 +1551,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="kw">fn </span>__meta_init__(<span class="macro-nonterminal">$cmd</span>: <span class="macro-nonterminal">$crate::event::Command</span>) {
                 <span class="macro-nonterminal">$meta_init
             </span>}
-            <span class="macro-nonterminal">$</span><span class="macro">crate::event::app_local! </span>{
+            <span class="macro-nonterminal">$</span><span class="macro">crate::event::app_local!</span> {
                 <span class="kw">static </span><span class="macro-nonterminal">EVENT</span>: <span class="macro-nonterminal">$crate::event::EventData </span>= <span class="kw">const </span>{ <span class="macro-nonterminal">$crate::event::EventData::new</span>(<span class="macro">std::stringify!</span>(<span class="macro-nonterminal">$COMMAND</span>)) };
                 <span class="kw">static </span>DATA: <span class="macro-nonterminal">$crate::event::CommandData </span>= <span class="macro-nonterminal">$crate::event::CommandData::new</span>(__meta_init__);
             }
@@ -1562,8 +1562,8 @@ document.addEventListener('DOMContentLoaded', function () {
         $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
         <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="macro-nonterminal">$COMMAND</span>:ident = { $(<span class="macro-nonterminal">$meta_ident</span>:ident : <span class="macro-nonterminal">$meta_init</span>:expr),* $(,)<span class="question-mark">? </span>};
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::event::paste! </span>{
-            <span class="macro-nonterminal">$</span><span class="macro">crate::__command! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::event::paste!</span> {
+            <span class="macro-nonterminal">$</span><span class="macro">crate::__command!</span> {
                 $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
                 <span class="doccomment">///
                 /// # Metadata
@@ -1589,7 +1589,7 @@ document.addEventListener('DOMContentLoaded', function () {
         $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
         <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="macro-nonterminal">$COMMAND</span>:ident;
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::__command! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__command!</span> {
             $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
             <span class="macro-nonterminal">$vis </span><span class="kw">static </span><span class="macro-nonterminal">$COMMAND </span>=&gt; |_cmd|{};
         }
@@ -1970,7 +1970,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Scope of a widget.
     </span>Widget(WidgetId),
 }
-<span class="macro">impl_from_and_into_var! </span>{
+<span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(id: WidgetId) -&gt; CommandScope {
         CommandScope::Widget(id)
     }
@@ -1987,7 +1987,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="macro">event_args! </span>{
+<span class="macro">event_args!</span> {
     <span class="doccomment">/// Event args for command events.
     </span><span class="kw">pub struct </span>CommandArgs {
         <span class="doccomment">/// Optional parameter for the command handler.
@@ -2261,11 +2261,11 @@ document.addEventListener('DOMContentLoaded', function () {
         f.debug_tuple(<span class="string">"CommandParam"</span>).field(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.type_id()).finish()
     }
 }
-<span class="macro">zng_var::impl_from_and_into_var! </span>{
+<span class="macro">zng_var::impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(param: CommandParam) -&gt; <span class="prelude-ty">Option</span>&lt;CommandParam&gt;;
 }
 
-<span class="macro">unique_id_64! </span>{
+<span class="macro">unique_id_64!</span> {
     <span class="doccomment">/// Unique identifier of a command metadata state variable.
     ///
     /// This type is very similar to [`StateId`], but `T` is the value type of the metadata variable.
@@ -2712,7 +2712,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">mod </span>tests {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="macro">command! </span>{
+    <span class="macro">command!</span> {
         <span class="kw">static </span>FOO_CMD;
     }
 

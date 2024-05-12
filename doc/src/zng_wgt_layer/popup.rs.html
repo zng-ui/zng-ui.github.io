@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-layer/src/popup.rs`."><title>popup.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_layer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-layer/src/popup.rs`."><title>popup.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_layer" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_layer/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -520,8 +520,6 @@
 <a href="#518" id="518">518</a>
 <a href="#519" id="519">519</a>
 <a href="#520" id="520">520</a>
-<a href="#521" id="521">521</a>
-<a href="#522" id="522">522</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Popup widget.
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
@@ -564,7 +562,7 @@
     <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.style_intrinsic(STYLE_FN_VAR, <span class="macro">property_id!</span>(<span class="self">self</span>::style_fn));
 
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="self">self</span>;
             style_base_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">DefaultStyle!</span>());
 
@@ -577,7 +575,7 @@
         }
     }
 
-    <span class="macro">widget_impl! </span>{
+    <span class="macro">widget_impl!</span> {
         <span class="doccomment">/// Popup focus behavior when it or a descendant receives a click.
         ///
         /// Is [`FocusClickBehavior::ExitEnabled`] by default.
@@ -588,7 +586,7 @@
 }
 <span class="macro">impl_style_fn!</span>(Popup);
 
-<span class="macro">context_var! </span>{
+<span class="macro">context_var!</span> {
     <span class="doccomment">/// If popup will close when it no longer contains the focused widget.
     ///
     /// Is `true` by default.
@@ -837,7 +835,7 @@
 </span><span class="kw">pub struct </span>DefaultStyle(Style);
 <span class="kw">impl </span>DefaultStyle {
     <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="self">self</span>;
 
             replace = <span class="bool-val">true</span>;
@@ -881,14 +879,12 @@
     <span class="doccomment">/// Captures all context-vars by default, and blend then over the node context.
     </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::CaptureBlend {
-            filter: CaptureFilter::ContextVars {
-                exclude: ContextValueSet::new(),
-            },
+            filter: CaptureFilter::context_vars(),
             over: <span class="bool-val">true</span>,
         }
     }
 }
-<span class="macro">impl_from_and_into_var! </span>{
+<span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(capture_vars_blend_over: bool) -&gt; ContextCapture {
         <span class="kw">if </span>capture_vars_blend_over {
             ContextCapture::CaptureBlend { filter: CaptureFilter::ContextVars { exclude: ContextValueSet::new() }, over: <span class="bool-val">true </span>}
@@ -902,7 +898,7 @@
     }
 }
 
-<span class="macro">event_args! </span>{
+<span class="macro">event_args!</span> {
     <span class="doccomment">/// Arguments for [`POPUP_CLOSE_REQUESTED_EVENT`].
     </span><span class="kw">pub struct </span>PopupCloseRequestedArgs {
         <span class="doccomment">/// The popup that has close requested.
@@ -916,7 +912,7 @@
     }
 }
 
-<span class="macro">event! </span>{
+<span class="macro">event!</span> {
     <span class="doccomment">/// Closing popup event.
     ///
     /// Requesting [`propagation().stop()`] on this event cancels the popup close.
@@ -924,7 +920,7 @@
     /// [`propagation().stop()`]: zng_app::event::EventPropagationHandle::stop
     </span><span class="kw">pub static </span>POPUP_CLOSE_REQUESTED_EVENT: PopupCloseRequestedArgs;
 }
-<span class="macro">event_property! </span>{
+<span class="macro">event_property!</span> {
     <span class="doccomment">/// Closing popup event.
     ///
     /// Requesting [`propagation().stop()`] on this event cancels the popup close.
@@ -936,7 +932,7 @@
     }
 }
 
-<span class="macro">command! </span>{
+<span class="macro">command!</span> {
     <span class="doccomment">/// Close the popup.
     ///
     /// # Param
@@ -963,7 +959,7 @@
 }
 
 <span class="kw">fn </span>setup_popup_close_service() {
-    <span class="macro">app_local! </span>{
+    <span class="macro">app_local!</span> {
         <span class="kw">static </span>POPUP_SETUP: bool = <span class="bool-val">false</span>;
     }
 
@@ -1041,7 +1037,7 @@
     </span>with_context_var(child, IS_CLOSE_DELAYED_VAR, state)
 }
 
-<span class="macro">context_var! </span>{
+<span class="macro">context_var!</span> {
     <span class="kw">static </span>IS_CLOSE_DELAYED_VAR: bool = <span class="bool-val">false</span>;
 }
 </code></pre></div></section></main></body></html>

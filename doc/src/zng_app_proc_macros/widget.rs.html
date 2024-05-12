@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/widget.rs`."><title>widget.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/widget.rs`."><title>widget.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app_proc_macros/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -718,7 +718,7 @@
     widget_util::{<span class="self">self</span>, WgtItem, WgtProperty, WgtWhen},
 };
 
-<span class="macro">lazy_static! </span>{
+<span class="macro">lazy_static!</span> {
     <span class="kw">static </span><span class="kw-2">ref </span>DOCS_JS: String = {
         <span class="kw">let </span>js = <span class="macro">include_str!</span>(<span class="string">"../js/widget.js"</span>);
         <span class="kw">let </span>js = minifier::js::minify(js);
@@ -856,12 +856,12 @@
 
         <span class="kw">let </span>val_span = util::last_span(struct_path.clone());
         <span class="kw">let </span>validate_path_ident = <span class="macro">ident_spanned!</span>(val_span=&gt; <span class="string">"zzz_widget_path_{struct_path_slug}"</span>);
-        <span class="kw">let </span>validate_path = <span class="macro">quote_spanned! </span>{val_span=&gt;
+        <span class="kw">let </span>validate_path = <span class="macro">quote_spanned!</span> {val_span=&gt;
             <span class="attr">#[doc(hidden)]
             #[allow(unused)]
             #[allow(non_snake_case)]
             </span><span class="kw">mod </span>#validate_path_ident {
-                <span class="macro">macro_rules! </span>#validate_path_ident {
+                <span class="macro">macro_rules!</span> #validate_path_ident {
                     () =&gt; {
                         <span class="kw">use </span>#struct_path;
                     }
@@ -873,9 +873,9 @@
         <span class="kw">let </span>custom_rules = {
             <span class="kw">let </span><span class="kw-2">mut </span>tt = <span class="macro">quote!</span>();
             <span class="kw">for </span>widget_util::WidgetCustomRule { rule, init } <span class="kw">in </span>custom_rules {
-                tt.extend(<span class="macro">quote! </span>{
+                tt.extend(<span class="macro">quote!</span> {
                     (#rule) =&gt; {
-                        #<span class="macro">struct_path! </span>{
+                        #<span class="macro">struct_path!</span> {
                             #init
                         }
                     };
@@ -889,8 +889,8 @@
         <span class="comment">// rust-analyzer does not find the macro if we don't set the call_site here.
         </span><span class="kw">let </span>struct_path = util::set_stream_span(struct_path, Span::call_site());
 
-        <span class="kw">let </span>macro_new = <span class="macro">quote! </span>{
-            <span class="macro">zng::__proc_macro_util::widget::widget_new! </span>{
+        <span class="kw">let </span>macro_new = <span class="macro">quote!</span> {
+            <span class="macro">zng::__proc_macro_util::widget::widget_new!</span> {
                 new {
                     <span class="kw">let </span><span class="kw-2">mut </span>wgt__ = #struct_path::widget_new();
                     <span class="kw">let </span>wgt__ = <span class="kw-2">&amp;mut </span>wgt__;
@@ -902,19 +902,19 @@
 
         <span class="kw">let </span>macro_docs = <span class="kw">if </span>util::is_rust_analyzer() {
             <span class="kw">let </span>docs = <span class="kw-2">&amp;</span>attrs.docs;
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 #(#docs)*
             }
         } <span class="kw">else </span>{
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 <span class="attr">#[doc(hidden)]
             </span>}
         };
 
-        <span class="kw">let </span>r = <span class="macro">quote! </span>{
+        <span class="kw">let </span>r = <span class="macro">quote!</span> {
             #macro_docs
             <span class="attr">#[macro_export]
-            </span><span class="macro">macro_rules! </span>#macro_ident {
+            </span><span class="macro">macro_rules!</span> #macro_ident {
                 <span class="comment">// actual new
                 </span>(zng_widget: $(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
                     #macro_new
@@ -922,13 +922,13 @@
 
                 <span class="comment">// enforce normal syntax, property = &lt;expr&gt; ..
                 </span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* $(<span class="macro-nonterminal">$property_path</span>:ident)::+ = $(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>) =&gt; {
-                    #<span class="macro">struct_path! </span>{
+                    #<span class="macro">struct_path!</span> {
                         zng_widget: $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* $(<span class="macro-nonterminal">$property_path</span>)::+ = $(<span class="macro-nonterminal">$rest</span>)*
                     }
                 };
                 <span class="comment">// enforce normal syntax, when &lt;expr&gt; { .. } ..
                 </span>($(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)* when $(<span class="macro-nonterminal">$rest</span>:tt)<span class="kw-2">*</span>) =&gt; {
-                    #<span class="macro">struct_path! </span>{
+                    #<span class="macro">struct_path!</span> {
                         zng_widget: $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)* when $(<span class="macro-nonterminal">$rest</span>)*
                     }
                 };
@@ -938,7 +938,7 @@
 
                 <span class="comment">// fallback, single property shorthand or error.
                 </span>($(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
-                    #<span class="macro">struct_path! </span>{
+                    #<span class="macro">struct_path!</span> {
                         zng_widget: $(<span class="macro-nonterminal">$tt</span>)*
                     }
                 };
@@ -950,7 +950,7 @@
         };
 
         <span class="kw">let </span>source_location = widget_util::source_location(<span class="kw-2">&amp;</span>crate_core, ident.span());
-        <span class="kw">let </span>start_r = <span class="macro">quote! </span>{
+        <span class="kw">let </span>start_r = <span class="macro">quote!</span> {
             <span class="kw">impl </span>#mixin_p_bounded #ident #mixin_p {
                 <span class="doccomment">/// Start building a new instance.
                 </span><span class="kw">pub fn </span>widget_new() -&gt; <span class="self">Self </span>{
@@ -979,7 +979,7 @@
         <span class="macro">quote!</span>(<span class="attr">#[doc=#docs_js]</span>)
     };
 
-    <span class="kw">let </span>r = <span class="macro">quote! </span>{
+    <span class="kw">let </span>r = <span class="macro">quote!</span> {
         #attrs
         #docs_js
         #vis #struct_token #ident #mixin_p(#parent);
@@ -1194,23 +1194,23 @@
                     <span class="kw">let </span>member = <span class="kw">match </span>member {
                         widget_util::WhenInputMember::Named(ident) =&gt; {
                             <span class="kw">let </span>ident_str = ident.to_string();
-                            <span class="macro">quote! </span>{
+                            <span class="macro">quote!</span> {
                                 Named(#ident_str)
                             }
                         }
-                        widget_util::WhenInputMember::Index(i) =&gt; <span class="macro">quote! </span>{
+                        widget_util::WhenInputMember::Index(i) =&gt; <span class="macro">quote!</span> {
                             Index(#i)
                         },
                     };
 
-                    <span class="macro">macro_rules! </span>quote_call {
+                    <span class="macro">macro_rules!</span> quote_call {
                         (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
                             <span class="kw">if </span>property.get_ident().is_some() {
-                                <span class="macro">quote! </span>{
+                                <span class="macro">quote!</span> {
                                     wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
                                 }
                             } <span class="kw">else </span>{
-                                <span class="macro">quote! </span>{
+                                <span class="macro">quote!</span> {
                                     #property::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
                                 }
                             }
@@ -1219,7 +1219,7 @@
 
                     <span class="kw">let </span>get_meta = <span class="macro">quote_call!</span>(#p_meta());
 
-                    when_expr_vars.extend(<span class="macro">quote! </span>{
+                    when_expr_vars.extend(<span class="macro">quote!</span> {
                         <span class="kw">let </span>(#var_input, #var) = {
                             <span class="kw">let </span>meta__ = #get_meta
                             meta__.allowed_in_when_expr();
@@ -1227,7 +1227,7 @@
                         };
                     });
 
-                    inputs.extend(<span class="macro">quote! </span>{
+                    inputs.extend(<span class="macro">quote!</span> {
                         {
                             <span class="kw">let </span>meta__ = #get_meta
                             #core::widget::builder::WhenInput {
@@ -1249,7 +1249,7 @@
                 <span class="kw">let </span>expr = when_expr.expr;
                 <span class="kw">let </span>expr_str = <span class="kw-2">&amp;</span>when.condition_expr_str;
 
-                <span class="kw">let </span>box_expr = <span class="macro">quote_spanned! </span>{expr.span()=&gt;
+                <span class="kw">let </span>box_expr = <span class="macro">quote_spanned!</span> {expr.span()=&gt;
                     {
                         <span class="kw">let </span>expr_var = #<span class="macro">core::var::expr_var!</span>{#expr};
                         #core::widget::builder::when_condition_expr_var(expr_var)
@@ -1257,7 +1257,7 @@
                 };
 
                 <span class="kw">let </span>source_location = widget_util::source_location(<span class="kw-2">&amp;</span>core, Span::call_site());
-                items.extend(<span class="macro">quote! </span>{
+                items.extend(<span class="macro">quote!</span> {
                     #attrs {
                         #when_expr_vars
                         <span class="kw">let </span>inputs__ = std::boxed::Box::new([
@@ -1281,7 +1281,7 @@
 
     <span class="kw">let </span>errors = p.errors;
 
-    <span class="kw">let </span>r = <span class="macro">quote! </span>{
+    <span class="kw">let </span>r = <span class="macro">quote!</span> {
         {
             #errors
 
@@ -1309,14 +1309,14 @@
 
     <span class="kw">let </span>generics = <span class="kw-2">&amp;</span>prop.generics;
 
-    <span class="macro">macro_rules! </span>quote_call {
+    <span class="macro">macro_rules!</span> quote_call {
         (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
             <span class="kw">if </span>path.get_ident().is_some() {
-                <span class="macro">quote! </span>{
+                <span class="macro">quote!</span> {
                     wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
                 }
             } <span class="kw">else </span>{
-                <span class="macro">quote! </span>{
+                <span class="macro">quote!</span> {
                     #path::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
                 }
             }
@@ -1327,7 +1327,7 @@
 
     <span class="kw">let </span>when_check = <span class="kw">if </span>is_when {
         <span class="kw">let </span>meta = <span class="macro">quote_call!</span>(#ident_meta());
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
             {
                 <span class="kw">let </span>meta__ = #meta
                 meta__.allowed_in_when_assign();
@@ -1344,7 +1344,7 @@
             widget_util::PropertyValue::Special(special, <span class="kw">_</span>) =&gt; {
                 <span class="kw">if </span>prop.is_unset() {
                     <span class="kw">let </span>unset_ident = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"unset_{}"</span>, ident);
-                    prop_init = <span class="macro">quote_call! </span>{
+                    prop_init = <span class="macro">quote_call!</span> {
                         #unset_ident()
                     };
                 } <span class="kw">else </span>{
@@ -1353,7 +1353,7 @@
                 }
             }
             widget_util::PropertyValue::Unnamed(val) =&gt; {
-                prop_init = <span class="macro">quote_call! </span>{
+                prop_init = <span class="macro">quote_call!</span> {
                     #ident(#val)
                 };
             }
@@ -1364,19 +1364,19 @@
                 <span class="kw">let </span>values = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.expr);
                 <span class="kw">let </span>ident_sorted = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"{}__"</span>, ident);
 
-                <span class="kw">let </span>call = <span class="macro">quote_call! </span>{
+                <span class="kw">let </span>call = <span class="macro">quote_call!</span> {
                     #ident_sorted(#(#idents_sorted),<span class="kw-2">*</span>)
                 };
                 <span class="kw">let </span>meta = <span class="kw">if </span>path.get_ident().is_some() {
-                    <span class="macro">quote! </span>{
+                    <span class="macro">quote!</span> {
                         wgt__.#ident_meta()
                     }
                 } <span class="kw">else </span>{
-                    <span class="macro">quote! </span>{
+                    <span class="macro">quote!</span> {
                         &lt;#core::widget::builder::WgtInfo <span class="kw">as </span>#path&gt;::#ident_meta(<span class="kw-2">&amp;</span>#core::widget::builder::WgtInfo)
                     }
                 };
-                prop_init = <span class="macro">quote! </span>{
+                prop_init = <span class="macro">quote!</span> {
                     {
                         <span class="kw">let </span>meta__ = #meta;
                         #(
@@ -1389,13 +1389,13 @@
         },
         <span class="prelude-val">None </span>=&gt; {
             <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>prop.path.segments.last().unwrap().ident;
-            prop_init = <span class="macro">quote_call! </span>{
+            prop_init = <span class="macro">quote_call!</span> {
                 #ident(#ident)
             };
         }
     }
 
-    <span class="macro">quote! </span>{
+    <span class="macro">quote!</span> {
         #attrs {
             #when_check
             #custom_expand

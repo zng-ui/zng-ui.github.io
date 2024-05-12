@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/live.rs`."><title>live.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/live.rs`."><title>live.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_inspector/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1708,7 +1708,7 @@
             })
         );
 
-        <span class="macro">window::Window! </span>{
+        <span class="macro">window::Window!</span> {
             parent;
             title;
             icon;
@@ -1719,16 +1719,16 @@
             on_close = <span class="macro">hn!</span>(selected_wgt, |<span class="kw">_</span>| {
                 <span class="kw">let _ </span>= selected_wgt.set(<span class="prelude-val">None</span>);
             });
-            child = <span class="macro">Container! </span>{
+            child = <span class="macro">Container!</span> {
                 child_top = menu(hit_select, adorn_selected, select_focused, wgt_filter.clone()), <span class="number">0</span>;
-                child = <span class="macro">Scroll! </span>{
+                child = <span class="macro">Scroll!</span> {
                     toggle::selector = toggle::Selector::single_opt(selected_wgt.clone());
                     child = tree_view(inspected_tree, wgt_filter.clone());
                     child_align = Align::FILL_TOP;
                     padding = <span class="number">5</span>;
                 };
             };
-            child_right = <span class="macro">Container! </span>{
+            child_right = <span class="macro">Container!</span> {
                 width = <span class="number">600</span>;
                 child = presenter(selected_wgt, <span class="macro">wgt_fn!</span>(|w| {
                     selected_view(w).boxed()
@@ -1760,7 +1760,7 @@
 
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>INSPECTED_ID: StaticStateId&lt;WindowId&gt; = StaticStateId::new_unique();
 
-    <span class="macro">context_var! </span>{
+    <span class="macro">context_var!</span> {
         <span class="kw">static </span>TREE_ITEM_BKG_HOVERED_VAR: Rgba = rgb(<span class="number">0.21</span>, <span class="number">0.21</span>, <span class="number">0.21</span>);
         <span class="kw">static </span>TREE_ITEM_BKG_CHECKED_VAR: Rgba = rgb(<span class="number">0.29</span>, <span class="number">0.29</span>, <span class="number">0.29</span>);
         <span class="kw">static </span>TREE_ITEM_LINE_VAR: Rgba = rgb(<span class="number">0.21</span>, <span class="number">0.21</span>, <span class="number">0.21</span>);
@@ -1780,19 +1780,19 @@
         select_focused: <span class="kw">impl </span>Var&lt;bool&gt;,
         search: <span class="kw">impl </span>Var&lt;Txt&gt;,
     ) -&gt; <span class="kw">impl </span>UiNode {
-        <span class="macro">Container! </span>{
+        <span class="macro">Container!</span> {
             background_color = MENU_BKG_VAR;
-            child_left = <span class="macro">Stack! </span>{
+            child_left = <span class="macro">Stack!</span> {
                 padding = <span class="number">4</span>;
                 spacing = <span class="number">2</span>;
                 direction = StackDirection::left_to_right();
-                toggle::style_fn = <span class="macro">Style! </span>{
+                toggle::style_fn = <span class="macro">Style!</span> {
                     padding = <span class="number">2</span>;
                     corner_radius = <span class="number">2</span>;
                 };
                 child_align = Align::CENTER;
                 children = <span class="macro">ui_vec!</span>[
-                    <span class="macro">Toggle! </span>{
+                    <span class="macro">Toggle!</span> {
                         child = crosshair_16x16();
                         tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"select widget (Ctrl+Shift+C)"</span>));
                         click_shortcut = <span class="macro">shortcut!</span>(CTRL|SHIFT+<span class="string">'C'</span>);
@@ -1801,8 +1801,8 @@
                             |b| <span class="kw">if </span><span class="kw-2">*</span>b { HitSelect::Enabled } <span class="kw">else </span>{ HitSelect::Disabled }
                         );
                     },
-                    <span class="macro">Toggle! </span>{
-                        child = <span class="macro">Wgt! </span>{
+                    <span class="macro">Toggle!</span> {
+                        child = <span class="macro">Wgt!</span> {
                             size = <span class="number">16</span>;
                             border = {
                                 widths: <span class="number">3</span>,
@@ -1812,8 +1812,8 @@
                         tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"highlight selected widget"</span>));
                         checked = adorn_selected;
                     },
-                    <span class="macro">Toggle! </span>{
-                        child = <span class="macro">Wgt! </span>{
+                    <span class="macro">Toggle!</span> {
+                        child = <span class="macro">Wgt!</span> {
                             size = <span class="number">14</span>;
                             corner_radius = <span class="number">14</span>;
                             border = {
@@ -1825,8 +1825,8 @@
                         checked = select_focused;
                     },
                     <span class="macro">zng_wgt_rule_line::vr::Vr!</span>(),
-                    <span class="macro">Toggle! </span>{
-                        child = <span class="macro">Stack! </span>{
+                    <span class="macro">Toggle!</span> {
+                        child = <span class="macro">Stack!</span> {
                             size = (<span class="number">14</span>, <span class="number">10</span>);
                             direction = StackDirection::top_to_bottom();
                             zng_wgt_rule_line::hr::margin = <span class="number">0</span>;
@@ -1843,7 +1843,7 @@
                             <span class="kw">let </span>screenshot_idle = var(<span class="bool-val">true</span>);
                             <span class="macro">wgt_fn!</span>(screenshot_idle, |<span class="kw">_</span>| {
                                 <span class="macro">zng_wgt_menu::context::ContextMenu!</span>(<span class="macro">ui_vec!</span>[
-                                    <span class="macro">Button! </span>{
+                                    <span class="macro">Button!</span> {
                                         child = <span class="macro">Text!</span>(<span class="string">"Save Screenshot"</span>);
                                         zng_wgt::enabled = screenshot_idle.clone();
                                         on_click = <span class="macro">hn!</span>(screenshot_idle, |<span class="kw">_</span>| {
@@ -1855,7 +1855,7 @@
                                             }));
                                         });
                                     },
-                                    <span class="macro">Button! </span>{
+                                    <span class="macro">Button!</span> {
                                         child = <span class="macro">Text!</span>(<span class="string">"Copy Screenshot"</span>);
                                         zng_wgt::enabled = screenshot_idle.clone();
                                         on_click = <span class="macro">hn!</span>(screenshot_idle, |<span class="kw">_</span>| {
@@ -1872,12 +1872,12 @@
                     }
                 ]
             }, <span class="number">0</span>;
-            child = <span class="macro">TextInput! </span>{
+            child = <span class="macro">TextInput!</span> {
                 access_role = AccessRole::SearchBox;
                 margin = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">50</span>);
                 padding = (<span class="number">3</span>, <span class="number">5</span>);
                 focus_shortcut = [<span class="macro">shortcut!</span>[<span class="string">'S'</span>], <span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
-                background = <span class="macro">Text! </span>{
+                background = <span class="macro">Text!</span> {
                     padding = (<span class="number">4</span>, <span class="number">6</span>); <span class="comment">// +1 border
                     </span>txt = <span class="string">"search widgets (S)"</span>;
                     opacity = <span class="number">50</span>.pct();
@@ -1909,7 +1909,7 @@
     }
 
     <span class="kw">fn </span>tree_view(tree: InspectedTree, filter: <span class="kw">impl </span>Var&lt;Txt&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        <span class="macro">Container! </span>{
+        <span class="macro">Container!</span> {
             font_family = [<span class="string">"JetBrains Mono"</span>, <span class="string">"Consolas"</span>, <span class="string">"monospace"</span>];
             child = tree_item_view(tree.inspect_root(), filter, LocalVar(<span class="number">0u32</span>).boxed());
         }
@@ -1958,12 +1958,12 @@
             </span>})
             .perm();
 
-        <span class="macro">Container! </span>{
+        <span class="macro">Container!</span> {
             when !<span class="kw-2">*</span>#{pass_filter.clone()} &amp;&amp; <span class="kw-2">*</span>#{descendants_pass_filter.clone()} == <span class="number">0 </span>{
                 visibility = Visibility::Collapsed;
             }
 
-            child = <span class="macro">Toggle! </span>{
+            child = <span class="macro">Toggle!</span> {
                 toggle::value = wgt.clone();
 
                 style_fn = <span class="macro">Style!</span>(replace = <span class="bool-val">true</span>);
@@ -1975,9 +1975,9 @@
                     background_color = TREE_ITEM_BKG_CHECKED_VAR;
                 }
 
-                child = <span class="macro">Wrap! </span>{
+                child = <span class="macro">Wrap!</span> {
                     children = <span class="macro">ui_vec!</span>[
-                        <span class="macro">Text! </span>{
+                        <span class="macro">Text!</span> {
                             txt = wgt.wgt_macro_name();
                             font_weight = FontWeight::BOLD;
                             font_color = WIDGET_MACRO_COLOR_VAR;
@@ -1987,7 +1987,7 @@
                             }
                         },
                         <span class="macro">Text!</span>(<span class="string">" {{ "</span>),
-                        <span class="macro">Text! </span>{
+                        <span class="macro">Text!</span> {
                             txt = <span class="macro">formatx!</span>(<span class="string">"{:#}"</span>, wgt.id());
                             font_color = WIDGET_ID_COLOR_VAR;
                         },
@@ -2003,8 +2003,8 @@
                 <span class="kw">if </span>children.is_empty() {
                     NilUiNode.boxed()
                 } <span class="kw">else </span>{
-                    <span class="macro">Container! </span>{
-                        child = <span class="macro">Stack! </span>{
+                    <span class="macro">Container!</span> {
+                        child = <span class="macro">Stack!</span> {
                             padding = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">2</span>.em());
                             direction = StackDirection::top_to_bottom();
                             children;
@@ -2025,35 +2025,35 @@
 
     <span class="kw">fn </span>selected_view(wgt: <span class="prelude-ty">Option</span>&lt;InspectedWidget&gt;) -&gt; <span class="kw">impl </span>UiNode {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = wgt {
-            <span class="macro">Scroll! </span>{
+            <span class="macro">Scroll!</span> {
                 mode = ScrollMode::VERTICAL;
                 child_align = Align::FILL_TOP;
                 padding = <span class="number">4</span>;
-                child = <span class="macro">Stack! </span>{
+                child = <span class="macro">Stack!</span> {
                     direction = StackDirection::top_to_bottom();
                     font_family = [<span class="string">"JetBrains Mono"</span>, <span class="string">"Consolas"</span>, <span class="string">"monospace"</span>];
                     children = <span class="macro">ui_vec!</span>[
-                        <span class="macro">Wrap! </span>{
+                        <span class="macro">Wrap!</span> {
                             children = <span class="macro">ui_vec!</span>[
-                                <span class="macro">Text! </span>{
+                                <span class="macro">Text!</span> {
                                     txt = wgt.wgt_macro_name();
                                     font_size = <span class="number">1.2</span>.em();
                                     font_weight = FontWeight::BOLD;
                                     font_color = WIDGET_MACRO_COLOR_VAR;
                                 },
-                                <span class="macro">Text! </span>{
+                                <span class="macro">Text!</span> {
                                     txt = <span class="macro">formatx!</span>(<span class="string">" {:#}"</span>, wgt.id());
                                     font_size = <span class="number">1.2</span>.em();
                                     font_color = WIDGET_ID_COLOR_VAR;
                                 },
                                 {
                                     <span class="kw">let </span>parent_property = wgt.parent_property_name();
-                                    <span class="macro">Wrap! </span>{
+                                    <span class="macro">Wrap!</span> {
                                         visibility = parent_property.map(|p| (!p.is_empty()).into());
                                         tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"parent property"</span>));
                                         children = <span class="macro">ui_vec!</span>[
                                             <span class="macro">Text!</span>(<span class="string">" (in "</span>),
-                                            <span class="macro">Text! </span>{
+                                            <span class="macro">Text!</span> {
                                                 txt = parent_property;
                                                 font_color = PROPERTY_COLOR_VAR;
                                             },
@@ -2076,7 +2076,7 @@
                 }
             }
         } <span class="kw">else </span>{
-            <span class="macro">Text! </span>{
+            <span class="macro">Text!</span> {
                 txt_align = Align::TOP;
                 padding = <span class="number">20</span>;
                 font_style = FontStyle::Italic;
@@ -2125,7 +2125,7 @@
             out.push(nest_group_view(current_group.unwrap(), group_items));
         }
 
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             children = out;
         }
@@ -2134,7 +2134,7 @@
     <span class="kw">fn </span>nest_group_view(group: NestGroup, <span class="kw-2">mut </span>items: UiNodeVec) -&gt; <span class="kw">impl </span>UiNode {
         items.insert(
             <span class="number">0</span>,
-            <span class="macro">Text! </span>{
+            <span class="macro">Text!</span> {
                 txt = <span class="macro">formatx!</span>(<span class="string">"// {}"</span>, group.name());
                 tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"nest group"</span>));
                 margin = (<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
@@ -2142,7 +2142,7 @@
             },
         );
 
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             spacing = <span class="number">3</span>;
             children = items;
@@ -2169,7 +2169,7 @@
         user_assigned: bool,
     ) -&gt; <span class="kw">impl </span>UiNode {
         <span class="kw">let </span><span class="kw-2">mut </span>children = <span class="macro">ui_vec!</span>[
-            <span class="macro">Text! </span>{
+            <span class="macro">Text!</span> {
                 txt = info.name;
                 font_color = PROPERTY_COLOR_VAR;
                 tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="kw">if </span>captured {
@@ -2184,7 +2184,7 @@
             <span class="kw">let </span>value = actual_vars.get_debug(info.id, <span class="number">0</span>).unwrap_or_else(|| args.live_debug(<span class="number">0</span>));
             <span class="kw">let </span>flash = value_background(<span class="kw-2">&amp;</span>value);
 
-            children.push(<span class="macro">Text! </span>{
+            children.push(<span class="macro">Text!</span> {
                 txt = value;
                 font_color = PROPERTY_VALUE_COLOR_VAR;
                 background_color = flash;
@@ -2203,7 +2203,7 @@
                 <span class="kw">let </span>value = actual_vars.get_debug(info.id, i).unwrap_or_else(|| args.live_debug(i));
                 <span class="kw">let </span>flash = value_background(<span class="kw-2">&amp;</span>value);
 
-                children.push(<span class="macro">Text! </span>{
+                children.push(<span class="macro">Text!</span> {
                     txt = value;
                     font_color = PROPERTY_VALUE_COLOR_VAR;
                     background_color = flash;
@@ -2213,13 +2213,13 @@
             children.push(<span class="macro">Text!</span>(<span class="string">"}};"</span>));
         }
 
-        <span class="macro">Wrap! </span>{
+        <span class="macro">Wrap!</span> {
             children;
         }
     }
 
     <span class="kw">fn </span>intrinsic_view(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; <span class="kw">impl </span>UiNode {
-        <span class="macro">Text! </span>{
+        <span class="macro">Text!</span> {
             txt = name;
             font_style = FontStyle::Italic;
             tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"intrinsic node"</span>));
@@ -2228,48 +2228,48 @@
 
     <span class="kw">fn </span>info_watchers(wgt: <span class="kw-2">&amp;</span>InspectedWidget) -&gt; <span class="kw">impl </span>UiNode {
         <span class="kw">let </span><span class="kw-2">mut </span>children = UiNodeVec::new();
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = <span class="string">"interactivity: "</span>;
         });
 
         <span class="kw">let </span>value = wgt.info().map(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.interactivity())).boxed();
         <span class="kw">let </span>flash = value_background(<span class="kw-2">&amp;</span>value);
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = value;
             font_color = PROPERTY_VALUE_COLOR_VAR;
             background_color = flash;
         });
 
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = <span class="string">",\nvisibility: "</span>;
         });
         <span class="kw">let </span>value = wgt.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.visibility())).boxed();
         <span class="kw">let </span>flash = value_background(<span class="kw-2">&amp;</span>value);
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = value;
             font_color = PROPERTY_VALUE_COLOR_VAR;
             background_color = flash;
         });
 
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = <span class="string">",\ninner_bounds: "</span>;
         });
         <span class="kw">let </span>value = wgt.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.bounds_info().inner_bounds())).boxed();
         <span class="kw">let </span>flash = value_background(<span class="kw-2">&amp;</span>value);
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = value;
             font_color = PROPERTY_VALUE_COLOR_VAR;
             background_color = flash;
         });
-        children.push(<span class="macro">Text! </span>{
+        children.push(<span class="macro">Text!</span> {
             txt = <span class="string">","</span>;
         });
 
-        <span class="macro">Stack! </span>{
+        <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             spacing = <span class="number">3</span>;
             children = <span class="macro">ui_vec!</span>[
-                <span class="macro">Text! </span>{
+                <span class="macro">Text!</span> {
                     txt = <span class="macro">formatx!</span>(<span class="string">"/* INFO */"</span>);
                     tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"watched widget info"</span>));
                     font_color = NEST_GROUP_COLOR_VAR;

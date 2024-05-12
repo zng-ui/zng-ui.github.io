@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node/list.rs`."><title>list.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node/list.rs`."><title>list.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -2762,7 +2762,7 @@ document.addEventListener('DOMContentLoaded', function () {
 /// Note that this is different from `vec![item; n]`, the node is not cloned, the expression is called **n** times to
 /// generate the nodes.
 </span><span class="attr">#[macro_export]
-</span><span class="macro">macro_rules! </span>ui_vec {
+</span><span class="macro">macro_rules!</span> ui_vec {
     () =&gt; { <span class="macro-nonterminal">$crate::widget::node::UiNodeVec::new</span>() };
     (<span class="macro-nonterminal">$node</span>:expr; <span class="macro-nonterminal">$n</span>:expr) =&gt; {
         {
@@ -2776,7 +2776,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
     ($(<span class="macro-nonterminal">$nodes</span>:tt)+) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items!</span> {
             <span class="kw">match </span>{ $(<span class="macro-nonterminal">$nodes</span>)+ }
             result { }
         }
@@ -2797,13 +2797,13 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="comment">// attribute to support `#[cfg(_)]` in items, Rust does not allow a match to `$(#[$meta:meta])* $node:expr`.
 </span><span class="attr">#[macro_export]
 #[doc(hidden)]
-</span><span class="macro">macro_rules! </span>ui_vec_items {
+</span><span class="macro">macro_rules!</span> ui_vec_items {
     <span class="comment">// match attribute
     </span>(
         <span class="kw">match </span>{ <span class="attr">#[<span class="macro-nonterminal">$meta</span>:meta] </span>$(<span class="macro-nonterminal">$tt</span>:tt)* }
         result { $(<span class="macro-nonterminal">$r</span>:tt)* }
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items!</span> {
             <span class="kw">match </span>{ $(<span class="macro-nonterminal">$tt</span>)* }
             result { $(<span class="macro-nonterminal">$r</span>)* <span class="attr">#[<span class="macro-nonterminal">$meta</span>] </span>}
         }
@@ -2813,7 +2813,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">match </span>{ <span class="macro-nonterminal">$node</span>:expr, $(<span class="macro-nonterminal">$tt</span>:tt)* }
         result { $(<span class="macro-nonterminal">$r</span>:tt)* }
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items!</span> {
             <span class="kw">match </span>{ $(<span class="macro-nonterminal">$tt</span>)* }
             result { $(<span class="macro-nonterminal">$r</span>)* <span class="macro-nonterminal">$crate::widget::node::UiNode::boxed</span>(<span class="macro-nonterminal">$node</span>), }
         }
@@ -2823,7 +2823,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">match </span>{ <span class="macro-nonterminal">$node</span>:expr }
         result { $(<span class="macro-nonterminal">$r</span>:tt)* }
     ) =&gt; {
-        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items! </span>{
+        <span class="macro-nonterminal">$</span><span class="macro">crate::ui_vec_items!</span> {
             <span class="kw">match </span>{ }
             <span class="macro-nonterminal">result </span>{ $(<span class="macro-nonterminal">$r</span>)* <span class="macro-nonterminal">$crate::widget::node::UiNode::boxed</span>(<span class="macro-nonterminal">$node</span>) }
         }
@@ -3302,7 +3302,7 @@ document.addEventListener('DOMContentLoaded', function () {
         })
     }
 }
-<span class="macro">context_local! </span>{
+<span class="macro">context_local!</span> {
     <span class="kw">static </span>SORTING_LIST_PARENT: AtomicBool = AtomicBool::new(<span class="bool-val">false</span>);
 }
 
@@ -3499,7 +3499,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>resort: AtomicBool,
 }
 
-<span class="macro">context_local! </span>{
+<span class="macro">context_local!</span> {
     <span class="kw">static </span>Z_INDEX_CTX: ZIndexCtx = ZIndexCtx::default();
 }
 
@@ -3678,7 +3678,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 }
-<span class="macro">impl_from_and_into_var! </span>{
+<span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(index: u32) -&gt; ZIndex {
         ZIndex(index)
     }
@@ -5265,7 +5265,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="macro">bitflags::bitflags! </span>{
+<span class="macro">bitflags::bitflags!</span> {
     <span class="doccomment">/// Identifies changes in [`PanelListData`] since last layout.
     </span><span class="attr">#[must_use = <span class="string">"|= with other item changes, call request_render"</span>]
     #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]

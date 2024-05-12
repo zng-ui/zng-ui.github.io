@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-ansi-text/src/lib.rs`."><title>lib.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_ansi_text" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-ansi-text/src/lib.rs`."><title>lib.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_ansi_text" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_ansi_text/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1035,7 +1035,7 @@
 );
 <span class="kw">impl </span>AnsiText {
     <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="self">self</span>;
             font_family = [<span class="string">"JetBrains Mono"</span>, <span class="string">"Consolas"</span>, <span class="string">"monospace"</span>];
         };
@@ -1047,7 +1047,7 @@
         });
     }
 
-    <span class="macro">widget_impl! </span>{
+    <span class="macro">widget_impl!</span> {
         <span class="doccomment">/// ANSI text.
         </span><span class="kw">pub </span>txt(text: <span class="kw">impl </span>IntoVar&lt;Txt&gt;);
     }
@@ -1135,7 +1135,7 @@
         <span class="doccomment">/// RGB
         </span>TrueColor(u8, u8, u8),
     }
-    <span class="macro">impl_from_and_into_var! </span>{
+    <span class="macro">impl_from_and_into_var!</span> {
         <span class="kw">fn </span>from(color: AnsiColor) -&gt; Rgba {
             <span class="kw">match </span>color {
                 AnsiColor::Black =&gt; rgb(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>),
@@ -1180,7 +1180,7 @@
             <span class="self">Self</span>::Normal
         }
     }
-    <span class="macro">impl_from_and_into_var! </span>{
+    <span class="macro">impl_from_and_into_var!</span> {
         <span class="kw">fn </span>from(weight: AnsiWeight) -&gt; FontWeight {
             <span class="kw">match </span>weight {
                 AnsiWeight::Normal =&gt; FontWeight::NORMAL,
@@ -1383,7 +1383,7 @@
         </span><span class="kw">pub </span>pages: UiNodeVec,
     }
 
-    <span class="macro">context_var! </span>{
+    <span class="macro">context_var!</span> {
         <span class="doccomment">/// Widget function for [`TextFnArgs`].
         ///
         /// The returned widgets are layout by the [`LINE_FN_VAR`]. The default view is [`default_text_fn`].
@@ -1434,59 +1434,59 @@
     </span><span class="kw">pub fn </span>default_text_fn(args: TextFnArgs) -&gt; <span class="kw">impl </span>UiNode {
         <span class="kw">let </span><span class="kw-2">mut </span>text = Text::widget_new();
 
-        <span class="macro">widget_set! </span>{
+        <span class="macro">widget_set!</span> {
             <span class="kw-2">&amp;mut </span>text;
             txt = args.txt;
         }
 
         <span class="kw">if </span>args.style.background_color != AnsiColor::Black {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 background_color = args.style.background_color;
             }
         }
         <span class="kw">if </span>args.style.color != AnsiColor::White {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 font_color = args.style.color;
             }
         }
 
         <span class="kw">if </span>args.style.weight != AnsiWeight::Normal {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 font_weight = args.style.weight;
             }
         }
         <span class="kw">if </span>args.style.italic {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 font_style = FontStyle::Italic;
             }
         }
 
         <span class="kw">if </span>args.style.underline {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 underline = <span class="number">1</span>, LineStyle::Solid;
             }
         }
         <span class="kw">if </span>args.style.strikethrough {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 strikethrough = <span class="number">1</span>, LineStyle::Solid;
             }
         }
 
         <span class="kw">if </span>args.style.invert_color {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 invert_color = <span class="bool-val">true</span>;
             }
         }
 
         <span class="kw">if </span>args.style.hidden {
-            <span class="macro">widget_set! </span>{
+            <span class="macro">widget_set!</span> {
                 <span class="kw-2">&amp;mut </span>text;
                 visibility = Visibility::Hidden;
             }
@@ -1498,7 +1498,7 @@
             <span class="kw">if </span>interval != Duration::ZERO &amp;&amp; interval != Duration::MAX {
                 opacity.step_oci(<span class="number">0</span>.fct(), interval).perm();
 
-                <span class="macro">widget_set! </span>{
+                <span class="macro">widget_set!</span> {
                     <span class="kw-2">&amp;mut </span>text;
                     opacity;
                 }
@@ -1519,7 +1519,7 @@
         } <span class="kw">else if </span>args.text.len() == <span class="number">1 </span>{
             args.text.remove(<span class="number">0</span>)
         } <span class="kw">else </span>{
-            <span class="macro">Stack! </span>{
+            <span class="macro">Stack!</span> {
                 direction = StackDirection::start_to_end();
                 children = args.text;
             }
@@ -1539,7 +1539,7 @@
             args.lines.remove(<span class="number">0</span>)
         } <span class="kw">else </span>{
             <span class="kw">let </span>len = args.lines.len();
-            <span class="macro">Stack! </span>{
+            <span class="macro">Stack!</span> {
                 direction = StackDirection::top_to_bottom();
                 children = args.lines;
                 lazy = LazyMode::lazy_vertical(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| {
@@ -1562,7 +1562,7 @@
         } <span class="kw">else if </span>args.pages.len() == <span class="number">1 </span>{
             args.pages.remove(<span class="number">0</span>)
         } <span class="kw">else </span>{
-            <span class="macro">Stack! </span>{
+            <span class="macro">Stack!</span> {
                 direction = StackDirection::top_to_bottom();
                 children = args.pages;
             }

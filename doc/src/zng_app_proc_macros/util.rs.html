@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/util.rs`."><title>util.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/util.rs`."><title>util.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app_proc_macros/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1028,14 +1028,14 @@
 <span class="kw">use </span>once_cell::sync::OnceCell;
 
 <span class="doccomment">/// `Ident` with custom span.
-</span><span class="macro">macro_rules! </span>ident_spanned {
+</span><span class="macro">macro_rules!</span> ident_spanned {
     (<span class="macro-nonterminal">$span</span>:expr=&gt; $(<span class="macro-nonterminal">$format_name</span>:tt)+) =&gt; {
         proc_macro2::Ident::new(<span class="kw-2">&amp;</span><span class="macro">format!</span>($(<span class="macro-nonterminal">$format_name</span>)+), <span class="macro-nonterminal">$span</span>)
     };
 }
 
 <span class="doccomment">/// `Ident` with call_site span.
-</span><span class="macro">macro_rules! </span>ident {
+</span><span class="macro">macro_rules!</span> ident {
     ($(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
         <span class="macro">ident_spanned!</span>(proc_macro2::Span::call_site()=&gt; $(<span class="macro-nonterminal">$tt</span>)<span class="kw-2">*</span>)
     };
@@ -1069,7 +1069,7 @@
     <span class="kw">let </span>ident = Ident::new(<span class="kw-2">&amp;</span>ident, Span::call_site());
     <span class="kw">if </span>!module.is_empty() {
         <span class="kw">let </span>module = Ident::new(module, Span::call_site());
-        <span class="macro">quote! </span>{ #ident::#module }
+        <span class="macro">quote!</span> { #ident::#module }
     } <span class="kw">else </span>{
         ident.to_token_stream()
     }
@@ -1228,7 +1228,7 @@
 }
 
 <span class="doccomment">/// Generates a return of a compile_error message in the given span.
-</span><span class="macro">macro_rules! </span>abort {
+</span><span class="macro">macro_rules!</span> abort {
     (<span class="macro-nonterminal">$span</span>:expr, $(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {{
         <span class="kw">let </span>error = <span class="macro">format!</span>($(<span class="macro-nonterminal">$tt</span>)<span class="kw-2">*</span>);
         <span class="kw">let </span>error = syn::LitStr::new(<span class="kw-2">&amp;</span>error, proc_macro2::Span::call_site());
@@ -1238,23 +1238,23 @@
 }
 
 <span class="doccomment">/// Generates a return of a compile_error message in the call_site span.
-</span><span class="macro">macro_rules! </span>abort_call_site {
+</span><span class="macro">macro_rules!</span> abort_call_site {
     ($(<span class="macro-nonterminal">$tt</span>:tt)<span class="kw-2">*</span>) =&gt; {
         <span class="macro">abort!</span>(proc_macro2::Span::call_site(), $(<span class="macro-nonterminal">$tt</span>)<span class="kw-2">*</span>)
     };
 }
 
 <span class="doccomment">/// Input error not caused by the user.
-</span><span class="macro">macro_rules! </span>non_user_error {
+</span><span class="macro">macro_rules!</span> non_user_error {
     (<span class="macro-nonterminal">$e</span>:expr) =&gt; {
         <span class="macro">panic!</span>(<span class="string">"[{}:{}] invalid non-user input: {}"</span>, <span class="macro">file!</span>(), <span class="macro">line!</span>(), <span class="macro-nonterminal">$e</span>)
     };
     (<span class="macro-nonterminal">$fmt</span>:tt, $(<span class="macro-nonterminal">$args</span>:tt)+) =&gt; {
-        <span class="macro">non_user_error! </span>{ <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+) }
+        <span class="macro">non_user_error!</span> { <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+) }
     }
 }
 
-<span class="macro">macro_rules! </span>non_user_group {
+<span class="macro">macro_rules!</span> non_user_group {
     (<span class="macro-nonterminal">$group_kind</span>:ident, <span class="macro-nonterminal">$input</span>:expr) =&gt; {
         {
             <span class="kw">fn </span>inner(input: syn::parse::ParseStream) -&gt; syn::Result&lt;syn::parse::ParseBuffer&gt; {
@@ -1273,32 +1273,32 @@
             <span class="kw">if </span>id != ident {
                 <span class="macro">non_user_error!</span>(<span class="macro">format!</span>(<span class="string">"expected `{ident}`"</span>));
             }
-            <span class="macro">non_user_group! </span>{ <span class="macro-nonterminal">$group_kind</span>, <span class="macro-nonterminal">$input </span>}
+            <span class="macro">non_user_group!</span> { <span class="macro-nonterminal">$group_kind</span>, <span class="macro-nonterminal">$input </span>}
         }
     }
 }
 <span class="doccomment">/// Does a `braced!` parse but panics with [`non_user_error!()`](non_user_error) if the parsing fails.
-</span><span class="macro">macro_rules! </span>non_user_braced {
+</span><span class="macro">macro_rules!</span> non_user_braced {
     (<span class="macro-nonterminal">$input</span>:expr) =&gt; {
-        <span class="macro">non_user_group! </span>{ braced, <span class="macro-nonterminal">$input </span>}
+        <span class="macro">non_user_group!</span> { braced, <span class="macro-nonterminal">$input </span>}
     };
     (<span class="macro-nonterminal">$input</span>:expr, <span class="macro-nonterminal">$ident</span>:expr) =&gt; {
-        <span class="macro">non_user_group! </span>{ braced, <span class="macro-nonterminal">$input</span>, <span class="macro-nonterminal">$ident </span>}
+        <span class="macro">non_user_group!</span> { braced, <span class="macro-nonterminal">$input</span>, <span class="macro-nonterminal">$ident </span>}
     };
 }
 
 <span class="doccomment">/// Does a `parenthesized!` parse but panics with [`non_user_error!()`](non_user_error) if the parsing fails.
 </span><span class="attr">#[allow(unused)]
-</span><span class="macro">macro_rules! </span>non_user_parenthesized {
+</span><span class="macro">macro_rules!</span> non_user_parenthesized {
     (<span class="macro-nonterminal">$input</span>:expr) =&gt; {
-        <span class="macro">non_user_group! </span>{ parenthesized, <span class="macro-nonterminal">$input </span>}
+        <span class="macro">non_user_group!</span> { parenthesized, <span class="macro-nonterminal">$input </span>}
     };
 }
 
 <span class="doccomment">/// Does a `bracketed!` parse but panics with [`non_user_error!()`](non_user_error) if the parsing fails.
-</span><span class="macro">macro_rules! </span>non_user_bracketed {
+</span><span class="macro">macro_rules!</span> non_user_bracketed {
     (<span class="macro-nonterminal">$input</span>:expr) =&gt; {
-        <span class="macro">non_user_group! </span>{ bracketed, <span class="macro-nonterminal">$input </span>}
+        <span class="macro">non_user_group!</span> { bracketed, <span class="macro-nonterminal">$input </span>}
     };
 }
 
@@ -1311,7 +1311,7 @@
     <span class="doccomment">/// Push a compile error.
     </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, error: <span class="kw">impl </span>ToString, span: Span) {
         <span class="kw">let </span>error = error.to_string();
-        <span class="self">self</span>.tokens.extend(<span class="macro">quote_spanned! </span>{span=&gt;
+        <span class="self">self</span>.tokens.extend(<span class="macro">quote_spanned!</span> {span=&gt;
             <span class="macro">compile_error!</span>{#error}
         })
     }
@@ -1396,7 +1396,7 @@
                 <span class="prelude-val">Ok</span>(doc) =&gt; {
                     <span class="kw">let </span><span class="kw-2">mut </span>msg = doc.msg.value();
                     msg.insert_str(<span class="number">0</span>, <span class="kw-2">&amp;</span>txt);
-                    <span class="kw-2">*</span>first = <span class="macro">parse_quote_spanned! </span>{first.span()=&gt;
+                    <span class="kw-2">*</span>first = <span class="macro">parse_quote_spanned!</span> {first.span()=&gt;
                         <span class="attr">#[doc = #msg]
                     </span>};
 
@@ -1767,7 +1767,7 @@
 
 <span class="attr">#[allow(unused)]
 #[cfg(debug_assertions)]
-</span><span class="macro">macro_rules! </span>enable_trace {
+</span><span class="macro">macro_rules!</span> enable_trace {
     () =&gt; {
         <span class="macro-nonterminal">$crate::util::debug_trace::enable</span>(<span class="bool-val">true</span>);
     };
@@ -1777,7 +1777,7 @@
 }
 <span class="attr">#[allow(unused)]
 #[cfg(debug_assertions)]
-</span><span class="macro">macro_rules! </span>trace {
+</span><span class="macro">macro_rules!</span> trace {
     (<span class="macro-nonterminal">$msg</span>:tt) =&gt; {
         <span class="macro-nonterminal">$crate::util::debug_trace::display</span>(<span class="macro-nonterminal">$msg</span>);
     };

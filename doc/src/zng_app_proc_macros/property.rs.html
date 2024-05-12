@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/property.rs`."><title>property.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/property.rs`."><title>property.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_app_proc_macros/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1142,7 +1142,7 @@
         <span class="prelude-val">Err</span>(e) =&gt; {
             errors.push_syn(e);
             <span class="kw">let </span>input = TokenStream::from(input);
-            <span class="kw">let </span>r = <span class="macro">quote! </span>{
+            <span class="kw">let </span>r = <span class="macro">quote!</span> {
                 #input
                 #errors
             };
@@ -1151,7 +1151,7 @@
     };
     <span class="kw">let </span><span class="kw-2">mut </span>attrs = Attributes::new(mem::take(<span class="kw-2">&amp;mut </span>item.attrs));
     <span class="kw">let </span><span class="kw-2">mut </span>mtd_attrs = Attributes::new(<span class="macro">vec!</span>[]);
-    mtd_attrs.docs = attrs.docs.clone();
+    mtd_attrs.docs.clone_from(<span class="kw-2">&amp;</span>attrs.docs);
     <span class="kw">let </span><span class="kw-2">mut </span>extra_docs = <span class="macro">quote!</span>();
 
     <span class="comment">// note that the tags "c" and "P" are used by the `widget.js` to find properties.
@@ -1159,7 +1159,7 @@
         attrs.tag_doc(<span class="string">"c"</span>, <span class="string">"Capture-only property function"</span>);
         mtd_attrs.tag_doc(<span class="string">"c"</span>, <span class="string">"Capture-only property method"</span>);
         <span class="kw">if </span>!attrs.docs.is_empty() {
-            extra_docs = <span class="macro">quote! </span>{
+            extra_docs = <span class="macro">quote!</span> {
                 <span class="doccomment">///
                 /// # Capture-Only
                 ///
@@ -1223,7 +1223,7 @@
             errors.push(<span class="string">"capture property must have an empty body"</span>, item.block.span());
         }
         item.block.stmts.clear();
-        item.block.stmts.push(<span class="macro">parse_quote! </span>{
+        item.block.stmts.push(<span class="macro">parse_quote!</span> {
             <span class="kw">let _ </span>= (#(#inputs,)<span class="kw-2">*</span>);
         });
     }
@@ -1279,23 +1279,23 @@
                         InputKind::Var =&gt; {
                             <span class="kw">if </span>ident_str.starts_with(<span class="string">"is_"</span>) || ident_str.starts_with(<span class="string">"has_"</span>) {
                                 <span class="kw">let </span>core = set_stream_span(core.clone(), input.ty.span());
-                                default.extend(<span class="macro">quote_spanned! </span>{input.ty.span()=&gt;
+                                default.extend(<span class="macro">quote_spanned!</span> {input.ty.span()=&gt;
                                     #core::widget::builder::state_var(),
                                 })
                             } <span class="kw">else if </span>ident_str.starts_with(<span class="string">"get_"</span>) || ident_str.starts_with(<span class="string">"actual_"</span>) {
                                 <span class="kw">let </span>core = set_stream_span(core.clone(), input.ty.span());
-                                default.extend(<span class="macro">quote_spanned! </span>{input.ty.span()=&gt;
+                                default.extend(<span class="macro">quote_spanned!</span> {input.ty.span()=&gt;
                                     #core::widget::builder::getter_var(),
                                 })
                             }
                         }
-                        InputKind::UiNode =&gt; default.extend(<span class="macro">quote! </span>{
+                        InputKind::UiNode =&gt; default.extend(<span class="macro">quote!</span> {
                             #core::widget::node::NilUiNode,
                         }),
-                        InputKind::UiNodeList =&gt; default.extend(<span class="macro">quote! </span>{
+                        InputKind::UiNodeList =&gt; default.extend(<span class="macro">quote!</span> {
                             #core::widget::node::UiNodeVec::new(),
                         }),
-                        InputKind::WidgetHandler <span class="kw">if </span>!has_generics =&gt; default.extend(<span class="macro">quote! </span>{
+                        InputKind::WidgetHandler <span class="kw">if </span>!has_generics =&gt; default.extend(<span class="macro">quote!</span> {
                             #<span class="macro">core::handler::hn!</span>(|<span class="kw">_</span>| {}),
                         }),
                         <span class="kw">_ </span>=&gt; {
@@ -1314,17 +1314,17 @@
         };
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>((span, args)) = args_default {
-            default = <span class="macro">quote_spanned! </span>{span=&gt;
+            default = <span class="macro">quote_spanned!</span> {span=&gt;
                 <span class="kw">fn </span>__default__ #impl_gens() -&gt; std::boxed::Box&lt;<span class="kw">dyn </span>#core::widget::builder::PropertyArgs&gt; #where_gens {
                     #ident_meta {}.args(#args)
                 }
             };
-            default_fn = <span class="macro">quote! </span>{
+            default_fn = <span class="macro">quote!</span> {
                 <span class="prelude-val">Some</span>(__default__ #path_gens)
             };
         } <span class="kw">else </span>{
             default = <span class="macro">quote!</span>();
-            default_fn = <span class="macro">quote! </span>{
+            default_fn = <span class="macro">quote!</span> {
                 <span class="prelude-val">None
             </span>};
         }
@@ -1357,7 +1357,7 @@
             <span class="kw">let </span>kind = input.kind;
             <span class="kw">let </span>info_ty = <span class="kw-2">&amp;</span>input.info_ty;
             <span class="kw">let </span>storage_ty = <span class="kw-2">&amp;</span>input.storage_ty;
-            input_info.extend(<span class="macro">quote! </span>{
+            input_info.extend(<span class="macro">quote!</span> {
                 #core::widget::builder::PropertyInput {
                     name: <span class="macro">stringify!</span>(#ident),
                     kind: #kind,
@@ -1368,27 +1368,27 @@
 
             <span class="kw">match </span>kind {
                 InputKind::Var =&gt; {
-                    input_to_storage.push(<span class="macro">quote! </span>{
+                    input_to_storage.push(<span class="macro">quote!</span> {
                         <span class="self">self</span>.inputs().#ident(#ident)
                     });
-                    get_var.extend(<span class="macro">quote! </span>{
+                    get_var.extend(<span class="macro">quote!</span> {
                         #i =&gt; <span class="kw-2">&amp;</span><span class="self">self</span>.#ident,
                     });
-                    instantiate.extend(<span class="macro">quote! </span>{
+                    instantiate.extend(<span class="macro">quote!</span> {
                         std::clone::Clone::clone(<span class="kw-2">&amp;</span><span class="self">self</span>.#ident),
                     });
-                    named_into.extend(<span class="macro">quote! </span>{
+                    named_into.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>, #ident: #input_ty) -&gt; #storage_ty #where_gens {
                             #core::widget::builder::var_to_args(#ident)
                         }
                     });
-                    input_new_dyn.push(<span class="macro">quote! </span>{
+                    input_new_dyn.push(<span class="macro">quote!</span> {
                         <span class="kw">let </span>__actions__ = #core::widget::builder::iter_input_build_actions(<span class="kw-2">&amp;</span>__args__.build_actions, <span class="kw-2">&amp;</span>__args__.build_actions_when_data, #i);
                         #core::widget::builder::new_dyn_var(<span class="kw-2">&amp;mut </span>__inputs__, __actions__)
                     });
                     <span class="kw">let </span>get_ident = <span class="macro">ident!</span>(<span class="string">"__w_{ident}__"</span>);
                     <span class="kw">let </span>get_ident_i = <span class="macro">ident!</span>(<span class="string">"__w_{i}__"</span>);
-                    get_when_input.extend(<span class="macro">quote! </span>{
+                    get_when_input.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#get_ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>)
                         -&gt; (#core::widget::builder::WhenInputVar, <span class="kw">impl </span>#core::var::Var&lt;#info_ty&gt;) #where_gens {
                             #core::widget::builder::WhenInputVar::new::&lt;#info_ty&gt;()
@@ -1401,27 +1401,27 @@
                 }
                 InputKind::Value =&gt; {
                     allowed_in_when_assign = <span class="bool-val">false</span>;
-                    input_to_storage.push(<span class="macro">quote! </span>{
+                    input_to_storage.push(<span class="macro">quote!</span> {
                         <span class="self">self</span>.inputs().#ident(#ident)
                     });
-                    named_into.extend(<span class="macro">quote! </span>{
+                    named_into.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>, #ident: #input_ty) -&gt; #storage_ty #where_gens {
                             #core::widget::builder::value_to_args(#ident)
                         }
                     });
-                    get_value.extend(<span class="macro">quote! </span>{
+                    get_value.extend(<span class="macro">quote!</span> {
                         #i =&gt; <span class="kw-2">&amp;</span><span class="self">self</span>.#ident,
                     });
-                    instantiate.extend(<span class="macro">quote! </span>{
+                    instantiate.extend(<span class="macro">quote!</span> {
                         std::clone::Clone::clone(<span class="kw-2">&amp;</span><span class="self">self</span>.#ident),
                     });
-                    input_new_dyn.push(<span class="macro">quote! </span>{
+                    input_new_dyn.push(<span class="macro">quote!</span> {
                         <span class="kw">let </span>__actions__ = #core::widget::builder::iter_input_build_actions(<span class="kw-2">&amp;</span>__args__.build_actions, <span class="kw-2">&amp;</span>__args__.build_actions_when_data, #i);
                         #core::widget::builder::new_dyn_other(<span class="kw-2">&amp;mut </span>__inputs__, __actions__)
                     });
                     <span class="kw">let </span>get_ident = <span class="macro">ident!</span>(<span class="string">"__w_{ident}__"</span>);
                     <span class="kw">let </span>get_ident_i = <span class="macro">ident!</span>(<span class="string">"__w_{i}__"</span>);
-                    get_when_input.extend(<span class="macro">quote! </span>{
+                    get_when_input.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#get_ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>)
                         -&gt; (#core::widget::builder::WhenInputVar, <span class="kw">impl </span>#core::var::Var&lt;#info_ty&gt;) #where_gens {
                             #core::widget::builder::WhenInputVar::new::&lt;#info_ty&gt;()
@@ -1434,27 +1434,27 @@
                 }
                 InputKind::UiNode =&gt; {
                     allowed_in_when_expr = <span class="bool-val">false</span>;
-                    input_to_storage.push(<span class="macro">quote! </span>{
+                    input_to_storage.push(<span class="macro">quote!</span> {
                         #core::widget::builder::ui_node_to_args(#ident)
                     });
-                    named_into.extend(<span class="macro">quote! </span>{
+                    named_into.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#ident(<span class="kw-2">&amp;</span><span class="self">self</span>, #ident: #input_ty) -&gt; #core::widget::node::BoxedUiNode {
                             #core::widget::node::UiNode::boxed(#ident)
                         }
                     });
-                    get_ui_node.extend(<span class="macro">quote! </span>{
+                    get_ui_node.extend(<span class="macro">quote!</span> {
                         #i =&gt; <span class="kw-2">&amp;</span><span class="self">self</span>.#ident,
                     });
-                    instantiate.extend(<span class="macro">quote! </span>{
+                    instantiate.extend(<span class="macro">quote!</span> {
                         <span class="self">self</span>.#ident.take_on_init(),
                     });
-                    input_new_dyn.push(<span class="macro">quote! </span>{
+                    input_new_dyn.push(<span class="macro">quote!</span> {
                         <span class="kw">let </span>__actions__ = #core::widget::builder::iter_input_build_actions(<span class="kw-2">&amp;</span>__args__.build_actions, <span class="kw-2">&amp;</span>__args__.build_actions_when_data, #i);
                         #core::widget::builder::new_dyn_ui_node(<span class="kw-2">&amp;mut </span>__inputs__, __actions__)
                     });
                     <span class="kw">let </span>get_ident = <span class="macro">ident!</span>(<span class="string">"__w_{ident}__"</span>);
                     <span class="kw">let </span>get_ident_i = <span class="macro">ident!</span>(<span class="string">"__w_{i}__"</span>);
-                    get_when_input.extend(<span class="macro">quote! </span>{
+                    get_when_input.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#get_ident(<span class="kw-2">&amp;</span><span class="self">self</span>)
                         -&gt; (#core::widget::builder::WhenInputVar, <span class="kw">impl </span>#core::var::Var&lt;#core::widget::builder::UiNodeInWhenExprError&gt;) {
                             #core::widget::builder::WhenInputVar::new::&lt;#core::widget::builder::UiNodeInWhenExprError&gt;()
@@ -1467,27 +1467,27 @@
                 }
                 InputKind::UiNodeList =&gt; {
                     allowed_in_when_expr = <span class="bool-val">false</span>;
-                    input_to_storage.push(<span class="macro">quote! </span>{
+                    input_to_storage.push(<span class="macro">quote!</span> {
                         #core::widget::builder::ui_node_list_to_args(#ident)
                     });
-                    named_into.extend(<span class="macro">quote! </span>{
+                    named_into.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#ident(<span class="kw-2">&amp;</span><span class="self">self</span>, #ident: #input_ty) -&gt; #core::widget::node::BoxedUiNodeList {
                             #core::widget::node::UiNodeList::boxed(#ident)
                         }
                     });
-                    get_ui_node_list.extend(<span class="macro">quote! </span>{
+                    get_ui_node_list.extend(<span class="macro">quote!</span> {
                         #i =&gt; <span class="kw-2">&amp;</span><span class="self">self</span>.#ident,
                     });
-                    instantiate.extend(<span class="macro">quote! </span>{
+                    instantiate.extend(<span class="macro">quote!</span> {
                         <span class="self">self</span>.#ident.take_on_init(),
                     });
-                    input_new_dyn.push(<span class="macro">quote! </span>{
+                    input_new_dyn.push(<span class="macro">quote!</span> {
                         <span class="kw">let </span>__actions__ = #core::widget::builder::iter_input_build_actions(<span class="kw-2">&amp;</span>__args__.build_actions, <span class="kw-2">&amp;</span>__args__.build_actions_when_data, #i);
                         #core::widget::builder::new_dyn_ui_node_list(<span class="kw-2">&amp;mut </span>__inputs__, __actions__)
                     });
                     <span class="kw">let </span>get_ident = <span class="macro">ident!</span>(<span class="string">"__w_{ident}__"</span>);
                     <span class="kw">let </span>get_ident_i = <span class="macro">ident!</span>(<span class="string">"__w_{i}__"</span>);
-                    get_when_input.extend(<span class="macro">quote! </span>{
+                    get_when_input.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#get_ident(<span class="kw-2">&amp;</span><span class="self">self</span>)
                         -&gt; (#core::widget::builder::WhenInputVar, <span class="kw">impl </span>#core::var::Var&lt;#core::widget::builder::UiNodeListInWhenExprError&gt;) {
                             #core::widget::builder::WhenInputVar::new::&lt;#core::widget::builder::UiNodeListInWhenExprError&gt;()
@@ -1500,27 +1500,27 @@
                 }
                 InputKind::WidgetHandler =&gt; {
                     allowed_in_when_expr = <span class="bool-val">false</span>;
-                    input_to_storage.push(<span class="macro">quote! </span>{
+                    input_to_storage.push(<span class="macro">quote!</span> {
                         #core::widget::builder::widget_handler_to_args(#ident)
                     });
-                    named_into.extend(<span class="macro">quote! </span>{
+                    named_into.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>, #ident: #input_ty) -&gt; #input_ty #where_gens {
                             #ident
                         }
                     });
-                    get_widget_handler.extend(<span class="macro">quote! </span>{
+                    get_widget_handler.extend(<span class="macro">quote!</span> {
                         #i =&gt; <span class="kw-2">&amp;</span><span class="self">self</span>.#ident,
                     });
-                    instantiate.extend(<span class="macro">quote! </span>{
+                    instantiate.extend(<span class="macro">quote!</span> {
                         std::clone::Clone::clone(<span class="kw-2">&amp;</span><span class="self">self</span>.#ident),
                     });
-                    input_new_dyn.push(<span class="macro">quote! </span>{
+                    input_new_dyn.push(<span class="macro">quote!</span> {
                         <span class="kw">let </span>__actions__ = #core::widget::builder::iter_input_build_actions(<span class="kw-2">&amp;</span>__args__.build_actions, <span class="kw-2">&amp;</span>__args__.build_actions_when_data, #i);
                         #core::widget::builder::new_dyn_widget_handler(<span class="kw-2">&amp;mut </span>__inputs__, __actions__)
                     });
                     <span class="kw">let </span>get_ident = <span class="macro">ident!</span>(<span class="string">"__w_{ident}__"</span>);
                     <span class="kw">let </span>get_ident_i = <span class="macro">ident!</span>(<span class="string">"__w_{i}__"</span>);
-                    get_when_input.extend(<span class="macro">quote! </span>{
+                    get_when_input.extend(<span class="macro">quote!</span> {
                         <span class="kw">pub fn </span>#get_ident #impl_gens(<span class="kw-2">&amp;</span><span class="self">self</span>)
                         -&gt; (#core::widget::builder::WhenInputVar, <span class="kw">impl </span>#core::var::Var&lt;#core::widget::builder::WidgetHandlerInWhenExprError&gt;) #where_gens {
                             #core::widget::builder::WhenInputVar::new::&lt;#core::widget::builder::WidgetHandlerInWhenExprError&gt;()
@@ -1535,7 +1535,7 @@
         }
 
         <span class="kw">if </span>!get_var.is_empty() {
-            get_var = <span class="macro">quote! </span>{
+            get_var = <span class="macro">quote!</span> {
                 <span class="kw">fn </span>var(<span class="kw-2">&amp;</span><span class="self">self</span>, __index__: usize) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>#core::var::AnyVar {
                     <span class="kw">match </span>__index__ {
                         #get_var
@@ -1545,7 +1545,7 @@
             }
         }
         <span class="kw">if </span>!get_value.is_empty() {
-            get_value = <span class="macro">quote! </span>{
+            get_value = <span class="macro">quote!</span> {
                 <span class="kw">fn </span>value(<span class="kw-2">&amp;</span><span class="self">self</span>, __index__: usize) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>#core::var::AnyVarValue {
                     <span class="kw">match </span>__index__ {
                         #get_value
@@ -1555,7 +1555,7 @@
             }
         }
         <span class="kw">if </span>!get_ui_node.is_empty() {
-            get_ui_node = <span class="macro">quote! </span>{
+            get_ui_node = <span class="macro">quote!</span> {
                 <span class="kw">fn </span>ui_node(<span class="kw-2">&amp;</span><span class="self">self</span>, __index__: usize) -&gt; <span class="kw-2">&amp;</span>#core::widget::node::ArcNode&lt;#core::widget::node::BoxedUiNode&gt; {
                     <span class="kw">match </span>__index__ {
                         #get_ui_node
@@ -1565,7 +1565,7 @@
             }
         }
         <span class="kw">if </span>!get_ui_node_list.is_empty() {
-            get_ui_node_list = <span class="macro">quote! </span>{
+            get_ui_node_list = <span class="macro">quote!</span> {
                 <span class="kw">fn </span>ui_node_list(<span class="kw-2">&amp;</span><span class="self">self</span>, __index__: usize) -&gt; <span class="kw-2">&amp;</span>#core::widget::node::ArcNodeList&lt;#core::widget::node::BoxedUiNodeList&gt; {
                     <span class="kw">match </span>__index__ {
                         #get_ui_node_list
@@ -1575,7 +1575,7 @@
             }
         }
         <span class="kw">if </span>!get_widget_handler.is_empty() {
-            get_widget_handler = <span class="macro">quote! </span>{
+            get_widget_handler = <span class="macro">quote!</span> {
                 <span class="kw">fn </span>widget_handler(<span class="kw-2">&amp;</span><span class="self">self</span>, __index__: usize) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>#core::widget::builder::AnyArcWidgetHandler {
                     <span class="kw">match </span>__index__ {
                         #get_widget_handler
@@ -1595,14 +1595,14 @@
         <span class="kw">let </span>docs = <span class="kw-2">&amp;</span>attrs.docs;
 
         <span class="kw">let </span>allowed_in_when_expr = <span class="kw">if </span>allowed_in_when_expr {
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 <span class="kw">pub const fn </span>allowed_in_when_expr(<span class="kw-2">&amp;</span><span class="self">self</span>) {}
             }
         } <span class="kw">else </span>{
             <span class="macro">quote!</span>()
         };
         <span class="kw">let </span>allowed_in_when_assign = <span class="kw">if </span>allowed_in_when_assign {
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 <span class="kw">pub const fn </span>allowed_in_when_assign(<span class="kw-2">&amp;</span><span class="self">self</span>) {}
             }
         } <span class="kw">else </span>{
@@ -1611,7 +1611,7 @@
 
         <span class="kw">let </span>source_location = <span class="kw">crate</span>::widget_util::source_location(<span class="kw-2">&amp;</span>core, ident.span());
 
-        <span class="kw">let </span>meta = <span class="macro">quote! </span>{
+        <span class="kw">let </span>meta = <span class="macro">quote!</span> {
             #cfg
             <span class="attr">#[doc(hidden)]
             #[allow(non_camel_case_types)]
@@ -1686,19 +1686,19 @@
             }
         };
         <span class="kw">let </span>instantiate = <span class="kw">if </span>capture {
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 <span class="attr">#[allow(unused)]
                 </span><span class="kw">use </span><span class="self">self</span>::#ident;
                 __child__
             }
         } <span class="kw">else </span>{
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 <span class="kw">let </span>#node_instance = #ident(__child__, #instantiate);
                 #core::widget::node::UiNode::boxed(#node_instance)
             }
         };
 
-        <span class="kw">let </span>args = <span class="macro">quote! </span>{
+        <span class="kw">let </span>args = <span class="macro">quote!</span> {
             #cfg
             <span class="attr">#[doc(hidden)]
             #[derive(std::clone::Clone)]
@@ -1728,7 +1728,7 @@
                 #get_widget_handler
             }
         };
-        <span class="kw">let </span>inputs = <span class="macro">quote! </span>{
+        <span class="kw">let </span>inputs = <span class="macro">quote!</span> {
             #cfg
             <span class="attr">#[doc(hidden)]
             #[allow(non_camel_case_types)]
@@ -1762,7 +1762,7 @@
                 }
             };
             <span class="kw">let </span>docs = <span class="kw-2">&amp;</span>mtd_attrs.docs;
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 #cfg
                 <span class="kw">impl </span>#generics_impl #target #generics {
                     #(#docs)*
@@ -1795,7 +1795,7 @@
             <span class="macro">quote!</span>()
         };
 
-        <span class="macro">quote! </span>{
+        <span class="macro">quote!</span> {
             #direct_impl
 
             #cfg
@@ -1851,7 +1851,7 @@
         <span class="macro">quote!</span>()
     };
 
-    <span class="kw">let </span>r = <span class="macro">quote! </span>{
+    <span class="kw">let </span>r = <span class="macro">quote!</span> {
         #attrs
         #extra_docs
         #item
@@ -1941,7 +1941,7 @@
             InputKind::UiNodeList =&gt; <span class="macro">ident!</span>(<span class="string">"UiNodeList"</span>),
         };
         <span class="kw">let </span>core = crate_core();
-        tokens.extend(<span class="macro">quote! </span>{
+        tokens.extend(<span class="macro">quote!</span> {
             #core::widget::builder::InputKind::#kin
         });
     }
@@ -2074,7 +2074,7 @@
     <span class="kw">let </span>r = <span class="kw">match </span>args {
         MetaArgs::Method { self_ty, sep, property } =&gt; {
             <span class="kw">let </span>meta_ident = <span class="macro">ident!</span>(<span class="string">"{}_"</span>, property);
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 &lt;#self_ty <span class="kw">as </span>#core::widget::base::WidgetImpl&gt; #sep info_instance__() . #meta_ident()
             }
         }
@@ -2082,7 +2082,7 @@
             <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>path.segments.last().unwrap().ident;
             <span class="kw">let </span>meta_ident = <span class="macro">ident!</span>(<span class="string">"{}_"</span>, ident);
 
-            <span class="macro">quote! </span>{
+            <span class="macro">quote!</span> {
                 &lt;#core::widget::builder::WgtInfo <span class="kw">as </span>#path&gt;::#meta_ident(<span class="kw-2">&amp;</span>#core::widget::builder::WgtInfo)
             }
         }
@@ -2116,7 +2116,7 @@
 <span class="kw">pub fn </span>expand_impl(input: proc_macro::TokenStream) -&gt; proc_macro::TokenStream {
     <span class="kw">let </span>p = <span class="macro">parse_macro_input!</span>(input <span class="kw">as </span>PropertyImplArgs);
     <span class="kw">if </span>p.args.empty_or_trailing() {
-        <span class="kw">return </span><span class="macro">quote_spanned! </span>{p.path.span()=&gt;
+        <span class="kw">return </span><span class="macro">quote_spanned!</span> {p.path.span()=&gt;
             <span class="macro">compile_error!</span>(<span class="string">"missing args"</span>)
         }
         .into();
@@ -2142,7 +2142,7 @@
 
     <span class="kw">let </span>core = crate_core();
 
-    <span class="kw">let </span>r = <span class="macro">quote! </span>{
+    <span class="kw">let </span>r = <span class="macro">quote!</span> {
         #attrs
         #vis <span class="kw">fn </span>#ident(<span class="kw-2">&amp;</span><span class="self">self</span>, #args) {
             #core::widget::base::WidgetImpl::base_ref(<span class="self">self</span>).reexport__(|base__| {

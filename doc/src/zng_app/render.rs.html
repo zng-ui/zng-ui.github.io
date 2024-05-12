@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -3094,7 +3094,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="macro">macro_rules! </span>expect_inner {
+<span class="macro">macro_rules!</span> expect_inner {
     (<span class="macro-nonterminal">$self</span>:ident.<span class="macro-nonterminal">$fn_name</span>:ident) =&gt; {
         <span class="kw">if </span><span class="macro-nonterminal">$self</span>.is_outer() {
             <span class="macro">tracing::error!</span>(<span class="string">"called `{}` in outer context of `{}`"</span>, <span class="macro">stringify!</span>(<span class="macro-nonterminal">$fn_name</span>), <span class="macro-nonterminal">$self</span>.widget_id);
@@ -3102,7 +3102,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 }
 
-<span class="macro">macro_rules! </span>warn_empty {
+<span class="macro">macro_rules!</span> warn_empty {
     (<span class="macro-nonterminal">$self</span>:ident.<span class="macro-nonterminal">$fn_name</span>:ident(<span class="macro-nonterminal">$rect</span>:tt)) =&gt; {
         <span class="attr">#[cfg(debug_assertions)]
         </span><span class="kw">if </span><span class="macro-nonterminal">$rect</span>.is_empty() {
@@ -3936,7 +3936,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <span class="comment">// reference frame must be just outside the stacking context, except for the
                 // pre-filter context in Preserve3D roots.
-                </span><span class="macro">macro_rules! </span>push_reference_frame {
+                </span><span class="macro">macro_rules!</span> push_reference_frame {
                     () =&gt; {
                         <span class="self">self</span>.display_list.push_reference_frame(
                             ReferenceFrameId::from_widget(<span class="self">self</span>.widget_id).into(),
@@ -5686,13 +5686,13 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub </span>extensions: Vec&lt;(ApiExtensionId, ApiExtensionPayload)&gt;,
 }
 
-<span class="macro">unique_id_32! </span>{
+<span class="macro">unique_id_32!</span> {
     <span class="attr">#[derive(Debug)]
     </span><span class="kw">struct </span>FrameBindingKeyId;
 }
 <span class="macro">impl_unique_id_bytemuck!</span>(FrameBindingKeyId);
 
-<span class="macro">unique_id_32! </span>{
+<span class="macro">unique_id_32!</span> {
     <span class="doccomment">/// Unique ID of a reference frame.
     </span><span class="attr">#[derive(Debug)]
     </span><span class="kw">pub struct </span>SpatialFrameId;
@@ -5968,7 +5968,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="macro">bitflags::bitflags! </span>{
+<span class="macro">bitflags::bitflags!</span> {
     <span class="doccomment">/// Configure if a synthetic font is generated for fonts that do not implement **bold** or *oblique* variants.
     </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
     #[serde(transparent)]
@@ -5990,7 +5990,7 @@ document.addEventListener('DOMContentLoaded', function () {
         FontSynthesis::ENABLED
     }
 }
-<span class="macro">impl_from_and_into_var! </span>{
+<span class="macro">impl_from_and_into_var!</span> {
     <span class="doccomment">/// Convert to full [`ENABLED`](FontSynthesis::ENABLED) or [`DISABLED`](FontSynthesis::DISABLED).
     </span><span class="kw">fn </span>from(enabled: bool) -&gt; FontSynthesis {
         <span class="kw">if </span>enabled { FontSynthesis::ENABLED } <span class="kw">else </span>{ FontSynthesis::DISABLED }

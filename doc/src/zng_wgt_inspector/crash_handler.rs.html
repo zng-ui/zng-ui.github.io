@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/crash_handler.rs`."><title>crash_handler.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2"><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-5bc39a1768837dd0.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.77.2 (25ef9e3d8 2024-04-09)" data-channel="1.77.2" data-search-js="search-dd67cee4cfa65049.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-48f368f3872407c8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/crash_handler.rs`."><title>crash_handler.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_inspector/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -400,7 +400,7 @@
 /// Used by `zng::app::init_debug`.
 </span><span class="kw">pub fn </span>debug_dialog(args: CrashArgs) -&gt; WindowRoot {
     <span class="kw">let </span>error = args.latest();
-    <span class="macro">Window! </span>{
+    <span class="macro">Window!</span> {
         title = APP.about().map(|a| <span class="macro">formatx!</span>(<span class="string">"{}App Crashed"</span>, a.title_prefix()));
         start_position = StartPosition::CenterMonitor;
         color_scheme = ColorScheme::Dark;
@@ -421,7 +421,7 @@
 }
 
 <span class="kw">fn </span>header(error: <span class="kw-2">&amp;</span>CrashError) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">SelectableText! </span>{
+    <span class="macro">SelectableText!</span> {
         txt = error.message();
         margin = <span class="number">10</span>;
     }
@@ -463,14 +463,14 @@
 
     <span class="kw">let </span>active = var(active);
 
-    <span class="macro">Container! </span>{
-        child_top = <span class="macro">Wrap! </span>{
+    <span class="macro">Container!</span> {
+        child_top = <span class="macro">Wrap!</span> {
             toggle::selector = toggle::Selector::single(active.clone());
-            children = options.iter().map(|p| <span class="macro">Toggle! </span>{
+            children = options.iter().map(|p| <span class="macro">Toggle!</span> {
                 child = <span class="macro">Text!</span>(p.title());
                 value = <span class="kw-2">*</span>p;
             }).collect::&lt;UiNodeVec&gt;();
-            toggle::style_fn = <span class="macro">Style! </span>{
+            toggle::style_fn = <span class="macro">Style!</span> {
                 padding = (<span class="number">2</span>, <span class="number">4</span>);
                 corner_radius = <span class="number">2</span>;
             };
@@ -549,13 +549,13 @@
 }
 
 <span class="kw">fn </span>std_panel(std: Txt, config_key: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">Scroll! </span>{
+    <span class="macro">Scroll!</span> {
         child_align = Align::TOP_START;
         background_color = colors::BLACK;
         padding = <span class="number">5</span>;
         horizontal_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"{config_key}.scroll.h"</span>), || <span class="number">0</span>.fct());
         vertical_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"{config_key}.scroll.v"</span>), || <span class="number">0</span>.fct());
-        child = <span class="macro">AnsiText! </span>{
+        child = <span class="macro">AnsiText!</span> {
             txt = std;
             font_size = <span class="number">0.9</span>.em();
         }
@@ -572,29 +572,29 @@
 }
 <span class="kw">fn </span>minidump_panel(path: PathBuf) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>path_txt = path.display().to_string().trim_start_matches(<span class="string">r"\\?\"</span>).to_txt();
-    <span class="macro">Scroll! </span>{
+    <span class="macro">Scroll!</span> {
         child_align = Align::TOP_START;
         background_color = colors::BLACK;
         padding = <span class="number">5</span>;
         horizontal_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"minidump.scroll.h"</span>), || <span class="number">0</span>.fct());
         vertical_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"minidump.scroll.v"</span>), || <span class="number">0</span>.fct());
-        child = <span class="macro">Stack! </span>{
+        child = <span class="macro">Stack!</span> {
             direction = StackDirection::top_to_bottom();
             spacing = <span class="number">5</span>;
             children = <span class="macro">ui_vec!</span>[
-                <span class="macro">SelectableText! </span>{
+                <span class="macro">SelectableText!</span> {
                     txt = path_txt;
                     font_size = <span class="number">0.9</span>.em();
                     <span class="comment">// same as AnsiText
                     </span>font_family = [<span class="string">"JetBrains Mono"</span>, <span class="string">"Consolas"</span>, <span class="string">"monospace"</span>];
                 },
-                <span class="macro">Stack! </span>{
+                <span class="macro">Stack!</span> {
                     direction = StackDirection::top_to_bottom();
                     zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">zng_wgt_button::LinkStyle!</span>());
                     children = <span class="macro">ui_vec!</span>[
                         {
                             <span class="kw">let </span>enabled = var(<span class="bool-val">true</span>);
-                            <span class="macro">Button! </span>{
+                            <span class="macro">Button!</span> {
                                 child = <span class="macro">Text!</span>(<span class="string">"Open Minidump"</span>);
                                 on_click = <span class="macro">async_hn!</span>(enabled, path, |<span class="kw">_</span>| {
                                     open_path(enabled, path).<span class="kw">await</span>;
@@ -604,7 +604,7 @@
                         },
                         {
                             <span class="kw">let </span>enabled = var(<span class="bool-val">true</span>);
-                            <span class="macro">Button! </span>{
+                            <span class="macro">Button!</span> {
                                 child = <span class="macro">Text!</span>(<span class="string">"Open Minidump Dir"</span>);
                                 on_click = <span class="macro">async_hn!</span>(enabled, path, |<span class="kw">_</span>| {
                                     open_path(enabled, path.parent().unwrap().to_owned()).<span class="kw">await</span>;
@@ -613,7 +613,7 @@
                         },
                         {
                             <span class="kw">let </span>enabled = var(<span class="bool-val">true</span>);
-                            <span class="macro">Button! </span>{
+                            <span class="macro">Button!</span> {
                                 child = <span class="macro">Text!</span>(<span class="string">"Save Minidump"</span>);
                                 tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"Save copy of the minidump"</span>));
                                 on_click = <span class="macro">async_hn!</span>(enabled, path, |<span class="kw">_</span>| {
@@ -623,7 +623,7 @@
                         },
                         {
                             <span class="kw">let </span>enabled = var(<span class="bool-val">true</span>);
-                            <span class="macro">Button! </span>{
+                            <span class="macro">Button!</span> {
                                 child = <span class="macro">Text!</span>(<span class="string">"Delete Minidump"</span>);
                                 on_click = <span class="macro">async_hn!</span>(enabled, path, |<span class="kw">_</span>| {
                                     remove_path(enabled, path).<span class="kw">await</span>;
@@ -702,13 +702,13 @@
 }
 
 <span class="kw">fn </span>plain_panel(txt: Txt, config_key: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">Scroll! </span>{
+    <span class="macro">Scroll!</span> {
         child_align = Align::TOP_START;
         background_color = colors::BLACK;
         padding = <span class="number">5</span>;
         horizontal_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"{config_key}.scroll.h"</span>), || <span class="number">0</span>.fct());
         vertical_offset = CONFIG.get(<span class="macro">formatx!</span>(<span class="string">"{config_key}.scroll.v"</span>), || <span class="number">0</span>.fct());
-        child = <span class="macro">SelectableText! </span>{
+        child = <span class="macro">SelectableText!</span> {
             txt;
             font_size = <span class="number">0.9</span>.em();
             <span class="comment">// same as AnsiText
@@ -718,18 +718,18 @@
 }
 
 <span class="kw">fn </span>commands(args: CrashArgs) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">Stack! </span>{
+    <span class="macro">Stack!</span> {
         spacing = <span class="number">5</span>;
         direction = StackDirection::start_to_end();
         align = Align::END;
         children = <span class="macro">ui_vec!</span>[
-            <span class="macro">Button! </span>{
+            <span class="macro">Button!</span> {
                 child = <span class="macro">Text!</span>(<span class="string">"Restart App"</span>);
                 on_click = <span class="macro">hn_once!</span>(args, |<span class="kw">_</span>| {
                     args.restart();
                 });
             },
-            <span class="macro">Button! </span>{
+            <span class="macro">Button!</span> {
                 child = <span class="macro">Text!</span>(<span class="string">"Exit App"</span>);
                 on_click = <span class="macro">hn_once!</span>(|<span class="kw">_</span>| {
                     args.exit(<span class="number">0</span>);
