@@ -842,6 +842,8 @@
 <a href="#840" id="840">840</a>
 <a href="#841" id="841">841</a>
 <a href="#842" id="842">842</a>
+<a href="#843" id="843">843</a>
+<a href="#844" id="844">844</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt,
     path::{Path, PathBuf},
@@ -1128,7 +1130,7 @@
 }
 <span class="attr">#[cfg(feature = <span class="string">"http"</span>)]
 </span><span class="macro">impl_from_and_into_var!</span> {
-    <span class="kw">fn </span>from(uri: <span class="kw">crate</span>::task::http::Uri) -&gt; WindowIcon {
+    <span class="kw">fn </span>from(uri: zng_task::http::Uri) -&gt; WindowIcon {
         ImageSource::from(uri).into()
     }
 }
@@ -1566,6 +1568,8 @@
     </span><span class="kw">pub static </span>WINDOW_CLOSE_REQUESTED_EVENT: WindowCloseRequestedArgs;
 
     <span class="doccomment">/// Window closed event.
+    ///
+    /// The closed windows deinit after this event notifies, so the window content can subscribe to it.
     </span><span class="kw">pub static </span>WINDOW_CLOSE_EVENT: WindowCloseArgs;
 
     <span class="doccomment">/// A window frame has finished rendering.

@@ -1589,6 +1589,8 @@
 <a href="#1587" id="1587">1587</a>
 <a href="#1588" id="1588">1588</a>
 <a href="#1589" id="1589">1589</a>
+<a href="#1590" id="1590">1590</a>
+<a href="#1591" id="1591">1591</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1672,14 +1674,14 @@
 
                 <span class="comment">// widget may only become a full widget after init (ArcNode)
                 </span>widget.with_context(WidgetUpdateMode::Bubble, || {
-                    WIDGET.set_state(<span class="kw-2">&amp;</span>LAYER_INDEX_ID, layer.get());
+                    WIDGET.set_state(<span class="kw-2">*</span>LAYER_INDEX_ID, layer.get());
                     WIDGET.sub_var(<span class="kw-2">&amp;</span>layer);
                 });
             }
             UiNodeOp::Update { .. } =&gt; {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(index) = layer.get_new() {
                     widget.with_context(WidgetUpdateMode::Bubble, || {
-                        WIDGET.set_state(<span class="kw-2">&amp;</span>LAYER_INDEX_ID, index);
+                        WIDGET.set_state(<span class="kw-2">*</span>LAYER_INDEX_ID, index);
                         SORTING_LIST.invalidate_sort();
                     });
                 }
@@ -1688,7 +1690,7 @@
         })
         .boxed();
 
-        <span class="kw">let </span>r = WINDOW.with_state(|s| <span class="kw">match </span>s.get(<span class="kw-2">&amp;</span>WINDOW_LAYERS_ID) {
+        <span class="kw">let </span>r = WINDOW.with_state(|s| <span class="kw">match </span>s.get(<span class="kw-2">*</span>WINDOW_LAYERS_ID) {
             <span class="prelude-val">Some</span>(open) =&gt; {
                 <span class="comment">// window already open
                 </span>open.items.push(widget);
@@ -1699,7 +1701,7 @@
         <span class="kw">if let </span><span class="prelude-val">Err</span>(widget) = r {
             WINDOW.with_state_mut(|<span class="kw-2">mut </span>s| {
                 <span class="comment">// window not open yet, `widget` will be inited with the window
-                </span>s.entry(<span class="kw-2">&amp;</span>WINDOW_PRE_INIT_LAYERS_ID).or_default().push(Mutex::new(widget));
+                </span>s.entry(<span class="kw-2">*</span>WINDOW_PRE_INIT_LAYERS_ID).or_default().push(Mutex::new(widget));
             });
         }
     }
@@ -2243,7 +2245,7 @@
     /// [`remove_node`]: Self::remove_node
     </span><span class="kw">pub fn </span>remove(<span class="kw-2">&amp;</span><span class="self">self</span>, id: <span class="kw">impl </span>Into&lt;WidgetId&gt;) {
         WINDOW.with_state(|s| {
-            s.req(<span class="kw-2">&amp;</span>WINDOW_LAYERS_ID).items.remove(id);
+            s.req(<span class="kw-2">*</span>WINDOW_LAYERS_ID).items.remove(id);
         });
     }
 
@@ -2255,7 +2257,7 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = id.rsp() {
             <span class="self">self</span>.remove(id);
         } <span class="kw">else </span>{
-            <span class="kw">let </span>items = WINDOW.with_state(|s| s.req(<span class="kw-2">&amp;</span>WINDOW_LAYERS_ID).items.clone());
+            <span class="kw">let </span>items = WINDOW.with_state(|s| s.req(<span class="kw-2">*</span>WINDOW_LAYERS_ID).items.clone());
             id.hook(<span class="kw">move </span>|a| {
                 <span class="kw">match </span>a.value() {
                     zng_var::types::Response::Waiting =&gt; <span class="bool-val">true</span>,
@@ -2277,7 +2279,7 @@
 
     <span class="kw">fn </span>cleanup(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         WINDOW.with_state(|s| {
-            s.req(<span class="kw-2">&amp;</span>WINDOW_LAYERS_ID).items.retain(|n| n.is_widget());
+            s.req(<span class="kw-2">*</span>WINDOW_LAYERS_ID).items.retain(|n| n.is_widget());
         });
     }
 }
@@ -2330,9 +2332,11 @@
     <span class="kw">static </span>ANCHOR_ID_VAR: <span class="prelude-ty">Option</span>&lt;WidgetId&gt; = <span class="prelude-val">None</span>;
 }
 
-<span class="kw">static </span>WINDOW_PRE_INIT_LAYERS_ID: StaticStateId&lt;Vec&lt;Mutex&lt;BoxedUiNode&gt;&gt;&gt; = StaticStateId::new_unique();
-<span class="kw">static </span>WINDOW_LAYERS_ID: StaticStateId&lt;LayersCtx&gt; = StaticStateId::new_unique();
-<span class="kw">static </span>LAYER_INDEX_ID: StaticStateId&lt;LayerIndex&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>WINDOW_PRE_INIT_LAYERS_ID: StateId&lt;Vec&lt;Mutex&lt;BoxedUiNode&gt;&gt;&gt;;
+    <span class="kw">static </span><span class="kw-2">ref </span>WINDOW_LAYERS_ID: StateId&lt;LayersCtx&gt;;
+    <span class="kw">static </span><span class="kw-2">ref </span>LAYER_INDEX_ID: StateId&lt;LayerIndex&gt;;
+}
 
 <span class="doccomment">/// Represents a layer in a window.
 ///
@@ -3050,10 +3054,10 @@
 
     <span class="kw">fn </span>sort(a: <span class="kw-2">&amp;mut </span>BoxedUiNode, b: <span class="kw-2">&amp;mut </span>BoxedUiNode) -&gt; std::cmp::Ordering {
         <span class="kw">let </span>a = a
-            .with_context(WidgetUpdateMode::Ignore, || WIDGET.req_state(<span class="kw-2">&amp;</span>LAYER_INDEX_ID))
+            .with_context(WidgetUpdateMode::Ignore, || WIDGET.req_state(<span class="kw-2">*</span>LAYER_INDEX_ID))
             .unwrap_or(LayerIndex::DEFAULT);
         <span class="kw">let </span>b = b
-            .with_context(WidgetUpdateMode::Ignore, || WIDGET.req_state(<span class="kw-2">&amp;</span>LAYER_INDEX_ID))
+            .with_context(WidgetUpdateMode::Ignore, || WIDGET.req_state(<span class="kw-2">*</span>LAYER_INDEX_ID))
             .unwrap_or(LayerIndex::DEFAULT);
 
         a.cmp(<span class="kw-2">&amp;</span>b)
@@ -3064,9 +3068,9 @@
     match_node_list(children, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
             WINDOW.with_state_mut(|<span class="kw-2">mut </span>s| {
-                s.set(<span class="kw-2">&amp;</span>WINDOW_LAYERS_ID, LayersCtx { items: layered.clone() });
+                s.set(<span class="kw-2">*</span>WINDOW_LAYERS_ID, LayersCtx { items: layered.clone() });
 
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(widgets) = s.get_mut(<span class="kw-2">&amp;</span>WINDOW_PRE_INIT_LAYERS_ID) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(widgets) = s.get_mut(<span class="kw-2">*</span>WINDOW_PRE_INIT_LAYERS_ID) {
                     <span class="kw">for </span>wgt <span class="kw">in </span>widgets.drain(..) {
                         layered.push(wgt.into_inner());
                     }

@@ -1749,6 +1749,14 @@
 <a href="#1747" id="1747">1747</a>
 <a href="#1748" id="1748">1748</a>
 <a href="#1749" id="1749">1749</a>
+<a href="#1750" id="1750">1750</a>
+<a href="#1751" id="1751">1751</a>
+<a href="#1752" id="1752">1752</a>
+<a href="#1753" id="1753">1753</a>
+<a href="#1754" id="1754">1754</a>
+<a href="#1755" id="1755">1755</a>
+<a href="#1756" id="1756">1756</a>
+<a href="#1757" id="1757">1757</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, future::Future, mem, sync::Arc};
 
 <span class="kw">use </span>parking_lot::Mutex;
@@ -1821,6 +1829,7 @@
 
     close_requests: Vec&lt;CloseWindowRequest&gt;,
     close_responders: IdMap&lt;WindowId, Vec&lt;ResponderVar&lt;CloseWindowResult&gt;&gt;&gt;,
+    exit_on_close: bool,
 
     focus_request: <span class="prelude-ty">Option</span>&lt;WindowId&gt;,
     bring_to_top_requests: Vec&lt;WindowId&gt;,
@@ -1844,6 +1853,7 @@
             open_loading: IdMap::new(),
             open_tasks: <span class="macro">vec!</span>[],
             open_requests: Vec::with_capacity(<span class="number">1</span>),
+            exit_on_close: <span class="bool-val">false</span>,
             close_responders: IdMap::default(),
             close_requests: <span class="macro">vec!</span>[],
             focus_request: <span class="prelude-val">None</span>,
@@ -2011,9 +2021,9 @@
     ///
     /// This setting does not consider headless windows and is fully ignored in headless apps.
     ///
-    /// This is also set to `true` on [`EXIT_REQUESTED_EVENT`] when there are open headed windows.
-    ///
-    /// [`EXIT_REQUESTED_EVENT`]: zng_app::EXIT_REQUESTED_EVENT
+    /// Note that if [`APP.exit`](APP::exit) is requested directly the windows service will cancel it, request
+    /// close for all headed and headless windows, and if all windows close request app exit again, independent
+    /// of this setting.
     </span><span class="kw">pub fn </span>exit_on_last_close(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;bool&gt; {
         WINDOWS_SV.read().exit_on_last_close.clone()
     }
@@ -2683,7 +2693,8 @@
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>on_event(update: <span class="kw-2">&amp;mut </span>EventUpdate) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = WINDOW_CLOSE_REQUESTED_EVENT.on(update) {
             <span class="kw">let </span>key = args.windows.iter().next().unwrap();
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(rsp) = WINDOWS_SV.write().close_responders.remove(key) {
+            <span class="kw">let </span><span class="kw-2">mut </span>sv = WINDOWS_SV.write();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(rsp) = sv.close_responders.remove(key) {
                 <span class="kw">if </span>!args.propagation().is_stopped() {
                     <span class="comment">// close requested by us and not canceled.
                     </span>WINDOW_CLOSE_EVENT.notify(WindowCloseArgs::now(args.windows.clone()));
@@ -2694,6 +2705,8 @@
                     <span class="kw">for </span>r <span class="kw">in </span>rsp {
                         r.respond(CloseWindowResult::Cancel);
                     }
+                    <span class="comment">// already cancelled exit request
+                    </span>sv.exit_on_close = <span class="bool-val">false</span>;
                 }
             }
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = WINDOW_CLOSE_EVENT.on(update) {
@@ -2718,28 +2731,31 @@
             }
 
             <span class="kw">let </span>is_headless_app = zng_app::APP.window_mode().is_headless();
-            <span class="kw">let </span>wns = WINDOWS_SV.read();
+            <span class="kw">let </span><span class="kw-2">mut </span>wns = WINDOWS_SV.write();
 
-            <span class="comment">// if set to exit on last headed window close in a headed app,
+            <span class="comment">// if windows closed because of app exit request
+            // OR
+            // if set to exit on last headed window close in a headed app,
             // AND there is no more open headed window OR request for opening a headed window.
-            </span><span class="kw">if </span>wns.exit_on_last_close.get()
-                &amp;&amp; !is_headless_app
-                &amp;&amp; !wns.windows.values().any(|w| <span class="macro">matches!</span>(w.ctx.mode(), WindowMode::Headed))
-                &amp;&amp; !wns
-                    .open_requests
-                    .iter()
-                    .any(|w| <span class="macro">matches!</span>(w.force_headless, <span class="prelude-val">None </span>| <span class="prelude-val">Some</span>(WindowMode::Headed)))
-                &amp;&amp; !wns.open_tasks.iter().any(|t| <span class="macro">matches!</span>(t.mode, WindowMode::Headed))
+            </span><span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>wns.exit_on_close)
+                || (wns.exit_on_last_close.get()
+                    &amp;&amp; !is_headless_app
+                    &amp;&amp; !wns.windows.values().any(|w| <span class="macro">matches!</span>(w.ctx.mode(), WindowMode::Headed))
+                    &amp;&amp; !wns
+                        .open_requests
+                        .iter()
+                        .any(|w| <span class="macro">matches!</span>(w.force_headless, <span class="prelude-val">None </span>| <span class="prelude-val">Some</span>(WindowMode::Headed)))
+                    &amp;&amp; !wns.open_tasks.iter().any(|t| <span class="macro">matches!</span>(t.mode, WindowMode::Headed)))
             {
-                <span class="comment">// fulfill `exit_on_last_close`
+                <span class="comment">// fulfill `exit_on_close` or `exit_on_last_close`
                 </span>APP.exit();
             }
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = EXIT_REQUESTED_EVENT.on(update) {
             <span class="kw">if </span>!args.propagation().is_stopped() {
-                <span class="kw">let </span>windows = WINDOWS_SV.read();
-                <span class="kw">if </span>windows.windows_info.values().any(|w| w.mode == WindowMode::Headed) {
+                <span class="kw">let </span><span class="kw-2">mut </span>windows = WINDOWS_SV.write();
+                <span class="kw">if </span>!windows.windows_info.is_empty() {
                     args.propagation().stop();
-                    windows.exit_on_last_close.set(<span class="bool-val">true</span>);
+                    windows.exit_on_close = <span class="bool-val">true</span>;
                     drop(windows);
                     WINDOWS.close_all();
                 }
@@ -3139,7 +3155,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>ctx = WindowCtx::new(id, mode);
 
         <span class="kw">let </span>vars = WindowVars::new(WINDOWS_SV.read().default_render_mode.get(), primary_scale_factor, color_scheme);
-        ctx.with_state(|s| s.borrow_mut().set(<span class="kw-2">&amp;</span>WINDOW_VARS_ID, vars.clone()));
+        ctx.with_state(|s| s.borrow_mut().set(<span class="kw-2">*</span>WINDOW_VARS_ID, vars.clone()));
 
         <span class="self">Self </span>{
             ctx,
@@ -3180,7 +3196,7 @@
 
         ctx.set_widget_tree(WidgetInfoTree::wgt(id, window.id));
 
-        <span class="kw">let </span>vars = ctx.with_state(|s| s.borrow().get_clone(<span class="kw-2">&amp;</span>WINDOW_VARS_ID)).unwrap();
+        <span class="kw">let </span>vars = ctx.with_state(|s| s.borrow().get_clone(<span class="kw-2">*</span>WINDOW_VARS_ID)).unwrap();
 
         <span class="kw">if </span>window.kiosk {
             vars.chrome().set(<span class="bool-val">false</span>);

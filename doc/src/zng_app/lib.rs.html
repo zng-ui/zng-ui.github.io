@@ -1579,6 +1579,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1541" id="1541">1541</a>
 <a href="#1542" id="1542">1542</a>
 <a href="#1543" id="1543">1543</a>
+<a href="#1544" id="1544">1544</a>
+<a href="#1545" id="1545">1545</a>
+<a href="#1546" id="1546">1546</a>
+<a href="#1547" id="1547">1547</a>
+<a href="#1548" id="1548">1548</a>
+<a href="#1549" id="1549">1549</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1637,6 +1643,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_app_context::{AppId, AppScope, LocalContext};
 <span class="kw">use </span>zng_task::UiTask;
 
+<span class="kw">pub use </span>zng_unique_id::static_id;
+
 <span class="doccomment">/// Enable widget instantiation in crates that can't depend on the `zng` crate.
 ///
 /// This must be called at the top of the crate:
@@ -1672,6 +1680,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // * don't use macro_rules! macros that use $crate , they will fail with "unresolved import" when used from the re-exports.
 
     </span><span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub use </span>zng_unique_id::static_id;
+
+    <span class="attr">#[doc(hidden)]
     </span><span class="kw">pub mod </span>widget {
         <span class="attr">#[doc(hidden)]
         </span><span class="kw">pub mod </span>builder {
@@ -1681,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 new_dyn_widget_handler, panic_input, state_var, ui_node_list_to_args, ui_node_to_args, value_to_args, var_to_args,
                 when_condition_expr_var, widget_handler_to_args, AnyArcWidgetHandler, ArcWidgetHandler, Importance, InputKind,
                 PropertyArgs, PropertyId, PropertyInfo, PropertyInput, PropertyInputTypes, PropertyNewArgs, SourceLocation,
-                StaticPropertyId, UiNodeInWhenExprError, UiNodeListInWhenExprError, WgtInfo, WhenInput, WhenInputMember, WhenInputVar,
+                UiNodeInWhenExprError, UiNodeListInWhenExprError, WgtInfo, WhenInput, WhenInputMember, WhenInputVar,
                 WidgetHandlerInWhenExprError, WidgetType,
             };
         }
@@ -1706,7 +1717,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="attr">#[doc(hidden)]
         </span><span class="kw">pub use </span><span class="kw">crate</span>::widget::{easing_property, widget_new};
 
-        <span class="kw">pub use </span><span class="kw">crate</span>::widget::WIDGET;
+        <span class="attr">#[doc(hidden)]
+        </span><span class="kw">pub use </span><span class="kw">crate</span>::widget::WIDGET;
     }
 
     <span class="attr">#[doc(hidden)]

@@ -416,6 +416,8 @@
 <a href="#414" id="414">414</a>
 <a href="#415" id="415">415</a>
 <a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, sync::Arc};
 
 <span class="kw">use </span>zng_app::{
@@ -427,7 +429,7 @@
     window::{WindowId, WINDOW},
 };
 <span class="kw">use </span>zng_layout::unit::Factor;
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_var::{types::WeakArcVar, var, ArcVar, IntoVar, Var, WeakVar};
 <span class="kw">use </span>zng_view_api::{image::ImageMaskMode, window::RenderMode};
 
@@ -672,7 +674,7 @@
                     windows.open_headless_window(Box::new(<span class="kw">move </span>|| {
                         <span class="kw">let </span>ctx = ImageRenderCtx::new();
                         <span class="kw">let </span>retain = ctx.retain.clone();
-                        WINDOW.set_state(<span class="kw-2">&amp;</span>IMAGE_RENDER_ID, ctx);
+                        WINDOW.set_state(<span class="kw-2">*</span>IMAGE_RENDER_ID, ctx);
 
                         <span class="kw">let </span>w = (req.render)();
 
@@ -742,7 +744,9 @@
     }
 }
 
-<span class="kw">static </span>IMAGE_RENDER_ID: StaticStateId&lt;ImageRenderCtx&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>IMAGE_RENDER_ID: StateId&lt;ImageRenderCtx&gt;;
+}
 
 <span class="doccomment">/// Controls properties of the render window used by [`IMAGES.render`].
 ///
@@ -754,14 +758,14 @@
     ///
     /// [`IMAGES.render`]: IMAGES::render
     </span><span class="kw">pub fn </span>is_in_render(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        WINDOW.contains_state(<span class="kw-2">&amp;</span>IMAGE_RENDER_ID)
+        WINDOW.contains_state(<span class="kw-2">*</span>IMAGE_RENDER_ID)
     }
 
     <span class="doccomment">/// If the render task is kept alive after a frame is produced, this is `false` by default
     /// meaning the image only renders once, if set to `true` the image will automatically update
     /// when the render widget requests a new frame.
     </span><span class="kw">pub fn </span>retain(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;bool&gt; {
-        WINDOW.req_state(<span class="kw-2">&amp;</span>IMAGE_RENDER_ID).retain
+        WINDOW.req_state(<span class="kw-2">*</span>IMAGE_RENDER_ID).retain
     }
 }
 

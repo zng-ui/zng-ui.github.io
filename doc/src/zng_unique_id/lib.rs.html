@@ -642,8 +642,6 @@
 <a href="#640" id="640">640</a>
 <a href="#641" id="641">641</a>
 <a href="#642" id="642">642</a>
-<a href="#643" id="643">643</a>
-<a href="#644" id="644">644</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -666,6 +664,9 @@
 
 <span class="attr">#[cfg(feature = <span class="string">"named"</span>)]
 </span><span class="kw">mod </span>named;
+
+<span class="attr">#[doc(hidden)]
+</span><span class="kw">pub mod </span>hot_reload;
 
 <span class="attr">#[cfg(feature = <span class="string">"named"</span>)]
 </span><span class="kw">pub use </span>named::<span class="kw-2">*</span>;
@@ -699,10 +700,8 @@
                 ///
                 /// # Static
                 ///
-                /// The unique ID cannot be generated at compile time, but you can use the [`new_static`] constructor to
-                /// create a lightweight lazy ID factory that will generate the ID on the first get.
-                ///
-                /// [`new_static`]: Self::new_static
+                /// The unique ID cannot be generated at compile time, but you can use the `static_id!` macro to declare
+                /// a lazy static that instantiates the ID.
                 </span><span class="macro-nonterminal">$vis </span><span class="kw">struct </span><span class="macro-nonterminal">$Type </span>$(&lt; <span class="macro-nonterminal">$T </span>$(:($(<span class="macro-nonterminal">$bounds</span>)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">? </span>$(: <span class="macro-nonterminal">$ParentId</span>)<span class="question-mark">? </span>;
             }
             non_zero {
@@ -752,10 +751,8 @@
                 ///
                 /// # Static
                 ///
-                /// The unique ID cannot be generated at compile time, but you can use the [`new_static`] constructor to
-                /// create a lightweight lazy ID factory that will generate the ID on the first get.
-                ///
-                /// [`new_static`]: Self::new_static
+                /// The unique ID cannot be generated at compile time, but you can use the `static_id!` macro to declare
+                /// a lazy static that instantiates the ID.
                 </span><span class="macro-nonterminal">$vis </span><span class="kw">struct </span><span class="macro-nonterminal">$Type </span>$(&lt; <span class="macro-nonterminal">$T </span>$(:($(<span class="macro-nonterminal">$bounds</span>)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">? </span>$(: <span class="macro-nonterminal">$ParentId</span>)<span class="question-mark">? </span>;
             }
             non_zero {
@@ -846,6 +843,11 @@
                 std::hash::Hash::hash(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, state)
             }
         }
+        <span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span><span class="macro-nonterminal">$crate::UniqueId </span><span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
+            <span class="kw">fn </span>new_unique() -&gt; <span class="self">Self </span>{
+                <span class="self">Self</span>::new_unique()
+            }
+        }
 
         <span class="attr">#[allow(dead_code)]
         </span><span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
@@ -859,13 +861,6 @@
                 next_id {
                     <span class="macro-nonterminal">$next_id
                 </span>}
-            }
-
-            <span class="macro-nonterminal">$</span><span class="macro">crate::paste!</span> {
-                <span class="doccomment">/// New static ID that will be generated on the first get.
-                </span><span class="kw">pub const fn </span><span class="macro-nonterminal">new_static</span>() -&gt; [&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-                    [&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>::new_unique()
-                }
             }
 
             <span class="doccomment">/// Retrieve the underlying value.
@@ -906,49 +901,6 @@
                 <span class="self">Self</span>(__non_zero::new(<span class="macro-nonterminal">$to_hash</span>(num)).unwrap() $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
             }
         }
-
-        <span class="macro-nonterminal">$</span><span class="macro">crate::paste!</span> {
-            <span class="attr">#[<span class="macro-nonterminal">doc </span>= <span class="string">"Lazy inited [`" </span><span class="macro-nonterminal">$Type </span><span class="string">"`]."</span>]
-            #[allow(dead_code)]
-            </span><span class="macro-nonterminal">$vis </span><span class="kw">struct </span>[&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>(<span class="macro-nonterminal">$atomic </span>$(, std::marker::PhantomData&lt;<span class="kw">fn</span>() -&gt; <span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>);
-
-            <span class="attr">#[allow(dead_code)]
-            </span><span class="kw">impl </span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>[&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-                <span class="attr">#[doc = <span class="string">"New static [`" </span><span class="macro-nonterminal">$Type </span><span class="string">"`], an unique ID will be generated on the first get."</span>]
-                </span><span class="kw">pub const fn </span>new_unique() -&gt; <span class="self">Self </span>{
-                    <span class="kw">use </span><span class="macro-nonterminal">$atomic </span><span class="kw">as </span>__atomic;
-
-                    <span class="self">Self</span>(__atomic::new(<span class="number">0</span>) $(, std::marker::PhantomData::&lt;<span class="kw">fn</span>() -&gt; <span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
-                }
-
-                <span class="doccomment">/// Gets or generates the unique ID.
-                </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-                    <span class="kw">use </span>std::sync::atomic::Ordering;
-
-                    <span class="kw">use </span><span class="macro-nonterminal">$non_zero </span><span class="kw">as </span>__non_zero;
-
-                    <span class="kw">let </span>id = <span class="self">self</span>.<span class="number">0</span>.load(Ordering::Relaxed);
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = __non_zero::new(id) {
-                        <span class="macro-nonterminal">$Type</span>(id $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
-                    } <span class="kw">else </span>{
-                        <span class="kw">let </span>id = <span class="macro-nonterminal">$Type </span>$(::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>::new_unique().get();
-                        <span class="kw">let </span>id = <span class="kw">match </span><span class="self">self</span>.<span class="number">0</span>.compare_exchange(<span class="number">0</span>, id, Ordering::AcqRel, Ordering::Relaxed) {
-                            <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; id,
-                            <span class="prelude-val">Err</span>(id) =&gt; id,
-                        };
-
-                        <span class="comment">// SAFETY: already replaced zero.
-                        </span><span class="macro-nonterminal">$Type</span>(__non_zero::new(id).unwrap() $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
-                    }
-                }
-            }
-
-            <span class="kw">impl </span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span>From&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>[&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>&gt; <span class="kw">for </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-                <span class="kw">fn </span>from(st: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>[&lt;Static <span class="macro-nonterminal">$Type</span>&gt;] $(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>) -&gt; <span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-                    st.get()
-                }
-            }
-        }
     };
 
     (
@@ -984,8 +936,12 @@
         <span class="doccomment">/// Generates a new unique ID.
         </span><span class="kw">pub fn </span>new_unique() -&gt; <span class="self">Self </span>{
             <span class="kw">use </span><span class="macro-nonterminal">$atomic </span><span class="kw">as </span>__atomic;
-            <span class="kw">static </span>NEXT: __atomic = __atomic::new(<span class="number">1</span>);
-            <span class="self">Self</span>(<span class="macro-nonterminal">$next_id</span>(<span class="kw-2">&amp;</span>NEXT) $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
+
+            <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static!</span> {
+                <span class="kw">static </span><span class="macro-nonterminal">NEXT</span>: __atomic = __atomic::new(<span class="number">1</span>);
+            }
+            <span class="kw">let </span>__ref = <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static_ref!</span>(<span class="macro-nonterminal">NEXT</span>);
+            <span class="self">Self</span>(<span class="macro-nonterminal">$next_id</span>(__ref) $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
         }
     };
 }
@@ -1287,5 +1243,45 @@
     <span class="kw">fn </span>finish(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
         <span class="self">self</span>.<span class="number">0
     </span>}
+}
+
+<span class="doccomment">/// Trait implemented for all generated unique ID types.
+</span><span class="kw">pub trait </span>UniqueId: Clone + Copy + PartialEq + Eq + Hash {
+    <span class="doccomment">/// New unique ID.
+    </span><span class="kw">fn </span>new_unique() -&gt; <span class="self">Self</span>;
+}
+
+<span class="doccomment">/// Declares a static unique ID that is lazy inited.
+///
+/// Dereferencing this static generates the ID and caches it.
+///
+/// # Examples
+///
+/// ```
+/// # fn main() { }
+/// # use zng_unique_id::*;
+/// #
+/// # unique_id_32! {
+/// #     pub struct StateId&lt;T: (std::any::Any)&gt;;
+/// # }
+/// #
+/// static_id! {
+///     /// Metadata foo ID.
+///     pub static ref FOO_ID: StateId&lt;bool&gt;;
+/// }
+/// ```
+</span><span class="attr">#[macro_export]
+</span><span class="macro">macro_rules!</span> static_id {
+    ($(
+        $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>:meta]</span>)*
+        <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="kw-2">ref </span><span class="macro-nonterminal">$IDENT</span>:ident: <span class="macro-nonterminal">$IdTy</span>:ty;
+    )+) =&gt; {
+        $(
+            <span class="macro-nonterminal">$</span><span class="macro">crate::lazy_static!</span> {
+                $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
+                <span class="macro-nonterminal">$vis </span><span class="kw">static </span><span class="kw-2">ref </span><span class="macro-nonterminal">$IDENT</span>: <span class="macro-nonterminal">$IdTy </span>= &lt;<span class="macro-nonterminal">$IdTy </span><span class="kw">as </span><span class="macro-nonterminal">$crate::UniqueId</span>&gt;::new_unique();
+            }
+        )+
+    };
 }
 </code></pre></div></section></main></body></html>

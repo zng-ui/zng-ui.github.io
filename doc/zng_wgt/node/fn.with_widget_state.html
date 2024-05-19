@@ -34,8 +34,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 </script>
-</head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng_wgt/index.html">zng_wgt</a><span class="version">0.3.1</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng_wgt::node</a></h2></div></nav><div class="sidebar-resizer"></div>
-    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../index.html">zng_wgt</a>::<wbr><a href="index.html">node</a>::<wbr><a class="fn" href="#">with_widget_state</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_wgt/node.rs.html#1701-1710">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn with_widget_state&lt;U, I, T&gt;(
+</head><body class="rustdoc fn"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png" alt="logo"></a><h2><a href="../../zng_wgt/index.html">zng_wgt</a><span class="version">0.3.2</span></h2></div><div class="sidebar-elems"><h2><a href="index.html">In zng_wgt::node</a></h2></div></nav><div class="sidebar-resizer"></div>
+    <main><div class="width-limiter"><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="main-heading"><h1>Function <a href="../index.html">zng_wgt</a>::<wbr><a href="index.html">node</a>::<wbr><a class="fn" href="#">with_widget_state</a><button id="copy-path" title="Copy item path to clipboard"><img src="../../static.files/clipboard-7571035ce49a181d.svg" width="19" height="18" alt="Copy item path"></button></h1><span class="out-of-band"><a class="src" href="../../src/zng_wgt/node.rs.html#1703-1712">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub fn with_widget_state&lt;U, I, T&gt;(
     child: U,
     id: impl <a class="trait" href="https://doc.rust-lang.org/1.78.0/core/convert/trait.Into.html" title="trait core::convert::Into">Into</a>&lt;<a class="struct" href="../../zng_state_map/struct.StateId.html" title="struct zng_state_map::StateId">StateId</a>&lt;T&gt;&gt;,
     default: I,
@@ -46,22 +46,24 @@ document.addEventListener('DOMContentLoaded', function () {
     T: <a class="trait" href="../../zng_state_map/trait.StateValue.html" title="trait zng_state_map::StateValue">StateValue</a> + <a class="trait" href="../../zng_var/trait.VarValue.html" title="trait zng_var::VarValue">VarValue</a>,</div></code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Helper for declaring properties that set the widget state.</p>
 <p>The state ID is set in <a href="../../zng_app/widget/struct.WIDGET.html" title="struct zng_app::widget::WIDGET"><code>WIDGET</code></a> on init and is kept updated. On deinit it is set to the <code>default</code> value.</p>
 <h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub static </span>FOO_ID: StaticStateId&lt;u32&gt; = StateId::new_static();
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="macro">static_id!</span> {
+    <span class="kw">pub static </span><span class="kw-2">ref </span>FOO_ID: StateId&lt;u32&gt;;
+}
 
 <span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>foo(child: <span class="kw">impl </span>UiNode, value: <span class="kw">impl </span>IntoVar&lt;u32&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    with_widget_state(child, <span class="kw-2">&amp;</span>FOO_ID, || <span class="number">0</span>, value)
+    with_widget_state(child, <span class="kw-2">*</span>FOO_ID, || <span class="number">0</span>, value)
 }
 
 <span class="comment">// after the property is used and the widget initializes:
 
 </span><span class="doccomment">/// Get the value from outside the widget.
 </span><span class="kw">fn </span>get_foo_outer(widget: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>UiNode) -&gt; u32 {
-    widget.with_context(WidgetUpdateMode::Ignore, || WIDGET.get_state(<span class="kw-2">&amp;</span>FOO_ID)).flatten().unwrap_or_default()
+    widget.with_context(WidgetUpdateMode::Ignore, || WIDGET.get_state(<span class="kw-2">*</span>FOO_ID)).flatten().unwrap_or_default()
 }
 
 <span class="doccomment">/// Get the value from inside the widget.
 </span><span class="kw">fn </span>get_foo_inner() -&gt; u32 {
-    WIDGET.get_state(<span class="kw-2">&amp;</span>FOO_ID).unwrap_or_default()
+    WIDGET.get_state(<span class="kw-2">*</span>FOO_ID).unwrap_or_default()
 }</code></pre></div>
 </div></details></section></div></main></body></html>

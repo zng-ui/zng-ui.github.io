@@ -105,6 +105,8 @@
 <a href="#103" id="103">103</a>
 <a href="#104" id="104">104</a>
 <a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>atomic::Atomic;
@@ -113,7 +115,7 @@
     widget::info::{WidgetInfo, WidgetInfoBuilder, WidgetPath},
 };
 <span class="kw">use </span>zng_layout::unit::PxRect;
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_txt::Txt;
 
 <span class="macro">event_args!</span> {
@@ -194,12 +196,14 @@
     </span><span class="kw">fn </span>set_ime_area(<span class="kw-2">&amp;mut </span><span class="self">self</span>, area: Arc&lt;Atomic&lt;PxRect&gt;&gt;);
 }
 
-<span class="kw">static </span>IME_AREA: StaticStateId&lt;Arc&lt;Atomic&lt;PxRect&gt;&gt;&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>IME_AREA: StateId&lt;Arc&lt;Atomic&lt;PxRect&gt;&gt;&gt;;
+}
 
 <span class="kw">impl </span>WidgetInfoImeArea <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>ime_area(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; PxRect {
         <span class="self">self</span>.meta()
-            .get(<span class="kw-2">&amp;</span>IME_AREA)
+            .get(<span class="kw-2">*</span>IME_AREA)
             .map(|r| r.load(atomic::Ordering::Relaxed))
             .unwrap_or_else(|| <span class="self">self</span>.inner_bounds())
     }
@@ -207,7 +211,7 @@
 
 <span class="kw">impl </span>WidgetInfoBuilderImeArea <span class="kw">for </span>WidgetInfoBuilder {
     <span class="kw">fn </span>set_ime_area(<span class="kw-2">&amp;mut </span><span class="self">self</span>, area: Arc&lt;Atomic&lt;PxRect&gt;&gt;) {
-        <span class="self">self</span>.set_meta(<span class="kw-2">&amp;</span>IME_AREA, area);
+        <span class="self">self</span>.set_meta(<span class="kw-2">*</span>IME_AREA, area);
     }
 }
 </code></pre></div></section></main></body></html>

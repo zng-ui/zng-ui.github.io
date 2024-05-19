@@ -1947,6 +1947,11 @@
 <a href="#1945" id="1945">1945</a>
 <a href="#1946" id="1946">1946</a>
 <a href="#1947" id="1947">1947</a>
+<a href="#1948" id="1948">1948</a>
+<a href="#1949" id="1949">1949</a>
+<a href="#1950" id="1950">1950</a>
+<a href="#1951" id="1951">1951</a>
+<a href="#1952" id="1952">1952</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::VecDeque,
     fmt,
@@ -2068,6 +2073,8 @@
     </span>ime_area: <span class="prelude-ty">Option</span>&lt;DipRect&gt;,
     <span class="attr">#[cfg(windows)]
     </span>ime_open: bool,
+    <span class="attr">#[cfg(windows)]
+    </span>has_shutdown_warn: bool,
 
     cursor: <span class="prelude-ty">Option</span>&lt;CursorIcon&gt;,
     cursor_img: <span class="prelude-ty">Option</span>&lt;CustomCursor&gt;,
@@ -2400,6 +2407,8 @@
             ime_area: cfg.ime_area,
             <span class="attr">#[cfg(windows)]
             </span>ime_open: <span class="bool-val">false</span>,
+            <span class="attr">#[cfg(windows)]
+            </span>has_shutdown_warn: <span class="bool-val">false</span>,
             cursor: <span class="prelude-val">None</span>,
             cursor_img: <span class="prelude-val">None</span>,
         };
@@ -3801,6 +3810,7 @@
     <span class="attr">#[cfg(windows)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_system_shutdown_warn(<span class="kw-2">&amp;mut </span><span class="self">self</span>, reason: Txt) {
         <span class="kw">if </span>!reason.is_empty() {
+            <span class="self">self</span>.has_shutdown_warn = <span class="bool-val">true</span>;
             <span class="kw">let </span>hwnd = <span class="kw">crate</span>::util::winit_to_hwnd(<span class="kw-2">&amp;</span><span class="self">self</span>.window);
             <span class="kw">let </span>reason = windows::core::HSTRING::from(reason.as_str());
             <span class="comment">// SAFETY: function return handled.
@@ -3809,7 +3819,7 @@
                 <span class="kw">let </span>error = <span class="kw">unsafe </span>{ windows_sys::Win32::Foundation::GetLastError() };
                 <span class="macro">tracing::error!</span>(<span class="string">"failed to set system shutdown warn ({error:#X}), requested warn reason was: {reason}"</span>);
             }
-        } <span class="kw">else </span>{
+        } <span class="kw">else if </span>mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.has_shutdown_warn) {
             <span class="kw">let </span>hwnd = <span class="kw">crate</span>::util::winit_to_hwnd(<span class="kw-2">&amp;</span><span class="self">self</span>.window);
             <span class="comment">// SAFETY: function return handled.
             </span><span class="kw">let </span>destroyed = <span class="kw">unsafe </span>{ windows_sys::Win32::System::Shutdown::ShutdownBlockReasonDestroy(hwnd) } != <span class="number">0</span>;

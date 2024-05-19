@@ -651,6 +651,8 @@
 <a href="#649" id="649">649</a>
 <a href="#650" id="650">650</a>
 <a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Sub-menu widget and properties.
 
 </span><span class="kw">use </span>std::time::Duration;
@@ -760,7 +762,7 @@
             }
             UiNodeOp::Info { info } =&gt; {
                 info.set_meta(
-                    <span class="kw-2">&amp;</span>SUB_MENU_INFO_ID,
+                    <span class="kw-2">*</span>SUB_MENU_INFO_ID,
                     SubMenuInfo {
                         parent: SUB_MENU_PARENT_CTX.get_clone(),
                         is_open: is_open.clone(),
@@ -1203,23 +1205,23 @@
 }
 <span class="kw">impl </span>SubMenuWidgetInfoExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>is_submenu(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.meta().contains(<span class="kw-2">&amp;</span>SUB_MENU_INFO_ID)
+        <span class="self">self</span>.meta().contains(<span class="kw-2">*</span>SUB_MENU_INFO_ID)
     }
 
     <span class="kw">fn </span>is_submenu_open(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ReadOnlyArcVar&lt;bool&gt;&gt; {
-        <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SUB_MENU_INFO_ID).map(|s| s.is_open.read_only())
+        <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SUB_MENU_INFO_ID).map(|s| s.is_open.read_only())
     }
 
     <span class="kw">fn </span>submenu_parent(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SUB_MENU_INFO_ID) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SUB_MENU_INFO_ID) {
             <span class="self">self</span>.tree().get(p.parent<span class="question-mark">?</span>)
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.ancestors().find(|a| a.is_submenu()) {
             <span class="prelude-val">Some</span>(p)
-        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(pop) = <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SUB_MENU_POPUP_ID) {
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(pop) = <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SUB_MENU_POPUP_ID) {
             <span class="self">self</span>.tree().get(pop.parent<span class="question-mark">?</span>)
         } <span class="kw">else </span>{
             <span class="kw">for </span>anc <span class="kw">in </span><span class="self">self</span>.ancestors() {
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(pop) = anc.meta().get(<span class="kw-2">&amp;</span>SUB_MENU_POPUP_ID) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(pop) = anc.meta().get(<span class="kw-2">*</span>SUB_MENU_POPUP_ID) {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = pop.parent {
                         <span class="kw">return </span><span class="self">self</span>.tree().get(p);
                     } <span class="kw">else </span>{
@@ -1300,6 +1302,8 @@
     </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>SUB_MENU_PARENT_CTX: <span class="prelude-ty">Option</span>&lt;WidgetId&gt; = <span class="prelude-val">None</span>;
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>SUB_MENU_INFO_ID: StaticStateId&lt;SubMenuInfo&gt; = StaticStateId::new_unique();
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>SUB_MENU_POPUP_ID: StaticStateId&lt;SubMenuPopupInfo&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>SUB_MENU_INFO_ID: StateId&lt;SubMenuInfo&gt;;
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>SUB_MENU_POPUP_ID: StateId&lt;SubMenuPopupInfo&gt;;
+}
 </code></pre></div></section></main></body></html>

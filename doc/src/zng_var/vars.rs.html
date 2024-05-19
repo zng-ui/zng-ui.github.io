@@ -409,12 +409,24 @@
 <a href="#407" id="407">407</a>
 <a href="#408" id="408">408</a>
 <a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, thread::ThreadId, time::Duration};
 
 <span class="kw">use </span>zng_app_context::{app_local, context_local};
 <span class="kw">use </span>zng_time::INSTANT_APP;
 
 <span class="kw">use </span><span class="kw">crate</span>::animation::AnimationTimer;
+
+<span class="kw">use </span><span class="self">self</span>::types::ArcCowVar;
 
 <span class="kw">use super</span>::{
     animation::{Animations, ModifyInfo},
@@ -497,11 +509,20 @@
         VARS_SV.read().update_id
     }
 
-    <span class="doccomment">/// Returns a read-only variable that tracks if animations are enabled in the operating system.
+    <span class="doccomment">/// Read-write that defines if animations are enabled on the app.
     ///
-    /// If `false` all animations must be skipped to the end, users with photo-sensitive epilepsy disable animations system wide.
-    </span><span class="kw">pub fn </span>animations_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;bool&gt; {
-        VARS_SV.read().ans.animations_enabled.read_only()
+    /// The value is the same as [`sys_animations_enabled`], if set the variable disconnects from system config.
+    ///
+    /// [`sys_animations_enabled`]: Self::sys_animations_enabled
+    </span><span class="kw">pub fn </span>animations_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcCowVar&lt;bool, ArcVar&lt;bool&gt;&gt; {
+        VARS_SV.read().ans.animations_enabled.clone()
+    }
+
+    <span class="doccomment">/// Read-only that tracks if animations are enabled in the operating system.
+    ///
+    /// This is `true` by default, it updates when the operating system config changes.
+    </span><span class="kw">pub fn </span>sys_animations_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;bool&gt; {
+        VARS_SV.read().ans.sys_animations_enabled.read_only()
     }
 
     <span class="doccomment">/// Variable that defines the global frame duration, the default is 60fps `(1.0 / 60.0).secs()`.
@@ -652,10 +673,9 @@
     /// [`Animation`] API, for example, there is no guarantee that a restart requested by the controller will repeat the same animation.
     ///
     /// The controller can start new animations, these animations will have the same controller if not overridden, you can
-    /// use this method and the [`NilAnimationObserver`] to avoid this behavior.
+    /// use this method and the `()` controller to avoid this behavior.
     ///
     /// [`Animation`]: animation::Animation
-    /// [`NilAnimationObserver`]: animation::NilAnimationObserver
     /// [`VARS.animate`]: VARS::animate
     </span><span class="kw">pub fn </span>with_animation_controller&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, controller: <span class="kw">impl </span>animation::AnimationController, animate: <span class="kw">impl </span>FnOnce() -&gt; R) -&gt; R {
         <span class="kw">let </span>controller: Box&lt;<span class="kw">dyn </span>animation::AnimationController&gt; = Box::new(controller);
@@ -690,11 +710,6 @@
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>wake_app(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         VARS_SV.read().wake_app();
-    }
-
-    <span class="doccomment">/// Enable or disable animations.
-    </span><span class="kw">pub fn </span>set_animations_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, enabled: bool) {
-        VARS_SV.read().ans.animations_enabled.set(enabled);
     }
 }
 
@@ -732,6 +747,11 @@
     /// [`apply_updates`]: Self::apply_updates
     </span><span class="kw">pub fn </span>has_pending_updates(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         !VARS_SV.write().updates.get_mut().is_empty()
+    }
+
+    <span class="doccomment">/// Sets the `sys_animations_enabled` read-only variable.
+    </span><span class="kw">pub fn </span>set_sys_animations_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, enabled: bool) {
+        VARS_SV.read().ans.sys_animations_enabled.set(enabled);
     }
 
     <span class="doccomment">/// Apply all pending updates, call hooks and update bindings.

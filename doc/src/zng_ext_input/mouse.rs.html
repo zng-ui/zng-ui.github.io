@@ -1497,6 +1497,18 @@
 <a href="#1495" id="1495">1495</a>
 <a href="#1496" id="1496">1496</a>
 <a href="#1497" id="1497">1497</a>
+<a href="#1498" id="1498">1498</a>
+<a href="#1499" id="1499">1499</a>
+<a href="#1500" id="1500">1500</a>
+<a href="#1501" id="1501">1501</a>
+<a href="#1502" id="1502">1502</a>
+<a href="#1503" id="1503">1503</a>
+<a href="#1504" id="1504">1504</a>
+<a href="#1505" id="1505">1505</a>
+<a href="#1506" id="1506">1506</a>
+<a href="#1507" id="1507">1507</a>
+<a href="#1508" id="1508">1508</a>
+<a href="#1509" id="1509">1509</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Mouse events and service.
 //!
 //! The app extension [`MouseManager`] provides the events and service. It is included in the default application.
@@ -1526,8 +1538,8 @@
 <span class="kw">use </span>zng_app_context::app_local;
 <span class="kw">use </span>zng_ext_window::WINDOWS;
 <span class="kw">use </span>zng_layout::unit::{Dip, DipPoint, DipToPx, Factor, PxPoint};
-<span class="kw">use </span>zng_state_map::{state_map, StaticStateId};
-<span class="kw">use </span>zng_var::{impl_from_and_into_var, var, ArcVar, BoxedVar, IntoVar, LocalVar, ReadOnlyArcVar, Var};
+<span class="kw">use </span>zng_state_map::{state_map, static_id, StateId};
+<span class="kw">use </span>zng_var::{impl_from_and_into_var, types::ArcCowVar, var, ArcVar, BoxedVar, IntoVar, LocalVar, ReadOnlyArcVar, Var};
 <span class="kw">use </span>zng_view_api::touch::TouchPhase;
 <span class="kw">pub use </span>zng_view_api::{
     config::MultiClickConfig,
@@ -2856,7 +2868,7 @@
 <span class="kw">impl </span>WidgetInfoMouseExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>click_mode(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ClickMode {
         <span class="kw">for </span>w <span class="kw">in </span><span class="self">self</span>.self_and_ancestors() {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(m) = w.meta().get_clone(<span class="kw-2">&amp;</span>CLICK_MODE_ID).flatten() {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(m) = w.meta().get_clone(<span class="kw-2">*</span>CLICK_MODE_ID).flatten() {
                 <span class="kw">return </span>m;
             }
         }
@@ -2873,7 +2885,7 @@
 }
 <span class="kw">impl </span>WidgetInfoBuilderMouseExt <span class="kw">for </span>WidgetInfoBuilder {
     <span class="kw">fn </span>set_click_mode(<span class="kw-2">&amp;mut </span><span class="self">self</span>, mode: <span class="prelude-ty">Option</span>&lt;ClickMode&gt;) {
-        <span class="self">self</span>.with_meta(|<span class="kw-2">mut </span>m| <span class="kw">match </span>m.entry(<span class="kw-2">&amp;</span>CLICK_MODE_ID) {
+        <span class="self">self</span>.with_meta(|<span class="kw-2">mut </span>m| <span class="kw">match </span>m.entry(<span class="kw-2">*</span>CLICK_MODE_ID) {
             state_map::StateMapEntry::Occupied(<span class="kw-2">mut </span>e) =&gt; <span class="kw-2">*</span>e.get_mut() = mode,
             state_map::StateMapEntry::Vacant(e) =&gt; {
                 <span class="kw">if </span>mode.is_some() {
@@ -2884,7 +2896,9 @@
     }
 }
 
-<span class="kw">static </span>CLICK_MODE_ID: StaticStateId&lt;<span class="prelude-ty">Option</span>&lt;ClickMode&gt;&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>CLICK_MODE_ID: StateId&lt;<span class="prelude-ty">Option</span>&lt;ClickMode&gt;&gt;;
+}
 
 <span class="doccomment">/// Settings that define the mouse button pressed repeat.
 </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
@@ -2924,22 +2938,27 @@
         MOUSE_SV.read().buttons.read_only()
     }
 
-    <span class="doccomment">/// Read-only variable that tracks the system click-count increment time and area, a.k.a. the double-click config.
+    <span class="doccomment">/// Variable that defines the click-count increment time and area, a.k.a. the double-click config.
     ///
     /// Repeated clicks with an interval less then this time and within the distance of the first click increment the click count.
+    ///
+    /// The value is the same as [`sys_multi_click_config`], if set the variable disconnects from system config.
+    ///
+    /// [`sys_multi_click_config`]: Self::sys_multi_click_config
+    </span><span class="kw">pub fn </span>multi_click_config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcCowVar&lt;MultiClickConfig, ArcVar&lt;MultiClickConfig&gt;&gt; {
+        MOUSE_SV.read().multi_click_config.clone()
+    }
+
+    <span class="doccomment">/// Variable that tracks the system click-count increment time and area, a.k.a. the double-click config.
     ///
     /// # Value Source
     ///
     /// The value comes from the operating system settings, the variable
-    /// updates with a new value if the system setting is changed.
+    /// updates with a new value if the system setting is changed and on view-process (re)init.
     ///
     /// In headless apps the default is [`MultiClickConfig::default`] and does not change.
-    ///
-    /// Internally the [`RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT`] is listened to update this variable.
-    ///
-    /// [`RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT`]: zng_app::view_process::raw_events::RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT
-    </span><span class="kw">pub fn </span>multi_click_config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;MultiClickConfig&gt; {
-        MOUSE_SV.read().multi_click_config.read_only()
+    </span><span class="kw">pub fn </span>sys_multi_click_config(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;MultiClickConfig&gt; {
+        MOUSE_SV.read().sys_multi_click_config.read_only()
     }
 
     <span class="doccomment">/// Variable that gets and sets the config for [`ClickMode::repeat`] clicks.
@@ -2979,16 +2998,21 @@
 }
 
 <span class="macro">app_local!</span> {
-    <span class="kw">static </span>MOUSE_SV: MouseService = MouseService {
-        multi_click_config: var(MultiClickConfig::default()),
-        repeat_config: KEYBOARD.repeat_config().map(|c| ButtonRepeatConfig { start_delay: c.start_delay, interval: c.interval }).cow().boxed(),
-        buttons: var(<span class="macro">vec!</span>[]),
-        hovered: var(<span class="prelude-val">None</span>),
-        position: var(<span class="prelude-val">None</span>),
+    <span class="kw">static </span>MOUSE_SV: MouseService = {
+        <span class="kw">let </span>sys_multi_click_config = var(MultiClickConfig::default());
+        MouseService {
+            multi_click_config: sys_multi_click_config.cow(),
+            sys_multi_click_config,
+            repeat_config: KEYBOARD.repeat_config().map(|c| ButtonRepeatConfig { start_delay: c.start_delay, interval: c.interval }).cow().boxed(),
+            buttons: var(<span class="macro">vec!</span>[]),
+            hovered: var(<span class="prelude-val">None</span>),
+            position: var(<span class="prelude-val">None</span>),
+        }
     };
 }
 <span class="kw">struct </span>MouseService {
-    multi_click_config: ArcVar&lt;MultiClickConfig&gt;,
+    multi_click_config: ArcCowVar&lt;MultiClickConfig, ArcVar&lt;MultiClickConfig&gt;&gt;,
+    sys_multi_click_config: ArcVar&lt;MultiClickConfig&gt;,
     repeat_config: BoxedVar&lt;ButtonRepeatConfig&gt;,
     buttons: ArcVar&lt;Vec&lt;MouseButton&gt;&gt;,
     hovered: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;InteractionPath&gt;&gt;,

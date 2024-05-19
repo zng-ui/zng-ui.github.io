@@ -2713,6 +2713,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2675" id="2675">2675</a>
 <a href="#2676" id="2676">2676</a>
 <a href="#2677" id="2677">2677</a>
+<a href="#2678" id="2678">2678</a>
+<a href="#2679" id="2679">2679</a>
+<a href="#2680" id="2680">2680</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp::Ordering,
     mem, ops,
@@ -2726,8 +2729,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>task::ParallelIteratorExt;
 <span class="kw">use </span>zng_app_context::context_local;
 <span class="kw">use </span>zng_layout::unit::{Factor, PxSize, PxTransform, PxVector};
-<span class="kw">use </span>zng_state_map::{StateId, StaticStateId};
+<span class="kw">use </span>zng_state_map::StateId;
 <span class="kw">use </span>zng_task::{<span class="self">self </span><span class="kw">as </span>task, rayon::prelude::<span class="kw-2">*</span>};
+<span class="kw">use </span>zng_unique_id::static_id;
 <span class="kw">use </span>zng_var::{animation::Transitionable, impl_from_and_into_var};
 
 <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -3522,7 +3526,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// Returns `DEFAULT` if the node is not a widget.
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ZIndex {
-        WIDGET.get_state(<span class="kw-2">&amp;</span>Z_INDEX_ID).unwrap_or_default()
+        WIDGET.get_state(<span class="kw-2">*</span>Z_INDEX_ID).unwrap_or_default()
     }
 
     <span class="doccomment">/// Gets the index set on the `widget`.
@@ -3544,13 +3548,15 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span>valid = z_ctx.panel_id == WIDGET.parent_id() &amp;&amp; z_ctx.panel_id.is_some();
         <span class="kw">if </span>valid {
             z_ctx.resort.store(<span class="bool-val">true</span>, Relaxed);
-            WIDGET.set_state(<span class="kw-2">&amp;</span>Z_INDEX_ID, index);
+            WIDGET.set_state(<span class="kw-2">*</span>Z_INDEX_ID, index);
         }
         valid
     }
 }
 
-<span class="kw">static </span>Z_INDEX_ID: StaticStateId&lt;ZIndex&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>Z_INDEX_ID: StateId&lt;ZIndex&gt;;
+}
 
 <span class="doccomment">/// Position of a widget inside an [`UiNodeList`] render operation.
 ///

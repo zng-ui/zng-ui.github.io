@@ -2159,6 +2159,8 @@
 <a href="#2157" id="2157">2157</a>
 <a href="#2158" id="2158">2158</a>
 <a href="#2159" id="2159">2159</a>
+<a href="#2160" id="2160">2160</a>
+<a href="#2161" id="2161">2161</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::sync::atomic::Ordering::Relaxed;
 
@@ -2169,7 +2171,7 @@
     WidgetId,
 };
 <span class="kw">use </span>zng_layout::unit::{DistanceKey, Orientation2D, Px, PxBox, PxPoint, PxRect, PxSize};
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_unique_id::IdSet;
 <span class="kw">use </span>zng_var::impl_from_and_into_var;
 <span class="kw">use </span>zng_view_api::window::FocusIndicator;
@@ -2879,7 +2881,7 @@
     <span class="doccomment">/// Widget focus metadata.
     </span><span class="kw">pub fn </span>focus_info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; FocusInfo {
         <span class="kw">if </span><span class="self">self</span>.mode_allows_focus() {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.info.meta().get(<span class="kw-2">&amp;</span>FOCUS_INFO_ID) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID) {
                 <span class="kw">return </span>builder.build();
             }
         }
@@ -2889,7 +2891,7 @@
     <span class="doccomment">/// Widget focus metadata, all things equal except the widget interactivity is blocked.
     </span><span class="kw">pub fn </span>focus_info_ignore_blocked(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; FocusInfo {
         <span class="kw">if </span><span class="self">self</span>.mode_allows_focus_ignore_blocked() {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.info.meta().get(<span class="kw-2">&amp;</span>FOCUS_INFO_ID) {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID) {
                 <span class="kw">return </span>builder.build();
             }
         }
@@ -2975,7 +2977,7 @@
         </span>}
     }
     <span class="kw">fn </span>inner_alt_scope(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt; {
-        <span class="kw">let </span>inner_alt = <span class="self">self</span>.info.meta().get(<span class="kw-2">&amp;</span>FOCUS_INFO_ID).unwrap().inner_alt.load(Relaxed);
+        <span class="kw">let </span>inner_alt = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID).unwrap().inner_alt.load(Relaxed);
         <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = inner_alt {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = <span class="self">self</span>.info.tree().get(id) {
                 <span class="kw">let </span>wgt = wgt.into_focus_info(<span class="self">self</span>.focus_disabled_widgets(), <span class="self">self</span>.focus_hidden_widgets());
@@ -4044,8 +4046,10 @@
     }
 }
 
-<span class="kw">static </span>FOCUS_INFO_ID: StaticStateId&lt;FocusInfoData&gt; = StaticStateId::new_unique();
-<span class="kw">static </span>FOCUS_TREE_ID: StaticStateId&lt;FocusTreeData&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>FOCUS_INFO_ID: StateId&lt;FocusInfoData&gt;;
+    <span class="kw">static </span><span class="kw-2">ref </span>FOCUS_TREE_ID: StateId&lt;FocusTreeData&gt;;
+}
 
 <span class="attr">#[derive(Default)]
 </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>FocusTreeData {
@@ -4057,21 +4061,21 @@
 
         </span><span class="kw">let </span>prev = prev_tree
             .build_meta()
-            .get(<span class="kw-2">&amp;</span>FOCUS_TREE_ID)
+            .get(<span class="kw-2">*</span>FOCUS_TREE_ID)
             .map(|d| d.alt_scopes.lock().clone())
             .unwrap_or_default();
 
         <span class="kw">let </span><span class="kw-2">mut </span>alt_scopes = prev;
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = new_tree.build_meta().get(<span class="kw-2">&amp;</span>FOCUS_TREE_ID) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = new_tree.build_meta().get(<span class="kw-2">*</span>FOCUS_TREE_ID) {
             alt_scopes.extend(data.alt_scopes.lock().iter());
         }
 
         alt_scopes.retain(|id| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = new_tree.get(<span class="kw-2">*</span>id) {
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = wgt.meta().get(<span class="kw-2">&amp;</span>FOCUS_INFO_ID) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = wgt.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID) {
                     <span class="kw">if </span>info.build().is_alt_scope() {
                         <span class="kw">for </span>parent <span class="kw">in </span>wgt.ancestors() {
-                            <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = parent.meta().get(<span class="kw-2">&amp;</span>FOCUS_INFO_ID) {
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = parent.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID) {
                                 <span class="kw">if </span>info.build().is_scope() {
                                     info.inner_alt.store(<span class="prelude-val">Some</span>(<span class="kw-2">*</span>id), Relaxed);
                                     <span class="kw">break</span>;
@@ -4086,7 +4090,7 @@
             <span class="bool-val">false
         </span>});
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = new_tree.build_meta().get(<span class="kw-2">&amp;</span>FOCUS_TREE_ID) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = new_tree.build_meta().get(<span class="kw-2">*</span>FOCUS_TREE_ID) {
             <span class="kw-2">*</span>data.alt_scopes.lock() = alt_scopes;
         }
     }
@@ -4196,7 +4200,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>access = <span class="self">self</span>.<span class="number">0</span>.access().is_some();
 
         <span class="kw">let </span>r = <span class="self">self</span>.<span class="number">0</span>.with_meta(|m| {
-            <span class="kw">let </span>data = m.into_entry(<span class="kw-2">&amp;</span>FOCUS_INFO_ID).or_default();
+            <span class="kw">let </span>data = m.into_entry(<span class="kw-2">*</span>FOCUS_INFO_ID).or_default();
 
             <span class="kw">if </span>access {
                 access = !std::mem::replace(<span class="kw-2">&amp;mut </span>data.access_handler_registered, <span class="bool-val">true</span>);
@@ -4218,7 +4222,7 @@
     }
 
     <span class="kw">fn </span>with_tree_data&lt;R&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>FocusTreeData) -&gt; R) -&gt; R {
-        <span class="self">self</span>.<span class="number">0</span>.with_build_meta(|m| visitor(m.into_entry(<span class="kw-2">&amp;</span>FOCUS_TREE_ID).or_default()))
+        <span class="self">self</span>.<span class="number">0</span>.with_build_meta(|m| visitor(m.into_entry(<span class="kw-2">*</span>FOCUS_TREE_ID).or_default()))
     }
 
     <span class="doccomment">/// If the widget is definitely focusable or not.

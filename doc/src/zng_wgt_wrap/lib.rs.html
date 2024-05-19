@@ -1103,6 +1103,8 @@
 <a href="#1101" id="1101">1101</a>
 <a href="#1102" id="1102">1102</a>
 <a href="#1103" id="1103">1103</a>
+<a href="#1104" id="1104">1104</a>
+<a href="#1105" id="1105">1105</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1199,7 +1201,7 @@
 /// Can be used directly to inline widgets without declaring a wrap widget info. This node is the child
 /// of the `Wrap!` widget.
 </span><span class="kw">pub fn </span>node(children: <span class="kw">impl </span>UiNodeList, spacing: <span class="kw">impl </span>IntoVar&lt;GridSpacing&gt;, children_align: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span>children = PanelList::new(children).track_info_range(<span class="kw-2">&amp;</span>PANEL_LIST_ID);
+    <span class="kw">let </span>children = PanelList::new(children).track_info_range(<span class="kw-2">*</span>PANEL_LIST_ID);
     <span class="kw">let </span>spacing = spacing.into_var();
     <span class="kw">let </span>children_align = children_align.into_var();
     <span class="kw">let </span><span class="kw-2">mut </span>layout = InlineLayout::default();
@@ -2116,7 +2118,9 @@
     }
 }
 
-<span class="kw">static </span>PANEL_LIST_ID: StaticStateId&lt;PanelListRange&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>PANEL_LIST_ID: StateId&lt;PanelListRange&gt;;
+}
 
 <span class="doccomment">/// Get the child index in the parent wrap.
 ///
@@ -2124,7 +2128,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>get_index(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id.unwrap_or(<span class="number">0</span>));
     })
 }
@@ -2133,7 +2137,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>get_index_len(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;(usize, usize)&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_index_len_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id_len| {
+    with_index_len_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id_len| {
         <span class="kw">let _ </span>= state.set(id_len.unwrap_or((<span class="number">0</span>, <span class="number">0</span>)));
     })
 }
@@ -2142,7 +2146,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>get_rev_index(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_rev_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_rev_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id.unwrap_or(<span class="number">0</span>));
     })
 }
@@ -2155,7 +2159,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>is_even(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id.map(|i| i % <span class="number">2 </span>== <span class="number">0</span>).unwrap_or(<span class="bool-val">false</span>));
     })
 }
@@ -2168,7 +2172,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>is_odd(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id.map(|i| i % <span class="number">2 </span>!= <span class="number">0</span>).unwrap_or(<span class="bool-val">false</span>));
     })
 }
@@ -2177,7 +2181,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>is_first(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id == <span class="prelude-val">Some</span>(<span class="number">0</span>));
     })
 }
@@ -2186,7 +2190,7 @@
 </span><span class="attr">#[property(CONTEXT)]
 </span><span class="kw">pub fn </span>is_last(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>state = state.into_var();
-    with_rev_index_node(child, <span class="kw-2">&amp;</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
+    with_rev_index_node(child, <span class="kw-2">*</span>PANEL_LIST_ID, <span class="kw">move </span>|id| {
         <span class="kw">let _ </span>= state.set(id == <span class="prelude-val">Some</span>(<span class="number">0</span>));
     })
 }
@@ -2203,7 +2207,7 @@
 }
 <span class="kw">impl </span>WidgetInfoWrapExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>wrap_children(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;zng_app::widget::info::iter::Children&gt; {
-        PanelListRange::get(<span class="self">self</span>, <span class="kw-2">&amp;</span>PANEL_LIST_ID)
+        PanelListRange::get(<span class="self">self</span>, <span class="kw-2">*</span>PANEL_LIST_ID)
     }
 }
 </code></pre></div></section></main></body></html>

@@ -353,6 +353,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#315" id="315">315</a>
 <a href="#316" id="316">316</a>
 <a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Helper types for inspecting an UI tree.
 //!
 //! When compiled with the `"inspector"` feature all widget instances are instrumented with inspection node
@@ -371,7 +374,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span>insp_info = Arc::new(info);
         match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
             <span class="kw">if let </span>UiNodeOp::Info { info } = op {
-                info.set_meta(<span class="kw-2">&amp;</span><span class="kw">super</span>::INSPECTOR_INFO_ID, insp_info.clone());
+                info.set_meta(<span class="kw-2">*</span><span class="kw">super</span>::INSPECTOR_INFO_ID, insp_info.clone());
             }
         })
     }
@@ -380,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
         match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
             <span class="kw">if let </span>UiNodeOp::Info { info } = op {
                 info.with_meta(|<span class="kw-2">mut </span>m| {
-                    <span class="kw">let </span>info = m.get_mut(<span class="kw-2">&amp;</span><span class="kw">super</span>::INSPECTOR_INFO_ID).unwrap();
+                    <span class="kw">let </span>info = m.get_mut(<span class="kw-2">*</span><span class="kw">super</span>::INSPECTOR_INFO_ID).unwrap();
                     <span class="kw">let </span>prop = info.properties().find(|p| p.<span class="number">0</span>.id() == property).unwrap().<span class="number">0</span>;
                     <span class="kw">for </span>(i, input) <span class="kw">in </span>prop.property().inputs.iter().enumerate() {
                         <span class="kw">if </span><span class="macro">matches!</span>(input.kind, InputKind::Var) {
@@ -400,8 +403,9 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>inspector_only::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>parking_lot::RwLock;
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::StateId;
 <span class="kw">use </span>zng_txt::Txt;
+<span class="kw">use </span>zng_unique_id::static_id;
 <span class="kw">use </span>zng_var::{BoxedAnyVar, BoxedVar, VarValue};
 
 <span class="kw">use </span>std::{any::TypeId, collections::HashMap, sync::Arc};
@@ -412,7 +416,9 @@ document.addEventListener('DOMContentLoaded', function () {
     WidgetUpdateMode, WIDGET,
 };
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>INSPECTOR_INFO_ID: StaticStateId&lt;Arc&lt;InspectorInfo&gt;&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>INSPECTOR_INFO_ID: StateId&lt;Arc&lt;InspectorInfo&gt;&gt;;
+}
 
 <span class="doccomment">/// Widget instance item.
 ///
@@ -563,29 +569,29 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">impl </span>WidgetInfoInspectorExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>inspector_info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Arc&lt;InspectorInfo&gt;&gt; {
-        <span class="self">self</span>.meta().get_clone(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID)
+        <span class="self">self</span>.meta().get_clone(<span class="kw-2">*</span>INSPECTOR_INFO_ID)
     }
 
     <span class="kw">fn </span>can_inspect(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.meta().contains(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID)
+        <span class="self">self</span>.meta().contains(<span class="kw-2">*</span>INSPECTOR_INFO_ID)
     }
 
     <span class="kw">fn </span>inspect_child&lt;P: InspectWidgetPattern&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: P) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {
-        <span class="self">self</span>.children().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID) {
+        <span class="self">self</span>.children().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">*</span>INSPECTOR_INFO_ID) {
             <span class="prelude-val">Some</span>(wgt) =&gt; pattern.matches(wgt),
             <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
         })
     }
 
     <span class="kw">fn </span>inspect_descendant&lt;P: InspectWidgetPattern&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: P) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {
-        <span class="self">self</span>.descendants().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID) {
+        <span class="self">self</span>.descendants().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">*</span>INSPECTOR_INFO_ID) {
             <span class="prelude-val">Some</span>(info) =&gt; pattern.matches(info),
             <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
         })
     }
 
     <span class="kw">fn </span>inspect_ancestor&lt;P: InspectWidgetPattern&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: P) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {
-        <span class="self">self</span>.ancestors().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID) {
+        <span class="self">self</span>.ancestors().find(|c| <span class="kw">match </span>c.meta().get(<span class="kw-2">*</span>INSPECTOR_INFO_ID) {
             <span class="prelude-val">Some</span>(info) =&gt; pattern.matches(info),
             <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
         })
@@ -593,13 +599,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="kw">fn </span>inspect_property&lt;P: InspectPropertyPattern&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: P) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span><span class="kw">dyn </span>PropertyArgs&gt; {
         <span class="self">self</span>.meta()
-            .get(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID)<span class="question-mark">?
+            .get(<span class="kw-2">*</span>INSPECTOR_INFO_ID)<span class="question-mark">?
             </span>.properties()
             .find_map(|(args, cap)| <span class="kw">if </span>pattern.matches(args, cap) { <span class="prelude-val">Some</span>(args) } <span class="kw">else </span>{ <span class="prelude-val">None </span>})
     }
 
     <span class="kw">fn </span>parent_property(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;(PropertyId, usize)&gt; {
-        <span class="self">self</span>.parent()<span class="question-mark">?</span>.meta().get(<span class="kw-2">&amp;</span>INSPECTOR_INFO_ID)<span class="question-mark">?</span>.properties().find_map(|(args, <span class="kw">_</span>)| {
+        <span class="self">self</span>.parent()<span class="question-mark">?</span>.meta().get(<span class="kw-2">*</span>INSPECTOR_INFO_ID)<span class="question-mark">?</span>.properties().find_map(|(args, <span class="kw">_</span>)| {
             <span class="kw">let </span>id = <span class="self">self</span>.id();
             <span class="kw">let </span>info = args.property();
             <span class="kw">for </span>(i, input) <span class="kw">in </span>info.inputs.iter().enumerate() {

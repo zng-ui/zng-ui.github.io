@@ -492,6 +492,10 @@
 <a href="#490" id="490">490</a>
 <a href="#491" id="491">491</a>
 <a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -506,6 +510,8 @@
 </span><span class="kw">use </span>std::{any::Any, fmt, marker::PhantomData};
 
 <span class="kw">use </span>zng_unique_id::unique_id_64;
+
+<span class="kw">pub use </span>zng_unique_id::static_id;
 
 <span class="doccomment">/// Represents a type that can be a [`StateId`] value.
 ///
@@ -524,11 +530,13 @@
     ///
     /// ```
     /// # use zng_state_map::*;
-    /// static FOO_ID: StaticStateId&lt;bool&gt; = StateId::new_static();
+    /// static_id! {
+    ///     static ref FOO_ID: StateId&lt;bool&gt;;
+    /// }
     ///
     /// # fn demo() {
     /// let mut owned_state = OwnedStateMap::&lt;()&gt;::default();
-    /// let foo = owned_state.borrow_mut().set(&amp;FOO_ID, true);
+    /// let foo = owned_state.borrow_mut().set(*FOO_ID, true);
     /// # ; }
     /// ```
     </span><span class="kw">pub struct </span>StateId&lt;T: (StateValue)&gt;;

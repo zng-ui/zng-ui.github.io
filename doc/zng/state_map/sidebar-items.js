@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["StateMapEntry"],"struct":["OccupiedStateMapEntry","OwnedStateMap","StateId","StateMapMut","StateMapRef","StaticStateId","VacantStateMapEntry"],"trait":["StateValue"]};
+window.SIDEBAR_ITEMS = {"enum":["StateMapEntry"],"struct":["OccupiedStateMapEntry","OwnedStateMap","StateId","StateMapMut","StateMapRef","VacantStateMapEntry"],"trait":["StateValue"]};

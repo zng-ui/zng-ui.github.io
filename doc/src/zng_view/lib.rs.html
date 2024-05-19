@@ -2094,6 +2094,25 @@
 <a href="#2092" id="2092">2092</a>
 <a href="#2093" id="2093">2093</a>
 <a href="#2094" id="2094">2094</a>
+<a href="#2095" id="2095">2095</a>
+<a href="#2096" id="2096">2096</a>
+<a href="#2097" id="2097">2097</a>
+<a href="#2098" id="2098">2098</a>
+<a href="#2099" id="2099">2099</a>
+<a href="#2100" id="2100">2100</a>
+<a href="#2101" id="2101">2101</a>
+<a href="#2102" id="2102">2102</a>
+<a href="#2103" id="2103">2103</a>
+<a href="#2104" id="2104">2104</a>
+<a href="#2105" id="2105">2105</a>
+<a href="#2106" id="2106">2106</a>
+<a href="#2107" id="2107">2107</a>
+<a href="#2108" id="2108">2108</a>
+<a href="#2109" id="2109">2109</a>
+<a href="#2110" id="2110">2110</a>
+<a href="#2111" id="2111">2111</a>
+<a href="#2112" id="2112">2112</a>
+<a href="#2113" id="2113">2113</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2107,8 +2126,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.5.1"
-//! zng-view = "0.3.1"
+//! zng = "0.6.0"
+//! zng-view = "0.3.2"
 //! ```
 //!
 //! Then call [`init`] before any other code in `main` to setup a view-process that uses
@@ -2333,7 +2352,25 @@
 
 <span class="doccomment">/// Like [`run_same_process`] but with custom API extensions.
 </span><span class="kw">pub fn </span>run_same_process_extended(run_app: <span class="kw">impl </span>FnOnce() + Send + <span class="lifetime">'static</span>, ext: <span class="kw">fn</span>() -&gt; ViewExtensions) {
-    <span class="kw">let </span>r = thread::Builder::new().name(<span class="string">"app"</span>.to_owned()).spawn(run_app).unwrap();
+    <span class="kw">let </span>r = thread::Builder::new()
+        .name(<span class="string">"app"</span>.to_owned())
+        .spawn(<span class="kw">move </span>|| {
+            <span class="comment">// SAFETY: we exit the process in case of panic.
+            </span><span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::panic::catch_unwind(std::panic::AssertUnwindSafe(run_app)) {
+                thread::spawn(|| {
+                    <span class="comment">// Sometimes the channel does not disconnect on panic,
+                    // observed this issue on a panic in `AppExtension::init`.
+                    //
+                    // This workaround ensures that don't become a zombie process.
+                    </span>thread::sleep(std::time::Duration::from_secs(<span class="number">5</span>));
+                    <span class="macro">eprintln!</span>(<span class="string">"run_same_process did not exit after 5s of a fatal panic, exiting now"</span>);
+                    std::process::exit(<span class="number">101</span>);
+                });
+                <span class="comment">// Propagate panic in case the normal disconnect/shutdown handler works.
+                </span>std::panic::resume_unwind(e);
+            }
+        })
+        .unwrap();
 
     <span class="kw">let </span>config = ViewConfig::wait_same_process();
     config.assert_version(<span class="bool-val">true</span>);
@@ -3054,7 +3091,7 @@
         }
     }
 
-    <span class="kw">pub fn </span>run_headless(c: ipc::ViewChannels, ext: ViewExtensions) {
+    <span class="kw">pub fn </span>run_headless(ipc: ipc::ViewChannels, ext: ViewExtensions) {
         <span class="macro">tracing::info!</span>(<span class="string">"running headless view-process"</span>);
 
         gl::warmup();
@@ -3063,8 +3100,8 @@
         <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
         <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
             AppEventSender::Headless(app_sender, request_sender),
-            c.response_sender,
-            c.event_sender,
+            ipc.response_sender,
+            ipc.event_sender,
             request_receiver,
             ext,
         );
@@ -3077,7 +3114,7 @@
         event_loop
             .run_app(<span class="kw-2">&amp;mut </span>HeadlessApp {
                 app,
-                request_receiver: <span class="prelude-val">Some</span>(c.request_receiver),
+                request_receiver: <span class="prelude-val">Some</span>(ipc.request_receiver),
                 app_receiver,
             })
             .unwrap();
@@ -3161,7 +3198,7 @@
         }
     }
 
-    <span class="kw">pub fn </span>run_headed(c: ipc::ViewChannels, ext: ViewExtensions) {
+    <span class="kw">pub fn </span>run_headed(ipc: ipc::ViewChannels, ext: ViewExtensions) {
         <span class="macro">tracing::info!</span>(<span class="string">"running headed view-process"</span>);
 
         gl::warmup();
@@ -3174,12 +3211,12 @@
         <span class="kw">let </span>(request_sender, request_receiver) = flume::unbounded();
         <span class="kw">let </span><span class="kw-2">mut </span>app = App::new(
             AppEventSender::Headed(app_sender, request_sender),
-            c.response_sender,
-            c.event_sender,
+            ipc.response_sender,
+            ipc.event_sender,
             request_receiver,
             ext,
         );
-        app.start_receiving(c.request_receiver);
+        app.start_receiving(ipc.request_receiver);
 
         <span class="attr">#[cfg(windows)]
         </span>config::spawn_listener(app.app_sender.clone());
@@ -3242,6 +3279,7 @@
                     <span class="kw">break</span>;
                 }
             }
+            <span class="kw">let _ </span>= app_sender.send(AppEvent::ParentProcessExited);
         });
     }
 

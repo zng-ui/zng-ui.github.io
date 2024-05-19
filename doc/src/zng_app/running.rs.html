@@ -2035,7 +2035,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="self">self</span>.notify_event(RAW_MULTI_CLICK_CONFIG_CHANGED_EVENT.new_update(args), observer);
             }
             Event::AnimationsConfigChanged(cfg) =&gt; {
-                VARS.set_animations_enabled(cfg.enabled);
+                VARS_APP.set_sys_animations_enabled(cfg.enabled);
                 <span class="kw">let </span>args = RawAnimationsConfigChangedArgs::now(cfg);
                 <span class="self">self</span>.notify_event(RAW_ANIMATIONS_CONFIG_CHANGED_EVENT.new_update(args), observer);
             }
@@ -2179,7 +2179,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         .map(|(id, info)| (VIEW_PROCESS.monitor_id(id), info))
                         .collect();
 
-                    VARS.set_animations_enabled(animations_config.enabled);
+                    VARS.animations_enabled().set(animations_config.enabled);
 
                     <span class="kw">let </span>args = <span class="kw">crate</span>::view_process::ViewProcessInitedArgs::now(
                         generation,

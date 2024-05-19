@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["state_map"],"struct":["OwnedStateMap","StateId","StateMapMut","StateMapRef","StaticStateId"],"trait":["StateValue"]};
+window.SIDEBAR_ITEMS = {"macro":["static_id"],"mod":["state_map"],"struct":["OwnedStateMap","StateId","StateMapMut","StateMapRef"],"trait":["StateValue"]};

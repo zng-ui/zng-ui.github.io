@@ -590,6 +590,9 @@
 <a href="#588" id="588">588</a>
 <a href="#589" id="589">589</a>
 <a href="#590" id="590">590</a>
+<a href="#591" id="591">591</a>
+<a href="#592" id="592">592</a>
+<a href="#593" id="593">593</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fmt, mem};
 
 <span class="kw">use </span>proc_macro2::{Ident, Span, TokenStream, TokenTree};
@@ -710,7 +713,8 @@
 
 <span class="kw">pub struct </span>PropertyField {
     <span class="kw">pub </span>ident: Ident,
-    <span class="kw">pub </span>colon: <span class="macro">Token!</span>[:],
+    <span class="attr">#[allow(dead_code)]
+    </span><span class="kw">pub </span>colon: <span class="macro">Token!</span>[:],
     <span class="kw">pub </span>expr: TokenStream,
 }
 <span class="kw">impl </span>Parse <span class="kw">for </span>PropertyField {
@@ -743,11 +747,11 @@
 <span class="comment">// Value assigned in a [`PropertyAssign`].
 </span><span class="kw">pub enum </span>PropertyValue {
     <span class="doccomment">/// `unset!`.
-    </span>Special(Ident, <span class="macro">Token!</span>[!]),
+    </span>Special(Ident, <span class="attr">#[allow(dead_code)] </span><span class="macro">Token!</span>[!]),
     <span class="doccomment">/// `arg0, arg1,`
     </span>Unnamed(TokenStream),
     <span class="doccomment">/// `{ field0: true, field1: false, }`
-    </span>Named(syn::token::Brace, Punctuated&lt;PropertyField, <span class="macro">Token!</span>[,]&gt;),
+    </span>Named(<span class="attr">#[allow(dead_code)] </span>syn::token::Brace, Punctuated&lt;PropertyField, <span class="macro">Token!</span>[,]&gt;),
 }
 <span class="kw">impl </span>Parse <span class="kw">for </span>PropertyValue {
     <span class="kw">fn </span>parse(input: parse::ParseStream) -&gt; syn::Result&lt;<span class="self">Self</span>&gt; {
@@ -845,10 +849,12 @@
 
 <span class="kw">pub struct </span>WgtWhen {
     <span class="kw">pub </span>attrs: Attributes,
-    <span class="kw">pub </span>when: keyword::when,
+    <span class="attr">#[allow(dead_code)]
+    </span><span class="kw">pub </span>when: keyword::when,
     <span class="kw">pub </span>condition_expr: TokenStream,
     <span class="kw">pub </span>condition_expr_str: String,
-    <span class="kw">pub </span>brace_token: syn::token::Brace,
+    <span class="attr">#[allow(dead_code)]
+    </span><span class="kw">pub </span>brace_token: syn::token::Brace,
     <span class="kw">pub </span>assigns: Vec&lt;WgtProperty&gt;,
 }
 <span class="kw">impl </span>WgtWhen {

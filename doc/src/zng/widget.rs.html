@@ -1034,6 +1034,8 @@
 <a href="#1031" id="1031">1031</a>
 <a href="#1032" id="1032">1032</a>
 <a href="#1033" id="1033">1033</a>
+<a href="#1034" id="1034">1034</a>
+<a href="#1035" id="1035">1035</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget info, builder and base, UI node and list.
 //!
 //! The [`Wgt!`](struct@Wgt) widget is a blank widget that entirely shaped by properties.
@@ -1075,7 +1077,7 @@
 
 </span><span class="kw">pub use </span>zng_app::widget::base::{HitTestMode, NonWidgetBase, Parallel, WidgetBase, WidgetExt, WidgetImpl, PARALLEL_VAR};
 
-<span class="kw">pub use </span>zng_app::widget::{widget_impl, widget_set, StaticWidgetId, WidgetId, WidgetUpdateMode, WIDGET};
+<span class="kw">pub use </span>zng_app::widget::{widget_impl, widget_set, WidgetId, WidgetUpdateMode, WIDGET};
 
 <span class="kw">pub use </span>zng_app::widget::border::{
     BorderSide, BorderSides, BorderStyle, CornerRadius, CornerRadiusFit, LineOrientation, LineStyle, BORDER,
@@ -1177,7 +1179,9 @@
 /// mod custom {
 ///     use zng::prelude_wgt::*;
 ///
-///     static STATE_ID: StaticStateId&lt;bool&gt; = StaticStateId::new_unique();
+///     static_id! {
+///         static ref STATE_ID: StateId&lt;bool&gt;;
+///     }
 ///
 ///     #[property(CONTEXT)]
 ///     pub fn flag_state(child: impl UiNode, state: impl IntoVar&lt;bool&gt;) -&gt; impl UiNode {
@@ -1187,7 +1191,7 @@
 ///                 WIDGET.sub_var_info(&amp;state);
 ///             }
 ///             UiNodeOp::Info { info } =&gt; {
-///                 info.set_meta(&amp;STATE_ID, state.get());
+///                 info.set_meta(*STATE_ID, state.get());
 ///             }
 ///             _ =&gt; {}
 ///         })
@@ -1198,7 +1202,7 @@
 ///     }
 ///     impl StateExt for WidgetInfo {
 ///         fn state(&amp;self) -&gt; Option&lt;bool&gt; {
-///             self.meta().get_clone(&amp;STATE_ID)
+///             self.meta().get_clone(*STATE_ID)
 ///         }
 ///     }
 /// }

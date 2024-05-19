@@ -438,7 +438,7 @@
             <span class="comment">// sub-menus set the popup as parent in context menu.
             </span><span class="kw">let </span>parent_ctx = <span class="prelude-val">Some</span>(parent.unwrap_or_else(|| WIDGET.id()));
             <span class="kw">super</span>::sub::SUB_MENU_PARENT_CTX.with_context(<span class="kw-2">&amp;mut </span><span class="prelude-val">Some</span>(Arc::new(parent_ctx)), || c.info(info));
-            info.set_meta(<span class="kw-2">&amp;</span><span class="kw">super</span>::sub::SUB_MENU_POPUP_ID, <span class="kw">super</span>::sub::SubMenuPopupInfo { parent });
+            info.set_meta(<span class="kw-2">*</span><span class="kw">super</span>::sub::SUB_MENU_POPUP_ID, <span class="kw">super</span>::sub::SubMenuPopupInfo { parent });
         }
         UiNodeOp::Event { update } =&gt; {
             c.event(update);

@@ -467,6 +467,7 @@
 <a href="#465" id="465">465</a>
 <a href="#466" id="466">466</a>
 <a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::Arc;
@@ -866,9 +867,10 @@
     <span class="bool-val">true
 </span>}
 
-<span class="kw">static </span>ANCHOR_ID: StaticStateId&lt;Txt&gt; = StaticStateId::new_unique();
-
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>MARKDOWN_INFO_ID: StaticStateId&lt;()&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>ANCHOR_ID: StateId&lt;Txt&gt;;
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>MARKDOWN_INFO_ID: StateId&lt;()&gt;;
+}
 
 <span class="doccomment">/// Set a label that identifies the widget in the context of the parent markdown.
 ///
@@ -882,7 +884,7 @@
             WIDGET.sub_var_info(<span class="kw-2">&amp;</span>anchor);
         }
         UiNodeOp::Info { info } =&gt; {
-            info.set_meta(<span class="kw-2">&amp;</span>ANCHOR_ID, anchor.get());
+            info.set_meta(<span class="kw-2">*</span>ANCHOR_ID, anchor.get());
         }
         <span class="kw">_ </span>=&gt; {}
     })
@@ -905,11 +907,11 @@
 }
 <span class="kw">impl </span>WidgetInfoExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>anchor(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Txt&gt; {
-        <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>ANCHOR_ID)
+        <span class="self">self</span>.meta().get(<span class="kw-2">*</span>ANCHOR_ID)
     }
 
     <span class="kw">fn </span>is_markdown(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.meta().contains(<span class="kw-2">&amp;</span>MARKDOWN_INFO_ID)
+        <span class="self">self</span>.meta().contains(<span class="kw-2">*</span>MARKDOWN_INFO_ID)
     }
 
     <span class="kw">fn </span>find_anchor(<span class="kw-2">&amp;</span><span class="self">self</span>, anchor: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {

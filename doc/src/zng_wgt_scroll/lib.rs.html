@@ -460,7 +460,7 @@
         <span class="kw">let </span>child = with_context_var(child, SCROLL_VERTICAL_CONTENT_OVERFLOWS_VAR, var(<span class="bool-val">false</span>));
         <span class="kw">let </span>child = with_context_var(child, SCROLL_HORIZONTAL_CONTENT_OVERFLOWS_VAR, var(<span class="bool-val">false</span>));
 
-        <span class="kw">let </span>child = SCROLL.config_node(child);
+        <span class="kw">let </span>child = SCROLL.config_node(child).boxed();
 
         <span class="kw">let </span>child = with_context_var(child, SCROLL_VERTICAL_OFFSET_VAR, var(<span class="number">0</span>.fct()));
         <span class="kw">let </span>child = with_context_var(child, SCROLL_HORIZONTAL_OFFSET_VAR, var(<span class="number">0</span>.fct()));
@@ -507,7 +507,7 @@
 
     match_node_list(children, <span class="kw">move </span>|children, op| <span class="kw">match </span>op {
         UiNodeOp::Info { info } =&gt; {
-            info.set_meta(<span class="kw-2">&amp;</span>SCROLL_INFO_ID, scroll_info.clone());
+            info.set_meta(<span class="kw-2">*</span>SCROLL_INFO_ID, scroll_info.clone());
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
             <span class="kw">let </span>constraints = LAYOUT.constraints();

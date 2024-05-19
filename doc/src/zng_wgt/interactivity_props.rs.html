@@ -584,10 +584,14 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#546" id="546">546</a>
 <a href="#547" id="547">547</a>
 <a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>task::parking_lot::Mutex;
-<span class="kw">use </span>zng_app::widget::info;
+<span class="kw">use </span>zng_app::{static_id, widget::info};
 
 <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
 
@@ -910,7 +914,9 @@ document.addEventListener('DOMContentLoaded', function () {
 /// [`modal_includes`]: fn@modal_includes
 </span><span class="attr">#[property(CONTEXT, default(<span class="bool-val">false</span>))]
 </span><span class="kw">pub fn </span>modal(child: <span class="kw">impl </span>UiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">static </span>MODAL_WIDGETS: StaticStateId&lt;Arc&lt;Mutex&lt;ModalWidgetsData&gt;&gt;&gt; = StaticStateId::new_unique();
+    <span class="macro">static_id!</span> {
+        <span class="kw">static </span><span class="kw-2">ref </span>MODAL_WIDGETS: StateId&lt;Arc&lt;Mutex&lt;ModalWidgetsData&gt;&gt;&gt;;
+    }
     <span class="attr">#[derive(Default)]
     </span><span class="kw">struct </span>ModalWidgetsData {
         widgets: IdSet&lt;WidgetId&gt;,
@@ -923,10 +929,10 @@ document.addEventListener('DOMContentLoaded', function () {
     match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
             WIDGET.sub_var_info(<span class="kw-2">&amp;</span>enabled);
-            WINDOW.init_state_default(<span class="kw-2">&amp;</span>MODAL_WIDGETS); <span class="comment">// insert window state
+            WINDOW.init_state_default(<span class="kw-2">*</span>MODAL_WIDGETS); <span class="comment">// insert window state
         </span>}
         UiNodeOp::Deinit =&gt; {
-            <span class="kw">let </span>mws = WINDOW.req_state(<span class="kw-2">&amp;</span>MODAL_WIDGETS);
+            <span class="kw">let </span>mws = WINDOW.req_state(<span class="kw-2">*</span>MODAL_WIDGETS);
 
             <span class="comment">// maybe unregister.
             </span><span class="kw">let </span><span class="kw-2">mut </span>mws = mws.lock();
@@ -948,7 +954,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         UiNodeOp::Info { info } =&gt; {
-            <span class="kw">let </span>mws = WINDOW.req_state(<span class="kw-2">&amp;</span>MODAL_WIDGETS);
+            <span class="kw">let </span>mws = WINDOW.req_state(<span class="kw-2">*</span>MODAL_WIDGETS);
 
             <span class="kw">if </span>enabled.get() {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>a) = info.access() {
@@ -1100,11 +1106,11 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">impl </span>WidgetInfoBuilderModalExt <span class="kw">for </span>WidgetInfoBuilder {
     <span class="kw">fn </span>insert_modal_include(<span class="kw-2">&amp;mut </span><span class="self">self</span>, include: WidgetId) {
-        <span class="self">self</span>.with_meta(|<span class="kw-2">mut </span>m| m.entry(<span class="kw-2">&amp;</span>MODAL_INCLUDES).or_default().insert(include));
+        <span class="self">self</span>.with_meta(|<span class="kw-2">mut </span>m| m.entry(<span class="kw-2">*</span>MODAL_INCLUDES).or_default().insert(include));
     }
 
     <span class="kw">fn </span>set_modal_included(<span class="kw-2">&amp;mut </span><span class="self">self</span>, modal: WidgetId) {
-        <span class="self">self</span>.set_meta(<span class="kw-2">&amp;</span>MODAL_INCLUDED, modal);
+        <span class="self">self</span>.set_meta(<span class="kw-2">*</span>MODAL_INCLUDED, modal);
     }
 }
 
@@ -1114,11 +1120,11 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">impl </span>WidgetInfoModalExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>modal_includes(<span class="kw-2">&amp;</span><span class="self">self</span>, id: WidgetId) -&gt; bool {
-        <span class="self">self</span>.id() == id || <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>MODAL_INCLUDES).map(|i| i.contains(<span class="kw-2">&amp;</span>id)).unwrap_or(<span class="bool-val">false</span>)
+        <span class="self">self</span>.id() == id || <span class="self">self</span>.meta().get(<span class="kw-2">*</span>MODAL_INCLUDES).map(|i| i.contains(<span class="kw-2">&amp;</span>id)).unwrap_or(<span class="bool-val">false</span>)
     }
 
     <span class="kw">fn </span>modal_included(<span class="kw-2">&amp;</span><span class="self">self</span>, modal: WidgetId) -&gt; bool {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = <span class="self">self</span>.meta().get_clone(<span class="kw-2">&amp;</span>MODAL_INCLUDED) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = <span class="self">self</span>.meta().get_clone(<span class="kw-2">*</span>MODAL_INCLUDED) {
             <span class="kw">if </span>id == modal {
                 <span class="kw">return </span><span class="bool-val">true</span>;
             }
@@ -1130,6 +1136,8 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>}
 }
 
-<span class="kw">static </span>MODAL_INCLUDES: StaticStateId&lt;IdSet&lt;WidgetId&gt;&gt; = StaticStateId::new_unique();
-<span class="kw">static </span>MODAL_INCLUDED: StaticStateId&lt;WidgetId&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>MODAL_INCLUDES: StateId&lt;IdSet&lt;WidgetId&gt;&gt;;
+    <span class="kw">static </span><span class="kw-2">ref </span>MODAL_INCLUDED: StateId&lt;WidgetId&gt;;
+}
 </code></pre></div></section></main></body></html>

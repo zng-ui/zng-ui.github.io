@@ -1086,6 +1086,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1048" id="1048">1048</a>
 <a href="#1049" id="1049">1049</a>
 <a href="#1050" id="1050">1050</a>
+<a href="#1051" id="1051">1051</a>
+<a href="#1052" id="1052">1052</a>
+<a href="#1053" id="1053">1053</a>
+<a href="#1054" id="1054">1054</a>
+<a href="#1055" id="1055">1055</a>
 </pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"crash_handler"</span>)]
 
 </span><span class="doccomment">//! App-process crash handler.
@@ -1271,6 +1276,10 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub </span>args: Box&lt;[Txt]&gt;,
     <span class="doccomment">/// Minidump file.
     </span><span class="kw">pub </span>minidump: <span class="prelude-ty">Option</span>&lt;PathBuf&gt;,
+    <span class="doccomment">/// Operating system.
+    ///
+    /// See [`std::env::consts::OS`] for details.
+    </span><span class="kw">pub </span>os: Txt,
 }
 <span class="doccomment">/// Alternate mode `{:#}` prints plain stdout and stderr (no ANSI escape sequences).
 </span><span class="kw">impl </span>fmt::Display <span class="kw">for </span>CrashError {
@@ -1316,6 +1325,7 @@ document.addEventListener('DOMContentLoaded', function () {
             stderr,
             args,
             minidump,
+            os: std::env::consts::OS.into(),
         }
     }
 

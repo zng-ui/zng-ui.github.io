@@ -1356,6 +1356,8 @@
 <a href="#1354" id="1354">1354</a>
 <a href="#1355" id="1355">1355</a>
 <a href="#1356" id="1356">1356</a>
+<a href="#1357" id="1357">1357</a>
+<a href="#1358" id="1358">1358</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_app::access::ACCESS_CLICK_EVENT;
 <span class="kw">use </span>zng_ext_config::CONFIG;
 <span class="kw">use </span>zng_ext_input::{
@@ -1748,17 +1750,19 @@
         match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
             <span class="kw">if let </span>UiNodeOp::Info { info } = op {
                 <span class="macro">assert!</span>(WIDGET.parent_id().is_none());
-                info.set_meta(<span class="kw-2">&amp;</span>INSPECTED_ID, inspected);
+                info.set_meta(<span class="kw-2">*</span>INSPECTED_ID, inspected);
             }
         })
     }
 
     <span class="doccomment">/// Gets the window that is inspected by the current inspector window.
     </span><span class="kw">pub fn </span>inspected() -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt; {
-        WINDOW.info().root().meta().get(<span class="kw-2">&amp;</span>INSPECTED_ID).copied()
+        WINDOW.info().root().meta().get(<span class="kw-2">*</span>INSPECTED_ID).copied()
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>INSPECTED_ID: StaticStateId&lt;WindowId&gt; = StaticStateId::new_unique();
+    <span class="macro">static_id!</span> {
+        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>INSPECTED_ID: StateId&lt;WindowId&gt;;
+    }
 
     <span class="macro">context_var!</span> {
         <span class="kw">static </span>TREE_ITEM_BKG_HOVERED_VAR: Rgba = rgb(<span class="number">0.21</span>, <span class="number">0.21</span>, <span class="number">0.21</span>);

@@ -1420,6 +1420,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1382" id="1382">1382</a>
 <a href="#1383" id="1383">1383</a>
 <a href="#1384" id="1384">1384</a>
+<a href="#1385" id="1385">1385</a>
+<a href="#1386" id="1386">1386</a>
+<a href="#1387" id="1387">1387</a>
+<a href="#1388" id="1388">1388</a>
+<a href="#1389" id="1389">1389</a>
+<a href="#1390" id="1390">1390</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::TypeId,
     collections::{hash_map, HashMap},
@@ -1530,7 +1536,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_app_context::AppId;
 <span class="kw">use </span>zng_state_map::{OwnedStateMap, StateId, StateMapMut, StateValue};
 <span class="kw">use </span>zng_txt::Txt;
-<span class="kw">use </span>zng_unique_id::unique_id_64;
+<span class="kw">use </span>zng_unique_id::{static_id, unique_id_64};
 <span class="kw">use </span>zng_var::{impl_from_and_into_var, types::ArcCowVar, var, AnyVar, ArcVar, BoxedVar, ReadOnlyArcVar, Var, VarValue};
 
 <span class="attr">#[doc(hidden)]
@@ -2317,10 +2323,12 @@ document.addEventListener('DOMContentLoaded', function () {
 /// must have a `foo` and `init_foo` methods.
 ///
 /// ```
-/// use zng_app::{event::*, var::*};
+/// use zng_app::{event::*, var::*, static_id};
 ///
-/// static COMMAND_FOO_ID: StaticCommandMetaVarId&lt;bool&gt; = StaticCommandMetaVarId::new_unique();
-/// static COMMAND_BAR_ID: StaticCommandMetaVarId&lt;bool&gt; = StaticCommandMetaVarId::new_unique();
+/// static_id! {
+///     static ref COMMAND_FOO_ID: CommandMetaVarId&lt;bool&gt;;
+///     static ref COMMAND_BAR_ID: CommandMetaVarId&lt;bool&gt;;
+/// }
 ///
 /// /// FooBar command values.
 /// pub trait CommandFooBarExt {
@@ -2342,11 +2350,11 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// impl CommandFooBarExt for Command {
 ///     fn foo(self) -&gt; CommandMetaVar&lt;bool&gt; {
-///         self.with_meta(|m| m.get_var_or_default(&amp;COMMAND_FOO_ID))
+///         self.with_meta(|m| m.get_var_or_default(*COMMAND_FOO_ID))
 ///     }
 ///
 ///     fn bar(self) -&gt; ReadOnlyCommandMetaVar&lt;bool&gt; {
-///         self.with_meta(|m| m.get_var_or_insert(&amp;COMMAND_BAR_ID, ||true)).read_only()
+///         self.with_meta(|m| m.get_var_or_insert(*COMMAND_BAR_ID, ||true)).read_only()
 ///     }
 ///
 ///     fn foo_and_bar(self) -&gt; BoxedVar&lt;bool&gt; {
@@ -2354,12 +2362,12 @@ document.addEventListener('DOMContentLoaded', function () {
 ///     }
 ///
 ///     fn init_foo(self, foo: bool) -&gt; Self {
-///         self.with_meta(|m| m.init_var(&amp;COMMAND_FOO_ID, foo));
+///         self.with_meta(|m| m.init_var(*COMMAND_FOO_ID, foo));
 ///         self
 ///     }
 ///
 ///     fn init_bar(self, bar: bool) -&gt; Self {
-///         self.with_meta(|m| m.init_var(&amp;COMMAND_BAR_ID, bar));
+///         self.with_meta(|m| m.init_var(*COMMAND_BAR_ID, bar));
 ///         self
 ///     }
 /// }
@@ -2546,11 +2554,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">where
         </span><span class="self">Self</span>: <span class="kw">crate</span>::shortcut::CommandShortcutExt;
 }
-<span class="kw">static </span>COMMAND_NAME_ID: StaticCommandMetaVarId&lt;Txt&gt; = StaticCommandMetaVarId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>COMMAND_NAME_ID: CommandMetaVarId&lt;Txt&gt;;
+}
 <span class="kw">impl </span>CommandNameExt <span class="kw">for </span>Command {
     <span class="kw">fn </span>name(<span class="self">self</span>) -&gt; CommandMetaVar&lt;Txt&gt; {
         <span class="self">self</span>.with_meta(|m| {
-            m.get_var_or_insert(<span class="kw-2">&amp;</span>COMMAND_NAME_ID, || {
+            m.get_var_or_insert(<span class="kw-2">*</span>COMMAND_NAME_ID, || {
                 <span class="kw">let </span>name = <span class="self">self</span>.event.name();
                 <span class="kw">let </span>name = name.strip_suffix(<span class="string">"_CMD"</span>).unwrap_or(name);
                 <span class="kw">let </span><span class="kw-2">mut </span>title = String::with_capacity(name.len());
@@ -2576,7 +2586,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="kw">fn </span>init_name(<span class="self">self</span>, name: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
-        <span class="self">self</span>.with_meta(|m| m.init_var(<span class="kw-2">&amp;</span>COMMAND_NAME_ID, name.into()));
+        <span class="self">self</span>.with_meta(|m| m.init_var(<span class="kw-2">*</span>COMMAND_NAME_ID, name.into()));
         <span class="self">self
     </span>}
 
@@ -2603,14 +2613,16 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Sets the initial info if it is not set.
     </span><span class="kw">fn </span>init_info(<span class="self">self</span>, info: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self</span>;
 }
-<span class="kw">static </span>COMMAND_INFO_ID: StaticCommandMetaVarId&lt;Txt&gt; = StaticCommandMetaVarId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>COMMAND_INFO_ID: CommandMetaVarId&lt;Txt&gt;;
+}
 <span class="kw">impl </span>CommandInfoExt <span class="kw">for </span>Command {
     <span class="kw">fn </span>info(<span class="self">self</span>) -&gt; CommandMetaVar&lt;Txt&gt; {
-        <span class="self">self</span>.with_meta(|m| m.get_var_or_insert(<span class="kw-2">&amp;</span>COMMAND_INFO_ID, Txt::default))
+        <span class="self">self</span>.with_meta(|m| m.get_var_or_insert(<span class="kw-2">*</span>COMMAND_INFO_ID, Txt::default))
     }
 
     <span class="kw">fn </span>init_info(<span class="self">self</span>, info: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
-        <span class="self">self</span>.with_meta(|m| m.init_var(<span class="kw-2">&amp;</span>COMMAND_INFO_ID, info.into()));
+        <span class="self">self</span>.with_meta(|m| m.init_var(<span class="kw-2">*</span>COMMAND_INFO_ID, info.into()));
         <span class="self">self
     </span>}
 }

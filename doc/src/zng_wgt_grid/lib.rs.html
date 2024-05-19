@@ -1700,6 +1700,12 @@
 <a href="#1698" id="1698">1698</a>
 <a href="#1699" id="1699">1699</a>
 <a href="#1700" id="1700">1700</a>
+<a href="#1701" id="1701">1701</a>
+<a href="#1702" id="1702">1702</a>
+<a href="#1703" id="1703">1703</a>
+<a href="#1704" id="1704">1704</a>
+<a href="#1705" id="1705">1705</a>
+<a href="#1706" id="1706">1706</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2188,8 +2194,10 @@
         }
     }
 
-    <span class="doccomment">/// Column index, total in the parent widget set by the parent.
-    </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>INDEX_ID: StaticStateId&lt;(usize, usize)&gt; = StaticStateId::new_unique();
+    <span class="macro">static_id!</span> {
+        <span class="doccomment">/// Column index, total in the parent widget set by the parent.
+        </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>INDEX_ID: StateId&lt;(usize, usize)&gt;;
+    }
 
     <span class="doccomment">/// If the column index is even.
     ///
@@ -2198,7 +2206,7 @@
     /// [`is_odd`]: fn@is_odd
     </span><span class="attr">#[property(CONTEXT, widget_impl(Column))]
     </span><span class="kw">pub fn </span>is_even(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        widget_state_is_state(child, |w| w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>== <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
+        widget_state_is_state(child, |w| w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>== <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
     }
 
     <span class="doccomment">/// If the column index is odd.
@@ -2208,7 +2216,7 @@
     /// [`is_even`]: fn@is_even
     </span><span class="attr">#[property(CONTEXT, widget_impl(Column))]
     </span><span class="kw">pub fn </span>is_odd(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        widget_state_is_state(child, |w| w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>!= <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
+        widget_state_is_state(child, |w| w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>!= <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
     }
 
     <span class="doccomment">/// If the column is the first.
@@ -2217,7 +2225,7 @@
         widget_state_is_state(
             child,
             |w| {
-                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 i == <span class="number">0 </span>&amp;&amp; l &gt; <span class="number">0
             </span>},
             |<span class="kw">_</span>| <span class="bool-val">false</span>,
@@ -2231,7 +2239,7 @@
         widget_state_is_state(
             child,
             |w| {
-                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 i &lt; l &amp;&amp; i == l - <span class="number">1
             </span>},
             |<span class="kw">_</span>| <span class="bool-val">false</span>,
@@ -2247,7 +2255,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0</span>;
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0</span>;
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
                 } <span class="kw">else </span>{
@@ -2265,7 +2273,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
                 } <span class="kw">else </span>{
@@ -2283,7 +2291,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 <span class="kw">let </span>a = a.<span class="number">1 </span>- a.<span class="number">0</span>;
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
@@ -2341,8 +2349,10 @@
         }
     }
 
-    <span class="doccomment">/// Row index, total in the parent widget set by the parent.
-    </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>INDEX_ID: StaticStateId&lt;(usize, usize)&gt; = StaticStateId::new_unique();
+    <span class="macro">static_id!</span> {
+        <span class="doccomment">/// Row index, total in the parent widget set by the parent.
+        </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>INDEX_ID: StateId&lt;(usize, usize)&gt;;
+    }
 
     <span class="doccomment">/// If the row index is even.
     ///
@@ -2351,7 +2361,7 @@
     /// [`is_odd`]: fn@is_odd
     </span><span class="attr">#[property(CONTEXT, widget_impl(Row))]
     </span><span class="kw">pub fn </span>is_even(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        widget_state_is_state(child, |w| w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>== <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
+        widget_state_is_state(child, |w| w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>== <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
     }
 
     <span class="doccomment">/// If the row index is odd.
@@ -2361,7 +2371,7 @@
     /// [`is_even`]: fn@is_even
     </span><span class="attr">#[property(CONTEXT, widget_impl(Row))]
     </span><span class="kw">pub fn </span>is_odd(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        widget_state_is_state(child, |w| w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>!= <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
+        widget_state_is_state(child, |w| w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0 </span>% <span class="number">2 </span>!= <span class="number">0</span>, |<span class="kw">_</span>| <span class="bool-val">false</span>, state)
     }
 
     <span class="doccomment">/// If the row is the first.
@@ -2370,7 +2380,7 @@
         widget_state_is_state(
             child,
             |w| {
-                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 i == <span class="number">0 </span>&amp;&amp; l &gt; <span class="number">0
             </span>},
             |<span class="kw">_</span>| <span class="bool-val">false</span>,
@@ -2384,7 +2394,7 @@
         widget_state_is_state(
             child,
             |w| {
-                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>(i, l) = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 i &lt; l &amp;&amp; i == l - <span class="number">1
             </span>},
             |<span class="kw">_</span>| <span class="bool-val">false</span>,
@@ -2400,7 +2410,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0</span>;
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>)).<span class="number">0</span>;
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
                 } <span class="kw">else </span>{
@@ -2418,7 +2428,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
                 } <span class="kw">else </span>{
@@ -2436,7 +2446,7 @@
         widget_state_get_state(
             child,
             |w, <span class="kw-2">&amp;</span>i| {
-                <span class="kw">let </span>a = w.get(<span class="kw-2">&amp;</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
+                <span class="kw">let </span>a = w.get(<span class="kw-2">*</span>INDEX_ID).copied().unwrap_or((<span class="number">0</span>, <span class="number">0</span>));
                 <span class="kw">let </span>a = a.<span class="number">1 </span>- a.<span class="number">0</span>;
                 <span class="kw">if </span>a != i {
                     <span class="prelude-val">Some</span>(a)
@@ -2528,7 +2538,7 @@
         ///
         /// [`WIDGET`]: zng_wgt::prelude::WIDGET
         </span><span class="kw">pub fn </span>get() -&gt; <span class="self">Self </span>{
-            WIDGET.get_state(<span class="kw-2">&amp;</span>INFO_ID).unwrap_or_default()
+            WIDGET.get_state(<span class="kw-2">*</span>INFO_ID).unwrap_or_default()
         }
 
         <span class="doccomment">/// Get the cell info stored in the `wgt` state.
@@ -2537,10 +2547,12 @@
         }
     }
 
-    <span class="doccomment">/// Id for widget state set by cell properties.
-    ///
-    /// The parent grid uses this info to position and size the cell widget.
-    </span><span class="kw">pub static </span>INFO_ID: StaticStateId&lt;CellInfo&gt; = StaticStateId::new_unique();
+    <span class="macro">static_id!</span> {
+        <span class="doccomment">/// Id for widget state set by cell properties.
+        ///
+        /// The parent grid uses this info to position and size the cell widget.
+        </span><span class="kw">pub static </span><span class="kw-2">ref </span>INFO_ID: StateId&lt;CellInfo&gt;;
+    }
 
     <span class="doccomment">/// Cell column index.
     ///
@@ -2555,7 +2567,7 @@
     /// [`at`]: fn@at
     </span><span class="attr">#[property(CONTEXT, default(<span class="number">0</span>), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>column(child: <span class="kw">impl </span>UiNode, col: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, col, CellInfo::default, |i, <span class="kw-2">&amp;</span>c| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, col, CellInfo::default, |i, <span class="kw-2">&amp;</span>c| {
             <span class="kw">if </span>i.column != c {
                 i.column = c;
                 WIDGET.layout();
@@ -2576,7 +2588,7 @@
     /// [`at`]: fn@at
     </span><span class="attr">#[property(CONTEXT, default(<span class="number">0</span>), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>row(child: <span class="kw">impl </span>UiNode, row: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, row, CellInfo::default, |i, <span class="kw-2">&amp;</span>r| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, row, CellInfo::default, |i, <span class="kw-2">&amp;</span>r| {
             <span class="kw">if </span>i.row != r {
                 i.row = r;
                 WIDGET.layout();
@@ -2598,7 +2610,7 @@
     /// [`row`]: fn@row
     </span><span class="attr">#[property(CONTEXT, default((<span class="number">0</span>, <span class="number">0</span>)), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>at(child: <span class="kw">impl </span>UiNode, column_row: <span class="kw">impl </span>IntoVar&lt;(usize, usize)&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, column_row, CellInfo::default, |i, <span class="kw-2">&amp;</span>(col, row)| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, column_row, CellInfo::default, |i, <span class="kw-2">&amp;</span>(col, row)| {
             <span class="kw">if </span>i.column != col || i.row != row {
                 i.column = col;
                 i.row = row;
@@ -2623,7 +2635,7 @@
     /// [`span`]: fn@span
     </span><span class="attr">#[property(CONTEXT, default(<span class="number">1</span>), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>column_span(child: <span class="kw">impl </span>UiNode, span: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>s| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>s| {
             <span class="kw">if </span>i.column_span != s {
                 i.column_span = s;
                 WIDGET.layout();
@@ -2647,7 +2659,7 @@
     /// [`span`]: fn@span
     </span><span class="attr">#[property(CONTEXT, default(<span class="number">1</span>), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>row_span(child: <span class="kw">impl </span>UiNode, span: <span class="kw">impl </span>IntoVar&lt;usize&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>s| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>s| {
             <span class="kw">if </span>i.row_span != s {
                 i.row_span = s;
                 WIDGET.layout();
@@ -2667,7 +2679,7 @@
     /// [`row_span`]: fn@row_span
     </span><span class="attr">#[property(CONTEXT, default((<span class="number">1</span>, <span class="number">1</span>)), widget_impl(Cell))]
     </span><span class="kw">pub fn </span>span(child: <span class="kw">impl </span>UiNode, span: <span class="kw">impl </span>IntoVar&lt;(usize, usize)&gt;) -&gt; <span class="kw">impl </span>UiNode {
-        with_widget_state_modify(child, <span class="kw-2">&amp;</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>(cs, rs)| {
+        with_widget_state_modify(child, <span class="kw-2">*</span>INFO_ID, span, CellInfo::default, |i, <span class="kw-2">&amp;</span>(cs, rs)| {
             <span class="kw">if </span>i.column_span != rs || i.row_span != rs {
                 i.column_span = cs;
                 i.row_span = rs;
@@ -2893,7 +2905,7 @@
         </span><span class="kw">let </span>columns_len = children[<span class="number">0</span>].len() + imaginary_cols;
         children[<span class="number">0</span>].for_each(|i, c| {
             c.with_context(WidgetUpdateMode::Bubble, || {
-                <span class="kw">let </span>prev = WIDGET.set_state(<span class="kw-2">&amp;</span>column::INDEX_ID, (i, columns_len));
+                <span class="kw">let </span>prev = WIDGET.set_state(<span class="kw-2">*</span>column::INDEX_ID, (i, columns_len));
                 <span class="kw">if </span>prev != <span class="prelude-val">Some</span>((i, columns_len)) {
                     WIDGET.update();
                 }
@@ -2902,7 +2914,7 @@
         <span class="kw">let </span>rows_len = children[<span class="number">1</span>].len() + imaginary_rows;
         children[<span class="number">1</span>].for_each(|i, r| {
             r.with_context(WidgetUpdateMode::Bubble, || {
-                <span class="kw">let </span>prev = WIDGET.set_state(<span class="kw-2">&amp;</span>row::INDEX_ID, (i, rows_len));
+                <span class="kw">let </span>prev = WIDGET.set_state(<span class="kw-2">*</span>row::INDEX_ID, (i, rows_len));
                 <span class="kw">if </span>prev != <span class="prelude-val">Some</span>((i, rows_len)) {
                     WIDGET.update();
                 }

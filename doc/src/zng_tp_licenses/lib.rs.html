@@ -454,15 +454,15 @@
         text: Txt,
         used_by: Vec&lt;UsedBy&gt;,
     }
-    <span class="kw">impl </span>From&lt;LicenseJson&gt; <span class="kw">for </span>LicenseUsed {
-        <span class="kw">fn </span>from(value: LicenseJson) -&gt; <span class="self">Self </span>{
-            <span class="self">Self </span>{
+    <span class="kw">impl </span>LicenseJson {
+        <span class="kw">fn </span>into(<span class="self">self</span>) -&gt; LicenseUsed {
+            LicenseUsed {
                 license: License {
-                    id: value.id,
-                    name: value.name,
-                    text: value.text,
+                    id: <span class="self">self</span>.id,
+                    name: <span class="self">self</span>.name,
+                    text: <span class="self">self</span>.text,
                 },
-                used_by: value.used_by.into_iter().map(Into::into).collect(),
+                used_by: <span class="self">self</span>.used_by.into_iter().map(UsedBy::into).collect(),
             }
         }
     }
@@ -478,22 +478,22 @@
         <span class="attr">#[serde(default)]
         </span>repository: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
     }
-    <span class="kw">impl </span>From&lt;UsedBy&gt; <span class="kw">for </span>User {
-        <span class="kw">fn </span>from(value: UsedBy) -&gt; <span class="self">Self </span>{
-            <span class="kw">let </span>repo = value.crate_.repository.unwrap_or_default();
-            <span class="self">Self </span>{
-                version: value.crate_.version,
+    <span class="kw">impl </span>UsedBy {
+        <span class="kw">fn </span>into(<span class="self">self</span>) -&gt; User {
+            <span class="kw">let </span>repo = <span class="self">self</span>.crate_.repository.unwrap_or_default();
+            User {
+                version: <span class="self">self</span>.crate_.version,
                 url: <span class="kw">if </span>repo.is_empty() {
-                    <span class="macro">zng_txt::formatx!</span>(<span class="string">"https://crates.io/crates/{}"</span>, value.crate_.name)
+                    <span class="macro">zng_txt::formatx!</span>(<span class="string">"https://crates.io/crates/{}"</span>, <span class="self">self</span>.crate_.name)
                 } <span class="kw">else </span>{
                     repo
                 },
-                name: value.crate_.name,
+                name: <span class="self">self</span>.crate_.name,
             }
         }
     }
 
-    serde_json::from_str::&lt;Output&gt;(json).map(|o| o.licenses.into_iter().map(Into::into).collect())
+    serde_json::from_str::&lt;Output&gt;(json).map(|o| o.licenses.into_iter().map(LicenseJson::into).collect())
 }
 
 <span class="doccomment">/// Bincode serialize and deflate the licenses.

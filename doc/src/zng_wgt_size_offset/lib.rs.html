@@ -1054,6 +1054,8 @@
 <a href="#1052" id="1052">1052</a>
 <a href="#1053" id="1053">1053</a>
 <a href="#1054" id="1054">1054</a>
+<a href="#1055" id="1055">1055</a>
+<a href="#1056" id="1056">1056</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1853,7 +1855,7 @@
     </span><span class="kw">pub fn </span>set_width(<span class="kw-2">&amp;</span><span class="self">self</span>, width: <span class="kw-2">&amp;</span>Length) {
         WIDGET.with_state_mut(|<span class="kw-2">mut </span>state| {
             <span class="kw">let </span>width = width.into();
-            <span class="kw">match </span>state.entry(<span class="kw-2">&amp;</span>WIDGET_SIZE_ID) {
+            <span class="kw">match </span>state.entry(<span class="kw-2">*</span>WIDGET_SIZE_ID) {
                 state_map::StateMapEntry::Occupied(<span class="kw-2">mut </span>e) =&gt; e.get_mut().width = width,
                 state_map::StateMapEntry::Vacant(e) =&gt; {
                     e.insert(euclid::size2(width, WidgetLength::Default));
@@ -1866,7 +1868,7 @@
     </span><span class="kw">pub fn </span>set_height(<span class="kw-2">&amp;</span><span class="self">self</span>, height: <span class="kw-2">&amp;</span>Length) {
         WIDGET.with_state_mut(|<span class="kw-2">mut </span>state| {
             <span class="kw">let </span>height = height.into();
-            <span class="kw">match </span>state.entry(<span class="kw-2">&amp;</span>WIDGET_SIZE_ID) {
+            <span class="kw">match </span>state.entry(<span class="kw-2">*</span>WIDGET_SIZE_ID) {
                 state_map::StateMapEntry::Occupied(<span class="kw-2">mut </span>e) =&gt; e.get_mut().height = height,
                 state_map::StateMapEntry::Vacant(e) =&gt; {
                     e.insert(euclid::size2(WidgetLength::Default, height));
@@ -1877,12 +1879,12 @@
 
     <span class="doccomment">/// Set the size state.
     </span><span class="kw">pub fn </span>set(<span class="kw-2">&amp;</span><span class="self">self</span>, size: <span class="kw-2">&amp;</span>Size) {
-        WIDGET.set_state(<span class="kw-2">&amp;</span>WIDGET_SIZE_ID, euclid::size2((<span class="kw-2">&amp;</span>size.width).into(), (<span class="kw-2">&amp;</span>size.height).into()));
+        WIDGET.set_state(<span class="kw-2">*</span>WIDGET_SIZE_ID, euclid::size2((<span class="kw-2">&amp;</span>size.width).into(), (<span class="kw-2">&amp;</span>size.height).into()));
     }
 
     <span class="doccomment">/// Get the size set in the state.
     </span><span class="kw">pub fn </span>get(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; euclid::Size2D&lt;WidgetLength, ()&gt; {
-        WIDGET.get_state(<span class="kw-2">&amp;</span>WIDGET_SIZE_ID).unwrap_or_default()
+        WIDGET.get_state(<span class="kw-2">*</span>WIDGET_SIZE_ID).unwrap_or_default()
     }
 
     <span class="doccomment">/// Get the size set in the widget state.
@@ -1891,7 +1893,9 @@
     }
 }
 
-<span class="kw">static </span>WIDGET_SIZE_ID: StaticStateId&lt;euclid::Size2D&lt;WidgetLength, ()&gt;&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>WIDGET_SIZE_ID: StateId&lt;euclid::Size2D&lt;WidgetLength, ()&gt;&gt;;
+}
 
 <span class="doccomment">/// Getter property, gets the latest rendered widget inner size.
 </span><span class="attr">#[property(LAYOUT)]

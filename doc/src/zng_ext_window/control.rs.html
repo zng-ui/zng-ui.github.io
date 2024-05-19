@@ -2298,6 +2298,58 @@
 <a href="#2296" id="2296">2296</a>
 <a href="#2297" id="2297">2297</a>
 <a href="#2298" id="2298">2298</a>
+<a href="#2299" id="2299">2299</a>
+<a href="#2300" id="2300">2300</a>
+<a href="#2301" id="2301">2301</a>
+<a href="#2302" id="2302">2302</a>
+<a href="#2303" id="2303">2303</a>
+<a href="#2304" id="2304">2304</a>
+<a href="#2305" id="2305">2305</a>
+<a href="#2306" id="2306">2306</a>
+<a href="#2307" id="2307">2307</a>
+<a href="#2308" id="2308">2308</a>
+<a href="#2309" id="2309">2309</a>
+<a href="#2310" id="2310">2310</a>
+<a href="#2311" id="2311">2311</a>
+<a href="#2312" id="2312">2312</a>
+<a href="#2313" id="2313">2313</a>
+<a href="#2314" id="2314">2314</a>
+<a href="#2315" id="2315">2315</a>
+<a href="#2316" id="2316">2316</a>
+<a href="#2317" id="2317">2317</a>
+<a href="#2318" id="2318">2318</a>
+<a href="#2319" id="2319">2319</a>
+<a href="#2320" id="2320">2320</a>
+<a href="#2321" id="2321">2321</a>
+<a href="#2322" id="2322">2322</a>
+<a href="#2323" id="2323">2323</a>
+<a href="#2324" id="2324">2324</a>
+<a href="#2325" id="2325">2325</a>
+<a href="#2326" id="2326">2326</a>
+<a href="#2327" id="2327">2327</a>
+<a href="#2328" id="2328">2328</a>
+<a href="#2329" id="2329">2329</a>
+<a href="#2330" id="2330">2330</a>
+<a href="#2331" id="2331">2331</a>
+<a href="#2332" id="2332">2332</a>
+<a href="#2333" id="2333">2333</a>
+<a href="#2334" id="2334">2334</a>
+<a href="#2335" id="2335">2335</a>
+<a href="#2336" id="2336">2336</a>
+<a href="#2337" id="2337">2337</a>
+<a href="#2338" id="2338">2338</a>
+<a href="#2339" id="2339">2339</a>
+<a href="#2340" id="2340">2340</a>
+<a href="#2341" id="2341">2341</a>
+<a href="#2342" id="2342">2342</a>
+<a href="#2343" id="2343">2343</a>
+<a href="#2344" id="2344">2344</a>
+<a href="#2345" id="2345">2345</a>
+<a href="#2346" id="2346">2346</a>
+<a href="#2347" id="2347">2347</a>
+<a href="#2348" id="2348">2348</a>
+<a href="#2349" id="2349">2349</a>
+<a href="#2350" id="2350">2350</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -4219,11 +4271,29 @@
                 <span class="self">self</span>.commands.update(<span class="kw-2">&amp;</span><span class="self">self</span>.vars);
 
                 update_widgets.with_window(|| {
-                    WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
-                        update_widgets.with_widget(|| {
-                            <span class="self">self</span>.root.update(update_widgets);
+                    <span class="kw">if </span><span class="self">self</span>.root_ctx.take_reinit() {
+                        <span class="comment">// like WidgetBase, pending reinit cancels update
+                        </span>WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+                            <span class="self">self</span>.root.deinit();
+                            <span class="self">self</span>.root.init();
                         });
-                    });
+                        <span class="kw">let _ </span>= <span class="self">self</span>.root_ctx.take_reinit(); <span class="comment">// ignore after init
+                    </span>} <span class="kw">else </span>{
+                        <span class="comment">// no pending reinit, can update
+                        </span>WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+                            update_widgets.with_widget(|| {
+                                <span class="self">self</span>.root.update(update_widgets);
+                            });
+                        });
+
+                        <span class="comment">// update requested reinit
+                        </span><span class="kw">if </span><span class="self">self</span>.root_ctx.take_reinit() {
+                            WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+                                <span class="self">self</span>.root.deinit();
+                                <span class="self">self</span>.root.init();
+                            });
+                        }
+                    }
                 });
             }
 
@@ -4241,7 +4311,8 @@
                     <span class="kw">super</span>::WINDOW_OPEN_EVENT.notify(<span class="kw">super</span>::WindowOpenArgs::now(WINDOW.id()));
                 });
                 <span class="self">self</span>.init_state = InitState::Inited;
-            }
+                <span class="self">self</span>.root_ctx.take_reinit(); <span class="comment">// ignore reinit request (same as WidgetBase).
+            </span>}
         }
     }
 
@@ -4266,6 +4337,10 @@
             <span class="kw">let </span>info = info.finalize(<span class="prelude-val">Some</span>(WINDOW.info()), <span class="bool-val">true</span>);
 
             WINDOWS.set_widget_tree(info.clone());
+
+            <span class="kw">if </span><span class="self">self</span>.root_ctx.is_pending_reinit() {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || WIDGET.update());
+            }
 
             <span class="prelude-val">Some</span>(info)
         } <span class="kw">else </span>{
@@ -4293,11 +4368,26 @@
                 <span class="kw">return</span>;
             }
 
+            <span class="kw">if </span><span class="self">self</span>.root_ctx.take_reinit() {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+                    <span class="self">self</span>.root.deinit();
+                    <span class="self">self</span>.root.init();
+                });
+                <span class="kw">let _ </span>= <span class="self">self</span>.root_ctx.take_reinit(); <span class="comment">// ignore after init
+            </span>}
+
             WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
                 update.with_widget(|| {
                     <span class="self">self</span>.root.event(update);
                 })
             });
+
+            <span class="kw">if </span><span class="self">self</span>.root_ctx.take_reinit() {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+                    <span class="self">self</span>.root.deinit();
+                    <span class="self">self</span>.root.init();
+                });
+            }
         });
     }
 
@@ -4341,7 +4431,7 @@
 
         <span class="self">self</span>.layout_pass = <span class="self">self</span>.layout_pass.next();
 
-        WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
+        <span class="kw">let </span>final_size = WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || {
             <span class="kw">let </span>metrics = LayoutMetrics::new(scale_factor, size, root_font_size)
                 .with_screen_ppi(screen_ppi)
                 .with_direction(DIRECTION_VAR.get());
@@ -4371,7 +4461,13 @@
 
                 final_size
             })
-        })
+        });
+
+        <span class="kw">if </span><span class="self">self</span>.root_ctx.is_pending_reinit() {
+            WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || WIDGET.update());
+        }
+
+        final_size
     }
 
     <span class="kw">pub fn </span>render(
@@ -4409,6 +4505,10 @@
                 <span class="self">self</span>.root.render(<span class="kw-2">&amp;mut </span>frame);
                 frame.finalize(<span class="kw-2">&amp;</span>WINDOW.info())
             });
+
+            <span class="kw">if </span><span class="self">self</span>.root_ctx.is_pending_reinit() {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || WIDGET.update());
+            }
 
             <span class="self">self</span>.clear_color = frame.clear_color;
 
@@ -4448,6 +4548,10 @@
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = update.clear_color {
                 <span class="self">self</span>.clear_color = c;
+            }
+
+            <span class="kw">if </span><span class="self">self</span>.root_ctx.is_pending_reinit() {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>.root_ctx, WidgetUpdateMode::Bubble, || WIDGET.update());
             }
 
             <span class="kw">let </span>capture = <span class="self">self</span>.take_frame_capture();

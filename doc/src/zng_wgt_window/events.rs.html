@@ -159,6 +159,15 @@
 <a href="#157" id="157">157</a>
 <a href="#158" id="158">158</a>
 <a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window events, [`on_window_open`](fn@on_window_open) and [`on_window_close_requested`](fn@on_window_close_requested).
 //!
 //! These events are re-exported by [`Window!`](struct@crate::Window) as `on_open` and `on_close_requested`, but you can
@@ -227,6 +236,15 @@
     </span><span class="kw">pub fn </span>window_close_requested {
         event: WINDOW_CLOSE_REQUESTED_EVENT,
         args: WindowCloseRequestedArgs,
+        filter: |args| args.windows.contains(<span class="kw-2">&amp;</span>WINDOW.id()),
+    }
+
+    <span class="doccomment">/// On window closed.
+    ///
+    /// See [`WINDOW_CLOSE_EVENT`] for more details of when this event notifies.
+    </span><span class="kw">pub fn </span>window_close {
+        event: WINDOW_CLOSE_EVENT,
+        args: WindowCloseArgs,
         filter: |args| args.windows.contains(<span class="kw-2">&amp;</span>WINDOW.id()),
     }
 

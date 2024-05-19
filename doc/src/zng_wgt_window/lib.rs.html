@@ -345,8 +345,8 @@
 
 </span><span class="kw">use </span>zng_ext_input::focus::{DirectionalNav, FocusScopeOnFocus, TabNav};
 <span class="kw">use </span>zng_ext_window::{
-    FrameImageReadyArgs, HeadlessMonitor, RenderMode, StartPosition, WindowChangedArgs, WindowCloseRequestedArgs, WindowOpenArgs,
-    WindowRoot,
+    FrameImageReadyArgs, HeadlessMonitor, RenderMode, StartPosition, WindowChangedArgs, WindowCloseArgs, WindowCloseRequestedArgs,
+    WindowOpenArgs, WindowRoot,
 };
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt_fill::background_color;
@@ -510,16 +510,16 @@
     events::on_window_close_requested(child, handler)
 }
 
-<span class="doccomment">/// On window deinit.
+<span class="doccomment">/// On window close.
 ///
-/// This event notifies once on deinit.
+/// The window will deinit after this event.
 ///
-/// This property is the same as [`on_deinit`].
+/// This property is the same as [`on_pre_window_close`].
 ///
-/// [`on_deinit`]: fn@zng_wgt::on_deinit
+/// [`on_pre_window_close`]: fn@events::on_pre_window_close
 </span><span class="attr">#[property(EVENT, widget_impl(Window))]
-</span><span class="kw">pub fn </span>on_close(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;zng_wgt::OnNodeOpArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    zng_wgt::on_deinit(child, handler)
+</span><span class="kw">pub fn </span>on_close(child: <span class="kw">impl </span>UiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;WindowCloseArgs&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    events::on_pre_window_close(child, handler)
 }
 
 <span class="doccomment">/// On window position changed.

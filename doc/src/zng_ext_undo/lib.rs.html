@@ -1630,6 +1630,10 @@
 <a href="#1628" id="1628">1628</a>
 <a href="#1629" id="1629">1629</a>
 <a href="#1630" id="1630">1630</a>
+<a href="#1631" id="1631">1631</a>
+<a href="#1632" id="1632">1632</a>
+<a href="#1633" id="1633">1633</a>
+<a href="#1634" id="1634">1634</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1670,7 +1674,7 @@
 <span class="kw">use </span>zng_app_context::{app_local, context_local, RunOnDrop};
 <span class="kw">use </span>zng_clone_move::clmv;
 <span class="kw">use </span>zng_ext_input::{focus::cmd::CommandFocusExt, keyboard::KEYBOARD};
-<span class="kw">use </span>zng_state_map::{StateMapRef, StaticStateId};
+<span class="kw">use </span>zng_state_map::{static_id, StateId, StateMapRef};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::{context_var, var, BoxedVar, Var, VarHandle, VarValue, WeakVar};
 
@@ -2470,8 +2474,8 @@
 
         UNDO_CMD
             .scoped(id)
-            .with_meta(|m| m.set(<span class="kw-2">&amp;</span>WEAK_UNDO_SCOPE_ID, (wk_scope.clone(), interval.clone())));
-        REDO_CMD.scoped(id).with_meta(|m| m.set(<span class="kw-2">&amp;</span>WEAK_UNDO_SCOPE_ID, (wk_scope, interval)));
+            .with_meta(|m| m.set(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID, (wk_scope.clone(), interval.clone())));
+        REDO_CMD.scoped(id).with_meta(|m| m.set(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID, (wk_scope, interval)));
 
         <span class="self">self</span>.<span class="number">0 </span>= <span class="prelude-val">Some</span>(scope);
     }
@@ -2480,7 +2484,7 @@
     ///
     /// [`WIDGET`]: zng_app::widget::WIDGET
     </span><span class="kw">pub fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>WidgetInfoBuilder) {
-        info.flag_meta(<span class="kw-2">&amp;</span>FOCUS_SCOPE_ID);
+        info.flag_meta(<span class="kw-2">*</span>FOCUS_SCOPE_ID);
     }
 
     <span class="doccomment">/// Deinit the scope in the [`WIDGET`].
@@ -2823,7 +2827,7 @@
 }
 <span class="kw">impl </span>WidgetInfoUndoExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>is_undo_scope(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.meta().flagged(<span class="kw-2">&amp;</span>FOCUS_SCOPE_ID)
+        <span class="self">self</span>.meta().flagged(<span class="kw-2">*</span>FOCUS_SCOPE_ID)
     }
 
     <span class="kw">fn </span>undo_scope(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt; {
@@ -2831,7 +2835,9 @@
     }
 }
 
-<span class="kw">static </span>FOCUS_SCOPE_ID: StaticStateId&lt;()&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>FOCUS_SCOPE_ID: StateId&lt;()&gt;;
+}
 
 <span class="doccomment">/// Undo extension methods for commands.
 </span><span class="kw">pub trait </span>CommandUndoExt {
@@ -2861,7 +2867,7 @@
     }
 
     <span class="kw">fn </span>undo_stack(<span class="self">self</span>) -&gt; UndoStackInfo {
-        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">&amp;</span>WEAK_UNDO_SCOPE_ID));
+        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID));
         <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade() {
                 <span class="kw">return </span>UndoStackInfo::undo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
@@ -2881,7 +2887,7 @@
     }
 
     <span class="kw">fn </span>redo_stack(<span class="self">self</span>) -&gt; UndoStackInfo {
-        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">&amp;</span>WEAK_UNDO_SCOPE_ID));
+        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID));
         <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade() {
                 <span class="kw">return </span>UndoStackInfo::redo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
@@ -2901,7 +2907,9 @@
     }
 }
 
-<span class="kw">static </span>WEAK_UNDO_SCOPE_ID: StaticStateId&lt;(std::sync::Weak&lt;UndoScope&gt;, BoxedVar&lt;Duration&gt;)&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>WEAK_UNDO_SCOPE_ID: StateId&lt;(std::sync::Weak&lt;UndoScope&gt;, BoxedVar&lt;Duration&gt;)&gt;;
+}
 
 <span class="doccomment">/// Represents a type that can select actions for undo or redo once.
 ///

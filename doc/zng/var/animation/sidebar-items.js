@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"derive":["Transitionable"],"mod":["easing"],"struct":["Animation","AnimationHandle","ChaseAnimation","ForceAnimationController","ModifyInfo","NilAnimationObserver","Transition","TransitionKeyed","WeakAnimationHandle"],"trait":["AnimationController","Transitionable"]};
+window.SIDEBAR_ITEMS = {"derive":["Transitionable"],"mod":["easing"],"struct":["Animation","AnimationHandle","ChaseAnimation","ForceAnimationController","ModifyInfo","Transition","TransitionKeyed","WeakAnimationHandle"],"trait":["AnimationController","Transitionable"]};

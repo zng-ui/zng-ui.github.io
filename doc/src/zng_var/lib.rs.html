@@ -2871,7 +2871,7 @@
     },
     time::Duration,
 };
-<span class="kw">use </span>zng_app_context::ContextLocal;
+<span class="kw">use </span>zng_app_context::{AppLocalId, ContextLocal};
 <span class="kw">use </span>zng_clone_move::clmv;
 <span class="kw">use </span>zng_txt::{formatx, ToTxt, Txt};
 <span class="kw">use </span>zng_unit::{Factor, FactorUnits};
@@ -3481,7 +3481,7 @@
 
 <span class="attr">#[derive(Debug)]
 </span><span class="kw">enum </span>VarPtrData {
-    Static(<span class="kw-2">*const </span>()),
+    Static(AppLocalId),
     Arc(<span class="kw-2">*const </span>()),
     NeverEq,
 }
@@ -3514,7 +3514,7 @@
     </span><span class="kw">pub fn </span>raw_pointer(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">*const </span>() {
         <span class="kw">match </span><span class="self">self</span>.eq {
             VarPtrData::Arc(p) =&gt; p,
-            VarPtrData::Static(p) =&gt; p,
+            VarPtrData::Static(p) =&gt; p.get() <span class="kw">as </span><span class="kw-2">*const </span>(),
             VarPtrData::NeverEq =&gt; std::ptr::null(),
         }
     }
@@ -3529,7 +3529,7 @@
     <span class="kw">fn </span>new_ctx_local&lt;T: Send + Sync&gt;(tl: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>ContextLocal&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             _lt: std::marker::PhantomData,
-            eq: VarPtrData::Static((tl <span class="kw">as </span><span class="kw-2">*const </span>ContextLocal&lt;T&gt;) <span class="kw">as _</span>),
+            eq: VarPtrData::Static(tl.id()),
         }
     }
 

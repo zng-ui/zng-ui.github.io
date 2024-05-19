@@ -1697,14 +1697,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1659" id="1659">1659</a>
 <a href="#1660" id="1660">1660</a>
 <a href="#1661" id="1661">1661</a>
-<a href="#1662" id="1662">1662</a>
-<a href="#1663" id="1663">1663</a>
-<a href="#1664" id="1664">1664</a>
-<a href="#1665" id="1665">1665</a>
-<a href="#1666" id="1666">1666</a>
-<a href="#1667" id="1667">1667</a>
-<a href="#1668" id="1668">1668</a>
-<a href="#1669" id="1669">1669</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget, UI node API.
 
 </span><span class="kw">pub mod </span>base;
@@ -1721,7 +1713,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>parking_lot::{Mutex, RwLock};
 <span class="kw">use </span>std::{
     borrow::Cow,
-    fmt,
     sync::{atomic::Ordering::Relaxed, Arc},
 };
 <span class="kw">use </span>zng_app_context::context_local;
@@ -2309,13 +2300,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="kw">fn </span>from(some: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetId&gt;;
 }
-
-<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>StaticWidgetId {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-        fmt::Debug::fmt(<span class="kw-2">&amp;</span><span class="self">self</span>.get(), f)
-    }
-}
-<span class="kw">impl </span>zng_var::IntoValue&lt;WidgetId&gt; <span class="kw">for </span><span class="kw-2">&amp;</span><span class="lifetime">'static </span>StaticWidgetId {}
 <span class="kw">impl </span>serde::Serialize <span class="kw">for </span>WidgetId {
     <span class="kw">fn </span>serialize&lt;S&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
     <span class="kw">where
@@ -2826,7 +2810,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <span class="comment">// is at root, register `UPDATES`
                     </span>UPDATES.update_flags_root(wgt_flags, window_id, ctx.id);
                     <span class="comment">// some builders don't clear the root widget flags like they do for other widgets.
-                    </span>ctx.flags.store(UpdateFlags::empty(), Relaxed);
+                    </span>ctx.flags.store(wgt_flags &amp; UpdateFlags::REINIT, Relaxed);
                 } <span class="kw">else </span>{
                     <span class="comment">// used outside window
                     </span>UPDATES.update_flags(wgt_flags, ctx.id);

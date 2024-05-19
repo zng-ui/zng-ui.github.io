@@ -1110,6 +1110,8 @@
 <a href="#1108" id="1108">1108</a>
 <a href="#1109" id="1109">1109</a>
 <a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, sync::Arc, time::Duration};
 
 <span class="kw">use </span>atomic::{Atomic, Ordering};
@@ -2032,15 +2034,15 @@
 }
 <span class="kw">impl </span>WidgetInfoExt <span class="kw">for </span>WidgetInfo {
     <span class="kw">fn </span>is_scroll(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SCROLL_INFO_ID).is_some()
+        <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SCROLL_INFO_ID).is_some()
     }
 
     <span class="kw">fn </span>scroll_info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ScrollInfo&gt; {
-        <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SCROLL_INFO_ID).cloned()
+        <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SCROLL_INFO_ID).cloned()
     }
 
     <span class="kw">fn </span>viewport(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;PxRect&gt; {
-        <span class="self">self</span>.meta().get(<span class="kw-2">&amp;</span>SCROLL_INFO_ID).map(|r| r.viewport())
+        <span class="self">self</span>.meta().get(<span class="kw-2">*</span>SCROLL_INFO_ID).map(|r| r.viewport())
     }
 }
 
@@ -2125,7 +2127,9 @@
     }
 }
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>SCROLL_INFO_ID: StaticStateId&lt;ScrollInfo&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>SCROLL_INFO_ID: StateId&lt;ScrollInfo&gt;;
+}
 
 <span class="doccomment">/// Smooth scrolling config.
 ///

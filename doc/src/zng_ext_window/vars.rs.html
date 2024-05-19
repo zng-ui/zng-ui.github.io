@@ -708,6 +708,8 @@
 <a href="#706" id="706">706</a>
 <a href="#707" id="707">707</a>
 <a href="#708" id="708">708</a>
+<a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -716,7 +718,7 @@
 };
 <span class="kw">use </span>zng_ext_image::Img;
 <span class="kw">use </span>zng_layout::unit::{Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Length, LengthUnits, Point, PxPoint, PxSize, Size};
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_txt::{ToTxt, Txt};
 <span class="kw">use </span>zng_unique_id::IdSet;
 <span class="kw">use </span>zng_var::{merge_var, var, var_from, ArcVar, BoxedVar, ReadOnlyArcVar, Var};
@@ -872,7 +874,7 @@
     ///
     /// Panics if called in a custom window context that did not setup the variables.
     </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>req() -&gt; <span class="self">Self </span>{
-        WINDOW.req_state(<span class="kw-2">&amp;</span>WINDOW_VARS_ID)
+        WINDOW.req_state(<span class="kw-2">*</span>WINDOW_VARS_ID)
     }
 
     <span class="doccomment">/// Defines if the window chrome is visible.
@@ -1415,5 +1417,7 @@
 }
 <span class="kw">impl </span>Eq <span class="kw">for </span>WindowVars {}
 
-<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span>WINDOW_VARS_ID: StaticStateId&lt;WindowVars&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">static </span><span class="kw-2">ref </span>WINDOW_VARS_ID: StateId&lt;WindowVars&gt;;
+}
 </code></pre></div></section></main></body></html>

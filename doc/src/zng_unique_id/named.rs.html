@@ -259,6 +259,9 @@
 <a href="#257" id="257">257</a>
 <a href="#258" id="258">258</a>
 <a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt,
     hash::{BuildHasher, Hash},
@@ -424,14 +427,17 @@
 </span><span class="macro">macro_rules!</span> impl_unique_id_name {
     (<span class="macro-nonterminal">$UniqueId</span>:ident) =&gt; {
         <span class="macro-nonterminal">$</span><span class="macro">crate::paste!</span> {
-            <span class="attr">#[<span class="macro-nonterminal">allow</span>(non_upper_case_globals)]
-            </span><span class="kw">static </span>[&lt;<span class="macro-nonterminal">$UniqueId </span>_ID_NAMES&gt;]: <span class="macro-nonterminal">$crate::UniqueIdNameStore</span>&lt;<span class="macro-nonterminal">$UniqueId</span>&gt; = <span class="macro-nonterminal">$crate::UniqueIdNameStore::new</span>();
+            <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static!</span> {
+                <span class="kw">static </span>[&lt;<span class="macro-nonterminal">$UniqueId</span>:upper _ID_NAMES&gt;]: <span class="macro-nonterminal">$crate::UniqueIdNameStore</span>&lt;<span class="macro-nonterminal">$UniqueId</span>&gt; = <span class="macro-nonterminal">$crate::UniqueIdNameStore::new</span>();
+            }
         }
 
         <span class="kw">impl </span><span class="macro-nonterminal">$UniqueId </span>{
             <span class="kw">fn </span>names_store() -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="macro-nonterminal">$crate::UniqueIdNameStore</span>&lt;<span class="self">Self</span>&gt; {
                 <span class="macro-nonterminal">$</span><span class="macro">crate::paste!</span> {
-                    <span class="kw-2">&amp;</span>[&lt;<span class="macro-nonterminal">$UniqueId </span>_ID_NAMES&gt;]
+                    <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static_ref!</span> {
+                        [&lt;<span class="macro-nonterminal">$UniqueId</span>:upper _ID_NAMES&gt;]
+                    }
                 }
             }
 

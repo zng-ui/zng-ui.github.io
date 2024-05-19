@@ -1328,6 +1328,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1290" id="1290">1290</a>
 <a href="#1291" id="1291">1291</a>
 <a href="#1292" id="1292">1292</a>
+<a href="#1293" id="1293">1293</a>
+<a href="#1294" id="1294">1294</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Accessibility metadata types.
 
 </span><span class="kw">use </span>std::num::NonZeroU32;
@@ -1335,7 +1337,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>unic_langid::LanguageIdentifier;
 <span class="kw">use </span>zng_layout::unit::{Factor, PxSize, PxTransform};
-<span class="kw">use </span>zng_state_map::StaticStateId;
+<span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_unique_id::IdMap;
 <span class="kw">use </span>zng_var::{BoxedVar, IntoVar, Var};
@@ -1367,7 +1369,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>&gt; WidgetAccessInfoBuilder&lt;<span class="lifetime">'a</span>&gt; {
     <span class="kw">fn </span>with_access(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>AccessInfo)) {
-        <span class="self">self</span>.builder.with_meta(<span class="kw">move </span>|<span class="kw-2">mut </span>m| f(m.entry(<span class="kw-2">&amp;</span>ACCESS_INFO_ID).or_default()))
+        <span class="self">self</span>.builder.with_meta(<span class="kw">move </span>|<span class="kw-2">mut </span>m| f(m.entry(<span class="kw-2">*</span>ACCESS_INFO_ID).or_default()))
     }
 
     <span class="doccomment">/// Set the accessibility role of the widget.
@@ -1733,7 +1735,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// Note that the accessibility info for the widget and descendants is still collected and
     /// available in the app-process.
     </span><span class="kw">pub fn </span>flag_inaccessible(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.builder.flag_meta(<span class="kw-2">&amp;</span>INACCESSIBLE_ID);
+        <span class="self">self</span>.builder.flag_meta(<span class="kw-2">*</span>INACCESSIBLE_ID);
     }
 
     <span class="doccomment">/// Register a `handler` that is called every time view-process access info is build from the current widget,
@@ -1867,7 +1869,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`access_enabled`]: crate::widget::info::WidgetInfoTree::access_enabled
     </span><span class="kw">pub fn </span>access(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetAccessInfo&gt; {
-        <span class="kw">if </span><span class="self">self</span>.tree.access_enabled().is_enabled() &amp;&amp; <span class="self">self</span>.meta().contains(<span class="kw-2">&amp;</span>ACCESS_INFO_ID) {
+        <span class="kw">if </span><span class="self">self</span>.tree.access_enabled().is_enabled() &amp;&amp; <span class="self">self</span>.meta().contains(<span class="kw-2">*</span>ACCESS_INFO_ID) {
             <span class="prelude-val">Some</span>(WidgetAccessInfo { info: <span class="self">self</span>.clone() })
         } <span class="kw">else </span>{
             <span class="prelude-val">None
@@ -1966,7 +1968,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="kw">fn </span>access(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>AccessInfo {
-        <span class="self">self</span>.info.meta().req(<span class="kw-2">&amp;</span>ACCESS_INFO_ID)
+        <span class="self">self</span>.info.meta().req(<span class="kw-2">*</span>ACCESS_INFO_ID)
     }
 
     <span class="doccomment">/// Accessibility role of the widget.
@@ -2249,7 +2251,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// available in the app-process.
     </span><span class="kw">pub fn </span>is_accessible(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">for </span>wgt <span class="kw">in </span><span class="self">self</span>.info.self_and_ancestors() {
-            <span class="kw">if </span>wgt.meta().contains(<span class="kw-2">&amp;</span>INACCESSIBLE_ID) || !<span class="self">self</span>.info.visibility().is_visible() {
+            <span class="kw">if </span>wgt.meta().contains(<span class="kw-2">*</span>INACCESSIBLE_ID) || !<span class="self">self</span>.info.visibility().is_visible() {
                 <span class="kw">return </span><span class="bool-val">false</span>;
             }
         }
@@ -2257,7 +2259,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span>}
 
     <span class="kw">fn </span>is_local_accessible(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        !<span class="self">self</span>.info.meta().contains(<span class="kw-2">&amp;</span>INACCESSIBLE_ID) &amp;&amp; <span class="self">self</span>.info.visibility().is_visible()
+        !<span class="self">self</span>.info.meta().contains(<span class="kw-2">*</span>INACCESSIBLE_ID) &amp;&amp; <span class="self">self</span>.info.visibility().is_visible()
     }
 
     <span class="kw">fn </span>to_access_node_leaf(<span class="kw-2">&amp;</span><span class="self">self</span>, inverse: <span class="kw-2">&amp;</span>InverseAccess) -&gt; zng_view_api::access::AccessNode {
@@ -2443,7 +2445,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Returns `true` if access changed by visibility update.
     </span><span class="kw">fn </span>to_access_updates_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>, inverse: <span class="kw-2">&amp;</span>InverseAccess, updates: <span class="kw-2">&amp;mut </span>Vec&lt;zng_view_api::access::AccessTree&gt;) -&gt; bool {
-        <span class="kw">if </span><span class="self">self</span>.info.meta().contains(<span class="kw-2">&amp;</span>INACCESSIBLE_ID) {
+        <span class="kw">if </span><span class="self">self</span>.info.meta().contains(<span class="kw-2">*</span>INACCESSIBLE_ID) {
             <span class="comment">// not accessible
             </span><span class="kw">return </span><span class="bool-val">false</span>;
         }
@@ -2585,8 +2587,10 @@ document.addEventListener('DOMContentLoaded', function () {
     described_by: IdMap&lt;WidgetId, Vec&lt;WidgetId&gt;&gt;,
 }
 
-<span class="kw">static </span>ACCESS_INFO_ID: StaticStateId&lt;AccessInfo&gt; = StaticStateId::new_unique();
-<span class="kw">static </span>INACCESSIBLE_ID: StaticStateId&lt;()&gt; = StaticStateId::new_unique();
+<span class="macro">static_id!</span> {
+    <span class="kw">static </span><span class="kw-2">ref </span>ACCESS_INFO_ID: StateId&lt;AccessInfo&gt;;
+    <span class="kw">static </span><span class="kw-2">ref </span>INACCESSIBLE_ID: StateId&lt;()&gt;;
+}
 
 <span class="macro">bitflags::bitflags!</span> {
     <span class="doccomment">/// Defines how accessibility info is enabled.

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"static":["DEVICE_ADDED_EVENT","DEVICE_REMOVED_EVENT","MOTION_EVENT"],"struct":["DeviceArgs","DeviceId","MotionArgs","StaticDeviceId"]};
+window.SIDEBAR_ITEMS = {"static":["DEVICE_ADDED_EVENT","DEVICE_REMOVED_EVENT","MOTION_EVENT"],"struct":["DeviceArgs","DeviceId","MotionArgs"]};
