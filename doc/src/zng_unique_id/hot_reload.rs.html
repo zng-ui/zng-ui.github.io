@@ -258,6 +258,8 @@
 <a href="#256" id="256">256</a>
 <a href="#257" id="257">257</a>
 <a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
 </pre></div><pre class="rust"><code><span class="comment">// # Full API
 //
 // The full API is implemented in `zng-ext-hot-reload`, `HOT_STATICS` and `hot_static` are declared
@@ -321,8 +323,10 @@
         }
         <span class="macro-nonterminal">$</span><span class="macro">crate::paste!</span> {
             <span class="kw">static </span>[&lt;<span class="macro-nonterminal">$IDENT </span>_COLD&gt;] : <span class="macro-nonterminal">$Ty </span>= <span class="macro-nonterminal">$init</span>;
-            <span class="kw">static </span><span class="kw-2">mut </span><span class="macro-nonterminal">$IDENT</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$Ty </span>= <span class="kw-2">&amp;</span>[&lt;<span class="macro-nonterminal">$IDENT </span>_COLD&gt;];
-            <span class="kw">unsafe fn </span>[&lt;<span class="macro-nonterminal">$IDENT </span>_INIT&gt;](static_ptr: <span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>() {
+            <span class="attr">#[allow(non_camel_case_types)]
+            </span><span class="kw">static </span><span class="kw-2">mut </span><span class="macro-nonterminal">$IDENT</span>: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$Ty </span>= <span class="kw-2">&amp;</span>[&lt;<span class="macro-nonterminal">$IDENT </span>_COLD&gt;];
+            <span class="attr">#[allow(non_snake_case)]
+            </span><span class="kw">unsafe fn </span>[&lt;<span class="macro-nonterminal">$IDENT </span>_INIT&gt;](static_ptr: <span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>() {
                 <span class="macro-nonterminal">$crate::hot_reload::init_static</span>(<span class="kw-2">&amp;mut </span><span class="macro-nonterminal">$IDENT</span>, static_ptr)
             }
 

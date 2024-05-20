@@ -249,6 +249,11 @@
 <a href="#247" id="247">247</a>
 <a href="#248" id="248">248</a>
 <a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fmt,
     io::{<span class="self">self</span>, BufRead <span class="kw">as _</span>, Read},
@@ -270,8 +275,6 @@
     bin: <span class="kw-2">&amp;</span>str,
     cancel: SignalOnce,
 ) -&gt; ResponseVar&lt;<span class="prelude-ty">Result</span>&lt;PathBuf, BuildError&gt;&gt; {
-    <span class="kw">let </span>manifest_path = PathBuf::from(manifest_dir).join(<span class="string">"Cargo.toml"</span>);
-
     <span class="kw">let </span><span class="kw-2">mut </span>build = Command::new(<span class="string">"cargo"</span>);
     build.arg(<span class="string">"build"</span>).arg(<span class="string">"--message-format"</span>).arg(<span class="string">"json"</span>);
     <span class="kw">if </span>!package.is_empty() {
@@ -280,6 +283,13 @@
     <span class="kw">if </span>!bin.is_empty() {
         build.arg(bin_option).arg(bin);
     }
+
+    build_custom(manifest_dir, build, cancel)
+}
+
+<span class="doccomment">/// Build and return the dylib path.
+</span><span class="kw">pub fn </span>build_custom(manifest_dir: <span class="kw-2">&amp;</span>str, <span class="kw-2">mut </span>build: Command, cancel: SignalOnce) -&gt; ResponseVar&lt;<span class="prelude-ty">Result</span>&lt;PathBuf, BuildError&gt;&gt; {
+    <span class="kw">let </span>manifest_path = PathBuf::from(manifest_dir).join(<span class="string">"Cargo.toml"</span>);
 
     zng_task::respond(<span class="kw">async move </span>{
         <span class="kw">let </span><span class="kw-2">mut </span>child = zng_task::wait(<span class="kw">move </span>|| build.stdin(Stdio::null()).stderr(Stdio::piped()).stdout(Stdio::piped()).spawn()).<span class="kw">await</span><span class="question-mark">?</span>;

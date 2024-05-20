@@ -617,6 +617,62 @@
 <a href="#615" id="615">615</a>
 <a href="#616" id="616">616</a>
 <a href="#617" id="617">617</a>
+<a href="#618" id="618">618</a>
+<a href="#619" id="619">619</a>
+<a href="#620" id="620">620</a>
+<a href="#621" id="621">621</a>
+<a href="#622" id="622">622</a>
+<a href="#623" id="623">623</a>
+<a href="#624" id="624">624</a>
+<a href="#625" id="625">625</a>
+<a href="#626" id="626">626</a>
+<a href="#627" id="627">627</a>
+<a href="#628" id="628">628</a>
+<a href="#629" id="629">629</a>
+<a href="#630" id="630">630</a>
+<a href="#631" id="631">631</a>
+<a href="#632" id="632">632</a>
+<a href="#633" id="633">633</a>
+<a href="#634" id="634">634</a>
+<a href="#635" id="635">635</a>
+<a href="#636" id="636">636</a>
+<a href="#637" id="637">637</a>
+<a href="#638" id="638">638</a>
+<a href="#639" id="639">639</a>
+<a href="#640" id="640">640</a>
+<a href="#641" id="641">641</a>
+<a href="#642" id="642">642</a>
+<a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
+<a href="#662" id="662">662</a>
+<a href="#663" id="663">663</a>
+<a href="#664" id="664">664</a>
+<a href="#665" id="665">665</a>
+<a href="#666" id="666">666</a>
+<a href="#667" id="667">667</a>
+<a href="#668" id="668">668</a>
+<a href="#669" id="669">669</a>
+<a href="#670" id="670">670</a>
+<a href="#671" id="671">671</a>
+<a href="#672" id="672">672</a>
+<a href="#673" id="673">673</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -677,7 +733,7 @@
 
         <span class="attr">#[no_mangle]
         #[doc(hidden)]
-        </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>zng_hot_entry_init(patch: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$crate::StaticPatch</span>) {
+        </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>zng_hot_entry_init(patch: <span class="macro-nonterminal">$crate::StaticPatch</span>) {
             <span class="macro-nonterminal">$crate::zng_hot_entry::init</span>(patch)
         }
     };
@@ -714,9 +770,7 @@
         <span class="prelude-val">None
     </span>}
 
-    <span class="kw">pub fn </span>init(statics: <span class="kw-2">&amp;</span>StaticPatch) {
-        tracing::dispatcher::set_global_default(statics.tracing.clone()).unwrap();
-
+    <span class="kw">pub fn </span>init(statics: StaticPatch) {
         std::panic::set_hook(Box::new(|args| {
             <span class="macro">eprintln!</span>(<span class="string">"PANIC IN HOT LOADED LIBRARY, ABORTING"</span>);
             <span class="kw">crate</span>::util::crash_handler(args);
@@ -728,22 +782,31 @@
     }
 }
 
+<span class="kw">type </span>StaticPatchCaptures = HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>zng_unique_id::hot_reload::PatchKey, <span class="kw">unsafe fn</span>(<span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>()&gt;;
+
 <span class="attr">#[doc(hidden)]
-#[derive(Default, Clone)]
 </span><span class="kw">pub struct </span>StaticPatch {
-    entries: HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>zng_unique_id::hot_reload::PatchKey, <span class="kw">unsafe fn</span>(<span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>()&gt;,
-    tracing: tracing::dispatcher::Dispatch,
+    entries: StaticPatchCaptures,
+    tracing: tracing_shared::SharedLogger,
 }
 <span class="kw">impl </span>StaticPatch {
     <span class="doccomment">/// Called on the static code (host).
-    </span><span class="kw">fn </span>capture_statics(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="kw">if </span>!<span class="self">self</span>.entries.is_empty() {
+    </span><span class="kw">pub fn </span>capture(cached_statics: <span class="kw-2">&amp;mut </span>StaticPatchCaptures) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::capture_statics(cached_statics);
+        <span class="self">Self </span>{
+            entries: cached_statics.clone(),
+            tracing: tracing_shared::build_shared_logger(),
+        }
+    }
+    <span class="kw">fn </span>capture_statics(cache: <span class="kw-2">&amp;mut </span>StaticPatchCaptures) {
+        <span class="kw">if </span>!cache.is_empty() {
             <span class="kw">return</span>;
         }
-        <span class="self">self</span>.entries.reserve(HOT_STATICS.len());
+
+        cache.reserve(HOT_STATICS.len());
 
         <span class="kw">for </span>(key, val) <span class="kw">in </span>HOT_STATICS.iter() {
-            <span class="kw">match </span><span class="self">self</span>.entries.entry(<span class="kw-2">*</span>key) {
+            <span class="kw">match </span>cache.entry(<span class="kw-2">*</span>key) {
                 std::collections::hash_map::Entry::Vacant(e) =&gt; {
                     e.insert(<span class="kw-2">*</span>val);
                 }
@@ -755,7 +818,9 @@
     }
 
     <span class="doccomment">/// Called on the dynamic code (dylib).
-    </span><span class="kw">unsafe fn </span>apply(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+    </span><span class="kw">unsafe fn </span>apply(<span class="self">self</span>) {
+        tracing_shared::setup_shared_logger(<span class="self">self</span>.tracing);
+
         <span class="kw">for </span>(key, patch) <span class="kw">in </span>HOT_STATICS.iter() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(val) = <span class="self">self</span>.entries.get(key) {
                 <span class="comment">// println!("patched `{key:?}`");
@@ -819,13 +884,10 @@
 </span><span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>HotReloadManager {
     libs: HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, WatchedLib&gt;,
-    static_patch: StaticPatch,
+    statics_cache: StaticPatchCaptures,
 }
 <span class="kw">impl </span>AppExtension <span class="kw">for </span>HotReloadManager {
     <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="comment">// capture global tracing dispatcher early.
-        </span><span class="self">self</span>.static_patch.tracing = tracing::dispatcher::get_default(|d| d.clone());
-
         <span class="comment">// watch all hot libraries.
         </span><span class="kw">let </span><span class="kw-2">mut </span>status = <span class="macro">vec!</span>[];
         <span class="kw">for </span>entry <span class="kw">in </span><span class="kw">crate</span>::zng_hot_entry::HOT_NODES.iter() {
@@ -848,9 +910,7 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = zng_ext_fs_watcher::FS_CHANGES_EVENT.on(update) {
             <span class="kw">for </span>(manifest_dir, watched) <span class="kw">in </span><span class="self">self</span>.libs.iter_mut() {
                 <span class="kw">if </span>args.changes_for_path(manifest_dir.as_ref()).next().is_some() {
-                    <span class="self">self</span>.static_patch.capture_statics();
-
-                    watched.rebuild((<span class="kw-2">*</span>manifest_dir).into(), <span class="kw-2">&amp;</span><span class="self">self</span>.static_patch);
+                    watched.rebuild((<span class="kw-2">*</span>manifest_dir).into(), StaticPatch::capture(<span class="kw-2">&amp;mut </span><span class="self">self</span>.statics_cache));
                 }
             }
         }
@@ -869,7 +929,7 @@
                         }
                         <span class="prelude-val">Err</span>(e) =&gt; {
                             <span class="kw">if </span><span class="macro">matches!</span>(<span class="kw-2">&amp;</span>e, BuildError::Cancelled) {
-                                <span class="macro">tracing::error!</span>(<span class="string">"cancelled rebuild `{manifest_dir}`"</span>);
+                                <span class="macro">tracing::warn!</span>(<span class="string">"cancelled rebuild `{manifest_dir}`"</span>);
                             } <span class="kw">else </span>{
                                 <span class="macro">tracing::error!</span>(<span class="string">"failed rebuild `{manifest_dir}`, {e}"</span>);
                             }
@@ -913,8 +973,7 @@
         drop(sv);
         <span class="kw">for </span>r <span class="kw">in </span>requests {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(watched) = <span class="self">self</span>.libs.get_mut(r.as_str()) {
-                <span class="self">self</span>.static_patch.capture_statics();
-                watched.rebuild(r, <span class="kw-2">&amp;</span><span class="self">self</span>.static_patch);
+                watched.rebuild(r, StaticPatch::capture(<span class="kw-2">&amp;mut </span><span class="self">self</span>.statics_cache));
             } <span class="kw">else </span>{
                 <span class="macro">tracing::error!</span>(<span class="string">"cannot rebuild `{r}`, unknown"</span>);
             }
@@ -943,6 +1002,8 @@
 }
 <span class="kw">impl </span>BuildArgs {
     <span class="doccomment">/// Calls `cargo build [--package {package}] --message-format json` and cancels it as soon as the dylib is rebuilt.
+    ///
+    /// Always returns `Some(_)`.
     </span><span class="kw">pub fn </span>build(<span class="kw-2">&amp;</span><span class="self">self</span>, package: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
         <span class="prelude-val">Some</span>(cargo::build(
             <span class="kw-2">&amp;</span><span class="self">self</span>.manifest_dir,
@@ -955,6 +1016,8 @@
 
     <span class="doccomment">/// Calls `cargo build [--package {package}] --example {example} --message-format json` and cancels
     /// it as soon as the dylib is rebuilt.
+    ///
+    /// Always returns `Some(_)`.
     </span><span class="kw">pub fn </span>build_example(<span class="kw-2">&amp;</span><span class="self">self</span>, package: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;, example: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
         <span class="prelude-val">Some</span>(cargo::build(
             <span class="kw-2">&amp;</span><span class="self">self</span>.manifest_dir,
@@ -967,6 +1030,8 @@
 
     <span class="doccomment">/// Calls `cargo build [--package {package}] --bin {bin}  --message-format json` and cancels it as
     /// soon as the dylib is rebuilt.
+    ///
+    /// Always returns `Some(_)`.
     </span><span class="kw">pub fn </span>build_bin(<span class="kw-2">&amp;</span><span class="self">self</span>, package: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;, bin: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
         <span class="prelude-val">Some</span>(cargo::build(
             <span class="kw-2">&amp;</span><span class="self">self</span>.manifest_dir,
@@ -975,6 +1040,53 @@
             bin,
             <span class="self">self</span>.cancel_build.clone(),
         ))
+    }
+
+    <span class="doccomment">/// Calls a custom command that must write to stdout the same way `cargo build --message-format json` does.
+    ///
+    /// The command will run until it writes the `"compiler-artifact"` for the `manifest_dir/Cargo.toml` to stdout, it will
+    /// then be killed.
+    ///
+    /// Always returns `Some(_)`.
+    </span><span class="kw">pub fn </span>custom(<span class="kw-2">&amp;</span><span class="self">self</span>, cmd: std::process::Command) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
+        <span class="prelude-val">Some</span>(cargo::build_custom(<span class="kw-2">&amp;</span><span class="self">self</span>.manifest_dir, cmd, <span class="self">self</span>.cancel_build.clone()))
+    }
+
+    <span class="doccomment">/// Call a custom command defined in an environment var.
+    ///
+    /// The variable value must be arguments for `cargo`, that is `cargo $VAR`.
+    ///
+    /// See [`custom`] for other requirements of the command.
+    ///
+    /// If `var_key` is empty the default key `"ZNG_HOT_RELOAD_REBUILDER"` is used.
+    ///
+    /// Returns `None` if the var is not found or is set empty.
+    ///
+    /// [`custom`]: Self::custom
+    </span><span class="kw">pub fn </span>custom_env(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>var_key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
+        <span class="kw">if </span>var_key.is_empty() {
+            var_key = <span class="string">"ZNG_HOT_RELOAD_REBUILDER"</span>;
+        }
+
+        <span class="kw">let </span>custom = std::env::var(var_key).ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>custom = custom.split(<span class="string">' '</span>);
+
+        <span class="kw">let </span>subcommand = custom.next()<span class="question-mark">?</span>;
+
+        <span class="kw">let </span><span class="kw-2">mut </span>cmd = std::process::Command::new(<span class="string">"cargo"</span>);
+        cmd.arg(subcommand);
+        cmd.args(custom);
+
+        <span class="self">self</span>.custom(cmd)
+    }
+
+    <span class="doccomment">/// The default action.
+    ///
+    /// Tries `custom_env`, if env is not set, does `build(None)`.
+    ///
+    /// Always returns `Some(_)`.
+    </span><span class="kw">pub fn </span>default_build(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; {
+        <span class="self">self</span>.custom_env(<span class="string">""</span>).or_else(|| <span class="self">self</span>.build(<span class="prelude-val">None</span>))
     }
 }
 
@@ -1076,7 +1188,7 @@
                 }
             }
 
-            <span class="kw">let </span>dylib = HotLib::new(<span class="kw-2">&amp;</span>static_patch, manifest_dir, path)<span class="question-mark">?</span>;
+            <span class="kw">let </span>dylib = HotLib::new(static_patch, manifest_dir, path)<span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(dylib)
         });
         (rebuild_load, cancel)
@@ -1098,7 +1210,7 @@
             manifest_dir: manifest_dir.clone(),
             cancel_build: cancel.clone(),
         };
-        (args.build(<span class="prelude-val">None</span>).unwrap(), cancel)
+        (args.default_build().unwrap(), cancel)
     }
 }
 
@@ -1135,7 +1247,7 @@
     rebuild_again: bool,
 }
 <span class="kw">impl </span>WatchedLib {
-    <span class="kw">fn </span>rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_path: <span class="kw-2">&amp;</span>StaticPatch) {
+    <span class="kw">fn </span>rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_path: StaticPatch) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span><span class="self">self</span>.building {
             <span class="kw">if </span>b.start_time.elapsed() &gt; WATCHER.debounce().get() + <span class="number">34</span>.ms() {
                 <span class="comment">// WATCHER debounce notifies immediately, then debounces. Some
@@ -1153,7 +1265,7 @@
 
             <span class="kw">let </span><span class="kw-2">mut </span>sv = HOT_RELOAD_SV.write();
 
-            <span class="kw">let </span>(rebuild_load, cancel_build) = sv.rebuild_reload(manifest_dir.clone(), static_path.clone());
+            <span class="kw">let </span>(rebuild_load, cancel_build) = sv.rebuild_reload(manifest_dir.clone(), static_path);
             <span class="self">self</span>.building = <span class="prelude-val">Some</span>(BuildingLib {
                 start_time,
                 rebuild_load,
@@ -1193,7 +1305,7 @@
     }
 }
 <span class="kw">impl </span>HotLib {
-    <span class="kw">pub fn </span>new(patch: <span class="kw-2">&amp;</span>StaticPatch, manifest_dir: Txt, lib: <span class="kw">impl </span>AsRef&lt;std::ffi::OsStr&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, libloading::Error&gt; {
+    <span class="kw">pub fn </span>new(patch: StaticPatch, manifest_dir: Txt, lib: <span class="kw">impl </span>AsRef&lt;std::ffi::OsStr&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, libloading::Error&gt; {
         <span class="kw">unsafe </span>{
             <span class="comment">// SAFETY: assuming the the hot lib was setup as the documented, this works,
             // even the `linkme` stuff does not require any special care.
@@ -1203,7 +1315,7 @@
             </span><span class="kw">let </span>lib = libloading::Library::new(lib)<span class="question-mark">?</span>;
 
             <span class="comment">// SAFETY: thats the signature.
-            </span><span class="kw">let </span>init: <span class="kw">unsafe fn</span>(<span class="kw-2">&amp;</span>StaticPatch) = <span class="kw-2">*</span>lib.get(<span class="string">b"zng_hot_entry_init"</span>)<span class="question-mark">?</span>;
+            </span><span class="kw">let </span>init: <span class="kw">unsafe fn</span>(StaticPatch) = <span class="kw-2">*</span>lib.get(<span class="string">b"zng_hot_entry_init"</span>)<span class="question-mark">?</span>;
             init(patch);
 
             <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
