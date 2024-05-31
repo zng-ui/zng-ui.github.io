@@ -68,6 +68,13 @@
 <a href="#66" id="66">66</a>
 <a href="#67" id="67">67</a>
 <a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -98,10 +105,17 @@
 
 <span class="kw">use </span>clap::<span class="kw-2">*</span>;
 
-<span class="attr">#[derive(Parser, Debug)]
+<span class="attr">#[derive(Parser)] </span><span class="comment">// requires `derive` feature
+</span><span class="attr">#[command(name = <span class="string">"cargo"</span>)]
+#[command(bin_name = <span class="string">"cargo"</span>)]
+</span><span class="kw">enum </span>CargoCli {
+    Zng(Zng),
+}
+
+<span class="attr">#[derive(Args, Debug)]
 #[command(author, version, about, long_about = <span class="prelude-val">None</span>)]
 #[command(propagate_version = <span class="bool-val">true</span>)]
-</span><span class="kw">struct </span>Cli {
+</span><span class="kw">struct </span>Zng {
     <span class="doccomment">/// Command.
     </span><span class="attr">#[command(subcommand)]
     </span><span class="kw">pub </span>command: Command,
@@ -126,7 +140,7 @@
 <span class="kw">fn </span>main() {
     res::built_in::run();
 
-    <span class="kw">let </span>cli = Cli::parse();
+    <span class="kw">let </span>CargoCli::Zng(cli) = CargoCli::parse();
 
     <span class="kw">match </span>cli.command {
         Command::New(args) =&gt; new::run(args),

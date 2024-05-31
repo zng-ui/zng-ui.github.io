@@ -698,56 +698,56 @@
 
 <span class="kw">use </span>convert_case::{Case, Casing};
 
-<span class="doccomment">/// Env var set by cargo-zng to the Cargo workspace directory that is parent to the res source.
+<span class="doccomment">/// Env var set to the Cargo workspace directory that is parent to the res source.
 ///
 /// Note that the tool also runs with this dir as working directory (`current_dir`).
 </span><span class="kw">pub const </span>ZR_WORKSPACE_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_WORKSPACE_DIR"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to the resources source directory.
+<span class="doccomment">/// Env var set to the resources source directory.
 </span><span class="kw">pub const </span>ZR_SOURCE_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_SOURCE_DIR"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to the resources build target directory.
+<span class="doccomment">/// Env var set to the resources build target directory.
 ///
 /// Note that this is the 'root' of the built resources, use [`ZR_TARGET_DD`] to get the
 /// parent dir of the target file inside the target directory.
 </span><span class="kw">pub const </span>ZR_TARGET_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_TARGET_DIR"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to dir that the tool can use to store intermediary data for the specific request.
+<span class="doccomment">/// Env var set to dir that the tool can use to store intermediary data for the specific request.
 ///
 /// The cache key (dir name) is a hash of source, target, request and request content only.
 </span><span class="kw">pub const </span>ZR_CACHE_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_CACHE_DIR"</span>;
 
-<span class="doccomment">/// Env var set by cargo-zng to the request file that called the tool.
+<span class="doccomment">/// Env var set to the request file that called the tool.
 </span><span class="kw">pub const </span>ZR_REQUEST: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_REQUEST"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to the request file parent dir.
+<span class="doccomment">/// Env var set to the request file parent dir.
 </span><span class="kw">pub const </span>ZR_REQUEST_DD: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_REQUEST_DD"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to the target file implied by the request file name.
+<span class="doccomment">/// Env var set to the target file implied by the request file name.
 ///
 /// That is, the request filename without `.zr-{tool}` and in the equivalent target subdirectory.
 </span><span class="kw">pub const </span>ZR_TARGET: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_TARGET"</span>;
-<span class="doccomment">/// Env var set by cargo-zng to the target file parent dir.
+<span class="doccomment">/// Env var set to the target file parent dir.
 </span><span class="kw">pub const </span>ZR_TARGET_DD: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_TARGET_DD"</span>;
 
-<span class="doccomment">/// Env var set by cargo-zng when it is running a tool that requested `zng-res::on-final=` again.
+<span class="doccomment">/// Env var set when it is running a tool that requested `zng-res::on-final=` again.
 </span><span class="kw">pub const </span>ZR_FINAL: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_FINAL"</span>;
 
-<span class="doccomment">/// Env var set by cargo-zng when it needs the tool print the help text shown in `cargo zng res --list`.
+<span class="doccomment">/// Env var set when it needs the tool print the help text shown in `cargo zng res --list`.
 </span><span class="kw">pub const </span>ZR_HELP: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_HELP"</span>;
 
-<span class="doccomment">/// package.metadata.zng.about.app or package.name
+<span class="doccomment">/// Env var set to package.metadata.zng.about.app or package.name
 </span><span class="kw">pub const </span>ZR_APP: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_APP"</span>;
-<span class="doccomment">/// package.metadata.zng.about.org or the first package.authors
+<span class="doccomment">/// Env var set to package.metadata.zng.about.org or the first package.authors
 </span><span class="kw">pub const </span>ZR_ORG: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_ORG"</span>;
-<span class="doccomment">/// package.version
+<span class="doccomment">/// Env var set to package.version
 </span><span class="kw">pub const </span>ZR_VERSION: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_VERSION"</span>;
-<span class="doccomment">/// package.description
+<span class="doccomment">/// Env var set to package.description
 </span><span class="kw">pub const </span>ZR_DESCRIPTION: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_DESCRIPTION"</span>;
-<span class="doccomment">/// package.homepage
+<span class="doccomment">/// Env var set to package.homepage
 </span><span class="kw">pub const </span>ZR_HOMEPAGE: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_HOMEPAGE"</span>;
-<span class="doccomment">/// package.name
+<span class="doccomment">/// Env var set to package.name
 </span><span class="kw">pub const </span>ZR_PKG_NAME: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_PKG_NAME"</span>;
-<span class="doccomment">/// package.authors
+<span class="doccomment">/// Env var set to package.authors
 </span><span class="kw">pub const </span>ZR_PKG_AUTHORS: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_PKG_AUTHORS"</span>;
-<span class="doccomment">/// package.name in snake_case
+<span class="doccomment">/// Env var set to package.name in snake_case
 </span><span class="kw">pub const </span>ZR_CRATE_NAME: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_CRATE_NAME"</span>;
-<span class="doccomment">/// package.metadata.zng.about.qualifier
+<span class="doccomment">/// Env var set to package.metadata.zng.about.qualifier
 </span><span class="kw">pub const </span>ZR_QUALIFIER: <span class="kw-2">&amp;</span>str = <span class="string">"ZR_QUALIFIER"</span>;
 
 <span class="doccomment">/// Print the help and exit if is help request.
