@@ -1,3 +1,3 @@
 (function() {var implementors = {
-"zng_l10n_scraper":[["impl Args for <a class=\"struct\" href=\"zng_l10n_scraper/struct.Args.html\" title=\"struct zng_l10n_scraper::Args\">Args</a>"]]
+"cargo_zng":[["impl Args for <a class=\"struct\" href=\"cargo_zng/l10n/struct.L10nArgs.html\" title=\"struct cargo_zng::l10n::L10nArgs\">L10nArgs</a>"],["impl Args for <a class=\"struct\" href=\"cargo_zng/new/struct.NewArgs.html\" title=\"struct cargo_zng::new::NewArgs\">NewArgs</a>"],["impl Args for <a class=\"struct\" href=\"cargo_zng/res/struct.ResArgs.html\" title=\"struct cargo_zng::res::ResArgs\">ResArgs</a>"],["impl Args for <a class=\"struct\" href=\"cargo_zng/struct.Cli.html\" title=\"struct cargo_zng::Cli\">Cli</a>"]]
 };if (window.register_implementors) {window.register_implementors(implementors);} else {window.pending_implementors = implementors;}})()

@@ -403,6 +403,10 @@
 <a href="#401" id="401">401</a>
 <a href="#402" id="402">402</a>
 <a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     io,
@@ -466,6 +470,7 @@
                                 </span><span class="kw">if let </span><span class="prelude-val">Some</span>(name_and_ext) = f.file_name().to_str() {
                                     <span class="kw">if let </span><span class="prelude-val">Some</span>((name, ext)) = name_and_ext.rsplit_once(<span class="string">'.'</span>) {
                                         <span class="kw">if </span>ext.is_ascii() &amp;&amp; unicase::Ascii::new(ext) == EXT {
+                                            <span class="macro">tracing::debug!</span>(<span class="string">"found {name}.{ext}"</span>);
                                             <span class="comment">// found .flt file.
                                             </span><span class="kw">match </span>Lang::from_str(name) {
                                                 <span class="prelude-val">Ok</span>(lang) =&gt; {
@@ -482,8 +487,8 @@
                                 }
                             } <span class="kw">else if </span>f.depth() == <span class="number">1 </span>&amp;&amp; ty.is_dir() {
                                 <span class="comment">// match dir/lang/file.flt files
-                                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(name) = f.file_name().to_str() {
-                                    <span class="kw">match </span>Lang::from_str(name) {
+                                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(dir_name) = f.file_name().to_str() {
+                                    <span class="kw">match </span>Lang::from_str(dir_name) {
                                         <span class="prelude-val">Ok</span>(lang) =&gt; {
                                             <span class="kw">let </span>inner = set.get_exact_or_insert(lang, Default::default);
                                             <span class="kw">for </span>entry <span class="kw">in </span>std::fs::read_dir(f.path()).into_iter().flatten() {
@@ -493,7 +498,8 @@
                                                             <span class="kw">if let </span><span class="prelude-val">Some</span>((name, ext)) = name_and_ext.rsplit_once(<span class="string">'.'</span>) {
                                                                 <span class="kw">if </span>ext.is_ascii() &amp;&amp; unicase::Ascii::new(ext) == EXT {
                                                                     <span class="comment">// found .flt file.
-                                                                    </span>inner.insert(Txt::from_str(name), f.path());
+                                                                    </span><span class="macro">tracing::debug!</span>(<span class="string">"found {dir_name}/{name}.{ext}"</span>);
+                                                                    inner.insert(Txt::from_str(name), f.path());
                                                                 }
                                                             }
                                                         }
@@ -505,7 +511,9 @@
                                                 set.pop();
                                             }
                                         }
-                                        <span class="prelude-val">Err</span>(e) =&gt; errors.push(Arc::new(e)),
+                                        <span class="prelude-val">Err</span>(e) =&gt; {
+                                            <span class="macro">tracing::trace!</span>(<span class="string">"dir {dir_name}/ is not l10n, {e}"</span>);
+                                        }
                                     }
                                 }
                             }
@@ -518,7 +526,7 @@
                     <span class="comment">// Loaded set by `dir_watch` to avoid race condition in wait.
                 </span>} <span class="kw">else </span>{
                     <span class="kw">let </span>s = LangResourceStatus::Errors(errors);
-                    <span class="macro">tracing::error!</span>(<span class="string">"loading available {s}"</span>);
+                    <span class="macro">tracing::error!</span>(<span class="string">"'loading available' {s}"</span>);
                     status.set(s)
                 }
 

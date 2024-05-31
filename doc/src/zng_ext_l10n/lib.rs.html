@@ -691,7 +691,7 @@
         L10N_SV.write().load(source);
     }
 
-    <span class="doccomment">/// Start watching the `dir` for `"dir/{locale}.ftl"` files.
+    <span class="doccomment">/// Start watching the `dir` for `"dir/{lang}.ftl"` and "dir/{lang}/*.ftl" files.
     ///
     /// The [`available_langs`] variable maintains an up-to-date list of locale files found, the files
     /// are only loaded when needed, and also are watched to update automatically.
@@ -712,7 +712,7 @@
             <span class="macro">tracing::warn!</span>(<span class="string">"absolute path in `load_exe_dir`"</span>);
             <span class="self">self</span>.load_dir(dir);
         } <span class="kw">else </span>{
-            <span class="kw">match </span>std::env::current_exe().and_then(|p| p.canonicalize()) {
+            <span class="kw">match </span>std::env::current_exe().and_then(dunce::canonicalize) {
                 <span class="prelude-val">Ok</span>(p) =&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = p.parent() {
                         <span class="self">self</span>.load_dir(p.join(dir));
@@ -727,7 +727,7 @@
 
     <span class="doccomment">/// Available localization files.
     ///
-    /// The value maps lang to one or more files, the files can be `{dir}/{lang}.flt` or `{dir}/{lang}/file.flt`.
+    /// The value maps lang to one or more files, the files can be `{dir}/{lang}.flt` or `{dir}/{lang}/*.flt`.
     ///
     /// Note that this map will include any file in the source dir that has a name that is a valid [`lang!`],
     /// that includes the `template.flt` file and test pseudo-locales such as `qps-ploc.flt`.

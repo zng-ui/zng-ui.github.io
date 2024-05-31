@@ -709,7 +709,6 @@
 <a href="#707" id="707">707</a>
 <a href="#708" id="708">708</a>
 <a href="#709" id="709">709</a>
-<a href="#710" id="710">710</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -719,7 +718,7 @@
 <span class="kw">use </span>zng_ext_image::Img;
 <span class="kw">use </span>zng_layout::unit::{Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Length, LengthUnits, Point, PxPoint, PxSize, Size};
 <span class="kw">use </span>zng_state_map::{static_id, StateId};
-<span class="kw">use </span>zng_txt::{ToTxt, Txt};
+<span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_unique_id::IdSet;
 <span class="kw">use </span>zng_var::{merge_var, var, var_from, ArcVar, BoxedVar, ReadOnlyArcVar, Var};
 <span class="kw">use </span>zng_view_api::{
@@ -807,7 +806,7 @@
             actual_icon: var(<span class="prelude-val">None</span>),
             cursor: var_from(CursorIcon::Default),
             actual_cursor_img: var(<span class="prelude-val">None</span>),
-            title: var(<span class="string">""</span>.to_txt()),
+            title: var(zng_env::about().app.clone()),
 
             state: var(WindowState::Normal),
             focus_indicator: var(<span class="prelude-val">None</span>),
@@ -864,7 +863,6 @@
             access_enabled: var(AccessEnabled::empty()),
             system_shutdown_warn: var(Txt::from(<span class="string">""</span>)),
         });
-        zng_app::APP.about().map_ref(|i| <span class="kw-2">&amp;</span>i.name).set_bind(<span class="kw-2">&amp;</span>vars.title).perm();
         <span class="self">Self</span>(vars)
     }
 

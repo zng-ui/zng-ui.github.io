@@ -1309,7 +1309,7 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(response) = line.strip_prefix(RESPONSE_PREFIX) {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(path) = response.strip_prefix(<span class="string">"minidump "</span>) {
                     <span class="kw">let </span>path = PathBuf::from(path);
-                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(p) = path.canonicalize() {
+                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(p) = dunce::canonicalize(path) {
                         minidump = <span class="prelude-val">Some</span>(p);
                     }
                     <span class="kw">break</span>;
@@ -1781,7 +1781,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="macro">tracing::info!</span>(<span class="string">"crash monitor-process is running"</span>);
 
     <span class="kw">let </span>exe = std::env::current_exe()
-        .and_then(|p| p.canonicalize())
+        .and_then(dunce::canonicalize)
         .expect(<span class="string">"failed to get the current executable"</span>);
 
     <span class="kw">let </span><span class="kw-2">mut </span>args: Box&lt;[<span class="kw">_</span>]&gt; = std::env::args().skip(<span class="number">1</span>).map(Txt::from).collect();

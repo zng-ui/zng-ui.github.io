@@ -163,9 +163,10 @@
 <a href="#160" id="160">160</a>
 <a href="#161" id="161">161</a>
 <a href="#162" id="162">162</a>
-</pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"hot_reload"</span>)]
-
-</span><span class="doccomment">//! Hot reloading instrumentation macros and service.
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Hot reloading instrumentation macros and service.
 //!
 //! Hot reloading rebuilds an instrumented library and automatically re-inits widgets that
 //! are using marked nodes, properties, all without needing to restart the application.
@@ -314,6 +315,7 @@
 /// The function output type must be `impl UiNode`, the attribute will change the internal node type.
 ///
 /// [`property`]: crate::widget::property#input-types
+</span><span class="attr">#[cfg(feature = <span class="string">"hot_reload"</span>)]
 </span><span class="kw">pub use </span>zng_ext_hot_reload::hot_node;
 
 <span class="doccomment">/// Declare the dynamic library hot reload entry.
@@ -322,7 +324,11 @@
 /// documentation for more details.
 ///
 /// [module]: crate::hot_reload
+</span><span class="attr">#[cfg(feature = <span class="string">"hot_reload"</span>)]
 </span><span class="kw">pub use </span>zng_ext_hot_reload::zng_hot_entry;
 
-<span class="kw">pub use </span>zng_ext_hot_reload::{BuildArgs, BuildError, HOT_RELOAD};
+<span class="attr">#[cfg(feature = <span class="string">"hot_reload"</span>)]
+</span><span class="kw">pub use </span>zng_ext_hot_reload::{BuildArgs, BuildError, HOT_RELOAD};
+
+<span class="kw">pub use </span>zng_unique_id::{hot_static, hot_static_ref, lazy_static, lazy_static_init};
 </code></pre></div></section></main></body></html>

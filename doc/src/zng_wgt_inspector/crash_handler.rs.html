@@ -375,7 +375,7 @@
 </span><span class="doccomment">//! Debug crash handler.
 
 </span><span class="kw">use </span>std::path::PathBuf;
-<span class="kw">use </span>zng_app::{crash_handler::<span class="kw-2">*</span>, APP};
+<span class="kw">use </span>zng_app::crash_handler::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_ext_config::CONFIG;
 <span class="kw">use </span>zng_ext_window::{StartPosition, WindowRoot, WINDOWS};
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
@@ -402,7 +402,7 @@
 </span><span class="kw">pub fn </span>debug_dialog(args: CrashArgs) -&gt; WindowRoot {
     <span class="kw">let </span>error = args.latest();
     <span class="macro">Window!</span> {
-        title = APP.about().map(|a| <span class="macro">formatx!</span>(<span class="string">"{}App Crashed"</span>, a.title_prefix()));
+        title = <span class="macro">formatx!</span>(<span class="string">"{} - App Crashed"</span>, zng_env::about().app);
         start_position = StartPosition::CenterMonitor;
         color_scheme = ColorScheme::Dark;
 

@@ -668,11 +668,6 @@
 <a href="#666" id="666">666</a>
 <a href="#667" id="667">667</a>
 <a href="#668" id="668">668</a>
-<a href="#669" id="669">669</a>
-<a href="#670" id="670">670</a>
-<a href="#671" id="671">671</a>
-<a href="#672" id="672">672</a>
-<a href="#673" id="673">673</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -700,6 +695,7 @@
 
 <span class="kw">use </span>zng_app::{
     event::{event, event_args},
+    handler::async_clmv,
     update::UPDATES,
     AppExtension, DInstant, INSTANT,
 };
@@ -782,31 +778,20 @@
     }
 }
 
-<span class="kw">type </span>StaticPatchCaptures = HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>zng_unique_id::hot_reload::PatchKey, <span class="kw">unsafe fn</span>(<span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>()&gt;;
+<span class="kw">type </span>StaticPatchersMap = HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="kw">dyn </span>zng_unique_id::hot_reload::PatchKey, <span class="kw">unsafe fn</span>(<span class="kw-2">*const </span>()) -&gt; <span class="kw-2">*const </span>()&gt;;
 
 <span class="attr">#[doc(hidden)]
+#[derive(Clone)]
 </span><span class="kw">pub struct </span>StaticPatch {
-    entries: StaticPatchCaptures,
+    entries: Arc&lt;StaticPatchersMap&gt;,
     tracing: tracing_shared::SharedLogger,
 }
 <span class="kw">impl </span>StaticPatch {
     <span class="doccomment">/// Called on the static code (host).
-    </span><span class="kw">pub fn </span>capture(cached_statics: <span class="kw-2">&amp;mut </span>StaticPatchCaptures) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::capture_statics(cached_statics);
-        <span class="self">Self </span>{
-            entries: cached_statics.clone(),
-            tracing: tracing_shared::build_shared_logger(),
-        }
-    }
-    <span class="kw">fn </span>capture_statics(cache: <span class="kw-2">&amp;mut </span>StaticPatchCaptures) {
-        <span class="kw">if </span>!cache.is_empty() {
-            <span class="kw">return</span>;
-        }
-
-        cache.reserve(HOT_STATICS.len());
-
+    </span><span class="kw">pub fn </span>capture() -&gt; <span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>entries = StaticPatchersMap::with_capacity(HOT_STATICS.len());
         <span class="kw">for </span>(key, val) <span class="kw">in </span>HOT_STATICS.iter() {
-            <span class="kw">match </span>cache.entry(<span class="kw-2">*</span>key) {
+            <span class="kw">match </span>entries.entry(<span class="kw-2">*</span>key) {
                 std::collections::hash_map::Entry::Vacant(e) =&gt; {
                     e.insert(<span class="kw-2">*</span>val);
                 }
@@ -815,11 +800,16 @@
                 }
             }
         }
+
+        <span class="self">Self </span>{
+            entries: Arc::new(entries),
+            tracing: tracing_shared::SharedLogger::new(),
+        }
     }
 
     <span class="doccomment">/// Called on the dynamic code (dylib).
-    </span><span class="kw">unsafe fn </span>apply(<span class="self">self</span>) {
-        tracing_shared::setup_shared_logger(<span class="self">self</span>.tracing);
+    </span><span class="kw">unsafe fn </span>apply(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="self">self</span>.tracing.install();
 
         <span class="kw">for </span>(key, patch) <span class="kw">in </span>HOT_STATICS.iter() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(val) = <span class="self">self</span>.entries.get(key) {
@@ -884,7 +874,7 @@
 </span><span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>HotReloadManager {
     libs: HashMap&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, WatchedLib&gt;,
-    statics_cache: StaticPatchCaptures,
+    static_patch: <span class="prelude-ty">Option</span>&lt;StaticPatch&gt;,
 }
 <span class="kw">impl </span>AppExtension <span class="kw">for </span>HotReloadManager {
     <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
@@ -910,7 +900,7 @@
         <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = zng_ext_fs_watcher::FS_CHANGES_EVENT.on(update) {
             <span class="kw">for </span>(manifest_dir, watched) <span class="kw">in </span><span class="self">self</span>.libs.iter_mut() {
                 <span class="kw">if </span>args.changes_for_path(manifest_dir.as_ref()).next().is_some() {
-                    watched.rebuild((<span class="kw-2">*</span>manifest_dir).into(), StaticPatch::capture(<span class="kw-2">&amp;mut </span><span class="self">self</span>.statics_cache));
+                    watched.rebuild((<span class="kw-2">*</span>manifest_dir).into(), <span class="self">self</span>.static_patch.get_or_insert_with(StaticPatch::capture));
                 }
             }
         }
@@ -973,7 +963,7 @@
         drop(sv);
         <span class="kw">for </span>r <span class="kw">in </span>requests {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(watched) = <span class="self">self</span>.libs.get_mut(r.as_str()) {
-                watched.rebuild(r, StaticPatch::capture(<span class="kw-2">&amp;mut </span><span class="self">self</span>.statics_cache));
+                watched.rebuild(r, <span class="self">self</span>.static_patch.get_or_insert_with(StaticPatch::capture));
             } <span class="kw">else </span>{
                 <span class="macro">tracing::error!</span>(<span class="string">"cannot rebuild `{r}`, unknown"</span>);
             }
@@ -1165,9 +1155,9 @@
     cancel_requests: Vec&lt;Txt&gt;,
 }
 <span class="kw">impl </span>HotReloadService {
-    <span class="kw">fn </span>rebuild_reload(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_patch: StaticPatch) -&gt; (RebuildLoadVar, SignalOnce) {
+    <span class="kw">fn </span>rebuild_reload(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_patch: <span class="kw-2">&amp;</span>StaticPatch) -&gt; (RebuildLoadVar, SignalOnce) {
         <span class="kw">let </span>(rebuild, cancel) = <span class="self">self</span>.rebuild(manifest_dir.clone());
-        <span class="kw">let </span>rebuild_load = zng_task::respond(<span class="kw">async move </span>{
+        <span class="kw">let </span>rebuild_load = zng_task::respond(<span class="macro">async_clmv!</span>(static_patch, {
             <span class="kw">let </span><span class="kw-2">mut </span>path = rebuild.wait_into_rsp().<span class="kw">await</span><span class="question-mark">?</span>;
 
             <span class="comment">// copy dylib to not block the next rebuild
@@ -1188,9 +1178,9 @@
                 }
             }
 
-            <span class="kw">let </span>dylib = HotLib::new(static_patch, manifest_dir, path)<span class="question-mark">?</span>;
+            <span class="kw">let </span>dylib = HotLib::new(<span class="kw-2">&amp;</span>static_patch, manifest_dir, path)<span class="question-mark">?</span>;
             <span class="prelude-val">Ok</span>(dylib)
-        });
+        }));
         (rebuild_load, cancel)
     }
 
@@ -1247,7 +1237,7 @@
     rebuild_again: bool,
 }
 <span class="kw">impl </span>WatchedLib {
-    <span class="kw">fn </span>rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_path: StaticPatch) {
+    <span class="kw">fn </span>rebuild(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_path: <span class="kw-2">&amp;</span>StaticPatch) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span><span class="self">self</span>.building {
             <span class="kw">if </span>b.start_time.elapsed() &gt; WATCHER.debounce().get() + <span class="number">34</span>.ms() {
                 <span class="comment">// WATCHER debounce notifies immediately, then debounces. Some
@@ -1305,7 +1295,7 @@
     }
 }
 <span class="kw">impl </span>HotLib {
-    <span class="kw">pub fn </span>new(patch: StaticPatch, manifest_dir: Txt, lib: <span class="kw">impl </span>AsRef&lt;std::ffi::OsStr&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, libloading::Error&gt; {
+    <span class="kw">pub fn </span>new(patch: <span class="kw-2">&amp;</span>StaticPatch, manifest_dir: Txt, lib: <span class="kw">impl </span>AsRef&lt;std::ffi::OsStr&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, libloading::Error&gt; {
         <span class="kw">unsafe </span>{
             <span class="comment">// SAFETY: assuming the the hot lib was setup as the documented, this works,
             // even the `linkme` stuff does not require any special care.
@@ -1315,7 +1305,7 @@
             </span><span class="kw">let </span>lib = libloading::Library::new(lib)<span class="question-mark">?</span>;
 
             <span class="comment">// SAFETY: thats the signature.
-            </span><span class="kw">let </span>init: <span class="kw">unsafe fn</span>(StaticPatch) = <span class="kw-2">*</span>lib.get(<span class="string">b"zng_hot_entry_init"</span>)<span class="question-mark">?</span>;
+            </span><span class="kw">let </span>init: <span class="kw">unsafe extern </span><span class="string">"C" </span><span class="kw">fn</span>(<span class="kw-2">&amp;</span>StaticPatch) = <span class="kw-2">*</span>lib.get(<span class="string">b"zng_hot_entry_init"</span>)<span class="question-mark">?</span>;
             init(patch);
 
             <span class="prelude-val">Ok</span>(<span class="self">Self </span>{

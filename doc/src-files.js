@@ -1,11 +1,14 @@
 var srcIndex = new Map(JSON.parse('[\
-["zng",["",[],["access.rs","ansi_text.rs","app.rs","button.rs","checkerboard.rs","clipboard.rs","color.rs","config.rs","container.rs","data_context.rs","data_view.rs","event.rs","focus.rs","font.rs","fs_watcher.rs","gesture.rs","grid.rs","handler.rs","hot_reload.rs","icon.rs","image.rs","keyboard.rs","l10n.rs","label.rs","layer.rs","layout.rs","lib.rs","markdown.rs","menu.rs","mouse.rs","panel.rs","pointer_capture.rs","popup.rs","render.rs","rule_line.rs","scroll.rs","selectable.rs","stack.rs","state_map.rs","style.rs","task.rs","text.rs","text_input.rs","third_party.rs","timer.rs","tip.rs","toggle.rs","touch.rs","undo.rs","update.rs","var.rs","view_process.rs","widget.rs","window.rs","wrap.rs"]]],\
+["cargo_zng",["",[["l10n",[],["pseudo.rs","scraper.rs"]],["res",[],["about.rs","built_in.rs","tool.rs"]]],["l10n.rs","main.rs","new.rs","res.rs","util.rs"]]],\
+["zng",["",[],["access.rs","ansi_text.rs","app.rs","button.rs","checkerboard.rs","clipboard.rs","color.rs","config.rs","container.rs","data_context.rs","data_view.rs","env.rs","event.rs","focus.rs","font.rs","fs_watcher.rs","gesture.rs","grid.rs","handler.rs","hot_reload.rs","icon.rs","image.rs","keyboard.rs","l10n.rs","label.rs","layer.rs","layout.rs","lib.rs","markdown.rs","menu.rs","mouse.rs","panel.rs","pointer_capture.rs","popup.rs","render.rs","rule_line.rs","scroll.rs","selectable.rs","stack.rs","state_map.rs","style.rs","task.rs","text.rs","text_input.rs","third_party.rs","timer.rs","tip.rs","toggle.rs","touch.rs","undo.rs","update.rs","var.rs","view_process.rs","widget.rs","window.rs","wrap.rs"]]],\
 ["zng_app",["",[["event",[],["args.rs","channel.rs","command.rs","events.rs"]],["view_process",[],["raw_device_events.rs","raw_events.rs"]],["widget",[["info",[],["access.rs","builder.rs","hit.rs","iter.rs","path.rs","tree.rs"]],["node",[],["adopt.rs","arc.rs","extend.rs","list.rs","match_node.rs","when.rs"]]],["base.rs","border.rs","builder.rs","easing.rs","info.rs","inspector.rs","node.rs"]]],["access.rs","crash_handler.rs","event.rs","handler.rs","lib.rs","render.rs","running.rs","shortcut.rs","third_party.rs","timer.rs","update.rs","view_process.rs","widget.rs","window.rs"]]],\
 ["zng_app_context",["",[],["lib.rs"]]],\
 ["zng_app_proc_macros",["",[],["lib.rs","property.rs","ui_node.rs","util.rs","wgt_property_attrs.rs","widget.rs","widget_util.rs"]]],\
 ["zng_clone_move",["",[],["lib.rs"]]],\
 ["zng_color",["",[],["colors.rs","filter.rs","gradient.rs","lib.rs","mix.rs","web_colors.rs"]]],\
 ["zng_color_proc_macros",["",[],["hex_color.rs","lib.rs"]]],\
+["zng_env",["",[],["lib.rs"]]],\
+["zng_env_proc_macros",["",[],["lib.rs"]]],\
 ["zng_ext_clipboard",["",[],["lib.rs"]]],\
 ["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
 ["zng_ext_font",["",[],["emoji_util.rs","font_features.rs","font_kit_cache.rs","hyphenation.rs","lib.rs","ligature_util.rs","segmenting.rs","shaping.rs","unicode_bidi_util.rs","unit.rs"]]],\
@@ -20,7 +23,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_ext_undo",["",[],["lib.rs"]]],\
 ["zng_ext_window",["",[],["cmd.rs","control.rs","ime.rs","lib.rs","monitor.rs","service.rs","types.rs","vars.rs"]]],\
 ["zng_handle",["",[],["lib.rs"]]],\
-["zng_l10n_scraper",["",[],["main.rs","pseudo.rs","scraper.rs"]]],\
+["zng_l10n_scraper",["",[],["main.rs"]]],\
 ["zng_layout",["",[["unit",[],["alignment.rs","constraints.rs","factor.rs","grid.rs","length.rs","line.rs","point.rs","rect.rs","resolution.rs","side_offsets.rs","size.rs","transform.rs","vector.rs"]]],["context.rs","lib.rs","unit.rs"]]],\
 ["zng_state_map",["",[],["lib.rs"]]],\
 ["zng_task",["",[["http",[],["cache.rs","util.rs"]]],["channel.rs","crate_util.rs","http.rs","io.rs","ipc.rs","lib.rs","rayon_ctx.rs","ui.rs"]]],\

@@ -463,7 +463,7 @@
 </span><span class="kw">pub fn </span>single_instance() {
     single_instance_named(
         std::env::current_exe()
-            .and_then(|p| p.canonicalize())
+            .and_then(dunce::canonicalize)
             .expect(<span class="string">"current exe is required"</span>)
             .display()
             .to_txt(),

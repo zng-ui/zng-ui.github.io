@@ -643,6 +643,24 @@
 <a href="#641" id="641">641</a>
 <a href="#642" id="642">642</a>
 <a href="#643" id="643">643</a>
+<a href="#644" id="644">644</a>
+<a href="#645" id="645">645</a>
+<a href="#646" id="646">646</a>
+<a href="#647" id="647">647</a>
+<a href="#648" id="648">648</a>
+<a href="#649" id="649">649</a>
+<a href="#650" id="650">650</a>
+<a href="#651" id="651">651</a>
+<a href="#652" id="652">652</a>
+<a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
+<a href="#655" id="655">655</a>
+<a href="#656" id="656">656</a>
+<a href="#657" id="657">657</a>
+<a href="#658" id="658">658</a>
+<a href="#659" id="659">659</a>
+<a href="#660" id="660">660</a>
+<a href="#661" id="661">661</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, fmt, mem, ops, sync::Arc};
 
 <span class="kw">use </span>fluent::types::FluentNumber;
@@ -970,6 +988,10 @@
     <span class="kw">type </span><span class="prelude-val">Err </span>= unic_langid::LanguageIdentifierError;
 
     <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">let </span>s = s.trim();
+        <span class="kw">if </span>s.is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="macro">lang!</span>(und));
+        }
         unic_langid::LanguageIdentifier::from_str(s).map(Lang)
     }
 }
@@ -1027,6 +1049,20 @@
             sep = <span class="string">", "</span>;
         }
         <span class="prelude-val">Ok</span>(())
+    }
+}
+<span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>Langs {
+    <span class="kw">type </span><span class="prelude-val">Err </span>= unic_langid::LanguageIdentifierError;
+
+    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+        <span class="kw">if </span>s.trim().is_empty() {
+            <span class="kw">return </span><span class="prelude-val">Ok</span>(Langs(<span class="macro">vec!</span>[]));
+        }
+        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="self">Self</span>(<span class="macro">vec!</span>[]);
+        <span class="kw">for </span>lang <span class="kw">in </span>s.split(<span class="string">','</span>) {
+            r.<span class="number">0</span>.push(lang.trim().parse()<span class="question-mark">?</span>)
+        }
+        <span class="prelude-val">Ok</span>(r)
     }
 }
 

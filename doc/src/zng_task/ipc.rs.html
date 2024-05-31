@@ -686,12 +686,12 @@
     ///
     /// Note that the current process must call [`run_worker`] at startup to actually work.
     </span><span class="kw">pub async fn </span>start() -&gt; std::io::Result&lt;<span class="self">Self</span>&gt; {
-        <span class="self">Self</span>::start_impl(<span class="macro">duct::cmd!</span>(std::env::current_exe()<span class="question-mark">?</span>.canonicalize()<span class="question-mark">?</span>)).<span class="kw">await
+        <span class="self">Self</span>::start_impl(<span class="macro">duct::cmd!</span>(dunce::canonicalize(std::env::current_exe()<span class="question-mark">?</span>)<span class="question-mark">?</span>)).<span class="kw">await
     </span>}
 
     <span class="doccomment">/// Start a worker process implemented in the current executable with custom env vars and args.
     </span><span class="kw">pub async fn </span>start_with(env_vars: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span>str, <span class="kw-2">&amp;</span>str)], args: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; std::io::Result&lt;<span class="self">Self</span>&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>worker = duct::cmd(std::env::current_exe()<span class="question-mark">?</span>.canonicalize()<span class="question-mark">?</span>, args);
+        <span class="kw">let </span><span class="kw-2">mut </span>worker = duct::cmd(dunce::canonicalize(std::env::current_exe()<span class="question-mark">?</span>)<span class="question-mark">?</span>, args);
         <span class="kw">for </span>(name, value) <span class="kw">in </span>env_vars {
             worker = worker.env(name, value);
         }

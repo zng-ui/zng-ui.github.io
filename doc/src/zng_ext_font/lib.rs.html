@@ -3313,6 +3313,7 @@
 <a href="#3311" id="3311">3311</a>
 <a href="#3312" id="3312">3312</a>
 <a href="#3313" id="3313">3313</a>
+<a href="#3314" id="3314">3314</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -4334,7 +4335,7 @@
         } <span class="kw">else </span>{
             ColorGlyphs::load(<span class="kw-2">&amp;</span>font)<span class="question-mark">?
         </span>};
-        <span class="kw">let </span>has_ligatures = face.table_with_tag(<span class="string">b"GSUB"</span>).is_some();
+        <span class="kw">let </span>has_ligatures = font.load_font_table(GSUB).is_some();
         <span class="kw">let </span>lig_carets = <span class="kw">if </span>has_ligatures {
             LigatureCaretList::empty()
         } <span class="kw">else </span>{
@@ -4409,7 +4410,8 @@
         } <span class="kw">else </span>{
             ColorGlyphs::load(<span class="kw-2">&amp;</span>font)<span class="question-mark">?
         </span>};
-        <span class="kw">let </span>has_ligatures = face.table_with_tag(<span class="string">b"GSUB"</span>).is_some();
+
+        <span class="kw">let </span>has_ligatures = font.load_font_table(GSUB).is_some();
         <span class="kw">let </span>lig_carets = <span class="kw">if </span>has_ligatures {
             LigatureCaretList::empty()
         } <span class="kw">else </span>{

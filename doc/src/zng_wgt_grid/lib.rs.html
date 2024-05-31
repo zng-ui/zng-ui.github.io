@@ -1735,7 +1735,7 @@
                 w.capture_ui_node_list_or_empty(<span class="macro">property_id!</span>(<span class="self">Self</span>::columns)),
                 w.capture_ui_node_list_or_empty(<span class="macro">property_id!</span>(<span class="self">Self</span>::rows)),
                 w.capture_var_or_else(<span class="macro">property_id!</span>(<span class="self">Self</span>::auto_grow_fn), WidgetFn::nil),
-                w.capture_var_or_else(<span class="macro">property_id!</span>(<span class="self">Self</span>::auto_grow_mode), || AutoGrowMode::Rows(u32::MAX)),
+                w.capture_var_or_else(<span class="macro">property_id!</span>(<span class="self">Self</span>::auto_grow_mode), AutoGrowMode::rows),
                 w.capture_var_or_default(<span class="macro">property_id!</span>(<span class="self">Self</span>::spacing)),
             );
             w.set_child(child);
@@ -1816,8 +1816,8 @@
 /// If a cell is outside this index and is not covered by predefined columns or rows a new one is auto generated for it, but if the
 /// cell is also outside this max it is *collapsed*.
 ///
-/// Is `AutoGrowMode::Rows(u32::MAX)` by default.
-</span><span class="attr">#[property(CONTEXT, capture, default(AutoGrowMode::Rows(u32::MAX)), widget_impl(Grid))]
+/// Is `AutoGrowMode::rows() by default.
+</span><span class="attr">#[property(CONTEXT, capture, default(AutoGrowMode::rows()), widget_impl(Grid))]
 </span><span class="kw">pub fn </span>auto_grow_mode(mode: <span class="kw">impl </span>IntoVar&lt;AutoGrowMode&gt;) {}
 
 <span class="doccomment">/// Space in-between cells.
@@ -2113,18 +2113,18 @@
 }
 <span class="kw">impl </span>AutoGrowMode {
     <span class="doccomment">/// Value that does not generate any new row or column.
-    </span><span class="kw">pub fn </span>disabled() -&gt; <span class="self">Self </span>{
+    </span><span class="kw">pub const fn </span>disabled() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::Rows(<span class="number">0</span>)
     }
 
     <span class="doccomment">/// Columns, not specific maximum limit.
-    </span><span class="kw">pub fn </span>columns() -&gt; <span class="self">Self </span>{
+    </span><span class="kw">pub const fn </span>columns() -&gt; <span class="self">Self </span>{
         <span class="self">Self</span>::Columns(u32::MAX)
     }
 
     <span class="doccomment">/// Rows, not specific maximum limit.
-    </span><span class="kw">pub fn </span>rows() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>::Columns(u32::MAX)
+    </span><span class="kw">pub const fn </span>rows() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::Rows(u32::MAX)
     }
 
     <span class="doccomment">/// Set the maximum columns or rows allowed.

@@ -1061,6 +1061,7 @@
 <a href="#1059" id="1059">1059</a>
 <a href="#1060" id="1060">1060</a>
 <a href="#1061" id="1061">1061</a>
+<a href="#1062" id="1062">1062</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     env, fmt, fs, io, mem, ops,
     path::{Path, PathBuf},
@@ -1318,11 +1319,12 @@
                 <span class="kw">let </span>height = area.size.height.<span class="number">0 </span><span class="kw">as </span>usize;
                 <span class="kw">let </span>pixel = <span class="kw">if </span><span class="self">self</span>.is_mask() { <span class="number">1 </span>} <span class="kw">else </span>{ <span class="number">4 </span>};
                 <span class="kw">let </span><span class="kw-2">mut </span>bytes = Vec::with_capacity(width * height * pixel);
+                <span class="kw">let </span>row_stride = <span class="self">self</span>.size().width.<span class="number">0 </span><span class="kw">as </span>usize * pixel;
                 <span class="kw">for </span>l <span class="kw">in </span>y..y + height {
-                    <span class="kw">let </span>line_start = (l + x) * pixel;
-                    <span class="kw">let </span>line_end = (l + x + width) * pixel;
+                    <span class="kw">let </span>line_start = l * row_stride + x * pixel;
+                    <span class="kw">let </span>line_end = line_start + width * pixel;
                     <span class="kw">let </span>line = <span class="kw-2">&amp;</span>pixels[line_start..line_end];
-                    bytes.extend(line);
+                    bytes.extend_from_slice(line);
                 }
                 (area, bytes)
             }
@@ -1997,7 +1999,7 @@
 
     <span class="doccomment">/// Allow any file inside the current executable directory or sub-directories.
     </span><span class="kw">pub fn </span>allow_exe_dir() -&gt; <span class="self">Self </span>{
-        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>p) = env::current_exe().and_then(|p| p.canonicalize()) {
+        <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>p) = env::current_exe().and_then(dunce::canonicalize) {
             <span class="kw">if </span>p.pop() {
                 <span class="kw">return </span><span class="self">Self</span>::allow_dir(p);
             }

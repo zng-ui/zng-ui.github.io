@@ -1574,17 +1574,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1536" id="1536">1536</a>
 <a href="#1537" id="1537">1537</a>
 <a href="#1538" id="1538">1538</a>
-<a href="#1539" id="1539">1539</a>
-<a href="#1540" id="1540">1540</a>
-<a href="#1541" id="1541">1541</a>
-<a href="#1542" id="1542">1542</a>
-<a href="#1543" id="1543">1543</a>
-<a href="#1544" id="1544">1544</a>
-<a href="#1545" id="1545">1545</a>
-<a href="#1546" id="1546">1546</a>
-<a href="#1547" id="1547">1547</a>
-<a href="#1548" id="1548">1548</a>
-<a href="#1549" id="1549">1549</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2752,18 +2741,8 @@ document.addEventListener('DOMContentLoaded', function () {
         APP_PROCESS_SV.read().device_events
     }
 
-    <span class="doccomment">/// App display info.
-    ///
-    /// This info can be used by auto-generated views.
-    ///
-    /// # Examples
-    ///
-    /// You can set some of the info using crate metadata:
-    ///
-    /// ```no_run
-    /// # use zng_app::*;
-    /// APP.about().set(about_app_from_crate!());
-    /// ```
+    <span class="doccomment">/// Deprecated.
+    </span><span class="attr">#[deprecated = <span class="string">"use zng::env::about"</span>]
     </span><span class="kw">pub fn </span>about(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;AboutApp&gt; {
         APP_PROCESS_SV.read().about.clone()
     }
@@ -3067,9 +3046,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">static </span>TEST_LOG: bool = <span class="bool-val">false</span>;
 }
 
-<span class="doccomment">/// Display info about the current app.
-///
-/// You can use the [`about_app_from_crate!`] macro to generate info from the app crate metadata.
+<span class="doccomment">/// Deprecated.
 </span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>AboutApp {
     <span class="doccomment">/// App name.
@@ -3099,8 +3076,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
-<span class="doccomment">/// Generate an [`AboutApp`] value from the crate's metadata.
-</span><span class="attr">#[macro_export]
+<span class="doccomment">/// Deprecated.
+</span><span class="attr">#[deprecated = <span class="string">"use zng::env::init"</span>]
+#[macro_export]
 </span><span class="macro">macro_rules!</span> about_app_from_crate {
     () =&gt; {
         <span class="macro-nonterminal">$crate::AboutApp </span>{
