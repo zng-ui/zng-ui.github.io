@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["init","remove_ansi_csi","restart_count"],"struct":["BacktraceFrame","CrashArgs","CrashConfig","CrashError","CrashPanic"]};
+window.SIDEBAR_ITEMS = {"fn":["remove_ansi_csi","restart_count"],"macro":["crash_handler_config"],"struct":["BacktraceFrame","CrashArgs","CrashConfig","CrashError","CrashPanic"]};

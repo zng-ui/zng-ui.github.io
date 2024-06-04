@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["init","run_same_process"],"struct":["ViewLib"]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["run_same_process","view_process_main"],"struct":["ViewLib"]};

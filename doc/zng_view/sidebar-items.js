@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["init","init_extended","run_same_process","run_same_process_extended"],"mod":["extensions"]};
+window.SIDEBAR_ITEMS = {"fn":["run_same_process","run_same_process_extended","view_process_main"],"macro":["view_process_extension"],"mod":["extensions"]};

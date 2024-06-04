@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Key","KeyCode","KeyState","NativeKeyCode"],"static":["KEY_INPUT_EVENT","MODIFIERS_CHANGED_EVENT"],"struct":["KEYBOARD","KeyInputArgs","KeyRepeatConfig","KeyboardManager","ModifiersChangedArgs"],"trait":["HeadlessAppKeyboardExt"]};
+window.SIDEBAR_ITEMS = {"enum":["Key","KeyCode","KeyLocation","KeyState","NativeKeyCode"],"static":["KEY_INPUT_EVENT","MODIFIERS_CHANGED_EVENT"],"struct":["KEYBOARD","KeyInputArgs","KeyRepeatConfig","KeyboardManager","ModifiersChangedArgs"],"trait":["HeadlessAppKeyboardExt"]};

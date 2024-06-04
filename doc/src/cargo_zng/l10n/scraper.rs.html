@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/l10n/scraper.rs`."><title>scraper.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/l10n/scraper.rs`."><title>scraper.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../../cargo_zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -662,15 +662,6 @@
 <a href="#660" id="660">660</a>
 <a href="#661" id="661">661</a>
 <a href="#662" id="662">662</a>
-<a href="#663" id="663">663</a>
-<a href="#664" id="664">664</a>
-<a href="#665" id="665">665</a>
-<a href="#666" id="666">666</a>
-<a href="#667" id="667">667</a>
-<a href="#668" id="668">668</a>
-<a href="#669" id="669">669</a>
-<a href="#670" id="670">670</a>
-<a href="#671" id="671">671</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scraping.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt::Debug, io, mem, path::PathBuf, sync::Arc};
@@ -689,42 +680,42 @@
 /// # Panics
 ///
 /// Panics if `code_files_glob` had an incorrect pattern.
-</span><span class="kw">pub fn </span>scrape_fluent_text(code_files_glob: <span class="kw-2">&amp;</span>str, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; io::Result&lt;FluentTemplate&gt; {
+</span><span class="kw">pub fn </span>scrape_fluent_text(code_files_glob: <span class="kw-2">&amp;</span>str, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; FluentTemplate {
     <span class="kw">let </span>num_threads = rayon::max_num_threads();
     <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::with_capacity(num_threads);
 
     <span class="kw">let </span><span class="kw-2">mut </span>r = FluentTemplate::default();
-    <span class="kw">for </span>file <span class="kw">in </span>glob::glob(code_files_glob).unwrap() {
-        buf.push(file.map_err(|e| e.into_error())<span class="question-mark">?</span>);
+    <span class="kw">for </span>file <span class="kw">in </span>glob::glob(code_files_glob).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"{e}"</span>)) {
+        <span class="kw">let </span>file = file.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"{e}"</span>));
+        <span class="kw">if </span>file.is_dir() {
+            <span class="kw">continue</span>;
+        }
+        buf.push(file);
         <span class="kw">if </span>buf.len() == num_threads {
-            r.extend(scrape_files(<span class="kw-2">&amp;mut </span>buf, custom_macro_names)<span class="question-mark">?</span>);
+            r.extend(scrape_files(<span class="kw-2">&amp;mut </span>buf, custom_macro_names));
         }
     }
+    buf.sort();
     <span class="kw">if </span>!buf.is_empty() {
-        r.extend(scrape_files(<span class="kw-2">&amp;mut </span>buf, custom_macro_names)<span class="question-mark">?</span>);
+        r.extend(scrape_files(<span class="kw-2">&amp;mut </span>buf, custom_macro_names));
     }
 
-    <span class="prelude-val">Ok</span>(r)
+    r
 }
-<span class="kw">fn </span>scrape_files(buf: <span class="kw-2">&amp;mut </span>Vec&lt;PathBuf&gt;, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; io::Result&lt;FluentTemplate&gt; {
+<span class="kw">fn </span>scrape_files(buf: <span class="kw-2">&amp;mut </span>Vec&lt;PathBuf&gt;, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; FluentTemplate {
     buf.par_drain(..).map(|f| scrape_file(f, custom_macro_names)).reduce(
-        || {
-            <span class="prelude-val">Ok</span>(FluentTemplate {
-                notes: <span class="macro">vec!</span>[],
-                entries: <span class="macro">vec!</span>[],
-            })
+        || FluentTemplate {
+            notes: <span class="macro">vec!</span>[],
+            entries: <span class="macro">vec!</span>[],
         },
-        |a, b| <span class="kw">match </span>(a, b) {
-            (<span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>a), <span class="prelude-val">Ok</span>(b)) =&gt; {
-                a.extend(b);
-                <span class="prelude-val">Ok</span>(a)
-            }
-            (<span class="prelude-val">Err</span>(e), <span class="kw">_</span>) | (<span class="kw">_</span>, <span class="prelude-val">Err</span>(e)) =&gt; <span class="prelude-val">Err</span>(e),
+        |<span class="kw-2">mut </span>a, b| {
+            a.extend(b);
+            a
         },
     )
 }
-<span class="kw">fn </span>scrape_file(file: PathBuf, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; io::Result&lt;FluentTemplate&gt; {
-    <span class="kw">let </span>file = std::fs::read_to_string(file)<span class="question-mark">?</span>;
+<span class="kw">fn </span>scrape_file(file: PathBuf, custom_macro_names: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; FluentTemplate {
+    <span class="kw">let </span>file = std::fs::read_to_string(<span class="kw-2">&amp;</span>file).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{}`, {e}"</span>, file.display()));
     <span class="kw">let </span><span class="kw-2">mut </span>s = file.as_str();
 
     <span class="kw">const </span>BOM: <span class="kw-2">&amp;</span>str = <span class="string">"\u{feff}"</span>;
@@ -844,7 +835,7 @@
                             .trim_matches(<span class="string">'#'</span>)
                             .trim_matches(<span class="string">'"'</span>)
                             .to_owned();
-                        <span class="kw">let </span>(file, id, attr) = parse_validate_id(<span class="kw-2">&amp;</span>message_id)<span class="question-mark">?</span>;
+                        <span class="kw">let </span>(file, id, attr) = parse_validate_id(<span class="kw-2">&amp;</span>message_id);
                         entry.file = file;
                         entry.id = id;
                         entry.attribute = attr;
@@ -998,10 +989,10 @@
         s = <span class="kw-2">&amp;</span>s[token.len..];
     }
 
-    <span class="prelude-val">Ok</span>(FluentTemplate {
+    FluentTemplate {
         notes: l10n_notes,
         entries: output,
-    })
+    }
 }
 
 <span class="doccomment">/// Represents a standalone note, declared using `// l10n-{file}-### {note}` or `l10n-### {note}`.
@@ -1274,7 +1265,7 @@
 }
 
 <span class="comment">// Returns "file", "id", "attribute"
-</span><span class="kw">fn </span>parse_validate_id(s: <span class="kw-2">&amp;</span>str) -&gt; io::Result&lt;(String, String, String)&gt; {
+</span><span class="kw">fn </span>parse_validate_id(s: <span class="kw-2">&amp;</span>str) -&gt; (String, String, String) {
     <span class="kw">let </span><span class="kw-2">mut </span>id = s;
     <span class="kw">let </span><span class="kw-2">mut </span>file = <span class="string">""</span>;
     <span class="kw">let </span><span class="kw-2">mut </span>attribute = <span class="string">""</span>;
@@ -1300,10 +1291,7 @@
             first = <span class="bool-val">false</span>;
         }
         <span class="kw">if </span>!valid {
-            <span class="kw">return </span><span class="prelude-val">Err</span>(io::Error::new(
-                io::ErrorKind::InvalidData,
-                <span class="macro">format!</span>(<span class="string">"invalid file {file:?}, must be a single file name"</span>),
-            ));
+            <span class="macro">fatal!</span>(<span class="string">"invalid file {file:?}, must be a single file name"</span>)
         }
     }
 
@@ -1328,18 +1316,12 @@
         <span class="bool-val">true
     </span>}
     <span class="kw">if </span>!validate(id) {
-        <span class="kw">return </span><span class="prelude-val">Err</span>(io::Error::new(
-            io::ErrorKind::InvalidData,
-            <span class="macro">format!</span>(<span class="string">"invalid id {id:?}, must start with letter, followed by any letters, digits, `_` or `-`"</span>),
-        ));
+        <span class="macro">fatal!</span>(<span class="string">"invalid id {id:?}, must start with letter, followed by any letters, digits, `_` or `-`"</span>)
     }
     <span class="kw">if </span>!attribute.is_empty() &amp;&amp; !validate(attribute) {
-        <span class="kw">return </span><span class="prelude-val">Err</span>(io::Error::new(
-            io::ErrorKind::InvalidData,
-            <span class="macro">format!</span>(<span class="string">"invalid id {attribute:?}, must start with letter, followed by any letters, digits, `_` or `-`"</span>),
-        ));
+        <span class="macro">fatal!</span>(<span class="string">"invalid id {attribute:?}, must start with letter, followed by any letters, digits, `_` or `-`"</span>)
     }
 
-    <span class="prelude-val">Ok</span>((file.to_owned(), id.to_owned(), attribute.to_owned()))
+    (file.to_owned(), id.to_owned(), attribute.to_owned())
 }
 </code></pre></div></section></main></body></html>

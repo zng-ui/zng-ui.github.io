@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Key","KeyCode","KeyState","NativeKeyCode"]};
+window.SIDEBAR_ITEMS = {"enum":["Key","KeyCode","KeyLocation","KeyState","NativeKeyCode"]};

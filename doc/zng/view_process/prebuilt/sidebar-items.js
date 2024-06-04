@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["init","run_same_process"]};
+window.SIDEBAR_ITEMS = {"fn":["run_same_process"]};

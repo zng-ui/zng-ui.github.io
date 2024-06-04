@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/l10n.rs`."><title>l10n.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/master/examples/res/image/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/l10n.rs`."><title>l10n.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
             <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
     <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../cargo_zng/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -127,7 +127,7 @@
 
 <span class="attr">#[derive(Args, Debug)]
 </span><span class="kw">pub struct </span>L10nArgs {
-    <span class="doccomment">/// Rust files glob
+    <span class="doccomment">/// Rust files glob or directory
     </span>input: String,
 
     <span class="doccomment">/// Lang resources dir
@@ -149,79 +149,79 @@
 }
 
 <span class="kw">pub fn </span>run(args: L10nArgs) {
-    <span class="macro">println!</span>(<span class="string">r#"searching {:?}.."#</span>, args.input);
+    <span class="kw">let </span><span class="kw-2">mut </span>input = args.input;
+    <span class="kw">if </span>!input.contains(<span class="string">'*'</span>) &amp;&amp; PathBuf::from(<span class="kw-2">&amp;</span>input).is_dir() {
+        input = <span class="macro">format!</span>(<span class="string">"{}/**/*.rs"</span>, input.trim_end_matches(<span class="kw-2">&amp;</span>[<span class="string">'\\'</span>, <span class="string">'/'</span>]));
+    }
+
+    <span class="macro">println!</span>(<span class="string">r#"searching "{input}".."#</span>);
 
     <span class="kw">let </span>custom_macro_names: Vec&lt;<span class="kw-2">&amp;</span>str&gt; = args.macros.split(<span class="string">','</span>).map(|n| n.trim()).collect();
 
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::create_dir_all(<span class="kw-2">&amp;</span>args.output) {
-        <span class="macro">println!</span>(<span class="string">"error: {e}"</span>);
-        <span class="kw">return</span>;
+        <span class="macro">fatal!</span>(<span class="string">"cannot create dir `{}`, {e}"</span>, args.output.display());
     }
 
-    <span class="kw">match </span>scraper::scrape_fluent_text(<span class="kw-2">&amp;</span>args.input, <span class="kw-2">&amp;</span>custom_macro_names) {
-        <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>template) =&gt; {
-            <span class="kw">match </span>template.entries.len() {
-                <span class="number">0 </span>=&gt; {
-                    <span class="macro">println!</span>(<span class="string">"did not find any entry"</span>);
-                    <span class="kw">return</span>;
-                }
-                <span class="number">1 </span>=&gt; <span class="macro">println!</span>(<span class="string">"found 1 entry"</span>),
-                n =&gt; <span class="macro">println!</span>(<span class="string">"found {n} entries"</span>),
-            }
-
-            <span class="kw">struct </span>Task {
-                name: String,
-                transform: <span class="kw">fn</span>(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;,
-            }
-            <span class="kw">let </span><span class="kw-2">mut </span>tasks = <span class="macro">vec!</span>[Task {
-                name: <span class="string">"template"</span>.to_owned(),
-                transform: pseudo::none,
-            }];
-            <span class="kw">if </span>!args.pseudo.is_empty() {
-                tasks.push(Task {
-                    name: args.pseudo,
-                    transform: pseudo::pseudo,
-                })
-            }
-            <span class="kw">if </span>!args.pseudo_m.is_empty() {
-                tasks.push(Task {
-                    name: args.pseudo_m,
-                    transform: pseudo::pseudo_mirr,
-                })
-            }
-            <span class="kw">if </span>!args.pseudo_w.is_empty() {
-                tasks.push(Task {
-                    name: args.pseudo_w,
-                    transform: pseudo::pseudo_wide,
-                })
-            }
-
-            template.sort();
-
-            <span class="kw">for </span>task <span class="kw">in </span>tasks {
-                <span class="kw">let </span>r = template.write(task.transform, |file| {
-                    <span class="kw">fn </span>box_dyn(file: std::fs::File) -&gt; Box&lt;<span class="kw">dyn </span>Write + Send&gt; {
-                        Box::new(file)
-                    }
-
-                    <span class="kw">let </span><span class="kw-2">mut </span>output = args.output.clone();
-                    <span class="kw">if </span>file.is_empty() {
-                        output.push(<span class="macro">format!</span>(<span class="string">"{}.ftl"</span>, task.name));
-                    } <span class="kw">else </span>{
-                        output.push(<span class="kw-2">&amp;</span>task.name);
-                        std::fs::create_dir_all(<span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
-                        output.push(<span class="macro">format!</span>(<span class="string">"{file}.ftl"</span>));
-                    }
-                    std::fs::File::create(output).map(box_dyn)
-                });
-
-                <span class="kw">match </span>r {
-                    <span class="prelude-val">Ok</span>(()) =&gt; <span class="macro">println!</span>(<span class="string">"finished {:?}."</span>, task.name),
-                    <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"{:?} error: {}"</span>, task.name, e),
-                }
-            }
+    <span class="kw">let </span><span class="kw-2">mut </span>template = scraper::scrape_fluent_text(<span class="kw-2">&amp;</span>input, <span class="kw-2">&amp;</span>custom_macro_names);
+    <span class="kw">match </span>template.entries.len() {
+        <span class="number">0 </span>=&gt; {
+            <span class="macro">println!</span>(<span class="string">"did not find any entry"</span>);
+            <span class="kw">return</span>;
         }
-        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"error: {e}"</span>),
+        <span class="number">1 </span>=&gt; <span class="macro">println!</span>(<span class="string">"found 1 entry"</span>),
+        n =&gt; <span class="macro">println!</span>(<span class="string">"found {n} entries"</span>),
+    }
+
+    <span class="kw">struct </span>Task {
+        name: String,
+        transform: <span class="kw">fn</span>(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;,
+    }
+    <span class="kw">let </span><span class="kw-2">mut </span>tasks = <span class="macro">vec!</span>[Task {
+        name: <span class="string">"template"</span>.to_owned(),
+        transform: pseudo::none,
+    }];
+    <span class="kw">if </span>!args.pseudo.is_empty() {
+        tasks.push(Task {
+            name: args.pseudo,
+            transform: pseudo::pseudo,
+        })
+    }
+    <span class="kw">if </span>!args.pseudo_m.is_empty() {
+        tasks.push(Task {
+            name: args.pseudo_m,
+            transform: pseudo::pseudo_mirr,
+        })
+    }
+    <span class="kw">if </span>!args.pseudo_w.is_empty() {
+        tasks.push(Task {
+            name: args.pseudo_w,
+            transform: pseudo::pseudo_wide,
+        })
+    }
+
+    template.sort();
+
+    <span class="kw">for </span>task <span class="kw">in </span>tasks {
+        <span class="kw">let </span>r = template.write(task.transform, |file| {
+            <span class="kw">fn </span>box_dyn(file: std::fs::File) -&gt; Box&lt;<span class="kw">dyn </span>Write + Send&gt; {
+                Box::new(file)
+            }
+
+            <span class="kw">let </span><span class="kw-2">mut </span>output = args.output.clone();
+            <span class="kw">if </span>file.is_empty() {
+                output.push(<span class="macro">format!</span>(<span class="string">"{}.ftl"</span>, task.name));
+            } <span class="kw">else </span>{
+                output.push(<span class="kw-2">&amp;</span>task.name);
+                std::fs::create_dir_all(<span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
+                output.push(<span class="macro">format!</span>(<span class="string">"{file}.ftl"</span>));
+            }
+            std::fs::File::create(output).map(box_dyn)
+        });
+
+        <span class="kw">match </span>r {
+            <span class="prelude-val">Ok</span>(()) =&gt; <span class="macro">println!</span>(<span class="string">"finished {:?}."</span>, task.name),
+            <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">fatal!</span>(<span class="string">"{:?} error: {}"</span>, task.name, e),
+        }
     }
 }
 </code></pre></div></section></main></body></html>

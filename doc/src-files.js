@@ -7,7 +7,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_clone_move",["",[],["lib.rs"]]],\
 ["zng_color",["",[],["colors.rs","filter.rs","gradient.rs","lib.rs","mix.rs","web_colors.rs"]]],\
 ["zng_color_proc_macros",["",[],["hex_color.rs","lib.rs"]]],\
-["zng_env",["",[],["lib.rs"]]],\
+["zng_env",["",[],["lib.rs","process.rs"]]],\
 ["zng_env_proc_macros",["",[],["lib.rs"]]],\
 ["zng_ext_clipboard",["",[],["lib.rs"]]],\
 ["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
