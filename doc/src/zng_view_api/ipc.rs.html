@@ -559,6 +559,23 @@
 <a href="#557" id="557">557</a>
 <a href="#558" id="558">558</a>
 <a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! IPC types.
 
 </span><span class="kw">use </span>std::{fmt, ops::Deref, time::Duration};
@@ -580,7 +597,7 @@
 <span class="doccomment">/// Bytes sender.
 ///
 /// Use [`bytes_channel`] to create.
-</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(Serialize, Deserialize))]
+</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(serde::Serialize, serde::Deserialize))]
 </span><span class="kw">pub struct </span>IpcBytesSender {
     <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
     </span>sender: ipc_channel::ipc::IpcBytesSender,
@@ -608,7 +625,7 @@
 <span class="doccomment">/// Bytes receiver.
 ///
 /// Use [`bytes_channel`] to create.
-</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(Serialize, Deserialize))]
+</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(serde::Serialize, serde::Deserialize))]
 </span><span class="kw">pub struct </span>IpcBytesReceiver {
     <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
     </span>recv: ipc_channel::ipc::IpcBytesReceiver,
@@ -641,6 +658,22 @@
     (IpcBytesSender { sender }, IpcBytesReceiver { recv })
 }
 
+<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+</span><span class="kw">mod </span>arc_bytes {
+    <span class="kw">pub fn </span>serialize&lt;S&gt;(bytes: <span class="kw-2">&amp;</span>std::sync::Arc&lt;Vec&lt;u8&gt;&gt;, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+    <span class="kw">where
+        </span>S: serde::Serializer,
+    {
+        serde_bytes::serialize(<span class="kw-2">&amp;</span>bytes[..], serializer)
+    }
+    <span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">'de</span>, D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;std::sync::Arc&lt;Vec&lt;u8&gt;&gt;, D::Error&gt;
+    <span class="kw">where
+        </span>D: serde::Deserializer&lt;<span class="lifetime">'de</span>&gt;,
+    {
+        <span class="prelude-val">Ok</span>(std::sync::Arc::new(serde_bytes::deserialize(deserializer)<span class="question-mark">?</span>))
+    }
+}
+
 <span class="doccomment">/// Immutable shared memory that can be send fast over IPC.
 ///
 /// # `not(feature="ipc")`
@@ -653,6 +686,7 @@
     </span>bytes: <span class="prelude-ty">Option</span>&lt;ipc_channel::ipc::IpcSharedMemory&gt;,
     <span class="comment">// `IpcSharedMemory` only clones a pointer.
     </span><span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    #[serde(with = <span class="string">"arc_bytes"</span>)]
     </span>bytes: std::sync::Arc&lt;Vec&lt;u8&gt;&gt;,
 }
 <span class="doccomment">/// Pointer equal.

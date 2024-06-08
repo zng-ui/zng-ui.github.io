@@ -2124,6 +2124,51 @@
 <a href="#2122" id="2122">2122</a>
 <a href="#2123" id="2123">2123</a>
 <a href="#2124" id="2124">2124</a>
+<a href="#2125" id="2125">2125</a>
+<a href="#2126" id="2126">2126</a>
+<a href="#2127" id="2127">2127</a>
+<a href="#2128" id="2128">2128</a>
+<a href="#2129" id="2129">2129</a>
+<a href="#2130" id="2130">2130</a>
+<a href="#2131" id="2131">2131</a>
+<a href="#2132" id="2132">2132</a>
+<a href="#2133" id="2133">2133</a>
+<a href="#2134" id="2134">2134</a>
+<a href="#2135" id="2135">2135</a>
+<a href="#2136" id="2136">2136</a>
+<a href="#2137" id="2137">2137</a>
+<a href="#2138" id="2138">2138</a>
+<a href="#2139" id="2139">2139</a>
+<a href="#2140" id="2140">2140</a>
+<a href="#2141" id="2141">2141</a>
+<a href="#2142" id="2142">2142</a>
+<a href="#2143" id="2143">2143</a>
+<a href="#2144" id="2144">2144</a>
+<a href="#2145" id="2145">2145</a>
+<a href="#2146" id="2146">2146</a>
+<a href="#2147" id="2147">2147</a>
+<a href="#2148" id="2148">2148</a>
+<a href="#2149" id="2149">2149</a>
+<a href="#2150" id="2150">2150</a>
+<a href="#2151" id="2151">2151</a>
+<a href="#2152" id="2152">2152</a>
+<a href="#2153" id="2153">2153</a>
+<a href="#2154" id="2154">2154</a>
+<a href="#2155" id="2155">2155</a>
+<a href="#2156" id="2156">2156</a>
+<a href="#2157" id="2157">2157</a>
+<a href="#2158" id="2158">2158</a>
+<a href="#2159" id="2159">2159</a>
+<a href="#2160" id="2160">2160</a>
+<a href="#2161" id="2161">2161</a>
+<a href="#2162" id="2162">2162</a>
+<a href="#2163" id="2163">2163</a>
+<a href="#2164" id="2164">2164</a>
+<a href="#2165" id="2165">2165</a>
+<a href="#2166" id="2166">2166</a>
+<a href="#2167" id="2167">2167</a>
+<a href="#2168" id="2168">2168</a>
+<a href="#2169" id="2169">2169</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2137,8 +2182,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.7.0"
-//! zng-view = "0.4.0"
+//! zng = "0.7.1"
+//! zng-view = "0.4.1"
 //! ```
 //!
 //! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2386,20 +2431,28 @@
 <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
 #[doc(hidden)]
 #[no_mangle]
-</span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>extern_run_same_process(run_app: <span class="kw">extern </span><span class="string">"C" </span><span class="kw">fn</span>()) {
+</span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>extern_run_same_process(patch: <span class="kw-2">&amp;</span>StaticPatch, run_app: <span class="kw">extern </span><span class="string">"C" </span><span class="kw">fn</span>()) {
     std::panic::set_hook(Box::new(ffi_abort));
+
+    <span class="comment">// SAFETY:
+    // safe because it is called before any view related code in the library.
+    </span><span class="kw">unsafe </span>{
+        patch.install();
+    }
 
     <span class="attr">#[allow(clippy::redundant_closure)]
     </span>run_same_process(<span class="kw">move </span>|| run_app())
 }
-
-<span class="kw">fn </span>init_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
+<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="kw">fn </span>init_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
     panic_hook(info, <span class="string">"note: aborting to respawn"</span>);
 }
-<span class="kw">fn </span>ffi_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
+<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="kw">fn </span>ffi_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
     panic_hook(info, <span class="string">"note: aborting to avoid unwind across FFI"</span>);
 }
-<span class="kw">fn </span>panic_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, details: <span class="kw-2">&amp;</span>str) {
+<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="kw">fn </span>panic_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, details: <span class="kw-2">&amp;</span>str) {
     <span class="comment">// see `default_hook` in https://doc.rust-lang.org/src/std/panicking.rs.html#182
 
     </span><span class="kw">let </span>panic = util::SuppressedPanic::from_hook(info, std::backtrace::Backtrace::force_capture());
@@ -2463,6 +2516,8 @@
 
     <span class="attr">#[cfg(not(windows))]
     </span>arboard: <span class="prelude-ty">Option</span>&lt;arboard::Clipboard&gt;,
+
+    config_listener_exit: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>FnOnce()&gt;&gt;,
 
     exited: bool,
 }
@@ -2982,6 +3037,22 @@
                     w.redraw();
                 }
             }
+            AppEvent::ColorSchemeConfigChanged =&gt; {
+                <span class="attr">#[cfg(any(
+                    target_os = <span class="string">"linux"</span>,
+                    target_os = <span class="string">"dragonfly"</span>,
+                    target_os = <span class="string">"freebsd"</span>,
+                    target_os = <span class="string">"netbsd"</span>,
+                    target_os = <span class="string">"openbsd"
+                </span>))]
+                </span>{
+                    <span class="kw">let </span>cfg = <span class="kw">crate</span>::config::color_scheme_config();
+                    <span class="kw">let </span>ids: Vec&lt;<span class="kw">_</span>&gt; = <span class="self">self</span>.windows.iter().map(|w| w.id()).collect();
+                    <span class="kw">for </span>id <span class="kw">in </span>ids {
+                        <span class="self">self</span>.notify(Event::ColorSchemeChanged(id, cfg));
+                    }
+                }
+            }
             AppEvent::InitDeviceEvents(enabled) =&gt; {
                 <span class="self">self</span>.init_device_events(enabled, <span class="prelude-val">Some</span>(winit_loop));
             }
@@ -3049,6 +3120,9 @@
 
     <span class="kw">fn </span>exiting(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
         <span class="kw">let _ </span>= event_loop;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="self">self</span>.config_listener_exit.take() {
+            t();
+        }
     }
 
     <span class="kw">fn </span>memory_warning(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
@@ -3190,7 +3264,8 @@
                                 <span class="self">self</span>.app.image_cache.loaded(data);
                             }
                             AppEvent::MonitorPowerChanged =&gt; {} <span class="comment">// headless
-                            </span>AppEvent::InitDeviceEvents(enabled) =&gt; {
+                            </span>AppEvent::ColorSchemeConfigChanged =&gt; {}
+                            AppEvent::InitDeviceEvents(enabled) =&gt; {
                                 <span class="self">self</span>.app.init_device_events(enabled, <span class="prelude-val">None</span>);
                             }
                         },
@@ -3230,8 +3305,7 @@
         );
         app.start_receiving(ipc.request_receiver);
 
-        <span class="attr">#[cfg(windows)]
-        </span>config::spawn_listener(app.app_sender.clone());
+        app.config_listener_exit = config::spawn_listener(app.app_sender.clone());
 
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = event_loop.run_app(<span class="kw-2">&amp;mut </span>app) {
             <span class="kw">if </span>app.exited {
@@ -3283,6 +3357,7 @@
             pressed_modifiers: FxHashMap::default(),
             pending_modifiers_update: <span class="prelude-val">None</span>,
             pending_modifiers_focus_clear: <span class="bool-val">false</span>,
+            config_listener_exit: <span class="prelude-val">None</span>,
 
             <span class="attr">#[cfg(not(windows))]
             </span>arboard: <span class="prelude-val">None</span>,
@@ -3586,7 +3661,13 @@
         </span>}
     };
 }
-
+<span class="kw">impl </span>Drop <span class="kw">for </span>App {
+    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = <span class="self">self</span>.config_listener_exit.take() {
+            f();
+        }
+    }
+}
 <span class="kw">impl </span>App {
     <span class="kw">fn </span>open_headless_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, config: HeadlessRequest) -&gt; HeadlessOpenData {
         <span class="self">self</span>.assert_started();
@@ -3652,6 +3733,9 @@
         <span class="self">self</span>.assert_started();
         <span class="self">self</span>.started = <span class="bool-val">false</span>;
         <span class="self">self</span>.exited = <span class="bool-val">true</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="self">self</span>.config_listener_exit.take() {
+            t();
+        }
         <span class="comment">// not really, but just to exit winit loop
         </span><span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::ParentProcessExited);
     }
@@ -4169,6 +4253,12 @@
     <span class="doccomment">/// Send when monitor was turned on/off by the OS, need to redraw all screens to avoid blank issue.
     </span><span class="attr">#[allow(unused)]
     </span>MonitorPowerChanged,
+
+    <span class="doccomment">/// System color scheme changed.
+    ///
+    /// X11/Wayland needs this
+    </span><span class="attr">#[allow(unused)]
+    </span>ColorSchemeConfigChanged,
 }
 
 <span class="doccomment">/// Message inserted in the request loop from the view-process.

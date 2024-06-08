@@ -506,26 +506,6 @@
 <a href="#504" id="504">504</a>
 <a href="#505" id="505">505</a>
 <a href="#506" id="506">506</a>
-<a href="#507" id="507">507</a>
-<a href="#508" id="508">508</a>
-<a href="#509" id="509">509</a>
-<a href="#510" id="510">510</a>
-<a href="#511" id="511">511</a>
-<a href="#512" id="512">512</a>
-<a href="#513" id="513">513</a>
-<a href="#514" id="514">514</a>
-<a href="#515" id="515">515</a>
-<a href="#516" id="516">516</a>
-<a href="#517" id="517">517</a>
-<a href="#518" id="518">518</a>
-<a href="#519" id="519">519</a>
-<a href="#520" id="520">520</a>
-<a href="#521" id="521">521</a>
-<a href="#522" id="522">522</a>
-<a href="#523" id="523">523</a>
-<a href="#524" id="524">524</a>
-<a href="#525" id="525">525</a>
-<a href="#526" id="526">526</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     panic,
@@ -544,11 +524,6 @@
 <span class="doccomment">/// The listener returns the closure on join for reuse in respawn.
 </span><span class="kw">type </span>EventListenerJoin = JoinHandle&lt;Box&lt;<span class="kw">dyn </span>FnMut(Event) + Send&gt;&gt;;
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
-</span><span class="kw">type </span>DuctHandle = duct::Handle;
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
-</span><span class="kw">struct </span>DuctHandle;
-
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>VIEW_VERSION: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_VIEW_VERSION"</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>VIEW_SERVER: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_VIEW_SERVER"</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>VIEW_MODE: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_VIEW_MODE"</span>;
@@ -564,7 +539,7 @@
 /// [exits]: std::process::exit
 </span><span class="attr">#[cfg_attr(not(feature = <span class="string">"ipc"</span>), allow(unused))]
 </span><span class="kw">pub struct </span>Controller {
-    process: <span class="prelude-ty">Option</span>&lt;DuctHandle&gt;,
+    process: <span class="prelude-ty">Option</span>&lt;std::process::Child&gt;,
     online: bool,
     generation: ViewProcessGen,
     is_respawn: bool,
@@ -740,7 +715,12 @@
         view_process_exe: <span class="kw-2">&amp;</span>Path,
         view_process_env: <span class="kw-2">&amp;</span>HashMap&lt;Txt, Txt&gt;,
         headless: bool,
-    ) -&gt; AnyResult&lt;(<span class="prelude-ty">Option</span>&lt;DuctHandle&gt;, ipc::RequestSender, ipc::ResponseReceiver, ipc::EventReceiver)&gt; {
+    ) -&gt; AnyResult&lt;(
+        <span class="prelude-ty">Option</span>&lt;std::process::Child&gt;,
+        ipc::RequestSender,
+        ipc::ResponseReceiver,
+        ipc::EventReceiver,
+    )&gt; {
         <span class="kw">let </span>_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"spawn_view_process"</span>).entered();
 
         <span class="kw">let </span>init = ipc::AppInit::new();
@@ -762,20 +742,16 @@
 
             <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
             </span>{
-                <span class="kw">let </span><span class="kw-2">mut </span>process = <span class="macro">duct::cmd!</span>(view_process_exe);
+                <span class="kw">let </span><span class="kw-2">mut </span>process = std::process::Command::new(view_process_exe);
                 <span class="kw">for </span>(name, val) <span class="kw">in </span>view_process_env {
-                    process = process.env(name, val);
+                    process.env(name, val);
                 }
                 <span class="kw">let </span>process = process
                     .env(VIEW_VERSION, <span class="kw">crate</span>::VERSION)
                     .env(VIEW_SERVER, init.name())
                     .env(VIEW_MODE, <span class="kw">if </span>headless { <span class="string">"headless" </span>} <span class="kw">else </span>{ <span class="string">"headed" </span>})
                     .env(<span class="string">"RUST_BACKTRACE"</span>, <span class="string">"full"</span>)
-                    .stdin_null()
-                    .stdout_capture()
-                    .stderr_capture()
-                    .unchecked()
-                    .start()<span class="question-mark">?</span>;
+                    .spawn()<span class="question-mark">?</span>;
                 <span class="prelude-val">Some</span>(process)
             }
         };
@@ -784,15 +760,14 @@
             <span class="prelude-val">Ok</span>(r) =&gt; r,
             <span class="prelude-val">Err</span>(e) =&gt; {
                 <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
-                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(p) = process {
+                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>p) = process {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(ke) = p.kill() {
                         <span class="macro">tracing::error!</span>(
                             <span class="string">"failed to kill new view-process after failing to connect to it\n connection error: {e:?}\n kill error: {ke:?}"</span>,
                         );
                     } <span class="kw">else if let </span><span class="prelude-val">Ok</span>(output) = p.wait() {
-                        <span class="kw">let </span>code = output.status.code();
-                        <span class="kw">let </span>stderr = String::from_utf8_lossy(<span class="kw-2">&amp;</span>output.stderr);
-                        <span class="kw">if </span>ViewConfig::is_version_err(code, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>stderr)) {
+                        <span class="kw">let </span>code = output.code();
+                        <span class="kw">if </span>ViewConfig::is_version_err(code, <span class="prelude-val">None</span>) {
                             <span class="kw">let </span>code = code.unwrap_or(<span class="number">1</span>);
                             <span class="macro">tracing::error!</span>(
                                 <span class="string">"view-process API version mismatch, the view-process build must use the same exact version as the app-process, \
@@ -873,7 +848,7 @@
         <span class="self">self</span>.online = <span class="bool-val">false</span>;
         <span class="self">self</span>.is_respawn = <span class="bool-val">true</span>;
 
-        <span class="kw">let </span>process = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.process.take() {
+        <span class="kw">let </span><span class="kw-2">mut </span>process = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.process.take() {
             p
         } <span class="kw">else </span>{
             <span class="kw">if </span><span class="self">self</span>.same_process {
@@ -918,7 +893,7 @@
             }
         }
 
-        <span class="kw">let </span>code_and_output = <span class="kw">match </span>process.into_output() {
+        <span class="kw">let </span>code_and_output = <span class="kw">match </span>process.wait() {
             <span class="prelude-val">Ok</span>(c) =&gt; <span class="prelude-val">Some</span>(c),
             <span class="prelude-val">Err</span>(e) =&gt; {
                 <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process could not be killed, will abandon running, {e:?}"</span>);
@@ -930,7 +905,7 @@
         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = code_and_output {
             <span class="macro">tracing::info!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process killed"</span>);
 
-            <span class="kw">let </span>code = c.status.code();
+            <span class="kw">let </span>code = c.code();
             <span class="attr">#[allow(unused_mut)]
             </span><span class="kw">let </span><span class="kw-2">mut </span>signal = <span class="prelude-val">None</span>::&lt;i32&gt;;
 
@@ -947,7 +922,7 @@
                 <span class="attr">#[cfg(unix)]
                 </span><span class="kw">if </span>code.is_none() {
                     <span class="kw">use </span>std::os::unix::process::ExitStatusExt <span class="kw">as _</span>;
-                    signal = c.status.signal();
+                    signal = c.signal();
 
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(sig) = signal {
                         <span class="kw">if </span>[<span class="number">2</span>, <span class="number">9</span>, <span class="number">17</span>, <span class="number">19</span>, <span class="number">23</span>].contains(<span class="kw-2">&amp;</span>sig) {
@@ -965,33 +940,11 @@
                 <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process exit code: {code:#X}, signal: {signal}"</span>);
             }
 
-            <span class="kw">let </span>stderr = <span class="kw">match </span>String::from_utf8(c.stderr) {
-                <span class="prelude-val">Ok</span>(s) =&gt; {
-                    <span class="kw">if </span>!s.is_empty() {
-                        <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process stderr:\n```stderr\n{s}\n```"</span>)
-                    }
-                    <span class="prelude-val">Some</span>(s)
-                }
-                <span class="prelude-val">Err</span>(e) =&gt; {
-                    <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"failed to read view-process stderr: {e}"</span>);
-                    <span class="prelude-val">None
-                </span>}
-            };
-
-            <span class="kw">if </span>ViewConfig::is_version_err(code, stderr.as_deref()) {
+            <span class="kw">if </span>ViewConfig::is_version_err(code, <span class="prelude-val">None</span>) {
                 <span class="kw">let </span>code = code.unwrap_or(<span class="number">1</span>);
                 <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process API version mismatch, the view-process build must use the same exact version as the app-process, \
                                         will exit app-process with code 0x{code:x}"</span>);
                 zng_env::exit(code);
-            }
-
-            <span class="kw">match </span>String::from_utf8(c.stdout) {
-                <span class="prelude-val">Ok</span>(s) =&gt; {
-                    <span class="kw">if </span>!s.is_empty() {
-                        <span class="macro">tracing::info!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process stdout:\n```stdout\n{s}\n```"</span>)
-                    }
-                }
-                <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"failed to read view-process stdout: {e}"</span>),
             }
         } <span class="kw">else </span>{
             <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"failed to kill view-process, will abandon it running and spawn a new one"</span>);
@@ -1047,8 +1000,15 @@
     </span><span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="kw">let _ </span>= <span class="self">self</span>.exit();
         <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
-        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(process) = <span class="self">self</span>.process.take() {
-            <span class="kw">let _ </span>= process.kill();
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>process) = <span class="self">self</span>.process.take() {
+            <span class="kw">if </span>process.try_wait().is_err() {
+                std::thread::sleep(Duration::from_secs(<span class="number">1</span>));
+                <span class="kw">if </span>process.try_wait().is_err() {
+                    <span class="macro">tracing::error!</span>(<span class="string">"view-process did not exit after 1s, killing"</span>);
+                    <span class="kw">let _ </span>= process.kill();
+                    <span class="kw">let _ </span>= process.wait();
+                }
+            }
         }
     }
 }

@@ -1644,6 +1644,8 @@
 <a href="#1642" id="1642">1642</a>
 <a href="#1643" id="1643">1643</a>
 <a href="#1644" id="1644">1644</a>
+<a href="#1645" id="1645">1645</a>
+<a href="#1646" id="1646">1646</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
@@ -2588,11 +2590,12 @@
 }
 
 <span class="doccomment">/// If `true` our custom panic hook must not log anything.
+</span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>suppress_panic() -&gt; bool {
     SUPPRESS.get()
 }
-
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_suppressed_panic(panic: SuppressedPanic) {
+<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>set_suppressed_panic(panic: SuppressedPanic) {
     SUPPRESSED_PANIC.set(<span class="prelude-val">Some</span>(panic));
 }
 
@@ -2606,7 +2609,8 @@
     <span class="kw">pub </span>backtrace: Backtrace,
 }
 <span class="kw">impl </span>SuppressedPanic {
-    <span class="kw">pub fn </span>from_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, backtrace: Backtrace) -&gt; <span class="self">Self </span>{
+    <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    </span><span class="kw">pub fn </span>from_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, backtrace: Backtrace) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>current_thread = std::thread::current();
         <span class="kw">let </span>thread = current_thread.name().unwrap_or(<span class="string">"&lt;unnamed&gt;"</span>);
         <span class="kw">let </span>msg = <span class="self">Self</span>::payload(info.payload());

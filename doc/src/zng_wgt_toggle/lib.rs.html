@@ -1290,6 +1290,46 @@
 <a href="#1288" id="1288">1288</a>
 <a href="#1289" id="1289">1289</a>
 <a href="#1290" id="1290">1290</a>
+<a href="#1291" id="1291">1291</a>
+<a href="#1292" id="1292">1292</a>
+<a href="#1293" id="1293">1293</a>
+<a href="#1294" id="1294">1294</a>
+<a href="#1295" id="1295">1295</a>
+<a href="#1296" id="1296">1296</a>
+<a href="#1297" id="1297">1297</a>
+<a href="#1298" id="1298">1298</a>
+<a href="#1299" id="1299">1299</a>
+<a href="#1300" id="1300">1300</a>
+<a href="#1301" id="1301">1301</a>
+<a href="#1302" id="1302">1302</a>
+<a href="#1303" id="1303">1303</a>
+<a href="#1304" id="1304">1304</a>
+<a href="#1305" id="1305">1305</a>
+<a href="#1306" id="1306">1306</a>
+<a href="#1307" id="1307">1307</a>
+<a href="#1308" id="1308">1308</a>
+<a href="#1309" id="1309">1309</a>
+<a href="#1310" id="1310">1310</a>
+<a href="#1311" id="1311">1311</a>
+<a href="#1312" id="1312">1312</a>
+<a href="#1313" id="1313">1313</a>
+<a href="#1314" id="1314">1314</a>
+<a href="#1315" id="1315">1315</a>
+<a href="#1316" id="1316">1316</a>
+<a href="#1317" id="1317">1317</a>
+<a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a>
+<a href="#1321" id="1321">1321</a>
+<a href="#1322" id="1322">1322</a>
+<a href="#1323" id="1323">1323</a>
+<a href="#1324" id="1324">1324</a>
+<a href="#1325" id="1325">1325</a>
+<a href="#1326" id="1326">1326</a>
+<a href="#1327" id="1327">1327</a>
+<a href="#1328" id="1328">1328</a>
+<a href="#1329" id="1329">1329</a>
+<a href="#1330" id="1330">1330</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1324,7 +1364,6 @@
 <span class="kw">use </span>zng_wgt_layer::popup::{PopupState, POPUP};
 <span class="kw">use </span>zng_wgt_size_offset::{size, x, y};
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style};
-<span class="kw">use </span>zng_wgt_transform::scale_y;
 
 <span class="kw">pub mod </span>cmd;
 
@@ -2441,19 +2480,60 @@
 
 <span class="attr">#[allow(non_snake_case)]
 </span><span class="kw">fn </span>combomark_visual() -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">zng_wgt_text::Text!</span> {
-        hit_test_mode = <span class="bool-val">false</span>;
-        accessible = <span class="bool-val">false</span>;
-        font_family = FontNames::system_ui(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(und));
-        txt_align = Align::CENTER;
-        align = Align::CENTER;
-        font_size = <span class="number">0.6</span>.em();
+    <span class="kw">let </span>color_key = FrameValueKey::new_unique();
+    <span class="kw">let </span><span class="kw-2">mut </span>size = PxSize::zero();
+    <span class="kw">let </span><span class="kw-2">mut </span>bounds = PxBox::zero();
+    <span class="kw">let </span><span class="kw-2">mut </span>transform = PxTransform::identity();
 
-        txt = <span class="string">"▼"</span>;
+    <span class="comment">// (8x8) at 45º, scaled-x 70%
+    </span><span class="kw">fn </span>layout() -&gt; (PxSize, PxTransform, PxBox) {
+        <span class="kw">let </span>size = Size::from(<span class="number">8</span>).layout();
+        <span class="kw">let </span>center = size.to_vector() * <span class="number">0.5</span>.fct();
+        <span class="kw">let </span>transform = Transform::new_translate(-center.x, -center.y)
+            .rotate(<span class="number">45</span>.deg())
+            .scale_x(<span class="number">0.7</span>)
+            .translate(center.x, center.y)
+            .layout();
 
-        when #{IS_CHECKED_VAR}.unwrap_or(<span class="bool-val">true</span>) {
-            scale_y = -<span class="number">1.0f32</span>;
+        <span class="kw">let </span>bounds = transform.outer_transformed(PxBox::from_size(size)).unwrap_or_default();
+        (size, transform, bounds)
+    }
+
+    <span class="kw">let </span>visual = match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
+        UiNodeOp::Init =&gt; {
+            WIDGET.sub_var_render_update(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR);
+            WIDGET.sub_var_render(<span class="kw-2">&amp;</span>IS_CHECKED_VAR);
         }
+        UiNodeOp::Measure { desired_size, .. } =&gt; {
+            <span class="kw">let </span>(s, <span class="kw">_</span>, <span class="kw">_</span>) = layout();
+            <span class="kw-2">*</span>desired_size = s;
+        }
+        UiNodeOp::Layout { final_size, .. } =&gt; {
+            (size, transform, bounds) = layout();
+            <span class="kw-2">*</span>final_size = size;
+        }
+        UiNodeOp::Render { frame } =&gt; {
+            <span class="kw">let </span><span class="kw-2">mut </span>clip = bounds.to_rect();
+            clip.size.height <span class="kw-2">*</span>= <span class="number">0.5</span>.fct();
+
+            <span class="kw">if </span>!IS_CHECKED_VAR.get().unwrap_or(<span class="bool-val">false</span>) {
+                clip.origin.y += clip.size.height;
+            }
+
+            frame.push_clip_rect(clip, <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+                frame.push_reference_frame((WIDGET.id(), <span class="number">0</span>).into(), transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+                    frame.push_color(PxRect::from_size(size), color_key.bind_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
+                })
+            });
+        }
+        UiNodeOp::RenderUpdate { update } =&gt; {
+            update.update_color_opt(color_key.update_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
+        }
+        <span class="kw">_ </span>=&gt; {}
+    });
+    <span class="macro">zng_wgt_container::Container!</span> {
+        child = visual;
+        child_align = Align::CENTER;
     }
 }
 

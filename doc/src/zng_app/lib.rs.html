@@ -1602,6 +1602,20 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1564" id="1564">1564</a>
 <a href="#1565" id="1565">1565</a>
 <a href="#1566" id="1566">1566</a>
+<a href="#1567" id="1567">1567</a>
+<a href="#1568" id="1568">1568</a>
+<a href="#1569" id="1569">1569</a>
+<a href="#1570" id="1570">1570</a>
+<a href="#1571" id="1571">1571</a>
+<a href="#1572" id="1572">1572</a>
+<a href="#1573" id="1573">1573</a>
+<a href="#1574" id="1574">1574</a>
+<a href="#1575" id="1575">1575</a>
+<a href="#1576" id="1576">1576</a>
+<a href="#1577" id="1577">1577</a>
+<a href="#1578" id="1578">1578</a>
+<a href="#1579" id="1579">1579</a>
+<a href="#1580" id="1580">1580</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3019,6 +3033,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// See also [`test_log`] to enable panicking for errors.
 ///
+/// See also [`print_tracing_filter`] for the filter used by this.
+///
 /// [`tracing`]: https://docs.rs/tracing
 </span><span class="kw">pub fn </span>print_tracing(max: tracing::Level) -&gt; bool {
     <span class="kw">use </span>tracing_subscriber::prelude::<span class="kw-2">*</span>;
@@ -3033,7 +3049,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">struct </span>FilterLayer(tracing::Level);
 <span class="kw">impl</span>&lt;S: tracing::Subscriber&gt; tracing_subscriber::Layer&lt;S&gt; <span class="kw">for </span>FilterLayer {
     <span class="kw">fn </span>enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, metadata: <span class="kw-2">&amp;</span>tracing::Metadata&lt;<span class="lifetime">'_</span>&gt;, <span class="kw">_</span>: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) -&gt; bool {
-        filter(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, metadata)
+        print_tracing_filter(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, metadata)
     }
 
     <span class="kw">fn </span>max_level_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;tracing::metadata::LevelFilter&gt; {
@@ -3062,29 +3078,41 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 }
-<span class="kw">fn </span>filter(level: <span class="kw-2">&amp;</span>tracing::Level, metadata: <span class="kw-2">&amp;</span>tracing::Metadata) -&gt; bool {
+<span class="doccomment">/// Filter used by [`print_tracing`], removes some log noise from dependencies.
+</span><span class="kw">pub fn </span>print_tracing_filter(level: <span class="kw-2">&amp;</span>tracing::Level, metadata: <span class="kw-2">&amp;</span>tracing::Metadata) -&gt; bool {
     <span class="kw">if </span>metadata.level() &gt; level {
         <span class="kw">return </span><span class="bool-val">false</span>;
     }
 
-    <span class="comment">// suppress webrender warnings:
-    //
-    </span><span class="kw">if </span>metadata.target() == <span class="string">"webrender::device::gl" </span>{
-        <span class="comment">// Suppress "Cropping texture upload Box2D((0, 0), (0, 1)) to None"
-        // This happens when an empty frame is rendered.
-        </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">4661</span>) {
+    <span class="kw">if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::INFO {
+        <span class="comment">// suppress large info about texture cache
+        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
             <span class="kw">return </span><span class="bool-val">false</span>;
         }
-    }
-
-    <span class="comment">// suppress font-kit warnings:
-    //
-    </span><span class="kw">if </span>metadata.target() == <span class="string">"font_kit::loaders::freetype" </span>{
-        <span class="comment">// Suppress "$fn(): found invalid platform ID $n"
-        // This does not look fully implemented and generates a lot of warns
-        // with the default Ubuntu font set all with valid platform IDs.
-        </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">735</span>) {
+        <span class="comment">// suppress config dump
+        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::renderer::init" </span>{
             <span class="kw">return </span><span class="bool-val">false</span>;
+        }
+    } <span class="kw">else if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::WARN {
+        <span class="comment">// suppress webrender warnings:
+        //
+        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
+            <span class="comment">// Suppress "Cropping texture upload Box2D((0, 0), (0, 1)) to None"
+            // This happens when an empty frame is rendered.
+            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">4661</span>) {
+                <span class="kw">return </span><span class="bool-val">false</span>;
+            }
+        }
+
+        <span class="comment">// suppress font-kit warnings:
+        //
+        </span><span class="kw">if </span>metadata.target() == <span class="string">"font_kit::loaders::freetype" </span>{
+            <span class="comment">// Suppress "$fn(): found invalid platform ID $n"
+            // This does not look fully implemented and generates a lot of warns
+            // with the default Ubuntu font set all with valid platform IDs.
+            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">734</span>) {
+                <span class="kw">return </span><span class="bool-val">false</span>;
+            }
         }
     }
 

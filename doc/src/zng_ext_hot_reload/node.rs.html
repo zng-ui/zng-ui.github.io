@@ -574,7 +574,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture();
 
         <span class="self">self</span>.instance = <span class="kw">match </span>HOT_RELOAD.lib(<span class="self">self</span>.manifest_dir) {
-            <span class="prelude-val">Some</span>(lib) =&gt; <span class="kw">match </span>lib.instantiate(<span class="self">self</span>.name, ctx.clone(), <span class="self">self</span>.args.clone()) {
+            <span class="prelude-val">Some</span>(lib) =&gt; <span class="kw">match </span>lib.instantiate(<span class="self">self</span>.name, <span class="kw-2">&amp;mut </span>ctx, <span class="self">self</span>.args.clone()) {
                 <span class="prelude-val">Some</span>(ok) =&gt; {
                     <span class="macro">tracing::debug!</span>(<span class="string">"loaded hot `{}` in `{}`"</span>, <span class="self">self</span>.name, WIDGET.trace_id());
                     ok

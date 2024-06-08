@@ -3298,22 +3298,6 @@
 <a href="#3296" id="3296">3296</a>
 <a href="#3297" id="3297">3297</a>
 <a href="#3298" id="3298">3298</a>
-<a href="#3299" id="3299">3299</a>
-<a href="#3300" id="3300">3300</a>
-<a href="#3301" id="3301">3301</a>
-<a href="#3302" id="3302">3302</a>
-<a href="#3303" id="3303">3303</a>
-<a href="#3304" id="3304">3304</a>
-<a href="#3305" id="3305">3305</a>
-<a href="#3306" id="3306">3306</a>
-<a href="#3307" id="3307">3307</a>
-<a href="#3308" id="3308">3308</a>
-<a href="#3309" id="3309">3309</a>
-<a href="#3310" id="3310">3310</a>
-<a href="#3311" id="3311">3311</a>
-<a href="#3312" id="3312">3312</a>
-<a href="#3313" id="3313">3313</a>
-<a href="#3314" id="3314">3314</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3335,6 +3319,8 @@
 </span><span class="kw">extern crate </span>bitflags;
 
 <span class="kw">pub mod </span>font_features;
+
+<span class="kw">mod </span>match_util;
 
 <span class="kw">mod </span>emoji_util;
 <span class="kw">pub use </span>emoji_util::<span class="kw-2">*</span>;
@@ -4421,7 +4407,7 @@
         <span class="kw">let </span>metrics = font.metrics();
         <span class="kw">if </span>metrics.units_per_em == <span class="number">0 </span>{
             <span class="comment">// observed this in Noto Color Emoji
-            </span><span class="macro">tracing::error!</span>(<span class="string">"font {:?} units_per_em 0"</span>, font.family_name());
+            </span><span class="macro">tracing::debug!</span>(<span class="string">"font {:?} units_per_em 0"</span>, font.family_name());
             <span class="kw">return </span><span class="prelude-val">Err</span>(FontLoadingError::UnknownFormat);
         }
 
@@ -5289,7 +5275,7 @@
 
                     <span class="attr">#[cfg(debug_assertions)]
                     </span><span class="kw">if </span>NOT_FOUND.lock().get_or_insert_with(HashSet::default).insert(font_name.clone()) {
-                        <span class="macro">tracing::warn!</span>(<span class="string">r#"font "{font_name}" not found"#</span>);
+                        <span class="macro">tracing::debug!</span>(<span class="string">r#"font "{font_name}" not found"#</span>);
                     }
 
                     <span class="kw">return </span><span class="prelude-val">None</span>;
@@ -5327,25 +5313,7 @@
 
     <span class="kw">fn </span>get_system(font_name: <span class="kw-2">&amp;</span>FontName, style: FontStyle, weight: FontWeight, stretch: FontStretch) -&gt; <span class="prelude-ty">Option</span>&lt;font_kit::handle::Handle&gt; {
         <span class="kw">let </span>_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"FontFaceLoader::get_system"</span>).entered();
-        <span class="kw">let </span>family_name = font_kit::family_name::FamilyName::from(font_name.clone());
-        <span class="kw">match </span>font_kit::source::SystemSource::new().select_best_match(
-            <span class="kw-2">&amp;</span>[family_name],
-            <span class="kw-2">&amp;</span>font_kit::properties::Properties {
-                style: style.into(),
-                weight: weight.into(),
-                stretch: stretch.into(),
-            },
-        ) {
-            <span class="prelude-val">Ok</span>(handle) =&gt; <span class="prelude-val">Some</span>(handle),
-            <span class="prelude-val">Err</span>(font_kit::error::SelectionError::NotFound) =&gt; {
-                <span class="macro">tracing::debug!</span>(target: <span class="string">"font_loading"</span>, <span class="string">"system font not found\nquery: {:?}"</span>, (font_name, style, weight, stretch));
-                <span class="prelude-val">None
-            </span>}
-            <span class="prelude-val">Err</span>(e) =&gt; {
-                <span class="macro">tracing::error!</span>(target: <span class="string">"font_loading"</span>, <span class="string">"failed to select system font, {e}\nquery: {:?}"</span>, (font_name, style, weight, stretch));
-                <span class="prelude-val">None
-            </span>}
-        }
+        match_util::best(font_name, style, weight, stretch)
     }
 
     <span class="kw">fn </span>match_custom(faces: <span class="kw-2">&amp;</span>[FontFace], style: FontStyle, weight: FontWeight, stretch: FontStretch) -&gt; FontFace {

@@ -1077,7 +1077,82 @@
 <a href="#1075" id="1075">1075</a>
 <a href="#1076" id="1076">1076</a>
 <a href="#1077" id="1077">1077</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::Cell, error::Error, ffi::CString, fmt, mem, num::NonZeroU32, rc::Rc};
+<a href="#1078" id="1078">1078</a>
+<a href="#1079" id="1079">1079</a>
+<a href="#1080" id="1080">1080</a>
+<a href="#1081" id="1081">1081</a>
+<a href="#1082" id="1082">1082</a>
+<a href="#1083" id="1083">1083</a>
+<a href="#1084" id="1084">1084</a>
+<a href="#1085" id="1085">1085</a>
+<a href="#1086" id="1086">1086</a>
+<a href="#1087" id="1087">1087</a>
+<a href="#1088" id="1088">1088</a>
+<a href="#1089" id="1089">1089</a>
+<a href="#1090" id="1090">1090</a>
+<a href="#1091" id="1091">1091</a>
+<a href="#1092" id="1092">1092</a>
+<a href="#1093" id="1093">1093</a>
+<a href="#1094" id="1094">1094</a>
+<a href="#1095" id="1095">1095</a>
+<a href="#1096" id="1096">1096</a>
+<a href="#1097" id="1097">1097</a>
+<a href="#1098" id="1098">1098</a>
+<a href="#1099" id="1099">1099</a>
+<a href="#1100" id="1100">1100</a>
+<a href="#1101" id="1101">1101</a>
+<a href="#1102" id="1102">1102</a>
+<a href="#1103" id="1103">1103</a>
+<a href="#1104" id="1104">1104</a>
+<a href="#1105" id="1105">1105</a>
+<a href="#1106" id="1106">1106</a>
+<a href="#1107" id="1107">1107</a>
+<a href="#1108" id="1108">1108</a>
+<a href="#1109" id="1109">1109</a>
+<a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a>
+<a href="#1113" id="1113">1113</a>
+<a href="#1114" id="1114">1114</a>
+<a href="#1115" id="1115">1115</a>
+<a href="#1116" id="1116">1116</a>
+<a href="#1117" id="1117">1117</a>
+<a href="#1118" id="1118">1118</a>
+<a href="#1119" id="1119">1119</a>
+<a href="#1120" id="1120">1120</a>
+<a href="#1121" id="1121">1121</a>
+<a href="#1122" id="1122">1122</a>
+<a href="#1123" id="1123">1123</a>
+<a href="#1124" id="1124">1124</a>
+<a href="#1125" id="1125">1125</a>
+<a href="#1126" id="1126">1126</a>
+<a href="#1127" id="1127">1127</a>
+<a href="#1128" id="1128">1128</a>
+<a href="#1129" id="1129">1129</a>
+<a href="#1130" id="1130">1130</a>
+<a href="#1131" id="1131">1131</a>
+<a href="#1132" id="1132">1132</a>
+<a href="#1133" id="1133">1133</a>
+<a href="#1134" id="1134">1134</a>
+<a href="#1135" id="1135">1135</a>
+<a href="#1136" id="1136">1136</a>
+<a href="#1137" id="1137">1137</a>
+<a href="#1138" id="1138">1138</a>
+<a href="#1139" id="1139">1139</a>
+<a href="#1140" id="1140">1140</a>
+<a href="#1141" id="1141">1141</a>
+<a href="#1142" id="1142">1142</a>
+<a href="#1143" id="1143">1143</a>
+<a href="#1144" id="1144">1144</a>
+<a href="#1145" id="1145">1145</a>
+<a href="#1146" id="1146">1146</a>
+<a href="#1147" id="1147">1147</a>
+<a href="#1148" id="1148">1148</a>
+<a href="#1149" id="1149">1149</a>
+<a href="#1150" id="1150">1150</a>
+<a href="#1151" id="1151">1151</a>
+<a href="#1152" id="1152">1152</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::Cell, error::Error, ffi::CString, fmt, mem, num::NonZeroU32, rc::Rc, thread};
 
 <span class="kw">use </span>gleam::gl;
 <span class="kw">use </span>glutin::{
@@ -1113,6 +1188,32 @@
     }
 }
 
+<span class="kw">enum </span>GlWindowCreation {
+    <span class="doccomment">/// Windows requires this.
+    </span>Before(winit::window::Window),
+    <span class="doccomment">/// Other platforms don't. X11 requires this because it needs to set the XVisualID.
+    </span>After(winit::window::WindowAttributes),
+}
+<span class="kw">fn </span>winit_create_window(winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop, window: <span class="kw-2">&amp;</span>winit::window::WindowAttributes) -&gt; winit::window::Window {
+    <span class="kw">let </span><span class="kw-2">mut </span>retries = <span class="number">0</span>;
+    <span class="kw">loop </span>{
+        <span class="kw">match </span>winit_loop.create_window(window.clone()) {
+            <span class="prelude-val">Ok</span>(w) =&gt; <span class="kw">break </span>w,
+            <span class="prelude-val">Err</span>(e) =&gt; {
+                <span class="comment">// Some platforms work after a retry
+                // X11: After a GLXBadWindow
+                </span>retries += <span class="number">1</span>;
+                <span class="kw">if </span>retries == <span class="number">10 </span>{
+                    <span class="macro">panic!</span>(<span class="string">"cannot create winit window, {e}"</span>)
+                } <span class="kw">else if </span>retries &gt; <span class="number">1 </span>{
+                    <span class="macro">tracing::error!</span>(<span class="string">"cannot create winit window (retry={retries}), {e}"</span>);
+                    thread::sleep(std::time::Duration::from_millis(retries * <span class="number">100</span>));
+                }
+            }
+        }
+    }
+}
+
 <span class="kw">impl </span>GlContextManager {
     <span class="doccomment">/// New window context.
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>create_headed(
@@ -1131,16 +1232,20 @@
                 <span class="kw">continue</span>;
             }
 
-            <span class="kw">let </span>window = winit_loop.create_window(window.clone()).unwrap();
+            <span class="kw">let </span>window = <span class="kw">if </span><span class="macro">cfg!</span>(windows) || <span class="macro">matches!</span>(config.mode, RenderMode::Software) {
+                GlWindowCreation::Before(winit_create_window(winit_loop, <span class="kw-2">&amp;</span>window))
+            } <span class="kw">else </span>{
+                GlWindowCreation::After(window.clone())
+            };
 
             <span class="kw">let </span>r = util::catch_suppress(std::panic::AssertUnwindSafe(|| <span class="kw">match </span>config.mode {
-                RenderMode::Dedicated =&gt; <span class="self">self</span>.create_headed_glutin(id, <span class="kw-2">&amp;</span>window, config.hardware_acceleration),
-                RenderMode::Integrated =&gt; <span class="self">self</span>.create_headed_glutin(id, <span class="kw-2">&amp;</span>window, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)),
-                RenderMode::Software =&gt; <span class="self">self</span>.create_headed_swgl(id, <span class="kw-2">&amp;</span>window),
+                RenderMode::Dedicated =&gt; <span class="self">self</span>.create_headed_glutin(winit_loop, id, window, config.hardware_acceleration),
+                RenderMode::Integrated =&gt; <span class="self">self</span>.create_headed_glutin(winit_loop, id, window, <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)),
+                RenderMode::Software =&gt; <span class="self">self</span>.create_headed_swgl(winit_loop, id, window),
             }));
 
             <span class="kw">let </span>error = <span class="kw">match </span>r {
-                <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(ctx)) =&gt; <span class="kw">return </span>(window, ctx),
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(r)) =&gt; <span class="kw">return </span>r,
                 <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(e)) =&gt; e,
                 <span class="prelude-val">Err</span>(panic) =&gt; {
                     <span class="kw">let </span>component = <span class="kw">match </span>config.mode {
@@ -1229,15 +1334,16 @@
 
     <span class="kw">fn </span>create_headed_glutin(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         id: WindowId,
-        window: <span class="kw-2">&amp;</span>winit::window::Window,
+        window: GlWindowCreation,
         hardware: <span class="prelude-ty">Option</span>&lt;bool&gt;,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;GlContext, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
-        <span class="kw">let </span>display_handle = window.raw_display_handle();
-        <span class="kw">let </span>window_handle = window.raw_window_handle();
-
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(winit::window::Window, GlContext), Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
         <span class="attr">#[cfg(windows)]
-        </span><span class="kw">let </span>display_pref = DisplayApiPreference::WglThenEgl(<span class="prelude-val">Some</span>(window_handle));
+        </span><span class="kw">let </span>display_pref = DisplayApiPreference::WglThenEgl(<span class="prelude-val">Some</span>(<span class="kw">match </span><span class="kw-2">&amp;</span>window {
+            GlWindowCreation::Before(w) =&gt; w.raw_window_handle(),
+            GlWindowCreation::After(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
+        }));
 
         <span class="attr">#[cfg(any(
             target_os = <span class="string">"linux"</span>,
@@ -1251,19 +1357,52 @@
         <span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
         </span><span class="kw">let </span>display_pref = DisplayApiPreference::Cgl;
 
+        <span class="kw">let </span>display_handle = <span class="kw">match </span><span class="kw-2">&amp;</span>window {
+            GlWindowCreation::Before(w) =&gt; w.raw_display_handle(),
+            GlWindowCreation::After(<span class="kw">_</span>) =&gt; event_loop.raw_display_handle(),
+        };
+
         <span class="comment">// SAFETY: we are trusting the `raw_display_handle` from winit here.
         </span><span class="kw">let </span>display = <span class="kw">unsafe </span>{ Display::new(display_handle, display_pref) }<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>template = ConfigTemplateBuilder::new()
+        <span class="kw">let </span><span class="kw-2">mut </span>template = ConfigTemplateBuilder::new()
             .with_alpha_size(<span class="number">8</span>)
             .with_transparency(<span class="bool-val">true</span>)
-            .compatible_with_native_window(window_handle)
             .with_surface_type(ConfigSurfaceTypes::WINDOW)
-            .prefer_hardware_accelerated(hardware)
-            .build();
+            .prefer_hardware_accelerated(hardware);
+        <span class="kw">if let </span>GlWindowCreation::Before(w) = <span class="kw-2">&amp;</span>window {
+            template = template.compatible_with_native_window(w.raw_window_handle());
+        }
+        <span class="kw">let </span>template = template.build();
 
         <span class="comment">// SAFETY: we are holding the `window` reference.
         </span><span class="kw">let </span>config = <span class="kw">unsafe </span>{ display.find_configs(template)<span class="question-mark">?</span>.next().ok_or(<span class="string">"no display config"</span>) }<span class="question-mark">?</span>;
+
+        <span class="kw">let </span>window = <span class="kw">match </span>window {
+            GlWindowCreation::Before(w) =&gt; w,
+            GlWindowCreation::After(w) =&gt; {
+                <span class="attr">#[cfg(any(
+                    target_os = <span class="string">"linux"</span>,
+                    target_os = <span class="string">"dragonfly"</span>,
+                    target_os = <span class="string">"freebsd"</span>,
+                    target_os = <span class="string">"openbsd"</span>,
+                    target_os = <span class="string">"netbsd"
+                </span>))]
+                </span><span class="kw">let </span>w = {
+                    <span class="kw">use </span>glutin::platform::x11::X11GlConfigExt <span class="kw">as _</span>;
+                    <span class="kw">use </span>winit::platform::x11::WindowAttributesExtX11 <span class="kw">as _</span>;
+
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = config.x11_visual() {
+                        w.with_x11_visual(id.visual_id() <span class="kw">as _</span>)
+                    } <span class="kw">else </span>{
+                        w
+                    }
+                };
+                winit_create_window(event_loop, <span class="kw-2">&amp;</span>w)
+            }
+        };
+
+        <span class="kw">let </span>window_handle = window.raw_window_handle();
 
         <span class="kw">let </span>size = window.inner_size();
         <span class="kw">let </span>attrs = SurfaceAttributesBuilder::&lt;WindowSurface&gt;::new().build(
@@ -1327,11 +1466,16 @@
 
         context.resize(size);
 
-        <span class="prelude-val">Ok</span>(context)
+        <span class="prelude-val">Ok</span>((window, context))
     }
 
     <span class="attr">#[allow(unreachable_code)]
-    </span><span class="kw">fn </span>create_headed_swgl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, window: <span class="kw-2">&amp;</span>winit::window::Window) -&gt; <span class="prelude-ty">Result</span>&lt;GlContext, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+    </span><span class="kw">fn </span>create_headed_swgl(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
+        id: WindowId,
+        window: GlWindowCreation,
+    ) -&gt; <span class="prelude-ty">Result</span>&lt;(winit::window::Window, GlContext), Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
         <span class="attr">#[cfg(not(feature = <span class="string">"software"</span>))]
         </span>{
             <span class="kw">let _ </span>= (id, window);
@@ -1344,7 +1488,12 @@
                 <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"zng-view does not fully implement headed \"software\" backend on target OS (missing blit)"</span>.into());
             }
 
-            <span class="kw">let </span>blit = blit::Impl::new(window);
+            <span class="kw">let </span>window = <span class="kw">match </span>window {
+                GlWindowCreation::Before(w) =&gt; w,
+                GlWindowCreation::After(w) =&gt; event_loop.create_window(w)<span class="question-mark">?</span>,
+            };
+
+            <span class="kw">let </span>blit = blit::Impl::new(<span class="kw-2">&amp;</span>window);
             <span class="kw">let </span>context = swgl::Context::create();
             <span class="kw">let </span>gl = Rc::new(context);
 
@@ -1352,13 +1501,14 @@
             </span><span class="self">self</span>.current.set(<span class="prelude-val">Some</span>(id));
             context.make_current();
 
-            <span class="prelude-val">Ok</span>(GlContext {
+            <span class="kw">let </span>context = GlContext {
                 id,
                 current: <span class="self">self</span>.current.clone(),
                 backend: GlBackend::Swgl { context, blit: <span class="prelude-val">Some</span>(blit) },
                 gl,
                 render_mode: RenderMode::Software,
-            })
+            };
+            <span class="prelude-val">Ok</span>((window, context))
         }
     }
 
