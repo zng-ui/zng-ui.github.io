@@ -1174,6 +1174,29 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1136" id="1136">1136</a>
 <a href="#1137" id="1137">1137</a>
 <a href="#1138" id="1138">1138</a>
+<a href="#1139" id="1139">1139</a>
+<a href="#1140" id="1140">1140</a>
+<a href="#1141" id="1141">1141</a>
+<a href="#1142" id="1142">1142</a>
+<a href="#1143" id="1143">1143</a>
+<a href="#1144" id="1144">1144</a>
+<a href="#1145" id="1145">1145</a>
+<a href="#1146" id="1146">1146</a>
+<a href="#1147" id="1147">1147</a>
+<a href="#1148" id="1148">1148</a>
+<a href="#1149" id="1149">1149</a>
+<a href="#1150" id="1150">1150</a>
+<a href="#1151" id="1151">1151</a>
+<a href="#1152" id="1152">1152</a>
+<a href="#1153" id="1153">1153</a>
+<a href="#1154" id="1154">1154</a>
+<a href="#1155" id="1155">1155</a>
+<a href="#1156" id="1156">1156</a>
+<a href="#1157" id="1157">1157</a>
+<a href="#1158" id="1158">1158</a>
+<a href="#1159" id="1159">1159</a>
+<a href="#1160" id="1160">1160</a>
+<a href="#1161" id="1161">1161</a>
 </pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"crash_handler"</span>)]
 
 </span><span class="doccomment">//! App-process crash handler.
@@ -1183,7 +1206,7 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>std::{
     fmt,
-    io::{BufRead, BufReader},
+    io::{BufRead, Write},
     path::{Path, PathBuf},
     time::SystemTime,
 };
@@ -1191,10 +1214,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">use </span>zng_txt::{ToTxt <span class="kw">as _</span>, Txt};
 
+<span class="doccomment">/// Environment variable that causes the crash handler to not start if set.
+///
+/// This is particularly useful to set in debugger launch configs. Crash handler spawns
+/// a different process for the app  so break points will not work.
+</span><span class="kw">pub const </span>NO_CRASH_HANDLER: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_NO_CRASH_HANDLER"</span>;
+
 <span class="macro">zng_env::on_process_start!</span>(|process_start_args| {
+    <span class="kw">if </span>std::env::var(NO_CRASH_HANDLER).is_ok() {
+        <span class="kw">return</span>;
+    }
+
     <span class="kw">let </span><span class="kw-2">mut </span>config = CrashConfig::new();
     <span class="kw">for </span>ext <span class="kw">in </span>CRASH_CONFIG {
         ext(<span class="kw-2">&amp;mut </span>config);
+        <span class="kw">if </span>config.no_crash_handler {
+            <span class="kw">return</span>;
+        }
     }
 
     <span class="kw">if </span>std::env::var(APP_PROCESS) != <span class="prelude-val">Err</span>(std::env::VarError::NotPresent) {
@@ -1297,6 +1333,7 @@ document.addEventListener('DOMContentLoaded', function () {
     app_process: ConfigProcess,
     dialog_process: ConfigProcess,
     dump_dir: <span class="prelude-ty">Option</span>&lt;PathBuf&gt;,
+    no_crash_handler: bool,
 }
 <span class="kw">impl </span>CrashConfig {
     <span class="kw">fn </span>new() -&gt; <span class="self">Self </span>{
@@ -1306,6 +1343,7 @@ document.addEventListener('DOMContentLoaded', function () {
             app_process: <span class="macro">vec!</span>[],
             dialog_process: <span class="macro">vec!</span>[],
             dump_dir: <span class="prelude-val">Some</span>(zng_env::cache(<span class="string">"zng_minidump"</span>)),
+            no_crash_handler: <span class="bool-val">false</span>,
         }
     }
 
@@ -1355,6 +1393,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Do not collect a minidump.
     </span><span class="kw">pub fn </span>no_minidump(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.dump_dir = <span class="prelude-val">None</span>;
+    }
+
+    <span class="doccomment">/// Does not run with crash handler.
+    ///
+    /// This is equivalent of running with `NO_ZNG_CRASH_HANDLER` env var.
+    </span><span class="kw">pub fn </span>no_crash_handler(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.no_crash_handler = <span class="bool-val">true</span>;
     }
 }
 
@@ -2165,33 +2210,34 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="prelude-val">Ok</span>((status, [stdout, stderr]))
 }
-<span class="kw">fn </span>capture_and_print(stream: <span class="kw">impl </span>std::io::Read + Send + <span class="lifetime">'static</span>, is_err: bool) -&gt; std::thread::JoinHandle&lt;String&gt; {
+<span class="kw">fn </span>capture_and_print(<span class="kw-2">mut </span>stream: <span class="kw">impl </span>std::io::Read + Send + <span class="lifetime">'static</span>, is_err: bool) -&gt; std::thread::JoinHandle&lt;String&gt; {
     std::thread::spawn(<span class="kw">move </span>|| {
-        <span class="kw">let </span><span class="kw-2">mut </span>capture = String::new();
-
-        <span class="kw">let </span><span class="kw-2">mut </span>reader = BufReader::new(stream);
-
+        <span class="kw">let </span><span class="kw-2">mut </span>capture = <span class="macro">vec!</span>[];
+        <span class="kw">let </span><span class="kw-2">mut </span>buffer = [<span class="number">0u8</span>; <span class="number">32</span>];
         <span class="kw">loop </span>{
-            <span class="kw">let </span><span class="kw-2">mut </span>line = String::new();
-            <span class="kw">match </span>reader.read_line(<span class="kw-2">&amp;mut </span>line) {
+            <span class="kw">match </span>stream.read(<span class="kw-2">&amp;mut </span>buffer) {
                 <span class="prelude-val">Ok</span>(n) =&gt; {
-                    <span class="kw">if </span>n &gt; <span class="number">0 </span>{
-                        <span class="kw">if </span>is_err {
-                            <span class="macro">eprint!</span>(<span class="string">"{line}"</span>);
-                        } <span class="kw">else </span>{
-                            <span class="macro">print!</span>(<span class="string">"{line}"</span>);
-                        }
-                        capture.push_str(<span class="kw-2">&amp;</span>line);
-                        line.clear();
-                    } <span class="kw">else </span>{
+                    <span class="kw">if </span>n == <span class="number">0 </span>{
                         <span class="kw">break</span>;
+                    }
+
+                    <span class="kw">let </span>new = <span class="kw-2">&amp;</span>buffer[..n];
+                    capture.write_all(new).unwrap();
+                    <span class="kw">let </span>r = <span class="kw">if </span>is_err {
+                        <span class="kw">let </span><span class="kw-2">mut </span>s = std::io::stderr();
+                        s.write_all(new).and_then(|<span class="kw">_</span>| s.flush())
+                    } <span class="kw">else </span>{
+                        <span class="kw">let </span><span class="kw-2">mut </span>s = std::io::stdout();
+                        s.write_all(new).and_then(|<span class="kw">_</span>| s.flush())
+                    };
+                    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
+                        <span class="macro">panic!</span>(<span class="string">"{} write error, {}"</span>, <span class="kw">if </span>is_err { <span class="string">"stderr" </span>} <span class="kw">else </span>{ <span class="string">"stdout" </span>}, e)
                     }
                 }
                 <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">panic!</span>(<span class="string">"{} read error, {}"</span>, <span class="kw">if </span>is_err { <span class="string">"stderr" </span>} <span class="kw">else </span>{ <span class="string">"stdout" </span>}, e),
             }
         }
-
-        capture
+        String::from_utf8_lossy(<span class="kw-2">&amp;</span>capture).into_owned()
     })
 }
 

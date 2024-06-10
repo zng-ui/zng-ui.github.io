@@ -561,6 +561,20 @@
 <a href="#558" id="558">558</a>
 <a href="#559" id="559">559</a>
 <a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+<a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a>
+<a href="#569" id="569">569</a>
+<a href="#570" id="570">570</a>
+<a href="#571" id="571">571</a>
+<a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! App extensions, context, events and commands API.
 //!
 //! # Runtime
@@ -586,7 +600,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.7.1", features = ["view_prebuilt"] }
+//! zng = { version = "0.8.0", features = ["view_prebuilt"] }
 //! ```
 //!
 //! ```no_run
@@ -966,16 +980,16 @@
 #[allow(deprecated)]
 </span><span class="kw">pub use </span>zng_app::about_app_from_crate;
 <span class="kw">pub use </span>zng_app::{
-    on_app_start, print_tracing, AboutApp, AppControlFlow, AppEventObserver, AppExtended, AppExtension, AppExtensionBoxed,
-    AppExtensionInfo, AppStartArgs, DInstant, Deadline, ExitRequestedArgs, HeadlessApp, InstantMode, EXIT_CMD, EXIT_REQUESTED_EVENT,
-    INSTANT,
+    on_app_start, print_tracing, print_tracing_filter, AboutApp, AppControlFlow, AppEventObserver, AppExtended, AppExtension,
+    AppExtensionBoxed, AppExtensionInfo, AppStartArgs, DInstant, Deadline, ExitRequestedArgs, HeadlessApp, InstantMode, EXIT_CMD,
+    EXIT_REQUESTED_EVENT, INSTANT,
 };
 
 <span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
 </span><span class="kw">pub use </span>zng_app::test_log;
 
 <span class="kw">pub use </span>zng_app_context::{
-    app_local, context_local, AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, FullLocalContext, LocalContext,
+    app_local, context_local, AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext,
     MappedRwLockReadGuardOwned, MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned,
 };
 <span class="kw">pub use </span>zng_wgt_input::cmd::{
@@ -1092,6 +1106,20 @@
 ///     });
 /// });
 ///
+/// ```
+///
+/// # Debugger
+///
+/// Note that because the crash handler spawns a different process for the app debuggers will not
+/// stop at break points in the app code. You can configure your debugger to set the `NO_ZNG_CRASH_HANDLER` environment
+/// variable to not use a crash handler in debug runs.
+///
+/// On VS Code with the CodeLLDB extension you can add this workspace configuration:
+///
+/// ```json
+/// "lldb.launch.env": {
+///    "NO_ZNG_CRASH_HANDLER": ""
+/// }
 /// ```
 ///
 /// # Full API

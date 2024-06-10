@@ -1152,6 +1152,7 @@
 <a href="#1150" id="1150">1150</a>
 <a href="#1151" id="1151">1151</a>
 <a href="#1152" id="1152">1152</a>
+<a href="#1153" id="1153">1153</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::Cell, error::Error, ffi::CString, fmt, mem, num::NonZeroU32, rc::Rc, thread};
 
 <span class="kw">use </span>gleam::gl;
@@ -1341,7 +1342,7 @@
     ) -&gt; <span class="prelude-ty">Result</span>&lt;(winit::window::Window, GlContext), Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
         <span class="attr">#[cfg(windows)]
         </span><span class="kw">let </span>display_pref = DisplayApiPreference::WglThenEgl(<span class="prelude-val">Some</span>(<span class="kw">match </span><span class="kw-2">&amp;</span>window {
-            GlWindowCreation::Before(w) =&gt; w.raw_window_handle(),
+            GlWindowCreation::Before(w) =&gt; w.window_handle().unwrap().as_raw(),
             GlWindowCreation::After(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(),
         }));
 
@@ -1358,8 +1359,8 @@
         </span><span class="kw">let </span>display_pref = DisplayApiPreference::Cgl;
 
         <span class="kw">let </span>display_handle = <span class="kw">match </span><span class="kw-2">&amp;</span>window {
-            GlWindowCreation::Before(w) =&gt; w.raw_display_handle(),
-            GlWindowCreation::After(<span class="kw">_</span>) =&gt; event_loop.raw_display_handle(),
+            GlWindowCreation::Before(w) =&gt; w.display_handle().unwrap().as_raw(),
+            GlWindowCreation::After(<span class="kw">_</span>) =&gt; event_loop.display_handle().unwrap().as_raw(),
         };
 
         <span class="comment">// SAFETY: we are trusting the `raw_display_handle` from winit here.
@@ -1371,7 +1372,7 @@
             .with_surface_type(ConfigSurfaceTypes::WINDOW)
             .prefer_hardware_accelerated(hardware);
         <span class="kw">if let </span>GlWindowCreation::Before(w) = <span class="kw-2">&amp;</span>window {
-            template = template.compatible_with_native_window(w.raw_window_handle());
+            template = template.compatible_with_native_window(w.window_handle().unwrap().as_raw());
         }
         <span class="kw">let </span>template = template.build();
 
@@ -1402,7 +1403,7 @@
             }
         };
 
-        <span class="kw">let </span>window_handle = window.raw_window_handle();
+        <span class="kw">let </span>window_handle = window.window_handle().unwrap().as_raw();
 
         <span class="kw">let </span>size = window.inner_size();
         <span class="kw">let </span>attrs = SurfaceAttributesBuilder::&lt;WindowSurface&gt;::new().build(
@@ -1525,8 +1526,8 @@
             .with_decorations(<span class="bool-val">false</span>);
         <span class="kw">let </span>hidden_window = winit_loop.create_window(hidden_window)<span class="question-mark">?</span>;
 
-        <span class="kw">let </span>display_handle = winit_loop.raw_display_handle();
-        <span class="kw">let </span>window_handle = hidden_window.raw_window_handle();
+        <span class="kw">let </span>display_handle = winit_loop.display_handle().unwrap().as_raw();
+        <span class="kw">let </span>window_handle = hidden_window.window_handle().unwrap().as_raw();
 
         <span class="attr">#[cfg(windows)]
         </span><span class="kw">let </span>display_pref = DisplayApiPreference::WglThenEgl(<span class="prelude-val">Some</span>(window_handle));
@@ -1950,8 +1951,7 @@
 
     <span class="attr">#[cfg(windows)]
     </span><span class="kw">mod </span>windows_blit {
-
-        <span class="kw">use </span>raw_window_handle::HasRawWindowHandle;
+        <span class="kw">use </span>raw_window_handle::HasWindowHandle <span class="kw">as _</span>;
         <span class="kw">use </span>windows_sys::Win32::Foundation::HWND;
         <span class="kw">use </span>windows_sys::Win32::Graphics::Gdi::<span class="kw-2">*</span>;
 
@@ -1961,8 +1961,8 @@
 
         <span class="kw">impl </span>GdiBlit {
             <span class="kw">pub fn </span>new(window: <span class="kw-2">&amp;</span>winit::window::Window) -&gt; <span class="self">Self </span>{
-                <span class="kw">match </span>window.raw_window_handle() {
-                    raw_window_handle::RawWindowHandle::Win32(h) =&gt; GdiBlit { hwnd: h.hwnd <span class="kw">as _ </span>},
+                <span class="kw">match </span>window.window_handle().unwrap().as_raw() {
+                    raw_window_handle::RawWindowHandle::Win32(h) =&gt; GdiBlit { hwnd: h.hwnd.get() <span class="kw">as _ </span>},
                     <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
                 }
             }
@@ -2115,21 +2115,23 @@
 
         <span class="kw">impl </span>XLibOrWaylandBlit {
             <span class="kw">pub fn </span>new(window: <span class="kw-2">&amp;</span>winit::window::Window) -&gt; <span class="self">Self </span>{
-                <span class="kw">if let </span>(RawDisplayHandle::Xlib(d), RawWindowHandle::Xlib(w)) = (window.raw_display_handle(), window.raw_window_handle()) {
+                <span class="kw">if let </span>(RawDisplayHandle::Xlib(d), RawWindowHandle::Xlib(w)) =
+                    (window.display_handle().unwrap().as_raw(), window.window_handle().unwrap().as_raw())
+                {
                     <span class="self">Self</span>::XLib {
                         xlib: Xlib::open().unwrap(),
-                        display: d.display <span class="kw">as _</span>,
+                        display: d.display.unwrap().as_ptr() <span class="kw">as _</span>,
                         window: w.window <span class="kw">as _</span>,
                     }
                 } <span class="kw">else if let </span>(RawDisplayHandle::Wayland(d), RawWindowHandle::Wayland(w)) =
-                    (window.raw_display_handle(), window.raw_window_handle())
+                    (window.display_handle().unwrap().as_raw(), window.window_handle().unwrap().as_raw())
                 {
                     <span class="kw">let </span>conn = wayland_client::Connection::connect_to_env().unwrap();
 
                     <span class="kw">let </span>event_queue = conn.new_event_queue::&lt;WaylandNoOp&gt;();
                     <span class="kw">let </span>qhandle = event_queue.handle();
 
-                    <span class="kw">let </span>display: <span class="kw-2">*const </span>WlDisplay = d.display <span class="kw">as _</span>;
+                    <span class="kw">let </span>display: <span class="kw-2">*const </span>WlDisplay = d.display.as_ptr() <span class="kw">as _</span>;
                     <span class="kw">let </span>display = <span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span>display };
                     <span class="kw">let </span>shm: WlShm = display.get_registry(<span class="kw-2">&amp;</span>qhandle, ()).bind(<span class="number">1</span>, <span class="number">0</span>, <span class="kw-2">&amp;</span>qhandle, ());
                     <span class="kw">let </span>file = tempfile::tempfile().expect(<span class="string">"cannot create file for wayland blit"</span>);
@@ -2148,7 +2150,7 @@
                     );
 
                     <span class="self">Self</span>::Wayland {
-                        surface: w.surface <span class="kw">as _</span>,
+                        surface: w.surface.as_ptr() <span class="kw">as _</span>,
                         data: WaylandData {
                             pool,
                             buf,

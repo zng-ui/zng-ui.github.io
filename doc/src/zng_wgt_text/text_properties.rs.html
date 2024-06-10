@@ -1930,7 +1930,6 @@
 <a href="#1928" id="1928">1928</a>
 <a href="#1929" id="1929">1929</a>
 <a href="#1930" id="1930">1930</a>
-<a href="#1931" id="1931">1931</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, num::NonZeroU32, time::Duration};
 
 <span class="kw">use </span>zng_app::render::FontSynthesis;
@@ -3817,11 +3816,11 @@
     })
 }
 
-<span class="doccomment">/// Gets a vector of font names and ranges.
+<span class="doccomment">/// Gets a vector of font and ranges.
 ///
 /// This property must be set in the text widget.
 </span><span class="attr">#[property(CHILD_LAYOUT+<span class="number">100</span>, widget_impl(TextInspectMix&lt;P&gt;))]
-</span><span class="kw">pub fn </span>get_font_use(child: <span class="kw">impl </span>UiNode, font_use: <span class="kw">impl </span>IntoVar&lt;Vec&lt;(FontName, std::ops::Range&lt;usize&gt;)&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>get_font_use(child: <span class="kw">impl </span>UiNode, font_use: <span class="kw">impl </span>IntoVar&lt;Vec&lt;(Font, std::ops::Range&lt;usize&gt;)&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>font_use = font_use.into_var();
     <span class="kw">let </span><span class="kw-2">mut </span>shaped_text_version = u32::MAX;
     match_node(child, <span class="kw">move </span>|c, op| {
@@ -3840,7 +3839,6 @@
                     <span class="kw">let </span>seg_range = seg.text_range();
 
                     <span class="kw">for </span>(font, glyphs) <span class="kw">in </span>seg.glyphs() {
-                        <span class="kw">let </span>font = font.face().family_name();
                         <span class="kw">if </span>r.is_empty() {
                             r.push((font.clone(), <span class="number">0</span>..seg_range.end));
                         } <span class="kw">else </span>{

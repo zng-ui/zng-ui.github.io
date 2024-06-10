@@ -1646,6 +1646,7 @@
 <a href="#1644" id="1644">1644</a>
 <a href="#1645" id="1645">1645</a>
 <a href="#1646" id="1646">1646</a>
+<a href="#1647" id="1647">1647</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
@@ -2023,9 +2024,10 @@
 
 <span class="attr">#[cfg(windows)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>winit_to_hwnd(window: <span class="kw-2">&amp;</span>winit::window::Window) -&gt; isize {
-    <span class="kw">use </span>raw_window_handle::HasRawWindowHandle;
-    <span class="kw">match </span>window.raw_window_handle() {
-        raw_window_handle::RawWindowHandle::Win32(w) =&gt; w.hwnd <span class="kw">as _</span>,
+    <span class="kw">use </span>raw_window_handle::HasWindowHandle <span class="kw">as _</span>;
+
+    <span class="kw">match </span>window.window_handle().unwrap().as_raw() {
+        raw_window_handle::RawWindowHandle::Win32(w) =&gt; w.hwnd.get() <span class="kw">as _</span>,
         <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
     }
 }
