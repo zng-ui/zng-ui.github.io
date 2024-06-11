@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ToolKind"],"fn":["visit_tools"],"struct":["Tool","ToolOutput","Tools"]};
+window.SIDEBAR_ITEMS = {"enum":["ToolKind"],"fn":["visit_about_vars","visit_tools"],"struct":["Tool","ToolOutput","Tools"]};

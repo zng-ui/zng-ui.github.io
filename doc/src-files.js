@@ -51,7 +51,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_wgt_grid",["",[],["lib.rs"]]],\
 ["zng_wgt_image",["",[],["image_properties.rs","lib.rs","mask.rs","node.rs"]]],\
 ["zng_wgt_input",["",[],["cmd.rs","focus.rs","gesture.rs","keyboard.rs","lib.rs","misc.rs","mouse.rs","pointer_capture.rs","state.rs","touch.rs","touch_props.rs"]]],\
-["zng_wgt_inspector",["",[],["crash_handler.rs","debug.rs","lib.rs","live.rs"]]],\
+["zng_wgt_inspector",["",[["live",[],["data_model.rs","inspector_window.rs"]]],["crash_handler.rs","debug.rs","lib.rs","live.rs"]]],\
 ["zng_wgt_layer",["",[],["lib.rs","popup.rs"]]],\
 ["zng_wgt_markdown",["",[],["lib.rs","resolvers.rs","view_fn.rs"]]],\
 ["zng_wgt_material_icons",["",[],["lib.rs"]]],\

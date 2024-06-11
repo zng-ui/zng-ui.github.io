@@ -3374,11 +3374,11 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="kw">match </span><span class="self">self</span>.event_sender.as_ref() {
                 <span class="prelude-val">Some</span>(s) =&gt; {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(AppDisconnected(())) = s.send_check_update() {
-                        <span class="macro">tracing::error!</span>(<span class="string">"no app connected to update"</span>);
+                        <span class="macro">tracing::debug!</span>(<span class="string">"no app connected to update"</span>);
                     }
                 }
                 <span class="prelude-val">None </span>=&gt; {
-                    <span class="macro">tracing::error!</span>(<span class="string">"no app connected yet to update"</span>);
+                    <span class="macro">tracing::debug!</span>(<span class="string">"no app connected yet to update"</span>);
                 }
             }
         }

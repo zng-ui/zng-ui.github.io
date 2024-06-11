@@ -341,7 +341,7 @@
             build.extend(<span class="macro">quote_spanned!</span> {span=&gt;
                 .l10n_arg(#var, {
                     <span class="kw">use </span>#l10n_path::IntoL10nVar;
-                    (&amp;&amp;#l10n_path::L10nSpecialize(#var_ident)).into_l10n_var()
+                    (<span class="kw-2">&amp;mut &amp;mut </span>#l10n_path::L10nSpecialize(<span class="prelude-val">Some</span>(#var_ident))).to_l10n_var()
                 })
             });
         }

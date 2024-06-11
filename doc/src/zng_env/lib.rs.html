@@ -868,7 +868,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>about = About {
             crate_name: m.package.name.replace(<span class="string">'-'</span>, <span class="string">"_"</span>).into(),
             pkg_name: m.package.name,
-            pkg_authors: m.package.authors,
+            pkg_authors: m.package.authors.unwrap_or_default(),
             version: m.package.version,
             description: m.package.description.unwrap_or_default(),
             homepage: m.package.homepage.unwrap_or_default(),
@@ -935,7 +935,7 @@
     version: Version,
     description: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
     homepage: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
-    authors: Box&lt;[Txt]&gt;,
+    authors: <span class="prelude-ty">Option</span>&lt;Box&lt;[Txt]&gt;&gt;,
     metadata: <span class="prelude-ty">Option</span>&lt;Metadata&gt;,
 }
 <span class="attr">#[derive(serde::Deserialize)]
