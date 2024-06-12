@@ -97,13 +97,13 @@
         <span class="kw">let </span>bin = bin.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"error searching metadata, {e}"</span>));
         <span class="kw">let </span>manifest = bin.parent().unwrap().parent().unwrap().join(<span class="string">"Cargo.toml"</span>);
         <span class="kw">if </span>manifest.exists() {
-            <span class="kw">let </span>output = std::process::Command::new(<span class="string">"cargo"</span>)
-                .arg(<span class="string">"locate-project"</span>)
-                .arg(<span class="string">"--workspace"</span>)
-                .arg(<span class="string">"--message-format=plain"</span>)
-                .current_dir(manifest.parent().unwrap())
-                .output()
-                .unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot locate workspace, {e}"</span>));
+            <span class="kw">let </span><span class="kw-2">mut </span>cmd = std::process::Command::new(<span class="string">"cargo"</span>);
+            cmd.arg(<span class="string">"locate-project"</span>).arg(<span class="string">"--workspace"</span>).arg(<span class="string">"--message-format=plain"</span>);
+            <span class="kw">let </span>manifest_dir = manifest.parent().unwrap();
+            <span class="kw">if </span>!manifest_dir.as_os_str().is_empty() {
+                cmd.current_dir(manifest_dir);
+            }
+            <span class="kw">let </span>output = cmd.output().unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot locate workspace, {e}"</span>));
 
             <span class="kw">if </span>output.status.success() {
                 <span class="kw">let </span>w2 = Path::new(std::str::from_utf8(<span class="kw-2">&amp;</span>output.stdout).unwrap().trim()).parent().unwrap();
