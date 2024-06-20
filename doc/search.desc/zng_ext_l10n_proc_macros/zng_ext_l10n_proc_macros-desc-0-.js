@@ -1,0 +1,1 @@
+searchState.loadedDescShard("zng_ext_l10n_proc_macros", 0, "Proc-macros for <code>zng-ext-l10n</code>.")

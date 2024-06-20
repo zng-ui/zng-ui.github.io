@@ -1,0 +1,1 @@
+searchState.loadedDescShard("zng_color_proc_macros", 0, "Proc-macros for <code>zng-color</code>.")

@@ -1,6 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-env/src/lib.rs`."><title>lib.rs - source</title><script> if (window.location.protocol !== "file:") document.write(`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceSerif4-Regular-46f98efaafac5295.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Regular-018c141bf0843ffd.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/FiraSans-Medium-8f9a781e4970d388.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2">`)</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-e935ef01ae1c1829.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_env" data-themes="" data-resource-suffix="" data-rustdoc-version="1.78.0 (9b00956e5 2024-04-29)" data-channel="1.78.0" data-search-js="search-42d8da7a6b9792c2.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-4c98445ec4002617.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-12cf3b4f4f9dc36d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-04d5337699b92874.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title">
-            <h2>Files</h2></div></nav><div class="sidebar-resizer"></div>
-    <main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_env/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../static.files/wheel-7b819b6101059cd0.svg"></a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-env/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_env" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_env/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -742,6 +740,22 @@
 <a href="#740" id="740">740</a>
 <a href="#741" id="741">741</a>
 <a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -818,7 +832,7 @@
 <span class="doccomment">/// Metadata about the app and main crate.
 ///
 /// See [`about`] for more details.
-</span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+</span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>About {
     <span class="doccomment">/// package.name
     </span><span class="kw">pub </span>pkg_name: Txt,
@@ -840,6 +854,10 @@
     </span><span class="kw">pub </span>description: Txt,
     <span class="doccomment">/// package.homepage
     </span><span class="kw">pub </span>homepage: Txt,
+
+    <span class="doccomment">/// package.license
+    </span><span class="kw">pub </span>license: Txt,
+
     <span class="doccomment">/// If package.metadata.zng.about is set on the Cargo.toml manifest.
     ///
     /// The presence of this section is used by `cargo zng res` to find the main
@@ -858,6 +876,7 @@
             qualifier: Txt::from_static(<span class="string">""</span>),
             description: Txt::from_static(<span class="string">""</span>),
             homepage: Txt::from_static(<span class="string">""</span>),
+            license: Txt::from_static(<span class="string">""</span>),
             has_about: <span class="bool-val">false</span>,
         }
     }
@@ -872,6 +891,7 @@
             version: m.package.version,
             description: m.package.description.unwrap_or_default(),
             homepage: m.package.homepage.unwrap_or_default(),
+            license: m.package.license.unwrap_or_default(),
             app: Txt::from_static(<span class="string">""</span>),
             org: Txt::from_static(<span class="string">""</span>),
             qualifier: Txt::from_static(<span class="string">""</span>),
@@ -904,6 +924,7 @@
         qualifier: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         description: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         homepage: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
+        license: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         has_about: bool,
     ) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
@@ -921,6 +942,7 @@
             qualifier: Txt::from_static(qualifier),
             description: Txt::from_static(description),
             homepage: Txt::from_static(homepage),
+            license: Txt::from_static(license),
             has_about,
         }
     }
@@ -935,6 +957,7 @@
     version: Version,
     description: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
     homepage: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
+    license: <span class="prelude-ty">Option</span>&lt;Txt&gt;,
     authors: <span class="prelude-ty">Option</span>&lt;Box&lt;[Txt]&gt;&gt;,
     metadata: <span class="prelude-ty">Option</span>&lt;Metadata&gt;,
 }
@@ -990,13 +1013,16 @@
 <span class="doccomment">/// Gets a path relative to the package resources.
 ///
 /// * The res dir can be set by [`init_res`] before any env dir is used.
-/// * In all platforms if a file `bin/current_exe_name.zng_res_dir` is found it defines the res path.
+/// * In all platforms if a file `bin/current_exe_name.res-dir` is found the first non-empty and non-comment (#) line
+///   defines the res path.
 /// * In `cfg(debug_assertions)` builds returns `res`.
 /// * In macOS returns `bin("../Resources")`, assumes the package is deployed using a desktop `.app` folder.
 /// * In iOS returns `bin("")`, assumes the package is deployed as a mobile `.app` folder.
-/// * In Android returns `bin("../res")`, assumes the package is deployed as a `.apk` file.
-/// * In all other Unix systems returns `bin("../etc")`, assumes the package is deployed using a `.deb` like structure.
-/// * In Windows returns `bin("../res")`. Note that there is no Windows standard, make sure to install the project using this structure.
+/// * In Android returns `bin("../res/raw")`, assumes the package is deployed as a `.apk` file.
+/// * In all other Unix systems returns `bin("../share/current_exe_name")`, assumes the package is deployed
+///   using a Debian package.
+/// * In Windows returns `bin("../res")`. Note that there is no Windows standard, make sure to install
+///   the project using this structure.
 ///
 /// # Built Resources
 ///
@@ -1004,7 +1030,7 @@
 /// is returned instead. This is useful during development when the app depends on res that are generated locally and not
 /// included in version control.
 ///
-/// Note that the built resources must be packaged with the other res at the same relative location, so that release builds can find then.
+/// Note that the built resources must be packaged with the other res at the same relative location, so that release builds can find them.
 </span><span class="kw">pub fn </span>res(relative_path: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; PathBuf {
     res_impl(relative_path.as_ref())
 }
@@ -1053,9 +1079,9 @@
 }
 <span class="kw">fn </span>find_res() -&gt; PathBuf {
     <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>p) = std::env::current_exe() {
-        p.set_extension(<span class="string">"zng_res_dir"</span>);
+        p.set_extension(<span class="string">"res-dir"</span>);
         <span class="kw">if let </span><span class="prelude-val">Ok</span>(dir) = read_line(<span class="kw-2">&amp;</span>p) {
-            <span class="kw">return </span>dir.into();
+            <span class="kw">return </span>bin(dir);
         }
     }
     <span class="kw">if </span><span class="macro">cfg!</span>(debug_assertions) {
@@ -1067,12 +1093,13 @@
     } <span class="kw">else if </span><span class="macro">cfg!</span>(target_os = <span class="string">"ios"</span>) {
         bin(<span class="string">""</span>)
     } <span class="kw">else if </span><span class="macro">cfg!</span>(target_os = <span class="string">"android"</span>) {
-        bin(<span class="string">"res"</span>)
+        bin(<span class="string">"res/raw"</span>)
     } <span class="kw">else if </span><span class="macro">cfg!</span>(target_family = <span class="string">"unix"</span>) {
-        bin(<span class="string">"../etc"</span>)
+        <span class="kw">let </span>c = current_exe();
+        bin(<span class="macro">format!</span>(<span class="string">"../share/{}"</span>, c.file_name().unwrap().to_string_lossy()))
     } <span class="kw">else </span>{
         <span class="macro">panic!</span>(
-            <span class="string">"resources dir not specified for platform {}, use a 'bin/current_exe_name.zng_res_dir' file to specify an alternative"</span>,
+            <span class="string">"resources dir not specified for platform {}, use a 'bin/current_exe_name.res-dir' file to specify an alternative"</span>,
             std::env::consts::OS
         )
     }
@@ -1081,11 +1108,11 @@
 <span class="doccomment">/// Gets a path relative to the user config directory for the app.
 ///
 /// * The config dir can be set by [`init_config`] before any env dir is used.
-/// * In all platforms if a file in `res("zng_config_dir")` is found the file first line not starting with
-///  `"\s#"` and non empty is used as the config path.
+/// * In all platforms if a file in `res("config-dir")` is found the first non-empty and non-comment (#) line
+///   defines the res path.
 /// * In `cfg(debug_assertions)` builds returns `target/tmp/dev_config/`.
 /// * In all platforms attempts [`directories::ProjectDirs::config_dir`] and panic if it fails.
-/// * If the config dir selected by the previous method contains a `"zng_config_dir"` file it will be
+/// * If the config dir selected by the previous method contains a `"config-dir"` file it will be
 ///   used to redirect to another config dir, you can use this to implement config migration. Redirection only happens once.
 ///
 /// The config directory is created if it is missing, checks once on init or first use.
@@ -1152,7 +1179,7 @@
             fs::create_dir(from)<span class="question-mark">?</span>;
         }
 
-        <span class="kw">let </span>redirect = ORIGINAL_CONFIG.join(<span class="string">"zng_config_dir"</span>);
+        <span class="kw">let </span>redirect = ORIGINAL_CONFIG.join(<span class="string">"config-dir"</span>);
         <span class="kw">if </span>is_return {
             fs::remove_file(redirect)
         } <span class="kw">else </span>{
@@ -1193,9 +1220,9 @@
     <span class="kw">static </span><span class="kw-2">ref </span>CONFIG: PathBuf = redirect_config(original_config());
 }
 <span class="kw">fn </span>find_config() -&gt; PathBuf {
-    <span class="kw">let </span>cfg_dir = res(<span class="string">"zng_config_dir"</span>);
+    <span class="kw">let </span>cfg_dir = res(<span class="string">"config-dir"</span>);
     <span class="kw">if let </span><span class="prelude-val">Ok</span>(dir) = read_line(<span class="kw-2">&amp;</span>cfg_dir) {
-        <span class="kw">return </span>PathBuf::from(dir);
+        <span class="kw">return </span>res(dir);
     }
 
     <span class="kw">if </span><span class="macro">cfg!</span>(debug_assertions) {
@@ -1214,8 +1241,11 @@
     }
 }
 <span class="kw">fn </span>redirect_config(cfg: PathBuf) -&gt; PathBuf {
-    <span class="kw">if let </span><span class="prelude-val">Ok</span>(dir) = read_line(<span class="kw-2">&amp;</span>cfg.join(<span class="string">"zng_config_dir"</span>)) {
-        <span class="kw">let </span>dir = PathBuf::from(dir);
+    <span class="kw">if let </span><span class="prelude-val">Ok</span>(dir) = read_line(<span class="kw-2">&amp;</span>cfg.join(<span class="string">"config-dir"</span>)) {
+        <span class="kw">let </span><span class="kw-2">mut </span>dir = PathBuf::from(dir);
+        <span class="kw">if </span>dir.is_relative() {
+            dir = cfg.join(dir);
+        }
         <span class="kw">if </span>dir.exists() {
             <span class="kw">let </span>test_path = dir.join(<span class="string">".zng-config-test"</span>);
             <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::create_dir_all(<span class="kw-2">&amp;</span>dir)
@@ -1248,8 +1278,8 @@
 <span class="doccomment">/// Gets a path relative to the cache directory for the app.
 ///
 /// * The cache dir can be set by [`init_cache`] before any env dir is used.
-/// * In all platforms if a file `config("zng_cache_dir")` is found the file first line not starting with
-///  `"\s#"` and non empty is used as the cache path.
+/// * In all platforms if a file `config("cache-dir")` is found the first non-empty and non-comment (#) line
+///   defines the res path.
 /// * In `cfg(debug_assertions)` builds returns `target/tmp/dev_cache/`.
 /// * In all platforms attempts [`directories::ProjectDirs::cache_dir`] and panic if it fails.
 ///
@@ -1348,7 +1378,7 @@
     fs::write(<span class="kw-2">&amp;</span>write_test, <span class="string">"# zng cache dir"</span>.as_bytes())<span class="question-mark">?</span>;
     fs::remove_file(<span class="kw-2">&amp;</span>write_test)<span class="question-mark">?</span>;
 
-    fs::write(config(<span class="string">"zng_cache_dir"</span>), new_path.display().to_string().as_bytes())<span class="question-mark">?</span>;
+    fs::write(config(<span class="string">"cache-dir"</span>), new_path.display().to_string().as_bytes())<span class="question-mark">?</span>;
 
     <span class="macro">tracing::info!</span>(<span class="string">"changed cache dir to `{}`"</span>, new_path.display());
 
@@ -1432,9 +1462,9 @@
     <span class="kw">static </span><span class="kw-2">ref </span>CACHE: PathBuf = create_dir_opt(find_cache());
 }
 <span class="kw">fn </span>find_cache() -&gt; PathBuf {
-    <span class="kw">let </span>cache_dir = config(<span class="string">"zng_cache_dir"</span>);
+    <span class="kw">let </span>cache_dir = config(<span class="string">"cache-dir"</span>);
     <span class="kw">if let </span><span class="prelude-val">Ok</span>(dir) = read_line(<span class="kw-2">&amp;</span>cache_dir) {
-        <span class="kw">return </span>PathBuf::from(dir);
+        <span class="kw">return </span>config(dir);
     }
 
     <span class="kw">if </span><span class="macro">cfg!</span>(debug_assertions) {

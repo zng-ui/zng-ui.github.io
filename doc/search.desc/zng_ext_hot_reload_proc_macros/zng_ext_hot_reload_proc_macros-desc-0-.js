@@ -1,0 +1,1 @@
+searchState.loadedDescShard("zng_ext_hot_reload_proc_macros", 0, "Proc-macros for <code>zng-ext-hot-reload</code>.\nExpands an impl into a <code>UiNode</code> impl.")

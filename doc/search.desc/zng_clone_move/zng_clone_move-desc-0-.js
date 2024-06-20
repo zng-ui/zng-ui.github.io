@@ -1,0 +1,1 @@
+searchState.loadedDescShard("zng_clone_move", 0, "Macros for declaring clone-move closures and async blocks.\n Async clone move block.\n Async clone move closure.\n Async clone move closure that can only be called once.\n Clone move closure.")
