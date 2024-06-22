@@ -819,6 +819,14 @@
 <a href="#819" id="819">819</a>
 <a href="#820" id="820">820</a>
 <a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Built-in tools
 
 </span><span class="kw">use </span>std::{
@@ -1112,19 +1120,23 @@ $${VAR}         — Escapes $, replaces with '${VAR}'.
 
 The :case functions are:
 
-:k — kebab-case (cleaned)
-:K — UPPER-KEBAB-CASE (cleaned)
-:s — snake_case (cleaned)
-:S — UPPER_SNAKE_CASE (cleaned)
-:l — lower case
-:U — UPPER CASE
-:T — Title Case
-:c — camelCase (cleaned)
-:P — PascalCase (cleaned)
-:Tr — Train-Case (cleaned)
-: — Unchanged
+:k or :kebab  — kebab-case (cleaned)
+:K or :KEBAB  — UPPER-KEBAB-CASE (cleaned)
+:s or :snake  — snake_case (cleaned)
+:S or :SNAKE  — UPPER_SNAKE_CASE (cleaned)
+:l or :lower  — lower case
+:U or :UPPER  — UPPER CASE
+:T or :Title  — Title Case
+:c or :camel  — camelCase (cleaned)
+:P or :Pascal — PascalCase (cleaned)
+:Tr or :Train — Train-Case (cleaned)
+:           — Unchanged
+:clean      — Cleaned
+:f or :file — Sanitize file name
 
 Cleaned values only keep ascii alphabetic first char and ascii alphanumerics, ' ', '-' and '_' other chars.
+More then one case function can be used, separated by pipe ':T|f' converts to title case and sanitize for file name. 
+
 
 The fallback(:?else) can have nested ${...} patterns. 
 You can set both case and else: '${VAR:case?else}'.
@@ -1267,21 +1279,25 @@ See the cargo-zng crate docs for a full list of ZR vars.
                     <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
                 };
 
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = value {
-                    <span class="kw">let </span>value = <span class="kw">match </span>case {
-                        <span class="string">"k" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Kebab),
-                        <span class="string">"K" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::UpperKebab),
-                        <span class="string">"s" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Snake),
-                        <span class="string">"S" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::UpperSnake),
-                        <span class="string">"l" </span>=&gt; value.to_case(Case::Lower),
-                        <span class="string">"U" </span>=&gt; value.to_case(Case::Upper),
-                        <span class="string">"T" </span>=&gt; value.to_case(Case::Title),
-                        <span class="string">"c" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Camel),
-                        <span class="string">"P" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Pascal),
-                        <span class="string">"Tr" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Train),
-                        <span class="string">"" </span>=&gt; value,
-                        unknown =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"unknown case '{unknown}'"</span>)),
-                    };
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>value) = value {
+                    <span class="kw">for </span>case <span class="kw">in </span>case.split(<span class="string">'|'</span>) {
+                        value = <span class="kw">match </span>case {
+                            <span class="string">"k" </span>| <span class="string">"kebab" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Kebab),
+                            <span class="string">"K" </span>| <span class="string">"KEBAB" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::UpperKebab),
+                            <span class="string">"s" </span>| <span class="string">"snake" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Snake),
+                            <span class="string">"S" </span>| <span class="string">"SNAKE" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::UpperSnake),
+                            <span class="string">"l" </span>| <span class="string">"lower" </span>=&gt; value.to_case(Case::Lower),
+                            <span class="string">"U" </span>| <span class="string">"UPPER" </span>=&gt; value.to_case(Case::Upper),
+                            <span class="string">"T" </span>| <span class="string">"Title" </span>=&gt; value.to_case(Case::Title),
+                            <span class="string">"c" </span>| <span class="string">"camel" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Camel),
+                            <span class="string">"P" </span>| <span class="string">"Pascal" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Pascal),
+                            <span class="string">"Tr" </span>| <span class="string">"Train" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap().to_case(Case::Train),
+                            <span class="string">"" </span>=&gt; value,
+                            <span class="string">"clean" </span>=&gt; util::clean_value(<span class="kw-2">&amp;</span>value, <span class="bool-val">false</span>).unwrap(),
+                            <span class="string">"f" </span>| <span class="string">"file" </span>=&gt; sanitise_file_name::sanitise(<span class="kw-2">&amp;</span>value),
+                            unknown =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"unknown case '{unknown}'"</span>)),
+                        };
+                    }
                     out.push_str(<span class="kw-2">&amp;</span>value);
                 } <span class="kw">else if let </span><span class="prelude-val">Some</span>(fallback) = fallback {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(error) = fallback.strip_prefix(<span class="string">'!'</span>) {

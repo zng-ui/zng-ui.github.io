@@ -544,7 +544,23 @@
 <a href="#544" id="544">544</a>
 <a href="#545" id="545">545</a>
 <a href="#546" id="546">546</a>
-</pre></div><pre class="rust"><code><span class="doccomment">//! Initialize a new repository from a Zng template repository
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a>
+</pre></div><pre class="rust"><code><span class="doccomment">//! Initialize a new project from a Zng template repository
 
 </span><span class="kw">use </span>std::{
     fs, io, mem,
@@ -679,8 +695,6 @@
 }
 
 <span class="kw">fn </span>print_keys(template: Template) {
-    <span class="macro">println!</span>(<span class="macro">cstr!</span>(<span class="string">"&lt;bold&gt;clone template to temp dir&lt;bold&gt;"</span>));
-
     <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">100 </span>{
         <span class="kw">let </span>template_temp = std::env::temp_dir().join(<span class="macro">format!</span>(<span class="string">"cargo-zng-template-keys-help-{i}"</span>));
         <span class="kw">if </span>template_temp.exists() {
@@ -931,6 +945,13 @@
     <span class="kw">fn </span>rename(<span class="kw-2">&amp;</span><span class="self">self</span>, template_path: <span class="kw-2">&amp;</span>Path) -&gt; io::Result&lt;PathBuf&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>path = template_path.to_string_lossy().into_owned();
         <span class="kw">for </span>(key, value) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.replace {
+            <span class="kw">let </span>s_value;
+            <span class="kw">let </span>value = <span class="kw">if </span>is_sanitized_key(key) {
+                value
+            } <span class="kw">else </span>{
+                s_value = sanitise_file_name::sanitize(value);
+                <span class="kw-2">&amp;</span>s_value
+            };
             path = path.replace(key, value);
         }
         <span class="kw">let </span>path = PathBuf::from(path);
@@ -975,7 +996,9 @@
     (<span class="string">"T.Key.T"</span>, <span class="string">"Title Case"</span>, <span class="prelude-val">Some</span>(Case::Title)),
     (<span class="string">"ttKeyTt"</span>, <span class="string">"camelCase"</span>, <span class="prelude-val">Some</span>(Case::Camel)),
     (<span class="string">"TtKeyTt"</span>, <span class="string">"PascalCase"</span>, <span class="prelude-val">Some</span>(Case::Pascal)),
-    (<span class="string">"{{key}}"</span>, <span class="string">"&lt;unchanged&gt;"</span>, <span class="prelude-val">None</span>),
+    (<span class="string">"{{key}}"</span>, <span class="string">"Unchanged"</span>, <span class="prelude-val">None</span>),
+    (<span class="string">"f-key-f"</span>, <span class="string">"Sanitized"</span>, <span class="prelude-val">None</span>),
+    (<span class="string">"F-Key-F"</span>, <span class="string">"Title Sanitized"</span>, <span class="prelude-val">None</span>),
 ];
 
 <span class="kw">type </span>KeyMap = Vec&lt;TemplateKey&gt;;
@@ -1076,7 +1099,7 @@
                     Case::Camel =&gt; Case::Pascal,
                     c =&gt; <span class="kw-2">*</span>c,
                 };
-                <span class="kw">let </span>value = <span class="kw">match </span>pattern.contains(<span class="string">'.'</span>) {
+                <span class="kw">let </span>value = <span class="kw">match </span>!pattern.contains(<span class="string">'.'</span>) &amp;&amp; !pattern.contains(<span class="string">'{'</span>) {
                     <span class="bool-val">true </span>=&gt; <span class="kw-2">&amp;</span>clean_value,
                     <span class="bool-val">false </span>=&gt; value,
                 };
@@ -1084,10 +1107,19 @@
             } <span class="kw">else </span>{
                 (kv.key.to_owned(), value.to_owned())
             };
+            <span class="kw">let </span>value = <span class="kw">if </span>is_sanitized_key(<span class="kw-2">&amp;</span>key) {
+                sanitise_file_name::sanitize(<span class="kw-2">&amp;</span>value)
+            } <span class="kw">else </span>{
+                value
+            };
             <span class="kw">let </span>key = <span class="macro">format!</span>(<span class="string">"{prefix}{key}{suffix}"</span>);
             r.push((key, value));
         }
     }
     <span class="prelude-val">Ok</span>(r)
+}
+
+<span class="kw">fn </span>is_sanitized_key(key: <span class="kw-2">&amp;</span>str) -&gt; bool {
+    key.starts_with(<span class="string">'f'</span>) || key.starts_with(<span class="string">'F'</span>)
 }
 </code></pre></div></section></main></body></html>
