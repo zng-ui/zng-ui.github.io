@@ -122,11 +122,40 @@
 <a href="#122" id="122">122</a>
 <a href="#123" id="123">123</a>
 <a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Common commands.
 //!
 
 </span><span class="kw">use </span>zng_ext_clipboard::{COPY_CMD, CUT_CMD, PASTE_CMD};
-<span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng_wgt::{prelude::<span class="kw-2">*</span>, ICONS};
 
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represents the **new** action.
@@ -134,6 +163,7 @@
     /// The command parameter can identify the new item type, otherwise the default (or single) type
     /// must be used.
     </span><span class="kw">pub static </span>NEW_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"New"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">'N'</span>), <span class="macro">shortcut!</span>(New)],
     };
@@ -143,8 +173,10 @@
     /// The command parameter can be an item path to open (like a `PathBuf`), otherwise the
     /// command implementer must identify the item, either by context or by prompting the user.
     </span><span class="kw">pub static </span>OPEN_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Open…"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">'O'</span>), <span class="macro">shortcut!</span>(Open)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"file-open"</span>)),
     };
 
     <span class="doccomment">/// Represents the **save** action.
@@ -152,14 +184,17 @@
     /// Usually this saves to the already defined item path (open or previous save path),
     /// otherwise the user is prompted like [`SAVE_AS_CMD`].
     </span><span class="kw">pub static </span>SAVE_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Save"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">'S'</span>), <span class="macro">shortcut!</span>(Save)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"save"</span>)),
     };
 
     <span class="doccomment">/// Represents the **save-as** action.
     ///
     /// Usually this prompts the user for a save path, even if a previous path is already known.
     </span><span class="kw">pub static </span>SAVE_AS_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Save As…"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL|SHIFT+<span class="string">'S'</span>)],
     };
@@ -167,6 +202,22 @@
     <span class="doccomment">/// Represents the **context menu open** action.
     </span><span class="kw">pub static </span>CONTEXT_MENU_CMD = {
         shortcut: [<span class="macro">shortcut!</span>(SHIFT+F10), <span class="macro">shortcut!</span>(ContextMenu)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get([<span class="string">"context-menu"</span>, <span class="string">"menu-open"</span>])),
+    };
+
+    <span class="doccomment">/// Represents the **open settings** action.
+    ///
+    /// Settings is an editor for a selection of app configs.
+    ///
+    /// # Parameter
+    ///
+    /// The parameter can be a `Txt` that can match a `ConfigKey` or config metadata
+    /// such as the display name or description.
+    </span><span class="kw">pub static </span>SETTINGS_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+        name: <span class="string">"Settings"</span>,
+        shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">','</span>)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"settings"</span>)),
     };
 }
 
@@ -244,6 +295,13 @@
     /// [`PASTE_CMD`]: zng_ext_clipboard::PASTE_CMD
     </span><span class="kw">pub fn </span>paste {
         cmd: PASTE_CMD.scoped(WIDGET.id()),
+    }
+
+    <span class="doccomment">/// On settings command.
+    ///
+    /// Receives [`SETTINGS_CMD`] command events scoped on the widget.
+    </span><span class="kw">pub fn </span>settings {
+        cmd: SETTINGS_CMD.scoped(WIDGET.id()),
     }
 }
 </code></pre></div></section></main></body></html>

@@ -522,6 +522,27 @@
 <a href="#522" id="522">522</a>
 <a href="#523" id="523">523</a>
 <a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Commands that control the scoped scroll widget.
 //!
 //! The scroll widget implements all of this commands scoped to its widget ID.
@@ -532,6 +553,7 @@
 </span><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_app::event::{CommandArgs, CommandParam};
 <span class="kw">use </span>zng_ext_window::WINDOWS;
+<span class="kw">use </span>zng_wgt::ICONS;
 
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represents the **scroll up** by one [`v_line_unit`] action.
@@ -543,6 +565,7 @@
     ///
     /// [`v_line_unit`]: fn@crate::v_line_unit
     </span><span class="kw">pub static </span>SCROLL_UP_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll Up"</span>,
         info: <span class="string">"Scroll Up by one scroll unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(ArrowUp),
@@ -558,6 +581,7 @@
     ///
     /// [`v_line_unit`]: fn@crate::v_line_unit
     </span><span class="kw">pub static </span>SCROLL_DOWN_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll Down"</span>,
         info: <span class="string">"Scroll Down by one scroll unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(ArrowDown),
@@ -573,6 +597,7 @@
     ///
     /// [`h_line_unit`]: fn@crate::h_line_unit
     </span><span class="kw">pub static </span>SCROLL_LEFT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll Left"</span>,
         info: <span class="string">"Scroll Left by one scroll unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(ArrowLeft),
@@ -588,6 +613,7 @@
     ///
     /// [`h_line_unit`]: fn@crate::h_line_unit
     </span><span class="kw">pub static </span>SCROLL_RIGHT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll Right"</span>,
         info: <span class="string">"Scroll Right by one scroll unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(ArrowRight),
@@ -607,6 +633,7 @@
     /// [`shortcut`]: CommandShortcutExt
     /// [`v_page_unit`]: fn@crate::v_page_unit
     </span><span class="kw">pub static </span>PAGE_UP_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Page Up"</span>,
         info: <span class="string">"Scroll Up by one page unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(PageUp),
@@ -622,6 +649,7 @@
     ///
     /// [`v_page_unit`]: fn@crate::v_page_unit
     </span><span class="kw">pub static </span>PAGE_DOWN_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Page Down"</span>,
         info: <span class="string">"Scroll down by one page unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(PageDown),
@@ -637,6 +665,7 @@
     ///
     /// [`h_page_unit`]: fn@crate::h_page_unit
     </span><span class="kw">pub static </span>PAGE_LEFT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Page Left"</span>,
         info: <span class="string">"Scroll Left by one page unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(SHIFT+PageUp),
@@ -652,6 +681,7 @@
     ///
     /// [`h_page_unit`]: fn@crate::h_page_unit
     </span><span class="kw">pub static </span>PAGE_RIGHT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Page Right"</span>,
         info: <span class="string">"Scroll Right by one page unit."</span>,
         shortcut: <span class="macro">shortcut!</span>(SHIFT+PageDown),
@@ -660,22 +690,27 @@
 
     <span class="doccomment">/// Represents the **scroll to top** action.
     </span><span class="kw">pub static </span>SCROLL_TO_TOP_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll to Top"</span>,
         info: <span class="string">"Scroll up to the content top."</span>,
         shortcut: [<span class="macro">shortcut!</span>(Home), <span class="macro">shortcut!</span>(CTRL+Home)],
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get([<span class="string">"scroll-top"</span>, <span class="string">"vertical-align-top"</span>])),
     };
 
     <span class="doccomment">/// Represents the **scroll to bottom** action.
     </span><span class="kw">pub static </span>SCROLL_TO_BOTTOM_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll to Bottom"</span>,
         info: <span class="string">"Scroll down to the content bottom."</span>,
         shortcut: [<span class="macro">shortcut!</span>(End), <span class="macro">shortcut!</span>(CTRL+End)],
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get([<span class="string">"scroll-bottom"</span>, <span class="string">"vertical-align-bottom"</span>])),
     };
 
     <span class="doccomment">/// Represents the **scroll to leftmost** action.
     </span><span class="kw">pub static </span>SCROLL_TO_LEFTMOST_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll to Leftmost"</span>,
         info: <span class="string">"Scroll left to the content left edge."</span>,
         shortcut: [<span class="macro">shortcut!</span>(SHIFT+Home), <span class="macro">shortcut!</span>(CTRL|SHIFT+Home)],
@@ -684,6 +719,7 @@
 
     <span class="doccomment">/// Represents the **scroll to rightmost** action.
     </span><span class="kw">pub static </span>SCROLL_TO_RIGHTMOST_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Scroll to Rightmost"</span>,
         info: <span class="string">"Scroll right to the content right edge."</span>,
         shortcut: [<span class="macro">shortcut!</span>(SHIFT+End), <span class="macro">shortcut!</span>(CTRL|SHIFT+End)],
@@ -718,9 +754,11 @@
     ///
     /// [`Point`]: zng_wgt::prelude::Point
     </span><span class="kw">pub static </span>ZOOM_IN_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Zoom In"</span>,
         shortcut: <span class="macro">shortcut!</span>(CTRL+<span class="string">'+'</span>),
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"zoom-in"</span>)),
     };
 
     <span class="doccomment">/// Represents the **zoom out** action.
@@ -733,15 +771,18 @@
     ///
     /// [`Point`]: zng_wgt::prelude::Point
     </span><span class="kw">pub static </span>ZOOM_OUT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Zoom Out"</span>,
         shortcut: <span class="macro">shortcut!</span>(CTRL+<span class="string">'-'</span>),
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"zoom-out"</span>)),
     };
 
     <span class="doccomment">/// Represents the **zoom to fit** action.
     ///
     /// The content is scaled to fit the viewport, the equivalent to `ImageFit::Contain`.
     </span><span class="kw">pub static </span>ZOOM_TO_FIT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Zoom to Fit"</span>,
         shortcut: <span class="macro">shortcut!</span>(CTRL+<span class="string">'0'</span>),
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
@@ -751,6 +792,7 @@
     ///
     /// The content is scaled back to 100%, without adjusting the scroll.
     </span><span class="kw">pub static </span>ZOOM_RESET_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Reset Zoom"</span>,
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
     };

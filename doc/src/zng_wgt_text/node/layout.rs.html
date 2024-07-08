@@ -1257,6 +1257,45 @@
 <a href="#1257" id="1257">1257</a>
 <a href="#1258" id="1258">1258</a>
 <a href="#1259" id="1259">1259</a>
+<a href="#1260" id="1260">1260</a>
+<a href="#1261" id="1261">1261</a>
+<a href="#1262" id="1262">1262</a>
+<a href="#1263" id="1263">1263</a>
+<a href="#1264" id="1264">1264</a>
+<a href="#1265" id="1265">1265</a>
+<a href="#1266" id="1266">1266</a>
+<a href="#1267" id="1267">1267</a>
+<a href="#1268" id="1268">1268</a>
+<a href="#1269" id="1269">1269</a>
+<a href="#1270" id="1270">1270</a>
+<a href="#1271" id="1271">1271</a>
+<a href="#1272" id="1272">1272</a>
+<a href="#1273" id="1273">1273</a>
+<a href="#1274" id="1274">1274</a>
+<a href="#1275" id="1275">1275</a>
+<a href="#1276" id="1276">1276</a>
+<a href="#1277" id="1277">1277</a>
+<a href="#1278" id="1278">1278</a>
+<a href="#1279" id="1279">1279</a>
+<a href="#1280" id="1280">1280</a>
+<a href="#1281" id="1281">1281</a>
+<a href="#1282" id="1282">1282</a>
+<a href="#1283" id="1283">1283</a>
+<a href="#1284" id="1284">1284</a>
+<a href="#1285" id="1285">1285</a>
+<a href="#1286" id="1286">1286</a>
+<a href="#1287" id="1287">1287</a>
+<a href="#1288" id="1288">1288</a>
+<a href="#1289" id="1289">1289</a>
+<a href="#1290" id="1290">1290</a>
+<a href="#1291" id="1291">1291</a>
+<a href="#1292" id="1292">1292</a>
+<a href="#1293" id="1293">1293</a>
+<a href="#1294" id="1294">1294</a>
+<a href="#1295" id="1295">1295</a>
+<a href="#1296" id="1296">1296</a>
+<a href="#1297" id="1297">1297</a>
+<a href="#1298" id="1298">1298</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, sync::Arc};
 
 <span class="kw">use </span>atomic::Atomic;
@@ -1275,7 +1314,7 @@
     keyboard::{KEYBOARD, KEY_INPUT_EVENT},
     mouse::{MOUSE, MOUSE_INPUT_EVENT, MOUSE_MOVE_EVENT},
     pointer_capture::{POINTER_CAPTURE, POINTER_CAPTURE_EVENT},
-    touch::{TOUCH_LONG_PRESS_EVENT, TOUCH_TAP_EVENT},
+    touch::{TOUCH_INPUT_EVENT, TOUCH_LONG_PRESS_EVENT, TOUCH_TAP_EVENT},
 };
 <span class="kw">use </span>zng_ext_l10n::LANG_VAR;
 <span class="kw">use </span>zng_ext_undo::UNDO;
@@ -1291,12 +1330,12 @@
 <span class="kw">use crate</span>::{
     cmd::{TextSelectOp, SELECT_ALL_CMD, SELECT_CMD},
     node::SelectionBy,
-    TextOverflow, UnderlinePosition, UnderlineSkip, ACCEPTS_ENTER_VAR, ACCEPTS_TAB_VAR, FONT_FAMILY_VAR, FONT_FEATURES_VAR, FONT_SIZE_VAR,
-    FONT_STRETCH_VAR, FONT_STYLE_VAR, FONT_VARIATIONS_VAR, FONT_WEIGHT_VAR, HYPHENS_VAR, HYPHEN_CHAR_VAR, IME_UNDERLINE_THICKNESS_VAR,
-    LETTER_SPACING_VAR, LINE_BREAK_VAR, LINE_HEIGHT_VAR, LINE_SPACING_VAR, OBSCURE_TXT_VAR, OBSCURING_CHAR_VAR, OVERLINE_THICKNESS_VAR,
-    STRIKETHROUGH_THICKNESS_VAR, TAB_LENGTH_VAR, TEXT_ALIGN_VAR, TEXT_EDITABLE_VAR, TEXT_OVERFLOW_ALIGN_VAR, TEXT_OVERFLOW_VAR,
-    TEXT_SELECTABLE_VAR, TEXT_WRAP_VAR, UNDERLINE_POSITION_VAR, UNDERLINE_SKIP_VAR, UNDERLINE_THICKNESS_VAR, WORD_BREAK_VAR,
-    WORD_SPACING_VAR,
+    AutoSelection, TextOverflow, UnderlinePosition, UnderlineSkip, ACCEPTS_ENTER_VAR, ACCEPTS_TAB_VAR, AUTO_SELECTION_VAR, FONT_FAMILY_VAR,
+    FONT_FEATURES_VAR, FONT_SIZE_VAR, FONT_STRETCH_VAR, FONT_STYLE_VAR, FONT_VARIATIONS_VAR, FONT_WEIGHT_VAR, HYPHENS_VAR, HYPHEN_CHAR_VAR,
+    IME_UNDERLINE_THICKNESS_VAR, LETTER_SPACING_VAR, LINE_BREAK_VAR, LINE_HEIGHT_VAR, LINE_SPACING_VAR, OBSCURE_TXT_VAR,
+    OBSCURING_CHAR_VAR, OVERLINE_THICKNESS_VAR, STRIKETHROUGH_THICKNESS_VAR, TAB_LENGTH_VAR, TEXT_ALIGN_VAR, TEXT_EDITABLE_VAR,
+    TEXT_OVERFLOW_ALIGN_VAR, TEXT_OVERFLOW_VAR, TEXT_SELECTABLE_VAR, TEXT_WRAP_VAR, UNDERLINE_POSITION_VAR, UNDERLINE_SKIP_VAR,
+    UNDERLINE_THICKNESS_VAR, WORD_BREAK_VAR, WORD_SPACING_VAR,
 };
 
 <span class="kw">use super</span>::{LaidoutText, PendingLayout, RenderInfo, LAIDOUT_TEXT, TEXT};
@@ -2117,6 +2156,7 @@
                 edit.events[<span class="number">0</span>] = MOUSE_INPUT_EVENT.subscribe(id);
                 edit.events[<span class="number">1</span>] = TOUCH_TAP_EVENT.subscribe(id);
                 edit.events[<span class="number">2</span>] = TOUCH_LONG_PRESS_EVENT.subscribe(id);
+                edit.events[<span class="number">3</span>] = TOUCH_INPUT_EVENT.subscribe(id);
                 <span class="comment">// KEY_INPUT_EVENT subscribed by `resolve_text`.
             </span>}
 
@@ -2133,13 +2173,14 @@
 <span class="doccomment">/// Data allocated only when `editable`.
 </span><span class="attr">#[derive(Default)]
 </span><span class="kw">struct </span>LayoutTextEdit {
-    events: [EventHandle; <span class="number">3</span>],
+    events: [EventHandle; <span class="number">4</span>],
     caret_animation: VarHandle,
     select: CommandHandle,
     select_all: CommandHandle,
     ime_area: Arc&lt;Atomic&lt;PxRect&gt;&gt;,
     click_count: u8,
     selection_mouse_down: <span class="prelude-ty">Option</span>&lt;SelectionMouseDown&gt;,
+    auto_select: bool,
     selection_move_handles: EventHandles,
 }
 <span class="kw">struct </span>SelectionMouseDown {
@@ -2190,7 +2231,8 @@
     <span class="kw">if </span>!editable &amp;&amp; !selectable {
         <span class="kw">return</span>;
     }
-    <span class="kw">if </span>!WIDGET.info().interactivity().is_enabled() {
+    <span class="kw">let </span>widget = WIDGET.info();
+    <span class="kw">if </span>!widget.interactivity().is_enabled() {
         <span class="kw">return</span>;
     }
 
@@ -2201,7 +2243,7 @@
     drop(resolved);
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = KEY_INPUT_EVENT.on_unhandled(update) {
-        <span class="kw">if let </span>KeyState::Pressed = args.state {
+        <span class="kw">if </span>args.state == KeyState::Pressed &amp;&amp; args.target.widget_id() == widget.id() {
             <span class="kw">match </span><span class="kw-2">&amp;</span>args.key {
                 Key::Tab =&gt; {
                     <span class="kw">if </span>editable &amp;&amp; args.modifiers.is_empty() &amp;&amp; ACCEPTS_TAB_VAR.get() {
@@ -2383,14 +2425,14 @@
             }
         }
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = MOUSE_INPUT_EVENT.on_unhandled(update) {
-        <span class="kw">if </span>args.is_primary() &amp;&amp; args.is_mouse_down() {
+        <span class="kw">if </span>args.is_primary() &amp;&amp; args.is_mouse_down() &amp;&amp; args.target.widget_id() == widget.id() {
             <span class="kw">let </span><span class="kw-2">mut </span>modifiers = args.modifiers;
             <span class="kw">let </span>select = selectable &amp;&amp; modifiers.take_shift();
 
             <span class="kw">if </span>modifiers.is_empty() {
                 args.propagation().stop();
 
-                TEXT.resolve().selection_by = SelectionBy::Keyboard;
+                TEXT.resolve().selection_by = SelectionBy::Mouse;
 
                 edit.click_count = <span class="kw">if let </span><span class="prelude-val">Some</span>(info) = <span class="kw-2">&amp;mut </span>edit.selection_mouse_down {
                     <span class="kw">let </span>cfg = MOUSE.multi_click_config().get();
@@ -2424,12 +2466,19 @@
                 </span>};
 
                 <span class="kw">match </span>edit.click_count {
-                    <span class="number">1 </span>=&gt; <span class="kw">if </span>select {
-                        TextSelectOp::select_nearest_to(args.position)
-                    } <span class="kw">else </span>{
-                        TextSelectOp::nearest_to(args.position)
+                    <span class="number">1 </span>=&gt; {
+                        <span class="kw">if </span>select {
+                            TextSelectOp::select_nearest_to(args.position).call()
+                        } <span class="kw">else </span>{
+                            TextSelectOp::nearest_to(args.position).call();
+
+                            <span class="comment">// select all on mouse-up if only acquire focus
+                            </span>edit.auto_select = selectable
+                                &amp;&amp; AUTO_SELECTION_VAR.get().contains(AutoSelection::ALL_ON_FOCUS_POINTER)
+                                &amp;&amp; !FOCUS.is_focused(widget.id()).get()
+                                &amp;&amp; TEXT.resolved().caret.selection_range().is_none();
+                        }
                     }
-                    .call(),
                     <span class="number">2 </span>=&gt; {
                         <span class="kw">if </span>selectable {
                             TextSelectOp::select_word_nearest_to(!select, args.position).call()
@@ -2448,25 +2497,53 @@
                     <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
                 };
                 <span class="kw">if </span>selectable {
-                    <span class="kw">let </span>id = WIDGET.id();
+                    <span class="kw">let </span>id = widget.id();
                     edit.selection_move_handles.push(MOUSE_MOVE_EVENT.subscribe(id));
                     edit.selection_move_handles.push(POINTER_CAPTURE_EVENT.subscribe(id));
                     POINTER_CAPTURE.capture_widget(id);
                 }
             }
         } <span class="kw">else </span>{
+            <span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>edit.auto_select)
+                &amp;&amp; selectable
+                &amp;&amp; AUTO_SELECTION_VAR.get().contains(AutoSelection::ALL_ON_FOCUS_POINTER)
+                &amp;&amp; args.is_primary()
+                &amp;&amp; args.is_mouse_up()
+                &amp;&amp; FOCUS.is_focused(widget.id()).get()
+                &amp;&amp; TEXT.resolved().caret.selection_range().is_none()
+            {
+                TextSelectOp::select_all().call()
+            }
             edit.selection_move_handles.clear();
         }
+    } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = TOUCH_INPUT_EVENT.on_unhandled(update) {
+        <span class="kw">if </span>args.modifiers.is_empty() &amp;&amp; args.target.widget_id() == widget.id() {
+            edit.auto_select = selectable
+                &amp;&amp; AUTO_SELECTION_VAR.get().contains(AutoSelection::ALL_ON_FOCUS_POINTER)
+                &amp;&amp; args.modifiers.is_empty()
+                &amp;&amp; args.is_touch_start()
+                &amp;&amp; !FOCUS.is_focused(widget.id()).get()
+                &amp;&amp; TEXT.resolved().caret.selection_range().is_none();
+        }
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = TOUCH_TAP_EVENT.on_unhandled(update) {
-        <span class="kw">if </span>args.modifiers.is_empty() {
+        <span class="kw">if </span>args.modifiers.is_empty() &amp;&amp; args.target.widget_id() == widget.id() {
             args.propagation().stop();
 
             TEXT.resolve().selection_by = SelectionBy::Touch;
 
             TextSelectOp::nearest_to(args.position).call();
+
+            <span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>edit.auto_select)
+                &amp;&amp; selectable
+                &amp;&amp; AUTO_SELECTION_VAR.get().contains(AutoSelection::ALL_ON_FOCUS_POINTER)
+                &amp;&amp; FOCUS.is_focused(WIDGET.id()).get()
+                &amp;&amp; TEXT.resolved().caret.selection_range().is_none()
+            {
+                TextSelectOp::select_all().call()
+            }
         }
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = TOUCH_LONG_PRESS_EVENT.on_unhandled(update) {
-        <span class="kw">if </span>args.modifiers.is_empty() &amp;&amp; selectable {
+        <span class="kw">if </span>args.modifiers.is_empty() &amp;&amp; selectable &amp;&amp; args.target.widget_id() == widget.id() {
             args.propagation().stop();
 
             TEXT.resolve().selection_by = SelectionBy::Touch;
@@ -2474,7 +2551,7 @@
             TextSelectOp::select_word_nearest_to(<span class="bool-val">true</span>, args.position).call();
         }
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = MOUSE_MOVE_EVENT.on(update) {
-        <span class="kw">if </span>!edit.selection_move_handles.is_dummy() &amp;&amp; selectable {
+        <span class="kw">if </span>!edit.selection_move_handles.is_dummy() &amp;&amp; selectable &amp;&amp; args.target.widget_id() == widget.id() {
             args.propagation().stop();
 
             <span class="kw">match </span>edit.click_count {
@@ -2486,17 +2563,18 @@
             }
         }
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = POINTER_CAPTURE_EVENT.on(update) {
-        <span class="kw">if </span>args.is_lost(WIDGET.id()) {
+        <span class="kw">if </span>args.is_lost(widget.id()) {
             edit.selection_move_handles.clear();
+            edit.auto_select = <span class="bool-val">false</span>;
         }
     } <span class="kw">else if </span>selectable {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = SELECT_CMD.scoped(WIDGET.id()).on_unhandled(update) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = SELECT_CMD.scoped(widget.id()).on_unhandled(update) {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(op) = args.param::&lt;TextSelectOp&gt;() {
                 args.propagation().stop();
 
                 op.clone().call();
             }
-        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = SELECT_ALL_CMD.scoped(WIDGET.id()).on_unhandled(update) {
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = SELECT_ALL_CMD.scoped(widget.id()).on_unhandled(update) {
             args.propagation().stop();
             TextSelectOp::select_all().call();
         }
@@ -2505,12 +2583,12 @@
     <span class="kw">let </span><span class="kw-2">mut </span>resolve = TEXT.resolve();
     <span class="kw">let </span>caret = <span class="kw-2">&amp;mut </span>resolve.caret;
     <span class="kw">if </span>(caret.index, caret.index_version, caret.selection_index) != prev_caret_index {
-        <span class="kw">if </span>!editable || caret.index.is_none() || !FOCUS.is_focused(WIDGET.id()).get() {
+        <span class="kw">if </span>!editable || caret.index.is_none() || !FOCUS.is_focused(widget.id()).get() {
             edit.caret_animation = VarHandle::dummy();
             caret.opacity = var(<span class="number">0</span>.fct()).read_only();
         } <span class="kw">else </span>{
             caret.opacity = KEYBOARD.caret_animation();
-            edit.caret_animation = caret.opacity.subscribe(UpdateOp::RenderUpdate, WIDGET.id());
+            edit.caret_animation = caret.opacity.subscribe(UpdateOp::RenderUpdate, widget.id());
         }
         resolve.pending_layout |= PendingLayout::CARET;
         WIDGET.layout(); <span class="comment">// update caret_origin

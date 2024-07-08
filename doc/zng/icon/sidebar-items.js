@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["GlyphSource"],"fn":["ico_color","ico_size"],"mod":["material_filled","material_outlined","material_rounded","material_sharp"],"struct":["GlyphIcon","Icon","MaterialFonts","MaterialIcon"],"trait":["CommandIconExt"]};
+window.SIDEBAR_ITEMS = {"enum":["GlyphSource"],"fn":["ico_color","ico_size"],"mod":["material"],"struct":["GlyphIcon","ICONS","Icon","IconRequestArgs"],"trait":["CommandIconExt"]};

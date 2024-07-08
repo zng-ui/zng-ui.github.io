@@ -173,6 +173,19 @@
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
 <a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Commands that control the scoped window.
 
 </span><span class="kw">use </span>zng_app::{
@@ -183,6 +196,7 @@
 };
 <span class="kw">use </span>zng_var::Var;
 <span class="kw">use </span>zng_view_api::window::WindowState;
+<span class="kw">use </span>zng_wgt::{wgt_fn, CommandIconExt <span class="kw">as _</span>, ICONS};
 
 <span class="kw">use crate</span>::{WindowVars, WINDOWS};
 
@@ -191,21 +205,27 @@
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represents the window **close** action.
     </span><span class="kw">pub static </span>CLOSE_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Close"</span>,
         info: <span class="string">"Close the window."</span>,
         shortcut: [<span class="macro">shortcut!</span>(ALT+F4), <span class="macro">shortcut!</span>(CTRL+<span class="string">'W'</span>)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"close"</span>)),
     };
 
     <span class="doccomment">/// Represents the window **minimize** action.
     </span><span class="kw">pub static </span>MINIMIZE_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Minimize"</span>,
         info: <span class="string">"Minimize the window."</span>,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"minimize"</span>)),
     };
 
     <span class="doccomment">/// Represents the window **maximize** action.
     </span><span class="kw">pub static </span>MAXIMIZE_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Maximize"</span>,
         info: <span class="string">"Maximize the window."</span>,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"maximize"</span>)),
     };
 
     <span class="doccomment">/// Represents the window **toggle fullscreen** action.
@@ -215,8 +235,9 @@
     /// This command is about the *windowed* fullscreen state ([`WindowState::Fullscreen`]),
     /// use the [`EXCLUSIVE_FULLSCREEN_CMD`] to toggle *exclusive* video mode fullscreen.
     </span><span class="kw">pub static </span>FULLSCREEN_CMD = {
-        name: <span class="string">"Full-Screen"</span>,
-        info: <span class="string">"Toggle full-screen mode on the window."</span>,
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+        name: <span class="string">"Fullscreen"</span>,
+        info: <span class="string">"Toggle fullscreen mode on the window."</span>,
         shortcut: {
             <span class="kw">let </span>a = <span class="kw">if </span><span class="macro">cfg!</span>(target_os = <span class="string">"macos"</span>) {
                 <span class="macro">shortcut!</span>(CTRL|SHIFT+<span class="string">'F'</span>)
@@ -224,7 +245,8 @@
                 <span class="macro">shortcut!</span>(F11)
             };
             [a, <span class="macro">shortcut!</span>(ZoomToggle)]
-        }
+        },
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"fullscreen"</span>)),
     };
 
     <span class="doccomment">/// Represents the window **toggle fullscreen** action.
@@ -234,16 +256,20 @@
     /// This command is about the *exclusive* fullscreen state ([`WindowState::Exclusive`]),
     /// use the [`FULLSCREEN_CMD`] to toggle *windowed* fullscreen.
     </span><span class="kw">pub static </span>EXCLUSIVE_FULLSCREEN_CMD = {
-        name: <span class="string">"Exclusive Full-Screen"</span>,
-        info: <span class="string">"Toggle exclusive full-screen mode on the window."</span>,
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+        name: <span class="string">"Exclusive Fullscreen"</span>,
+        info: <span class="string">"Toggle exclusive fullscreen mode on the window."</span>,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"fullscreen"</span>)),
     };
 
     <span class="doccomment">/// Represents the window **restore** action.
     ///
     /// Restores the window to its previous non-minimized state or normal state.
     </span><span class="kw">pub static </span>RESTORE_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Restore"</span>,
         info: <span class="string">"Restores the window to its previous non-minimized state or normal state."</span>,
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"restore"</span>)),
     };
 
     <span class="doccomment">/// Represents the **close IME** action.

@@ -554,18 +554,6 @@
 <a href="#554" id="554">554</a>
 <a href="#555" id="555">555</a>
 <a href="#556" id="556">556</a>
-<a href="#557" id="557">557</a>
-<a href="#558" id="558">558</a>
-<a href="#559" id="559">559</a>
-<a href="#560" id="560">560</a>
-<a href="#561" id="561">561</a>
-<a href="#562" id="562">562</a>
-<a href="#563" id="563">563</a>
-<a href="#564" id="564">564</a>
-<a href="#565" id="565">565</a>
-<a href="#566" id="566">566</a>
-<a href="#567" id="567">567</a>
-<a href="#568" id="568">568</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -588,7 +576,7 @@
     keyboard::KEY_INPUT_EVENT,
     mouse::{MOUSE, MOUSE_HOVERED_EVENT, MOUSE_INPUT_EVENT, MOUSE_WHEEL_EVENT},
 };
-<span class="kw">use </span>zng_wgt::{border, corner_radius, hit_test_mode, prelude::<span class="kw-2">*</span>, HitTestMode};
+<span class="kw">use </span>zng_wgt::{base_color, border, corner_radius, hit_test_mode, prelude::<span class="kw-2">*</span>, HitTestMode};
 <span class="kw">use </span>zng_wgt_access::{access_role, AccessRole};
 <span class="kw">use </span>zng_wgt_container::padding;
 <span class="kw">use </span>zng_wgt_fill::background_color;
@@ -1102,19 +1090,6 @@
 }
 <span class="macro">impl_style_fn!</span>(Tip);
 
-<span class="macro">context_var!</span> {
-    <span class="doccomment">/// Idle background dark and light color.
-    </span><span class="kw">pub static </span>BASE_COLORS_VAR: ColorPair = (rgb(<span class="number">20</span>, <span class="number">20</span>, <span class="number">20</span>), rgb(<span class="number">235</span>, <span class="number">235</span>, <span class="number">235</span>));
-}
-
-<span class="doccomment">/// Sets the colors that is used to compute all background and border colors in the tip style.
-///
-/// Sets [`BASE_COLORS_VAR`].
-</span><span class="attr">#[property(CONTEXT, default(BASE_COLORS_VAR), widget_impl(DefaultStyle))]
-</span><span class="kw">pub fn </span>base_colors(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    with_context_var(child, BASE_COLORS_VAR, color)
-}
-
 <span class="doccomment">/// Tip default style.
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
 </span><span class="kw">pub struct </span>DefaultStyle(Style);
@@ -1123,13 +1098,14 @@
         <span class="macro">widget_set!</span> {
             <span class="self">self</span>;
             replace = <span class="bool-val">true</span>;
-            padding = (<span class="number">2</span>, <span class="number">4</span>);
+            padding = (<span class="number">4</span>, <span class="number">6</span>);
             corner_radius = <span class="number">3</span>;
-            background_color = color_scheme_pair(BASE_COLORS_VAR);
+            base_color = light_dark(rgb(<span class="number">235</span>, <span class="number">235</span>, <span class="number">235</span>), rgb(<span class="number">20</span>, <span class="number">20</span>, <span class="number">20</span>));
+            background_color = colors::BASE_COLOR_VAR.rgba();
             zng_wgt_text::font_size = <span class="number">10</span>.pt();
             border = {
                 widths: <span class="number">1</span>.px(),
-                sides: color_scheme_highlight(BASE_COLORS_VAR, <span class="number">0.5</span>).map_into()
+                sides: colors::BASE_COLOR_VAR.shade_into(<span class="number">1</span>)
             };
         }
     }

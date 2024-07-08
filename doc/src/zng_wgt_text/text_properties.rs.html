@@ -1928,6 +1928,12 @@
 <a href="#1928" id="1928">1928</a>
 <a href="#1929" id="1929">1929</a>
 <a href="#1930" id="1930">1930</a>
+<a href="#1931" id="1931">1931</a>
+<a href="#1932" id="1932">1932</a>
+<a href="#1933" id="1933">1933</a>
+<a href="#1934" id="1934">1934</a>
+<a href="#1935" id="1935">1935</a>
+<a href="#1936" id="1936">1936</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, num::NonZeroU32, time::Duration};
 
 <span class="kw">use </span>zng_app::render::FontSynthesis;
@@ -3449,7 +3455,7 @@
     with_context_var(child, CHANGE_STOP_DELAY_VAR, delay)
 }
 
-<span class="doccomment">/// Auto-selection on focus when the text is editable.
+<span class="doccomment">/// Auto-selection on focus when the text is selectable.
 ///
 /// If enabled on keyboard focus all text is selected and on blur any selection is cleared.
 </span><span class="attr">#[property(CONTEXT, default(AUTO_SELECTION_VAR), widget_impl(TextEditMix&lt;P&gt;))]
@@ -3482,31 +3488,37 @@
     with_context_var(child, OBSCURE_TXT_VAR, enabled)
 }
 
-<span class="doccomment">/// Defines when text is auto-selected on focus.
-</span><span class="attr">#[derive(Default, Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
-</span><span class="kw">pub enum </span>AutoSelection {
-    <span class="doccomment">/// Does not select-all on focus.
-    </span>Disabled,
-
-    <span class="doccomment">/// Select-all on keyboard focus ([highlight]).
-    ///
-    /// [highlight]: zng_ext_input::focus::FocusChangedArgs::highlight
-    </span>Enabled,
-
-    <span class="doccomment">/// Select-all on keyboard focus ([highlight]) if the text is not [`accepts_enter`].
-    ///
-    /// [highlight]: zng_ext_input::focus::FocusChangedArgs::highlight
-    /// [`accepts_enter`]: fn@accepts_enter
-    </span><span class="attr">#[default]
-    </span>Auto,
+<span class="macro">bitflags!</span> {
+    <span class="doccomment">/// Defines when text is auto-selected on focus.
+    </span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq, Debug, serde::Serialize, serde::Deserialize)]
+    </span><span class="kw">pub struct </span>AutoSelection: u8 {
+        <span class="doccomment">/// No auto-selection.
+        </span><span class="kw">const </span>DISABLED = <span class="number">0</span>;
+        <span class="doccomment">/// Clear selection on blur if the widget is not the ALT return focus and is not the parent scope return focus.
+        ///
+        /// This is the default behavior.
+        </span><span class="kw">const </span>CLEAR_ON_BLUR = <span class="number">0b0000_0001</span>;
+        <span class="doccomment">/// Select all on keyboard initiated focus.
+        </span><span class="kw">const </span>ALL_ON_FOCUS_KEYBOARD = <span class="number">0b0000_00010</span>;
+        <span class="doccomment">/// Select all on pointer release if the pointer press event caused the focus to happen and it did not change
+        /// the selection and there is no selection on release.
+        </span><span class="kw">const </span>ALL_ON_FOCUS_POINTER = <span class="number">0b0000_00100</span>;
+        <span class="doccomment">/// All auto-selection features enabled.
+        </span><span class="kw">const </span>ENABLED = <span class="number">0b1111_1111</span>;
+    }
 }
 <span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(enabled: bool) -&gt; AutoSelection {
         <span class="kw">if </span>enabled {
-            AutoSelection::Enabled
+            AutoSelection::ENABLED
         } <span class="kw">else </span>{
-            AutoSelection::Disabled
+            AutoSelection::DISABLED
         }
+    }
+}
+<span class="kw">impl </span>Default <span class="kw">for </span>AutoSelection {
+    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::CLEAR_ON_BLUR
     }
 }
 

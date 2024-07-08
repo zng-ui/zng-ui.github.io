@@ -275,6 +275,8 @@
 <a href="#275" id="275">275</a>
 <a href="#276" id="276">276</a>
 <a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -288,10 +290,11 @@
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
 
+<span class="kw">use </span>colors::BASE_COLOR_VAR;
 <span class="kw">use </span>zng_ext_font::FontNames;
 <span class="kw">use </span>zng_ext_input::{focus::FOCUS, mouse::ClickMode};
 <span class="kw">use </span>zng_ext_l10n::lang;
-<span class="kw">use </span>zng_wgt::{align, is_disabled, margin, prelude::<span class="kw-2">*</span>};
+<span class="kw">use </span>zng_wgt::{align, base_color, is_disabled, margin, prelude::<span class="kw-2">*</span>};
 <span class="kw">use </span>zng_wgt_access::{access_role, AccessRole};
 <span class="kw">use </span>zng_wgt_button::BUTTON;
 <span class="kw">use </span>zng_wgt_container::{child_align, child_end, padding};
@@ -301,7 +304,6 @@
 <span class="kw">use </span>zng_wgt_input::{cursor, focus::alt_focus_scope, CursorIcon};
 <span class="kw">use </span>zng_wgt_size_offset::size;
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style, StyleMix};
-<span class="kw">use </span>zng_wgt_text::icon::CommandIconExt <span class="kw">as _</span>;
 <span class="kw">use </span>zng_wgt_text::Text;
 
 <span class="kw">pub mod </span>context;
@@ -379,9 +381,10 @@
 
             <span class="comment">// also see context::DefaultStyle
 
-            </span>zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">ButtonStyle!</span>());
+            </span>base_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
+            zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">ButtonStyle!</span>());
             zng_wgt_toggle::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">ToggleStyle!</span>());
-            zng_wgt_rule_line::hr::color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+            zng_wgt_rule_line::hr::color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
             zng_wgt_text::icon::ico_size = <span class="number">18</span>;
         }
     }
@@ -405,7 +408,8 @@
             padding = (<span class="number">4</span>, <span class="number">0</span>);
             child_align = Align::START;
 
-            background_color = color_scheme_pair(zng_wgt_button::BASE_COLORS_VAR);
+            base_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
+            background_color = BASE_COLOR_VAR.rgba();
             opacity = <span class="number">90</span>.pct();
             foreground_highlight = <span class="macro">unset!</span>;
             zng_wgt_tooltip::tooltip_fn = WidgetFn::nil(); <span class="comment">// cmd sets tooltip
@@ -431,7 +435,7 @@
             });
 
             when <span class="kw-2">*</span>#is_focused {
-                background_color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+                background_color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
                 opacity = <span class="number">100</span>.pct();
             }
 

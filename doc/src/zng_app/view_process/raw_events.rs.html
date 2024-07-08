@@ -811,9 +811,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#775" id="775">775</a>
 <a href="#776" id="776">776</a>
 <a href="#777" id="777">777</a>
-<a href="#778" id="778">778</a>
-<a href="#779" id="779">779</a>
-<a href="#780" id="780">780</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Events directly from the view-process targeting the app windows.
 //!
 //! These events get processed by [app extensions] to generate the events used in widgets, for example
@@ -836,7 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
-    config::{AnimationsConfig, ColorScheme, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
     keyboard::{Key, KeyCode, KeyLocation, KeyState},
     mouse::{ButtonState, MouseButton, MouseScrollDelta},
     touch::{TouchPhase, TouchUpdate},
@@ -1297,22 +1294,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    <span class="doccomment">/// Arguments for the [`RAW_COLOR_SCHEME_CHANGED_EVENT`].
-    </span><span class="kw">pub struct </span>RawColorSchemeChangedArgs {
-        <span class="doccomment">/// Window for which the preference was changed.
-        </span><span class="kw">pub </span>window_id: WindowId,
-
-        <span class="doccomment">/// New preference.
-        </span><span class="kw">pub </span>color_scheme: ColorScheme,
-
-        ..
-
-        <span class="doccomment">/// Broadcast to all widgets.
-        </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
-           list.search_all();
-        }
-    }
-
     <span class="doccomment">/// Arguments for the image events.
     </span><span class="kw">pub struct </span>RawImageArgs {
         <span class="doccomment">/// Image that changed.
@@ -1436,6 +1417,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    <span class="doccomment">/// Arguments for the [`RAW_COLORS_CONFIG_CHANGED_EVENT`].
+    </span><span class="kw">pub struct </span>RawColorsConfigChangedArgs {
+        <span class="doccomment">/// New config.
+        </span><span class="kw">pub </span>config: ColorsConfig,
+
+        ..
+
+        <span class="doccomment">/// Broadcast to all widgets.
+        </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
+           list.search_all();
+        }
+    }
+
     <span class="doccomment">/// Arguments for the [`RAW_EXTENSION_EVENT`].
     </span><span class="kw">pub struct </span>RawExtensionEventArgs {
         <span class="doccomment">/// Id of the sender extension.
@@ -1549,8 +1543,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Monitors added, removed or modified.
     </span><span class="kw">pub static </span>RAW_MONITORS_CHANGED_EVENT: RawMonitorsChangedArgs;
 
-    <span class="doccomment">/// Color scheme preference changed for a window.
-    </span><span class="kw">pub static </span>RAW_COLOR_SCHEME_CHANGED_EVENT: RawColorSchemeChangedArgs;
+    <span class="doccomment">/// Color scheme or accent color preference changed for a window.
+    </span><span class="kw">pub static </span>RAW_COLORS_CONFIG_CHANGED_EVENT: RawColorsConfigChangedArgs;
 
     <span class="doccomment">/// Change in system font anti-aliasing config.
     </span><span class="kw">pub static </span>RAW_FONT_AA_CHANGED_EVENT: RawFontAaChangedArgs;

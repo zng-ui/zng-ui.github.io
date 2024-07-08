@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["parse_validate_id","scrape_file","scrape_files","scrape_fluent_text"],"struct":["FluentEntry","FluentNote","FluentTemplate"]};
+window.SIDEBAR_ITEMS = {"fn":["parse_validate_id","scrape_file","scrape_files","scrape_fluent_text"],"struct":["CommandMacroArgs","CommandMacroEntry","CommandMetaEntry","FluentEntry","FluentNote","FluentTemplate","L10nMacroArgs"]};

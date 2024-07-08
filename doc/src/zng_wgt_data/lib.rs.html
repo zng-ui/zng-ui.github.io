@@ -962,12 +962,12 @@
     /// The colors can be used directly as text color.
     ///
     /// Defaults set only for the named levels.
-    </span><span class="kw">pub static </span>DATA_NOTE_COLORS_VAR: HashMap&lt;DataNoteLevel, ColorPair&gt; = {
+    </span><span class="kw">pub static </span>DATA_NOTE_COLORS_VAR: HashMap&lt;DataNoteLevel, LightDark&gt; = {
         <span class="kw">let </span><span class="kw-2">mut </span>map = HashMap::new();
         <span class="comment">// (dark, light)
-        </span>map.insert(DataNoteLevel::INFO, (colors::AZURE, colors::AZURE).into());
-        map.insert(DataNoteLevel::WARN, (colors::YELLOW, colors::ORANGE).into());
-        map.insert(DataNoteLevel::ERROR, (colors::WHITE.with_alpha(<span class="number">20</span>.pct()).mix_normal(colors::RED), colors::RED).into());
+        </span>map.insert(DataNoteLevel::INFO, LightDark::new(colors::AZURE, colors::AZURE));
+        map.insert(DataNoteLevel::WARN, LightDark::new(colors::ORANGE, colors::YELLOW));
+        map.insert(DataNoteLevel::ERROR, LightDark::new(colors::RED, colors::WHITE.with_alpha(<span class="number">20</span>.pct()).mix_normal(colors::RED)));
         map
     };
 }
@@ -978,7 +978,7 @@
 ///
 /// This property sets the [`DATA_NOTE_COLORS_VAR`].
 </span><span class="attr">#[property(CONTEXT, default(DATA_NOTE_COLORS_VAR))]
-</span><span class="kw">pub fn </span>replace_data_note_colors(child: <span class="kw">impl </span>UiNode, colors: <span class="kw">impl </span>IntoVar&lt;HashMap&lt;DataNoteLevel, ColorPair&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>replace_data_note_colors(child: <span class="kw">impl </span>UiNode, colors: <span class="kw">impl </span>IntoVar&lt;HashMap&lt;DataNoteLevel, LightDark&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(child, DATA_NOTE_COLORS_VAR, colors)
 }
 
@@ -988,7 +988,7 @@
 ///
 /// This property sets the [`DATA_NOTE_COLORS_VAR`].
 </span><span class="attr">#[property(CONTEXT, default(HashMap::new()))]
-</span><span class="kw">pub fn </span>extend_data_note_colors(child: <span class="kw">impl </span>UiNode, colors: <span class="kw">impl </span>IntoVar&lt;HashMap&lt;DataNoteLevel, ColorPair&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>extend_data_note_colors(child: <span class="kw">impl </span>UiNode, colors: <span class="kw">impl </span>IntoVar&lt;HashMap&lt;DataNoteLevel, LightDark&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(
         child,
         DATA_NOTE_COLORS_VAR,
@@ -1001,7 +1001,7 @@
 }
 
 <span class="doccomment">/// Node that inserts a data note color in [`DATA_NOTE_COLORS_VAR`].
-</span><span class="kw">pub fn </span>with_data_note_color(child: <span class="kw">impl </span>UiNode, level: DataNoteLevel, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>with_data_note_color(child: <span class="kw">impl </span>UiNode, level: DataNoteLevel, color: <span class="kw">impl </span>IntoVar&lt;LightDark&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_context_var(
         child,
         DATA_NOTE_COLORS_VAR,
@@ -1019,7 +1019,7 @@
 ///
 /// [`INFO`]: DataNoteLevel::INFO
 </span><span class="attr">#[property(CONTEXT)]
-</span><span class="kw">pub fn </span>data_info_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>data_info_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;LightDark&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_data_note_color(child, DataNoteLevel::INFO, color)
 }
 
@@ -1029,7 +1029,7 @@
 ///
 /// [`WARN`]: DataNoteLevel::WARN
 </span><span class="attr">#[property(CONTEXT)]
-</span><span class="kw">pub fn </span>data_warn_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>data_warn_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;LightDark&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_data_note_color(child, DataNoteLevel::WARN, color)
 }
 
@@ -1039,7 +1039,7 @@
 ///
 /// [`ERROR`]: DataNoteLevel::ERROR
 </span><span class="attr">#[property(CONTEXT)]
-</span><span class="kw">pub fn </span>data_error_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
+</span><span class="kw">pub fn </span>data_error_color(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;LightDark&gt;) -&gt; <span class="kw">impl </span>UiNode {
     with_data_note_color(child, DataNoteLevel::ERROR, color)
 }
 
@@ -1155,7 +1155,7 @@
                     }
                 }
 
-                color.unwrap_or_else(|| ColorPair::from((colors::BLACK, colors::WHITE)))
+                color.unwrap_or_else(|| LightDark::new(colors::WHITE, colors::BLACK))
             };
             <span class="kw">match </span>scheme {
                 ColorScheme::Light =&gt; c.light,

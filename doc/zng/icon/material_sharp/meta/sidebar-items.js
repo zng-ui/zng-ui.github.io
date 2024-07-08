@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["FONT_BYTES","FONT_NAME"]};

@@ -779,6 +779,55 @@
 <a href="#779" id="779">779</a>
 <a href="#780" id="780">780</a>
 <a href="#781" id="781">781</a>
+<a href="#782" id="782">782</a>
+<a href="#783" id="783">783</a>
+<a href="#784" id="784">784</a>
+<a href="#785" id="785">785</a>
+<a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
+<a href="#802" id="802">802</a>
+<a href="#803" id="803">803</a>
+<a href="#804" id="804">804</a>
+<a href="#805" id="805">805</a>
+<a href="#806" id="806">806</a>
+<a href="#807" id="807">807</a>
+<a href="#808" id="808">808</a>
+<a href="#809" id="809">809</a>
+<a href="#810" id="810">810</a>
+<a href="#811" id="811">811</a>
+<a href="#812" id="812">812</a>
+<a href="#813" id="813">813</a>
+<a href="#814" id="814">814</a>
+<a href="#815" id="815">815</a>
+<a href="#816" id="816">816</a>
+<a href="#817" id="817">817</a>
+<a href="#818" id="818">818</a>
+<a href="#819" id="819">819</a>
+<a href="#820" id="820">820</a>
+<a href="#821" id="821">821</a>
+<a href="#822" id="822">822</a>
+<a href="#823" id="823">823</a>
+<a href="#824" id="824">824</a>
+<a href="#825" id="825">825</a>
+<a href="#826" id="826">826</a>
+<a href="#827" id="827">827</a>
+<a href="#828" id="828">828</a>
+<a href="#829" id="829">829</a>
+<a href="#830" id="830">830</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -806,11 +855,6 @@
 
 <span class="kw">mod </span>sync;
 <span class="kw">pub use </span>sync::<span class="kw-2">*</span>;
-<span class="kw">use </span>zng_app_context::app_local;
-<span class="kw">use </span>zng_clone_move::clmv;
-<span class="kw">use </span>zng_ext_fs_watcher::{WatchFile, WatcherReadStatus, WatcherSyncStatus, WriteFile};
-<span class="kw">use </span>zng_txt::Txt;
-<span class="kw">use </span>zng_var::{types::WeakArcVar, var, AnyVar, AnyWeakVar, ArcVar, BoxedVar, LocalVar, Var, VarHandles, VarModify, VarValue, WeakVar};
 
 <span class="attr">#[cfg(feature = <span class="string">"toml"</span>)]
 </span><span class="kw">mod </span>toml;
@@ -827,6 +871,8 @@
 <span class="attr">#[cfg(feature = <span class="string">"yaml"</span>)]
 </span><span class="kw">pub use </span><span class="self">self</span>::yaml::<span class="kw-2">*</span>;
 
+<span class="kw">pub mod </span>settings;
+
 <span class="kw">use </span>std::{
     any::Any,
     collections::{hash_map, HashMap},
@@ -835,7 +881,12 @@
 };
 
 <span class="kw">use </span>zng_app::{update::EventUpdate, view_process::raw_events::LOW_MEMORY_EVENT, AppExtension};
+<span class="kw">use </span>zng_app_context::app_local;
+<span class="kw">use </span>zng_clone_move::clmv;
+<span class="kw">use </span>zng_ext_fs_watcher::{WatchFile, WatcherReadStatus, WatcherSyncStatus, WriteFile};
 <span class="kw">use </span>zng_task <span class="kw">as </span>task;
+<span class="kw">use </span>zng_txt::Txt;
+<span class="kw">use </span>zng_var::{types::WeakArcVar, var, AnyVar, AnyWeakVar, ArcVar, BoxedVar, LocalVar, Var, VarHandles, VarModify, VarValue, WeakVar};
 
 <span class="doccomment">/// Application extension that provides mouse events and service.
 ///
@@ -889,16 +940,20 @@
     /// The same variable is returned for multiple requests of the same key. If the loaded config is not read-only the
     /// returned variable can be set to update the config source.
     ///
-    /// The `default` closure is used to generate a value if the key is not found in the config, the default value
-    /// is not inserted in the config, the key is inserted or replaced only when the returned variable updates. Note
-    /// that the `default` closure may be used even if the key is already in the config, depending on the config implementation.
-    </span><span class="kw">pub fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
-        CONFIG_SV.write().get(key.into(), default)
+    /// The `default` value is used if the key is not found in the config, the default value
+    /// is not inserted in the config, the key is inserted or replaced only when the returned variable updates.
+    </span><span class="kw">pub fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T) -&gt; BoxedVar&lt;T&gt; {
+        CONFIG_SV.write().get(key.into(), default, <span class="bool-val">false</span>)
+    }
+
+    <span class="doccomment">/// Gets a variable that is bound to the config `key`, the `value` is set and if the `key` was not present it is also inserted on the config.
+    </span><span class="kw">pub fn </span>insert&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, value: T) -&gt; BoxedVar&lt;T&gt; {
+        CONFIG_SV.write().get(key.into(), value, <span class="bool-val">true</span>)
     }
 }
 <span class="kw">impl </span>AnyConfig <span class="kw">for </span>CONFIG {
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
-        CONFIG_SV.write().get_raw(key, default, shared)
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, insert: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+        CONFIG_SV.write().get_raw(key, default, insert, shared)
     }
 
     <span class="kw">fn </span>contains_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey) -&gt; BoxedVar&lt;bool&gt; {
@@ -918,8 +973,8 @@
     }
 }
 <span class="kw">impl </span>Config <span class="kw">for </span>CONFIG {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
-        CONFIG.get(key, default)
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt; {
+        CONFIG_SV.write().get(key, default, insert)
     }
 }
 
@@ -1036,13 +1091,13 @@
     /// This method is used when `T` cannot be passed because the config is behind a dynamic reference,
     /// the backend must convert the value from the in memory representation to [`RawConfigValue`].
     ///
-    /// If `shared` is `true` and the key was already requested it the same var is returned, if `false`
+    /// If `shared` is `true` and the key was already requested the same var is returned, if `false`
     /// a new variable is always generated. Note that if you have two different variables for the same
     /// key they will go out-of-sync as updates from setting one variable do not propagate to the other.
     ///
-    /// The `default` value is used to if the key is not found in the config, the default value
-    /// is not inserted in the config, the key is inserted or replaced only when the returned variable updates.
-    </span><span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt;;
+    /// The `default` value is used if the key is not found in the config, the default value
+    /// is only inserted in the config if `insert`, otherwise the key is inserted or replaced only when the returned variable changes.
+    </span><span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, insert: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt;;
 
     <span class="doccomment">/// Gets a read-only variable that tracks if an entry for the `key` is in the backing storage.
     </span><span class="kw">fn </span>contains_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey) -&gt; BoxedVar&lt;bool&gt;;
@@ -1059,6 +1114,51 @@
     <span class="doccomment">/// Cleanup and flush RAM caches.
     </span><span class="kw">fn </span>low_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>);
 }
+<span class="kw">impl dyn </span>AnyConfig {
+    <span class="doccomment">/// Get raw config and setup a bidi binding that converts to and from `T`.
+    ///
+    /// See [`get_raw`](AnyConfig::get_raw) for more details about the inputs.
+    </span><span class="kw">pub fn </span>get_raw_serde_bidi&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool, shared: bool) -&gt; BoxedVar&lt;T&gt; {
+        <span class="kw">let </span>key = key.into();
+        <span class="kw">let </span>source_var = <span class="self">self</span>.get_raw(
+            key.clone(),
+            RawConfigValue::serialize(<span class="kw-2">&amp;</span>default).unwrap_or_else(|e| <span class="macro">panic!</span>(<span class="string">"invalid default value, {e}"</span>)),
+            insert,
+            shared,
+        );
+        <span class="kw">let </span>var = var(RawConfigValue::deserialize(source_var.get()).unwrap_or(default));
+
+        source_var
+            .bind_filter_map_bidi(
+                <span class="kw-2">&amp;</span>var,
+                <span class="comment">// Raw -&gt; T
+                </span><span class="macro">clmv!</span>(key, |raw| {
+                    <span class="kw">match </span>RawConfigValue::deserialize(raw.clone()) {
+                        <span class="prelude-val">Ok</span>(value) =&gt; <span class="prelude-val">Some</span>(value),
+                        <span class="prelude-val">Err</span>(e) =&gt; {
+                            <span class="macro">tracing::error!</span>(<span class="string">"get_raw_serde_bidi({key:?}) error, {e:?}"</span>);
+                            <span class="prelude-val">None
+                        </span>}
+                    }
+                }),
+                <span class="comment">// T -&gt; Raw
+                </span><span class="macro">clmv!</span>(key, source_var, |value| {
+                    <span class="kw">let </span>_strong_ref = <span class="kw-2">&amp;</span>source_var;
+
+                    <span class="kw">match </span>RawConfigValue::serialize(value) {
+                        <span class="prelude-val">Ok</span>(raw) =&gt; <span class="prelude-val">Some</span>(raw),
+                        <span class="prelude-val">Err</span>(e) =&gt; {
+                            <span class="macro">tracing::error!</span>(<span class="string">"get_raw_serde_bidi({key:?}) error, {e:?}"</span>);
+                            <span class="prelude-val">None
+                        </span>}
+                    }
+                }),
+            )
+            .perm();
+
+        var.boxed()
+    }
+}
 
 <span class="doccomment">/// Represents one or more config sources.
 </span><span class="kw">pub trait </span>Config: AnyConfig {
@@ -1067,10 +1167,9 @@
     /// The same variable is returned for multiple requests of the same key. If the loaded config is not read-only the
     /// returned variable can be set to update the config source.
     ///
-    /// The `default` closure is used to generate a value if the key is not found in the config, the default value
-    /// is not inserted in the config, the key is inserted or replaced only when the returned variable updates. Note
-    /// that the `default` closure may be used even if the key is already in the config, depending on the config implementation.
-    </span><span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt;;
+    /// The `default` value is used if the key is not found in the config, the default value
+    /// is only inserted in the config if `insert`, otherwise the key is inserted or replaced only when the returned variable changes.
+    </span><span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt;;
 }
 
 <span class="doccomment">/// Config wrapper that only provides read-only variables from the inner config.
@@ -1084,8 +1183,8 @@
     }
 }
 <span class="kw">impl</span>&lt;C: Config&gt; AnyConfig <span class="kw">for </span>ReadOnlyConfig&lt;C&gt; {
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
-        <span class="self">self</span>.cfg.get_raw(key, default, shared).read_only()
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, <span class="kw">_</span>: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+        <span class="self">self</span>.cfg.get_raw(key, default, <span class="bool-val">false</span>, shared).read_only()
     }
 
     <span class="kw">fn </span>contains_key(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey) -&gt; BoxedVar&lt;bool&gt; {
@@ -1105,8 +1204,8 @@
     }
 }
 <span class="kw">impl</span>&lt;C: Config&gt; Config <span class="kw">for </span>ReadOnlyConfig&lt;C&gt; {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
-        <span class="self">self</span>.cfg.get(key.into(), default).read_only()
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, <span class="kw">_</span>: bool) -&gt; BoxedVar&lt;T&gt; {
+        <span class="self">self</span>.cfg.get(key.into(), default, <span class="bool-val">false</span>).read_only()
     }
 }
 
@@ -1124,7 +1223,7 @@
         LocalVar(ConfigStatus::Loaded).boxed()
     }
 
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, _shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, _insert: bool, _shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
         <span class="kw">match </span><span class="self">self</span>.values.entry(key) {
             hash_map::Entry::Occupied(e) =&gt; e.get().clone().boxed(),
             hash_map::Entry::Vacant(e) =&gt; {
@@ -1180,9 +1279,8 @@
     }
 }
 <span class="kw">impl </span>Config <span class="kw">for </span>MemoryConfig {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
-        <span class="kw">let </span>default = default();
-        <span class="self">self</span>.get_raw(key.into(), RawConfigValue::serialize(default.clone()).unwrap(), <span class="bool-val">true</span>)
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt; {
+        <span class="self">self</span>.get_raw(key.into(), RawConfigValue::serialize(default.clone()).unwrap(), insert, <span class="bool-val">true</span>)
             .filter_map_bidi(
                 |m| m.clone().deserialize::&lt;T&gt;().ok(),
                 |v| RawConfigValue::serialize(v).ok(),
@@ -1353,7 +1451,7 @@
         };
 
         <span class="comment">// get or insert the source var
-        </span><span class="kw">let </span>source_var = source.get_raw(key.clone(), RawConfigValue::serialize(var.get()).unwrap(), <span class="bool-val">false</span>);
+        </span><span class="kw">let </span>source_var = source.get_raw(key.clone(), RawConfigValue::serialize(var.get()).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">false</span>);
 
         <span class="comment">// var.set_from_map(source_var)
         </span>var.modify(<span class="macro">clmv!</span>(source_var, key, |vm| {

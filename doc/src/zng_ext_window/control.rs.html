@@ -2348,6 +2348,21 @@
 <a href="#2348" id="2348">2348</a>
 <a href="#2349" id="2349">2349</a>
 <a href="#2350" id="2350">2350</a>
+<a href="#2351" id="2351">2351</a>
+<a href="#2352" id="2352">2352</a>
+<a href="#2353" id="2353">2353</a>
+<a href="#2354" id="2354">2354</a>
+<a href="#2355" id="2355">2355</a>
+<a href="#2356" id="2356">2356</a>
+<a href="#2357" id="2357">2357</a>
+<a href="#2358" id="2358">2358</a>
+<a href="#2359" id="2359">2359</a>
+<a href="#2360" id="2360">2360</a>
+<a href="#2361" id="2361">2361</a>
+<a href="#2362" id="2362">2362</a>
+<a href="#2363" id="2363">2363</a>
+<a href="#2364" id="2364">2364</a>
+<a href="#2365" id="2365">2365</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -2361,7 +2376,7 @@
     update::{EventUpdate, InfoUpdates, LayoutUpdates, RenderUpdates, WidgetUpdates, UPDATES},
     view_process::{
         raw_events::{
-            RawWindowFocusArgs, RAW_COLOR_SCHEME_CHANGED_EVENT, RAW_FRAME_RENDERED_EVENT, RAW_HEADLESS_OPEN_EVENT, RAW_IME_EVENT,
+            RawWindowFocusArgs, RAW_COLORS_CONFIG_CHANGED_EVENT, RAW_FRAME_RENDERED_EVENT, RAW_HEADLESS_OPEN_EVENT, RAW_IME_EVENT,
             RAW_WINDOW_CHANGED_EVENT, RAW_WINDOW_FOCUS_EVENT, RAW_WINDOW_OPEN_EVENT, RAW_WINDOW_OR_HEADLESS_OPEN_ERROR_EVENT,
         },
         ViewHeadless, ViewRenderer, ViewWindow, VIEW_PROCESS, VIEW_PROCESS_INITED_EVENT,
@@ -2375,7 +2390,7 @@
     Deadline,
 };
 <span class="kw">use </span>zng_clone_move::clmv;
-<span class="kw">use </span>zng_color::{colors, Rgba};
+<span class="kw">use </span>zng_color::{colors, LightDark, Rgba};
 <span class="kw">use </span>zng_ext_image::{ImageRenderArgs, ImageSource, ImageVar, Img, IMAGES};
 <span class="kw">use </span>zng_layout::{
     context::{LayoutMetrics, LayoutPassId, DIRECTION_VAR, LAYOUT},
@@ -2449,8 +2464,8 @@
     resize_wait_id: <span class="prelude-ty">Option</span>&lt;FrameWaitId&gt;,
     img_res: ImageResources,
     actual_state: <span class="prelude-ty">Option</span>&lt;WindowState&gt;, <span class="comment">// for WindowChangedEvent
-    </span>system_color_scheme: <span class="prelude-ty">Option</span>&lt;ColorScheme&gt;,
-    parent_color_scheme: <span class="prelude-ty">Option</span>&lt;ReadOnlyArcVar&lt;ColorScheme&gt;&gt;,
+    </span>parent_color_scheme: <span class="prelude-ty">Option</span>&lt;ReadOnlyArcVar&lt;ColorScheme&gt;&gt;,
+    parent_accent_color: <span class="prelude-ty">Option</span>&lt;ReadOnlyArcVar&lt;LightDark&gt;&gt;,
     actual_parent: <span class="prelude-ty">Option</span>&lt;WindowId&gt;,
     root_font_size: Dip,
     render_access_update: <span class="prelude-ty">Option</span>&lt;WidgetInfoTree&gt;, <span class="comment">// previous info tree
@@ -2480,8 +2495,8 @@
             monitor: <span class="prelude-val">None</span>,
             resize_wait_id: <span class="prelude-val">None</span>,
             img_res: ImageResources::default(),
-            system_color_scheme: <span class="prelude-val">None</span>,
             parent_color_scheme: <span class="prelude-val">None</span>,
+            parent_accent_color: <span class="prelude-val">None</span>,
             actual_parent: <span class="prelude-val">None</span>,
             actual_state: <span class="prelude-val">None</span>,
             root_font_size: Dip::from_px(Length::pt_to_px(<span class="number">11.0</span>, <span class="number">1</span>.fct()), <span class="number">1</span>.fct()),
@@ -2868,27 +2883,35 @@
             <span class="comment">// else indicator is send with init.
         </span>}
 
-        <span class="kw">let </span><span class="kw-2">mut </span>update_color_scheme = <span class="bool-val">false</span>;
+        <span class="kw">let </span><span class="kw-2">mut </span>update_colors = <span class="bool-val">false</span>;
 
         <span class="kw">if </span>update_parent(<span class="kw-2">&amp;mut </span><span class="self">self</span>.actual_parent, <span class="kw-2">&amp;</span><span class="self">self</span>.vars) {
             <span class="self">self</span>.parent_color_scheme = <span class="self">self
                 </span>.actual_parent
                 .and_then(|id| WINDOWS.vars(id).ok().map(|v| v.actual_color_scheme()));
-            update_color_scheme = <span class="bool-val">true</span>;
+            <span class="self">self</span>.parent_accent_color = <span class="self">self
+                </span>.actual_parent
+                .and_then(|id| WINDOWS.vars(id).ok().map(|v| v.actual_accent_color()));
+            update_colors = <span class="bool-val">true</span>;
         }
 
-        <span class="kw">if </span>update_color_scheme
-            || <span class="self">self</span>.vars.color_scheme().is_new()
-            || <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.is_new()).unwrap_or(<span class="bool-val">false</span>)
-        {
+        <span class="kw">if </span>update_colors || <span class="self">self</span>.vars.color_scheme().is_new() || <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.is_new()).unwrap_or(<span class="bool-val">false</span>) {
             <span class="kw">let </span>scheme = <span class="self">self
                 </span>.vars
                 .color_scheme()
                 .get()
                 .or_else(|| <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.get()))
-                .or(<span class="self">self</span>.system_color_scheme)
-                .unwrap_or_default();
+                .unwrap_or_else(|| WINDOWS.system_colors_config().scheme);
             <span class="self">self</span>.vars.<span class="number">0</span>.actual_color_scheme.set(scheme);
+        }
+        <span class="kw">if </span>update_colors || <span class="self">self</span>.vars.accent_color().is_new() || <span class="self">self</span>.parent_accent_color.as_ref().map(|t| t.is_new()).unwrap_or(<span class="bool-val">false</span>) {
+            <span class="kw">let </span>accent = <span class="self">self
+                </span>.vars
+                .accent_color()
+                .get()
+                .or_else(|| <span class="self">self</span>.parent_accent_color.as_ref().map(|t| t.get()))
+                .unwrap_or_else(|| WINDOWS.system_colors_config().accent.into());
+            <span class="self">self</span>.vars.<span class="number">0</span>.actual_accent_color.set(accent);
         }
 
         <span class="kw">if </span><span class="self">self</span>.vars.<span class="number">0</span>.access_enabled.is_new() {
@@ -3062,16 +3085,21 @@
                 <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(args.data.scale_factor);
 
                 <span class="self">self</span>.state = <span class="prelude-val">Some</span>(args.data.state.clone());
-                <span class="self">self</span>.system_color_scheme = <span class="prelude-val">Some</span>(args.data.color_scheme);
 
                 <span class="kw">let </span>scheme = <span class="self">self
                     </span>.vars
                     .color_scheme()
                     .get()
                     .or_else(|| <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.get()))
-                    .or(<span class="self">self</span>.system_color_scheme)
-                    .unwrap_or_default();
+                    .unwrap_or_else(|| WINDOWS.system_colors_config().scheme);
                 <span class="self">self</span>.vars.<span class="number">0</span>.actual_color_scheme.set(scheme);
+                <span class="kw">let </span>accent = <span class="self">self
+                    </span>.vars
+                    .accent_color()
+                    .get()
+                    .or_else(|| <span class="self">self</span>.parent_accent_color.as_ref().map(|t| t.get()))
+                    .unwrap_or_else(|| WINDOWS.system_colors_config().accent.into());
+                <span class="self">self</span>.vars.<span class="number">0</span>.actual_accent_color.set(accent);
 
                 UPDATES.layout_window(args.window_id).render_window(args.window_id);
 
@@ -3079,19 +3107,21 @@
                     update(<span class="kw-2">&amp;</span>args.window);
                 }
             }
-        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = RAW_COLOR_SCHEME_CHANGED_EVENT.on(update) {
-            <span class="kw">if </span>args.window_id == WINDOW.id() {
-                <span class="self">self</span>.system_color_scheme = <span class="prelude-val">Some</span>(args.color_scheme);
-
-                <span class="kw">let </span>scheme = <span class="self">self
-                    </span>.vars
-                    .color_scheme()
-                    .get()
-                    .or_else(|| <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.get()))
-                    .or(<span class="self">self</span>.system_color_scheme)
-                    .unwrap_or_default();
-                <span class="self">self</span>.vars.<span class="number">0</span>.actual_color_scheme.set(scheme);
-            }
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = RAW_COLORS_CONFIG_CHANGED_EVENT.on(update) {
+            <span class="kw">let </span>scheme = <span class="self">self
+                </span>.vars
+                .color_scheme()
+                .get()
+                .or_else(|| <span class="self">self</span>.parent_color_scheme.as_ref().map(|t| t.get()))
+                .unwrap_or(args.config.scheme);
+            <span class="self">self</span>.vars.<span class="number">0</span>.actual_color_scheme.set(scheme);
+            <span class="kw">let </span>color = <span class="self">self
+                </span>.vars
+                .accent_color()
+                .get()
+                .or_else(|| <span class="self">self</span>.parent_accent_color.as_ref().map(|t| t.get()))
+                .unwrap_or_else(|| args.config.accent.into());
+            <span class="self">self</span>.vars.<span class="number">0</span>.actual_accent_color.set(color);
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = RAW_WINDOW_OR_HEADLESS_OPEN_ERROR_EVENT.on(update) {
             <span class="kw">let </span>w_id = WINDOW.id();
             <span class="kw">if </span>args.window_id == w_id &amp;&amp; <span class="self">self</span>.window.is_none() &amp;&amp; <span class="self">self</span>.waiting_view {

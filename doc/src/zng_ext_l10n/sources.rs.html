@@ -405,30 +405,35 @@
 <a href="#405" id="405">405</a>
 <a href="#406" id="406">406</a>
 <a href="#407" id="407">407</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
-    collections::HashMap,
-    io,
-    path::{Path, PathBuf},
-    str::FromStr,
-    sync::Arc,
-};
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, io, path::PathBuf, str::FromStr, sync::Arc};
 
+<span class="kw">use </span>semver::Version;
 <span class="kw">use </span>zng_clone_move::clmv;
 <span class="kw">use </span>zng_ext_fs_watcher::WATCHER;
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::{types::WeakArcVar, var, AnyVar, ArcEq, ArcVar, BoxedVar, BoxedWeakVar, LocalVar, Var, VarHandle, WeakVar};
 
-<span class="kw">use crate</span>::{FluentParserErrors, L10nSource, Lang, LangMap, LangResourceStatus};
+<span class="kw">use crate</span>::{FluentParserErrors, L10nSource, Lang, LangFilePath, LangMap, LangResourceStatus};
 
 <span class="doccomment">/// Represents localization resources synchronized from files in a directory.
 ///
-/// The expected directory layout is `{dir}/{lang}.flt` for lang only and `{dir}/{lang}/file.flt` for
-/// lang with file.
+/// The expected directory layout is `{dir}/{lang}/{file}.ftl` app files and `{dir}/{lang}/deps/{pkg-name}/{pkg-version}/{file}.ftl`
+/// for dependencies.
 </span><span class="kw">pub struct </span>L10nDir {
-    dir: PathBuf,
-    dir_watch: BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt;,
+    dir_watch: BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt;,
     dir_watch_status: BoxedVar&lt;LangResourceStatus&gt;,
-    res: HashMap&lt;(Lang, Txt), L10nFile&gt;,
+    res: HashMap&lt;(Lang, LangFilePath), L10nFile&gt;,
 }
 <span class="kw">impl </span>L10nDir {
     <span class="doccomment">/// Start watching the `dir` for localization files.
@@ -436,88 +441,100 @@
         <span class="self">Self</span>::new(dir.into())
     }
     <span class="kw">fn </span>new(dir: PathBuf) -&gt; <span class="self">Self </span>{
-        <span class="kw">let </span>status = var(LangResourceStatus::Loading);
-        <span class="kw">let </span>dir_watch = WATCHER.read_dir(
+        <span class="kw">let </span>(dir_watch, status) = WATCHER.read_dir_status(
             dir.clone(),
             <span class="bool-val">true</span>,
             Arc::default(),
-            <span class="macro">clmv!</span>(status, |d| {
-                status.set(LangResourceStatus::Loading);
-
-                <span class="kw">let </span><span class="kw-2">mut </span>set: LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt; = LangMap::new();
+            <span class="macro">clmv!</span>(|d| {
+                <span class="kw">let </span><span class="kw-2">mut </span>set: LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt; = LangMap::new();
                 <span class="kw">let </span><span class="kw-2">mut </span>errors: Vec&lt;Arc&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt; = <span class="macro">vec!</span>[];
                 <span class="kw">let </span><span class="kw-2">mut </span>dir = <span class="prelude-val">None</span>;
-                <span class="kw">for </span>entry <span class="kw">in </span>d.min_depth(<span class="number">0</span>).max_depth(<span class="number">1</span>) {
-                    <span class="kw">match </span>entry {
-                        <span class="prelude-val">Ok</span>(f) =&gt; {
-                            <span class="kw">let </span>ty = f.file_type();
-                            <span class="kw">if </span>dir.is_none() {
-                                <span class="comment">// get the watched dir
-                                </span><span class="kw">if </span>!ty.is_dir() {
-                                    <span class="macro">tracing::error!</span>(<span class="string">"L10N path not a directory"</span>);
-                                    status.set(LangResourceStatus::NotAvailable);
-                                    <span class="kw">return </span><span class="prelude-val">None</span>;
-                                }
-                                dir = <span class="prelude-val">Some</span>(f.path().to_owned());
-                            }
-
-                            <span class="kw">const </span>EXT: unicase::Ascii&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; = unicase::Ascii::new(<span class="string">"ftl"</span>);
-
-                            <span class="kw">if </span>ty.is_file() {
-                                <span class="comment">// match dir/lang.flt files
-                                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(name_and_ext) = f.file_name().to_str() {
-                                    <span class="kw">if let </span><span class="prelude-val">Some</span>((name, ext)) = name_and_ext.rsplit_once(<span class="string">'.'</span>) {
-                                        <span class="kw">if </span>ext.is_ascii() &amp;&amp; unicase::Ascii::new(ext) == EXT {
-                                            <span class="macro">tracing::debug!</span>(<span class="string">"found {name}.{ext}"</span>);
-                                            <span class="comment">// found .flt file.
-                                            </span><span class="kw">match </span>Lang::from_str(name) {
-                                                <span class="prelude-val">Ok</span>(lang) =&gt; {
-                                                    <span class="comment">// and it is named correctly.
-                                                    </span>set.get_exact_or_insert(lang, Default::default)
-                                                        .insert(Txt::from_str(<span class="string">""</span>), dir.as_ref().unwrap().join(name_and_ext));
-                                                }
-                                                <span class="prelude-val">Err</span>(e) =&gt; {
-                                                    errors.push(Arc::new(e));
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            } <span class="kw">else if </span>f.depth() == <span class="number">1 </span>&amp;&amp; ty.is_dir() {
-                                <span class="comment">// match dir/lang/file.flt files
-                                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(dir_name) = f.file_name().to_str() {
-                                    <span class="kw">match </span>Lang::from_str(dir_name) {
-                                        <span class="prelude-val">Ok</span>(lang) =&gt; {
-                                            <span class="kw">let </span>inner = set.get_exact_or_insert(lang, Default::default);
-                                            <span class="kw">for </span>entry <span class="kw">in </span>std::fs::read_dir(f.path()).into_iter().flatten() {
-                                                <span class="kw">match </span>entry {
-                                                    <span class="prelude-val">Ok</span>(f) =&gt; {
-                                                        <span class="kw">if let </span><span class="prelude-val">Ok</span>(name_and_ext) = f.file_name().into_string() {
-                                                            <span class="kw">if let </span><span class="prelude-val">Some</span>((name, ext)) = name_and_ext.rsplit_once(<span class="string">'.'</span>) {
-                                                                <span class="kw">if </span>ext.is_ascii() &amp;&amp; unicase::Ascii::new(ext) == EXT {
-                                                                    <span class="comment">// found .flt file.
-                                                                    </span><span class="macro">tracing::debug!</span>(<span class="string">"found {dir_name}/{name}.{ext}"</span>);
-                                                                    inner.insert(Txt::from_str(name), f.path());
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    <span class="prelude-val">Err</span>(e) =&gt; errors.push(Arc::new(e)),
-                                                }
-                                            }
-                                            <span class="kw">if </span>inner.is_empty() {
-                                                set.pop();
-                                            }
-                                        }
-                                        <span class="prelude-val">Err</span>(e) =&gt; {
-                                            <span class="macro">tracing::trace!</span>(<span class="string">"dir {dir_name}/ is not l10n, {e}"</span>);
-                                        }
-                                    }
-                                }
-                            }
+                <span class="kw">for </span>entry <span class="kw">in </span>d.min_depth(<span class="number">0</span>).max_depth(<span class="number">5</span>) {
+                    <span class="kw">let </span>entry = <span class="kw">match </span>entry {
+                        <span class="prelude-val">Ok</span>(e) =&gt; e,
+                        <span class="prelude-val">Err</span>(e) =&gt; {
+                            errors.push(Arc::new(e));
+                            <span class="kw">continue</span>;
                         }
-                        <span class="prelude-val">Err</span>(e) =&gt; errors.push(Arc::new(e)),
+                    };
+                    <span class="kw">let </span>ty = entry.file_type();
+
+                    <span class="kw">if </span>dir.is_none() {
+                        <span class="comment">// get the watched dir (first because of min_depth(0))
+                        </span><span class="kw">if </span>!ty.is_dir() {
+                            <span class="macro">tracing::error!</span>(<span class="string">"L10N path not a directory"</span>);
+                            <span class="kw">return </span><span class="prelude-val">Err</span>(LangResourceStatus::NotAvailable);
+                        }
+                        dir = <span class="prelude-val">Some</span>(entry.path().to_owned());
+                        <span class="kw">continue</span>;
                     }
+
+                    <span class="kw">const </span>EXT: unicase::Ascii&lt;<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str&gt; = unicase::Ascii::new(<span class="string">"ftl"</span>);
+
+                    <span class="kw">let </span>is_ftl = ty.is_file()
+                        &amp;&amp; entry
+                            .file_name()
+                            .to_str()
+                            .and_then(|n| n.rsplit_once(<span class="string">'.'</span>))
+                            .map(|(<span class="kw">_</span>, ext)| ext.is_ascii() &amp;&amp; unicase::Ascii::new(ext) == EXT)
+                            .unwrap_or(<span class="bool-val">false</span>);
+
+                    <span class="kw">if </span>!is_ftl {
+                        <span class="kw">continue</span>;
+                    }
+
+                    <span class="kw">let </span><span class="kw-2">mut </span>utf8_path = [<span class="string">""</span>; <span class="number">5</span>];
+                    <span class="kw">for </span>(i, part) <span class="kw">in </span>entry.path().iter().rev().take(entry.depth()).enumerate() {
+                        <span class="kw">match </span>part.to_str() {
+                            <span class="prelude-val">Some</span>(p) =&gt; utf8_path[entry.depth() - i - <span class="number">1</span>] = p,
+                            <span class="prelude-val">None </span>=&gt; <span class="kw">continue</span>,
+                        }
+                    }
+
+                    <span class="kw">let </span>(lang, <span class="kw-2">mut </span>file) = <span class="kw">match </span>entry.depth() {
+                        <span class="comment">// lang/file.ftl
+                        </span><span class="number">2 </span>=&gt; {
+                            <span class="kw">let </span>lang = utf8_path[<span class="number">0</span>];
+                            <span class="kw">let </span>file = Txt::from_str(utf8_path[<span class="number">1</span>].rsplit_once(<span class="string">'.'</span>).unwrap().<span class="number">0</span>);
+                            (lang, LangFilePath::current_app(file))
+                        }
+                        <span class="comment">// lang/deps/pkg-name/pkg-version/file.ftl
+                        </span><span class="number">5 </span>=&gt; {
+                            <span class="kw">if </span>utf8_path[<span class="number">1</span>] != <span class="string">"deps" </span>{
+                                <span class="kw">continue</span>;
+                            }
+                            <span class="kw">let </span>lang = utf8_path[<span class="number">0</span>];
+                            <span class="kw">let </span>pkg_name = Txt::from_str(utf8_path[<span class="number">2</span>]);
+                            <span class="kw">let </span>pkg_version: Version = <span class="kw">match </span>utf8_path[<span class="number">3</span>].parse() {
+                                <span class="prelude-val">Ok</span>(v) =&gt; v,
+                                <span class="prelude-val">Err</span>(e) =&gt; {
+                                    errors.push(Arc::new(e));
+                                    <span class="kw">continue</span>;
+                                }
+                            };
+                            <span class="kw">let </span>file = Txt::from_str(utf8_path[<span class="number">4</span>]);
+
+                            (lang, LangFilePath::new(pkg_name, pkg_version, file))
+                        }
+                        <span class="kw">_ </span>=&gt; {
+                            <span class="kw">continue</span>;
+                        }
+                    };
+
+                    <span class="kw">let </span>lang = <span class="kw">match </span>Lang::from_str(lang) {
+                        <span class="prelude-val">Ok</span>(l) =&gt; l,
+                        <span class="prelude-val">Err</span>(e) =&gt; {
+                            errors.push(Arc::new(e));
+                            <span class="kw">continue</span>;
+                        }
+                    };
+
+                    <span class="kw">if </span>file.file == <span class="string">"_" </span>{
+                        file.file = <span class="string">""</span>.into();
+                    }
+
+                    set.get_exact_or_insert(lang, Default::default)
+                        .insert(file, entry.path().to_owned());
                 }
 
                 <span class="kw">if </span>errors.is_empty() {
@@ -525,16 +542,14 @@
                 </span>} <span class="kw">else </span>{
                     <span class="kw">let </span>s = LangResourceStatus::Errors(errors);
                     <span class="macro">tracing::error!</span>(<span class="string">"'loading available' {s}"</span>);
-                    status.set(s)
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(s);
                 }
 
-                <span class="prelude-val">Some</span>(Arc::new(set))
+                <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(Arc::new(set)))
             }),
         );
-        dir_watch.bind_map(<span class="kw-2">&amp;</span>status, |<span class="kw">_</span>| LangResourceStatus::Loaded).perm();
 
         <span class="self">Self </span>{
-            dir,
             dir_watch: dir_watch.boxed(),
             dir_watch_status: status.read_only().boxed(),
             res: HashMap::new(),
@@ -542,21 +557,21 @@
     }
 }
 <span class="kw">impl </span>L10nSource <span class="kw">for </span>L10nDir {
-    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt; {
+    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt; {
         <span class="self">self</span>.dir_watch.clone()
     }
     <span class="kw">fn </span>available_langs_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
         <span class="self">self</span>.dir_watch_status.clone()
     }
 
-    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
+    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
         <span class="kw">match </span><span class="self">self</span>.res.entry((lang, file)) {
             std::collections::hash_map::Entry::Occupied(<span class="kw-2">mut </span>e) =&gt; {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(out) = e.get().res.upgrade() {
                     out
                 } <span class="kw">else </span>{
                     <span class="kw">let </span>(lang, file) = e.key();
-                    <span class="kw">let </span>out = load_file(e.get().status.clone(), <span class="kw-2">&amp;</span><span class="self">self</span>.dir, lang, file);
+                    <span class="kw">let </span>out = resource_var(<span class="kw-2">&amp;</span><span class="self">self</span>.dir_watch, e.get().status.clone(), lang.clone(), file.clone());
                     e.get_mut().res = out.downgrade();
                     out
                 }
@@ -564,7 +579,7 @@
             std::collections::hash_map::Entry::Vacant(e) =&gt; {
                 <span class="kw">let </span><span class="kw-2">mut </span>f = L10nFile::new();
                 <span class="kw">let </span>(lang, file) = e.key();
-                <span class="kw">let </span>out = load_file(f.status.clone(), <span class="kw-2">&amp;</span><span class="self">self</span>.dir, lang, file);
+                <span class="kw">let </span>out = resource_var(<span class="kw-2">&amp;</span><span class="self">self</span>.dir_watch, f.status.clone(), lang.clone(), file.clone());
                 f.res = out.downgrade();
                 e.insert(f);
                 out
@@ -572,7 +587,7 @@
         }
     }
 
-    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
+    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
         <span class="self">self</span>.res
             .entry((lang, file))
             .or_insert_with(L10nFile::new)
@@ -593,49 +608,56 @@
         }
     }
 }
-<span class="kw">fn </span>load_file(status: ArcVar&lt;LangResourceStatus&gt;, dir: <span class="kw-2">&amp;</span>Path, lang: <span class="kw-2">&amp;</span>Lang, file: <span class="kw-2">&amp;</span>Txt) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
-    status.set(LangResourceStatus::Loading);
 
-    <span class="kw">let </span>path = <span class="kw">if </span>file.is_empty() {
-        <span class="macro">format!</span>(<span class="string">"{lang}.ftl"</span>)
-    } <span class="kw">else </span>{
-        <span class="macro">format!</span>(<span class="string">"{lang}/{file}.ftl"</span>)
-    };
+<span class="kw">fn </span>resource_var(
+    dir_watch: <span class="kw-2">&amp;</span>BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt;,
+    status: ArcVar&lt;LangResourceStatus&gt;,
+    lang: Lang,
+    file: LangFilePath,
+) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
+    dir_watch
+        .map(<span class="kw">move </span>|w| w.get_file(<span class="kw-2">&amp;</span>lang, <span class="kw-2">&amp;</span>file).cloned())
+        .flat_map(<span class="kw">move </span>|p| <span class="kw">match </span>p {
+            <span class="prelude-val">Some</span>(p) =&gt; {
+                status.set(LangResourceStatus::Loading);
 
-    <span class="kw">let </span>r = WATCHER.read(
-        dir.join(path),
-        <span class="prelude-val">None</span>,
-        <span class="macro">clmv!</span>(status, |file| {
-            status.set(LangResourceStatus::Loading);
+                <span class="kw">let </span>r = WATCHER.read(
+                    p.clone(),
+                    <span class="prelude-val">None</span>,
+                    <span class="macro">clmv!</span>(status, |file| {
+                        status.set(LangResourceStatus::Loading);
 
-            <span class="kw">match </span>file.and_then(|<span class="kw-2">mut </span>f| f.string()) {
-                <span class="prelude-val">Ok</span>(flt) =&gt; <span class="kw">match </span>fluent::FluentResource::try_new(flt) {
-                    <span class="prelude-val">Ok</span>(flt) =&gt; {
-                        <span class="comment">// ok
-                        // Loaded set by `r` to avoid race condition in waiter.
-                        </span><span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(ArcEq::new(flt)));
-                    }
-                    <span class="prelude-val">Err</span>(e) =&gt; {
-                        <span class="kw">let </span>e = FluentParserErrors(e.<span class="number">1</span>);
-                        <span class="macro">tracing::error!</span>(<span class="string">"error parsing fluent resource, {e}"</span>);
-                        status.set(LangResourceStatus::Errors(<span class="macro">vec!</span>[Arc::new(e)]));
-                    }
-                },
-                <span class="prelude-val">Err</span>(e) =&gt; {
-                    <span class="kw">if </span><span class="macro">matches!</span>(e.kind(), io::ErrorKind::NotFound) {
-                        status.set(LangResourceStatus::NotAvailable);
-                    } <span class="kw">else </span>{
-                        <span class="macro">tracing::error!</span>(<span class="string">"error loading fluent resource, {e}"</span>);
-                        status.set(LangResourceStatus::Errors(<span class="macro">vec!</span>[Arc::new(e)]));
-                    }
-                }
+                        <span class="kw">match </span>file.and_then(|<span class="kw-2">mut </span>f| f.string()) {
+                            <span class="prelude-val">Ok</span>(flt) =&gt; <span class="kw">match </span>fluent::FluentResource::try_new(flt) {
+                                <span class="prelude-val">Ok</span>(flt) =&gt; {
+                                    <span class="comment">// ok
+                                    // Loaded set by `r` to avoid race condition in waiter.
+                                    </span><span class="kw">return </span><span class="prelude-val">Some</span>(<span class="prelude-val">Some</span>(ArcEq::new(flt)));
+                                }
+                                <span class="prelude-val">Err</span>(e) =&gt; {
+                                    <span class="kw">let </span>e = FluentParserErrors(e.<span class="number">1</span>);
+                                    <span class="macro">tracing::error!</span>(<span class="string">"error parsing fluent resource, {e}"</span>);
+                                    status.set(LangResourceStatus::Errors(<span class="macro">vec!</span>[Arc::new(e)]));
+                                }
+                            },
+                            <span class="prelude-val">Err</span>(e) =&gt; {
+                                <span class="kw">if </span><span class="macro">matches!</span>(e.kind(), io::ErrorKind::NotFound) {
+                                    status.set(LangResourceStatus::NotAvailable);
+                                } <span class="kw">else </span>{
+                                    <span class="macro">tracing::error!</span>(<span class="string">"error loading fluent resource, {e}"</span>);
+                                    status.set(LangResourceStatus::Errors(<span class="macro">vec!</span>[Arc::new(e)]));
+                                }
+                            }
+                        }
+                        <span class="comment">// not ok
+                        </span><span class="prelude-val">Some</span>(<span class="prelude-val">None</span>)
+                    }),
+                );
+                r.bind_map(<span class="kw-2">&amp;</span>status, |<span class="kw">_</span>| LangResourceStatus::Loaded).perm();
+                r.boxed()
             }
-            <span class="comment">// not ok
-            </span><span class="prelude-val">Some</span>(<span class="prelude-val">None</span>)
-        }),
-    );
-    r.bind_map(<span class="kw-2">&amp;</span>status, |<span class="kw">_</span>| LangResourceStatus::Loaded).perm();
-    r.boxed()
+            <span class="prelude-val">None </span>=&gt; LocalVar(<span class="prelude-val">None</span>).boxed(),
+        })
 }
 
 <span class="doccomment">/// Represents localization source that can swap the actual source without disconnecting variables
@@ -647,10 +669,10 @@
 </span><span class="kw">pub struct </span>SwapL10nSource {
     actual: Box&lt;<span class="kw">dyn </span>L10nSource&gt;,
 
-    available_langs: ArcVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt;,
+    available_langs: ArcVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt;,
     available_langs_status: ArcVar&lt;LangResourceStatus&gt;,
 
-    res: HashMap&lt;(Lang, Txt), SwapFile&gt;,
+    res: HashMap&lt;(Lang, LangFilePath), SwapFile&gt;,
 }
 <span class="kw">impl </span>SwapL10nSource {
     <span class="doccomment">/// New with [`NilL10nSource`].
@@ -703,7 +725,7 @@
     }
 }
 <span class="kw">impl </span>L10nSource <span class="kw">for </span>SwapL10nSource {
-    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt; {
+    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt; {
         <span class="self">self</span>.available_langs.read_only().boxed()
     }
 
@@ -711,7 +733,7 @@
         <span class="self">self</span>.available_langs_status.read_only().boxed()
     }
 
-    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
+    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
         <span class="kw">match </span><span class="self">self</span>.res.entry((lang, file)) {
             std::collections::hash_map::Entry::Occupied(<span class="kw-2">mut </span>e) =&gt; {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = e.get().res.upgrade() {
@@ -765,7 +787,7 @@
         }
     }
 
-    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
+    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
         <span class="self">self</span>.res
             .entry((lang, file))
             .or_insert_with(SwapFile::new)
@@ -796,7 +818,7 @@
 <span class="doccomment">/// Localization source that is never available.
 </span><span class="kw">pub struct </span>NilL10nSource;
 <span class="kw">impl </span>L10nSource <span class="kw">for </span>NilL10nSource {
-    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt; {
+    <span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt; {
         LocalVar(Arc::default()).boxed()
     }
 
@@ -804,11 +826,11 @@
         LocalVar(LangResourceStatus::NotAvailable).boxed()
     }
 
-    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Lang, <span class="kw">_</span>: Txt) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
+    <span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Lang, <span class="kw">_</span>: LangFilePath) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt; {
         LocalVar(<span class="prelude-val">None</span>).boxed()
     }
 
-    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Lang, <span class="kw">_</span>: Txt) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
+    <span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: Lang, <span class="kw">_</span>: LangFilePath) -&gt; BoxedVar&lt;LangResourceStatus&gt; {
         LocalVar(LangResourceStatus::NotAvailable).boxed()
     }
 }

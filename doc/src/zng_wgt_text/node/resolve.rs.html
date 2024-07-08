@@ -725,6 +725,7 @@
 <a href="#725" id="725">725</a>
 <a href="#726" id="726">726</a>
 <a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, num::Wrapping, sync::Arc};
 
 <span class="kw">use </span>parking_lot::RwLock;
@@ -1129,7 +1130,7 @@
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = KEY_INPUT_EVENT.on_unhandled(update) {
         <span class="kw">let </span><span class="kw-2">mut </span>ctx = TEXT.resolve();
-        <span class="kw">if let </span>KeyState::Pressed = args.state {
+        <span class="kw">if </span>args.state == KeyState::Pressed &amp;&amp; args.target.widget_id() == widget.id() {
             <span class="kw">match </span><span class="kw-2">&amp;</span>args.key {
                 Key::Backspace =&gt; {
                     <span class="kw">let </span>caret = <span class="kw-2">&amp;mut </span>ctx.caret;
@@ -1196,13 +1197,9 @@
             caret.opacity = var(<span class="number">0</span>.fct()).read_only();
         }
 
-        <span class="kw">let </span>auto_select = <span class="kw">match </span>AUTO_SELECTION_VAR.get() {
-            AutoSelection::Disabled =&gt; <span class="bool-val">false</span>,
-            AutoSelection::Enabled =&gt; <span class="bool-val">true</span>,
-            AutoSelection::Auto =&gt; !ACCEPTS_ENTER_VAR.get(),
-        };
-        <span class="kw">if </span>auto_select &amp;&amp; TEXT_SELECTABLE_VAR.get() {
-            <span class="kw">if </span>args.is_blur(widget.id()) {
+        <span class="kw">let </span>auto_select = AUTO_SELECTION_VAR.get();
+        <span class="kw">if </span>auto_select != AutoSelection::DISABLED &amp;&amp; TEXT_SELECTABLE_VAR.get() {
+            <span class="kw">if </span>auto_select.contains(AutoSelection::CLEAR_ON_BLUR) &amp;&amp; args.is_blur(widget.id()) {
                 <span class="comment">// deselect if the widget is not the ALT return focus and is not the parent scope return focus.
 
                 </span><span class="kw">let </span>us = <span class="prelude-val">Some</span>(widget.id());
@@ -1217,10 +1214,15 @@
                         }
                     }
                 }
-            } <span class="kw">else if </span>args.highlight &amp;&amp; args.is_focus(widget.id()) {
-                SELECT_ALL_CMD.scoped(widget.id()).notify();
             }
-        }
+
+            <span class="kw">if </span>auto_select.contains(AutoSelection::ALL_ON_FOCUS_KEYBOARD) &amp;&amp; args.highlight &amp;&amp; args.is_focus(widget.id()) {
+                <span class="comment">// select all on keyboard caused focus
+                </span>SELECT_ALL_CMD.scoped(widget.id()).notify();
+            }
+
+            <span class="comment">// ALL_ON_FOCUS_POINTER handled by `layout_text_edit_events`
+        </span>}
     } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = CUT_CMD.scoped(widget.id()).on_unhandled(update) {
         <span class="kw">let </span><span class="kw-2">mut </span>ctx = TEXT.resolve();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(range) = ctx.caret.selection_char_range() {

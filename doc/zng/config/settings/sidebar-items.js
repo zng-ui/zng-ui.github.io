@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["on_pre_settings","on_settings"],"mod":["editor"],"static":["SETTINGS_CMD"],"struct":["CategoriesBuilder","Category","CategoryBuilder","CategoryId","SETTINGS","Setting","SettingBuilder","SettingsBuilder"]};

@@ -1603,15 +1603,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1567" id="1567">1567</a>
 <a href="#1568" id="1568">1568</a>
 <a href="#1569" id="1569">1569</a>
-<a href="#1570" id="1570">1570</a>
-<a href="#1571" id="1571">1571</a>
-<a href="#1572" id="1572">1572</a>
-<a href="#1573" id="1573">1573</a>
-<a href="#1574" id="1574">1574</a>
-<a href="#1575" id="1575">1575</a>
-<a href="#1576" id="1576">1576</a>
-<a href="#1577" id="1577">1577</a>
-<a href="#1578" id="1578">1578</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process connection and other types.
 
 </span><span class="kw">use </span>std::{
@@ -1638,7 +1629,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_view_api::{
     <span class="self">self</span>,
     api_extension::{ApiExtensionId, ApiExtensionName, ApiExtensionPayload, ApiExtensionRecvError, ApiExtensions},
-    config::{AnimationsConfig, ColorScheme, FontAntiAliasing, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, LocaleConfig, MultiClickConfig, TouchConfig},
     dialog::{FileDialog, FileDialogResponse, MsgDialog, MsgDialogResponse},
     font::FontOptions,
     image::{ImageMaskMode, ImagePpi, ImageRequest, ImageTextureId},
@@ -2199,13 +2190,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="doccomment">/// System locale config.
         </span><span class="kw">pub </span>locale_config: LocaleConfig,
 
-        <span class="doccomment">/// System preferred color scheme.
-        ///
-        /// Updates of this preference can be received in [`RAW_WINDOW_OPEN_EVENT`] and [`RAW_COLOR_SCHEME_CHANGED_EVENT`].
-        ///
-        /// [`RAW_WINDOW_OPEN_EVENT`]: crate::view_process::raw_events::RAW_WINDOW_OPEN_EVENT
-        /// [`RAW_COLOR_SCHEME_CHANGED_EVENT`]: crate::view_process::raw_events::RAW_COLOR_SCHEME_CHANGED_EVENT
-        </span><span class="kw">pub </span>color_scheme: ColorScheme,
+        <span class="doccomment">/// System preferred color scheme and accent color.
+        </span><span class="kw">pub </span>colors_config: ColorsConfig,
 
         <span class="doccomment">/// API extensions implemented by the view-process.
         ///
@@ -2247,9 +2233,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Actual render mode, can be different from the requested mode if it is not available.
     </span><span class="kw">pub </span>render_mode: RenderMode,
-
-    <span class="doccomment">/// Preferred color scheme.
-    </span><span class="kw">pub </span>color_scheme: ColorScheme,
 }
 <span class="kw">impl </span>WindowOpenData {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(data: zng_view_api::window::WindowOpenData, map_monitor: <span class="kw">impl </span>FnOnce(ApiMonitorId) -&gt; MonitorId) -&gt; <span class="self">Self </span>{
@@ -2260,7 +2243,6 @@ document.addEventListener('DOMContentLoaded', function () {
             size: data.size,
             scale_factor: data.scale_factor,
             render_mode: data.render_mode,
-            color_scheme: data.color_scheme,
         }
     }
 }

@@ -245,7 +245,13 @@
 <a href="#245" id="245">245</a>
 <a href="#246" id="246">246</a>
 <a href="#247" id="247">247</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::collections::HashSet;
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashSet, fmt::Write <span class="kw">as _</span>};
 
 <span class="kw">use </span>proc_macro2::TokenStream;
 <span class="kw">use </span>quote::{quote, quote_spanned};
@@ -261,12 +267,18 @@
 
     <span class="kw">let </span>message_params = parse_validate_id(input.message_id, <span class="kw-2">&amp;mut </span>errors);
 
-    <span class="kw">let </span>fluent_msg = <span class="macro">format!</span>(<span class="string">"id = {message}"</span>);
+    <span class="kw">let </span><span class="kw-2">mut </span>fluent_msg;
     <span class="kw">let </span><span class="kw-2">mut </span>variables = HashSet::new();
 
     <span class="kw">if </span>message.is_empty() {
         errors.push(<span class="string">"message cannot be empty"</span>, input.message.span());
     } <span class="kw">else </span>{
+        fluent_msg = <span class="string">"id = "</span>.to_owned();
+        <span class="kw">let </span><span class="kw-2">mut </span>spacing = <span class="string">""</span>;
+        <span class="kw">for </span>line <span class="kw">in </span>message.lines() {
+            <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>fluent_msg, <span class="string">"{spacing}{line}"</span>).unwrap();
+            spacing = <span class="string">"   "</span>;
+        }
         <span class="kw">match </span>fluent_syntax::parser::parse_runtime(fluent_msg.as_str()) {
             <span class="prelude-val">Ok</span>(ast) =&gt; {
                 <span class="kw">let </span>span = input.message.span();
@@ -332,7 +344,7 @@
         <span class="kw">let </span>span = input.message.span();
 
         <span class="kw">let </span><span class="kw-2">mut </span>build = <span class="macro">quote_spanned!</span> {span=&gt;
-            #l10n_path::L10N.l10n_message(#message_params, #message)
+            #l10n_path::L10N.l10n_message(<span class="macro">env!</span>(<span class="string">"CARGO_PKG_NAME"</span>), <span class="macro">env!</span>(<span class="string">"CARGO_PKG_VERSION"</span>), #message_params, #message)
         };
         <span class="kw">for </span>var <span class="kw">in </span>variables {
             <span class="kw">let </span>var_ident = <span class="macro">ident_spanned!</span>(span=&gt; <span class="string">"{}"</span>, var);

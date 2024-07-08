@@ -10,7 +10,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_env",["",[],["lib.rs","process.rs"]]],\
 ["zng_env_proc_macros",["",[],["lib.rs"]]],\
 ["zng_ext_clipboard",["",[],["lib.rs"]]],\
-["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
+["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","settings.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
 ["zng_ext_font",["",[],["emoji_util.rs","font_features.rs","font_kit_cache.rs","hyphenation.rs","lib.rs","ligature_util.rs","match_util.rs","segmenting.rs","shaping.rs","unicode_bidi_util.rs","unit.rs"]]],\
 ["zng_ext_fs_watcher",["",[],["lib.rs"]]],\
 ["zng_ext_hot_reload",["",[],["cargo.rs","lib.rs","node.rs","util.rs"]]],\
@@ -58,6 +58,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_wgt_panel",["",[],["lib.rs"]]],\
 ["zng_wgt_rule_line",["",[],["lib.rs"]]],\
 ["zng_wgt_scroll",["",[],["cmd.rs","lazy_prop.rs","lib.rs","node.rs","scroll_properties.rs","scrollbar.rs","thumb.rs","types.rs"]]],\
+["zng_wgt_settings",["",[],["lib.rs","view_fn.rs"]]],\
 ["zng_wgt_size_offset",["",[],["lib.rs"]]],\
 ["zng_wgt_stack",["",[],["lib.rs","types.rs"]]],\
 ["zng_wgt_style",["",[],["lib.rs"]]],\

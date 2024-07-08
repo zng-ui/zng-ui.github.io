@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["filled","outlined","rounded","sharp"],"struct":["MaterialFonts","MaterialIcon"]};
+window.SIDEBAR_ITEMS = {"mod":["filled","outlined","rounded","sharp"],"struct":["MaterialIconsManager"]};

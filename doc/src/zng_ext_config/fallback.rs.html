@@ -285,6 +285,8 @@
 <a href="#285" id="285">285</a>
 <a href="#286" id="286">286</a>
 <a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::atomic::{AtomicBool, Ordering};
 
 <span class="kw">use </span><span class="kw">crate</span>::task::parking_lot::Mutex;
@@ -368,7 +370,7 @@
         .boxed()
     }
 
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, insert: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
         <span class="kw">let </span><span class="kw-2">mut </span>d = <span class="self">self</span>.<span class="number">0</span>.lock();
         <span class="kw">let </span>d = <span class="kw-2">&amp;mut *</span>d;
 
@@ -384,9 +386,9 @@
         <span class="kw">let </span>cfg_contains_key_var = d.config.contains_key(key.clone());
         <span class="kw">let </span>is_already_set = cfg_contains_key_var.get();
 
-        <span class="kw">let </span>cfg_var = d.config.get_raw(key.clone(), default.clone(), shared);
+        <span class="kw">let </span>cfg_var = d.config.get_raw(key.clone(), default.clone(), insert, shared);
 
-        <span class="kw">let </span>fall_var = d.fallback.get_raw(key, default, shared);
+        <span class="kw">let </span>fall_var = d.fallback.get_raw(key, default, <span class="bool-val">false</span>, shared);
 
         <span class="kw">let </span>res_var = var(<span class="kw">if </span>is_already_set { cfg_var.get() } <span class="kw">else </span>{ fall_var.get() });
         entry.res = res_var.downgrade();
@@ -492,12 +494,15 @@
                     <span class="kw">if </span>is_reset {
                         fall_res_enabled.store(<span class="bool-val">true</span>, Ordering::Relaxed);
                     } <span class="kw">else </span>{
-                        fall_res_enabled.store(<span class="bool-val">false</span>, Ordering::Relaxed);
+                        <span class="kw">let </span>after_reset = fall_res_enabled.swap(<span class="bool-val">false</span>, Ordering::Relaxed);
                         <span class="kw">let </span>value = args.value().clone();
                         <span class="kw">let _ </span>= cfg_var.modify(<span class="kw">move </span>|v| {
                             <span class="kw">if </span>v.as_ref() != <span class="kw-2">&amp;</span>value {
                                 v.set(value);
                                 v.push_tag(binding_tag);
+                            } <span class="kw">else if </span>after_reset {
+                                <span class="comment">// cfg still has value from before reset, cause it to write
+                                </span>v.update();
                             }
                         });
                     }
@@ -525,9 +530,8 @@
     }
 }
 <span class="kw">impl</span>&lt;S: Config, F: Config&gt; Config <span class="kw">for </span>FallbackConfig&lt;S, F&gt; {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
-        <span class="kw">let </span>default = default();
-        <span class="self">self</span>.get_raw(key.into(), RawConfigValue::serialize(<span class="kw-2">&amp;</span>default).unwrap(), <span class="bool-val">true</span>)
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt; {
+        <span class="self">self</span>.get_raw(key.into(), RawConfigValue::serialize(<span class="kw-2">&amp;</span>default).unwrap(), insert, <span class="bool-val">true</span>)
             .filter_map_bidi(
                 |raw| raw.clone().deserialize().ok(),
                 |v| RawConfigValue::serialize(v).ok(),

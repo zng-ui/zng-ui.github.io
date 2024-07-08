@@ -249,9 +249,9 @@
         s.build(|status| ConfigStatus::merge_status(status.iter().cloned())).boxed()
     }
 
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, insert: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
         <span class="kw">match </span><span class="self">self</span>.cfg_mut(<span class="kw-2">&amp;</span>key) {
-            <span class="prelude-val">Some</span>((key, cfg)) =&gt; cfg.get_raw(key, default, shared),
+            <span class="prelude-val">Some</span>((key, cfg)) =&gt; cfg.get_raw(key, default, insert, shared),
             <span class="prelude-val">None </span>=&gt; LocalVar(default).boxed(),
         }
     }
@@ -277,14 +277,14 @@
     }
 }
 <span class="kw">impl </span>Config <span class="kw">for </span>SwitchConfig {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt; {
         <span class="kw">let </span>key = key.into();
         <span class="kw">match </span><span class="self">self</span>.cfg_mut(<span class="kw-2">&amp;</span>key) {
             <span class="prelude-val">Some</span>((key, cfg)) =&gt; {
-                <span class="kw">let </span>default = default();
                 <span class="kw">let </span>source_var = cfg.get_raw(
                     key.clone(),
                     RawConfigValue::serialize(<span class="kw-2">&amp;</span>default).unwrap_or_else(|e| <span class="macro">panic!</span>(<span class="string">"invalid default value, {e}"</span>)),
+                    insert,
                     <span class="bool-val">false</span>,
                 );
                 <span class="kw">let </span>var = var(RawConfigValue::deserialize(source_var.get()).unwrap_or(default));
@@ -319,7 +319,7 @@
 
                 var.boxed()
             }
-            <span class="prelude-val">None </span>=&gt; LocalVar(default()).boxed(),
+            <span class="prelude-val">None </span>=&gt; LocalVar(default).boxed(),
         }
     }
 }

@@ -1022,7 +1022,7 @@
 </span><span class="kw">use crate</span>::{
     access::{AccessCmd, AccessNodeId},
     api_extension::{ApiExtensionId, ApiExtensionPayload, ApiExtensions},
-    config::{AnimationsConfig, ColorScheme, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
     dialog::{DialogId, FileDialogResponse, MsgDialogResponse},
     image::{ImageId, ImageLoadedData, ImagePpi},
     ipc::IpcBytes,
@@ -1150,8 +1150,8 @@
     </span><span class="kw">pub </span>animations_config: AnimationsConfig,
     <span class="doccomment">/// System locale config.
     </span><span class="kw">pub </span>locale_config: LocaleConfig,
-    <span class="doccomment">/// System preferred color scheme.
-    </span><span class="kw">pub </span>color_scheme: ColorScheme,
+    <span class="doccomment">/// System preferred color scheme and colors.
+    </span><span class="kw">pub </span>colors_config: ColorsConfig,
     <span class="doccomment">/// API extensions implemented by the view-process.
     ///
     /// The extension IDs will stay valid for the duration of the view-process.
@@ -1394,8 +1394,6 @@
     <span class="doccomment">/// The available monitors have changed.
     </span>MonitorsChanged(Vec&lt;(MonitorId, MonitorInfo)&gt;),
 
-    <span class="doccomment">/// The preferred color scheme for a window has changed.
-    </span>ColorSchemeChanged(WindowId, ColorScheme),
     <span class="doccomment">/// The window has been requested to close.
     </span>WindowCloseRequested(WindowId),
     <span class="doccomment">/// The window has closed.
@@ -1484,6 +1482,8 @@
     </span>TouchConfigChanged(TouchConfig),
     <span class="doccomment">/// System locale changed.
     </span>LocaleChanged(LocaleConfig),
+    <span class="doccomment">/// System color scheme or colors changed.
+    </span>ColorsConfigChanged(ColorsConfig),
 
     <span class="comment">/* Raw device events */
     </span><span class="doccomment">/// Device added or installed.

@@ -328,8 +328,6 @@
 <a href="#328" id="328">328</a>
 <a href="#329" id="329">329</a>
 <a href="#330" id="330">330</a>
-<a href="#331" id="331">331</a>
-<a href="#332" id="332">332</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -385,21 +383,19 @@
             <span class="comment">// set layout direction.
             </span>lang = zng_ext_l10n::LANG_VAR;
 
-            font_color = color_scheme_map(rgb(<span class="number">0.92</span>, <span class="number">0.92</span>, <span class="number">0.92</span>), rgb(<span class="number">0.08</span>, <span class="number">0.08</span>, <span class="number">0.08</span>));
-            background_color = color_scheme_map(rgb(<span class="number">0.1</span>, <span class="number">0.1</span>, <span class="number">0.1</span>), rgb(<span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">0.9</span>));
+            font_color = light_dark(rgb(<span class="number">0.08</span>, <span class="number">0.08</span>, <span class="number">0.08</span>), rgb(<span class="number">0.92</span>, <span class="number">0.92</span>, <span class="number">0.92</span>));
+            background_color = light_dark(rgb(<span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">0.9</span>), rgb(<span class="number">0.1</span>, <span class="number">0.1</span>, <span class="number">0.1</span>));
             focus_highlight = {
                 offsets: FOCUS_HIGHLIGHT_OFFSETS_VAR,
                 widths: FOCUS_HIGHLIGHT_WIDTHS_VAR,
-                sides: color_scheme_map(
-                    BorderSides::dashed(rgba(<span class="number">200</span>, <span class="number">200</span>, <span class="number">200</span>, <span class="number">1.0</span>)),
-                    BorderSides::dashed(colors::BLACK)
-                ),
+                sides: light_dark(colors::BLACK, rgb(<span class="number">200</span>, <span class="number">200</span>, <span class="number">200</span>)).rgba_map(BorderSides::dashed),
             };
-            clear_color = color_scheme_map(rgb(<span class="number">0.1</span>, <span class="number">0.1</span>, <span class="number">0.1</span>), rgb(<span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">0.9</span>));
+            clear_color = light_dark(rgb(<span class="number">0.9</span>, <span class="number">0.9</span>, <span class="number">0.9</span>), rgb(<span class="number">0.1</span>, <span class="number">0.1</span>, <span class="number">0.1</span>));
             focus_scope = <span class="bool-val">true</span>;
             tab_nav = TabNav::Cycle;
             directional_nav = DirectionalNav::Cycle;
             focus_scope_behavior = FocusScopeOnFocus::LastFocused;
+            config_block_window_load = <span class="bool-val">true</span>;
             save_state = SaveState::enabled();
         }
 

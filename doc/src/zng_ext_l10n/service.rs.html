@@ -369,6 +369,9 @@
 <a href="#369" id="369">369</a>
 <a href="#370" id="370">370</a>
 <a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     borrow::Cow,
     collections::{hash_map, HashMap},
@@ -386,7 +389,9 @@
 };
 <span class="kw">use </span>zng_view_api::config::LocaleConfig;
 
-<span class="kw">use crate</span>::{FluentParserErrors, L10nArgument, L10nSource, Lang, LangMap, LangResource, LangResourceStatus, Langs, SwapL10nSource};
+<span class="kw">use crate</span>::{
+    FluentParserErrors, L10nArgument, L10nSource, Lang, LangFilePath, LangMap, LangResource, LangResourceStatus, Langs, SwapL10nSource,
+};
 
 <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>L10nService {
     source: Mutex&lt;SwapL10nSource&gt;, <span class="comment">// Mutex for `Sync` only.
@@ -394,7 +399,7 @@
     app_lang: ArcCowVar&lt;Langs, ArcVar&lt;Langs&gt;&gt;,
 
     perm_res: Vec&lt;BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt;&gt;,
-    bundles: HashMap&lt;(Langs, Txt), BoxedWeakVar&lt;ArcFluentBundle&gt;&gt;,
+    bundles: HashMap&lt;(Langs, LangFilePath), BoxedWeakVar&lt;ArcFluentBundle&gt;&gt;,
 }
 <span class="kw">impl </span>L10nService {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
@@ -412,7 +417,7 @@
         <span class="self">self</span>.source.get_mut().load(source);
     }
 
-    <span class="kw">pub fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt; {
+    <span class="kw">pub fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt; {
         <span class="self">self</span>.source.get_mut().available_langs()
     }
 
@@ -428,10 +433,11 @@
         <span class="self">self</span>.app_lang.clone()
     }
 
-    <span class="kw">pub fn </span>localized_message(
+    <span class="attr">#[allow(clippy::too_many_arguments)]
+    </span><span class="kw">pub fn </span>localized_message(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         langs: Langs,
-        file: Txt,
+        file: LangFilePath,
         id: Txt,
         attribute: Txt,
         fallback: Txt,
@@ -446,7 +452,7 @@
                 </span>fluent_args_var(args)
                     .map(<span class="kw">move </span>|args| {
                         <span class="kw">let </span>args = args.lock();
-                        format_fallback(file.as_str(), id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>args))
+                        format_fallback(<span class="kw-2">&amp;</span>file.file, id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>args))
                     })
                     .boxed()
             };
@@ -502,7 +508,7 @@
                         <span class="kw">if </span>!errors.is_empty() {
                             <span class="kw">let </span>e = FluentErrors(errors);
                             <span class="kw">let </span>key = DisplayKey {
-                                file: file.as_str(),
+                                file: <span class="kw-2">&amp;</span>file.file,
                                 id: id.as_str(),
                                 attribute: attribute.as_str(),
                             };
@@ -512,7 +518,7 @@
                     }
                 }
 
-                format_fallback(file.as_str(), id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>args))
+                format_fallback(<span class="kw-2">&amp;</span>file.file, id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>args))
             })
             .boxed()
         } <span class="kw">else </span>{
@@ -532,7 +538,7 @@
                         <span class="kw">if </span>!errors.is_empty() {
                             <span class="kw">let </span>e = FluentErrors(errors);
                             <span class="kw">let </span>key = DisplayKey {
-                                file: file.as_str(),
+                                file: <span class="kw-2">&amp;</span>file.file,
                                 id: id.as_str(),
                                 attribute: attribute.as_str(),
                             };
@@ -543,13 +549,13 @@
                 }
 
                 <span class="kw">let </span>args = args.lock();
-                format_fallback(file.as_str(), id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>args))
+                format_fallback(<span class="kw-2">&amp;</span>file.file, id.as_str(), attribute.as_str(), <span class="kw-2">&amp;</span>fallback, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;*</span>args))
             })
             .boxed()
         }
     }
 
-    <span class="kw">fn </span>resource_bundle(<span class="kw-2">&amp;mut </span><span class="self">self</span>, langs: Langs, file: Txt) -&gt; BoxedVar&lt;ArcFluentBundle&gt; {
+    <span class="kw">fn </span>resource_bundle(<span class="kw-2">&amp;mut </span><span class="self">self</span>, langs: Langs, file: LangFilePath) -&gt; BoxedVar&lt;ArcFluentBundle&gt; {
         <span class="kw">match </span><span class="self">self</span>.bundles.entry((langs, file)) {
             hash_map::Entry::Occupied(<span class="kw-2">mut </span>e) =&gt; {
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = e.get().upgrade() {
@@ -568,7 +574,7 @@
             }
         }
     }
-    <span class="kw">fn </span>new_resource_bundle(source: <span class="kw-2">&amp;mut </span>SwapL10nSource, langs: <span class="kw-2">&amp;</span>Langs, file: <span class="kw-2">&amp;</span>Txt) -&gt; BoxedVar&lt;ArcFluentBundle&gt; {
+    <span class="kw">fn </span>new_resource_bundle(source: <span class="kw-2">&amp;mut </span>SwapL10nSource, langs: <span class="kw-2">&amp;</span>Langs, file: <span class="kw-2">&amp;</span>LangFilePath) -&gt; BoxedVar&lt;ArcFluentBundle&gt; {
         <span class="kw">if </span>langs.len() == <span class="number">1 </span>{
             <span class="kw">let </span>lang = langs[<span class="number">0</span>].clone();
             <span class="kw">let </span>res = source.lang_resource(lang.clone(), file.clone());
@@ -600,7 +606,7 @@
         }
     }
 
-    <span class="kw">pub fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; LangResource {
+    <span class="kw">pub fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; LangResource {
         LangResource {
             res: <span class="self">self</span>.source.get_mut().lang_resource(lang.clone(), file.clone()),
             status: <span class="self">self</span>.source.get_mut().lang_resource_status(lang, file),

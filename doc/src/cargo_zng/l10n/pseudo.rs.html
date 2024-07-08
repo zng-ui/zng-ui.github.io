@@ -58,64 +58,318 @@
 <a href="#58" id="58">58</a>
 <a href="#59" id="59">59</a>
 <a href="#60" id="60">60</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::borrow::Cow;
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
+<a href="#70" id="70">70</a>
+<a href="#71" id="71">71</a>
+<a href="#72" id="72">72</a>
+<a href="#73" id="73">73</a>
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
+<a href="#85" id="85">85</a>
+<a href="#86" id="86">86</a>
+<a href="#87" id="87">87</a>
+<a href="#88" id="88">88</a>
+<a href="#89" id="89">89</a>
+<a href="#90" id="90">90</a>
+<a href="#91" id="91">91</a>
+<a href="#92" id="92">92</a>
+<a href="#93" id="93">93</a>
+<a href="#94" id="94">94</a>
+<a href="#95" id="95">95</a>
+<a href="#96" id="96">96</a>
+<a href="#97" id="97">97</a>
+<a href="#98" id="98">98</a>
+<a href="#99" id="99">99</a>
+<a href="#100" id="100">100</a>
+<a href="#101" id="101">101</a>
+<a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, fmt::Write <span class="kw">as _</span>, fs, path::Path};
 
-<span class="kw">pub fn </span>pseudo(s: <span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt; {
-    fluent_pseudo_impl(s, <span class="bool-val">false</span>, <span class="bool-val">false</span>)
+<span class="kw">use </span>fluent_syntax::ast::<span class="kw-2">*</span>;
+
+<span class="kw">use </span><span class="kw">crate</span>::util;
+
+<span class="kw">pub fn </span>pseudo(dir: <span class="kw-2">&amp;</span>str, check: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo"</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>, check)
 }
 
-<span class="kw">pub fn </span>pseudo_mirr(s: <span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt; {
-    fluent_pseudo_impl(s, <span class="bool-val">true</span>, <span class="bool-val">false</span>)
+<span class="kw">pub fn </span>pseudo_mirr(dir: <span class="kw-2">&amp;</span>str, check: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo-mirr"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, check)
 }
 
-<span class="kw">pub fn </span>pseudo_wide(s: <span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt; {
-    fluent_pseudo_impl(s, <span class="bool-val">false</span>, <span class="bool-val">true</span>)
+<span class="kw">pub fn </span>pseudo_wide(dir: <span class="kw-2">&amp;</span>str, check: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo-wide"</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, check)
 }
 
-<span class="kw">pub fn </span>none(s: <span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt; {
-    Cow::Borrowed(s)
+<span class="kw">fn </span>fluent_pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, flipped: bool, elongate: bool, check: bool) {
+    pseudo_impl(dir, to_name, <span class="kw-2">&amp;</span>|s| fluent_pseudo::transform(s, flipped, elongate), check)
 }
 
-<span class="kw">fn </span>fluent_pseudo_impl(s: <span class="kw-2">&amp;</span>str, flipped: bool, elongate: bool) -&gt; Cow&lt;str&gt; {
-    pseudo_impl(s, |s| fluent_pseudo::transform(s, flipped, elongate))
-}
+<span class="kw">fn </span>pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool) {
+    <span class="kw">let </span>dir = Path::new(dir);
+    <span class="kw">let </span>to_dir = dir.with_file_name(to_name);
 
-<span class="kw">fn </span>pseudo_impl(s: <span class="kw-2">&amp;</span>str, transform: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;) -&gt; Cow&lt;str&gt; {
-    <span class="kw">if </span>s.contains(<span class="string">'{'</span>) {
-        <span class="kw">let </span><span class="kw-2">mut </span>r = String::with_capacity(s.len());
-
-        <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="number">0</span>;
-        <span class="kw">let </span><span class="kw-2">mut </span>depth = <span class="number">0</span>;
-        <span class="kw">for </span>(i, c) <span class="kw">in </span>s.char_indices() {
-            <span class="kw">match </span>c {
-                <span class="string">'{' </span>=&gt; {
-                    <span class="kw">if </span>depth == <span class="number">0 </span>{
-                        r.push_str(<span class="kw-2">&amp;</span>transform(<span class="kw-2">&amp;</span>s[start..i]));
-                        start = i;
-                    }
-                    depth += <span class="number">1</span>;
-                }
-                <span class="string">'}' </span>=&gt; {
-                    depth -= <span class="number">1</span>;
-                    <span class="kw">if </span>depth == <span class="number">0 </span>{
-                        r.push_str(<span class="kw-2">&amp;</span>s[start..=i]);
-                        start = i + <span class="number">1</span>;
-                    }
-                }
-                <span class="kw">_ </span>=&gt; {}
-            }
+    <span class="kw">for </span>entry <span class="kw">in </span>fs::read_dir(dir).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{}`, {e}"</span>, dir.display())) {
+        <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{}` entry, {e}"</span>, dir.display()));
+        <span class="kw">let </span>path = entry.path();
+        <span class="kw">if </span>path.is_file() &amp;&amp; path.extension().map(|e| e == <span class="string">"ftl"</span>).unwrap_or(<span class="bool-val">false</span>) {
+            <span class="kw">let _ </span>= util::check_or_create_dir(check, <span class="kw-2">&amp;</span>to_dir);
+            generate(<span class="kw-2">&amp;</span>path, <span class="kw-2">&amp;</span>to_dir.join(path.file_name().unwrap()), transform, check);
         }
-        <span class="kw">if </span>start &lt; s.len() {
-            <span class="kw">if </span>depth == <span class="number">0 </span>{
-                r.push_str(<span class="kw-2">&amp;</span>transform(<span class="kw-2">&amp;</span>s[start..]));
-            } <span class="kw">else </span>{
-                r.push_str(<span class="kw-2">&amp;</span>s[start..]);
-            }
-        }
-
-        Cow::Owned(r)
-    } <span class="kw">else </span>{
-        transform(s)
     }
+
+    <span class="kw">let </span>unnamed = dir.with_extension(<span class="string">"ftl"</span>);
+    <span class="kw">if </span>unnamed.exists() {
+        generate(<span class="kw-2">&amp;</span>unnamed, <span class="kw-2">&amp;</span>to_dir.with_extension(<span class="string">"ftl"</span>), transform, check);
+    }
+}
+
+<span class="kw">fn </span>generate(from: <span class="kw-2">&amp;</span>Path, to: <span class="kw-2">&amp;</span>Path, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool) {
+    <span class="kw">let </span>source = <span class="kw">match </span>fs::read_to_string(from) {
+        <span class="prelude-val">Ok</span>(s) =&gt; s,
+        <span class="prelude-val">Err</span>(e) =&gt; {
+            <span class="macro">error!</span>(<span class="string">"cannot read `{}`, {e}"</span>, from.display());
+            <span class="kw">return</span>;
+        }
+    };
+
+    <span class="kw">let </span>source = <span class="kw">match </span>fluent_syntax::parser::parse(source) {
+        <span class="prelude-val">Ok</span>(s) =&gt; s,
+        <span class="prelude-val">Err</span>((s, e)) =&gt; {
+            <span class="macro">error!</span>(
+                <span class="string">"cannot parse `{}`\n{}"</span>,
+                from.display(),
+                e.into_iter().map(|e| <span class="macro">format!</span>(<span class="string">"    {e}"</span>)).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;().join(<span class="string">"\n"</span>)
+            );
+            s
+        }
+    };
+
+    <span class="kw">let </span><span class="kw-2">mut </span>output = <span class="string">"# Test locale, generated by cargo zng l10n"</span>.to_owned();
+
+    <span class="kw">for </span>entry <span class="kw">in </span>source.body {
+        <span class="kw">match </span>entry {
+            Entry::Message(m) =&gt; write_entry(<span class="kw-2">&amp;mut </span>output, <span class="kw-2">&amp;</span>m.id, m.value.as_ref(), <span class="kw-2">&amp;</span>m.attributes, transform),
+            Entry::Term(t) =&gt; write_entry(<span class="kw-2">&amp;mut </span>output, <span class="kw-2">&amp;</span>t.id, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>t.value), <span class="kw-2">&amp;</span>t.attributes, transform),
+            Entry::Comment(<span class="kw">_</span>) | Entry::GroupComment(<span class="kw">_</span>) | Entry::ResourceComment(<span class="kw">_</span>) | Entry::Junk { .. } =&gt; {}
+        }
+    }
+
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_write(check, to, output.as_bytes()) {
+        <span class="macro">error!</span>(<span class="string">"cannot write `{}`, {e}"</span>, to.display());
+    } <span class="kw">else </span>{
+        <span class="macro">println!</span>(<span class="string">"  generated {}"</span>, to.display());
+    }
+}
+
+<span class="kw">fn </span>write_entry(
+    output: <span class="kw-2">&amp;mut </span>String,
+    id: <span class="kw-2">&amp;</span>Identifier&lt;String&gt;,
+    value: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>Pattern&lt;String&gt;&gt;,
+    attributes: <span class="kw-2">&amp;</span>[Attribute&lt;String&gt;],
+    transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;,
+) {
+    <span class="macro">write!</span>(output, <span class="string">"\n\n{} = "</span>, id.name).unwrap();
+    <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = value {
+        write_pattern(output, value, transform);
+    }
+    <span class="kw">for </span>attr <span class="kw">in </span>attributes {
+        <span class="macro">write!</span>(output, <span class="string">"\n    .{} = "</span>, attr.id.name).unwrap();
+        write_pattern(output, <span class="kw-2">&amp;</span>attr.value, transform);
+    }
+}
+
+<span class="kw">fn </span>write_pattern(output: <span class="kw-2">&amp;mut </span>String, pattern: <span class="kw-2">&amp;</span>Pattern&lt;String&gt;, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;) {
+    <span class="kw">for </span>el <span class="kw">in </span><span class="kw-2">&amp;</span>pattern.elements {
+        <span class="kw">match </span>el {
+            PatternElement::TextElement { value } =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>prefix = <span class="string">""</span>;
+                <span class="kw">for </span>line <span class="kw">in </span>value.lines() {
+                    <span class="macro">write!</span>(output, <span class="string">"{prefix}{}"</span>, transform(line)).unwrap();
+                    prefix = <span class="string">"    "</span>;
+                }
+            }
+            PatternElement::Placeable { expression } =&gt; write_expression(output, expression, transform),
+        }
+    }
+}
+
+<span class="kw">fn </span>write_expression(output: <span class="kw-2">&amp;mut </span>String, expr: <span class="kw-2">&amp;</span>Expression&lt;String&gt;, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;) {
+    <span class="kw">match </span>expr {
+        Expression::Select { selector, variants } =&gt; {
+            <span class="macro">write!</span>(output, <span class="string">"{{"</span>).unwrap();
+            write_inline_expression(output, selector, transform);
+            <span class="macro">writeln!</span>(output, <span class="string">" -&gt;"</span>).unwrap();
+
+            <span class="kw">for </span>v <span class="kw">in </span>variants {
+                <span class="macro">write!</span>(output, <span class="string">"    "</span>).unwrap();
+                <span class="kw">if </span>v.default {
+                    <span class="macro">write!</span>(output, <span class="string">"*"</span>).unwrap();
+                }
+                <span class="kw">let </span>key = <span class="kw">match </span><span class="kw-2">&amp;</span>v.key {
+                    VariantKey::Identifier { name } =&gt; name,
+                    VariantKey::NumberLiteral { value } =&gt; value,
+                };
+                <span class="macro">write!</span>(output, <span class="string">"[{key}] "</span>).unwrap();
+
+                write_pattern(output, <span class="kw-2">&amp;</span>v.value, transform);
+            }
+
+            <span class="macro">writeln!</span>(output, <span class="string">"}}"</span>).unwrap();
+        }
+        Expression::Inline(e) =&gt; write_inline_expression(output, e, transform),
+    }
+}
+<span class="kw">fn </span>write_inline_expression(output: <span class="kw-2">&amp;mut </span>String, expr: <span class="kw-2">&amp;</span>InlineExpression&lt;String&gt;, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;) {
+    <span class="kw">match </span>expr {
+        InlineExpression::StringLiteral { value } =&gt; <span class="macro">write!</span>(output, <span class="string">"{{ \"{value}\" }}"</span>).unwrap(),
+        InlineExpression::NumberLiteral { value } =&gt; <span class="macro">write!</span>(output, <span class="string">"{{ {value} }}"</span>).unwrap(),
+        InlineExpression::FunctionReference { id, arguments } =&gt; {
+            <span class="macro">write!</span>(output, <span class="string">"{{ {}"</span>, id.name).unwrap();
+            write_arguments(output, arguments, transform);
+            <span class="macro">write!</span>(output, <span class="string">" }}"</span>).unwrap()
+        }
+        InlineExpression::MessageReference { id, attribute } =&gt; {
+            <span class="macro">write!</span>(output, <span class="string">"{{ {}"</span>, id.name).unwrap();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = attribute {
+                <span class="macro">write!</span>(output, <span class="string">".{}"</span>, a.name).unwrap();
+            }
+            <span class="macro">write!</span>(output, <span class="string">" }}"</span>).unwrap()
+        }
+        InlineExpression::TermReference { id, attribute, arguments } =&gt; {
+            <span class="macro">write!</span>(output, <span class="string">"{{ -{}"</span>, id.name).unwrap();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(a) = attribute {
+                <span class="macro">write!</span>(output, <span class="string">".{}"</span>, a.name).unwrap();
+            }
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = arguments {
+                write_arguments(output, args, transform);
+            }
+            <span class="macro">write!</span>(output, <span class="string">" }}"</span>).unwrap()
+        }
+        InlineExpression::VariableReference { id } =&gt; <span class="macro">write!</span>(output, <span class="string">"{{ ${} }}"</span>, id.name).unwrap(),
+        InlineExpression::Placeable { expression } =&gt; {
+            <span class="macro">write!</span>(output, <span class="string">"{{ "</span>).unwrap();
+            write_expression(output, expression, transform);
+            <span class="macro">write!</span>(output, <span class="string">" }}"</span>).unwrap();
+        }
+    }
+}
+
+<span class="kw">fn </span>write_arguments(output: <span class="kw-2">&amp;mut </span>String, arguments: <span class="kw-2">&amp;</span>CallArguments&lt;String&gt;, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;) {
+    <span class="macro">write!</span>(output, <span class="string">"("</span>).unwrap();
+    <span class="kw">let </span><span class="kw-2">mut </span>sep = <span class="string">""</span>;
+    <span class="kw">for </span>a <span class="kw">in </span><span class="kw-2">&amp;</span>arguments.positional {
+        <span class="macro">write!</span>(output, <span class="string">"{sep}"</span>).unwrap();
+        write_inline_expression(output, a, transform);
+        sep = <span class="string">", "</span>;
+    }
+    <span class="kw">for </span>a <span class="kw">in </span><span class="kw-2">&amp;</span>arguments.named {
+        <span class="macro">write!</span>(output, <span class="string">"{sep}{}"</span>, a.name.name).unwrap();
+        write_inline_expression(output, <span class="kw-2">&amp;</span>a.value, transform);
+        sep = <span class="string">", "</span>;
+    }
+    <span class="macro">write!</span>(output, <span class="string">")"</span>).unwrap();
 }
 </code></pre></div></section></main></body></html>

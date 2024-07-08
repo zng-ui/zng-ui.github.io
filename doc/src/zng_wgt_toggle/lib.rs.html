@@ -1328,6 +1328,45 @@
 <a href="#1328" id="1328">1328</a>
 <a href="#1329" id="1329">1329</a>
 <a href="#1330" id="1330">1330</a>
+<a href="#1331" id="1331">1331</a>
+<a href="#1332" id="1332">1332</a>
+<a href="#1333" id="1333">1333</a>
+<a href="#1334" id="1334">1334</a>
+<a href="#1335" id="1335">1335</a>
+<a href="#1336" id="1336">1336</a>
+<a href="#1337" id="1337">1337</a>
+<a href="#1338" id="1338">1338</a>
+<a href="#1339" id="1339">1339</a>
+<a href="#1340" id="1340">1340</a>
+<a href="#1341" id="1341">1341</a>
+<a href="#1342" id="1342">1342</a>
+<a href="#1343" id="1343">1343</a>
+<a href="#1344" id="1344">1344</a>
+<a href="#1345" id="1345">1345</a>
+<a href="#1346" id="1346">1346</a>
+<a href="#1347" id="1347">1347</a>
+<a href="#1348" id="1348">1348</a>
+<a href="#1349" id="1349">1349</a>
+<a href="#1350" id="1350">1350</a>
+<a href="#1351" id="1351">1351</a>
+<a href="#1352" id="1352">1352</a>
+<a href="#1353" id="1353">1353</a>
+<a href="#1354" id="1354">1354</a>
+<a href="#1355" id="1355">1355</a>
+<a href="#1356" id="1356">1356</a>
+<a href="#1357" id="1357">1357</a>
+<a href="#1358" id="1358">1358</a>
+<a href="#1359" id="1359">1359</a>
+<a href="#1360" id="1360">1360</a>
+<a href="#1361" id="1361">1361</a>
+<a href="#1362" id="1362">1362</a>
+<a href="#1363" id="1363">1363</a>
+<a href="#1364" id="1364">1364</a>
+<a href="#1365" id="1365">1365</a>
+<a href="#1366" id="1366">1366</a>
+<a href="#1367" id="1367">1367</a>
+<a href="#1368" id="1368">1368</a>
+<a href="#1369" id="1369">1369</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1344,6 +1383,7 @@
 <span class="kw">use </span>std::ops;
 <span class="kw">use </span>std::{error::Error, fmt, marker::PhantomData, sync::Arc};
 
+<span class="kw">use </span>colors::BASE_COLOR_VAR;
 <span class="kw">use </span>task::parking_lot::Mutex;
 <span class="kw">use </span>zng_ext_font::FontNames;
 <span class="kw">use </span>zng_ext_input::{
@@ -1353,7 +1393,7 @@
 };
 <span class="kw">use </span>zng_ext_l10n::lang;
 <span class="kw">use </span>zng_var::{AnyVar, AnyVarValue, BoxedAnyVar, Var, VarIsReadOnlyError};
-<span class="kw">use </span>zng_wgt::{align, border, border_align, border_over, corner_radius, hit_test_mode, is_inited, prelude::<span class="kw-2">*</span>, Wgt};
+<span class="kw">use </span>zng_wgt::{align, border, border_align, border_over, corner_radius, hit_test_mode, is_inited, prelude::<span class="kw-2">*</span>, Wgt, ICONS};
 <span class="kw">use </span>zng_wgt_access::{access_role, accessible, AccessRole};
 <span class="kw">use </span>zng_wgt_container::{child_align, child_end, child_start, padding};
 <span class="kw">use </span>zng_wgt_fill::background_color;
@@ -2251,11 +2291,26 @@
             <span class="self">self</span>;
             replace = <span class="bool-val">true</span>;
             when <span class="kw-2">*</span>#is_checked {
-                background_color = zng_wgt_button::color_scheme_pressed(zng_wgt_button::BASE_COLORS_VAR);
+                background_color = BASE_COLOR_VAR.shade(<span class="number">2</span>);
                 border = {
                     widths: <span class="number">1</span>,
-                    sides: zng_wgt_button::color_scheme_pressed(zng_wgt_button::BASE_COLORS_VAR).map_into(),
+                    sides: BASE_COLOR_VAR.shade_into(<span class="number">2</span>),
                 };
+            }
+        }
+    }
+}
+
+<span class="doccomment">/// Toggle light style.
+</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LightStyle</span>)]
+</span><span class="kw">pub struct </span>LightStyle(zng_wgt_button::LightStyle);
+<span class="kw">impl </span>LightStyle {
+    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">widget_set!</span> {
+            <span class="self">self</span>;
+            when <span class="kw-2">*</span>#is_checked {
+                <span class="attr">#[easing(<span class="number">0</span>.ms())]
+                </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
             }
         }
     }
@@ -2286,7 +2341,7 @@
 }
 <span class="macro">context_var!</span> {
     <span class="doccomment">/// Spacing between the checkmark and the content.
-    </span><span class="kw">pub static </span>CHECK_SPACING_VAR: Length = <span class="number">2</span>;
+    </span><span class="kw">pub static </span>CHECK_SPACING_VAR: Length = <span class="number">4</span>;
 }
 
 <span class="doccomment">/// Spacing between the checkmark and the content.
@@ -2296,30 +2351,42 @@
 }
 
 <span class="kw">fn </span>checkmark_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="macro">zng_wgt_text::Text!</span> {
+    <span class="kw">let </span>checked = ICONS.get_or([<span class="string">"toggle.checked"</span>, <span class="string">"check"</span>], || {
+        <span class="macro">zng_wgt_text::Text!</span> {
+            txt = <span class="string">"✓"</span>;
+            font_family = FontNames::system_ui(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(und));
+            txt_align = Align::CENTER;
+        }
+    });
+    <span class="kw">let </span>indeterminate = ICONS.get_or([<span class="string">"toggle.indeterminate"</span>], || {
+        <span class="macro">zng_wgt::Wgt!</span> {
+            align = Align::CENTER;
+            background_color = zng_wgt_text::FONT_COLOR_VAR;
+            size = (<span class="number">6</span>, <span class="number">2</span>);
+            corner_radius = <span class="number">0</span>;
+        }
+    });
+    <span class="macro">zng_wgt_container::Container!</span> {
         hit_test_mode = <span class="bool-val">false</span>;
         accessible = <span class="bool-val">false</span>;
         size = <span class="number">1.2</span>.em();
-        font_family = FontNames::system_ui(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(und));
-        txt_align = Align::CENTER;
-        align = Align::CENTER;
         corner_radius = <span class="number">0.1</span>.em();
-
-        txt = <span class="string">"✓"</span>;
-        when #{IS_CHECKED_VAR}.is_none() {
-            txt = <span class="string">"━"</span>;
-        }
-
-        font_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.transparent());
-        when #{IS_CHECKED_VAR}.unwrap_or(<span class="bool-val">true</span>) {
-            font_color = zng_wgt_text::FONT_COLOR_VAR;
-        }
+        align = Align::CENTER;
 
         <span class="attr">#[easing(<span class="number">150</span>.ms())]
         </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
         when <span class="kw-2">*</span>#{parent_hovered} {
             <span class="attr">#[easing(<span class="number">0</span>.ms())]
             </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+        }
+
+        when #{IS_CHECKED_VAR}.is_none() {
+            child = indeterminate;
+        }
+        when <span class="kw-2">*</span>#{IS_CHECKED_VAR} == <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) {
+            child = checked;
+            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+            </span>background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
         }
     }
 }
@@ -2340,7 +2407,7 @@
             child_align = Align::FILL;
             border_over = <span class="bool-val">false</span>;
             border_align = <span class="number">1</span>.fct();
-            padding = COMBO_SPACING_VAR.map(|e| SideOffsets::new(-<span class="number">1</span>, e.clone(), -<span class="number">1</span>, -<span class="number">1</span>));
+            padding = -<span class="number">1</span>;
             checked = var(<span class="bool-val">false</span>);
             child_end = {
                 node: combomark_visual(),
@@ -2400,7 +2467,7 @@
 }
 <span class="macro">context_var!</span> {
     <span class="doccomment">/// Spacing between the arrow symbol and the content.
-    </span><span class="kw">pub static </span>COMBO_SPACING_VAR: Length = <span class="number">2</span>;
+    </span><span class="kw">pub static </span>COMBO_SPACING_VAR: Length = <span class="number">0</span>;
 }
 
 <span class="doccomment">/// Spacing between the arrow symbol and the content.
@@ -2478,6 +2545,22 @@
 
 <span class="attr">#[allow(non_snake_case)]
 </span><span class="kw">fn </span>combomark_visual() -&gt; <span class="kw">impl </span>UiNode {
+    <span class="kw">let </span>dropdown = ICONS.get_or(
+        [<span class="string">"toggle.dropdown"</span>, <span class="string">"material/rounded/keyboard-arrow-down"</span>, <span class="string">"keyboard-arrow-down"</span>],
+        combomark_visual_fallback,
+    );
+    <span class="macro">Wgt!</span> {
+        size = <span class="number">12</span>;
+        zng_wgt_fill::background = dropdown;
+        align = Align::CENTER;
+
+        zng_wgt_transform::rotate_x = <span class="number">0</span>.deg();
+        when #is_checked {
+            zng_wgt_transform::rotate_x = <span class="number">180</span>.deg();
+        }
+    }
+}
+<span class="kw">fn </span>combomark_visual_fallback() -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>color_key = FrameValueKey::new_unique();
     <span class="kw">let </span><span class="kw-2">mut </span>size = PxSize::zero();
     <span class="kw">let </span><span class="kw-2">mut </span>bounds = PxBox::zero();
@@ -2491,16 +2574,15 @@
             .rotate(<span class="number">45</span>.deg())
             .scale_x(<span class="number">0.7</span>)
             .translate(center.x, center.y)
+            .translate_x(Length::from(<span class="number">2</span>).layout_x())
             .layout();
-
         <span class="kw">let </span>bounds = transform.outer_transformed(PxBox::from_size(size)).unwrap_or_default();
         (size, transform, bounds)
     }
 
-    <span class="kw">let </span>visual = match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
+    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
             WIDGET.sub_var_render_update(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR);
-            WIDGET.sub_var_render(<span class="kw-2">&amp;</span>IS_CHECKED_VAR);
         }
         UiNodeOp::Measure { desired_size, .. } =&gt; {
             <span class="kw">let </span>(s, <span class="kw">_</span>, <span class="kw">_</span>) = layout();
@@ -2513,10 +2595,7 @@
         UiNodeOp::Render { frame } =&gt; {
             <span class="kw">let </span><span class="kw-2">mut </span>clip = bounds.to_rect();
             clip.size.height <span class="kw-2">*</span>= <span class="number">0.5</span>.fct();
-
-            <span class="kw">if </span>!IS_CHECKED_VAR.get().unwrap_or(<span class="bool-val">false</span>) {
-                clip.origin.y += clip.size.height;
-            }
+            clip.origin.y += clip.size.height;
 
             frame.push_clip_rect(clip, <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
                 frame.push_reference_frame((WIDGET.id(), <span class="number">0</span>).into(), transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
@@ -2528,11 +2607,7 @@
             update.update_color_opt(color_key.update_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
         }
         <span class="kw">_ </span>=&gt; {}
-    });
-    <span class="macro">zng_wgt_container::Container!</span> {
-        child = visual;
-        child_align = Align::CENTER;
-    }
+    })
 }
 
 <span class="doccomment">/// Switch toggle style.
@@ -2594,6 +2669,9 @@
             <span class="attr">#[easing(<span class="number">0</span>.ms())]
             </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
         }
+        when #is_checked {
+            background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
+        }
     }
 }
 
@@ -2651,7 +2729,7 @@
         when <span class="kw-2">*</span>#is_checked {
             border = {
                 widths: <span class="number">2</span>,
-                sides: zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()).into()),
+                sides: colors::ACCENT_COLOR_VAR.shade_into(-<span class="number">2</span>),
             };
             <span class="attr">#[easing(<span class="number">0</span>.ms())]
             </span>background_color = zng_wgt_text::FONT_COLOR_VAR;

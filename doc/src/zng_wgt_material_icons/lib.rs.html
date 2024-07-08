@@ -197,13 +197,67 @@
 <a href="#196" id="196">196</a>
 <a href="#197" id="197">197</a>
 <a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
+<a href="#234" id="234">234</a>
+<a href="#235" id="235">235</a>
+<a href="#236" id="236">236</a>
+<a href="#237" id="237">237</a>
+<a href="#238" id="238">238</a>
+<a href="#239" id="239">239</a>
+<a href="#240" id="240">240</a>
+<a href="#241" id="241">241</a>
+<a href="#242" id="242">242</a>
+<a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Material icons for the [`Icon!`] widget.
 //!
-//! A constant for each icon is defined in a module for each font. The font files are embedded
-//! and can be registered using the [`MaterialFonts`] app extension.
+//! A map from name to icon codepoint is defined in a module for each font. The font files are embedded
+//! by default and can are registered using the [`MaterialIconsManager`] app extension. The extension
+//! also registers [`ICONS`] handlers that provide the icons.
 //!
 //! The icons are from the [Material Design Icons] project.
 //!
@@ -216,31 +270,29 @@
 #![warn(unused_extern_crates)]
 #![warn(missing_docs)]
 
-</span><span class="kw">use </span>std::{fmt, mem};
+</span><span class="kw">use </span>zng_app::widget::node::{NilUiNode, UiNode <span class="kw">as _</span>};
 <span class="kw">use </span>zng_ext_font::FontName;
-<span class="kw">use </span>zng_wgt_text::icon::GlyphIcon;
+<span class="kw">use </span>zng_wgt::{wgt_fn, IconRequestArgs, ICONS};
+<span class="kw">use </span>zng_wgt_text::icon::{GlyphIcon, Icon};
 
-<span class="doccomment">/// Material fonts.
+<span class="macro">zng_wgt::enable_widget_macros!</span>();
+
+<span class="doccomment">/// Material icon fonts manager.
 ///
-/// You can call the [`MaterialFonts::register`] method yourself before creating any windows or you can
-/// use this struct as an app extension that does the same thing on app init.
-</span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-</span><span class="kw">pub struct </span>MaterialFonts;
-<span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-</span><span class="kw">impl </span>MaterialFonts {
-    <span class="doccomment">/// Register the material fonts in an app.
-    ///
-    /// The fonts will be available after the current update.
-    </span><span class="kw">pub fn </span>register() {
+/// This app extension registers the fonts in `"embedded"` builds and registers [`ICONS`] handlers that provide the icons.
+</span><span class="kw">pub struct </span>MaterialIconsManager;
+<span class="kw">impl </span>MaterialIconsManager {
+    <span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
+    </span><span class="kw">fn </span>register_fonts(<span class="kw-2">&amp;</span><span class="self">self</span>) {
         <span class="kw">let </span>sets = [
             <span class="attr">#[cfg(feature = <span class="string">"outlined"</span>)]
-            </span>(outlined::meta::FONT_NAME, outlined::meta::FONT_BYTES),
+            </span>(outlined::FONT_NAME, outlined::FONT_BYTES),
             <span class="attr">#[cfg(feature = <span class="string">"filled"</span>)]
-            </span>(filled::meta::FONT_NAME, filled::meta::FONT_BYTES),
+            </span>(filled::FONT_NAME, filled::FONT_BYTES),
             <span class="attr">#[cfg(feature = <span class="string">"rounded"</span>)]
-            </span>(rounded::meta::FONT_NAME, rounded::meta::FONT_BYTES),
+            </span>(rounded::FONT_NAME, rounded::FONT_BYTES),
             <span class="attr">#[cfg(feature = <span class="string">"sharp"</span>)]
-            </span>(sharp::meta::FONT_NAME, sharp::meta::FONT_BYTES),
+            </span>(sharp::FONT_NAME, sharp::FONT_BYTES),
         ];
 
         <span class="kw">for </span>(name, bytes) <span class="kw">in </span>sets {
@@ -250,149 +302,203 @@
     }
 }
 <span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-</span><span class="kw">impl </span>zng_app::AppExtension <span class="kw">for </span>MaterialFonts {
+</span><span class="kw">impl </span>zng_app::AppExtension <span class="kw">for </span>MaterialIconsManager {
     <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        MaterialFonts::register();
-    }
-}
+        <span class="self">self</span>.register_fonts();
 
-<span class="doccomment">/// Represents a material font icon.
-</span><span class="attr">#[derive(Clone, PartialEq, Eq, Debug)]
-</span><span class="kw">pub struct </span>MaterialIcon {
-    <span class="doccomment">/// Font name.
-    </span><span class="kw">pub </span>font: FontName,
-    <span class="doccomment">/// Constant name of the icon.
-    </span><span class="kw">pub </span>name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
-    <span class="doccomment">/// Codepoint.
-    </span><span class="kw">pub </span>code: char,
-}
-<span class="kw">impl </span>MaterialIcon {
-    <span class="doccomment">/// Format the name for display.
-    </span><span class="kw">pub fn </span>display_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
-        <span class="macro">format!</span>(<span class="string">"{self}"</span>)
-    }
-}
-<span class="macro">zng_var::impl_from_and_into_var!</span> {
-    <span class="kw">fn </span>from(icon: MaterialIcon) -&gt; GlyphIcon {
-        GlyphIcon::new(icon.font, icon.code)
-    }
-}
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>MaterialIcon {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-        <span class="kw">let </span><span class="kw-2">mut </span>chars = <span class="self">self</span>.name.chars().peekable();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = chars.next() {
-            <span class="comment">// skip N if followed by number.
-            </span><span class="kw">if </span>n == <span class="string">'N' </span>{
-                <span class="kw">if let </span><span class="prelude-val">Some</span>(q) = chars.peek() {
-                    <span class="kw">if </span>!q.is_ascii_digit() {
-                        <span class="macro">write!</span>(f, <span class="string">"{n}"</span>)<span class="question-mark">?</span>;
+        ICONS.register(<span class="macro">wgt_fn!</span>(|args: IconRequestArgs| {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(strong_key) = args.name().strip_prefix(<span class="string">"material/"</span>) {
+                <span class="attr">#[allow(clippy::type_complexity)]
+                </span><span class="kw">let </span>sets: <span class="kw-2">&amp;</span>[(<span class="kw-2">&amp;</span>str, <span class="kw">fn</span>(<span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;GlyphIcon&gt;)] = <span class="kw-2">&amp;</span>[
+                    <span class="attr">#[cfg(feature = <span class="string">"outlined"</span>)]
+                    </span>(<span class="string">"outlined/"</span>, outlined::get),
+                    <span class="attr">#[cfg(feature = <span class="string">"filled"</span>)]
+                    </span>(<span class="string">"filled/"</span>, filled::get),
+                    <span class="attr">#[cfg(feature = <span class="string">"rounded"</span>)]
+                    </span>(<span class="string">"rounded/"</span>, rounded::get),
+                    <span class="attr">#[cfg(feature = <span class="string">"sharp"</span>)]
+                    </span>(<span class="string">"sharp/"</span>, sharp::get),
+                ];
+                <span class="kw">for </span>(name, get) <span class="kw">in </span>sets {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = strong_key.strip_prefix(name) {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(ico) = get(key) {
+                            <span class="kw">return </span><span class="macro">Icon!</span>(ico).boxed();
+                        }
                     }
                 }
-            } <span class="kw">else </span>{
-                <span class="macro">write!</span>(f, <span class="string">"{n}"</span>)<span class="question-mark">?</span>;
             }
+
+            NilUiNode.boxed()
+        }));
+
+        ICONS.register_fallback(<span class="macro">wgt_fn!</span>(|args: IconRequestArgs| {
+            <span class="kw">let </span>sets = [
+                <span class="attr">#[cfg(feature = <span class="string">"outlined"</span>)]
+                </span>outlined::get,
+                <span class="attr">#[cfg(feature = <span class="string">"filled"</span>)]
+                </span>filled::get,
+                <span class="attr">#[cfg(feature = <span class="string">"rounded"</span>)]
+                </span>rounded::get,
+                <span class="attr">#[cfg(feature = <span class="string">"sharp"</span>)]
+                </span>sharp::get,
+            ];
+            <span class="kw">for </span>get <span class="kw">in </span>sets {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(ico) = get(args.name()) {
+                    <span class="kw">return </span><span class="macro">Icon!</span>(ico).boxed();
+                }
+            }
+            NilUiNode.boxed()
+        }));
+    }
+}
+
+<span class="macro">macro_rules!</span> getters {
+    (<span class="macro-nonterminal">$FONT_NAME</span>:ident, <span class="macro-nonterminal">$MAP</span>:ident) =&gt; {
+        <span class="doccomment">/// Gets the [`GlyphIcon`].
+        </span><span class="kw">pub fn </span>get(key: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Option</span>&lt;GlyphIcon&gt; {
+            <span class="prelude-val">Some</span>(GlyphIcon::new(<span class="macro-nonterminal">$FONT_NAME</span>.clone(), <span class="kw-2">*</span><span class="macro-nonterminal">$MAP</span>.get(key)<span class="question-mark">?</span>))
         }
-        <span class="kw">let </span><span class="kw-2">mut </span>is_cap = <span class="bool-val">false</span>;
-        <span class="kw">for </span>c <span class="kw">in </span>chars {
-            <span class="kw">if </span>c == <span class="string">'_' </span>{
-                <span class="macro">write!</span>(f, <span class="string">" "</span>)<span class="question-mark">?</span>;
-                is_cap = <span class="bool-val">true</span>;
-            } <span class="kw">else if </span>mem::take(<span class="kw-2">&amp;mut </span>is_cap) {
-                <span class="macro">write!</span>(f, <span class="string">"{c}"</span>)<span class="question-mark">?</span>;
-            } <span class="kw">else </span>{
-                <span class="macro">write!</span>(f, <span class="string">"{}"</span>, c.to_lowercase())<span class="question-mark">?</span>;
+
+        <span class="doccomment">/// Require the [`GlyphIcon`], logs an error if not found.
+        ///
+        /// # Panics
+        ///
+        /// Panics if the `key` is not found.
+        </span><span class="kw">pub fn </span>req(key: <span class="kw-2">&amp;</span>str) -&gt; GlyphIcon {
+            <span class="kw">match </span>get(key) {
+                <span class="prelude-val">Some</span>(g) =&gt; g,
+                <span class="prelude-val">None </span>=&gt; {
+                    <span class="macro">tracing::error!</span>(<span class="string">"icon {key:?} not found in `outlined`"</span>);
+                    GlyphIcon::new(<span class="string">""</span>, <span class="string">'\0'</span>)
+                }
             }
         }
 
-        <span class="prelude-val">Ok</span>(())
-    }
+        <span class="doccomment">/// All icons.
+        </span><span class="kw">pub fn </span>all() -&gt; <span class="kw">impl </span>ExactSizeIterator&lt;Item = (<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, GlyphIcon)&gt; {
+            <span class="macro-nonterminal">$MAP</span>.entries()
+                .map(|(key, val)| (<span class="kw-2">*</span>key, GlyphIcon::new(<span class="macro-nonterminal">$FONT_NAME</span>.clone(), <span class="kw-2">*</span>val)))
+        }
+    };
 }
 
 <span class="doccomment">/// Outline icons.
 ///  
 /// This is the "Material Icons Outlined" font.
-</span><span class="attr">#[cfg(feature = <span class="string">"outlined"</span>)]
+///
+/// # Icons
+///
+/// Use the [`ICONS`] service with key `"material/outlined/{name}"` or `"{name}"` to get an widget that renders the icon.
+///
+/// Use [`outlined::req`] to get a [`GlyphIcon`] directly for use in the [`Icon!`] widget.
+///
+/// [`Icon!`]: struct@Icon
+///
+/// | Name | Icon |
+/// |------|------|
+</span><span class="attr">#[doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.outlined.docs.txt"</span>))]
+#[cfg(feature = <span class="string">"outlined"</span>)]
 </span><span class="kw">pub mod </span>outlined {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="doccomment">/// Font metadata.
-    </span><span class="kw">pub mod </span>meta {
-        <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="doccomment">/// "Material Icons Outlined".
+    </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Outlined"</span>);
 
-        <span class="doccomment">/// "Material Icons Outlined".
-        </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Outlined"</span>);
+    <span class="doccomment">/// Embedded font bytes.
+    </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
+    </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsOutlined-Regular.otf"</span>);
 
-        <span class="doccomment">/// Embedded font bytes.
-        </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-        </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsOutlined-Regular.otf"</span>);
-    }
-
-    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.outlined.rs"</span>));
+    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.outlined.map.rs"</span>));
+    <span class="macro">getters!</span>(FONT_NAME, MAP);
 }
 
 <span class="doccomment">/// Filled icons.
 ///
 /// This is the "Material Icons" font.
-</span><span class="attr">#[cfg(feature = <span class="string">"filled"</span>)]
+///
+/// # Icons
+///
+/// Use the [`ICONS`] service with key `"material/filled/{name}"` or `"{name}"` to get an widget that renders the icon.
+///
+/// Use [`filled::req`] to get a [`GlyphIcon`] directly for use in the [`Icon!`] widget.
+///
+/// [`Icon!`]: struct@Icon
+///
+/// | Name | Icon |
+/// |------|------|
+</span><span class="attr">#[doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.filled.docs.txt"</span>))]
+#[cfg(feature = <span class="string">"filled"</span>)]
 </span><span class="kw">pub mod </span>filled {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="doccomment">/// Font metadata.
-    </span><span class="kw">pub mod </span>meta {
-        <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="doccomment">/// "Material Icons".
+    </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons"</span>);
 
-        <span class="doccomment">/// "Material Icons".
-        </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons"</span>);
+    <span class="doccomment">/// Embedded font bytes.
+    </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
+    </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIcons-Regular.ttf"</span>);
 
-        <span class="doccomment">/// Embedded font bytes.
-        </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-        </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIcons-Regular.ttf"</span>);
-    }
-
-    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.filled.rs"</span>));
+    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.filled.map.rs"</span>));
+    <span class="macro">getters!</span>(FONT_NAME, MAP);
 }
 
 <span class="doccomment">/// Rounded icons.
 ///  
 /// This is the "Material Icons Rounded" font.
-</span><span class="attr">#[cfg(feature = <span class="string">"rounded"</span>)]
+///
+/// # Icons
+///
+/// Use the [`ICONS`] service with key `"material/rounded/{name}"` or `"{name}"` to get an widget that renders the icon.
+///
+/// Use [`rounded::req`] to get a [`GlyphIcon`] directly for use in the [`Icon!`] widget.
+///
+/// [`Icon!`]: struct@Icon
+///
+/// | Name | Icon |
+/// |------|------|
+</span><span class="attr">#[doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.rounded.docs.txt"</span>))]
+#[cfg(feature = <span class="string">"rounded"</span>)]
 </span><span class="kw">pub mod </span>rounded {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="doccomment">/// Font metadata.
-    </span><span class="kw">pub mod </span>meta {
-        <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="doccomment">/// "Material Icons Rounded".
+    </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Rounded"</span>);
 
-        <span class="doccomment">/// "Material Icons Rounded".
-        </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Rounded"</span>);
+    <span class="doccomment">/// Embedded font bytes.
+    </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
+    </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsRound-Regular.otf"</span>);
 
-        <span class="doccomment">/// Embedded font bytes.
-        </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-        </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsRound-Regular.otf"</span>);
-    }
-
-    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.rounded.rs"</span>));
+    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.rounded.map.rs"</span>));
+    <span class="macro">getters!</span>(FONT_NAME, MAP);
 }
 
 <span class="doccomment">/// Sharp icons.
 ///  
 /// This is the "Material Icons Sharp" font.
-</span><span class="attr">#[cfg(feature = <span class="string">"sharp"</span>)]
+///
+/// # Icons
+///
+/// Use the [`ICONS`] service with key `"material/sharp/{name}"` or `"{name}"` to get an widget that renders the icon.
+///
+/// Use [`sharp::req`] to get a [`GlyphIcon`] directly for use in the [`Icon!`] widget.
+///
+/// [`Icon!`]: struct@Icon
+///
+/// | Name | Icon |
+/// |------|------|
+</span><span class="attr">#[doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.sharp.docs.txt"</span>))]
+#[cfg(feature = <span class="string">"sharp"</span>)]
 </span><span class="kw">pub mod </span>sharp {
     <span class="kw">use super</span>::<span class="kw-2">*</span>;
 
-    <span class="doccomment">/// Font metadata.
-    </span><span class="kw">pub mod </span>meta {
-        <span class="kw">use super</span>::<span class="kw-2">*</span>;
+    <span class="doccomment">/// "Material Icons Sharp".
+    </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Sharp"</span>);
 
-        <span class="doccomment">/// "Material Icons Sharp".
-        </span><span class="kw">pub const </span>FONT_NAME: FontName = FontName::from_static(<span class="string">"Material Icons Sharp"</span>);
+    <span class="doccomment">/// Embedded font bytes.
+    </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
+    </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsSharp-Regular.otf"</span>);
 
-        <span class="doccomment">/// Embedded font bytes.
-        </span><span class="attr">#[cfg(feature = <span class="string">"embedded"</span>)]
-        </span><span class="kw">pub const </span>FONT_BYTES: <span class="kw-2">&amp;</span>[u8] = <span class="macro">include_bytes!</span>(<span class="string">"../fonts/MaterialIconsSharp-Regular.otf"</span>);
-    }
-
-    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.sharp.rs"</span>));
+    <span class="macro">include!</span>(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/generated.sharp.map.rs"</span>));
+    <span class="macro">getters!</span>(FONT_NAME, MAP);
 }
 </code></pre></div></section></main></body></html>

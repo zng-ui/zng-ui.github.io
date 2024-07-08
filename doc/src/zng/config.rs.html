@@ -101,6 +101,32 @@
 <a href="#100" id="100">100</a>
 <a href="#101" id="101">101</a>
 <a href="#102" id="102">102</a>
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Config service, sources and other types.
 //!
 //! The configuration service [`CONFIG`] separates config using from config writing. A config
@@ -118,11 +144,11 @@
 //! use zng::prelude::*;
 //!
 //! fn txt_input() -&gt; impl UiNode {
-//!     TextInput!(CONFIG.get("example.txt", Txt::default))
+//!     TextInput!(CONFIG.get("example.txt", Txt::from("")))
 //! }
 //!
 //! fn txt_display() -&gt; impl UiNode {
-//!     Text!(CONFIG.get("example.txt", Txt::default))
+//!     Text!(CONFIG.get("example.txt", Txt::from("")))
 //! }
 //!
 //! # fn main() { }
@@ -195,6 +221,8 @@
     ReadOnlyConfig, SwapConfig, SwitchConfig, CONFIG,
 };
 
+<span class="kw">pub use </span>zng_wgt_window::{save_state_node, SaveState};
+
 <span class="attr">#[cfg(feature = <span class="string">"ron"</span>)]
 </span><span class="kw">pub use </span>zng_ext_config::RonConfig;
 
@@ -203,4 +231,28 @@
 
 <span class="attr">#[cfg(feature = <span class="string">"yaml"</span>)]
 </span><span class="kw">pub use </span>zng_ext_config::YamlConfig;
+
+<span class="doccomment">/// Settings are the config the user can directly edit, this module implements a basic settings data model.
+///
+/// # Full API
+///
+/// See [`zng_ext_config::settings`] for the full settings API.
+</span><span class="kw">pub mod </span>settings {
+    <span class="kw">pub use </span>zng_ext_config::settings::{
+        CategoriesBuilder, Category, CategoryBuilder, CategoryId, Setting, SettingBuilder, SettingsBuilder, SETTINGS,
+    };
+    <span class="kw">pub use </span>zng_wgt_input::cmd::{on_pre_settings, on_settings, SETTINGS_CMD};
+
+    <span class="doccomment">/// Settings editor widget.
+    ///
+    /// # Full API
+    ///
+    /// See [`zng_wgt_settings`] for the full settings editor API.
+    </span><span class="kw">pub mod </span>editor {
+        <span class="kw">pub use </span>zng_wgt_settings::{
+            categories_list_fn, category_header_fn, category_item_fn, setting_fn, settings_fn, CategoriesListArgs, CategoryHeaderArgs,
+            CategoryItemArgs, SettingArgs, SettingBuilderEditorExt, SettingsArgs, SettingsCtxExt, SettingsEditor,
+        };
+    }
+}
 </code></pre></div></section></main></body></html>

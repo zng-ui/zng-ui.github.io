@@ -1665,6 +1665,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1629" id="1629">1629</a>
 <a href="#1630" id="1630">1630</a>
 <a href="#1631" id="1631">1631</a>
+<a href="#1632" id="1632">1632</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fmt, mem,
@@ -1975,10 +1976,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="kw">let </span>args = RawMonitorsChangedArgs::now(monitors);
                 <span class="self">self</span>.notify_event(RAW_MONITORS_CHANGED_EVENT.new_update(args), observer);
             }
-            Event::ColorSchemeChanged(w_id, scheme) =&gt; {
-                <span class="kw">let </span>args = RawColorSchemeChangedArgs::now(window_id(w_id), scheme);
-                <span class="self">self</span>.notify_event(RAW_COLOR_SCHEME_CHANGED_EVENT.new_update(args), observer);
-            }
             Event::WindowCloseRequested(w_id) =&gt; {
                 <span class="kw">let </span>args = RawWindowCloseRequestedArgs::now(window_id(w_id));
                 <span class="self">self</span>.notify_event(RAW_WINDOW_CLOSE_REQUESTED_EVENT.new_update(args), observer);
@@ -2116,6 +2113,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="kw">let </span>args = RawLocaleChangedArgs::now(cfg);
                 <span class="self">self</span>.notify_event(RAW_LOCALE_CONFIG_CHANGED_EVENT.new_update(args), observer);
             }
+            Event::ColorsConfigChanged(cfg) =&gt; {
+                <span class="kw">let </span>args = RawColorsConfigChangedArgs::now(cfg);
+                <span class="self">self</span>.notify_event(RAW_COLORS_CONFIG_CHANGED_EVENT.new_update(args), observer);
+            }
 
             <span class="comment">// `device_events`
             </span>Event::DeviceAdded(d_id) =&gt; {
@@ -2229,7 +2230,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     font_aa,
                     animations_config,
                     locale_config,
-                    color_scheme,
+                    colors_config,
                     extensions,
                 }) =&gt; {
                     <span class="comment">// notify immediately.
@@ -2256,7 +2257,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         font_aa,
                         animations_config,
                         locale_config,
-                        color_scheme,
+                        colors_config,
                         extensions,
                     );
                     <span class="self">self</span>.notify_event(VIEW_PROCESS_INITED_EVENT.new_update(args), observer);
@@ -2820,6 +2821,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`exit`]: APP::exit
     </span><span class="kw">pub static </span>EXIT_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Exit"</span>,
         info: <span class="string">"Close all windows and exit."</span>,
         shortcut: <span class="macro">shortcut!</span>(Exit),

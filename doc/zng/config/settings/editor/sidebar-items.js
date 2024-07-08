@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["categories_list_fn","category_header_fn","category_item_fn","setting_fn","settings_fn"],"struct":["CategoriesListArgs","CategoryHeaderArgs","CategoryItemArgs","SettingArgs","SettingsArgs","SettingsEditor"],"trait":["SettingBuilderEditorExt","SettingsCtxExt"]};

@@ -243,48 +243,9 @@
 <a href="#243" id="243">243</a>
 <a href="#244" id="244">244</a>
 <a href="#245" id="245">245</a>
-<a href="#246" id="246">246</a>
-<a href="#247" id="247">247</a>
-<a href="#248" id="248">248</a>
-<a href="#249" id="249">249</a>
-<a href="#250" id="250">250</a>
-<a href="#251" id="251">251</a>
-<a href="#252" id="252">252</a>
-<a href="#253" id="253">253</a>
-<a href="#254" id="254">254</a>
-<a href="#255" id="255">255</a>
-<a href="#256" id="256">256</a>
-<a href="#257" id="257">257</a>
-<a href="#258" id="258">258</a>
-<a href="#259" id="259">259</a>
-<a href="#260" id="260">260</a>
-<a href="#261" id="261">261</a>
-<a href="#262" id="262">262</a>
-<a href="#263" id="263">263</a>
-<a href="#264" id="264">264</a>
-<a href="#265" id="265">265</a>
-<a href="#266" id="266">266</a>
-<a href="#267" id="267">267</a>
-<a href="#268" id="268">268</a>
-<a href="#269" id="269">269</a>
-<a href="#270" id="270">270</a>
-<a href="#271" id="271">271</a>
-<a href="#272" id="272">272</a>
-<a href="#273" id="273">273</a>
-<a href="#274" id="274">274</a>
-<a href="#275" id="275">275</a>
-<a href="#276" id="276">276</a>
-<a href="#277" id="277">277</a>
-<a href="#278" id="278">278</a>
-<a href="#279" id="279">279</a>
-<a href="#280" id="280">280</a>
-<a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a>
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="kw">use </span><span class="kw">crate</span>::task::parking_lot::Mutex;
-<span class="kw">use </span>zng_clone_move::clmv;
 <span class="kw">use </span>zng_var::VarHandle;
 
 <span class="doccomment">/// Represents a config source that can swap its backing config source without disconnecting any bound keys.
@@ -299,12 +260,12 @@
     status_binding: VarHandle,
 }
 <span class="kw">impl </span>AnyConfig <span class="kw">for </span>SwapConfig {
-    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
+    <span class="kw">fn </span>get_raw(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: ConfigKey, default: RawConfigValue, insert: bool, shared: bool) -&gt; BoxedVar&lt;RawConfigValue&gt; {
         <span class="kw">if </span>shared {
             <span class="self">self</span>.shared
-                .get_or_bind(key, |key| <span class="self">self</span>.cfg.get_mut().get_raw(key.clone(), default, <span class="bool-val">false</span>))
+                .get_or_bind(key, |key| <span class="self">self</span>.cfg.get_mut().get_raw(key.clone(), default, insert, <span class="bool-val">false</span>))
         } <span class="kw">else </span>{
-            <span class="self">self</span>.cfg.get_mut().get_raw(key, default, <span class="bool-val">false</span>)
+            <span class="self">self</span>.cfg.get_mut().get_raw(key, default, insert, <span class="bool-val">false</span>)
         }
     }
 
@@ -327,47 +288,10 @@
     }
 }
 <span class="kw">impl </span>Config <span class="kw">for </span>SwapConfig {
-    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: <span class="kw">impl </span>FnOnce() -&gt; T) -&gt; BoxedVar&lt;T&gt; {
+    <span class="kw">fn </span>get&lt;T: ConfigValue&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw">impl </span>Into&lt;ConfigKey&gt;, default: T, insert: bool) -&gt; BoxedVar&lt;T&gt; {
         <span class="self">self</span>.shared.get_or_bind(key.into(), |key| {
             <span class="comment">// not in shared, bind with source json var.
-
-            </span><span class="kw">let </span>default = default();
-            <span class="kw">let </span>source_var = <span class="self">self</span>.cfg.get_mut().get_raw(
-                key.clone(),
-                RawConfigValue::serialize(<span class="kw-2">&amp;</span>default).unwrap_or_else(|e| <span class="macro">panic!</span>(<span class="string">"invalid default value, {e}"</span>)),
-                <span class="bool-val">false</span>,
-            );
-            <span class="kw">let </span>var = var(RawConfigValue::deserialize(source_var.get()).unwrap_or(default));
-
-            source_var
-                .bind_filter_map_bidi(
-                    <span class="kw-2">&amp;</span>var,
-                    <span class="comment">// Raw -&gt; T
-                    </span><span class="macro">clmv!</span>(key, |raw| {
-                        <span class="kw">match </span>RawConfigValue::deserialize(raw.clone()) {
-                            <span class="prelude-val">Ok</span>(value) =&gt; <span class="prelude-val">Some</span>(value),
-                            <span class="prelude-val">Err</span>(e) =&gt; {
-                                <span class="macro">tracing::error!</span>(<span class="string">"swap config get({key:?}) error, {e:?}"</span>);
-                                <span class="prelude-val">None
-                            </span>}
-                        }
-                    }),
-                    <span class="comment">// T -&gt; Raw
-                    </span><span class="macro">clmv!</span>(key, source_var, |value| {
-                        <span class="kw">let </span>_strong_ref = <span class="kw-2">&amp;</span>source_var;
-
-                        <span class="kw">match </span>RawConfigValue::serialize(value) {
-                            <span class="prelude-val">Ok</span>(raw) =&gt; <span class="prelude-val">Some</span>(raw),
-                            <span class="prelude-val">Err</span>(e) =&gt; {
-                                <span class="macro">tracing::error!</span>(<span class="string">"swap config set({key:?}) error, {e:?}"</span>);
-                                <span class="prelude-val">None
-                            </span>}
-                        }
-                    }),
-                )
-                .perm();
-
-            var.boxed()
+            </span><span class="self">self</span>.cfg.get_mut().get_raw_serde_bidi(key.clone(), default, insert, <span class="bool-val">false</span>)
         })
     }
 }
@@ -423,12 +347,12 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>cfg = SwapConfig::new();
 
-        <span class="kw">let </span>v = cfg.get(<span class="string">"key"</span>, || <span class="bool-val">true</span>);
+        <span class="kw">let </span>v = cfg.get(<span class="string">"key"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>);
         <span class="macro">assert!</span>(v.get());
         v.set(<span class="bool-val">false</span>).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
-        <span class="kw">let </span>v2 = cfg.get(<span class="string">"key"</span>, || <span class="bool-val">true</span>);
+        <span class="kw">let </span>v2 = cfg.get(<span class="string">"key"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>);
         <span class="macro">assert!</span>(!v2.get() &amp;&amp; !v.get());
         <span class="macro">assert_eq!</span>(v.var_ptr(), v2.var_ptr());
     }
@@ -442,14 +366,14 @@
             .run_headless(<span class="bool-val">false</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner1 = MemoryConfig::default();
-        <span class="kw">let </span>c1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>c1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         c1.set(RawConfigValue::serialize(<span class="number">32</span>).unwrap()).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         <span class="kw">let </span><span class="kw-2">mut </span>test = SwapConfig::new();
         test.replace_source(Box::new(inner1));
 
-        <span class="kw">let </span>c1 = test.get(<span class="string">"key"</span>, || <span class="number">0</span>);
+        <span class="kw">let </span>c1 = test.get(<span class="string">"key"</span>, <span class="number">0</span>, <span class="bool-val">false</span>);
 
         <span class="macro">assert_eq!</span>(<span class="number">32</span>, c1.get());
     }
@@ -463,19 +387,19 @@
             .run_headless(<span class="bool-val">false</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner1 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         inner_v1.set(RawConfigValue::serialize(<span class="number">32</span>).unwrap()).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         <span class="kw">let </span><span class="kw-2">mut </span>test = SwapConfig::new();
         test.replace_source(Box::new(inner1));
 
-        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, || <span class="number">0</span>);
+        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, <span class="number">0</span>, <span class="bool-val">false</span>);
 
         <span class="macro">assert_eq!</span>(<span class="number">32</span>, cfg.get());
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner2 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         inner_v2.set(RawConfigValue::serialize(<span class="number">42</span>).unwrap()).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
@@ -494,19 +418,19 @@
             .run_headless(<span class="bool-val">false</span>);
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner1 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         inner_v1.set(RawConfigValue::serialize(<span class="number">32</span>).unwrap()).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         <span class="kw">let </span><span class="kw-2">mut </span>test = SwapConfig::new();
         test.replace_source(Box::new(inner1));
 
-        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, || <span class="number">0</span>);
+        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, <span class="number">0</span>, <span class="bool-val">false</span>);
 
         <span class="macro">assert_eq!</span>(<span class="number">32</span>, cfg.get());
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner2 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         test.replace_source(Box::new(inner2));
@@ -529,29 +453,29 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>fallback = MemoryConfig::default();
         fallback
-            .get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>)
+            .get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>)
             .set(RawConfigValue::serialize(<span class="number">100</span>).unwrap())
             .unwrap();
 
         <span class="kw">let </span><span class="kw-2">mut </span>inner1 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v1 = inner1.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         inner_v1.set(RawConfigValue::serialize(<span class="number">32</span>).unwrap()).unwrap();
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         <span class="kw">let </span><span class="kw-2">mut </span>test = SwapConfig::new();
         test.replace_source(Box::new(FallbackConfig::new(inner1, fallback)));
 
-        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, || -<span class="number">1</span>);
+        <span class="kw">let </span>cfg = test.get(<span class="string">"key"</span>, -<span class="number">1</span>, <span class="bool-val">false</span>);
 
         <span class="macro">assert_eq!</span>(<span class="number">32</span>, cfg.get());
 
         <span class="kw">let </span><span class="kw-2">mut </span>fallback = MemoryConfig::default();
         fallback
-            .get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>)
+            .get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>)
             .set(RawConfigValue::serialize(<span class="number">100</span>).unwrap())
             .unwrap();
         <span class="kw">let </span><span class="kw-2">mut </span>inner2 = MemoryConfig::default();
-        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">true</span>);
+        <span class="kw">let </span>inner_v2 = inner2.get_raw(<span class="string">"key"</span>.into(), RawConfigValue::serialize(<span class="number">0</span>).unwrap(), <span class="bool-val">false</span>, <span class="bool-val">true</span>);
         app.update(<span class="bool-val">false</span>).assert_wait();
 
         test.replace_source(Box::new(FallbackConfig::new(inner2, fallback)));

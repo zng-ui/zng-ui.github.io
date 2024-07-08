@@ -1678,6 +1678,20 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1642" id="1642">1642</a>
 <a href="#1643" id="1643">1643</a>
 <a href="#1644" id="1644">1644</a>
+<a href="#1645" id="1645">1645</a>
+<a href="#1646" id="1646">1646</a>
+<a href="#1647" id="1647">1647</a>
+<a href="#1648" id="1648">1648</a>
+<a href="#1649" id="1649">1649</a>
+<a href="#1650" id="1650">1650</a>
+<a href="#1651" id="1651">1651</a>
+<a href="#1652" id="1652">1652</a>
+<a href="#1653" id="1653">1653</a>
+<a href="#1654" id="1654">1654</a>
+<a href="#1655" id="1655">1655</a>
+<a href="#1656" id="1656">1656</a>
+<a href="#1657" id="1657">1657</a>
+<a href="#1658" id="1658">1658</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraints, InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegment, InlineSegmentPos, LayoutMask, LAYOUT},
@@ -2816,7 +2830,7 @@ document.addEventListener('DOMContentLoaded', function () {
     bounds: WidgetBoundsInfo,
     nest_group: LayoutNestGroup,
     inline: <span class="prelude-ty">Option</span>&lt;WidgetInlineInfo&gt;,
-    child_count: <span class="prelude-ty">Option</span>&lt;u32&gt;,
+    needs_ref_count: <span class="prelude-ty">Option</span>&lt;u32&gt;,
 }
 <span class="kw">impl </span>WidgetLayout {
     <span class="doccomment">/// Defines the root widget outer-bounds scope.
@@ -2828,7 +2842,7 @@ document.addEventListener('DOMContentLoaded', function () {
             bounds: WIDGET.bounds(),
             nest_group: LayoutNestGroup::Inner,
             inline: <span class="prelude-val">None</span>,
-            child_count: <span class="prelude-val">None</span>,
+            needs_ref_count: <span class="prelude-val">None</span>,
         }
         .with_widget(layout)
     }
@@ -2851,7 +2865,7 @@ document.addEventListener('DOMContentLoaded', function () {
             bounds: <span class="self">self</span>.bounds.clone(),
             nest_group: LayoutNestGroup::Child,
             inline: <span class="prelude-val">None</span>,
-            child_count: <span class="prelude-val">None</span>,
+            needs_ref_count: <span class="prelude-val">None</span>,
         }))
     }
 
@@ -2860,8 +2874,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span>folded = split.take();
         <span class="macro">assert_eq!</span>(<span class="self">self</span>.bounds, folded.bounds);
 
-        <span class="kw">let </span>count = <span class="self">self</span>.child_count.unwrap_or(<span class="number">0</span>) + folded.child_count.unwrap_or(<span class="number">0</span>);
-        <span class="self">self</span>.child_count = <span class="prelude-val">Some</span>(count);
+        <span class="kw">let </span>count = <span class="self">self</span>.needs_ref_count.unwrap_or(<span class="number">0</span>) + folded.needs_ref_count.unwrap_or(<span class="number">0</span>);
+        <span class="self">self</span>.needs_ref_count = <span class="prelude-val">Some</span>(count);
     }
 
     <span class="doccomment">/// Defines a widget scope, translations inside `layout` target the widget's inner offset.
@@ -2877,8 +2891,8 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span>bounds = WIDGET.bounds();
 
         <span class="kw">let </span>snap = metrics.snapshot();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(child_count) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.child_count {
-            <span class="kw-2">*</span>child_count += <span class="number">1</span>;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.needs_ref_count {
+            <span class="kw-2">*</span>c += <span class="number">1</span>;
         }
 
         <span class="kw">if </span>!WIDGET.take_update(UpdateFlags::LAYOUT) &amp;&amp; !<span class="self">self</span>.layout_widgets.delivery_list().enter_widget(WIDGET.id()) {
@@ -2891,7 +2905,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        <span class="kw">let </span>parent_child_count = <span class="self">self</span>.child_count.take();
+        <span class="kw">let </span>parent_needs_ref_count = <span class="self">self</span>.needs_ref_count.take();
         <span class="kw">let </span>parent_inline = <span class="self">self</span>.inline.take();
         <span class="kw">if </span>LAYOUT.inline_constraints().is_some() &amp;&amp; bounds.measure_inline().is_some() {
             <span class="comment">// inline enabled by parent and widget
@@ -2945,7 +2959,7 @@ document.addEventListener('DOMContentLoaded', function () {
             WIDGET.render_update();
         }
 
-        <span class="self">self</span>.child_count = parent_child_count;
+        <span class="self">self</span>.needs_ref_count = parent_needs_ref_count;
         <span class="self">self</span>.inline = parent_inline;
         <span class="self">self</span>.bounds = parent_bounds;
         <span class="self">self</span>.nest_group = LayoutNestGroup::Child;
@@ -3017,23 +3031,37 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`child_offset`]: WidgetBoundsInfo::child_offset
     /// [`with_branch_child`]: Self::with_branch_child
     </span><span class="kw">pub fn </span>with_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, layout: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) -&gt; PxSize) -&gt; (PxSize, bool) {
-        <span class="kw">let </span>parent_child_count = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.child_count, <span class="prelude-val">Some</span>(<span class="number">0</span>));
+        <span class="kw">let </span>parent_needs_ref_count = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.needs_ref_count, <span class="prelude-val">Some</span>(<span class="number">0</span>));
 
         <span class="self">self</span>.nest_group = LayoutNestGroup::Child;
         <span class="kw">let </span>child_size = layout(<span class="self">self</span>);
         <span class="self">self</span>.nest_group = LayoutNestGroup::Child;
 
-        <span class="kw">let </span>need_ref_frame = <span class="self">self</span>.child_count != <span class="prelude-val">Some</span>(<span class="number">1</span>);
-        <span class="self">self</span>.child_count = parent_child_count;
+        <span class="kw">let </span>need_ref_frame = <span class="self">self</span>.needs_ref_count != <span class="prelude-val">Some</span>(<span class="number">1</span>);
+        <span class="self">self</span>.needs_ref_count = parent_needs_ref_count;
         (child_size, need_ref_frame)
+    }
+
+    <span class="doccomment">/// Ensure that the parent [`with_child`] will receive a reference frame request.
+    ///
+    /// Nodes that branch out children inside the widget's child scope must call this to ensure that the offsets
+    /// are not given to the only widget child among other nodes.
+    ///
+    /// [`with_child`]: Self::with_child
+    </span><span class="kw">pub fn </span>require_child_ref_frame(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.needs_ref_count {
+            <span class="kw-2">*</span>c += <span class="number">2</span>;
+        }
     }
 
     <span class="doccomment">/// Defines a custom scope that does not affect the widget's offsets, only any widget inside `layout`.
     ///
-    /// Returns the output of `layout` and `Some(translate)` if any translations inside `layout` where not handled
+    /// Nodes that branch out children outside widget's child scope must use this method.
+    ///
+    /// Returns the output of `layout` and a translate vector if any translations inside `layout` where not handled
     /// by child widgets.
     </span><span class="kw">pub fn </span>with_branch_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, layout: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>) -&gt; PxSize) -&gt; (PxSize, PxVector) {
-        <span class="kw">let </span>parent_child_count = <span class="self">self</span>.child_count;
+        <span class="kw">let </span>parent_needs_ref_count = <span class="self">self</span>.needs_ref_count;
         <span class="kw">let </span>parent_translate = <span class="self">self</span>.bounds.child_offset();
         <span class="kw">let </span>parent_inner_offset_baseline = <span class="self">self</span>.bounds.inner_offset_baseline();
         <span class="self">self</span>.bounds.set_child_offset(PxVector::zero());
@@ -3046,7 +3074,7 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.bounds.set_child_offset(parent_translate);
         <span class="self">self</span>.bounds.set_inner_offset_baseline(parent_inner_offset_baseline);
         <span class="self">self</span>.nest_group = parent_group;
-        <span class="self">self</span>.child_count = parent_child_count;
+        <span class="self">self</span>.needs_ref_count = parent_needs_ref_count;
 
         (child_size, translate)
     }

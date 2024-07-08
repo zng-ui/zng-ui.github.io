@@ -1314,6 +1314,56 @@
 <a href="#1314" id="1314">1314</a>
 <a href="#1315" id="1315">1315</a>
 <a href="#1316" id="1316">1316</a>
+<a href="#1317" id="1317">1317</a>
+<a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a>
+<a href="#1321" id="1321">1321</a>
+<a href="#1322" id="1322">1322</a>
+<a href="#1323" id="1323">1323</a>
+<a href="#1324" id="1324">1324</a>
+<a href="#1325" id="1325">1325</a>
+<a href="#1326" id="1326">1326</a>
+<a href="#1327" id="1327">1327</a>
+<a href="#1328" id="1328">1328</a>
+<a href="#1329" id="1329">1329</a>
+<a href="#1330" id="1330">1330</a>
+<a href="#1331" id="1331">1331</a>
+<a href="#1332" id="1332">1332</a>
+<a href="#1333" id="1333">1333</a>
+<a href="#1334" id="1334">1334</a>
+<a href="#1335" id="1335">1335</a>
+<a href="#1336" id="1336">1336</a>
+<a href="#1337" id="1337">1337</a>
+<a href="#1338" id="1338">1338</a>
+<a href="#1339" id="1339">1339</a>
+<a href="#1340" id="1340">1340</a>
+<a href="#1341" id="1341">1341</a>
+<a href="#1342" id="1342">1342</a>
+<a href="#1343" id="1343">1343</a>
+<a href="#1344" id="1344">1344</a>
+<a href="#1345" id="1345">1345</a>
+<a href="#1346" id="1346">1346</a>
+<a href="#1347" id="1347">1347</a>
+<a href="#1348" id="1348">1348</a>
+<a href="#1349" id="1349">1349</a>
+<a href="#1350" id="1350">1350</a>
+<a href="#1351" id="1351">1351</a>
+<a href="#1352" id="1352">1352</a>
+<a href="#1353" id="1353">1353</a>
+<a href="#1354" id="1354">1354</a>
+<a href="#1355" id="1355">1355</a>
+<a href="#1356" id="1356">1356</a>
+<a href="#1357" id="1357">1357</a>
+<a href="#1358" id="1358">1358</a>
+<a href="#1359" id="1359">1359</a>
+<a href="#1360" id="1360">1360</a>
+<a href="#1361" id="1361">1361</a>
+<a href="#1362" id="1362">1362</a>
+<a href="#1363" id="1363">1363</a>
+<a href="#1364" id="1364">1364</a>
+<a href="#1365" id="1365">1365</a>
+<a href="#1366" id="1366">1366</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Commands that control the editable text.
 //!
 //! Most of the normal text editing is controlled by keyboard events, the [`EDIT_CMD`]
@@ -1325,6 +1375,7 @@
 
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_ext_font::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng_ext_l10n::l10n;
 <span class="kw">use </span>zng_ext_undo::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 
@@ -1345,6 +1396,7 @@
     ///
     /// The request is the same as [`SELECT_CMD`] with [`TextSelectOp::select_all`].
     </span><span class="kw">pub static </span>SELECT_ALL_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Select All"</span>,
         shortcut: <span class="macro">shortcut!</span>(CTRL+<span class="string">'A'</span>),
         shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
@@ -1827,6 +1879,53 @@
         }
     }
 
+    <span class="doccomment">/// Remove all the text.
+    </span><span class="kw">pub fn </span>clear() -&gt; <span class="self">Self </span>{
+        <span class="attr">#[derive(Default, Clone)]
+        </span><span class="kw">struct </span>Cleared {
+            txt: Txt,
+            selection: SelectionState,
+        }
+        <span class="self">Self</span>::new(Cleared::default(), |data, op| <span class="kw">match </span>op {
+            UndoFullOp::Init { .. } =&gt; {
+                <span class="kw">let </span>ctx = TEXT.resolved();
+                data.txt = ctx.txt.get();
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(range) = ctx.caret.selection_range() {
+                    <span class="kw">if </span>range.start.index == ctx.caret.index.unwrap_or(CaretIndex::ZERO).index {
+                        data.selection = SelectionState::CaretSelection(range.start, range.end);
+                    } <span class="kw">else </span>{
+                        data.selection = SelectionState::SelectionCaret(range.start, range.end);
+                    }
+                } <span class="kw">else </span>{
+                    data.selection = SelectionState::Caret(ctx.caret.index.unwrap_or(CaretIndex::ZERO));
+                };
+            }
+            UndoFullOp::Op(UndoOp::Redo) =&gt; {
+                <span class="kw">let _ </span>= TEXT.resolved().txt.set(<span class="string">""</span>);
+            }
+            UndoFullOp::Op(UndoOp::Undo) =&gt; {
+                <span class="kw">let _ </span>= TEXT.resolved().txt.set(data.txt.clone());
+
+                <span class="kw">let </span>(selection_idx, caret_idx) = <span class="kw">match </span>data.selection {
+                    SelectionState::Caret(c) =&gt; (<span class="prelude-val">None</span>, c),
+                    SelectionState::CaretSelection(s, e) =&gt; (<span class="prelude-val">Some</span>(e), s),
+                    SelectionState::SelectionCaret(s, e) =&gt; (<span class="prelude-val">Some</span>(s), e),
+                    SelectionState::PreInit =&gt; <span class="macro">unreachable!</span>(),
+                };
+                <span class="kw">let </span><span class="kw-2">mut </span>caret = TEXT.resolve_caret();
+                caret.set_index(caret_idx); <span class="comment">// (re)start caret animation
+                </span>caret.selection_index = selection_idx;
+            }
+            UndoFullOp::Info { info } =&gt; <span class="kw-2">*</span>info = <span class="prelude-val">Some</span>(Arc::new(<span class="macro">l10n!</span>(<span class="string">"text-edit-op.clear"</span>, <span class="string">"clear"</span>).get())),
+            UndoFullOp::Merge {
+                next_data,
+                within_undo_interval,
+                merged,
+                ..
+            } =&gt; <span class="kw-2">*</span>merged = within_undo_interval &amp;&amp; next_data.is::&lt;Cleared&gt;(),
+        })
+    }
+
     <span class="doccomment">/// Replace operation.
     ///
     /// The `select_before` is removed, and `insert` inserted at the `select_before.start`, after insertion
@@ -1875,7 +1974,7 @@
                 drop(ctx);
                 TEXT.resolve_caret().set_char_selection(select_before.start, select_before.end);
             }
-            UndoFullOp::Info { info } =&gt; <span class="kw-2">*</span>info = <span class="prelude-val">Some</span>(Arc::new(<span class="string">"replace"</span>)),
+            UndoFullOp::Info { info } =&gt; <span class="kw-2">*</span>info = <span class="prelude-val">Some</span>(Arc::new(<span class="macro">l10n!</span>(<span class="string">"text-edit-op.replace"</span>, <span class="string">"replace"</span>).get())),
             UndoFullOp::Merge { .. } =&gt; {}
         })
     }
@@ -1917,7 +2016,7 @@
                     <span class="kw">let _ </span>= ctx.txt.set(prev.clone());
                 }
             }
-            UndoFullOp::Info { info } =&gt; <span class="kw-2">*</span>info = <span class="prelude-val">Some</span>(Arc::new(<span class="string">"transform"</span>)),
+            UndoFullOp::Info { info } =&gt; <span class="kw-2">*</span>info = <span class="prelude-val">Some</span>(Arc::new(<span class="macro">l10n!</span>(<span class="string">"text-edit-op.transform"</span>, <span class="string">"transform"</span>).get())),
             UndoFullOp::Merge { .. } =&gt; {}
         })
     }
@@ -1951,9 +2050,10 @@
     }
 }
 <span class="doccomment">/// Used by `TextEditOp::insert`, `backspace` and `delete`.
-</span><span class="attr">#[derive(Clone, Copy)]
+</span><span class="attr">#[derive(Clone, Copy, Default)]
 </span><span class="kw">enum </span>SelectionState {
-    PreInit,
+    <span class="attr">#[default]
+    </span>PreInit,
     Caret(CaretIndex),
     CaretSelection(CaretIndex, CaretIndex),
     SelectionCaret(CaretIndex, CaretIndex),
@@ -1997,7 +2097,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>info = <span class="prelude-val">None</span>;
         (op.op)(<span class="kw-2">&amp;mut *</span>op.data, UndoFullOp::Info { info: <span class="kw-2">&amp;mut </span>info });
 
-        info.unwrap_or_else(|| Arc::new(<span class="string">"text edit"</span>))
+        info.unwrap_or_else(|| Arc::new(<span class="macro">l10n!</span>(<span class="string">"text-edit-op.generic"</span>, <span class="string">"text edit"</span>).get()))
     }
 
     <span class="kw">fn </span>as_any(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>std::any::Any {
@@ -2049,7 +2149,7 @@
         <span class="kw">let </span><span class="kw-2">mut </span>info = <span class="prelude-val">None</span>;
         (op.op)(<span class="kw-2">&amp;mut *</span>op.data, UndoFullOp::Info { info: <span class="kw-2">&amp;mut </span>info });
 
-        info.unwrap_or_else(|| Arc::new(<span class="string">"text edit"</span>))
+        info.unwrap_or_else(|| Arc::new(<span class="macro">l10n!</span>(<span class="string">"text-edit-op.generic"</span>, <span class="string">"text edit"</span>).get()))
     }
 }
 

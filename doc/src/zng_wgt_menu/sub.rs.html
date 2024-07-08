@@ -651,11 +651,13 @@
 <a href="#651" id="651">651</a>
 <a href="#652" id="652">652</a>
 <a href="#653" id="653">653</a>
+<a href="#654" id="654">654</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Sub-menu widget and properties.
 
 </span><span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span><span class="kw">super</span>::ButtonStyle;
+<span class="kw">use </span>colors::BASE_COLOR_VAR;
 <span class="kw">use </span>zng_ext_font::FontNames;
 <span class="kw">use </span>zng_ext_input::{
     focus::{WidgetInfoFocusExt <span class="kw">as _</span>, FOCUS, FOCUS_CHANGED_EVENT},
@@ -1119,7 +1121,7 @@
             });
 
             when <span class="kw-2">*</span>#is_hovered || <span class="kw-2">*</span>#is_focused || <span class="kw-2">*</span>#is_open {
-                background_color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+                background_color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
                 opacity = <span class="number">100</span>.pct();
             }
 
@@ -1148,7 +1150,7 @@
             }.with_min_size(AnchorSize::Unbounded));
 
             when <span class="kw-2">*</span>#is_open {
-                background_color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+                background_color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
                 opacity = <span class="number">100</span>.pct();
             }
 

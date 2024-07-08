@@ -197,9 +197,11 @@
 <a href="#197" id="197">197</a>
 <a href="#198" id="198">198</a>
 <a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Context menu widget and properties.
 
-</span><span class="kw">use </span>zng_ext_input::gesture::CLICK_EVENT;
+</span><span class="kw">use </span>colors::BASE_COLOR_VAR;
+<span class="kw">use </span>zng_ext_input::gesture::CLICK_EVENT;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt_input::focus::alt_focus_scope;
 <span class="kw">use </span>zng_wgt_layer::{
@@ -373,7 +375,7 @@
             replace = <span class="bool-val">true</span>;
             zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">super::ButtonStyle!</span>());
             zng_wgt_toggle::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">super::ToggleStyle!</span>());
-            zng_wgt_rule_line::hr::color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+            zng_wgt_rule_line::hr::color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
             zng_wgt_text::icon::ico_size = <span class="number">18</span>;
         }
     }
@@ -392,7 +394,7 @@
                 children = args.children;
             });
             zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">super::TouchButtonStyle!</span>());
-            zng_wgt_rule_line::vr::color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+            zng_wgt_rule_line::vr::color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
         }
     }
 }

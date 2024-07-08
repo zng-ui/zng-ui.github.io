@@ -465,6 +465,45 @@
 <a href="#465" id="465">465</a>
 <a href="#466" id="466">466</a>
 <a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
+<a href="#495" id="495">495</a>
+<a href="#496" id="496">496</a>
+<a href="#497" id="497">497</a>
+<a href="#498" id="498">498</a>
+<a href="#499" id="499">499</a>
+<a href="#500" id="500">500</a>
+<a href="#501" id="501">501</a>
+<a href="#502" id="502">502</a>
+<a href="#503" id="503">503</a>
+<a href="#504" id="504">504</a>
+<a href="#505" id="505">505</a>
+<a href="#506" id="506">506</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -478,7 +517,9 @@
 
 </span><span class="kw">use </span>std::{collections::HashMap, path::PathBuf, sync::Arc};
 
+<span class="kw">use </span>semver::Version;
 <span class="kw">use </span>zng_app::{
+    event::{Command, CommandMetaVar, EVENTS_L10N},
     update::EventUpdate,
     view_process::{raw_events::RAW_LOCALE_CONFIG_CHANGED_EVENT, VIEW_PROCESS_INITED_EVENT},
     AppExtension,
@@ -520,6 +561,24 @@
 </span><span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>L10nManager {}
 <span class="kw">impl </span>AppExtension <span class="kw">for </span>L10nManager {
+    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        EVENTS_L10N.init_l10n(|file, cmd, attr, txt| {
+            L10N.bind_command_meta(
+                LangFilePath {
+                    pkg_name: file[<span class="number">0</span>].into(),
+                    pkg_version: file[<span class="number">1</span>].parse().unwrap_or_else(|e| {
+                        <span class="macro">tracing::error!</span>(<span class="string">"invalid package version from command localization, {e}"</span>);
+                        Version::new(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>)
+                    }),
+                    file: file[<span class="number">2</span>].into(),
+                },
+                cmd,
+                attr,
+                txt,
+            );
+        });
+    }
+
     <span class="kw">fn </span>event_preview(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;mut </span>EventUpdate) {
         <span class="kw">if let </span><span class="prelude-val">Some</span>(u) = RAW_LOCALE_CONFIG_CHANGED_EVENT
             .on(update)
@@ -574,7 +633,12 @@
 ///     .attr = message
 /// ```
 ///
-/// And a key `"id.attr"` will be searched in the file `{dir}/{lang}.ftl`.
+/// And a key `"id.attr"` will be searched in the file `{dir}/{lang}/_.ftl`.
+///
+/// ### Package
+///
+/// The crate package name and version are also implicitly collected, when the message is requested from a different crate
+/// it is searched in `{dir}/{lang}/{pkg-name}/{pkg-version}/{file}.ftl`. Version matches any other version, the nearest is selected.
 ///
 /// # Scrap Template
 ///
@@ -584,9 +648,9 @@
 ///
 /// The scrapper can also scrap comments, if the previous code line from a [`l10n!`] call is a comment starting with
 /// prefix `l10n-# ` the text the follows is collected, same for a comment in the same line of the [`l10n!`] call. Sections
-/// can be declared using `l10n-##` and standalone notes can be added to the top of the template file from anywhere using
-/// `l10n-{file_pattern}-###`, file pattern can be omitted, `l10n-###` is equivalent to `l10n--###` that matches the localization
-/// template used when no file is specified.
+/// can be declared using `l10n-## `, all entries after a section comment are added to that section. Standalone notes can be added to
+/// the top of the template file from anywhere using `l10n-{file_pattern}-### `, file pattern can be omitted, `l10n-### ` is equivalent
+/// to `l10n--### ` that matches the localization template used when no file is specified.
 ///
 /// ```
 /// # use zng_ext_l10n::*;
@@ -665,7 +729,7 @@
         L10N_SV.write().load(source);
     }
 
-    <span class="doccomment">/// Start watching the `dir` for `"dir/{lang}.ftl"` and "dir/{lang}/*.ftl" files.
+    <span class="doccomment">/// Start watching the `dir` for `dir/{lang}/*.ftl` and `dir/{lang}/deps/*/*/*.ftl` files.
     ///
     /// The [`available_langs`] variable maintains an up-to-date list of locale files found, the files
     /// are only loaded when needed, and also are watched to update automatically.
@@ -677,11 +741,12 @@
 
     <span class="doccomment">/// Available localization files.
     ///
-    /// The value maps lang to one or more files, the files can be `{dir}/{lang}.flt` or `{dir}/{lang}/*.flt`.
+    /// The value maps lang to one or more files, the files can be from the project `dir/{lang}/{file}.ftl` or from dependencies
+    /// `dir/{lang}/deps/{pkg-name/{pkg-version}/{file}.ftl`.
     ///
     /// Note that this map will include any file in the source dir that has a name that is a valid [`lang!`],
-    /// that includes the `template.flt` file and test pseudo-locales such as `qps-ploc.flt`.
-    </span><span class="kw">pub fn </span>available_langs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt; {
+    /// that includes the `template.ftl` file and test pseudo-locales such as `qps-ploc.ftl`.
+    </span><span class="kw">pub fn </span>available_langs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt; {
         L10N_SV.write().available_langs()
     }
 
@@ -734,7 +799,7 @@
         L10N_SV.read().sys_lang()
     }
 
-    <span class="doccomment">/// Gets a variable that is a localized message in the localization context
+    <span class="doccomment">/// Gets a read-only variable that is a localized message in the localization context
     /// where the variable is first used. The variable will update when the contextual language changes.
     ///
     /// If the message has variable arguments they must be provided using [`L10nMessageBuilder::arg`], the
@@ -744,17 +809,20 @@
     ///
     /// # Params
     ///
-    /// * `file`: Name of the resource file, in the default directory layout the file is searched at `{dir}/{lang}/{file}.flt`, if
-    ///           empty the file is searched at `{dir}/{lang}.flt`. Only a single file name is valid, no other path components allowed.
+    /// * `file`: Name of the resource file, in the default directory layout the file is searched at `dir/{lang}/{file}.ftl`, if
+    ///           empty the file is searched at `dir/{lang}/_.ftl`. Only a single file name is valid, no other path components allowed.
+    ///           Note that the file can also be a full [`LangFilePath`] that includes dependency package info. Those files are searched in
+    ///           `dir/{lang}/deps/{pkg-name}/{pkg-version}/{file}.ftl`.
     /// * `id`: Message identifier inside the resource file.
     /// * `attribute`: Attribute of the identifier, leave empty to not use an attribute.
+    /// * `fallback`: Message to use when a localized message cannot be found.
     ///
     /// The `id` and `attribute` is only valid if it starts with letter `[a-zA-Z]`, followed by any letters, digits, _ or - `[a-zA-Z0-9_-]*`.
     ///
     /// Panics if any parameter is invalid.
     </span><span class="kw">pub fn </span>message(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        file: <span class="kw">impl </span>Into&lt;Txt&gt;,
+        file: <span class="kw">impl </span>Into&lt;LangFilePath&gt;,
         id: <span class="kw">impl </span>Into&lt;Txt&gt;,
         attribute: <span class="kw">impl </span>Into&lt;Txt&gt;,
         fallback: <span class="kw">impl </span>Into&lt;Txt&gt;,
@@ -772,38 +840,23 @@
     </span><span class="attr">#[doc(hidden)]
     </span><span class="kw">pub fn </span>l10n_message(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
+        pkg_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
+        pkg_version: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         file: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         id: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         attribute: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
         fallback: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
     ) -&gt; L10nMessageBuilder {
         <span class="self">self</span>.message(
-            Txt::from_static(file),
+            LangFilePath {
+                pkg_name: Txt::from_static(pkg_name),
+                pkg_version: pkg_version.parse().unwrap(),
+                file: Txt::from_static(file),
+            },
             Txt::from_static(id),
             Txt::from_static(attribute),
             Txt::from_static(fallback),
         )
-    }
-
-    <span class="doccomment">/// Gets a formatted message var localized to a given `lang`.
-    ///
-    /// The returned variable is read-only and will update when the backing resource changes and when the `args` variables change.
-    ///
-    /// The lang file resource is lazy loaded and stays in memory only when there are variables alive linked to it, each lang
-    /// in the list is matched to available resources if no match is available the `fallback` message is used. The variable
-    /// may temporary contain the `fallback` as lang resources are loaded asynchronous.
-    </span><span class="kw">pub fn </span>localized_message(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        lang: <span class="kw">impl </span>Into&lt;Langs&gt;,
-        file: <span class="kw">impl </span>Into&lt;Txt&gt;,
-        id: <span class="kw">impl </span>Into&lt;Txt&gt;,
-        attribute: <span class="kw">impl </span>Into&lt;Txt&gt;,
-        fallback: <span class="kw">impl </span>Into&lt;Txt&gt;,
-        args: <span class="kw">impl </span>Into&lt;Vec&lt;(Txt, BoxedVar&lt;L10nArgument&gt;)&gt;&gt;,
-    ) -&gt; BoxedVar&lt;Txt&gt; {
-        L10N_SV
-            .write()
-            .localized_message(lang.into(), file.into(), id.into(), attribute.into(), fallback.into(), args.into())
     }
 
     <span class="doccomment">/// Gets a handle to the lang file resource.
@@ -818,11 +871,13 @@
     /// # Params
     ///
     /// * `lang`: Language identifier.
-    /// * `file`: Name of the resource file, in the default directory layout the file is searched at `{dir}/{lang}/{file}.flt`, if
-    ///           empty the file is searched at `{dir}/{lang}.flt`. Only a single file name is valid, no other path components allowed.
+    /// * `file`: Name of the resource file, in the default directory layout the file is searched at `dir/{lang}/{file}.ftl`, if
+    ///           empty the file is searched at `dir/{lang}/_.ftl`. Only a single file name is valid, no other path components allowed.
+    ///           Note that the file can also be a full [`LangFilePath`] that includes dependency package info. Those files are searched in
+    ///           `dir/{lang}/deps/{pkg-name}/{pkg-version}/{file}.ftl`.
     ///
     /// Panics if the file is invalid.
-    </span><span class="kw">pub fn </span>lang_resource(<span class="kw-2">&amp;</span><span class="self">self</span>, lang: <span class="kw">impl </span>Into&lt;Lang&gt;, file: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; LangResource {
+    </span><span class="kw">pub fn </span>lang_resource(<span class="kw-2">&amp;</span><span class="self">self</span>, lang: <span class="kw">impl </span>Into&lt;Lang&gt;, file: <span class="kw">impl </span>Into&lt;LangFilePath&gt;) -&gt; LangResource {
         L10N_SV.write().lang_resource(lang.into(), file.into())
     }
 
@@ -831,14 +886,11 @@
     /// This awaits for the available langs to load, then collect an awaits for all lang files.
     </span><span class="kw">pub async fn </span>wait_lang(<span class="kw-2">&amp;</span><span class="self">self</span>, lang: <span class="kw">impl </span>Into&lt;Lang&gt;) -&gt; LangResources {
         <span class="kw">let </span>lang = lang.into();
-        <span class="kw">let </span>base = <span class="self">self</span>.lang_resource(lang.clone(), <span class="string">""</span>);
-        base.wait().<span class="kw">await</span>;
-
-        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="macro">vec!</span>[base];
-        <span class="kw">for </span>(name, <span class="kw">_</span>) <span class="kw">in </span><span class="self">self</span>.available_langs().get().get(<span class="kw-2">&amp;</span>lang).into_iter().flatten() {
-            r.push(<span class="self">self</span>.lang_resource(lang.clone(), name.clone()));
+        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="macro">vec!</span>[];
+        <span class="kw">for </span>(file, <span class="kw">_</span>) <span class="kw">in </span><span class="self">self</span>.available_langs().get().get(<span class="kw-2">&amp;</span>lang).into_iter().flatten() {
+            r.push(<span class="self">self</span>.lang_resource(lang.clone(), file.clone()));
         }
-        <span class="kw">for </span>h <span class="kw">in </span><span class="kw-2">&amp;</span>r[<span class="number">1</span>..] {
+        <span class="kw">for </span>h <span class="kw">in </span><span class="kw-2">&amp;</span>r {
             h.wait().<span class="kw">await</span>;
         }
         LangResources(r)
@@ -856,8 +908,8 @@
         <span class="kw">for </span>lang <span class="kw">in </span>langs.<span class="number">0 </span>{
             <span class="kw">if let </span><span class="prelude-val">Some</span>(files) = available.get_exact(<span class="kw-2">&amp;</span>lang) {
                 <span class="kw">let </span><span class="kw-2">mut </span>r = Vec::with_capacity(files.len());
-                <span class="kw">for </span>name <span class="kw">in </span>files.keys() {
-                    r.push(<span class="self">self</span>.lang_resource(lang.clone(), name.clone()));
+                <span class="kw">for </span>file <span class="kw">in </span>files.keys() {
+                    r.push(<span class="self">self</span>.lang_resource(lang.clone(), file.clone()));
                 }
                 <span class="kw">let </span>handle = LangResources(r);
                 handle.wait().<span class="kw">await</span>;
@@ -867,6 +919,32 @@
         }
 
         (<span class="prelude-val">None</span>, LangResources(<span class="macro">vec!</span>[]))
+    }
+
+    <span class="doccomment">/// Bind the command metadata to a message.
+    ///
+    /// This is automatically called by [`command!`] instances that set the metadata `l10n!: true` or `l10n!: "file"`.
+    ///
+    /// [`command!`]: zng_app::event::command!
+    </span><span class="kw">pub fn </span>bind_command_meta(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        file: <span class="kw">impl </span>Into&lt;LangFilePath&gt;,
+        cmd: Command,
+        meta_name: <span class="kw">impl </span>Into&lt;Txt&gt;,
+        meta_value: CommandMetaVar&lt;Txt&gt;,
+    ) {
+        <span class="kw">let </span>msg = <span class="self">self</span>.message(file, cmd.event().as_any().name(), meta_name, meta_value.get()).build();
+        meta_value.set_from(<span class="kw-2">&amp;</span>msg).unwrap();
+
+        <span class="comment">// bind only holds a weak ref to `meta_value`` in `msg`
+        </span>msg.bind(<span class="kw-2">&amp;</span>meta_value).perm();
+        meta_value
+            .hook(<span class="kw">move </span>|<span class="kw">_</span>| {
+                <span class="comment">// keep `msg` alive to it continues updating `meta_value`
+                </span><span class="kw">let </span>_keep = <span class="kw-2">&amp;</span>msg;
+                <span class="bool-val">true
+            </span>})
+            .perm();
     }
 }
 
@@ -908,18 +986,18 @@
 /// [`L10N.load`]: L10N::load
 </span><span class="kw">pub trait </span>L10nSource: Send + <span class="lifetime">'static </span>{
     <span class="doccomment">/// Gets a read-only variable with all lang files that the source can provide.
-    </span><span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;Txt, PathBuf&gt;&gt;&gt;&gt;;
+    </span><span class="kw">fn </span>available_langs(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;Arc&lt;LangMap&lt;HashMap&lt;LangFilePath, PathBuf&gt;&gt;&gt;&gt;;
     <span class="doccomment">/// Gets a read-only variable that is the status of the [`available_langs`] value.
     ///
     /// [`available_langs`]: Self::available_langs
     </span><span class="kw">fn </span>available_langs_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; BoxedVar&lt;LangResourceStatus&gt;;
 
     <span class="doccomment">/// Gets a read-only variable that provides the fluent resource for the `lang` and `file` if available.
-    </span><span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt;;
+    </span><span class="kw">fn </span>lang_resource(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;ArcEq&lt;fluent::FluentResource&gt;&gt;&gt;;
     <span class="doccomment">/// Gets a read-only variable that is the status of the [`lang_resource`] value.
     ///
     /// [`lang_resource`]: Self::lang_resource
-    </span><span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: Txt) -&gt; BoxedVar&lt;LangResourceStatus&gt;;
+    </span><span class="kw">fn </span>lang_resource_status(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lang: Lang, file: LangFilePath) -&gt; BoxedVar&lt;LangResourceStatus&gt;;
 }
 
 <span class="kw">fn </span>from_unic_char_direction(d: unic_langid::CharacterDirection) -&gt; LayoutDirection {

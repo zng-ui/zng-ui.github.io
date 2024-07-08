@@ -707,12 +707,40 @@
 <a href="#707" id="707">707</a>
 <a href="#708" id="708">708</a>
 <a href="#709" id="709">709</a>
+<a href="#710" id="710">710</a>
+<a href="#711" id="711">711</a>
+<a href="#712" id="712">712</a>
+<a href="#713" id="713">713</a>
+<a href="#714" id="714">714</a>
+<a href="#715" id="715">715</a>
+<a href="#716" id="716">716</a>
+<a href="#717" id="717">717</a>
+<a href="#718" id="718">718</a>
+<a href="#719" id="719">719</a>
+<a href="#720" id="720">720</a>
+<a href="#721" id="721">721</a>
+<a href="#722" id="722">722</a>
+<a href="#723" id="723">723</a>
+<a href="#724" id="724">724</a>
+<a href="#725" id="725">725</a>
+<a href="#726" id="726">726</a>
+<a href="#727" id="727">727</a>
+<a href="#728" id="728">728</a>
+<a href="#729" id="729">729</a>
+<a href="#730" id="730">730</a>
+<a href="#731" id="731">731</a>
+<a href="#732" id="732">732</a>
+<a href="#733" id="733">733</a>
+<a href="#734" id="734">734</a>
+<a href="#735" id="735">735</a>
+<a href="#736" id="736">736</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
     widget::info::access::AccessEnabled,
     window::{MonitorId, WindowId, WINDOW},
 };
+<span class="kw">use </span>zng_color::LightDark;
 <span class="kw">use </span>zng_ext_image::Img;
 <span class="kw">use </span>zng_layout::unit::{Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Length, LengthUnits, Point, PxPoint, PxSize, Size};
 <span class="kw">use </span>zng_state_map::{static_id, StateId};
@@ -720,7 +748,7 @@
 <span class="kw">use </span>zng_unique_id::IdSet;
 <span class="kw">use </span>zng_var::{merge_var, var, var_from, ArcVar, BoxedVar, ReadOnlyArcVar, Var};
 <span class="kw">use </span>zng_view_api::{
-    config::ColorScheme,
+    config::{ColorScheme, ColorsConfig},
     window::{CursorIcon, FocusIndicator, RenderMode, VideoMode, WindowButton, WindowState},
 };
 
@@ -775,6 +803,8 @@
 
     color_scheme: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;ColorScheme&gt;&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) actual_color_scheme: ArcVar&lt;ColorScheme&gt;,
+    accent_color: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;LightDark&gt;&gt;,
+    <span class="kw">pub</span>(<span class="kw">super</span>) actual_accent_color: ArcVar&lt;LightDark&gt;,
 
     <span class="kw">pub</span>(<span class="kw">super</span>) is_open: ArcVar&lt;bool&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) is_loaded: ArcVar&lt;bool&gt;,
@@ -797,7 +827,7 @@
 </span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>WindowVars(<span class="kw">pub</span>(<span class="kw">super</span>) Arc&lt;WindowVarsData&gt;);
 <span class="kw">impl </span>WindowVars {
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>new(default_render_mode: RenderMode, primary_scale_factor: Factor, system_color_scheme: ColorScheme) -&gt; <span class="self">Self </span>{
+    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>new(default_render_mode: RenderMode, primary_scale_factor: Factor, system_colors: ColorsConfig) -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>vars = Arc::new(WindowVarsData {
             chrome: var(<span class="bool-val">true</span>),
             icon: var(WindowIcon::Default),
@@ -850,7 +880,9 @@
             children: var(IdSet::default()),
 
             color_scheme: var(<span class="prelude-val">None</span>),
-            actual_color_scheme: var(system_color_scheme),
+            actual_color_scheme: var(system_colors.scheme),
+            accent_color: var(<span class="prelude-val">None</span>),
+            actual_accent_color: var(system_colors.accent.into()),
 
             is_open: var(<span class="bool-val">true</span>),
             is_loaded: var(<span class="bool-val">false</span>),
@@ -939,7 +971,7 @@
 
     <span class="doccomment">/// Window screen state.
     ///
-    /// Minimized, maximized or full-screen. See [`WindowState`] for details.
+    /// Minimized, maximized or fullscreen. See [`WindowState`] for details.
     ///
     /// The default value is [`WindowState::Normal`].
     </span><span class="kw">pub fn </span>state(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;WindowState&gt; {
@@ -1256,7 +1288,8 @@
     /// * This window is always on-top of the parent window.
     /// * If the parent window is closed, this window is also closed.
     /// * If [`modal`] is set, the parent window cannot be focused while this window is open.
-    /// * If a [`color_scheme`] is not set, the [`color_scheme`] fallback is the parent's actual scheme.
+    /// * If a [`color_scheme`] is not set, the fallback is the parent's actual scheme.
+    /// * If an [`accent_color`] is not set, the fallback is the parent's actual accent.
     ///
     /// The default value is `None`.
     ///
@@ -1269,7 +1302,7 @@
     ///
     /// [`modal`]: Self::modal
     /// [`color_scheme`]: Self::color_scheme
-    /// [`actual_color_scheme`]: Self::color_scheme
+    /// [`accent_color`]: Self::accent_color
     </span><span class="kw">pub fn </span>parent(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;WindowId&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.parent.clone()
     }
@@ -1308,6 +1341,27 @@
     /// [`color_scheme`]: Self::color_scheme
     </span><span class="kw">pub fn </span>actual_color_scheme(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;ColorScheme&gt; {
         <span class="self">self</span>.<span class="number">0</span>.actual_color_scheme.read_only()
+    }
+
+    <span class="doccomment">/// Override the preferred accent color.
+    ///
+    /// If set to `None` the system preference is used, see [`actual_accent_color`].
+    ///
+    /// [`actual_accent_color`]: Self::actual_accent_color
+    </span><span class="kw">pub fn </span>accent_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;LightDark&gt;&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.accent_color.clone()
+    }
+
+    <span class="doccomment">/// Actual accent color to use.
+    ///
+    /// This is the system preference, or [`color_scheme`] if it is set.
+    ///
+    /// The window widget also sets [`ACCENT_COLOR_VAR`] to this variable.
+    ///
+    /// [`color_scheme`]: Self::color_scheme
+    /// [`ACCENT_COLOR_VAR`]: zng_color::colors::ACCENT_COLOR_VAR
+    </span><span class="kw">pub fn </span>actual_accent_color(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;LightDark&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.actual_accent_color.read_only()
     }
 
     <span class="doccomment">/// If the window is open.
@@ -1399,7 +1453,7 @@
     /// The current `zng::view_process` or `zng-view` only implements this feature on Windows and it will only work properly
     /// under these conditions:
     ///
-    /// * It must be running in `run_same_process` mode. Windows kills all other processes, so in a run with `init` the the app-process
+    /// * It must be running in `run_same_process` mode. Windows kills all other processes, so in a run with `init` the app-process
     /// will be lost. Note that this also mean that the crash handler and worker processes are also killed.
     /// * Must be built with `#![windows_subsystem = "windows"]` and must be running from the Windows Explorer (desktop).
     </span><span class="kw">pub fn </span>system_shutdown_warn(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;Txt&gt; {

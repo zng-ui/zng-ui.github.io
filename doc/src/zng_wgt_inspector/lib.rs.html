@@ -60,6 +60,8 @@
 <a href="#60" id="60">60</a>
 <a href="#61" id="61">61</a>
 <a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -73,7 +75,7 @@
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
 
-<span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng_wgt::{prelude::<span class="kw-2">*</span>, ICONS};
 
 <span class="kw">pub mod </span>crash_handler;
 <span class="kw">pub mod </span>debug;
@@ -84,9 +86,11 @@
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represent the window **inspect** action.
     </span><span class="kw">pub static </span>INSPECT_CMD = {
+        <span class="macro">l10n!</span>: <span class="string">"inspector"</span>,
         name: <span class="string">"Debug Inspector"</span>,
         info: <span class="string">"Inspect the window."</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL|SHIFT+<span class="string">'I'</span>), <span class="macro">shortcut!</span>(F12)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get([<span class="string">"inspector"</span>, <span class="string">"screen-search-desktop"</span>])),
     };
 }
 

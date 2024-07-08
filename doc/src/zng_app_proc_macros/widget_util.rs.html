@@ -591,6 +591,12 @@
 <a href="#591" id="591">591</a>
 <a href="#592" id="592">592</a>
 <a href="#593" id="593">593</a>
+<a href="#594" id="594">594</a>
+<a href="#595" id="595">595</a>
+<a href="#596" id="596">596</a>
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, fmt, mem};
 
 <span class="kw">use </span>proc_macro2::{Ident, Span, TokenStream, TokenTree};
@@ -1006,18 +1012,24 @@
                 }
             }
         } <span class="kw">else if </span>input.peek2(token::Brace) {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = input.cursor().punct() {
-                <span class="kw">if </span>p.<span class="number">0</span>.as_char() != <span class="string">'.' </span>{
-                    <span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();
-                    tt.to_tokens(<span class="kw-2">&amp;mut </span>r);
-                    <span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();
-                    tt.to_tokens(<span class="kw-2">&amp;mut </span>r);
-                    <span class="kw">continue</span>; <span class="comment">// found #{ }
+            <span class="kw">if </span>input.peek(<span class="macro">Token!</span>[#]) {
+                <span class="comment">// #
+                </span><span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();
+                tt.to_tokens(<span class="kw-2">&amp;mut </span>r);
+                <span class="comment">// { .. }
+                </span><span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();
+                tt.to_tokens(<span class="kw-2">&amp;mut </span>r);
+
+                <span class="kw">if </span>input.peek(token::Brace) {
+                    <span class="kw">break</span>; <span class="comment">// found { } after expr or Struct #{ }
                 </span>}
+            } <span class="kw">else </span>{
+                <span class="comment">// item before brace
+                </span><span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();
+                tt.to_tokens(<span class="kw-2">&amp;mut </span>r);
+                <span class="kw">break</span>;
             }
-            input.parse::&lt;TokenTree&gt;().unwrap().to_tokens(<span class="kw-2">&amp;mut </span>r);
-            <span class="kw">break</span>; <span class="comment">// found { } after expr or Struct { }
-        </span>} <span class="kw">else if </span>!is_start &amp;&amp; input.peek(token::Brace) {
+        } <span class="kw">else if </span>!is_start &amp;&amp; input.peek(token::Brace) {
             <span class="kw">break</span>; <span class="comment">// found { } after expr
         </span>} <span class="kw">else </span>{
             <span class="kw">let </span>tt = input.parse::&lt;TokenTree&gt;().unwrap();

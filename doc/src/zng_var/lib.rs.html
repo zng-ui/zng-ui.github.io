@@ -2836,6 +2836,16 @@
 <a href="#2836" id="2836">2836</a>
 <a href="#2837" id="2837">2837</a>
 <a href="#2838" id="2838">2838</a>
+<a href="#2839" id="2839">2839</a>
+<a href="#2840" id="2840">2840</a>
+<a href="#2841" id="2841">2841</a>
+<a href="#2842" id="2842">2842</a>
+<a href="#2843" id="2843">2843</a>
+<a href="#2844" id="2844">2844</a>
+<a href="#2845" id="2845">2845</a>
+<a href="#2846" id="2846">2846</a>
+<a href="#2847" id="2847">2847</a>
+<a href="#2848" id="2848">2848</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3014,6 +3024,9 @@
 
     <span class="doccomment">/// Clone the value into a new boxed [`LocalVar&lt;Self&gt;`].
     </span><span class="kw">fn </span>clone_boxed_var(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedAnyVar;
+
+    <span class="doccomment">/// Gets if `self` equals `other`.
+    </span><span class="kw">fn </span>eq_any(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="kw">dyn </span>AnyVarValue) -&gt; bool;
 }
 
 <span class="kw">impl</span>&lt;T: VarValue&gt; AnyVarValue <span class="kw">for </span>T {
@@ -3036,6 +3049,13 @@
     <span class="kw">fn </span>into_any(<span class="self">self</span>: Box&lt;<span class="self">Self</span>&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Any&gt; {
         <span class="self">self
     </span>}
+
+    <span class="kw">fn </span>eq_any(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="kw">dyn </span>AnyVarValue) -&gt; bool {
+        <span class="kw">match </span>other.as_any().downcast_ref::&lt;T&gt;() {
+            <span class="prelude-val">Some</span>(v) =&gt; <span class="self">self </span>== v,
+            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+        }
+    }
 }
 
 <span class="doccomment">/// A property value that is not a variable but can be inspected.

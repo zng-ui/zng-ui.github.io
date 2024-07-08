@@ -118,6 +118,40 @@
 <a href="#117" id="117">117</a>
 <a href="#118" id="118">118</a>
 <a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Localization service, sources and other types.
 //!
 //! Localized text is declared using the [`l10n!`] macro, it provides a read-only text variable that automatically
@@ -180,7 +214,7 @@
 //!
 //! # Scraper
 //!
-//! The `cargo-zng` tool can be used to generate a Fluent file from source code, the Fluent file can be
+//! The `cargo zng l10n` tool can be used to generate a Fluent file from source code, the Fluent file can be
 //! used as a template for translators, it will include the fallback text and comments written close the key
 //! declaration.
 //!
@@ -217,24 +251,58 @@
 //!
 //! [`l10n!`]: crate::l10n::l10n
 //!
-//! # Localize Commands
+//! # Commands
 //!
-//! Currently [`command!`](zng::event::command) declarations are not integrated with the localization
-//! service yet, you will need to manually bind localization to command metadata to localize it.
+//! Commands metadata can be localized and scrapped, to enable this set `l10n!:` on the [`command!`](zng::event::command) declarations.
+//!
+//! If the first metadata is `l10n!:` the command init will attempt to localize the other string metadata. The `cargo zng l10n`
+//! command line tool scraps commands that set this special metadata.
 //!
 //! ```
-//! use zng::prelude::*;
-//! # let _scope = APP.defaults();
-//!
-//! l10n!("COPY_CMD.name", "Copy").set_bind(&amp;zng::clipboard::COPY_CMD.name()).perm();
+//! # use zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+//! command! {
+//!     pub static FOO_CMD = {
+//!         l10n!: true,
+//!         name: "Foo!",
+//!         info: "Does the foo thing.",
+//!     };
+//! }
 //! ```
 //!
+//! The example above will be scrapped as:
+//!
+//! ```ftl
+//! FOO_CMD =
+//!     .name = Foo!
+//!     .info = Does the foo thing.
+//! ```
+//!
+//! The `l10n!:` meta can also be set to a localization file name:
+//!
+//! ```
+//! # use zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+//! command! {
+//!     pub static FOO_CMD = {
+//!         l10n!: "file",
+//!         name: "Foo!",
+//!     };
+//! }
+//! ```
+//!
+//! The example above is scrapped to `{l10n-dir}/{lang}/file.ftl` files.
+//!
+//! ## Limitations
+//!
+//! Interpolation is not supported in command localization strings.
+//!
+//! The `l10n!:` value must be a *textual* literal, that is, it can be only a string literal or a `bool` literal, and it cannot be
+//! inside a macro expansion.
 //! # Full API
 //!
 //! See [`zng_ext_l10n`] for the full localization API.
 
 </span><span class="kw">pub use </span>zng_ext_l10n::{
-    l10n, lang, IntoL10nVar, L10nArgument, L10nDir, L10nMessageBuilder, L10nSource, Lang, LangMap, LangResource, LangResourceStatus,
-    LangResources, Langs, NilL10nSource, SwapL10nSource, L10N, LANG_VAR,
+    l10n, lang, IntoL10nVar, L10nArgument, L10nDir, L10nMessageBuilder, L10nSource, Lang, LangFilePath, LangMap, LangResource,
+    LangResourceStatus, LangResources, Langs, NilL10nSource, SwapL10nSource, L10N, LANG_VAR,
 };
 </code></pre></div></section></main></body></html>

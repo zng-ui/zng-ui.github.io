@@ -136,8 +136,71 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#100" id="100">100</a>
 <a href="#101" id="101">101</a>
 <a href="#102" id="102">102</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>zng_app_context::app_local;
+<a href="#103" id="103">103</a>
+<a href="#104" id="104">104</a>
+<a href="#105" id="105">105</a>
+<a href="#106" id="106">106</a>
+<a href="#107" id="107">107</a>
+<a href="#108" id="108">108</a>
+<a href="#109" id="109">109</a>
+<a href="#110" id="110">110</a>
+<a href="#111" id="111">111</a>
+<a href="#112" id="112">112</a>
+<a href="#113" id="113">113</a>
+<a href="#114" id="114">114</a>
+<a href="#115" id="115">115</a>
+<a href="#116" id="116">116</a>
+<a href="#117" id="117">117</a>
+<a href="#118" id="118">118</a>
+<a href="#119" id="119">119</a>
+<a href="#120" id="120">120</a>
+<a href="#121" id="121">121</a>
+<a href="#122" id="122">122</a>
+<a href="#123" id="123">123</a>
+<a href="#124" id="124">124</a>
+<a href="#125" id="125">125</a>
+<a href="#126" id="126">126</a>
+<a href="#127" id="127">127</a>
+<a href="#128" id="128">128</a>
+<a href="#129" id="129">129</a>
+<a href="#130" id="130">130</a>
+<a href="#131" id="131">131</a>
+<a href="#132" id="132">132</a>
+<a href="#133" id="133">133</a>
+<a href="#134" id="134">134</a>
+<a href="#135" id="135">135</a>
+<a href="#136" id="136">136</a>
+<a href="#137" id="137">137</a>
+<a href="#138" id="138">138</a>
+<a href="#139" id="139">139</a>
+<a href="#140" id="140">140</a>
+<a href="#141" id="141">141</a>
+<a href="#142" id="142">142</a>
+<a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>hashbrown::HashSet;
+<span class="kw">use </span>zng_app_context::app_local;
 <span class="kw">use </span>zng_time::INSTANT_APP;
+<span class="kw">use </span>zng_txt::Txt;
 
 <span class="kw">use </span><span class="kw">crate</span>::update::{UpdatesTrace, UPDATES};
 
@@ -149,16 +212,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>EventsService {
     updates: Mutex&lt;Vec&lt;EventUpdate&gt;&gt;, <span class="comment">// not locked, used to make service Sync.
-    </span>commands: Vec&lt;Command&gt;,
+    </span>commands: CommandSet,
     register_commands: Vec&lt;Command&gt;,
+    l10n: EventsL10n,
 }
-
+<span class="kw">enum </span>EventsL10n {
+    Pending(Vec&lt;([<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str; <span class="number">3</span>], Command, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, CommandMetaVar&lt;Txt&gt;)&gt;),
+    Init(Box&lt;<span class="kw">dyn </span>Fn([<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str; <span class="number">3</span>], Command, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, CommandMetaVar&lt;Txt&gt;) + Send + Sync&gt;),
+}
 <span class="kw">impl </span>EventsService {
     <span class="kw">const fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
             updates: Mutex::new(<span class="macro">vec!</span>[]),
-            commands: <span class="macro">vec!</span>[],
+            commands: HashSet::with_hasher(BuildFxHasher),
             register_commands: <span class="macro">vec!</span>[],
+            l10n: EventsL10n::Pending(<span class="macro">vec!</span>[]),
         }
     }
 
@@ -184,16 +252,31 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 }
 
+<span class="doccomment">/// Const rustc-hash hasher.
+</span><span class="attr">#[derive(Clone, Default)]
+</span><span class="kw">pub struct </span>BuildFxHasher;
+<span class="kw">impl </span>std::hash::BuildHasher <span class="kw">for </span>BuildFxHasher {
+    <span class="kw">type </span>Hasher = rustc_hash::FxHasher;
+
+    <span class="kw">fn </span>build_hasher(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::Hasher {
+        rustc_hash::FxHasher::default()
+    }
+}
+
+<span class="doccomment">/// Registered commands set.
+</span><span class="kw">pub type </span>CommandSet = HashSet&lt;Command, BuildFxHasher&gt;;
+
 <span class="doccomment">/// App events and commands service.
 </span><span class="kw">pub struct </span>EVENTS;
 <span class="kw">impl </span>EVENTS {
     <span class="doccomment">/// Commands that had handles generated in this app.
     ///
     /// When [`Command::subscribe`] is called for the first time in an app, the command gets added
-    /// to this list after the current update.
+    /// to this list after the current update, if the command is app scoped it remains on the list for
+    /// the lifetime of the app, if it is window or widget scoped it only remains while there are handles.
     ///
     /// [`Command::subscribe`]: crate::event::Command::subscribe
-    </span><span class="kw">pub fn </span>commands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Command&gt; {
+    </span><span class="kw">pub fn </span>commands(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; CommandSet {
         EVENTS_SV.read().commands.clone()
     }
 
@@ -214,12 +297,8 @@ document.addEventListener('DOMContentLoaded', function () {
         {
             <span class="kw">let </span>ev = <span class="kw-2">&amp;mut *</span>ev;
             <span class="kw">for </span>cmd <span class="kw">in </span>ev.register_commands.drain(..) {
-                <span class="kw">if </span>cmd.update_state() {
-                    <span class="kw">if </span>ev.commands.iter().any(|c| c == <span class="kw-2">&amp;</span>cmd) {
-                        <span class="macro">tracing::error!</span>(<span class="string">"command `{cmd:?}` is already registered"</span>)
-                    } <span class="kw">else </span>{
-                        ev.commands.push(cmd);
-                    }
+                <span class="kw">if </span>cmd.update_state() &amp;&amp; !ev.commands.insert(cmd) {
+                    <span class="macro">tracing::error!</span>(<span class="string">"command `{cmd:?}` is already registered"</span>)
                 }
             }
         }
@@ -236,6 +315,49 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
         updates
+    }
+}
+
+<span class="doccomment">/// EVENTS L10N integration.
+</span><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="kw">pub struct </span>EVENTS_L10N;
+<span class="kw">impl </span>EVENTS_L10N {
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>init_meta_l10n(<span class="kw-2">&amp;</span><span class="self">self</span>, file: [<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str; <span class="number">3</span>], cmd: Command, meta_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, txt: CommandMetaVar&lt;Txt&gt;) {
+        {
+            <span class="kw">let </span>sv = EVENTS_SV.read();
+            <span class="kw">if let </span>EventsL10n::Init(f) = <span class="kw-2">&amp;</span>sv.l10n {
+                f(file, cmd, meta_name, txt);
+                <span class="kw">return</span>;
+            }
+        }
+
+        <span class="kw">let </span><span class="kw-2">mut </span>sv = EVENTS_SV.write();
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span>sv.l10n {
+            EventsL10n::Pending(a) =&gt; a.push((file, cmd, meta_name, txt)),
+            EventsL10n::Init(f) =&gt; f(file, cmd, meta_name, txt),
+        }
+    }
+
+    <span class="doccomment">/// Register a closure that is called to localize command metadata.
+    ///
+    /// The closure arguments are:
+    ///
+    /// * `file` is the crate package name, version and the file from command declaration `@l10n: "file"`
+    ///    value or is empty if `@l10n` was set to something else.
+    /// * `cmd` is the command, the command event name should be used as key.
+    /// * `meta` is the metadata name, for example `"name"`, should be used as attribute.
+    /// * `txt` is text variable that must be set with the translation.
+    </span><span class="kw">pub fn </span>init_l10n(<span class="kw-2">&amp;</span><span class="self">self</span>, localize: <span class="kw">impl </span>Fn([<span class="kw-2">&amp;</span><span class="lifetime">'static </span>str; <span class="number">3</span>], Command, <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, CommandMetaVar&lt;Txt&gt;) + Send + Sync + <span class="lifetime">'static</span>) {
+        <span class="kw">let </span><span class="kw-2">mut </span>sv = EVENTS_SV.write();
+        <span class="kw">match </span><span class="kw-2">&amp;mut </span>sv.l10n {
+            EventsL10n::Pending(a) =&gt; {
+                <span class="kw">for </span>(f, k, a, t) <span class="kw">in </span>a.drain(..) {
+                    localize(f, k, a, t);
+                }
+            }
+            EventsL10n::Init(<span class="kw">_</span>) =&gt; <span class="macro">panic!</span>(<span class="string">"EVENTS_L10N already has a localizer"</span>),
+        }
+        sv.l10n = EventsL10n::Init(Box::new(localize));
     }
 }
 </code></pre></div></section></main></body></html>

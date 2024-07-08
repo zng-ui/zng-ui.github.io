@@ -987,6 +987,32 @@
 <a href="#986" id="986">986</a>
 <a href="#987" id="987">987</a>
 <a href="#988" id="988">988</a>
+<a href="#989" id="989">989</a>
+<a href="#990" id="990">990</a>
+<a href="#991" id="991">991</a>
+<a href="#992" id="992">992</a>
+<a href="#993" id="993">993</a>
+<a href="#994" id="994">994</a>
+<a href="#995" id="995">995</a>
+<a href="#996" id="996">996</a>
+<a href="#997" id="997">997</a>
+<a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
+<a href="#1001" id="1001">1001</a>
+<a href="#1002" id="1002">1002</a>
+<a href="#1003" id="1003">1003</a>
+<a href="#1004" id="1004">1004</a>
+<a href="#1005" id="1005">1005</a>
+<a href="#1006" id="1006">1006</a>
+<a href="#1007" id="1007">1007</a>
+<a href="#1008" id="1008">1008</a>
+<a href="#1009" id="1009">1009</a>
+<a href="#1010" id="1010">1010</a>
+<a href="#1011" id="1011">1011</a>
+<a href="#1012" id="1012">1012</a>
+<a href="#1013" id="1013">1013</a>
+<a href="#1014" id="1014">1014</a>
 </pre></div><pre class="rust"><code><span class="attr">#![allow(clippy::needless_doctest_main)]
 #![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
@@ -1006,7 +1032,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.9.1", features = ["view_prebuilt"] }
+//! zng = { version = "0.10.0", features = ["view_prebuilt"] }
 //! ```
 //!
 //! Then create your first app:
@@ -1587,7 +1613,7 @@
 
     <span class="kw">pub use </span>zng_clone_move::{async_clmv, async_clmv_fn, async_clmv_fn_once, clmv};
 
-    <span class="kw">pub use </span>zng_color::{colors, hex, hsl, hsla, hsv, hsva, rgb, rgba, web_colors, MixAdjust <span class="kw">as _</span>};
+    <span class="kw">pub use </span>zng_color::{colors, hex, hsl, hsla, hsv, hsva, light_dark, rgb, rgba, web_colors, LightDarkVarExt <span class="kw">as _</span>, MixAdjust <span class="kw">as _</span>};
 
     <span class="kw">pub use </span>zng_ext_clipboard::CLIPBOARD;
 
@@ -1617,7 +1643,7 @@
         WINDOWS,
     };
 
-    <span class="kw">pub use </span>zng_wgt::Wgt;
+    <span class="kw">pub use </span>zng_wgt::{CommandIconExt <span class="kw">as _</span>, Wgt, ICONS};
 
     <span class="kw">pub use </span><span class="kw">crate</span>::text;
     <span class="kw">pub use </span>zng_wgt_text::Text;
@@ -1638,8 +1664,6 @@
 
     <span class="kw">pub use </span><span class="kw">crate</span>::layer;
     <span class="kw">pub use </span>zng_wgt_layer::{AnchorMode, LayerIndex, LAYERS};
-
-    <span class="kw">pub use </span>zng_wgt_text::icon::CommandIconExt <span class="kw">as _</span>;
 
     <span class="kw">pub use </span><span class="kw">crate</span>::popup;
     <span class="kw">pub use </span>zng_wgt_layer::popup::POPUP;
@@ -1670,6 +1694,8 @@
     <span class="kw">pub use </span>zng_wgt_wrap::Wrap;
 
     <span class="kw">pub use </span>zng_wgt_data_view::{DataView, DataViewArgs};
+
+    <span class="kw">pub use </span>zng_wgt_settings::SettingBuilderEditorExt <span class="kw">as _</span>;
 }
 
 <span class="doccomment">/// Prelude for declaring new properties and widgets.
@@ -1770,8 +1796,8 @@
     <span class="kw">pub use </span>zng_wgt::{wgt_fn, WidgetFn};
 
     <span class="kw">pub use </span>zng_color::{
-        color_scheme_highlight, color_scheme_map, color_scheme_pair, colors, gradient, hex, hsl, hsla, hsv, hsva, rgb, rgba, web_colors,
-        ColorPair, ColorScheme, Hsla, Hsva, MixAdjust <span class="kw">as _</span>, MixBlendMode, Rgba,
+        colors, gradient, hex, hsl, hsla, hsv, hsva, light_dark, rgb, rgba, web_colors, ColorScheme, Hsla, Hsva, LightDark, MixAdjust <span class="kw">as _</span>,
+        MixBlendMode, Rgba,
     };
 
     <span class="kw">pub use </span>zng_wgt::node::{
@@ -1800,6 +1826,8 @@
     <span class="kw">use </span>zng_ext_l10n::L10nManager;
     <span class="kw">use </span>zng_ext_undo::UndoManager;
     <span class="kw">use </span>zng_ext_window::WindowManager;
+
+    <span class="kw">use </span><span class="kw">crate</span>::default_editors;
 
     <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
     </span><span class="macro">macro_rules!</span> DefaultsAppExtended {
@@ -1837,9 +1865,9 @@
         /// * [`UndoManager`]
         /// * [`SingleInstanceManager`] if the `"single_instance"` feature is enabled.
         /// * [`HotReloadManager`] if the `"hot_reload"` feature is enabled.
-        /// * [`MaterialFonts`] if any `"material_icons*"` feature is enabled.
+        /// * [`MaterialIconsManager`] if any `"material_icons*"` feature is enabled.
         ///
-        /// [`MaterialFonts`]: zng_wgt_material_icons::MaterialFonts
+        /// [`MaterialIconsManager`]: zng_wgt_material_icons::MaterialIconsManager
         /// [`SingleInstanceManager`]: zng_ext_single_instance::SingleInstanceManager
         /// [`HotReloadManager`]: zng_ext_hot_reload::HotReloadManager
         /// [`ConfigManager`]: zng_ext_config::ConfigManager
@@ -1878,7 +1906,7 @@
                 feature = <span class="string">"material_icons_rounded"</span>,
                 feature = <span class="string">"material_icons_sharp"</span>,
             ))]
-            </span><span class="kw">let </span>r = r.extend(zng_wgt_material_icons::MaterialFonts);
+            </span><span class="kw">let </span>r = r.extend(zng_wgt_material_icons::MaterialIconsManager);
 
             r.extend(DefaultsInit {})
         }
@@ -1887,25 +1915,28 @@
     <span class="kw">struct </span>DefaultsInit {}
     <span class="kw">impl </span>AppExtension <span class="kw">for </span>DefaultsInit {
         <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-            zng_ext_window::WINDOWS.register_root_extender(|a| {
+            <span class="comment">// Common editors.
+            </span>zng_wgt::EDITORS.register_fallback(zng_wgt::WidgetFn::new(default_editors::handler));
+            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, var_editor set"</span>);
+
+            <span class="comment">// injected in all windows
+            </span>zng_ext_window::WINDOWS.register_root_extender(|a| {
                 <span class="kw">let </span>child = a.root;
 
                 <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
                 </span><span class="kw">let </span>child = zng_wgt_inspector::inspector(child, zng_wgt_inspector::live_inspector(<span class="bool-val">true</span>));
 
-                <span class="comment">// setup COLOR_SCHEME_VAR for all windows, this is not done in `Window!` because
-                // WindowRoot is used directly by some headless renderers.
-                </span>zng_wgt::node::with_context_var_init(child, zng_color::COLOR_SCHEME_VAR, || {
-                    <span class="kw">use </span>zng_ext_window::WINDOW_Ext <span class="kw">as _</span>;
-                    <span class="kw">use </span>zng_var::Var <span class="kw">as _</span>;
-
-                    zng_app::window::WINDOW.vars().actual_color_scheme().boxed()
-                })
+                child
             });
             <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, root_extender set"</span>);
 
-            <span class="kw">crate</span>::third_party::setup_default_view();
+            <span class="comment">// setup OPEN_LICENSES_CMD handler
+            </span><span class="kw">crate</span>::third_party::setup_default_view();
             <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, third_party set"</span>);
+
+            <span class="comment">// setup SETTINGS_CMD handler
+            </span>zng_wgt_settings::handle_settings_cmd();
+            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, settings set"</span>);
 
             <span class="attr">#[cfg(feature = <span class="string">"single_instance"</span>)]
             </span>{
@@ -1928,46 +1959,6 @@
                     .perm();
                 <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, single_instance set"</span>);
             }
-
-            <span class="attr">#[cfg(feature = <span class="string">"material_icons_outlined"</span>)]
-            </span>{
-                <span class="kw">use </span>zng_ext_clipboard::<span class="kw-2">*</span>;
-                <span class="kw">use </span>zng_ext_undo::<span class="kw-2">*</span>;
-                <span class="kw">use </span>zng_ext_window::cmd::<span class="kw-2">*</span>;
-                <span class="kw">use </span>zng_wgt::wgt_fn;
-                <span class="kw">use </span>zng_wgt_input::cmd::<span class="kw-2">*</span>;
-                <span class="kw">use </span>zng_wgt_material_icons::outlined <span class="kw">as </span>icons;
-                <span class="kw">use </span>zng_wgt_scroll::cmd::<span class="kw-2">*</span>;
-                <span class="kw">use </span>zng_wgt_text::icon::CommandIconExt <span class="kw">as _</span>;
-                <span class="kw">use </span>zng_wgt_text::icon::Icon;
-
-                CUT_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::CUT)));
-                COPY_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::COPY)));
-                PASTE_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::PASTE)));
-
-                UNDO_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::UNDO)));
-                REDO_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::REDO)));
-
-                CLOSE_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::CLOSE)));
-                MINIMIZE_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::MINIMIZE)));
-                MAXIMIZE_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::MAXIMIZE)));
-                FULLSCREEN_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::FULLSCREEN)));
-
-                CONTEXT_MENU_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::MENU_OPEN)));
-
-                <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
-                </span>zng_wgt_inspector::INSPECT_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::SCREEN_SEARCH_DESKTOP)));
-
-                SCROLL_TO_TOP_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::VERTICAL_ALIGN_TOP)));
-                SCROLL_TO_BOTTOM_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::VERTICAL_ALIGN_BOTTOM)));
-
-                ZOOM_IN_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::ZOOM_IN)));
-                ZOOM_OUT_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::ZOOM_OUT)));
-
-                OPEN_CMD.init_icon(<span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Icon!</span>(icons::FILE_OPEN)));
-
-                <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, command_icons set"</span>);
-            }
         }
     }
 }
@@ -1975,4 +1966,65 @@
 <span class="attr">#[doc = <span class="macro">include_str!</span>(<span class="string">"../../README.md"</span>)]
 #[cfg(doctest)]
 </span><span class="kw">pub mod </span>read_me_test {}
+
+<span class="kw">mod </span>default_editors {
+    <span class="kw">use </span>zng::{
+        prelude::<span class="kw-2">*</span>,
+        text_input,
+        widget::{
+            node::{BoxedUiNode, NilUiNode},
+            EditorRequestArgs,
+        },
+    };
+
+    <span class="kw">pub fn </span>handler(args: EditorRequestArgs) -&gt; BoxedUiNode {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(txt) = args.value::&lt;Txt&gt;() {
+            <span class="kw">return </span><span class="macro">TextInput!</span> {
+                txt;
+            }
+            .boxed();
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = args.value::&lt;String&gt;() {
+            <span class="kw">return </span><span class="macro">TextInput!</span> {
+                txt = s.map_bidi(|s| Txt::from_str(s), |t: <span class="kw-2">&amp;</span>Txt| t.to_string());
+            }
+            .boxed();
+        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = args.value::&lt;char&gt;() {
+            <span class="kw">return </span><span class="macro">TextInput!</span> {
+                txt_parse::&lt;char&gt; = c;
+                style_fn = <span class="macro">text_input::FieldStyle!</span>();
+            }
+            .boxed();
+        }
+
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(checked) = args.value::&lt;bool&gt;() {
+            <span class="kw">return </span><span class="macro">Toggle!</span> {
+                style_fn = <span class="macro">toggle::CheckStyle!</span>();
+                checked;
+            }
+            .boxed();
+        }
+
+        <span class="macro">macro_rules!</span> parse {
+            ($(<span class="macro-nonterminal">$ty</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
+                $(
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = args.value::&lt;<span class="macro-nonterminal">$ty</span>&gt;() {
+                        <span class="kw">return </span><span class="macro">TextInput!</span> {
+                            txt_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt; = n;
+                            style_fn = <span class="macro">text_input::FieldStyle!</span>();
+                        }
+                        .boxed();
+                    }
+
+                )+
+            }
+        }
+        <span class="macro">parse!</span> {
+            u8, i8, u16, i16, u32, i32, u64, i64, u128, i128, f32, f64,
+        }
+
+        NilUiNode.boxed()
+    }
+}
 </code></pre></div></section></main></body></html>

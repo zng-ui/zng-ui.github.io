@@ -279,10 +279,6 @@
 <a href="#278" id="278">278</a>
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
-<a href="#281" id="281">281</a>
-<a href="#282" id="282">282</a>
-<a href="#283" id="283">283</a>
-<a href="#284" id="284">284</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Third party licenses service and types.
 //!
 //! Rust projects depend on many crated with a variety of licenses, some of these licenses require that they must be
@@ -423,12 +419,11 @@
 //! [`cargo-about`]: https://github.com/EmbarkStudios/cargo-about/
 //! [`on_pre_event`]: crate::event::Command::on_pre_event
 
-</span><span class="kw">pub use </span>zng_app::third_party::{License, LicenseUsed, User, UserLicense, LICENSES, OPEN_LICENSES_CMD};
-
-<span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+</span><span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+<span class="kw">pub use </span>zng_app::third_party::{License, LicenseUsed, User, UserLicense, LICENSES, OPEN_LICENSES_CMD};
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>setup_default_view() {
-    <span class="kw">let </span><span class="kw-2">mut </span>id = <span class="prelude-val">None</span>;
+    <span class="kw">let </span>id = WindowId::named(<span class="string">"zng-third_party-default"</span>);
     OPEN_LICENSES_CMD
         .on_event(
             <span class="bool-val">true</span>,
@@ -440,7 +435,6 @@
 
                 <span class="kw">let </span>parent = WINDOWS.focused_window_id();
 
-                <span class="kw">let </span>id = <span class="kw-2">*</span>id.get_or_insert_with(WindowId::new_unique);
                 WINDOWS.focus_or_open(id, <span class="kw">async move </span>{
                     <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = parent {
                         <span class="kw">if let </span><span class="prelude-val">Ok</span>(p) = WINDOWS.vars(p) {
@@ -450,7 +444,7 @@
                     }
 
                     <span class="macro">Window!</span> {
-                        title = <span class="macro">formatx!</span>(<span class="string">"{} - Third Party Licenses"</span>, zng::env::about().app);
+                        title = <span class="macro">l10n!</span>(<span class="string">"window.title"</span>, <span class="string">"{$app} - Third Party Licenses"</span>, app=zng::env::about().app.clone());
                         child = default_view();
                         parent;
                     }
@@ -465,13 +459,15 @@
     <span class="kw">if </span>licenses.is_empty() {
         licenses.push(UserLicense {
             user: User {
-                name: <span class="string">"&lt;none&gt;"</span>.into(),
+                <span class="comment">// l10n-# "user" is the package that uses the license
+                </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.user-name"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
                 version: <span class="string">""</span>.into(),
                 url: <span class="string">""</span>.into(),
             },
             license: License {
-                id: <span class="string">"&lt;none&gt;"</span>.into(),
-                name: <span class="string">"No license data"</span>.into(),
+                id: <span class="macro">l10n!</span>(<span class="string">"license-none.id"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
+                <span class="comment">// l10n-# License name
+                </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.name"</span>, <span class="string">"No license data"</span>).get(),
                 text: <span class="string">""</span>.into(),
             },
         });
@@ -481,18 +477,14 @@
 
     <span class="macro">Container!</span> {
         child_start = <span class="macro">Container!</span> {
-            widget::background_color = color::color_scheme_pair(zng_wgt_button::BASE_COLORS_VAR);
+            widget::background_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
 
             <span class="comment">// search
             </span>child_top = <span class="macro">TextInput!</span> {
                 txt = search.clone();
-                layout::margin = <span class="number">3</span>;
-                widget::background = <span class="macro">Text!</span> {
-                    txt = <span class="string">"search"</span>;
-                    layout::padding = (<span class="number">8</span>, <span class="number">16</span>, <span class="number">8</span>, <span class="number">27</span>); <span class="comment">// +1 border width
-                    </span>color::filter::opacity = <span class="number">50</span>.pct();
-                    widget::visibility = search.map(|t| t.is_empty().into());
-                };
+                style_fn = <span class="macro">zng_wgt_text_input::SearchStyle!</span>();
+                zng_wgt_input::focus::focus_shortcut = [<span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
+                placeholder_txt = <span class="macro">l10n!</span>(<span class="string">"search.placeholder"</span>, <span class="string">"search licenses ({$shortcut})"</span>, shortcut=<span class="string">"Ctrl+F"</span>);
             }, <span class="number">0</span>;
             <span class="comment">// list
             </span>child = <span class="macro">Scroll!</span> {

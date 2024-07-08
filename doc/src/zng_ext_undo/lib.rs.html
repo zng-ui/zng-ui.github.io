@@ -1632,6 +1632,12 @@
 <a href="#1632" id="1632">1632</a>
 <a href="#1633" id="1633">1633</a>
 <a href="#1634" id="1634">1634</a>
+<a href="#1635" id="1635">1635</a>
+<a href="#1636" id="1636">1636</a>
+<a href="#1637" id="1637">1637</a>
+<a href="#1638" id="1638">1638</a>
+<a href="#1639" id="1639">1639</a>
+<a href="#1640" id="1640">1640</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1675,6 +1681,7 @@
 <span class="kw">use </span>zng_state_map::{static_id, StateId, StateMapRef};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::{context_var, var, BoxedVar, Var, VarHandle, VarValue, WeakVar};
+<span class="kw">use </span>zng_wgt::{wgt_fn, CommandIconExt <span class="kw">as _</span>, ICONS};
 
 <span class="kw">mod </span>private {
     <span class="comment">// https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed
@@ -2314,7 +2321,7 @@
         <span class="doccomment">/// Closure data for the next undo action.
         ///
         /// The data can be from any full undo closure action, only merge if the data
-        /// indicates that is comes from actions that can be covered by the `self` closure.
+        /// indicates that it comes from actions that can be covered by the `self` closure.
         </span>next_data: <span class="kw-2">&amp;</span><span class="lifetime">'r </span><span class="kw-2">mut </span><span class="kw">dyn </span>Any,
 
         <span class="doccomment">/// Timestamp of the previous action registered.
@@ -2413,8 +2420,10 @@
     /// You can use [`CommandUndoExt::undo_scoped`] to get a command variable that is always scoped on the
     /// focused undo scope.
     </span><span class="kw">pub static </span>UNDO_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Undo"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">'Z'</span>)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"undo"</span>)),
     };
 
     <span class="doccomment">/// Represents the **redo** action.
@@ -2427,8 +2436,10 @@
     /// [`redo_select`]: UNDO::redo_select
     /// [`redo`]: UNDO::redo
     </span><span class="kw">pub static </span>REDO_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Redo"</span>,
         shortcut: [<span class="macro">shortcut!</span>(CTRL+<span class="string">'Y'</span>)],
+        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"redo"</span>)),
     };
 
     <span class="doccomment">/// Represents the **clear history** action.
@@ -2437,6 +2448,7 @@
     ///
     /// [`clear`]: UNDO::clear
     </span><span class="kw">pub static </span>CLEAR_HISTORY_CMD = {
+        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Clear History"</span>,
     };
 }

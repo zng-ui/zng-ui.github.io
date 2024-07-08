@@ -385,6 +385,46 @@
 <a href="#385" id="385">385</a>
 <a href="#386" id="386">386</a>
 <a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -398,11 +438,12 @@
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
 
-<span class="kw">use </span>std::ops;
+<span class="kw">use </span>std::{any::TypeId, ops};
 
+<span class="kw">use </span>colors::{ACCENT_COLOR_VAR, BASE_COLOR_VAR};
 <span class="kw">use </span>zng_app::event::CommandParam;
 <span class="kw">use </span>zng_var::ReadOnlyContextVar;
-<span class="kw">use </span>zng_wgt::{border, corner_radius, is_disabled, prelude::<span class="kw-2">*</span>};
+<span class="kw">use </span>zng_wgt::{base_color, border, corner_radius, is_disabled, prelude::<span class="kw-2">*</span>};
 <span class="kw">use </span>zng_wgt_access::{access_role, labelled_by_child, AccessRole};
 <span class="kw">use </span>zng_wgt_container::{child_align, padding, Container};
 <span class="kw">use </span>zng_wgt_fill::background_color;
@@ -416,7 +457,7 @@
     CursorIcon,
 };
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style, StyleMix};
-<span class="kw">use </span>zng_wgt_text::{font_color, underline, Text};
+<span class="kw">use </span>zng_wgt_text::{font_color, underline, Text, FONT_COLOR_VAR};
 <span class="kw">use </span>zng_wgt_tooltip::{tooltip, tooltip_fn, Tip, TooltipArgs};
 
 <span class="doccomment">/// A clickable container.
@@ -540,9 +581,6 @@
 <span class="macro">impl_style_fn!</span>(Button);
 
 <span class="macro">context_var!</span> {
-    <span class="doccomment">/// Idle background dark and light color.
-    </span><span class="kw">pub static </span>BASE_COLORS_VAR: ColorPair = (rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>), rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>));
-
     <span class="doccomment">/// Optional parameter for the button to use when notifying command.
     </span><span class="kw">pub static </span>CMD_PARAM_VAR: <span class="prelude-ty">Option</span>&lt;CommandParam&gt; = <span class="prelude-val">None</span>;
 
@@ -629,10 +667,27 @@
 
 <span class="doccomment">/// Optional command parameter for the button to use when notifying [`cmd`].
 ///
+/// If `T` is `Option&lt;CommandParam&gt;` the param can be dynamically unset, otherwise the value is the param.
+///
 /// [`cmd`]: fn@cmd
 </span><span class="attr">#[property(CONTEXT, default(CMD_PARAM_VAR), widget_impl(Button))]
-</span><span class="kw">pub fn </span>cmd_param(child: <span class="kw">impl </span>UiNode, cmd_param: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;CommandParam&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    with_context_var(child, CMD_PARAM_VAR, cmd_param)
+</span><span class="kw">pub fn </span>cmd_param&lt;T: VarValue&gt;(child: <span class="kw">impl </span>UiNode, cmd_param: <span class="kw">impl </span>IntoVar&lt;T&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    <span class="kw">if </span>TypeId::of::&lt;T&gt;() == TypeId::of::&lt;<span class="prelude-ty">Option</span>&lt;CommandParam&gt;&gt;() {
+        <span class="kw">let </span>cmd_param = <span class="kw-2">*</span>cmd_param
+            .into_var()
+            .boxed_any()
+            .double_boxed_any()
+            .downcast::&lt;BoxedVar&lt;<span class="prelude-ty">Option</span>&lt;CommandParam&gt;&gt;&gt;()
+            .unwrap();
+        with_context_var(child, CMD_PARAM_VAR, cmd_param).boxed()
+    } <span class="kw">else </span>{
+        with_context_var(
+            child,
+            CMD_PARAM_VAR,
+            cmd_param.into_var().map(|p| <span class="prelude-val">Some</span>(CommandParam::new(p.clone()))),
+        )
+        .boxed()
+    }
 }
 
 <span class="doccomment">/// Sets the widget function used to produce the button child when [`cmd`] is set and [`child`] is not.
@@ -652,28 +707,6 @@
     with_context_var(child, CMD_TOOLTIP_FN_VAR, cmd_tooltip)
 }
 
-<span class="doccomment">/// Sets the colors used to compute all background and border colors in the button style.
-///
-/// Sets the [`BASE_COLORS_VAR`].
-</span><span class="attr">#[property(CONTEXT, default(BASE_COLORS_VAR), widget_impl(DefaultStyle))]
-</span><span class="kw">pub fn </span>base_colors(child: <span class="kw">impl </span>UiNode, color: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    with_context_var(child, BASE_COLORS_VAR, color)
-}
-
-<span class="doccomment">/// Create a [`color_scheme_highlight`] of `0.08`.
-///
-/// [`color_scheme_highlight`]: zng_wgt::prelude::color_scheme_highlight
-</span><span class="kw">pub fn </span>color_scheme_hovered(pair: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>Var&lt;Rgba&gt; {
-    color_scheme_highlight(pair, <span class="number">0.08</span>)
-}
-
-<span class="doccomment">/// Create a [`color_scheme_highlight`] of `0.16`.
-///
-/// [`color_scheme_highlight`]: zng_wgt::prelude::color_scheme_highlight
-</span><span class="kw">pub fn </span>color_scheme_pressed(pair: <span class="kw">impl </span>IntoVar&lt;ColorPair&gt;) -&gt; <span class="kw">impl </span>Var&lt;Rgba&gt; {
-    color_scheme_highlight(pair, <span class="number">0.16</span>)
-}
-
 <span class="doccomment">/// Button default style.
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
 </span><span class="kw">pub struct </span>DefaultStyle(Style);
@@ -690,28 +723,107 @@
             corner_radius = <span class="number">4</span>;
             child_align = Align::CENTER;
 
-            <span class="attr">#[easing(<span class="number">150</span>.ms())]
-            </span>background_color = color_scheme_pair(BASE_COLORS_VAR);
+            base_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
 
+            <span class="attr">#[easing(<span class="number">150</span>.ms())]
+            </span>background_color = BASE_COLOR_VAR.rgba();
             <span class="attr">#[easing(<span class="number">150</span>.ms())]
             </span>border = {
                 widths: <span class="number">1</span>,
-                sides: color_scheme_pair(BASE_COLORS_VAR).map_into()
+                sides: BASE_COLOR_VAR.rgba_into()
             };
 
             when <span class="kw-2">*</span>#is_cap_hovered {
                 <span class="attr">#[easing(<span class="number">0</span>.ms())]
-                </span>background_color = color_scheme_hovered(BASE_COLORS_VAR);
+                </span>background_color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
                 <span class="attr">#[easing(<span class="number">0</span>.ms())]
                 </span>border = {
                     widths: <span class="number">1</span>,
-                    sides: color_scheme_pressed(BASE_COLORS_VAR).map_into(),
+                    sides: BASE_COLOR_VAR.shade_into(<span class="number">2</span>),
                 };
             }
 
             when <span class="kw-2">*</span>#is_pressed {
                 <span class="attr">#[easing(<span class="number">0</span>.ms())]
-                </span>background_color = color_scheme_pressed(BASE_COLORS_VAR);
+                </span>background_color = BASE_COLOR_VAR.shade(<span class="number">2</span>);
+            }
+
+            when <span class="kw-2">*</span>#is_disabled {
+                saturate = <span class="bool-val">false</span>;
+                child_opacity = <span class="number">50</span>.pct();
+                cursor = CursorIcon::NotAllowed;
+            }
+        }
+    }
+}
+
+<span class="doccomment">/// Primary button style.
+</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::PrimaryStyle</span>)]
+</span><span class="kw">pub struct </span>PrimaryStyle(DefaultStyle);
+<span class="kw">impl </span>PrimaryStyle {
+    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">widget_set!</span> {
+            <span class="self">self</span>;
+
+            base_color = ACCENT_COLOR_VAR.map(|c| c.shade(-<span class="number">2</span>));
+            zng_wgt_text::font_weight = zng_ext_font::FontWeight::BOLD;
+        }
+    }
+}
+
+<span class="doccomment">/// Button light style.
+</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LightStyle</span>)]
+</span><span class="kw">pub struct </span>LightStyle(DefaultStyle);
+<span class="kw">impl </span>LightStyle {
+    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">widget_set!</span> {
+            <span class="self">self</span>;
+            border = <span class="macro">unset!</span>;
+            padding = <span class="number">7</span>;
+
+            <span class="attr">#[easing(<span class="number">150</span>.ms())]
+            </span>background_color = FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">0</span>.pct()));
+
+            when <span class="kw-2">*</span>#is_cap_hovered {
+                <span class="attr">#[easing(<span class="number">0</span>.ms())]
+                </span>background_color = FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
+            }
+
+            when <span class="kw-2">*</span>#is_pressed {
+                <span class="attr">#[easing(<span class="number">0</span>.ms())]
+                </span>background_color = FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+            }
+
+            when <span class="kw-2">*</span>#is_disabled {
+                saturate = <span class="bool-val">false</span>;
+                child_opacity = <span class="number">50</span>.pct();
+                cursor = CursorIcon::NotAllowed;
+            }
+        }
+    }
+}
+
+<span class="doccomment">/// Button link style.
+///
+/// Looks like a web hyperlink.
+</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LinkStyle</span>)]
+</span><span class="kw">pub struct </span>LinkStyle(Style);
+<span class="kw">impl </span>LinkStyle {
+    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="macro">widget_set!</span> {
+            <span class="self">self</span>;
+            replace = <span class="bool-val">true</span>;
+
+            font_color = light_dark(colors::BLUE, web_colors::LIGHT_BLUE);
+            cursor = CursorIcon::Pointer;
+            access_role = AccessRole::Link;
+
+            when <span class="kw-2">*</span>#is_cap_hovered {
+                underline = <span class="number">1</span>, LineStyle::Solid;
+            }
+
+            when <span class="kw-2">*</span>#is_pressed {
+                font_color = light_dark(web_colors::BROWN, colors::YELLOW);
             }
 
             when <span class="kw-2">*</span>#is_disabled {
@@ -738,38 +850,6 @@
     /// [`cmd_param`]: fn@cmd_param
     </span><span class="kw">pub fn </span>cmd_param(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyContextVar&lt;<span class="prelude-ty">Option</span>&lt;CommandParam&gt;&gt; {
         CMD_PARAM_VAR.read_only()
-    }
-}
-
-<span class="doccomment">/// Button link style.
-///
-/// Looks like a web hyperlink.
-</span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LinkStyle</span>)]
-</span><span class="kw">pub struct </span>LinkStyle(Style);
-<span class="kw">impl </span>LinkStyle {
-    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="macro">widget_set!</span> {
-            <span class="self">self</span>;
-            replace = <span class="bool-val">true</span>;
-
-            font_color = color_scheme_map(web_colors::LIGHT_BLUE, colors::BLUE);
-            cursor = CursorIcon::Pointer;
-            access_role = AccessRole::Link;
-
-            when <span class="kw-2">*</span>#is_cap_hovered {
-                underline = <span class="number">1</span>, LineStyle::Solid;
-            }
-
-            when <span class="kw-2">*</span>#is_pressed {
-                font_color = color_scheme_map(colors::YELLOW, web_colors::BROWN);
-            }
-
-            when <span class="kw-2">*</span>#is_disabled {
-                saturate = <span class="bool-val">false</span>;
-                child_opacity = <span class="number">50</span>.pct();
-                cursor = CursorIcon::NotAllowed;
-            }
-        }
     }
 }
 </code></pre></div></section></main></body></html>

@@ -463,6 +463,9 @@
 <a href="#463" id="463">463</a>
 <a href="#464" id="464">464</a>
 <a href="#465" id="465">465</a>
+<a href="#466" id="466">466</a>
+<a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -476,10 +479,11 @@
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
 
+<span class="kw">use </span>colors::BASE_COLOR_VAR;
 <span class="kw">use </span>zng_ext_input::gesture::ClickArgs;
 <span class="kw">use </span>zng_ext_l10n::{l10n, L10nArgument};
 <span class="kw">use </span>zng_ext_undo::<span class="kw-2">*</span>;
-<span class="kw">use </span>zng_wgt::{margin, prelude::<span class="kw-2">*</span>};
+<span class="kw">use </span>zng_wgt::{base_color, margin, prelude::<span class="kw-2">*</span>};
 <span class="kw">use </span>zng_wgt_button::Button;
 <span class="kw">use </span>zng_wgt_container::{child_align, padding, Container};
 <span class="kw">use </span>zng_wgt_fill::background_color;
@@ -680,7 +684,8 @@
         };
         L10nArgument::from(c)
     });
-    <span class="kw">let </span>count = <span class="macro">l10n!</span>(<span class="string">"UndoHistory.count_actions"</span>, <span class="string">"{$n} actions"</span>, n = count);
+    <span class="comment">// l10n-# Number of undo/redo actions that are selected to run
+    </span><span class="kw">let </span>count = <span class="macro">l10n!</span>(<span class="string">"UndoHistory.count_actions"</span>, <span class="string">"{$n} actions"</span>, n = count);
 
     <span class="macro">Container!</span> {
         undo_stack = args.op;
@@ -824,15 +829,16 @@
             padding = <span class="number">4</span>;
             child_align = Align::START;
 
-            background_color = color_scheme_pair(zng_wgt_button::BASE_COLORS_VAR);
+            base_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
+            background_color = BASE_COLOR_VAR.rgba();
 
             when <span class="kw-2">*</span>#is_cap_hovered_timestamp {
-                background_color = zng_wgt_button::color_scheme_hovered(zng_wgt_button::BASE_COLORS_VAR);
+                background_color = BASE_COLOR_VAR.shade(<span class="number">1</span>);
             }
 
             when <span class="kw-2">*</span>#is_pressed {
                 <span class="attr">#[easing(<span class="number">0</span>.ms())]
-                </span>background_color = zng_wgt_button::color_scheme_pressed(zng_wgt_button::BASE_COLORS_VAR);
+                </span>background_color = BASE_COLOR_VAR.shade(<span class="number">2</span>);
             }
         }
     }

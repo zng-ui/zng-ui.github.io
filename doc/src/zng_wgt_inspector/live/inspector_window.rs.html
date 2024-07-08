@@ -757,6 +757,23 @@
 <a href="#757" id="757">757</a>
 <a href="#758" id="758">758</a>
 <a href="#759" id="759">759</a>
+<a href="#760" id="760">760</a>
+<a href="#761" id="761">761</a>
+<a href="#762" id="762">762</a>
+<a href="#763" id="763">763</a>
+<a href="#764" id="764">764</a>
+<a href="#765" id="765">765</a>
+<a href="#766" id="766">766</a>
+<a href="#767" id="767">767</a>
+<a href="#768" id="768">768</a>
+<a href="#769" id="769">769</a>
+<a href="#770" id="770">770</a>
+<a href="#771" id="771">771</a>
+<a href="#772" id="772">772</a>
+<a href="#773" id="773">773</a>
+<a href="#774" id="774">774</a>
+<a href="#775" id="775">775</a>
+<a href="#776" id="776">776</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::mem;
 
 <span class="kw">use </span>zng_app::widget::{
@@ -768,14 +785,13 @@
 <span class="kw">use </span>zng_color::Rgba;
 <span class="kw">use </span>zng_ext_font::{FontStyle, FontWeight};
 <span class="kw">use </span>zng_ext_input::focus::FOCUS;
-<span class="kw">use </span>zng_ext_l10n::lang;
+<span class="kw">use </span>zng_ext_l10n::{l10n, lang};
 <span class="kw">use </span>zng_ext_window::{WindowRoot, WINDOWS};
 <span class="kw">use </span>zng_var::animation::easing;
 <span class="kw">use </span>zng_wgt::{border, corner_radius, margin, prelude::<span class="kw-2">*</span>, visibility, Wgt};
-<span class="kw">use </span>zng_wgt_access::{access_role, AccessRole};
 <span class="kw">use </span>zng_wgt_button::Button;
 <span class="kw">use </span>zng_wgt_container::{child_align, padding, Container};
-<span class="kw">use </span>zng_wgt_fill::{background, background_color};
+<span class="kw">use </span>zng_wgt_fill::background_color;
 <span class="kw">use </span>zng_wgt_filter::opacity;
 <span class="kw">use </span>zng_wgt_input::{focus::focus_shortcut, gesture::click_shortcut, is_hovered};
 <span class="kw">use </span>zng_wgt_rule_line::hr::Hr;
@@ -794,7 +810,9 @@
 
 <span class="kw">use </span><span class="kw">super</span>::HitSelect;
 
-<span class="doccomment">/// New inspector window.
+<span class="comment">// l10n-## Inspector Window (always en-US)
+
+</span><span class="doccomment">/// New inspector window.
 </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>new(
     inspected: WindowId,
     inspected_tree: InspectedTree,
@@ -807,13 +825,11 @@
 
     <span class="kw">let </span>vars = WINDOWS.vars(inspected).unwrap();
 
-    <span class="kw">let </span>title = vars.title().map(|t| {
-        <span class="kw">if </span>!t.is_empty() {
-            <span class="macro">formatx!</span>(<span class="string">"{t} - Inspector"</span>)
-        } <span class="kw">else </span>{
-            <span class="string">"Inspector"</span>.into()
-        }
-    });
+    <span class="kw">let </span>title = <span class="macro">l10n!</span>(
+        <span class="string">"inspector/window.title"</span>,
+        <span class="string">"{$inspected_window_title} - Inspector"</span>,
+        inspected_window_title = vars.title()
+    );
     <span class="kw">let </span>icon = vars.icon();
 
     <span class="kw">let </span>wgt_filter = var(Txt::from_static(<span class="string">""</span>));
@@ -983,6 +999,7 @@
                             <span class="macro">zng_wgt_menu::context::ContextMenu!</span>(<span class="macro">ui_vec!</span>[
                                 <span class="macro">Button!</span> {
                                     child = <span class="macro">Text!</span>(<span class="string">"Save Screenshot"</span>);
+                                    zng_wgt_menu::icon = zng_wgt::ICONS.get(<span class="string">"save"</span>);
                                     zng_wgt::enabled = screenshot_idle.clone();
                                     on_click = <span class="macro">hn!</span>(screenshot_idle, |<span class="kw">_</span>| {
                                         <span class="comment">// not async_hn here because menu is dropped on click
@@ -995,6 +1012,7 @@
                                 },
                                 <span class="macro">Button!</span> {
                                     child = <span class="macro">Text!</span>(<span class="string">"Copy Screenshot"</span>);
+                                    zng_wgt_menu::icon = zng_wgt::ICONS.get(<span class="string">"copy"</span>);
                                     zng_wgt::enabled = screenshot_idle.clone();
                                     on_click = <span class="macro">hn!</span>(screenshot_idle, |<span class="kw">_</span>| {
                                         task::spawn(<span class="macro">async_clmv!</span>(screenshot_idle, {
@@ -1011,17 +1029,12 @@
             ]
         }, <span class="number">0</span>;
         child = <span class="macro">TextInput!</span> {
-            access_role = AccessRole::SearchBox;
+            style_fn = <span class="macro">zng_wgt_text_input::SearchStyle!</span>();
             margin = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">50</span>);
             padding = (<span class="number">3</span>, <span class="number">5</span>);
             txt_align = Align::START;
             focus_shortcut = [<span class="macro">shortcut!</span>[<span class="string">'S'</span>], <span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
-            background = <span class="macro">Text!</span> {
-                padding = (<span class="number">4</span>, <span class="number">6</span>); <span class="comment">// +1 border
-                </span>txt = <span class="string">"search widgets (S)"</span>;
-                opacity = <span class="number">50</span>.pct();
-                visibility = search.map(|t| t.is_empty().into());
-            };
+            placeholder_txt = <span class="string">"search widgets (S)"</span>;
             txt = search;
         }
     }
@@ -1221,7 +1234,7 @@
             txt_align = Align::TOP;
             padding = <span class="number">20</span>;
             font_style = FontStyle::Italic;
-            txt = <span class="macro">formatx!</span>(<span class="string">"select a widget to inspect"</span>);
+            txt = <span class="macro">l10n!</span>(<span class="string">"inspector/select-widget"</span>, <span class="string">"select a widget to inspect"</span>);
         }
     }
 }
@@ -1277,7 +1290,7 @@
         <span class="number">0</span>,
         <span class="macro">Text!</span> {
             txt = <span class="macro">formatx!</span>(<span class="string">"// {}"</span>, group.name());
-            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"nest group"</span>));
+            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="macro">l10n!</span>(<span class="string">"inspector/nest-group-help"</span>, <span class="string">"nest group"</span>)));
             margin = (<span class="number">10</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
             font_color = NEST_GROUP_COLOR_VAR;
         },
@@ -1363,7 +1376,7 @@
     <span class="macro">Text!</span> {
         txt = name;
         font_style = FontStyle::Italic;
-        tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"intrinsic node"</span>));
+        tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="macro">l10n!</span>(<span class="string">"inspector/intrinsic-help"</span>, <span class="string">"intrinsic node"</span>)));
     }
 }
 
@@ -1412,7 +1425,7 @@
         children = <span class="macro">ui_vec!</span>[
             <span class="macro">Text!</span> {
                 txt = <span class="macro">formatx!</span>(<span class="string">"/* INFO */"</span>);
-                tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="string">"watched widget info"</span>));
+                tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="macro">l10n!</span>(<span class="string">"inspector/info-help"</span>, <span class="string">"watched widget info"</span>)));
                 font_color = NEST_GROUP_COLOR_VAR;
             },
             <span class="macro">Wrap!</span>(children),
@@ -1454,16 +1467,19 @@
     <span class="kw">let </span>frame = WINDOWS.frame_image(inspected, <span class="prelude-val">None</span>);
 
     <span class="kw">let </span><span class="kw-2">mut </span>dlg = zng_view_api::dialog::FileDialog {
-        title: <span class="string">"Save Screenshot"</span>.into(),
+        title: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-title"</span>, <span class="string">"Save Screenshot"</span>).get(),
         kind: zng_view_api::dialog::FileDialogKind::SaveFile,
-        starting_name: <span class="string">"screenshot.png"</span>.into(),
+        starting_name: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-starting-name"</span>, <span class="string">"screenshot.png"</span>).get(),
         ..Default::default()
     };
     <span class="kw">let </span>encoders = zng_ext_image::IMAGES.available_encoders();
     <span class="kw">for </span>enc <span class="kw">in </span><span class="kw-2">&amp;</span>encoders {
         dlg.push_filter(<span class="kw-2">&amp;</span>enc.to_uppercase(), <span class="kw-2">&amp;</span>[enc]);
     }
-    dlg.push_filter(<span class="string">"Image Files"</span>, <span class="kw-2">&amp;</span>encoders);
+    dlg.push_filter(
+        <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-filter"</span>, <span class="string">"Image Files"</span>).get().as_str(),
+        <span class="kw-2">&amp;</span>encoders,
+    );
 
     <span class="kw">let </span>r = WINDOWS.native_file_dialog(inspector, dlg).wait_rsp().<span class="kw">await</span>;
     <span class="kw">let </span>path = <span class="kw">match </span>r {
@@ -1483,7 +1499,16 @@
     } <span class="kw">else </span>{
         <span class="kw">let </span>r = frame.save(path).<span class="kw">await</span>;
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
-            screenshot_error(<span class="macro">formatx!</span>(<span class="string">"Screenshot save error. {e}"</span>), inspector).<span class="kw">await</span>;
+            screenshot_error(
+                <span class="macro">l10n!</span>(
+                    <span class="string">"inspector/screenshot.save-error"</span>,
+                    <span class="string">"Screenshot save error. {$error}"</span>,
+                    error = e.to_string()
+                )
+                .get(),
+                inspector,
+            )
+            .<span class="kw">await</span>;
         }
     }
 }
@@ -1499,7 +1524,16 @@
     } <span class="kw">else </span>{
         <span class="kw">let </span>r = zng_ext_clipboard::CLIPBOARD.set_image(frame).wait_rsp().<span class="kw">await</span>;
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
-            screenshot_error(<span class="macro">formatx!</span>(<span class="string">"Clipboard error. {e}"</span>), inspector).<span class="kw">await</span>;
+            screenshot_error(
+                <span class="macro">l10n!</span>(
+                    <span class="string">"inspector/screenshot.copy-error"</span>,
+                    <span class="string">"Screenshot copy error. {$error}"</span>,
+                    error = e.to_string()
+                )
+                .get(),
+                inspector,
+            )
+            .<span class="kw">await</span>;
         }
     }
 }
@@ -1508,8 +1542,8 @@
     <span class="kw">let </span>r = WINDOWS.native_message_dialog(
         inspector,
         zng_view_api::dialog::MsgDialog {
-            title: <span class="string">"Screenshot Error"</span>.into(),
-            message: <span class="macro">formatx!</span>(<span class="string">"Screenshot error.\n\n{e}"</span>),
+            title: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.error-dlg-title"</span>, <span class="string">"Screenshot Error"</span>).get(),
+            message: e,
             icon: zng_view_api::dialog::MsgDialogIcon::Error,
             ..Default::default()
         },
