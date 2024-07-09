@@ -312,6 +312,7 @@
 <a href="#312" id="312">312</a>
 <a href="#313" id="313">313</a>
 <a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scrapper.
 //!
 //! See the [`l10n!`] documentation for more details.
@@ -485,10 +486,7 @@
                 <span class="comment">// get l10n_dir/{lang}/deps/dep.name/dep.version/
                 </span><span class="kw">let </span><span class="kw-2">mut </span>l10n_dir = |lang: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>std::ffi::OsStr&gt;| {
                     any = <span class="bool-val">true</span>;
-                    <span class="kw">let </span>dir = <span class="kw">match </span>lang {
-                        <span class="prelude-val">Some</span>(l) =&gt; l10n_dir.join(l).join(<span class="string">"deps"</span>),
-                        <span class="prelude-val">None </span>=&gt; l10n_dir.join(<span class="string">"deps"</span>),
-                    };
+                    <span class="kw">let </span>dir = l10n_dir.join(lang.unwrap()).join(<span class="string">"deps"</span>);
                     <span class="kw">let </span>ignore_file = dir.join(<span class="string">".gitignore"</span>);
 
                     <span class="kw">if </span>!ignore_file.exists() {
@@ -528,6 +526,10 @@
                             <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>ignore).unwrap();
                             <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>ignore, <span class="string">"*"</span>).unwrap();
                             <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>ignore, <span class="string">"!.gitignore"</span>).unwrap();
+
+                            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::write(<span class="kw-2">&amp;</span>ignore_file, ignore.as_bytes()) {
+                                <span class="macro">fatal!</span>(<span class="string">"cannot write `{}`, {e}"</span>, ignore_file.display())
+                            }
 
                             <span class="prelude-val">Ok</span>(())
                         })()

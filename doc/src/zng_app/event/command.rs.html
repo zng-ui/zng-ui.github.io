@@ -1533,10 +1533,34 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1497" id="1497">1497</a>
 <a href="#1498" id="1498">1498</a>
 <a href="#1499" id="1499">1499</a>
+<a href="#1500" id="1500">1500</a>
+<a href="#1501" id="1501">1501</a>
+<a href="#1502" id="1502">1502</a>
+<a href="#1503" id="1503">1503</a>
+<a href="#1504" id="1504">1504</a>
+<a href="#1505" id="1505">1505</a>
+<a href="#1506" id="1506">1506</a>
+<a href="#1507" id="1507">1507</a>
+<a href="#1508" id="1508">1508</a>
+<a href="#1509" id="1509">1509</a>
+<a href="#1510" id="1510">1510</a>
+<a href="#1511" id="1511">1511</a>
+<a href="#1512" id="1512">1512</a>
+<a href="#1513" id="1513">1513</a>
+<a href="#1514" id="1514">1514</a>
+<a href="#1515" id="1515">1515</a>
+<a href="#1516" id="1516">1516</a>
+<a href="#1517" id="1517">1517</a>
+<a href="#1518" id="1518">1518</a>
+<a href="#1519" id="1519">1519</a>
+<a href="#1520" id="1520">1520</a>
+<a href="#1521" id="1521">1521</a>
+<a href="#1522" id="1522">1522</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::TypeId,
     collections::{hash_map, HashMap},
     mem, ops,
+    thread::ThreadId,
 };
 
 <span class="kw">use crate</span>::{shortcut::CommandShortcutExt, update::UpdatesTrace, widget::info::WidgetInfo, window::WindowId, APP};
@@ -1685,6 +1709,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="attr">#[doc(inline)]
 </span><span class="kw">pub use </span>command;
+
 <span class="kw">use </span>zng_app_context::AppId;
 <span class="kw">use </span>zng_state_map::{OwnedStateMap, StateId, StateMapMut, StateValue};
 <span class="kw">use </span>zng_txt::Txt;
@@ -1936,9 +1961,22 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub fn </span>with_meta&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, visit: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>CommandMeta) -&gt; R) -&gt; R {
         {
             <span class="kw">let </span><span class="kw-2">mut </span>write = <span class="self">self</span>.local.write();
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(init) = write.meta_init.take() {
-                drop(write);
-                init(<span class="kw-2">*</span><span class="self">self</span>);
+            <span class="kw">match </span>write.meta_init.clone() {
+                MetaInit::Init(init) =&gt; {
+                    <span class="kw">let </span>lock = Arc::new((std::thread::current().id(), Mutex::new(())));
+                    write.meta_init = MetaInit::Initing(lock.clone());
+                    <span class="kw">let </span>_init_guard = lock.<span class="number">1</span>.lock();
+                    drop(write);
+                    init(<span class="kw-2">*</span><span class="self">self</span>);
+                    <span class="self">self</span>.local.write().meta_init = MetaInit::Inited;
+                }
+                MetaInit::Initing(l) =&gt; {
+                    drop(write);
+                    <span class="kw">if </span>l.<span class="number">0 </span>!= std::thread::current().id() {
+                        <span class="kw">let </span>_wait = l.<span class="number">1</span>.lock();
+                    }
+                }
+                MetaInit::Inited =&gt; {}
             }
         }
 
@@ -2845,9 +2883,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">enum </span>CommandMetaState {}
 
+<span class="attr">#[derive(Clone)]
+</span><span class="kw">enum </span>MetaInit {
+    Init(<span class="kw">fn</span>(Command)),
+    <span class="doccomment">/// Initing in a thread, lock is for other threads.
+    </span>Initing(Arc&lt;(ThreadId, Mutex&lt;()&gt;)&gt;),
+    Inited,
+}
+
 <span class="attr">#[doc(hidden)]
 </span><span class="kw">pub struct </span>CommandData {
-    meta_init: <span class="prelude-ty">Option</span>&lt;<span class="kw">fn</span>(Command)&gt;,
+    meta_init: MetaInit,
     meta: Mutex&lt;OwnedStateMap&lt;CommandMetaState&gt;&gt;,
 
     handle_count: usize,
@@ -2862,7 +2908,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">impl </span>CommandData {
     <span class="kw">pub fn </span>new(meta_init: <span class="kw">fn</span>(Command)) -&gt; <span class="self">Self </span>{
         CommandData {
-            meta_init: <span class="prelude-val">Some</span>(meta_init),
+            meta_init: MetaInit::Init(meta_init),
             meta: Mutex::new(OwnedStateMap::new()),
 
             handle_count: <span class="number">0</span>,
