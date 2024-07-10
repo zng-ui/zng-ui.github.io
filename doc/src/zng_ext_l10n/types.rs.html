@@ -905,6 +905,9 @@
 <a href="#905" id="905">905</a>
 <a href="#906" id="906">906</a>
 <a href="#907" id="907">907</a>
+<a href="#908" id="908">908</a>
+<a href="#909" id="909">909</a>
+<a href="#910" id="910">910</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, collections::HashMap, fmt, mem, ops, path::PathBuf, sync::Arc};
 
 <span class="kw">use </span>fluent::types::FluentNumber;
@@ -1628,8 +1631,11 @@
 
 <span class="doccomment">/// Localization resource file path in the localization directory.
 ///
-/// In the default directory layout, localization dependencies are collected using `cargo zng l10n --deps`
-/// and copied to `l10n/{lang}/deps/{name}/{version}/`.
+/// In the default directory layout, localization dependencies are collected using `cargo zng l10n`
+/// and copied to `l10n/{lang}/deps/{name}/{version}/`, and localization for the app ([`is_current_app`])
+/// is placed in `l10n/{lang}/`.
+///
+/// [`is_current_app`]: Self::is_current_app
 </span><span class="attr">#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 </span><span class="kw">pub struct </span>LangFilePath {
     <span class="doccomment">/// Package name.
@@ -1691,11 +1697,11 @@
         <span class="self">Self</span>::new(about.pkg_name.clone(), about.version.clone(), file.into())
     }
 
-    <span class="doccomment">/// Gets if this file is in the [`current_app`] resources.
+    <span class="doccomment">/// Gets if this file is in the [`current_app`] resources, or the `pkg_name` is empty or the `pkg_version.pre` is `#.#.#-local`.
     ///
     /// [`current_app`]: Self::current_app
     </span><span class="kw">pub fn </span>is_current_app(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.pkg_name.is_empty() || {
+        <span class="self">self</span>.pkg_name.is_empty() || <span class="self">self</span>.pkg_version.pre.as_str() == <span class="string">"local" </span>|| {
             <span class="kw">let </span>about = zng_env::about();
             <span class="self">self</span>.pkg_name == about.pkg_name &amp;&amp; <span class="self">self</span>.pkg_version == about.version
         }

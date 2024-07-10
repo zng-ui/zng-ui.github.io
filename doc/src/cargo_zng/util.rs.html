@@ -375,6 +375,7 @@
 <a href="#375" id="375">375</a>
 <a href="#376" id="376">376</a>
 <a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fs,
@@ -586,8 +587,8 @@
     <span class="prelude-val">None
 </span>}
 
-<span class="doccomment">/// Dependencies of manifest_path
-</span><span class="kw">pub fn </span>dependencies(manifest_path: <span class="kw-2">&amp;</span>str) -&gt; Vec&lt;DependencyManifest&gt; {
+<span class="doccomment">/// Workspace root and dependencies of manifest_path
+</span><span class="kw">pub fn </span>dependencies(manifest_path: <span class="kw-2">&amp;</span>str) -&gt; (PathBuf, Vec&lt;DependencyManifest&gt;) {
     <span class="kw">let </span>metadata = <span class="kw">match </span>Command::new(<span class="string">"cargo"</span>)
         .args([<span class="string">"metadata"</span>, <span class="string">"--format-version"</span>, <span class="string">"1"</span>, <span class="string">"--manifest-path"</span>])
         .arg(manifest_path)
@@ -606,15 +607,16 @@
     <span class="attr">#[derive(Deserialize)]
     </span><span class="kw">struct </span>Metadata {
         packages: Vec&lt;Package&gt;,
+        workspace_root: PathBuf,
     }
-    <span class="attr">#[derive(Deserialize)]
+    <span class="attr">#[derive(Debug, Deserialize)]
     </span><span class="kw">struct </span>Package {
         name: String,
         version: Version,
         dependencies: Vec&lt;Dependency&gt;,
         manifest_path: String,
     }
-    <span class="attr">#[derive(Deserialize)]
+    <span class="attr">#[derive(Debug, Deserialize)]
     </span><span class="kw">struct </span>Dependency {
         name: String,
         kind: <span class="prelude-ty">Option</span>&lt;String&gt;,
@@ -649,7 +651,7 @@
                 }
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(versions) = map.remove(dep.name.as_str()) {
                     <span class="kw">for </span>(version, pkg) <span class="kw">in </span>versions.iter() {
-                        <span class="kw">if </span>dep.req.matches(version) {
+                        <span class="kw">if </span>dep.req.comparators.is_empty() || dep.req.matches(version) {
                             r.push(DependencyManifest {
                                 name: pkg.name.clone(),
                                 version: pkg.version.clone(),
@@ -664,10 +666,10 @@
             }
         }
         collect(<span class="kw-2">&amp;mut </span>map, dependencies, <span class="kw-2">&amp;mut </span>r);
-        <span class="kw">return </span>r;
+        <span class="kw">return </span>(metadata.workspace_root, r);
     }
 
-    <span class="macro">vec!</span>[]
+    (metadata.workspace_root, <span class="macro">vec!</span>[])
 }
 
 <span class="kw">pub struct </span>DependencyManifest {

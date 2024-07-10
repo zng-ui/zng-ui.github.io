@@ -2846,6 +2846,31 @@
 <a href="#2846" id="2846">2846</a>
 <a href="#2847" id="2847">2847</a>
 <a href="#2848" id="2848">2848</a>
+<a href="#2849" id="2849">2849</a>
+<a href="#2850" id="2850">2850</a>
+<a href="#2851" id="2851">2851</a>
+<a href="#2852" id="2852">2852</a>
+<a href="#2853" id="2853">2853</a>
+<a href="#2854" id="2854">2854</a>
+<a href="#2855" id="2855">2855</a>
+<a href="#2856" id="2856">2856</a>
+<a href="#2857" id="2857">2857</a>
+<a href="#2858" id="2858">2858</a>
+<a href="#2859" id="2859">2859</a>
+<a href="#2860" id="2860">2860</a>
+<a href="#2861" id="2861">2861</a>
+<a href="#2862" id="2862">2862</a>
+<a href="#2863" id="2863">2863</a>
+<a href="#2864" id="2864">2864</a>
+<a href="#2865" id="2865">2865</a>
+<a href="#2866" id="2866">2866</a>
+<a href="#2867" id="2867">2867</a>
+<a href="#2868" id="2868">2868</a>
+<a href="#2869" id="2869">2869</a>
+<a href="#2870" id="2870">2870</a>
+<a href="#2871" id="2871">2871</a>
+<a href="#2872" id="2872">2872</a>
+<a href="#2873" id="2873">2873</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3495,6 +3520,19 @@
     /// [`map`]: Var::map
     /// [`Txt`]: Txt
     </span><span class="kw">fn </span>map_debug(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;Txt&gt;;
+
+    <span class="doccomment">/// Hold the variable in memory until the app exit.
+    </span><span class="kw">fn </span>perm(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        VARS.perm(<span class="self">self</span>.clone_any());
+    }
+
+    <span class="doccomment">/// Keep `other` alive until the handle or `self` are dropped.
+    </span><span class="kw">fn </span>hold_any(<span class="kw-2">&amp;</span><span class="self">self</span>, value: Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;) -&gt; VarHandle {
+        <span class="self">self</span>.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+            <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>value;
+            <span class="bool-val">true
+        </span>}))
+    }
 }
 
 <span class="attr">#[derive(Debug)]
@@ -4825,6 +4863,18 @@
             var: <span class="self">self</span>,
             _t: PhantomData,
         }
+    }
+
+    <span class="doccomment">/// Keep `value` alive until the handle or `self` are dropped.
+    </span><span class="kw">fn </span>hold&lt;V&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, value: V) -&gt; VarHandle
+    <span class="kw">where
+        </span>V: Any + Send,
+    {
+        <span class="kw">let </span>value = Mutex::new(value); <span class="comment">// + Sync
+        </span><span class="self">self</span>.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+            <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>value;
+            <span class="bool-val">true
+        </span>}))
     }
 }
 

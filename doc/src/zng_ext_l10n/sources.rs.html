@@ -404,25 +404,13 @@
 <a href="#404" id="404">404</a>
 <a href="#405" id="405">405</a>
 <a href="#406" id="406">406</a>
-<a href="#407" id="407">407</a>
-<a href="#408" id="408">408</a>
-<a href="#409" id="409">409</a>
-<a href="#410" id="410">410</a>
-<a href="#411" id="411">411</a>
-<a href="#412" id="412">412</a>
-<a href="#413" id="413">413</a>
-<a href="#414" id="414">414</a>
-<a href="#415" id="415">415</a>
-<a href="#416" id="416">416</a>
-<a href="#417" id="417">417</a>
-<a href="#418" id="418">418</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{collections::HashMap, io, path::PathBuf, str::FromStr, sync::Arc};
 
 <span class="kw">use </span>semver::Version;
 <span class="kw">use </span>zng_clone_move::clmv;
 <span class="kw">use </span>zng_ext_fs_watcher::WATCHER;
 <span class="kw">use </span>zng_txt::Txt;
-<span class="kw">use </span>zng_var::{types::WeakArcVar, var, AnyVar, ArcEq, ArcVar, BoxedVar, BoxedWeakVar, LocalVar, Var, VarHandle, WeakVar};
+<span class="kw">use </span>zng_var::{types::WeakArcVar, var, ArcEq, ArcVar, BoxedVar, BoxedWeakVar, LocalVar, Var, VarHandle, WeakVar};
 
 <span class="kw">use crate</span>::{FluentParserErrors, L10nSource, Lang, LangFilePath, LangMap, LangResourceStatus};
 
@@ -704,13 +692,9 @@
             <span class="kw">if let </span><span class="prelude-val">Some</span>(res) = f.res.upgrade() {
                 <span class="kw">let </span>actual_f = <span class="self">self</span>.actual.lang_resource(lang.clone(), file.clone());
                 f.actual_weak_res = actual_f.bind(<span class="kw-2">&amp;</span>res); <span class="comment">// weak ref to `res` is held by `actual_f`
-                </span>f.res_strong_actual = res.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-                    <span class="comment">// strong ref to `actual_f` is held by `res`.
-                    </span><span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>actual_f;
-                    <span class="bool-val">true
-                </span>}));
+                </span>f.res_strong_actual = res.hold(actual_f); <span class="comment">// strong ref to `actual_f` is held by `res`.
 
-                <span class="kw">let </span>actual_s = <span class="self">self</span>.actual.lang_resource_status(lang.clone(), file.clone());
+                </span><span class="kw">let </span>actual_s = <span class="self">self</span>.actual.lang_resource_status(lang.clone(), file.clone());
                 f.status.set_from(<span class="kw-2">&amp;</span>actual_s);
                 f.actual_weak_status = actual_s.bind(<span class="kw-2">&amp;</span>f.status);
             } <span class="kw">else </span>{
@@ -747,12 +731,8 @@
 
                     <span class="kw">let </span>res = var(actual_f.get());
                     f.actual_weak_res = actual_f.bind(<span class="kw-2">&amp;</span>res); <span class="comment">// weak ref to `res` is held by `actual_f`
-                    </span>f.res_strong_actual = res.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-                        <span class="comment">// strong ref to `actual_f` is held by `res`.
-                        </span><span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>actual_f;
-                        <span class="bool-val">true
-                    </span>}));
-                    <span class="kw">let </span>res = res.boxed();
+                    </span>f.res_strong_actual = res.hold(actual_f); <span class="comment">// strong ref to `actual_f` is held by `res`.
+                    </span><span class="kw">let </span>res = res.boxed();
                     f.res = res.downgrade();
 
                     f.status.set_from(<span class="kw-2">&amp;</span>actual_s);
@@ -769,12 +749,8 @@
 
                 <span class="kw">let </span>res = var(actual_f.get());
                 f.actual_weak_res = actual_f.bind(<span class="kw-2">&amp;</span>res); <span class="comment">// weak ref to `res` is held by `actual_f`
-                </span>f.res_strong_actual = res.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-                    <span class="comment">// strong ref to `actual_f` is held by `res`.
-                    </span><span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>actual_f;
-                    <span class="bool-val">true
-                </span>}));
-                <span class="kw">let </span>res = res.boxed();
+                </span>f.res_strong_actual = res.hold(actual_f); <span class="comment">// strong ref to `actual_f` is held by `res`.
+                </span><span class="kw">let </span>res = res.boxed();
                 f.res = res.downgrade();
 
                 f.status.set_from(<span class="kw-2">&amp;</span>actual_s);
