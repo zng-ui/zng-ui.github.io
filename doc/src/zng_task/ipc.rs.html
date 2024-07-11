@@ -477,6 +477,18 @@
 <a href="#477" id="477">477</a>
 <a href="#478" id="478">478</a>
 <a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
 </pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"ipc"</span>)]
 
 </span><span class="doccomment">//! IPC tasks.
@@ -665,12 +677,24 @@
                 <span class="prelude-val">Ok</span>(r) =&gt; r,
                 <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(std::io::ErrorKind::ConnectionRefused, e)),
             },
-            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
-                    std::io::ErrorKind::TimedOut,
-                    <span class="string">"worker process did not connect in 10s"</span>,
-                ))
-            }
+            <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="kw">match </span>process.kill() {
+                <span class="prelude-val">Ok</span>(()) =&gt; {
+                    <span class="kw">let </span>output = process.wait().unwrap();
+                    <span class="kw">let </span>stdout = String::from_utf8_lossy(<span class="kw-2">&amp;</span>output.stdout);
+                    <span class="kw">let </span>stderr = String::from_utf8_lossy(<span class="kw-2">&amp;</span>output.stderr);
+                    <span class="kw">let </span>code = output.status.code().unwrap_or(<span class="number">0</span>);
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
+                        std::io::ErrorKind::TimedOut,
+                        <span class="macro">format!</span>(<span class="string">"worker process did not connect in 10 seconds\nworker exit code: {code}\n--worker stdout--\n{stdout}\n--worker stderr--\n{stderr}"</span>),
+                    ));
+                }
+                <span class="prelude-val">Err</span>(e) =&gt; {
+                    <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(
+                        std::io::ErrorKind::TimedOut,
+                        <span class="macro">format!</span>(<span class="string">"worker process did not connect in 10s\ncannot be kill worker process, {e}"</span>),
+                    ))
+                }
+            },
         };
 
         <span class="kw">let </span>(rsp_sender, rsp_recv) = ipc_channel::ipc::channel()<span class="question-mark">?</span>;

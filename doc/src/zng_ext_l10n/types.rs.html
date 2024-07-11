@@ -908,6 +908,43 @@
 <a href="#908" id="908">908</a>
 <a href="#909" id="909">909</a>
 <a href="#910" id="910">910</a>
+<a href="#911" id="911">911</a>
+<a href="#912" id="912">912</a>
+<a href="#913" id="913">913</a>
+<a href="#914" id="914">914</a>
+<a href="#915" id="915">915</a>
+<a href="#916" id="916">916</a>
+<a href="#917" id="917">917</a>
+<a href="#918" id="918">918</a>
+<a href="#919" id="919">919</a>
+<a href="#920" id="920">920</a>
+<a href="#921" id="921">921</a>
+<a href="#922" id="922">922</a>
+<a href="#923" id="923">923</a>
+<a href="#924" id="924">924</a>
+<a href="#925" id="925">925</a>
+<a href="#926" id="926">926</a>
+<a href="#927" id="927">927</a>
+<a href="#928" id="928">928</a>
+<a href="#929" id="929">929</a>
+<a href="#930" id="930">930</a>
+<a href="#931" id="931">931</a>
+<a href="#932" id="932">932</a>
+<a href="#933" id="933">933</a>
+<a href="#934" id="934">934</a>
+<a href="#935" id="935">935</a>
+<a href="#936" id="936">936</a>
+<a href="#937" id="937">937</a>
+<a href="#938" id="938">938</a>
+<a href="#939" id="939">939</a>
+<a href="#940" id="940">940</a>
+<a href="#941" id="941">941</a>
+<a href="#942" id="942">942</a>
+<a href="#943" id="943">943</a>
+<a href="#944" id="944">944</a>
+<a href="#945" id="945">945</a>
+<a href="#946" id="946">946</a>
+<a href="#947" id="947">947</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, collections::HashMap, fmt, mem, ops, path::PathBuf, sync::Arc};
 
 <span class="kw">use </span>fluent::types::FluentNumber;
@@ -1647,11 +1684,13 @@
 }
 <span class="kw">impl </span>Ord <span class="kw">for </span>LangFilePath {
     <span class="kw">fn </span>cmp(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; std::cmp::Ordering {
-        <span class="kw">match </span><span class="self">self</span>.pkg_name.cmp(<span class="kw-2">&amp;</span>other.pkg_name) {
+        <span class="kw">let </span>self_pkg = <span class="self">self</span>.actual_pkg_data();
+        <span class="kw">let </span>other_pkg = other.actual_pkg_data();
+        <span class="kw">match </span>self_pkg.<span class="number">0</span>.cmp(other_pkg.<span class="number">0</span>) {
             core::cmp::Ordering::Equal =&gt; {}
             ord =&gt; <span class="kw">return </span>ord,
         }
-        <span class="kw">match </span><span class="self">self</span>.pkg_version.cmp(<span class="kw-2">&amp;</span>other.pkg_version) {
+        <span class="kw">match </span>self_pkg.<span class="number">1</span>.cmp(other_pkg.<span class="number">1</span>) {
             core::cmp::Ordering::Equal =&gt; {}
             ord =&gt; <span class="kw">return </span>ord,
         }
@@ -1665,15 +1704,14 @@
 }
 <span class="kw">impl </span>std::hash::Hash <span class="kw">for </span>LangFilePath {
     <span class="kw">fn </span>hash&lt;H: std::hash::Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
-        <span class="self">self</span>.pkg_name.hash(state);
-        <span class="self">self</span>.pkg_version.hash(state);
+        <span class="self">self</span>.actual_pkg_data().hash(state);
         <span class="self">self</span>.file().hash(state);
     }
 }
 <span class="kw">impl </span>Eq <span class="kw">for </span>LangFilePath {}
 <span class="kw">impl </span>PartialEq <span class="kw">for </span>LangFilePath {
     <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-        <span class="self">self</span>.pkg_name == other.pkg_name &amp;&amp; <span class="self">self</span>.pkg_version == other.pkg_version &amp;&amp; <span class="self">self</span>.file() == other.file()
+        <span class="self">self</span>.actual_pkg_data() == other.actual_pkg_data() &amp;&amp; <span class="self">self</span>.file() == other.file()
     }
 }
 <span class="kw">impl </span>LangFilePath {
@@ -1701,13 +1739,46 @@
     ///
     /// [`current_app`]: Self::current_app
     </span><span class="kw">pub fn </span>is_current_app(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.pkg_name.is_empty() || <span class="self">self</span>.pkg_version.pre.as_str() == <span class="string">"local" </span>|| {
+        <span class="self">self</span>.is_current_app_no_check() || {
             <span class="kw">let </span>about = zng_env::about();
             <span class="self">self</span>.pkg_name == about.pkg_name &amp;&amp; <span class="self">self</span>.pkg_version == about.version
         }
     }
 
+    <span class="kw">fn </span>is_current_app_no_check(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="self">self</span>.pkg_name.is_empty() || <span class="self">self</span>.pkg_version.pre.as_str() == <span class="string">"local"
+    </span>}
+
+    <span class="kw">fn </span>actual_pkg_data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (<span class="kw-2">&amp;</span>Txt, <span class="kw-2">&amp;</span>Version) {
+        <span class="kw">if </span><span class="self">self</span>.is_current_app_no_check() {
+            <span class="kw">let </span>about = zng_env::about();
+            (<span class="kw-2">&amp;</span>about.pkg_name, <span class="kw-2">&amp;</span>about.version)
+        } <span class="kw">else </span>{
+            (<span class="kw-2">&amp;</span><span class="self">self</span>.pkg_name, <span class="kw-2">&amp;</span><span class="self">self</span>.pkg_version)
+        }
+    }
+
+    <span class="doccomment">/// Gets the normalized package name.
+    ///
+    /// This is the app package name if [`is_current_app`], otherwise is just the `pkg_name` value.
+    ///
+    /// [`is_current_app`]: Self::is_current_app
+    </span><span class="kw">pub fn </span>pkg_name(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt {
+        <span class="self">self</span>.actual_pkg_data().<span class="number">0</span>.clone()
+    }
+
+    <span class="doccomment">/// Gets the normalized package version.
+    ///
+    /// This is the app version if [`is_current_app`], otherwise is just the `pkg_version` value.
+    ///
+    /// [`is_current_app`]: Self::is_current_app
+    </span><span class="kw">pub fn </span>pkg_version(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Version {
+        <span class="self">self</span>.actual_pkg_data().<span class="number">1</span>.clone()
+    }
+
     <span class="doccomment">/// Gets the normalized file name.
+    ///
+    /// This `"_"` for empty file or the file.
     </span><span class="kw">pub fn </span>file(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt {
         <span class="kw">if </span><span class="self">self</span>.file.is_empty() {
             Txt::from_char(<span class="string">'_'</span>)
@@ -1748,7 +1819,10 @@
     /// * `(0..u16::MAX) &lt;&lt; 16 * 3` is a match with `major` differences and the absolute distance.
     /// * `None`` is a `pkg_name` mismatch.
     </span><span class="kw">pub fn </span>matches(<span class="kw-2">&amp;</span><span class="self">self</span>, search: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;u64&gt; {
-        <span class="kw">if </span><span class="self">self</span>.pkg_name != search.pkg_name {
+        <span class="kw">let </span>(self_name, self_version) = <span class="self">self</span>.actual_pkg_data();
+        <span class="kw">let </span>(search_name, search_version) = search.actual_pkg_data();
+
+        <span class="kw">if </span>self_name != search_name {
             <span class="kw">return </span><span class="prelude-val">None</span>;
         }
 
@@ -1763,16 +1837,16 @@
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>d = <span class="number">0</span>;
-        <span class="kw">if </span><span class="self">self</span>.pkg_version.build != search.pkg_version.build {
+        <span class="kw">if </span>self_version.build != search_version.build {
             d = <span class="number">1</span>;
         }
-        <span class="kw">if </span><span class="self">self</span>.pkg_version.pre != search.pkg_version.pre {
+        <span class="kw">if </span>self_version.pre != search_version.pre {
             d |= <span class="number">0b10</span>;
         }
 
-        d |= dist(<span class="self">self</span>.pkg_version.patch, search.pkg_version.patch, <span class="number">1</span>);
-        d |= dist(<span class="self">self</span>.pkg_version.minor, search.pkg_version.minor, <span class="number">2</span>);
-        d |= dist(<span class="self">self</span>.pkg_version.major, search.pkg_version.major, <span class="number">3</span>);
+        d |= dist(self_version.patch, search_version.patch, <span class="number">1</span>);
+        d |= dist(self_version.minor, search_version.minor, <span class="number">2</span>);
+        d |= dist(self_version.major, search_version.major, <span class="number">3</span>);
 
         <span class="prelude-val">Some</span>(d)
     }
