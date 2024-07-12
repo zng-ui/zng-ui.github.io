@@ -2251,6 +2251,36 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2215" id="2215">2215</a>
 <a href="#2216" id="2216">2216</a>
 <a href="#2217" id="2217">2217</a>
+<a href="#2218" id="2218">2218</a>
+<a href="#2219" id="2219">2219</a>
+<a href="#2220" id="2220">2220</a>
+<a href="#2221" id="2221">2221</a>
+<a href="#2222" id="2222">2222</a>
+<a href="#2223" id="2223">2223</a>
+<a href="#2224" id="2224">2224</a>
+<a href="#2225" id="2225">2225</a>
+<a href="#2226" id="2226">2226</a>
+<a href="#2227" id="2227">2227</a>
+<a href="#2228" id="2228">2228</a>
+<a href="#2229" id="2229">2229</a>
+<a href="#2230" id="2230">2230</a>
+<a href="#2231" id="2231">2231</a>
+<a href="#2232" id="2232">2232</a>
+<a href="#2233" id="2233">2233</a>
+<a href="#2234" id="2234">2234</a>
+<a href="#2235" id="2235">2235</a>
+<a href="#2236" id="2236">2236</a>
+<a href="#2237" id="2237">2237</a>
+<a href="#2238" id="2238">2238</a>
+<a href="#2239" id="2239">2239</a>
+<a href="#2240" id="2240">2240</a>
+<a href="#2241" id="2241">2241</a>
+<a href="#2242" id="2242">2242</a>
+<a href="#2243" id="2243">2243</a>
+<a href="#2244" id="2244">2244</a>
+<a href="#2245" id="2245">2245</a>
+<a href="#2246" id="2246">2246</a>
+<a href="#2247" id="2247">2247</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Helper nodes.
 //!
 //! This module defines some foundational nodes that can be used for declaring properties and widgets.
@@ -2826,7 +2856,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = event.on(update) {
                 <span class="kw">if </span>!args.propagation().is_stopped() &amp;&amp; filter(args) {
+                    <span class="attr">#[cfg(debug_assertions)]
+                    </span><span class="kw">let </span>t = std::time::Instant::now();
+
                     handler.event(args);
+
+                    <span class="attr">#[cfg(debug_assertions)]
+                    </span>{
+                        <span class="kw">let </span>t = t.elapsed();
+                        <span class="kw">if </span>t &gt; std::time::Duration::from_millis(<span class="number">300</span>) {
+                            <span class="macro">tracing::warn!</span>(
+                                <span class="string">"event handler for `{}` in {:?} blocked for {t:?}, consider using `async_hn!`"</span>,
+                                event.as_any().name(),
+                                WIDGET.id()
+                            );
+                        }
+                    }
                 }
             }
         }
@@ -2892,7 +2937,22 @@ document.addEventListener('DOMContentLoaded', function () {
         UiNodeOp::Event { update } =&gt; {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = event.on(update) {
                 <span class="kw">if </span>!args.propagation().is_stopped() &amp;&amp; filter(args) {
+                    <span class="attr">#[cfg(debug_assertions)]
+                    </span><span class="kw">let </span>t = std::time::Instant::now();
+
                     handler.event(args);
+
+                    <span class="attr">#[cfg(debug_assertions)]
+                    </span>{
+                        <span class="kw">let </span>t = t.elapsed();
+                        <span class="kw">if </span>t &gt; std::time::Duration::from_millis(<span class="number">300</span>) {
+                            <span class="macro">tracing::warn!</span>(
+                                <span class="string">"preview event handler for `{}` in {:?} blocked for {t:?}, consider using `async_hn!`"</span>,
+                                event.as_any().name(),
+                                WIDGET.id()
+                            );
+                        }
+                    }
                 }
             }
         }

@@ -1094,7 +1094,7 @@
 
         var.animate(<span class="kw">move </span>|anim, vm| {
             <span class="kw">let </span>(interval, timeout) = cfg.get();
-            <span class="kw">if </span>anim.start_time().elapsed() &gt;= timeout {
+            <span class="kw">if </span>anim.start_time().elapsed() &gt;= timeout || interval == Duration::MAX {
                 <span class="kw">if </span><span class="kw-2">**</span>vm != one {
                     vm.set(one);
                 }

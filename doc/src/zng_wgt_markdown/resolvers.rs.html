@@ -466,6 +466,30 @@
 <a href="#466" id="466">466</a>
 <a href="#467" id="467">467</a>
 <a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::path::PathBuf;
 <span class="kw">use </span>std::sync::Arc;
@@ -473,6 +497,7 @@
 <span class="kw">use </span>zng_wgt::{prelude::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 
 <span class="kw">use </span>zng_app::widget::info::TransformChangedArgs;
+<span class="kw">use </span>zng_ext_clipboard::{CLIPBOARD, COPY_CMD};
 <span class="kw">use </span>zng_ext_image::ImageSource;
 <span class="kw">use </span>zng_ext_input::focus::WidgetInfoFocusExt <span class="kw">as _</span>;
 <span class="kw">use </span>zng_ext_input::{focus::FOCUS, gesture::ClickArgs};
@@ -480,11 +505,10 @@
 <span class="kw">use </span>zng_wgt_container::Container;
 <span class="kw">use </span>zng_wgt_fill::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt_filter::<span class="kw-2">*</span>;
-<span class="kw">use </span>zng_wgt_input::focus::on_blur;
+<span class="kw">use </span>zng_wgt_input::focus::on_focus_leave;
 <span class="kw">use </span>zng_wgt_layer::{AnchorMode, AnchorOffset, LayerIndex, LAYERS};
 <span class="kw">use </span>zng_wgt_scroll::cmd::ScrollToMode;
 <span class="kw">use </span>zng_wgt_size_offset::<span class="kw-2">*</span>;
-<span class="kw">use </span>zng_wgt_stack::{Stack, StackDirection};
 <span class="kw">use </span>zng_wgt_text::{<span class="self">self </span><span class="kw">as </span>text, Text};
 
 <span class="kw">use </span><span class="kw">super</span>::Markdown;
@@ -734,7 +758,8 @@
         <span class="kw">return </span><span class="bool-val">false</span>;
     }
 
-    <span class="kw">enum </span>Link {
+    <span class="attr">#[derive(Clone)]
+    </span><span class="kw">enum </span>Link {
         Url(Uri),
         Path(PathBuf),
     }
@@ -785,72 +810,95 @@
             background_color = light_dark(web_colors::PINK.with_alpha(<span class="number">90</span>.pct()), web_colors::DARK_RED.with_alpha(<span class="number">90</span>.pct()));
         }
 
-        child = <span class="macro">Stack!</span> {
-            direction = StackDirection::left_to_right();
-            children = <span class="macro">ui_vec!</span>[
-                <span class="macro">Button!</span> {
-                    style_fn = <span class="macro">zng_wgt_button::LinkStyle!</span>();
+        on_focus_leave = <span class="macro">async_hn_once!</span>(status, |<span class="kw">_</span>| {
+            <span class="kw">if </span>status.get() != Status::Pending {
+                <span class="kw">return</span>;
+            }
 
-                    focus_on_init = <span class="bool-val">true</span>;
+            status.set(Status::Cancel);
+            task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
 
-                    child = <span class="macro">Text!</span>(url);
-                    text::underline_skip = text::UnderlineSkip::SPACES;
+            LAYERS.remove(popup_id);
+        });
+        on_move = <span class="macro">async_hn!</span>(status, |args: TransformChangedArgs| {
+            <span class="kw">if </span>status.get() != Status::Pending || args.timestamp().duration_since(open_time) &lt; <span class="number">300</span>.ms() {
+                <span class="kw">return</span>;
+            }
 
-                    on_blur = <span class="macro">async_hn_once!</span>(status, |<span class="kw">_</span>| {
-                        <span class="kw">if </span>status.get() != Status::Pending {
-                            <span class="kw">return</span>;
-                        }
+            status.set(Status::Cancel);
+            task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
 
-                        status.set(Status::Cancel);
-                        task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
+            LAYERS.remove(popup_id);
+        });
 
-                        LAYERS.remove(popup_id);
-                    });
-                    on_move = <span class="macro">async_hn!</span>(status, |args: TransformChangedArgs| {
-                        <span class="kw">if </span>status.get() != Status::Pending || args.timestamp().duration_since(open_time) &lt; <span class="number">300</span>.ms() {
-                            <span class="kw">return</span>;
-                        }
+        child = <span class="macro">Button!</span> {
+            style_fn = <span class="macro">zng_wgt_button::LinkStyle!</span>();
 
-                        status.set(Status::Cancel);
-                        task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
+            focus_on_init = <span class="bool-val">true</span>;
 
-                        LAYERS.remove(popup_id);
-                    });
+            child = <span class="macro">Text!</span>(url);
+            child_end = ICONS.get_or(<span class="string">"arrow-outward"</span>, || <span class="macro">Text!</span>(<span class="string">"🡵"</span>)), <span class="number">2</span>;
 
-                    on_click = <span class="macro">async_hn_once!</span>(status, |args: ClickArgs| {
-                        <span class="kw">if </span>status.get() != Status::Pending || args.timestamp().duration_since(open_time) &lt; <span class="number">300</span>.ms() {
-                            <span class="kw">return</span>;
-                        }
+            text::underline_skip = text::UnderlineSkip::SPACES;
 
-                        args.propagation().stop();
+            on_click = <span class="macro">async_hn_once!</span>(status, link, |args: ClickArgs| {
+                <span class="kw">if </span>status.get() != Status::Pending || args.timestamp().duration_since(open_time) &lt; <span class="number">300</span>.ms() {
+                    <span class="kw">return</span>;
+                }
 
-                        <span class="kw">let </span>url = <span class="kw">match </span>link {
-                            Link::Url(u) =&gt; u.to_string(),
-                            Link::Path(p) =&gt; {
-                                <span class="kw">match </span>dunce::canonicalize(<span class="kw-2">&amp;</span>p) {
-                                    <span class="prelude-val">Ok</span>(p) =&gt; p.display().to_string(),
-                                    <span class="prelude-val">Err</span>(e) =&gt; {
-                                        <span class="macro">tracing::error!</span>(<span class="string">"error canonicalizing \"{}\", {e}"</span>, p.display());
-                                        <span class="kw">return</span>;
-                                    }
-                                }
+                args.propagation().stop();
+
+                <span class="kw">let </span>(uri, kind) = <span class="kw">match </span>link {
+                    Link::Url(u) =&gt; (u.to_string(), <span class="string">"url"</span>),
+                    Link::Path(p) =&gt; {
+                        <span class="kw">match </span>dunce::canonicalize(<span class="kw-2">&amp;</span>p) {
+                            <span class="prelude-val">Ok</span>(p) =&gt; (p.display().to_string(), <span class="string">"path"</span>),
+                            <span class="prelude-val">Err</span>(e) =&gt; {
+                                <span class="macro">tracing::error!</span>(<span class="string">"error canonicalizing \"{}\", {e}"</span>, p.display());
+                                <span class="kw">return</span>;
                             }
-                        };
-
-                        <span class="kw">let </span>r = task::wait(<span class="macro">clmv!</span>(url, || open::that(url))).<span class="kw">await</span>;
-                        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = <span class="kw-2">&amp;</span>r {
-                            <span class="macro">tracing::error!</span>(<span class="string">"error opening \"{url}\", {e}"</span>);
                         }
+                    }
+                };
 
-                        status.set(<span class="kw">if </span>r.is_ok() { Status::Ok } <span class="kw">else </span>{ Status::Err });
-                        task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
+                <span class="kw">let </span>r = task::wait( || open::that(uri)).<span class="kw">await</span>;
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = <span class="kw-2">&amp;</span>r {
+                    <span class="macro">tracing::error!</span>(<span class="string">"error opening {kind}, {e}"</span>);
+                }
 
-                        LAYERS.remove(popup_id);
-                    });
-                },
-                <span class="macro">Text!</span>(<span class="string">" 🡵"</span>),
-            ];
-        }
+                status.set(<span class="kw">if </span>r.is_ok() { Status::Ok } <span class="kw">else </span>{ Status::Err });
+                task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
+
+                LAYERS.remove(popup_id);
+            });
+        };
+        child_end = <span class="macro">Button!</span> {
+            style_fn = <span class="macro">zng_wgt_button::LightStyle!</span>();
+            padding = <span class="number">3</span>;
+            child = presenter((), COPY_CMD.icon());
+            on_click = <span class="macro">async_hn_once!</span>(status, |args: ClickArgs| {
+                <span class="kw">if </span>status.get() != Status::Pending || args.timestamp().duration_since(open_time) &lt; <span class="number">300</span>.ms() {
+                    <span class="kw">return</span>;
+                }
+
+                args.propagation().stop();
+
+                <span class="kw">let </span>txt = <span class="kw">match </span>link {
+                    Link::Url(u) =&gt; u.to_txt(),
+                    Link::Path(p) =&gt; p.display().to_txt(),
+                };
+
+                <span class="kw">let </span>r = CLIPBOARD.set_text(txt.clone()).wait_into_rsp().<span class="kw">await</span>;
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = <span class="kw-2">&amp;</span>r {
+                    <span class="macro">tracing::error!</span>(<span class="string">"error copying uri, {e}"</span>);
+                }
+
+                status.set(<span class="kw">if </span>r.is_ok() { Status::Ok } <span class="kw">else </span>{ Status::Err });
+                task::deadline(<span class="number">200</span>.ms()).<span class="kw">await</span>;
+
+                LAYERS.remove(popup_id);
+            });
+        }, <span class="number">0</span>;
     };
 
     LAYERS.insert_anchored(
