@@ -1507,6 +1507,13 @@
 <a href="#1507" id="1507">1507</a>
 <a href="#1508" id="1508">1508</a>
 <a href="#1509" id="1509">1509</a>
+<a href="#1510" id="1510">1510</a>
+<a href="#1511" id="1511">1511</a>
+<a href="#1512" id="1512">1512</a>
+<a href="#1513" id="1513">1513</a>
+<a href="#1514" id="1514">1514</a>
+<a href="#1515" id="1515">1515</a>
+<a href="#1516" id="1516">1516</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Mouse events and service.
 //!
 //! The app extension [`MouseManager`] provides the events and service. It is included in the default application.
@@ -1658,7 +1665,7 @@
         <span class="doccomment">/// Position of the mouse in the coordinates of [`target`](MouseClickArgs::target).
         </span><span class="kw">pub </span>position: DipPoint,
 
-         <span class="doccomment">/// What modifier keys where pressed when this event happened.
+        <span class="doccomment">/// What modifier keys where pressed when this event happened.
         </span><span class="kw">pub </span>modifiers: ModifiersState,
 
         <span class="doccomment">/// Count of clicks within the double-click interval. Number `1` is single click, `2` is double click, etc.
@@ -1760,7 +1767,7 @@
 
         <span class="doccomment">/// Position of the mouse in the coordinates of [`target`](MouseWheelArgs::target).
         </span><span class="kw">pub </span>position: DipPoint,
-         <span class="doccomment">/// What modifier keys where pressed when this event happened.
+        <span class="doccomment">/// What modifier keys where pressed when this event happened.
         </span><span class="kw">pub </span>modifiers: ModifiersState,
 
         <span class="doccomment">/// Wheel motion delta, value is in pixels if the *wheel* is a touchpad.
@@ -3001,7 +3008,14 @@
         MouseService {
             multi_click_config: sys_multi_click_config.cow(),
             sys_multi_click_config,
-            repeat_config: KEYBOARD.repeat_config().map(|c| ButtonRepeatConfig { start_delay: c.start_delay, interval: c.interval }).cow().boxed(),
+            repeat_config: KEYBOARD
+                .repeat_config()
+                .map(|c| ButtonRepeatConfig {
+                    start_delay: c.start_delay,
+                    interval: c.interval,
+                })
+                .cow()
+                .boxed(),
             buttons: var(<span class="macro">vec!</span>[]),
             hovered: var(<span class="prelude-val">None</span>),
             position: var(<span class="prelude-val">None</span>),

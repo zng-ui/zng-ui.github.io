@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["style_fn"],"static":["STYLE_FN_VAR"],"struct":["DefaultStyle","DialogBackdrop"]};

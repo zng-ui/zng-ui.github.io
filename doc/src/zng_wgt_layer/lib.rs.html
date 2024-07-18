@@ -1588,7 +1588,6 @@
 <a href="#1588" id="1588">1588</a>
 <a href="#1589" id="1589">1589</a>
 <a href="#1590" id="1590">1590</a>
-<a href="#1591" id="1591">1591</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1616,6 +1615,7 @@
 <span class="kw">use </span>std::{fmt, mem, ops};
 
 <span class="kw">pub mod </span>popup;
+
 <span class="kw">struct </span>LayersCtx {
     items: EditableUiNodeListRef,
 }
@@ -1871,9 +1871,9 @@
                         <span class="kw">let </span><span class="kw-2">mut </span>constraints = <span class="kw">match </span>mode.min_size {
                             AnchorSize::Unbounded =&gt; PxConstraints2d::new_unbounded(),
                             AnchorSize::Window =&gt; LAYOUT.constraints(),
-                            AnchorSize::InnerSize =&gt; PxConstraints2d::new_exact_size(bounds.inner_size()),
-                            AnchorSize::InnerBorder =&gt; PxConstraints2d::new_exact_size(border.inner_size(bounds)),
-                            AnchorSize::OuterSize =&gt; PxConstraints2d::new_exact_size(bounds.outer_size()),
+                            AnchorSize::InnerSize =&gt; PxConstraints2d::new_exact_size(bounds.inner_size()).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
+                            AnchorSize::InnerBorder =&gt; PxConstraints2d::new_exact_size(border.inner_size(bounds)).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
+                            AnchorSize::OuterSize =&gt; PxConstraints2d::new_exact_size(bounds.outer_size()).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
                         };
                         <span class="kw">if </span>mode.max_size != mode.min_size {
                             constraints = <span class="kw">match </span>mode.max_size {
@@ -1887,7 +1887,6 @@
                                 AnchorSize::OuterSize =&gt; constraints.with_new_max_size(bounds.outer_size()),
                             };
                         }
-                        constraints = constraints.with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>);
 
                         <span class="kw-2">*</span>desired_size = LAYOUT.with_constraints(constraints, || widget.measure(wm));
                     }
@@ -1905,9 +1904,9 @@
                         </span><span class="kw">let </span><span class="kw-2">mut </span>constraints = <span class="kw">match </span>mode.min_size {
                             AnchorSize::Unbounded =&gt; PxConstraints2d::new_unbounded(),
                             AnchorSize::Window =&gt; LAYOUT.constraints(),
-                            AnchorSize::InnerSize =&gt; PxConstraints2d::new_exact_size(bounds.inner_size()),
-                            AnchorSize::InnerBorder =&gt; PxConstraints2d::new_exact_size(border.inner_size(bounds)),
-                            AnchorSize::OuterSize =&gt; PxConstraints2d::new_exact_size(bounds.outer_size()),
+                            AnchorSize::InnerSize =&gt; PxConstraints2d::new_exact_size(bounds.inner_size()).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
+                            AnchorSize::InnerBorder =&gt; PxConstraints2d::new_exact_size(border.inner_size(bounds)).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
+                            AnchorSize::OuterSize =&gt; PxConstraints2d::new_exact_size(bounds.outer_size()).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>),
                         };
                         <span class="kw">if </span>mode.max_size != mode.min_size {
                             constraints = <span class="kw">match </span>mode.max_size {
@@ -1921,7 +1920,6 @@
                                 AnchorSize::OuterSize =&gt; constraints.with_new_max_size(bounds.outer_size()),
                             };
                         }
-                        constraints = constraints.with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>);
 
                         <span class="kw">let </span>layer_size = LAYOUT.with_constraints(constraints, || {
                             <span class="kw">if </span>mode.corner_radius {
@@ -2703,8 +2701,8 @@
     }
 }
 <span class="macro">impl_from_and_into_var!</span> {
-     <span class="doccomment">/// `(place, origin)`.
-     </span><span class="kw">fn </span>from&lt;P: Into&lt;Point&gt;, O: Into&lt;Point&gt;&gt;(place_origin: (P, O)) -&gt; AnchorOffset {
+    <span class="doccomment">/// `(place, origin)`.
+    </span><span class="kw">fn </span>from&lt;P: Into&lt;Point&gt;, O: Into&lt;Point&gt;&gt;(place_origin: (P, O)) -&gt; AnchorOffset {
         AnchorOffset {
             place: place_origin.<span class="number">0</span>.into(),
             origin: place_origin.<span class="number">1</span>.into(),

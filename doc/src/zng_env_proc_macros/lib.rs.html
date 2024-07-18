@@ -141,6 +141,15 @@
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -169,14 +178,20 @@
         <span class="prelude-val">Ok</span>(m) =&gt; PathBuf::from(m).join(<span class="string">"Cargo.toml"</span>),
         <span class="prelude-val">Err</span>(e) =&gt; {
             <span class="kw">let </span>msg = <span class="macro">format!</span>(<span class="string">"missing CARGO_MANIFEST_DIR, {e}"</span>);
-            <span class="kw">return </span><span class="macro">quote!</span> { <span class="macro">compile_error!</span>(#msg) }.into();
+            <span class="kw">return </span><span class="macro">quote!</span> {
+                <span class="macro">compile_error!</span>(#msg)
+            }
+            .into();
         }
     };
     <span class="kw">let </span>manifest_str = <span class="kw">match </span>std::fs::read_to_string(<span class="kw-2">&amp;</span>manifest) {
         <span class="prelude-val">Ok</span>(s) =&gt; s,
         <span class="prelude-val">Err</span>(e) =&gt; {
             <span class="kw">let </span>msg = <span class="macro">format!</span>(<span class="string">"cannot read `{}`, {e}"</span>, manifest.display());
-            <span class="kw">return </span><span class="macro">quote!</span> { <span class="macro">compile_error!</span>(#msg) }.into();
+            <span class="kw">return </span><span class="macro">quote!</span> {
+                <span class="macro">compile_error!</span>(#msg)
+            }
+            .into();
         }
     };
 
@@ -184,7 +199,10 @@
         <span class="prelude-val">Ok</span>(m) =&gt; m,
         <span class="prelude-val">Err</span>(e) =&gt; {
             <span class="kw">let </span>msg = <span class="macro">format!</span>(<span class="string">"cannot parse Cargo.toml manifest, {e}"</span>);
-            <span class="kw">return </span><span class="macro">quote!</span> { <span class="macro">compile_error!</span>(#msg) }.into();
+            <span class="kw">return </span><span class="macro">quote!</span> {
+                <span class="macro">compile_error!</span>(#msg)
+            }
+            .into();
         }
     };
     <span class="kw">let </span>p_name = m.package.name;

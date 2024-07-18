@@ -561,6 +561,7 @@
 <a href="#561" id="561">561</a>
 <a href="#562" id="562">562</a>
 <a href="#563" id="563">563</a>
+<a href="#564" id="564">564</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Initialize a new project from a Zng template repository
 
 </span><span class="kw">use </span>std::{
@@ -668,11 +669,12 @@
         util::exit();
     }
 
-    <span class="comment">// cargo fmt
+    <span class="comment">// cargo zng fmt
     </span><span class="kw">if </span>Path::new(<span class="kw-2">&amp;</span>project_name).join(<span class="string">"Cargo.toml"</span>).exists() {
-        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::env::set_current_dir(project_name).and_then(|<span class="kw">_</span>| util::cmd(<span class="string">"cargo fmt"</span>, <span class="kw-2">&amp;</span>[], <span class="kw-2">&amp;</span>[])) {
-            <span class="macro">fatal!</span>(<span class="string">"cannot cargo fmt generated project, {e}"</span>)
+        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::env::set_current_dir(project_name) {
+            <span class="macro">fatal!</span>(<span class="string">"cannot format generated project, {e}"</span>)
         }
+        <span class="kw">crate</span>::fmt::run(<span class="kw">crate</span>::fmt::FmtArgs::default());
     }
 }
 

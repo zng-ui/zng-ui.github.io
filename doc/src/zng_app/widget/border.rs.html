@@ -1283,7 +1283,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">fn </span>from(percent: FactorPercent) -&gt; CornerRadius {
         CornerRadius::new_all(percent)
     }
-   <span class="doccomment">/// All corners same relative length.
+    <span class="doccomment">/// All corners same relative length.
     </span><span class="kw">fn </span>from(norm: Factor) -&gt; CornerRadius {
         CornerRadius::new_all(norm)
     }
@@ -1299,14 +1299,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// (top-left, top-right, bottom-left, bottom-right) corners.
     </span><span class="kw">fn </span>from&lt;TL: Into&lt;Size&gt;, TR: Into&lt;Size&gt;, BR: Into&lt;Size&gt;, BL: Into&lt;Size&gt;&gt;(
-        (top_left, top_right, bottom_right, bottom_left): (TL, TR, BR, BL)
+        (top_left, top_right, bottom_right, bottom_left): (TL, TR, BR, BL),
     ) -&gt; CornerRadius {
         CornerRadius::new(top_left, top_right, bottom_right, bottom_left)
     }
 
     <span class="doccomment">/// From layout corner-radius.
     </span><span class="kw">fn </span>from(corner_radius: PxCornerRadius) -&gt; CornerRadius {
-        CornerRadius::new(corner_radius.top_left, corner_radius.top_right, corner_radius.bottom_right, corner_radius.bottom_left)
+        CornerRadius::new(
+            corner_radius.top_left,
+            corner_radius.top_right,
+            corner_radius.bottom_right,
+            corner_radius.bottom_left,
+        )
     }
 }
 
@@ -1509,7 +1514,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// (top, right, bottom, left) sides.
     </span><span class="kw">fn </span>from&lt;T: Into&lt;BorderSide&gt;, R: Into&lt;BorderSide&gt;, B: Into&lt;BorderSide&gt;, L: Into&lt;BorderSide&gt;&gt;(
-        (top, right, bottom, left): (T, R, B, L)
+        (top, right, bottom, left): (T, R, B, L),
     ) -&gt; BorderSides {
         BorderSides::new(top, right, bottom, left)
     }
@@ -1522,15 +1527,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// (top-color, right-color, bottom-color, left-color, style) sides.
     </span><span class="kw">fn </span>from&lt;T: Into&lt;Rgba&gt;, R: Into&lt;Rgba&gt;, B: Into&lt;Rgba&gt;, L: Into&lt;Rgba&gt;, S: Into&lt;BorderStyle&gt;&gt;(
-        (top, right, bottom, left, style): (T, R, B, L, S)
+        (top, right, bottom, left, style): (T, R, B, L, S),
     ) -&gt; BorderSides {
         <span class="kw">let </span>style = style.into();
-        BorderSides::new(
-            (top, style),
-            (right, style),
-            (bottom, style),
-            (left, style),
-        )
+        BorderSides::new((top, style), (right, style), (bottom, style), (left, style))
     }
 }
 

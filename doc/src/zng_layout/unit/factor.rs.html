@@ -509,18 +509,6 @@
 <a href="#509" id="509">509</a>
 <a href="#510" id="510">510</a>
 <a href="#511" id="511">511</a>
-<a href="#512" id="512">512</a>
-<a href="#513" id="513">513</a>
-<a href="#514" id="514">514</a>
-<a href="#515" id="515">515</a>
-<a href="#516" id="516">516</a>
-<a href="#517" id="517">517</a>
-<a href="#518" id="518">518</a>
-<a href="#519" id="519">519</a>
-<a href="#520" id="520">520</a>
-<a href="#521" id="521">521</a>
-<a href="#522" id="522">522</a>
-<a href="#523" id="523">523</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_unit::FactorUnits;
 
 <span class="kw">use super</span>::{
@@ -1021,26 +1009,14 @@
     }
 
     <span class="doccomment">/// New dimension, top-bottom, left-right.
-    </span><span class="kw">fn </span>from&lt;
-        TB: Into&lt;Factor&gt;,
-        LR: Into&lt;Factor&gt;
-        &gt;(
-            (top_bottom, left_right): (TB, LR)
-        )
-        -&gt; FactorSideOffsets {
+    </span><span class="kw">fn </span>from&lt;TB: Into&lt;Factor&gt;, LR: Into&lt;Factor&gt;&gt;((top_bottom, left_right): (TB, LR)) -&gt; FactorSideOffsets {
         FactorSideOffsets::new_vh(top_bottom, left_right)
     }
 
     <span class="doccomment">/// New top, right, bottom, left.
-    </span><span class="kw">fn </span>from&lt;
-        T: Into&lt;Factor&gt;,
-        R: Into&lt;Factor&gt;,
-        B: Into&lt;Factor&gt;,
-        L: Into&lt;Factor&gt;
-        &gt;(
-            (top, right, bottom, left): (T, R, B, L)
-        )
-        -&gt; FactorSideOffsets {
+    </span><span class="kw">fn </span>from&lt;T: Into&lt;Factor&gt;, R: Into&lt;Factor&gt;, B: Into&lt;Factor&gt;, L: Into&lt;Factor&gt;&gt;(
+        (top, right, bottom, left): (T, R, B, L),
+    ) -&gt; FactorSideOffsets {
         FactorSideOffsets::new(top, right, bottom, left)
     }
 }

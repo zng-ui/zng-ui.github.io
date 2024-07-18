@@ -73,6 +73,12 @@
 <a href="#73" id="73">73</a>
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
+<a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -86,6 +92,7 @@
 
 #[macro_use]
 </span><span class="kw">mod </span>util;
+<span class="kw">mod </span>fmt;
 <span class="kw">mod </span>l10n;
 <span class="kw">mod </span>new;
 <span class="kw">mod </span>res;
@@ -121,6 +128,10 @@
 
 <span class="attr">#[derive(Subcommand, Debug)]
 </span><span class="kw">enum </span>Command {
+    <span class="doccomment">/// Format code and macros
+    ///
+    /// Runs cargo fmt and formats Zng macros
+    </span>Fmt(fmt::FmtArgs),
     <span class="doccomment">/// New project from a Zng template repository.
     </span>New(new::NewArgs),
     <span class="doccomment">/// Localization text scraper
@@ -141,6 +152,7 @@
     <span class="kw">let </span>CargoCli::Zng(cli) = CargoCli::parse();
 
     <span class="kw">match </span>cli.command {
+        Command::Fmt(args) =&gt; fmt::run(args),
         Command::New(args) =&gt; new::run(args),
         Command::L10n(args) =&gt; l10n::run(args),
         Command::Res(args) =&gt; res::run(args),

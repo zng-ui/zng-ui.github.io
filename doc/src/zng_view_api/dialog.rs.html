@@ -279,9 +279,78 @@
 <a href="#279" id="279">279</a>
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Native dialog types.
 
-</span><span class="kw">use </span>std::path::PathBuf;
+</span><span class="kw">use </span>std::{mem, path::PathBuf};
 
 <span class="kw">use </span>zng_txt::Txt;
 
@@ -361,37 +430,31 @@
     </span>Error(Txt),
 }
 
-<span class="doccomment">/// Defines a native file dialog.
-</span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
-</span><span class="kw">pub struct </span>FileDialog {
-    <span class="doccomment">/// Dialog window title.
-    </span><span class="kw">pub </span>title: Txt,
-    <span class="doccomment">/// Selected directory when the dialog opens.
-    </span><span class="kw">pub </span>starting_dir: PathBuf,
-    <span class="doccomment">/// Starting file name.
-    </span><span class="kw">pub </span>starting_name: Txt,
-    <span class="doccomment">/// File extension filters.
-    ///
-    /// Syntax:
-    ///
-    /// ```txt
-    /// Display Name|ext1;ext2|All Files|*
-    /// ```
-    ///
-    /// You can use the [`push_filter`] method to create filters. Note that the extensions are
-    /// not glob patterns, they must be an extension (without the dot prefix) or `*` for all files.
-    ///
-    /// [`push_filter`]: Self::push_filter
-    </span><span class="kw">pub </span>filters: Txt,
+<span class="doccomment">/// File dialog filters builder.
+///
+/// # Syntax
+///
+/// ```txt
+/// Display Name|ext1;ext2|All Files|*
+/// ```
+///
+/// You can use the [`push_filter`] method to create filters. Note that the extensions are
+/// not glob patterns, they must be an extension (without the dot prefix) or `*` for all files.
+///
+/// [`push_filter`]: FileDialogFilters::push_filter
+</span><span class="attr">#[derive(Debug, Default, PartialEq, Eq, Hash, Clone, serde::Serialize, serde::Deserialize)]
+#[serde(transparent)]
+</span><span class="kw">pub struct </span>FileDialogFilters(Txt);
+<span class="kw">impl </span>FileDialogFilters {
+    <span class="doccomment">/// New default (empty).
+    </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>::default()
+    }
 
-    <span class="doccomment">/// Defines the file dialog looks and what kind of result is expected.
-    </span><span class="kw">pub </span>kind: FileDialogKind,
-}
-<span class="kw">impl </span>FileDialog {
     <span class="doccomment">/// Push a filter entry.
     </span><span class="kw">pub fn </span>push_filter&lt;S: AsRef&lt;str&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw-2">&amp;</span>[S]) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
-        <span class="kw">if </span>!<span class="self">self</span>.filters.is_empty() &amp;&amp; !<span class="self">self</span>.filters.ends_with(<span class="string">'|'</span>) {
-            <span class="self">self</span>.filters.push(<span class="string">'|'</span>);
+        <span class="kw">if </span>!<span class="self">self</span>.<span class="number">0</span>.is_empty() &amp;&amp; !<span class="self">self</span>.<span class="number">0</span>.ends_with(<span class="string">'|'</span>) {
+            <span class="self">self</span>.<span class="number">0</span>.push(<span class="string">'|'</span>);
         }
 
         <span class="kw">let </span><span class="kw-2">mut </span>extensions: Vec&lt;<span class="kw">_</span>&gt; = extensions
@@ -406,27 +469,27 @@
         <span class="kw">let </span>display_name = display_name.replace(<span class="string">'|'</span>, <span class="string">" "</span>);
         <span class="kw">let </span>display_name = display_name.trim();
         <span class="kw">if </span>!display_name.is_empty() {
-            <span class="self">self</span>.filters.push_str(display_name);
-            <span class="self">self</span>.filters.push_str(<span class="string">" ("</span>);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(display_name);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(<span class="string">" ("</span>);
         }
         <span class="kw">let </span><span class="kw-2">mut </span>prefix = <span class="string">""</span>;
         <span class="kw">for </span>pat <span class="kw">in </span><span class="kw-2">&amp;</span>extensions {
-            <span class="self">self</span>.filters.push_str(prefix);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(prefix);
             prefix = <span class="string">", "</span>;
-            <span class="self">self</span>.filters.push_str(<span class="string">"*."</span>);
-            <span class="self">self</span>.filters.push_str(pat);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(<span class="string">"*."</span>);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(pat);
         }
         <span class="kw">if </span>!display_name.is_empty() {
-            <span class="self">self</span>.filters.push(<span class="string">')'</span>);
+            <span class="self">self</span>.<span class="number">0</span>.push(<span class="string">')'</span>);
         }
 
-        <span class="self">self</span>.filters.push(<span class="string">'|'</span>);
+        <span class="self">self</span>.<span class="number">0</span>.push(<span class="string">'|'</span>);
 
         prefix = <span class="string">""</span>;
         <span class="kw">for </span>pat <span class="kw">in </span>extensions {
-            <span class="self">self</span>.filters.push_str(prefix);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(prefix);
             prefix = <span class="string">";"</span>;
-            <span class="self">self</span>.filters.push_str(pat);
+            <span class="self">self</span>.<span class="number">0</span>.push_str(pat);
         }
 
         <span class="self">self
@@ -434,6 +497,9 @@
 
     <span class="doccomment">/// Iterate over filter entries and patterns.
     </span><span class="kw">pub fn </span>iter_filters(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>str, <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>str&gt;)&gt; {
+        <span class="self">Self</span>::iter_filters_str(<span class="self">self</span>.<span class="number">0</span>.as_str())
+    }
+    <span class="kw">fn </span>iter_filters_str(filters: <span class="kw-2">&amp;</span>str) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>str, <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>str&gt;)&gt; {
         <span class="kw">struct </span>Iter&lt;<span class="lifetime">'a</span>&gt; {
             filters: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str,
         }
@@ -489,8 +555,65 @@
             }
         }
         Iter {
-            filters: <span class="self">self</span>.filters.trim_start().trim_start_matches(<span class="string">'|'</span>),
+            filters: filters.trim_start().trim_start_matches(<span class="string">'|'</span>),
         }
+    }
+
+    <span class="doccomment">/// Gets the filter text.
+    </span><span class="kw">pub fn </span>build(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; Txt {
+        <span class="self">self</span>.<span class="number">0</span>.end_mut();
+        <span class="self">self</span>.<span class="number">0
+    </span>}
+}
+<span class="attr">#[cfg(feature = <span class="string">"var"</span>)]
+</span><span class="macro">zng_var::impl_from_and_into_var!</span> {
+    <span class="kw">fn </span>from(filter: Txt) -&gt; FileDialogFilters {
+        FileDialogFilters(filter)
+    }
+
+    <span class="kw">fn </span>from(filter: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; FileDialogFilters {
+        FileDialogFilters(filter.into())
+    }
+}
+
+<span class="doccomment">/// Defines a native file dialog.
+</span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+</span><span class="kw">pub struct </span>FileDialog {
+    <span class="doccomment">/// Dialog window title.
+    </span><span class="kw">pub </span>title: Txt,
+    <span class="doccomment">/// Selected directory when the dialog opens.
+    </span><span class="kw">pub </span>starting_dir: PathBuf,
+    <span class="doccomment">/// Starting file name.
+    </span><span class="kw">pub </span>starting_name: Txt,
+    <span class="doccomment">/// File extension filters.
+    ///
+    /// Syntax:
+    ///
+    /// ```txt
+    /// Display Name|ext1;ext2|All Files|*
+    /// ```
+    ///
+    /// You can use the [`push_filter`] method to create filters. Note that the extensions are
+    /// not glob patterns, they must be an extension (without the dot prefix) or `*` for all files.
+    ///
+    /// [`push_filter`]: Self::push_filter
+    </span><span class="kw">pub </span>filters: Txt,
+
+    <span class="doccomment">/// Defines the file dialog looks and what kind of result is expected.
+    </span><span class="kw">pub </span>kind: FileDialogKind,
+}
+<span class="kw">impl </span>FileDialog {
+    <span class="doccomment">/// Push a filter entry.
+    </span><span class="kw">pub fn </span>push_filter&lt;S: AsRef&lt;str&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw-2">&amp;</span>[S]) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+        <span class="kw">let </span><span class="kw-2">mut </span>f = FileDialogFilters(mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.filters));
+        f.push_filter(display_name, extensions);
+        <span class="self">self</span>.filters = f.build();
+        <span class="self">self
+    </span>}
+
+    <span class="doccomment">/// Iterate over filter entries and patterns.
+    </span><span class="kw">pub fn </span>iter_filters(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>str, <span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>str&gt;)&gt; {
+        FileDialogFilters::iter_filters_str(<span class="kw-2">&amp;</span><span class="self">self</span>.filters)
     }
 }
 <span class="kw">impl </span>Default <span class="kw">for </span>FileDialog {
@@ -534,6 +657,21 @@
     /// The associated string may contain debug information, caller should assume that native file dialogs
     /// are not available for the given window ID at the current view-process instance.
     </span>Error(Txt),
+}
+<span class="kw">impl </span>FileDialogResponse {
+    <span class="doccomment">/// Gets the selected paths, or empty for cancel.
+    </span><span class="kw">pub fn </span>into_paths(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;PathBuf&gt;, Txt&gt; {
+        <span class="kw">match </span><span class="self">self </span>{
+            FileDialogResponse::Selected(s) =&gt; <span class="prelude-val">Ok</span>(s),
+            FileDialogResponse::Cancel =&gt; <span class="prelude-val">Ok</span>(<span class="macro">vec!</span>[]),
+            FileDialogResponse::Error(e) =&gt; <span class="prelude-val">Err</span>(e),
+        }
+    }
+
+    <span class="doccomment">/// Gets the last selected path, or `None` for cancel.
+    </span><span class="kw">pub fn </span>into_path(<span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;PathBuf&gt;, Txt&gt; {
+        <span class="self">self</span>.into_paths().map(|<span class="kw-2">mut </span>p| p.pop())
+    }
 }
 
 <span class="attr">#[cfg(test)]

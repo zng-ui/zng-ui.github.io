@@ -172,6 +172,18 @@
 <a href="#172" id="172">172</a>
 <a href="#173" id="173">173</a>
 <a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
 </pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// New paired [`ResponderVar`] and [`ResponseVar`] in the waiting state.
@@ -332,6 +344,18 @@
             },
             waiting_value,
         )
+    }
+
+    <span class="doccomment">/// Map to another response variable.
+    </span><span class="kw">pub fn </span>map_response&lt;O, M&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>map: M) -&gt; ResponseVar&lt;O&gt;
+    <span class="kw">where
+        </span>O: VarValue,
+        M: FnMut(<span class="kw-2">&amp;</span>T) -&gt; O + Send + <span class="lifetime">'static</span>,
+    {
+        <span class="self">self</span>.map(<span class="kw">move </span>|r| <span class="kw">match </span>r {
+            Response::Waiting =&gt; Response::Waiting,
+            Response::Done(t) =&gt; Response::Done(map(t)),
+        })
     }
 }
 

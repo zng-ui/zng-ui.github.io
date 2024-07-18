@@ -769,11 +769,6 @@
 <a href="#769" id="769">769</a>
 <a href="#770" id="770">770</a>
 <a href="#771" id="771">771</a>
-<a href="#772" id="772">772</a>
-<a href="#773" id="773">773</a>
-<a href="#774" id="774">774</a>
-<a href="#775" id="775">775</a>
-<a href="#776" id="776">776</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::mem;
 
 <span class="kw">use </span>zng_app::widget::{
@@ -1217,13 +1212,16 @@
                             },
                         ]
                     },
-                    presenter(wgt.inspector_info(), <span class="macro">wgt_fn!</span>(|i| {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = i {
-                            inspector_info_view(i).boxed()
-                        } <span class="kw">else </span>{
-                            NilUiNode.boxed()
-                        }
-                    })),
+                    presenter(
+                        wgt.inspector_info(),
+                        <span class="macro">wgt_fn!</span>(|i| {
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = i {
+                                inspector_info_view(i).boxed()
+                            } <span class="kw">else </span>{
+                                NilUiNode.boxed()
+                            }
+                        })
+                    ),
                     <span class="macro">Hr!</span>(),
                     info_watchers(<span class="kw-2">&amp;</span>wgt),
                 ]
@@ -1326,11 +1324,7 @@
         <span class="macro">Text!</span> {
             txt = info.name;
             font_color = PROPERTY_COLOR_VAR;
-            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="kw">if </span>captured {
-                <span class="string">"captured property"
-            </span>} <span class="kw">else </span>{
-                <span class="string">"property"
-            </span>}));
+            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="kw">if </span>captured { <span class="string">"captured property" </span>} <span class="kw">else </span>{ <span class="string">"property" </span>}));
         },
         <span class="macro">Text!</span>(<span class="string">" = "</span>),
     ];
@@ -1342,11 +1336,7 @@
             txt = value;
             font_color = PROPERTY_VALUE_COLOR_VAR;
             background_color = flash;
-            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="kw">if </span>user_assigned {
-                <span class="string">"instance value"
-            </span>} <span class="kw">else </span>{
-                <span class="string">"intrinsic value"
-            </span>}))
+            tooltip = <span class="macro">Tip!</span>(<span class="macro">Text!</span>(<span class="kw">if </span>user_assigned { <span class="string">"instance value" </span>} <span class="kw">else </span>{ <span class="string">"intrinsic value" </span>}))
         });
         children.push(<span class="macro">Text!</span>(<span class="string">";"</span>));
     } <span class="kw">else </span>{

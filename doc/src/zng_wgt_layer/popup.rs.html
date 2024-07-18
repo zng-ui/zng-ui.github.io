@@ -518,11 +518,30 @@
 <a href="#518" id="518">518</a>
 <a href="#519" id="519">519</a>
 <a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Popup widget.
 
-</span><span class="macro">zng_wgt::enable_widget_macros!</span>();
-
-<span class="kw">use </span>std::time::Duration;
+</span><span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>zng_ext_input::focus::{DirectionalNav, TabNav, FOCUS_CHANGED_EVENT};
 <span class="kw">use </span>zng_wgt::{modal_included, prelude::<span class="kw-2">*</span>};
@@ -750,10 +769,21 @@
         )
         .boxed();
 
-        <span class="kw">if let </span>ContextCapture::CaptureBlend { filter, over } = context_capture {
-            <span class="kw">if </span>filter != CaptureFilter::None {
-                popup = with_context_blend(LocalContext::capture_filtered(filter), over, popup).boxed();
+        <span class="kw">let </span>(filter, over) = <span class="kw">match </span>context_capture {
+            ContextCapture::NoCapture =&gt; {
+                <span class="kw">let </span>filter = CaptureFilter::Include({
+                    <span class="kw">let </span><span class="kw-2">mut </span>set = ContextValueSet::new();
+                    set.insert(<span class="kw-2">&amp;</span>CLOSE_ON_FOCUS_LEAVE_VAR);
+                    set.insert(<span class="kw-2">&amp;</span>ANCHOR_MODE_VAR);
+                    set.insert(<span class="kw-2">&amp;</span>CONTEXT_CAPTURE_VAR);
+                    set
+                });
+                (filter, <span class="bool-val">false</span>)
             }
+            ContextCapture::CaptureBlend { filter, over } =&gt; (filter, over),
+        };
+        <span class="kw">if </span>filter != CaptureFilter::None {
+            popup = with_context_blend(LocalContext::capture_filtered(filter), over, popup).boxed();
         }
         LAYERS.insert_anchored(LayerIndex::TOP_MOST, anchor_id, anchor_mode, popup);
 
@@ -857,8 +887,11 @@
 /// [`with_context_blend`]: zng_wgt::prelude::with_context_blend
 </span><span class="attr">#[derive(Clone, PartialEq, Eq, Debug)]
 </span><span class="kw">pub enum </span>ContextCapture {
-    <span class="doccomment">/// No context capture or blending, the popup will have
-    /// the context it is inited in, like any other widget.
+    <span class="doccomment">/// No context capture except the popup configuration context.
+    ///
+    /// The popup will only have the window context as it is open as a layer on the window root.
+    ///
+    /// Note to filter out even the popup config use [`CaptureFilter::None`] instead.
     </span>NoCapture,
     <span class="doccomment">/// Build/instantiation context is captured and blended with the node context during all [`UiNodeOp`].
     ///
@@ -885,14 +918,22 @@
 <span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from(capture_vars_blend_over: bool) -&gt; ContextCapture {
         <span class="kw">if </span>capture_vars_blend_over {
-            ContextCapture::CaptureBlend { filter: CaptureFilter::ContextVars { exclude: ContextValueSet::new() }, over: <span class="bool-val">true </span>}
+            ContextCapture::CaptureBlend {
+                filter: CaptureFilter::ContextVars {
+                    exclude: ContextValueSet::new(),
+                },
+                over: <span class="bool-val">true</span>,
+            }
         } <span class="kw">else </span>{
             ContextCapture::NoCapture
         }
     }
 
     <span class="kw">fn </span>from(filter_over: CaptureFilter) -&gt; ContextCapture {
-        ContextCapture::CaptureBlend { filter: filter_over, over: <span class="bool-val">true </span>}
+        ContextCapture::CaptureBlend {
+            filter: filter_over,
+            over: <span class="bool-val">true</span>,
+        }
     }
 }
 
@@ -983,7 +1024,7 @@
     <span class="kw">let </span>delay = delay.into_var();
     <span class="kw">let </span><span class="kw-2">mut </span>timer = <span class="prelude-val">None</span>::&lt;DeadlineHandle&gt;;
 
-    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+    <span class="kw">let </span>child = match_node(child, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
             WIDGET.sub_event(<span class="kw-2">&amp;</span>POPUP_CLOSE_REQUESTED_EVENT);
         }
@@ -991,6 +1032,7 @@
             timer = <span class="prelude-val">None</span>;
         }
         UiNodeOp::Event { update } =&gt; {
+            c.event(update);
             <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = POPUP_CLOSE_REQUESTED_EVENT.on_unhandled(update) {
                 <span class="kw">if </span>args.popup != WIDGET.id() {
                     <span class="kw">return</span>;
@@ -1023,16 +1065,16 @@
             }
         }
         <span class="kw">_ </span>=&gt; {}
-    })
+    });
+    with_context_var(child, IS_CLOSE_DELAYED_VAR, var(<span class="bool-val">false</span>))
 }
 
 <span class="doccomment">/// If close was requested for this layered widget and it is just awaiting for the [`close_delay`].
 ///
 /// [`close_delay`]: fn@close_delay
-</span><span class="attr">#[property(CONTEXT, widget_impl(Popup))]
+</span><span class="attr">#[property(EVENT+<span class="number">1</span>, widget_impl(Popup))]
 </span><span class="kw">pub fn </span>is_close_delaying(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="comment">// reverse context var, is set by `close_delay`.
-    </span>with_context_var(child, IS_CLOSE_DELAYED_VAR, state)
+    bind_state(child, IS_CLOSE_DELAYED_VAR, state)
 }
 
 <span class="macro">context_var!</span> {

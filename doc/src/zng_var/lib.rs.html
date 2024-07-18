@@ -2871,6 +2871,17 @@
 <a href="#2871" id="2871">2871</a>
 <a href="#2872" id="2872">2872</a>
 <a href="#2873" id="2873">2873</a>
+<a href="#2874" id="2874">2874</a>
+<a href="#2875" id="2875">2875</a>
+<a href="#2876" id="2876">2876</a>
+<a href="#2877" id="2877">2877</a>
+<a href="#2878" id="2878">2878</a>
+<a href="#2879" id="2879">2879</a>
+<a href="#2880" id="2880">2880</a>
+<a href="#2881" id="2881">2881</a>
+<a href="#2882" id="2882">2882</a>
+<a href="#2883" id="2883">2883</a>
+<a href="#2884" id="2884">2884</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3942,7 +3953,7 @@
     <span class="doccomment">/// Output of [`Var::map_bidi`].
     </span><span class="kw">type </span>MapBidi&lt;O: VarValue&gt;: Var&lt;O&gt;;
 
-    <span class="doccomment">/// Output of [`Var::map_bidi`].
+    <span class="doccomment">/// Output of [`Var::flat_map`].
     </span><span class="kw">type </span>FlatMap&lt;O: VarValue, V: Var&lt;O&gt;&gt;: Var&lt;O&gt;;
 
     <span class="doccomment">/// Output of [`Var::filter_map`].
@@ -4072,7 +4083,18 @@
     <span class="doccomment">/// Gets the value as a display [`Txt`].
     ///
     /// [`Txt`]: Txt
+    </span><span class="attr">#[deprecated = <span class="string">"use get_txt"</span>]
     </span><span class="kw">fn </span>get_text(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt
+    <span class="kw">where
+        </span>T: fmt::Display,
+    {
+        <span class="self">self</span>.with(ToTxt::to_txt)
+    }
+
+    <span class="doccomment">/// Gets the value as a display [`Txt`].
+    ///
+    /// [`Txt`]: Txt
+    </span><span class="kw">fn </span>get_txt(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt
     <span class="kw">where
         </span>T: fmt::Display,
     {

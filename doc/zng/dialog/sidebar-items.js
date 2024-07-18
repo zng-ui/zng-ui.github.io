@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FileDialogResponse"],"fn":["native_dialogs"],"mod":["backdrop"],"struct":["AskStyle","ConfirmStyle","DIALOG","DefaultStyle","Dialog","DialogButtonArgs","DialogKind","ErrorStyle","FileDialogFilters","InfoStyle","Response","Responses","WarnStyle"]};

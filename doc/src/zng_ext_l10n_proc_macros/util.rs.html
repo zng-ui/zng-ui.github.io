@@ -80,6 +80,8 @@
 <a href="#80" id="80">80</a>
 <a href="#81" id="81">81</a>
 <a href="#82" id="82">82</a>
+<a href="#83" id="83">83</a>
+<a href="#84" id="84">84</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>proc_macro2::{Span, TokenStream};
 <span class="kw">use </span>quote::{quote_spanned, ToTokens};
 
@@ -119,7 +121,9 @@
         <span class="macro">panic!</span>(<span class="string">"[{}:{}] invalid non-user input: {}"</span>, <span class="macro">file!</span>(), <span class="macro">line!</span>(), <span class="macro-nonterminal">$e</span>)
     };
     (<span class="macro-nonterminal">$fmt</span>:tt, $(<span class="macro-nonterminal">$args</span>:tt)+) =&gt; {
-        <span class="macro">non_user_error!</span> { <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+) }
+        <span class="macro">non_user_error!</span> {
+            <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+)
+        }
     }
 }
 

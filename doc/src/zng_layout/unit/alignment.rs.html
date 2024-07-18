@@ -465,7 +465,35 @@
 <a href="#465" id="465">465</a>
 <a href="#466" id="466">466</a>
 <a href="#467" id="467">467</a>
+<a href="#468" id="468">468</a>
+<a href="#469" id="469">469</a>
+<a href="#470" id="470">470</a>
+<a href="#471" id="471">471</a>
+<a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
+<a href="#474" id="474">474</a>
+<a href="#475" id="475">475</a>
+<a href="#476" id="476">476</a>
+<a href="#477" id="477">477</a>
+<a href="#478" id="478">478</a>
+<a href="#479" id="479">479</a>
+<a href="#480" id="480">480</a>
+<a href="#481" id="481">481</a>
+<a href="#482" id="482">482</a>
+<a href="#483" id="483">483</a>
+<a href="#484" id="484">484</a>
+<a href="#485" id="485">485</a>
+<a href="#486" id="486">486</a>
+<a href="#487" id="487">487</a>
+<a href="#488" id="488">488</a>
+<a href="#489" id="489">489</a>
+<a href="#490" id="490">490</a>
+<a href="#491" id="491">491</a>
+<a href="#492" id="492">492</a>
+<a href="#493" id="493">493</a>
+<a href="#494" id="494">494</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    borrow::Cow,
     fmt::{<span class="self">self</span>, Write},
     ops,
 };
@@ -671,15 +699,27 @@
 }
 <span class="macro">impl_from_and_into_var!</span> {
     <span class="kw">fn </span>from&lt;X: Into&lt;Factor&gt;, Y: Into&lt;Factor&gt;&gt;((x, y): (X, Y)) -&gt; Align {
-        Align { x: x.into(), x_rtl_aware: <span class="bool-val">false</span>, y: y.into() }
+        Align {
+            x: x.into(),
+            x_rtl_aware: <span class="bool-val">false</span>,
+            y: y.into(),
+        }
     }
 
     <span class="kw">fn </span>from&lt;X: Into&lt;Factor&gt;, Y: Into&lt;Factor&gt;&gt;((x, rtl, y): (X, bool, Y)) -&gt; Align {
-        Align { x: x.into(), x_rtl_aware: rtl, y: y.into() }
+        Align {
+            x: x.into(),
+            x_rtl_aware: rtl,
+            y: y.into(),
+        }
     }
 
     <span class="kw">fn </span>from(xy: Factor) -&gt; Align {
-        Align { x: xy, x_rtl_aware: <span class="bool-val">false</span>, y: xy }
+        Align {
+            x: xy,
+            x_rtl_aware: <span class="bool-val">false</span>,
+            y: xy,
+        }
     }
 
     <span class="kw">fn </span>from(xy: FactorPercent) -&gt; Align {
@@ -805,7 +845,7 @@
     }
 }
 <span class="macro">impl_from_and_into_var!</span> {
-     <span class="doccomment">/// To relative length x and y.
+    <span class="doccomment">/// To relative length x and y.
     </span><span class="kw">fn </span>from(alignment: Align) -&gt; Point {
         Point {
             x: alignment.x.into(),
@@ -894,7 +934,7 @@
 <span class="attr">#[derive(serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
 </span><span class="kw">enum </span>AlignSerde&lt;<span class="lifetime">'s</span>&gt; {
-    Named(<span class="kw-2">&amp;</span><span class="lifetime">'s </span>str),
+    Named(Cow&lt;<span class="lifetime">'s</span>, str&gt;),
     Unnamed { x: Factor, x_rtl_aware: bool, y: Factor },
 }
 <span class="kw">impl </span>serde::Serialize <span class="kw">for </span>Align {
@@ -904,7 +944,7 @@
     {
         <span class="kw">if </span>serializer.is_human_readable() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(name) = <span class="self">self</span>.name() {
-                <span class="kw">return </span>name.serialize(serializer);
+                <span class="kw">return </span>AlignSerde::Named(Cow::Borrowed(name)).serialize(serializer);
             }
         }
 
@@ -924,12 +964,26 @@
         <span class="kw">use </span>serde::de::Error;
 
         <span class="kw">match </span>AlignSerde::deserialize(deserializer)<span class="question-mark">? </span>{
-            AlignSerde::Named(n) =&gt; <span class="kw">match </span>Align::from_name(n) {
+            AlignSerde::Named(n) =&gt; <span class="kw">match </span>Align::from_name(<span class="kw-2">&amp;</span>n) {
                 <span class="prelude-val">Some</span>(a) =&gt; <span class="prelude-val">Ok</span>(a),
                 <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(D::Error::custom(<span class="string">"unknown align name"</span>)),
             },
             AlignSerde::Unnamed { x, x_rtl_aware, y } =&gt; <span class="prelude-val">Ok</span>(Align { x, x_rtl_aware, y }),
         }
+    }
+}
+
+<span class="attr">#[cfg(test)]
+</span><span class="kw">mod </span>tests {
+    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+
+    <span class="attr">#[test]
+    </span><span class="kw">fn </span>align_named() {
+        <span class="kw">let </span>value = serde_json::to_value(Align::TOP_START).unwrap();
+        <span class="macro">assert_eq!</span>(value, serde_json::Value::String(<span class="string">"TOP_START"</span>.to_owned()));
+
+        <span class="kw">let </span>align: Align = serde_json::from_value(value).unwrap();
+        <span class="macro">assert_eq!</span>(align, Align::TOP_START);
     }
 }
 </code></pre></div></section></main></body></html>

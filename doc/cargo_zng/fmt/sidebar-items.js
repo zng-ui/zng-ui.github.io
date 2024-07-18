@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["custom_fmt","fmt_code","replace_event_args","replace_expr_var","replace_widget_when","run","rustfmt_stdin","rustfmt_stdin_frag","try_fmt_macro"],"static":["POUND_REV_RGX","POUND_RGX","POUND_VAR_MARKER"],"struct":["FmtArgs"]};

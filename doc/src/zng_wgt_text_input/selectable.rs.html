@@ -100,6 +100,9 @@
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style, StyleMix};
 <span class="kw">use </span>zng_wgt_text::{<span class="self">self </span><span class="kw">as </span>text, <span class="kw-2">*</span>};
 
+<span class="attr">#[doc(hidden)]
+</span><span class="kw">pub use </span>zng_wgt::prelude::formatx <span class="kw">as </span>__formatx;
+
 <span class="doccomment">/// Styleable read-only text widget that can be selected and copied to clipboard.
 ///
 /// # Shorthand
@@ -107,13 +110,13 @@
 /// The same [`Text!`](struct@zng_wgt_text::Text#shorthand) shorthand can be used in this macro.
 </span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::selectable::SelectableText </span>{
     (<span class="macro-nonterminal">$txt</span>:literal) =&gt; {
-        txt = <span class="macro-nonterminal">$</span><span class="macro">crate::__formatx!</span>(<span class="macro-nonterminal">$txt</span>);
+        txt = <span class="macro-nonterminal">$</span><span class="macro">crate::selectable::__formatx!</span>(<span class="macro-nonterminal">$txt</span>);
     };
     (<span class="macro-nonterminal">$txt</span>:expr) =&gt; {
         txt = <span class="macro-nonterminal">$txt</span>;
     };
     (<span class="macro-nonterminal">$txt</span>:tt, $(<span class="macro-nonterminal">$format</span>:tt)<span class="kw-2">*</span>) =&gt; {
-        txt = <span class="macro-nonterminal">$</span><span class="macro">crate::__formatx!</span>(<span class="macro-nonterminal">$txt</span>, $(<span class="macro-nonterminal">$format</span>)<span class="kw-2">*</span>);
+        txt = <span class="macro-nonterminal">$</span><span class="macro">crate::selectable::__formatx!</span>(<span class="macro-nonterminal">$txt</span>, $(<span class="macro-nonterminal">$format</span>)<span class="kw-2">*</span>);
     };
 })]
 </span><span class="kw">pub struct </span>SelectableText(FocusableMix&lt;StyleMix&lt;zng_wgt_text::Text&gt;&gt;);
@@ -166,10 +169,7 @@
         <span class="kw">let </span>id = args.anchor_id;
         <span class="macro">ContextMenu!</span> {
             style_fn = <span class="macro">menu::context::TouchStyle!</span>();
-            children = <span class="macro">ui_vec!</span>[
-                <span class="macro">Button!</span>(COPY_CMD.scoped(id)),
-                <span class="macro">Button!</span>(text::cmd::SELECT_ALL_CMD.scoped(id)),
-            ]
+            children = <span class="macro">ui_vec!</span>[<span class="macro">Button!</span>(COPY_CMD.scoped(id)), <span class="macro">Button!</span>(text::cmd::SELECT_ALL_CMD.scoped(id)),]
         }
         .boxed()
     } <span class="kw">else </span>{

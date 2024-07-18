@@ -550,6 +550,11 @@
 <a href="#550" id="550">550</a>
 <a href="#551" id="551">551</a>
 <a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -954,12 +959,7 @@
     <span class="doccomment">/// Replace the image resource in the window renderer.
     ///
     /// The [`ImageTextureId`] will be associated with the new [`ImageId`].
-    </span><span class="kw">pub fn </span>update_image_use(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        id: WindowId,
-        texture_id: ImageTextureId,
-        image_id: ImageId,
-    );
+    </span><span class="kw">pub fn </span>update_image_use(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, texture_id: ImageTextureId, image_id: ImageId);
 
     <span class="doccomment">/// Delete the image resource in the window renderer.
     </span><span class="kw">pub fn </span>delete_image_use(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, texture_id: ImageTextureId);
@@ -1092,13 +1092,23 @@
     ///
     /// This is similar to [`Api::app_extension`], but is targeting the instance of an extension associated
     /// with the `id` window or headless surface.
-    </span><span class="kw">pub fn </span>window_extension(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, extension_id: ApiExtensionId, extension_request: ApiExtensionPayload) -&gt; ApiExtensionPayload;
+    </span><span class="kw">pub fn </span>window_extension(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        id: WindowId,
+        extension_id: ApiExtensionId,
+        extension_request: ApiExtensionPayload,
+    ) -&gt; ApiExtensionPayload;
 
     <span class="doccomment">/// Call the API extension.
     ///
     /// This is similar to [`Api::app_extension`], but is targeting the instance of an extension associated
     /// with the `id` renderer.
-    </span><span class="kw">pub fn </span>render_extension(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, extension_id: ApiExtensionId, extension_request: ApiExtensionPayload) -&gt; ApiExtensionPayload;
+    </span><span class="kw">pub fn </span>render_extension(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        id: WindowId,
+        extension_id: ApiExtensionId,
+        extension_request: ApiExtensionPayload,
+    ) -&gt; ApiExtensionPayload;
 }
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>AnyResult&lt;T&gt; = std::result::Result&lt;T, Box&lt;<span class="kw">dyn </span>std::error::Error&gt;&gt;;

@@ -996,6 +996,8 @@
 <a href="#996" id="996">996</a>
 <a href="#997" id="997">997</a>
 <a href="#998" id="998">998</a>
+<a href="#999" id="999">999</a>
+<a href="#1000" id="1000">1000</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{borrow::Cow, env, fmt, fs, path::PathBuf};
 
 <span class="kw">use </span>proc_macro2::<span class="kw-2">*</span>;
@@ -1235,7 +1237,9 @@
         <span class="macro">panic!</span>(<span class="string">"[{}:{}] invalid non-user input: {}"</span>, <span class="macro">file!</span>(), <span class="macro">line!</span>(), <span class="macro-nonterminal">$e</span>)
     };
     (<span class="macro-nonterminal">$fmt</span>:tt, $(<span class="macro-nonterminal">$args</span>:tt)+) =&gt; {
-        <span class="macro">non_user_error!</span> { <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+) }
+        <span class="macro">non_user_error!</span> {
+            <span class="macro">format_args!</span>(<span class="macro-nonterminal">$fmt</span>, $(<span class="macro-nonterminal">$args</span>)+)
+        }
     }
 }
 
