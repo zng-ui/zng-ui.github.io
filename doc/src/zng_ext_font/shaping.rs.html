@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_ext_font/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -4166,80 +4166,17 @@
 <a href="#4166" id="4166">4166</a>
 <a href="#4167" id="4167">4167</a>
 <a href="#4168" id="4168">4168</a>
-<a href="#4169" id="4169">4169</a>
-<a href="#4170" id="4170">4170</a>
-<a href="#4171" id="4171">4171</a>
-<a href="#4172" id="4172">4172</a>
-<a href="#4173" id="4173">4173</a>
-<a href="#4174" id="4174">4174</a>
-<a href="#4175" id="4175">4175</a>
-<a href="#4176" id="4176">4176</a>
-<a href="#4177" id="4177">4177</a>
-<a href="#4178" id="4178">4178</a>
-<a href="#4179" id="4179">4179</a>
-<a href="#4180" id="4180">4180</a>
-<a href="#4181" id="4181">4181</a>
-<a href="#4182" id="4182">4182</a>
-<a href="#4183" id="4183">4183</a>
-<a href="#4184" id="4184">4184</a>
-<a href="#4185" id="4185">4185</a>
-<a href="#4186" id="4186">4186</a>
-<a href="#4187" id="4187">4187</a>
-<a href="#4188" id="4188">4188</a>
-<a href="#4189" id="4189">4189</a>
-<a href="#4190" id="4190">4190</a>
-<a href="#4191" id="4191">4191</a>
-<a href="#4192" id="4192">4192</a>
-<a href="#4193" id="4193">4193</a>
-<a href="#4194" id="4194">4194</a>
-<a href="#4195" id="4195">4195</a>
-<a href="#4196" id="4196">4196</a>
-<a href="#4197" id="4197">4197</a>
-<a href="#4198" id="4198">4198</a>
-<a href="#4199" id="4199">4199</a>
-<a href="#4200" id="4200">4200</a>
-<a href="#4201" id="4201">4201</a>
-<a href="#4202" id="4202">4202</a>
-<a href="#4203" id="4203">4203</a>
-<a href="#4204" id="4204">4204</a>
-<a href="#4205" id="4205">4205</a>
-<a href="#4206" id="4206">4206</a>
-<a href="#4207" id="4207">4207</a>
-<a href="#4208" id="4208">4208</a>
-<a href="#4209" id="4209">4209</a>
-<a href="#4210" id="4210">4210</a>
-<a href="#4211" id="4211">4211</a>
-<a href="#4212" id="4212">4212</a>
-<a href="#4213" id="4213">4213</a>
-<a href="#4214" id="4214">4214</a>
-<a href="#4215" id="4215">4215</a>
-<a href="#4216" id="4216">4216</a>
-<a href="#4217" id="4217">4217</a>
-<a href="#4218" id="4218">4218</a>
-<a href="#4219" id="4219">4219</a>
-<a href="#4220" id="4220">4220</a>
-<a href="#4221" id="4221">4221</a>
-<a href="#4222" id="4222">4222</a>
-<a href="#4223" id="4223">4223</a>
-<a href="#4224" id="4224">4224</a>
-<a href="#4225" id="4225">4225</a>
-<a href="#4226" id="4226">4226</a>
-<a href="#4227" id="4227">4227</a>
-<a href="#4228" id="4228">4228</a>
-<a href="#4229" id="4229">4229</a>
-<a href="#4230" id="4230">4230</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
 };
 
-<span class="kw">pub use </span>font_kit::error::GlyphLoadingError;
 <span class="kw">use </span>zng_app::widget::info::InlineSegmentInfo;
 <span class="kw">use </span>zng_ext_l10n::{lang, Lang};
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegmentPos, LayoutDirection, TextSegmentKind},
-    unit::{euclid, Align, FactorUnits, Px, PxBox, PxConstraints2d, PxPoint, PxRect, PxSize},
+    unit::{euclid, Align, Factor2d, FactorUnits, Px, PxBox, PxConstraints2d, PxPoint, PxRect, PxSize},
 };
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_view_api::font::{GlyphIndex, GlyphInstance};
@@ -4248,6 +4185,35 @@
     font_features::RFontFeatures, BidiLevel, CaretIndex, Font, FontList, Hyphens, LineBreak, SegmentedText, TextSegment, WordBreak,
     HYPHENATION,
 };
+
+<span class="doccomment">/// Reasons why a font might fail to load a glyph.
+</span><span class="attr">#[derive(Clone, Copy, PartialEq, Debug)]
+</span><span class="kw">pub enum </span>GlyphLoadingError {
+    <span class="doccomment">/// The font didn't contain a glyph with that ID.
+    </span>NoSuchGlyph,
+    <span class="doccomment">/// A platform function returned an error.
+    </span>PlatformError,
+}
+<span class="kw">impl </span>std::error::Error <span class="kw">for </span>GlyphLoadingError {}
+<span class="kw">impl </span>fmt::Display <span class="kw">for </span>GlyphLoadingError {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        <span class="kw">use </span>GlyphLoadingError::<span class="kw-2">*</span>;
+        <span class="kw">match </span><span class="self">self </span>{
+            NoSuchGlyph =&gt; <span class="macro">write!</span>(f, <span class="string">"no such glyph"</span>),
+            PlatformError =&gt; <span class="macro">write!</span>(f, <span class="string">"platform error"</span>),
+        }
+    }
+}
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+</span><span class="kw">impl </span>From&lt;font_kit::error::GlyphLoadingError&gt; <span class="kw">for </span>GlyphLoadingError {
+    <span class="kw">fn </span>from(value: font_kit::error::GlyphLoadingError) -&gt; <span class="self">Self </span>{
+        <span class="kw">use </span>GlyphLoadingError::<span class="kw-2">*</span>;
+        <span class="kw">match </span>value {
+            font_kit::error::GlyphLoadingError::NoSuchGlyph =&gt; NoSuchGlyph,
+            font_kit::error::GlyphLoadingError::PlatformError =&gt; PlatformError,
+        }
+    }
+}
 
 <span class="doccomment">/// Extra configuration for [`shape_text`](Font::shape_text).
 </span><span class="attr">#[derive(Debug, Clone)]
@@ -5993,7 +5959,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         seg: <span class="kw-2">&amp;</span>str,
         word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
-        features: <span class="kw-2">&amp;</span>[harfbuzz_rs::Feature],
+        features: <span class="kw-2">&amp;</span>[rustybuzz::Feature],
         out: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>ShapedSegmentData, <span class="kw-2">&amp;</span>Font) -&gt; R,
     ) -&gt; R;
 }
@@ -6002,7 +5968,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         seg: <span class="kw-2">&amp;</span>str,
         word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
-        features: <span class="kw-2">&amp;</span>[harfbuzz_rs::Feature],
+        features: <span class="kw-2">&amp;</span>[rustybuzz::Feature],
         out: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>ShapedSegmentData, <span class="kw-2">&amp;</span>Font) -&gt; R,
     ) -&gt; R {
         <span class="kw">let </span><span class="kw-2">mut </span>out = <span class="prelude-val">Some</span>(out);
@@ -6223,7 +6189,7 @@
         <span class="kw">static </span>LIG: [<span class="kw-2">&amp;</span>[u8]; <span class="number">4</span>] = [<span class="string">b"liga"</span>, <span class="string">b"clig"</span>, <span class="string">b"dlig"</span>, <span class="string">b"hlig"</span>];
         <span class="kw">let </span>ligature_enabled = fonts[<span class="number">0</span>].face().has_ligatures()
             &amp;&amp; features.iter().any(|f| {
-                <span class="kw">let </span>tag = f.tag().to_bytes();
+                <span class="kw">let </span>tag = f.tag.to_bytes();
                 LIG.iter().any(|l| <span class="kw-2">*</span>l == tag)
             });
 
@@ -7494,7 +7460,7 @@
                     <span class="kw">let </span>continuation = <span class="self">self</span>.resume.take().or_else(|| <span class="self">self</span>.iter.next());
                     <span class="kw">if let </span><span class="prelude-val">Some</span>((font, <span class="kw-2">mut </span>glyphs_with_adv)) = continuation {
                         <span class="kw">for </span>(g, a) <span class="kw">in </span><span class="kw-2">&amp;mut </span>glyphs_with_adv {
-                            <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>((ex_start, ex_end))) = font.h_line_hits(g.index, <span class="self">self</span>.line_y_range) {
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>((ex_start, ex_end)) = font.h_line_hits(g.index, <span class="self">self</span>.line_y_range) {
                                 <span class="self">self</span>.width += ex_start - <span class="self">self</span>.padding;
                                 <span class="kw">let </span>r = <span class="self">self</span>.line();
                                 <span class="self">self</span>.x += <span class="self">self</span>.width + <span class="self">self</span>.padding + ex_end + <span class="self">self</span>.padding;
@@ -7743,16 +7709,16 @@
             features.reserve(font_features.len() * <span class="kw">if </span>is_64 { <span class="number">3 </span>} <span class="kw">else </span>{ <span class="number">4 </span>});
             <span class="kw">for </span>feature <span class="kw">in </span>font_features {
                 <span class="kw">if </span>is_64 {
-                    <span class="kw">let </span><span class="kw-2">mut </span>h = feature.tag().<span class="number">0 </span><span class="kw">as </span>usize;
-                    h |= (feature.value() <span class="kw">as </span>usize) &lt;&lt; <span class="number">32</span>;
-                    features.push(h);
+                    <span class="kw">let </span><span class="kw-2">mut </span>h = feature.tag.<span class="number">0 </span><span class="kw">as </span>u64;
+                    h |= (feature.value <span class="kw">as </span>u64) &lt;&lt; <span class="number">32</span>;
+                    features.push(h <span class="kw">as </span>usize);
                 } <span class="kw">else </span>{
-                    features.push(feature.tag().<span class="number">0 </span><span class="kw">as </span>usize);
-                    features.push(feature.value() <span class="kw">as </span>usize);
+                    features.push(feature.tag.<span class="number">0 </span><span class="kw">as </span>usize);
+                    features.push(feature.value <span class="kw">as </span>usize);
                 }
 
-                features.push(feature.start());
-                features.push(feature.end());
+                features.push(feature.start <span class="kw">as </span>usize);
+                features.push(feature.end <span class="kw">as </span>usize);
             }
         }
 
@@ -7764,17 +7730,17 @@
         }
     }
 
-    <span class="kw">pub fn </span>harfbuzz_lang(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;harfbuzz_rs::Language&gt; {
+    <span class="kw">pub fn </span>harfbuzz_lang(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;rustybuzz::Language&gt; {
         <span class="self">self</span>.lang.as_str().parse().ok()
     }
 
-    <span class="kw">pub fn </span>harfbuzz_script(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;harfbuzz_rs::Tag&gt; {
+    <span class="kw">pub fn </span>harfbuzz_script(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;rustybuzz::Script&gt; {
         <span class="kw">let </span>t: u32 = <span class="self">self</span>.script<span class="question-mark">?</span>.into();
         <span class="kw">let </span>t = t.to_le_bytes(); <span class="comment">// Script is a TinyStr4 that uses LE
-        </span><span class="prelude-val">Some</span>(harfbuzz_rs::Tag::from(<span class="kw-2">&amp;</span>[t[<span class="number">0</span>], t[<span class="number">1</span>], t[<span class="number">2</span>], t[<span class="number">3</span>]]))
+        </span>rustybuzz::Script::from_iso15924_tag(ttf_parser::Tag::from_bytes(<span class="kw-2">&amp;</span>[t[<span class="number">0</span>], t[<span class="number">1</span>], t[<span class="number">2</span>], t[<span class="number">3</span>]]))
     }
 
-    <span class="kw">pub fn </span>harfbuzz_direction(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; harfbuzz_rs::Direction {
+    <span class="kw">pub fn </span>harfbuzz_direction(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rustybuzz::Direction {
         into_harf_direction(<span class="self">self</span>.direction)
     }
 
@@ -7799,69 +7765,61 @@
 }
 
 <span class="kw">impl </span>Font {
-    <span class="kw">fn </span>buffer_segment(<span class="kw-2">&amp;</span><span class="self">self</span>, segment: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey) -&gt; harfbuzz_rs::UnicodeBuffer {
-        <span class="kw">let </span><span class="kw-2">mut </span>buffer = harfbuzz_rs::UnicodeBuffer::new()
-            .set_direction(key.harfbuzz_direction())
-            .set_cluster_level(harfbuzz_rs::ClusterLevel::MonotoneCharacters);
+    <span class="kw">fn </span>buffer_segment(<span class="kw-2">&amp;</span><span class="self">self</span>, segment: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey) -&gt; rustybuzz::UnicodeBuffer {
+        <span class="kw">let </span><span class="kw-2">mut </span>buffer = rustybuzz::UnicodeBuffer::new();
+        buffer.set_direction(key.harfbuzz_direction());
+        buffer.set_cluster_level(rustybuzz::BufferClusterLevel::MonotoneCharacters);
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(lang) = key.harfbuzz_lang() {
-            buffer = buffer.set_language(lang);
+            buffer.set_language(lang);
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(script) = key.harfbuzz_script() {
-            buffer = buffer.set_script(script);
+            buffer.set_script(script);
         }
 
-        buffer.add_str(segment)
+        buffer.push_str(segment);
+        buffer
     }
 
-    <span class="kw">fn </span>shape_segment_no_cache(<span class="kw-2">&amp;</span><span class="self">self</span>, seg: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey, features: <span class="kw-2">&amp;</span>[harfbuzz_rs::Feature]) -&gt; ShapedSegmentData {
+    <span class="kw">fn </span>shape_segment_no_cache(<span class="kw-2">&amp;</span><span class="self">self</span>, seg: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey, features: <span class="kw-2">&amp;</span>[rustybuzz::Feature]) -&gt; ShapedSegmentData {
+        <span class="kw">let </span>buffer = <span class="kw">if let </span><span class="prelude-val">Some</span>(font) = <span class="self">self</span>.harfbuzz() {
+            <span class="kw">let </span>buffer = <span class="self">self</span>.buffer_segment(seg, key);
+            rustybuzz::shape(<span class="kw-2">&amp;</span>font, features, buffer)
+        } <span class="kw">else </span>{
+            <span class="kw">return </span>ShapedSegmentData {
+                glyphs: <span class="macro">vec!</span>[],
+                x_advance: <span class="number">0.0</span>,
+                y_advance: <span class="number">0.0</span>,
+            };
+        };
+
         <span class="kw">let </span>size_scale = <span class="self">self</span>.metrics().size_scale;
         <span class="kw">let </span>to_layout = |p: i32| p <span class="kw">as </span>f32 * size_scale;
-
-        <span class="kw">let </span>buffer = <span class="self">self</span>.buffer_segment(seg, key);
-        <span class="kw">let </span>buffer = harfbuzz_rs::shape(<span class="self">self</span>.harfbuzz_font(), buffer, features);
 
         <span class="kw">let </span><span class="kw-2">mut </span>w_x_advance = <span class="number">0.0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>w_y_advance = <span class="number">0.0</span>;
 
-        <span class="kw">let </span>glyphs: Vec&lt;<span class="kw">_</span>&gt; = <span class="kw">if </span><span class="self">self</span>.face().is_empty() {
-            <span class="kw">let </span>advance = <span class="self">self</span>.metrics().bounds.width().<span class="number">0 </span><span class="kw">as </span>f32;
-            buffer
-                .get_glyph_infos()
-                .iter()
-                .map(|i| {
-                    <span class="kw">let </span>g = ShapedGlyph {
-                        index: <span class="number">0</span>,
-                        cluster: i.cluster,
-                        point: (w_x_advance, <span class="number">0.0</span>),
-                    };
-                    w_x_advance += advance;
-                    g
-                })
-                .collect()
-        } <span class="kw">else </span>{
-            buffer
-                .get_glyph_infos()
-                .iter()
-                .zip(buffer.get_glyph_positions())
-                .map(|(i, p)| {
-                    <span class="kw">let </span>x_offset = to_layout(p.x_offset);
-                    <span class="kw">let </span>y_offset = -to_layout(p.y_offset);
-                    <span class="kw">let </span>x_advance = to_layout(p.x_advance);
-                    <span class="kw">let </span>y_advance = to_layout(p.y_advance);
+        <span class="kw">let </span>glyphs: Vec&lt;<span class="kw">_</span>&gt; = buffer
+            .glyph_infos()
+            .iter()
+            .zip(buffer.glyph_positions())
+            .map(|(i, p)| {
+                <span class="kw">let </span>x_offset = to_layout(p.x_offset);
+                <span class="kw">let </span>y_offset = -to_layout(p.y_offset);
+                <span class="kw">let </span>x_advance = to_layout(p.x_advance);
+                <span class="kw">let </span>y_advance = to_layout(p.y_advance);
 
-                    <span class="kw">let </span>point = (w_x_advance + x_offset, w_y_advance + y_offset);
-                    w_x_advance += x_advance;
-                    w_y_advance += y_advance;
+                <span class="kw">let </span>point = (w_x_advance + x_offset, w_y_advance + y_offset);
+                w_x_advance += x_advance;
+                w_y_advance += y_advance;
 
-                    ShapedGlyph {
-                        index: i.codepoint,
-                        cluster: i.cluster,
-                        point,
-                    }
-                })
-                .collect()
-        };
+                ShapedGlyph {
+                    index: i.glyph_id,
+                    cluster: i.cluster,
+                    point,
+                }
+            })
+            .collect();
 
         ShapedSegmentData {
             glyphs,
@@ -7874,7 +7832,7 @@
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         seg: <span class="kw-2">&amp;</span>str,
         word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
-        features: <span class="kw-2">&amp;</span>[harfbuzz_rs::Feature],
+        features: <span class="kw-2">&amp;</span>[rustybuzz::Feature],
         out: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>ShapedSegmentData) -&gt; R,
     ) -&gt; R {
         <span class="kw">if </span>!(<span class="number">1</span>..=WORD_CACHE_MAX_LEN).contains(<span class="kw-2">&amp;</span>seg.len()) || <span class="self">self</span>.face().is_empty() {
@@ -7946,11 +7904,16 @@
 
     <span class="doccomment">/// Glyph index for the space `' '` character.
     </span><span class="kw">pub fn </span>space_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; GlyphIndex {
-        <span class="self">self</span>.<span class="number">0</span>.font.get_nominal_glyph(<span class="string">' '</span>).unwrap_or(<span class="number">0</span>)
-    }
+        <span class="self">self</span>.shape_space().<span class="number">0
+    </span>}
 
     <span class="doccomment">/// Returns the horizontal advance of the space `' '` character.
     </span><span class="kw">pub fn </span>space_x_advance(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
+        <span class="self">self</span>.shape_space().<span class="number">1
+    </span>}
+
+    <span class="kw">fn </span>shape_space(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (GlyphIndex, Px) {
+        <span class="kw">let </span><span class="kw-2">mut </span>id = <span class="number">0</span>;
         <span class="kw">let </span><span class="kw-2">mut </span>adv = <span class="number">0.0</span>;
         <span class="self">self</span>.shape_segment(
             <span class="string">" "</span>,
@@ -7961,28 +7924,12 @@
                 features: Box::new([]),
             },
             <span class="kw-2">&amp;</span>[],
-            |r| adv = r.x_advance,
+            |r| {
+                id = r.glyphs.last().map(|g| g.index).unwrap_or(<span class="number">0</span>);
+                adv = r.x_advance;
+            },
         );
-
-        Px(adv <span class="kw">as </span>i32)
-    }
-
-    <span class="doccomment">/// Gets the distance from the origin of the glyph with the given ID to the next.
-    </span><span class="kw">pub fn </span>advance(<span class="kw-2">&amp;</span><span class="self">self</span>, index: GlyphIndex) -&gt; <span class="prelude-ty">Result</span>&lt;euclid::Vector2D&lt;f32, Px&gt;, GlyphLoadingError&gt; {
-        <span class="self">self</span>.face()
-            .font_kit()
-            .ok_or(GlyphLoadingError::NoSuchGlyph)<span class="question-mark">?
-            </span>.advance(index)
-            .map(|v| euclid::Vector2D::new(v.x(), v.y()) * <span class="self">self</span>.metrics().size_scale)
-    }
-
-    <span class="doccomment">/// Gets the amount that the given glyph should be displaced from the origin.
-    </span><span class="kw">pub fn </span>origin(<span class="kw-2">&amp;</span><span class="self">self</span>, index: GlyphIndex) -&gt; <span class="prelude-ty">Result</span>&lt;euclid::Vector2D&lt;f32, Px&gt;, GlyphLoadingError&gt; {
-        <span class="self">self</span>.face()
-            .font_kit()
-            .ok_or(GlyphLoadingError::NoSuchGlyph)<span class="question-mark">?
-            </span>.origin(index)
-            .map(|v| euclid::Vector2D::new(v.x(), v.y()) * <span class="self">self</span>.metrics().size_scale)
+        (id, Px(adv <span class="kw">as _</span>))
     }
 
     <span class="doccomment">/// Calculates a [`ShapedText`].
@@ -7991,46 +7938,32 @@
     }
 
     <span class="doccomment">/// Sends the sized vector path for a glyph to `sink`.
-    </span><span class="kw">pub fn </span>outline(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        glyph_id: GlyphIndex,
-        hinting_options: OutlineHintingOptions,
-        sink: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>OutlineSink,
-    ) -&gt; <span class="prelude-ty">Result</span>&lt;(), GlyphLoadingError&gt; {
+    ///
+    /// Returns the glyph bounds if a full outline was sent to the sink.
+    </span><span class="kw">pub fn </span>outline(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, sink: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>OutlineSink) -&gt; <span class="prelude-ty">Option</span>&lt;PxRect&gt; {
         <span class="kw">struct </span>AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
             sink: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>S,
             scale: f32,
         }
-        <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, S&gt; AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
-            <span class="kw">fn </span>scale(<span class="kw-2">&amp;</span><span class="self">self</span>, p: pathfinder_geometry::vector::Vector2F) -&gt; euclid::Point2D&lt;f32, Px&gt; {
-                euclid::point2(p.x() * <span class="self">self</span>.scale, p.y() * <span class="self">self</span>.scale)
-            }
-        }
-        <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, S: OutlineSink&gt; font_kit::outline::OutlineSink <span class="kw">for </span>AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
-            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: pathfinder_geometry::vector::Vector2F) {
-                <span class="kw">let </span>to = <span class="self">self</span>.scale(to);
-                <span class="self">self</span>.sink.move_to(to)
+        <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, S: OutlineSink&gt; ttf_parser::OutlineBuilder <span class="kw">for </span>AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
+            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
+                <span class="self">self</span>.sink.move_to(euclid::point2(x, y) * <span class="self">self</span>.scale)
             }
 
-            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: pathfinder_geometry::vector::Vector2F) {
-                <span class="kw">let </span>to = <span class="self">self</span>.scale(to);
-                <span class="self">self</span>.sink.line_to(to)
+            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
+                <span class="self">self</span>.sink.line_to(euclid::point2(x, y) * <span class="self">self</span>.scale)
             }
 
-            <span class="kw">fn </span>quadratic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctrl: pathfinder_geometry::vector::Vector2F, to: pathfinder_geometry::vector::Vector2F) {
-                <span class="kw">let </span>ctrl = <span class="self">self</span>.scale(ctrl);
-                <span class="kw">let </span>to = <span class="self">self</span>.scale(to);
+            <span class="kw">fn </span>quad_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x: f32, y: f32) {
+                <span class="kw">let </span>ctrl = euclid::point2(x1, y1) * <span class="self">self</span>.scale;
+                <span class="kw">let </span>to = euclid::point2(x, y) * <span class="self">self</span>.scale;
                 <span class="self">self</span>.sink.quadratic_curve_to(ctrl, to)
             }
 
-            <span class="kw">fn </span>cubic_curve_to(
-                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-                ctrl: pathfinder_geometry::line_segment::LineSegment2F,
-                to: pathfinder_geometry::vector::Vector2F,
-            ) {
-                <span class="kw">let </span>l_from = <span class="self">self</span>.scale(ctrl.from());
-                <span class="kw">let </span>l_to = <span class="self">self</span>.scale(ctrl.to());
-                <span class="kw">let </span>to = <span class="self">self</span>.scale(to);
+            <span class="kw">fn </span>curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
+                <span class="kw">let </span>l_from = euclid::point2(x1, y1) * <span class="self">self</span>.scale;
+                <span class="kw">let </span>l_to = euclid::point2(x2, y2) * <span class="self">self</span>.scale;
+                <span class="kw">let </span>to = euclid::point2(x, y) * <span class="self">self</span>.scale;
                 <span class="self">self</span>.sink.cubic_curve_to((l_from, l_to), to)
             }
 
@@ -8041,32 +7974,14 @@
 
         <span class="kw">let </span>scale = <span class="self">self</span>.metrics().size_scale;
 
-        <span class="self">self</span>.face().font_kit().ok_or(GlyphLoadingError::NoSuchGlyph)<span class="question-mark">?</span>.outline(
-            glyph_id,
-            hinting_options.into(),
-            <span class="kw-2">&amp;mut </span>AdapterSink { sink, scale },
+        <span class="kw">let </span>f = <span class="self">self</span>.harfbuzz()<span class="question-mark">?</span>;
+        <span class="kw">let </span>r = f.outline_glyph(ttf_parser::GlyphId(glyph_id <span class="kw">as _</span>), <span class="kw-2">&amp;mut </span>AdapterSink { sink, scale })<span class="question-mark">?</span>;
+        <span class="prelude-val">Some</span>(
+            PxRect::new(
+                PxPoint::new(Px(r.x_min <span class="kw">as _</span>), Px(r.y_min <span class="kw">as _</span>)),
+                PxSize::new(Px(r.width() <span class="kw">as _</span>), Px(r.height() <span class="kw">as _</span>)),
+            ) * Factor2d::uniform(scale),
         )
-    }
-
-    <span class="doccomment">/// Returns the boundaries of a glyph in pixel units.
-    ///
-    /// The rectangle origin is the bottom-left of the bounds relative to the baseline.
-    </span><span class="kw">pub fn </span>typographic_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex) -&gt; <span class="prelude-ty">Result</span>&lt;euclid::Rect&lt;f32, Px&gt;, GlyphLoadingError&gt; {
-        <span class="kw">let </span>rect = <span class="self">self
-            </span>.face()
-            .font_kit()
-            .ok_or(GlyphLoadingError::NoSuchGlyph)<span class="question-mark">?
-            </span>.typographic_bounds(glyph_id)<span class="question-mark">?</span>;
-
-        <span class="kw">let </span>scale = <span class="self">self</span>.metrics().size_scale;
-        <span class="kw">let </span>bounds = euclid::rect::&lt;f32, Px&gt;(
-            rect.origin_x() * scale,
-            rect.origin_y() * scale,
-            rect.width() * scale,
-            rect.height() * scale,
-        );
-
-        <span class="prelude-val">Ok</span>(bounds)
     }
 
     <span class="doccomment">/// Ray cast an horizontal line across the glyph and returns the entry and exit hits.
@@ -8075,10 +7990,10 @@
     /// the start and inclusive end of the horizontal line, that is, `(underline, underline + thickness)`, note
     /// that positions under the baseline are negative so a 2px underline set 1px under the baseline becomes `(-1.0, -3.0)`.
     ///
-    /// Returns `Ok(Some(x_enter, x_exit))` where the two values are x-advances, returns `None` if there is not hit, returns
-    /// an error if the glyph is not found. The first x-advance is from the left typographic border to the first hit on the outline,
+    /// Returns `Ok(Some(x_enter, x_exit))` where the two values are x-advances, returns `None` if there is no hit.
+    /// The first x-advance is from the left typographic border to the first hit on the outline,
     /// the second x-advance is from the first across the outline to the exit hit.
-    </span><span class="kw">pub fn </span>h_line_hits(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, line_y_range: (f32, f32)) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;(f32, f32)&gt;, GlyphLoadingError&gt; {
+    </span><span class="kw">pub fn </span>h_line_hits(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, line_y_range: (f32, f32)) -&gt; <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt; {
         <span class="comment">// Algorithm:
         //
         // - Ignore curves, everything is direct line.
@@ -8147,48 +8062,9 @@
             line_y_range,
             hit: <span class="prelude-val">None</span>,
         };
-        <span class="self">self</span>.outline(glyph_id, OutlineHintingOptions::None, <span class="kw-2">&amp;mut </span>sink)<span class="question-mark">?</span>;
+        <span class="self">self</span>.outline(glyph_id, <span class="kw-2">&amp;mut </span>sink)<span class="question-mark">?</span>;
 
-        <span class="prelude-val">Ok</span>(sink.hit.map(|(a, b)| (a, b - a)))
-    }
-}
-
-<span class="doccomment">/// Specifies how hinting (grid fitting) is to be performed (or not performed) for [`Font::outline`].
-</span><span class="attr">#[derive(Clone, Copy, Debug, PartialEq, serde::Serialize, serde::Deserialize)]
-</span><span class="kw">pub enum </span>OutlineHintingOptions {
-    <span class="doccomment">/// No hinting is performed unless absolutely necessary to assemble the glyph.
-    ///
-    /// This corresponds to what macOS and FreeType in its "no hinting" mode do.
-    </span><span class="prelude-val">None</span>,
-
-    <span class="doccomment">/// Hinting is performed only in the vertical direction. The specified point size is used for
-    /// grid fitting.
-    ///
-    /// This corresponds to what DirectWrite and FreeType in its light hinting mode do.
-    </span>Vertical(f32),
-
-    <span class="doccomment">/// Hinting is performed only in the vertical direction, and further tweaks are applied to make
-    /// subpixel anti-aliasing look better. The specified point size is used for grid fitting.
-    ///
-    /// This matches DirectWrite, GDI in its ClearType mode, and FreeType in its LCD hinting mode.
-    </span>VerticalSubpixel(f32),
-
-    <span class="doccomment">/// Hinting is performed in both horizontal and vertical directions. The specified point size
-    /// is used for grid fitting.
-    ///
-    /// This corresponds to what GDI in non-ClearType modes and FreeType in its normal hinting mode
-    /// do.
-    </span>Full(f32),
-}
-<span class="kw">impl </span>From&lt;OutlineHintingOptions&gt; <span class="kw">for </span>font_kit::hinting::HintingOptions {
-    <span class="kw">fn </span>from(value: OutlineHintingOptions) -&gt; <span class="self">Self </span>{
-        <span class="kw">use </span>font_kit::hinting::HintingOptions::<span class="kw-2">*</span>;
-        <span class="kw">match </span>value {
-            OutlineHintingOptions::None =&gt; <span class="prelude-val">None</span>,
-            OutlineHintingOptions::Vertical(s) =&gt; Vertical(s),
-            OutlineHintingOptions::VerticalSubpixel(s) =&gt; VerticalSubpixel(s),
-            OutlineHintingOptions::Full(s) =&gt; Full(s),
-        }
+        sink.hit.map(|(a, b)| (a, b - a))
     }
 }
 
@@ -8295,10 +8171,10 @@
     a.partial_cmp(b).unwrap()
 }
 
-<span class="kw">fn </span>into_harf_direction(d: LayoutDirection) -&gt; harfbuzz_rs::Direction {
+<span class="kw">fn </span>into_harf_direction(d: LayoutDirection) -&gt; rustybuzz::Direction {
     <span class="kw">match </span>d {
-        LayoutDirection::LTR =&gt; harfbuzz_rs::Direction::Ltr,
-        LayoutDirection::RTL =&gt; harfbuzz_rs::Direction::Rtl,
+        LayoutDirection::LTR =&gt; rustybuzz::Direction::LeftToRight,
+        LayoutDirection::RTL =&gt; rustybuzz::Direction::RightToLeft,
     }
 }
 

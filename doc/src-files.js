@@ -11,7 +11,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_env_proc_macros",["",[],["lib.rs"]]],\
 ["zng_ext_clipboard",["",[],["lib.rs"]]],\
 ["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","settings.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
-["zng_ext_font",["",[],["emoji_util.rs","font_features.rs","font_kit_cache.rs","hyphenation.rs","lib.rs","ligature_util.rs","match_util.rs","segmenting.rs","shaping.rs","unicode_bidi_util.rs","unit.rs"]]],\
+["zng_ext_font",["",[],["emoji_util.rs","font_features.rs","hyphenation.rs","lib.rs","ligature_util.rs","query_util.rs","segmenting.rs","shaping.rs","unicode_bidi_util.rs","unit.rs"]]],\
 ["zng_ext_fs_watcher",["",[],["lib.rs"]]],\
 ["zng_ext_hot_reload",["",[],["cargo.rs","lib.rs","node.rs","util.rs"]]],\
 ["zng_ext_hot_reload_proc_macros",["",[],["hot_node.rs","lib.rs","util.rs"]]],\

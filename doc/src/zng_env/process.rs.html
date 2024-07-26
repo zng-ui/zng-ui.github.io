@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-env/src/process.rs`."><title>process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_env" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_env/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-env/src/process.rs`."><title>process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_env" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -241,6 +241,88 @@
 <a href="#241" id="241">241</a>
 <a href="#242" id="242">242</a>
 <a href="#243" id="243">243</a>
+<a href="#244" id="244">244</a>
+<a href="#245" id="245">245</a>
+<a href="#246" id="246">246</a>
+<a href="#247" id="247">247</a>
+<a href="#248" id="248">248</a>
+<a href="#249" id="249">249</a>
+<a href="#250" id="250">250</a>
+<a href="#251" id="251">251</a>
+<a href="#252" id="252">252</a>
+<a href="#253" id="253">253</a>
+<a href="#254" id="254">254</a>
+<a href="#255" id="255">255</a>
+<a href="#256" id="256">256</a>
+<a href="#257" id="257">257</a>
+<a href="#258" id="258">258</a>
+<a href="#259" id="259">259</a>
+<a href="#260" id="260">260</a>
+<a href="#261" id="261">261</a>
+<a href="#262" id="262">262</a>
+<a href="#263" id="263">263</a>
+<a href="#264" id="264">264</a>
+<a href="#265" id="265">265</a>
+<a href="#266" id="266">266</a>
+<a href="#267" id="267">267</a>
+<a href="#268" id="268">268</a>
+<a href="#269" id="269">269</a>
+<a href="#270" id="270">270</a>
+<a href="#271" id="271">271</a>
+<a href="#272" id="272">272</a>
+<a href="#273" id="273">273</a>
+<a href="#274" id="274">274</a>
+<a href="#275" id="275">275</a>
+<a href="#276" id="276">276</a>
+<a href="#277" id="277">277</a>
+<a href="#278" id="278">278</a>
+<a href="#279" id="279">279</a>
+<a href="#280" id="280">280</a>
+<a href="#281" id="281">281</a>
+<a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
+<a href="#289" id="289">289</a>
+<a href="#290" id="290">290</a>
+<a href="#291" id="291">291</a>
+<a href="#292" id="292">292</a>
+<a href="#293" id="293">293</a>
+<a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a>
+<a href="#303" id="303">303</a>
+<a href="#304" id="304">304</a>
+<a href="#305" id="305">305</a>
+<a href="#306" id="306">306</a>
+<a href="#307" id="307">307</a>
+<a href="#308" id="308">308</a>
+<a href="#309" id="309">309</a>
+<a href="#310" id="310">310</a>
+<a href="#311" id="311">311</a>
+<a href="#312" id="312">312</a>
+<a href="#313" id="313">313</a>
+<a href="#314" id="314">314</a>
+<a href="#315" id="315">315</a>
+<a href="#316" id="316">316</a>
+<a href="#317" id="317">317</a>
+<a href="#318" id="318">318</a>
+<a href="#319" id="319">319</a>
+<a href="#320" id="320">320</a>
+<a href="#321" id="321">321</a>
+<a href="#322" id="322">322</a>
+<a href="#323" id="323">323</a>
+<a href="#324" id="324">324</a>
+<a href="#325" id="325">325</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     mem,
     sync::atomic::{AtomicBool, Ordering},
@@ -286,8 +368,32 @@
 ///
 /// This event happens on the executable process context, before any `APP` context starts, you can use
 /// `zng::app::on_app_start` here to register a handler to be called in the app context, if and when it starts.
+///
+/// # Web Assembly
+///
+/// Crates that declare `on_process_start` must have the [`wasm_bindgen`] dependency to compile for the `wasm32` target.
+///
+/// In `Cargo.toml` add this dependency:
+///
+/// ```toml
+/// [target.'cfg(target_arch = "wasm32")'.dependencies]
+/// wasm-bindgen = "*"
+/// ```
+///
+/// Try to match the version used by `zng-env`.
+///
+/// [`wasm_bindgen`]: https://crates.io/crates/wasm-bindgen
 </span><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules!</span> on_process_start {
+    (<span class="macro-nonterminal">$closure</span>:expr) =&gt; {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::__on_process_start!</span> {<span class="macro-nonterminal">$closure</span>}
+    };
+}
+
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules!</span> __on_process_start {
     (<span class="macro-nonterminal">$closure</span>:expr) =&gt; {
         <span class="comment">// expanded from:
         // #[linkme::distributed_slice(ZNG_ENV_ON_PROCESS_START)]
@@ -325,11 +431,40 @@
     };
 }
 
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+#[doc(hidden)]
+#[macro_export]
+</span><span class="macro">macro_rules!</span> __on_process_start {
+    (<span class="macro-nonterminal">$closure</span>:expr) =&gt; {
+        <span class="macro-nonterminal">$</span><span class="macro">crate::wasm_process_start!</span> {<span class="macro-nonterminal">$</span><span class="kw">crate</span>,<span class="macro-nonterminal">$closure</span>}
+    };
+}
+
 <span class="attr">#[doc(hidden)]
+#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">pub use </span>wasm_bindgen::prelude::wasm_bindgen;
+
+<span class="attr">#[doc(hidden)]
+#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">pub use </span>zng_env_proc_macros::wasm_process_start;
+
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="macro">std::thread_local!</span> {
+    <span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub static </span>WASM_INIT: std::cell::RefCell&lt;Vec&lt;<span class="kw">fn</span>(<span class="kw-2">&amp;</span>ProcessStartArgs)&gt;&gt; = <span class="kw">const </span>{ std::cell::RefCell::new(<span class="macro">vec!</span>[]) };
+}
+
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+#[doc(hidden)]
 #[linkme::distributed_slice]
 </span><span class="kw">pub static </span>ZNG_ENV_ON_PROCESS_START: [<span class="kw">fn</span>(<span class="kw-2">&amp;</span>ProcessStartArgs)];
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>process_init() -&gt; <span class="kw">impl </span>Drop {
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>process_init() -&gt; <span class="kw">impl </span>Drop {
+    process_init_impl(<span class="kw-2">&amp;</span>ZNG_ENV_ON_PROCESS_START)
+}
+
+<span class="kw">fn </span>process_init_impl(handlers: <span class="kw-2">&amp;</span>[<span class="kw">fn</span>(<span class="kw-2">&amp;</span>ProcessStartArgs)]) -&gt; MainExitHandler {
     <span class="kw">let </span>process_state = std::mem::replace(
         <span class="kw-2">&amp;mut *</span><span class="macro">zng_unique_id::hot_static_ref!</span>(PROCESS_LIFETIME_STATE).lock(),
         ProcessLifetimeState::Inited,
@@ -337,8 +472,8 @@
     <span class="macro">assert_eq!</span>(process_state, ProcessLifetimeState::BeforeInit, <span class="string">"init!() already called"</span>);
 
     <span class="kw">let </span><span class="kw-2">mut </span>yielded = <span class="macro">vec!</span>[];
-    <span class="kw">let </span><span class="kw-2">mut </span>next_handlers_count = ZNG_ENV_ON_PROCESS_START.len();
-    <span class="kw">for </span>h <span class="kw">in </span>ZNG_ENV_ON_PROCESS_START {
+    <span class="kw">let </span><span class="kw-2">mut </span>next_handlers_count = handlers.len();
+    <span class="kw">for </span>h <span class="kw">in </span>handlers {
         next_handlers_count -= <span class="number">1</span>;
         <span class="kw">let </span>args = ProcessStartArgs {
             next_handlers_count,
@@ -378,6 +513,35 @@
     MainExitHandler
 }
 
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>process_init() -&gt; <span class="kw">impl </span>Drop {
+    std::panic::set_hook(Box::new(console_error_panic_hook::hook));
+
+    <span class="kw">let </span>window = web_sys::window().expect(<span class="string">"cannot 'init!', no window object"</span>);
+    <span class="kw">let </span>module = js_sys::Reflect::get(<span class="kw-2">&amp;</span>window, <span class="kw-2">&amp;</span><span class="string">"__zng_env_init_module"</span>.into())
+        .expect(<span class="string">"cannot 'init!', missing module in 'window.__zng_env_init_module'"</span>);
+
+    <span class="kw">if </span>module == wasm_bindgen::JsValue::undefined() || module == wasm_bindgen::JsValue::null() {
+        <span class="macro">panic!</span>(<span class="string">"cannot 'init!', missing module in 'window.__zng_env_init_module'"</span>);
+    }
+
+    <span class="kw">let </span>module: js_sys::Object = module.into();
+
+    <span class="kw">for </span>entry <span class="kw">in </span>js_sys::Object::entries(<span class="kw-2">&amp;</span>module) {
+        <span class="kw">let </span>entry: js_sys::Array = entry.into();
+        <span class="kw">let </span>ident = entry.get(<span class="number">0</span>).as_string().expect(<span class="string">"expected ident at entry[0]"</span>);
+
+        <span class="kw">if </span>ident.starts_with(<span class="string">"__zng_env_start_"</span>) {
+            <span class="kw">let </span>func: js_sys::Function = entry.get(<span class="number">1</span>).into();
+            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = func.call0(<span class="kw-2">&amp;</span>wasm_bindgen::JsValue::NULL) {
+                <span class="macro">panic!</span>(<span class="string">"'init!' function error, {e:?}"</span>);
+            }
+        }
+    }
+
+    process_init_impl(<span class="kw-2">&amp;</span>WASM_INIT.with_borrow_mut(std::mem::take))
+}
+
 <span class="doccomment">/// Arguments for [`on_process_start`] handlers.
 ///
 /// Empty in this release.
@@ -412,7 +576,7 @@
 }
 
 <span class="kw">type </span>ExitHandler = Box&lt;<span class="kw">dyn </span>FnOnce(<span class="kw-2">&amp;</span>ProcessExitArgs) + Send + <span class="lifetime">'static</span>&gt;;
-<span class="kw">use super</span>::<span class="kw-2">*</span>;
+
 <span class="macro">zng_unique_id::hot_static!</span> {
     <span class="kw">static </span>ON_PROCESS_EXIT: Mutex&lt;Vec&lt;ExitHandler&gt;&gt; = Mutex::new(<span class="macro">vec!</span>[]);
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/font_features.rs`."><title>font_features.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_ext_font/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/font_features.rs`."><title>font_features.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1900,6 +1900,9 @@
 <a href="#1900" id="1900">1900</a>
 <a href="#1901" id="1901">1901</a>
 <a href="#1902" id="1902">1902</a>
+<a href="#1903" id="1903">1903</a>
+<a href="#1904" id="1904">1904</a>
+<a href="#1905" id="1905">1905</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Font features and variation types.
 
 </span><span class="kw">use </span>std::{
@@ -1933,9 +1936,9 @@
         FontFeatureName(<span class="kw-2">*</span>name)
     }
 }
-<span class="kw">impl </span>From&lt;FontFeatureName&gt; <span class="kw">for </span>harfbuzz_rs::Tag {
+<span class="kw">impl </span>From&lt;FontFeatureName&gt; <span class="kw">for </span>ttf_parser::Tag {
     <span class="kw">fn </span>from(value: FontFeatureName) -&gt; <span class="self">Self </span>{
-        harfbuzz_rs::Tag::from(<span class="kw-2">&amp;</span>value.<span class="number">0</span>)
+        ttf_parser::Tag::from_bytes(<span class="kw-2">&amp;</span>value.<span class="number">0</span>)
     }
 }
 <span class="kw">impl </span>ops::Deref <span class="kw">for </span>FontFeatureName {
@@ -2055,7 +2058,7 @@
     </span><span class="kw">pub fn </span>finalize(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RFontFeatures {
         <span class="self">self</span>.<span class="number">0
             </span>.iter()
-            .map(|(<span class="kw-2">&amp;</span>n, <span class="kw-2">&amp;</span>s)| harfbuzz_rs::Feature::new(harfbuzz_rs::Tag::from(n), s, <span class="number">0</span>..usize::MAX))
+            .map(|(<span class="kw-2">&amp;</span>n, <span class="kw-2">&amp;</span>s)| rustybuzz::Feature::new(ttf_parser::Tag::from(n), s, <span class="number">0</span>..usize::MAX))
             .collect()
     }
 }
@@ -2071,8 +2074,8 @@
 
 <span class="doccomment">/// Finalized [`FontFeatures`].
 ///
-/// This is a vec of [harfbuzz features](https://docs.rs/harfbuzz_rs/2.0.1/harfbuzz_rs/struct.Feature.html).
-</span><span class="kw">pub type </span>RFontFeatures = Vec&lt;harfbuzz_rs::Feature&gt;;
+/// This is a vec of [harfbuzz features](https://docs.rs/rustybuzz/0.17.0/rustybuzz/struct.Feature.html).
+</span><span class="kw">pub type </span>RFontFeatures = Vec&lt;rustybuzz::Feature&gt;;
 
 <span class="doccomment">/// A builder for [`FontFeatures`].
 ///
@@ -3643,9 +3646,9 @@
         FontVariationName(<span class="kw-2">*</span>name)
     }
 }
-<span class="kw">impl </span>From&lt;FontVariationName&gt; <span class="kw">for </span>harfbuzz_rs::Tag {
+<span class="kw">impl </span>From&lt;FontVariationName&gt; <span class="kw">for </span>ttf_parser::Tag {
     <span class="kw">fn </span>from(value: FontVariationName) -&gt; <span class="self">Self </span>{
-        harfbuzz_rs::Tag::from(<span class="kw-2">&amp;</span>value.<span class="number">0</span>)
+        ttf_parser::Tag::from_bytes(<span class="kw-2">&amp;</span>value.<span class="number">0</span>)
     }
 }
 <span class="kw">impl </span>ops::Deref <span class="kw">for </span>FontVariationName {
@@ -3745,7 +3748,10 @@
     </span><span class="kw">pub fn </span>finalize(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; RFontVariations {
         <span class="self">self</span>.<span class="number">0
             </span>.iter()
-            .map(|(name, value)| harfbuzz_rs::Variation::new(<span class="kw-2">*</span>name, <span class="kw-2">*</span>value))
+            .map(|(name, value)| rustybuzz::Variation {
+                tag: (<span class="kw-2">*</span>name).into(),
+                value: <span class="kw-2">*</span>value,
+            })
             .collect()
     }
 }
@@ -3800,6 +3806,6 @@
 
 <span class="doccomment">/// Finalized [`FontVariations`].
 ///
-/// This is a vec of [harfbuzz variations](https://docs.rs/harfbuzz_rs/2.0.1/harfbuzz_rs/struct.Variation.html).
-</span><span class="kw">pub type </span>RFontVariations = Vec&lt;harfbuzz_rs::Variation&gt;;
+/// This is a vec of [harfbuzz variations](https://docs.rs/rustybuzz/0.17.0/rustybuzz/struct.Variation.html).
+</span><span class="kw">pub type </span>RFontVariations = Vec&lt;rustybuzz::Variation&gt;;
 </code></pre></div></section></main></body></html>

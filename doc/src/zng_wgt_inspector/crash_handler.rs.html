@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/crash_handler.rs`."><title>crash_handler.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_wgt_inspector/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/crash_handler.rs`."><title>crash_handler.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -422,7 +422,9 @@
 <a href="#422" id="422">422</a>
 <a href="#423" id="423">423</a>
 <a href="#424" id="424">424</a>
-</pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"crash_handler"</span>)]
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+</pre></div><pre class="rust"><code><span class="attr">#![cfg(all(feature = <span class="string">"crash_handler"</span>, not(target_arch = <span class="string">"wasm32"</span>)))]
 
 </span><span class="doccomment">//! Debug crash handler.
 
@@ -436,6 +438,7 @@
 <span class="kw">use </span>zng_wgt_ansi_text::AnsiText;
 <span class="kw">use </span>zng_wgt_button::Button;
 <span class="kw">use </span>zng_wgt_container::{padding, Container};
+<span class="kw">use </span>zng_wgt_dialog::{FileDialogFilters, FileDialogResponse, DIALOG};
 <span class="kw">use </span>zng_wgt_fill::background_color;
 <span class="kw">use </span>zng_wgt_scroll::Scroll;
 <span class="kw">use </span>zng_wgt_stack::Stack;
@@ -640,7 +643,10 @@ OS: {$os}
     plain_panel(widget_path, <span class="string">"widget"</span>)
 }
 <span class="kw">fn </span>minidump_panel(path: PathBuf) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span>path_txt = path.display().to_string().trim_start_matches(<span class="string">r"\\?\"</span>).to_txt();
+    <span class="kw">let </span>path_str = path.display().to_string();
+    <span class="attr">#[cfg(windows)]
+    </span><span class="kw">let </span>path_str = path_str.trim_start_matches(<span class="string">r"\\?\"</span>).replace(<span class="string">'/'</span>, <span class="string">"\\"</span>);
+    <span class="kw">let </span>path_txt = path_str.to_txt();
     <span class="macro">Scroll!</span> {
         child_align = Align::TOP_START;
         background_color = colors::BLACK;
@@ -708,16 +714,21 @@ OS: {$os}
 <span class="kw">async fn </span>open_path(enabled: ArcVar&lt;bool&gt;, path: PathBuf) {
     enabled.set(<span class="bool-val">false</span>);
 
-    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = task::wait(<span class="kw">move </span>|| open::that(path)).<span class="kw">await </span>{
-        error_message(
-            <span class="macro">l10n!</span>(
-                <span class="string">"crash-handler/minidump.open-error"</span>,
-                <span class="string">"Failed to open minidump.\n{$error}"</span>,
-                error = e.to_string()
+    <span class="attr">#[cfg(windows)]
+    </span><span class="kw">let </span>path = path.display().to_string().replace(<span class="string">'/'</span>, <span class="string">"\\"</span>);
+
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = task::wait(<span class="kw">move </span>|| open::that_detached(path)).<span class="kw">await </span>{
+        DIALOG
+            .error(
+                <span class="string">""</span>,
+                <span class="macro">l10n!</span>(
+                    <span class="string">"crash-handler/minidump.open-error"</span>,
+                    <span class="string">"Failed to open minidump.\n{$error}"</span>,
+                    error = e.to_string()
+                ),
             )
-            .get(),
-        )
-        .<span class="kw">await</span>;
+            .wait_done()
+            .<span class="kw">await</span>;
     }
 
     enabled.set(<span class="bool-val">true</span>);
@@ -725,51 +736,56 @@ OS: {$os}
 <span class="kw">async fn </span>save_copy(enabled: ArcVar&lt;bool&gt;, path: PathBuf) {
     enabled.set(<span class="bool-val">false</span>);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>dialog = zng_view_api::dialog::FileDialog {
-        title: <span class="macro">l10n!</span>(<span class="string">"crash-handler/minidump.save-copy-title"</span>, <span class="string">"Save Copy"</span>).get(),
-        starting_dir: path.parent().unwrap().to_owned(),
-        <span class="comment">// l10n-# default file name
-        </span>starting_name: <span class="macro">l10n!</span>(<span class="string">"crash-handler/minidump.save-copy-starting-name"</span>, <span class="string">"minidump"</span>).get(),
-        kind: zng_view_api::dialog::FileDialogKind::SaveFile,
-        ..Default::default()
-    };
-
+    <span class="kw">let </span><span class="kw-2">mut </span>filters = FileDialogFilters::new();
     <span class="kw">if let </span><span class="prelude-val">Some</span>(ext) = path.extension() {
         <span class="comment">// l10n-# name for the minidump file type in the save file dialog
-        </span>dialog.push_filter(
+        </span>filters.push_filter(
             <span class="macro">l10n!</span>(<span class="string">"crash-handler/minidump.save-copy-filter-name"</span>, <span class="string">"Minidump"</span>).get().as_str(),
             <span class="kw-2">&amp;</span>[ext.to_string_lossy()],
         );
     }
 
-    <span class="kw">let </span>r = WINDOWS.native_file_dialog(WINDOW.id(), dialog).wait_into_rsp().<span class="kw">await</span>;
+    <span class="kw">let </span>r = DIALOG
+        .save_file(
+            <span class="macro">l10n!</span>(<span class="string">"crash-handler/minidump.save-copy-title"</span>, <span class="string">"Save Copy"</span>),
+            path.parent().unwrap().to_owned(),
+            <span class="comment">// l10n-# default file name
+            </span><span class="macro">l10n!</span>(<span class="string">"crash-handler/minidump.save-copy-starting-name"</span>, <span class="string">"minidump"</span>),
+            filters,
+        )
+        .wait_into_rsp()
+        .<span class="kw">await</span>;
 
     <span class="kw">match </span>r {
-        zng_view_api::dialog::FileDialogResponse::Selected(<span class="kw-2">mut </span>paths) =&gt; {
+        FileDialogResponse::Selected(<span class="kw-2">mut </span>paths) =&gt; {
             <span class="kw">let </span>destiny = paths.remove(<span class="number">0</span>);
             <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = task::wait(<span class="kw">move </span>|| std::fs::copy(path, destiny)).<span class="kw">await </span>{
-                error_message(
+                DIALOG
+                    .error(
+                        <span class="string">""</span>,
+                        <span class="macro">l10n!</span>(
+                            <span class="string">"crash-handler/minidump.save-error"</span>,
+                            <span class="string">"Failed so save minidump copy.\n{$error}"</span>,
+                            error = <span class="macro">format!</span>(<span class="string">"[copy] {e}"</span>),
+                        ),
+                    )
+                    .wait_done()
+                    .<span class="kw">await</span>;
+            }
+        }
+        FileDialogResponse::Cancel =&gt; {}
+        FileDialogResponse::Error(e) =&gt; {
+            DIALOG
+                .error(
+                    <span class="string">""</span>,
                     <span class="macro">l10n!</span>(
                         <span class="string">"crash-handler/minidump.save-error"</span>,
                         <span class="string">"Failed so save minidump copy.\n{$error}"</span>,
-                        error = <span class="macro">format!</span>(<span class="string">"[copy] {e}"</span>),
-                    )
-                    .get(),
+                        error = <span class="macro">format!</span>(<span class="string">"[dialog] {e}"</span>),
+                    ),
                 )
-                .<span class="kw">await</span>;
-            }
-        }
-        zng_view_api::dialog::FileDialogResponse::Cancel =&gt; {}
-        zng_view_api::dialog::FileDialogResponse::Error(e) =&gt; {
-            error_message(
-                <span class="macro">l10n!</span>(
-                    <span class="string">"crash-handler/minidump.save-error"</span>,
-                    <span class="string">"Failed so save minidump copy.\n{$error}"</span>,
-                    error = <span class="macro">format!</span>(<span class="string">"[dialog] {e}"</span>),
-                )
-                .get(),
-            )
-            .<span class="kw">await
+                .wait_done()
+                .<span class="kw">await
         </span>}
     }
 
@@ -780,33 +796,21 @@ OS: {$os}
 
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = task::wait(<span class="kw">move </span>|| std::fs::remove_file(path)).<span class="kw">await </span>{
         <span class="kw">if </span>e.kind() != std::io::ErrorKind::NotFound {
-            error_message(
-                <span class="macro">l10n!</span>(
-                    <span class="string">"crash-handler/minidump.remove-error"</span>,
-                    <span class="string">"Failed to remove minidump.\n{$error}"</span>,
-                    error = e.to_string()
+            DIALOG
+                .error(
+                    <span class="string">""</span>,
+                    <span class="macro">l10n!</span>(
+                        <span class="string">"crash-handler/minidump.remove-error"</span>,
+                        <span class="string">"Failed to remove minidump.\n{$error}"</span>,
+                        error = e.to_string()
+                    ),
                 )
-                .get(),
-            )
-            .<span class="kw">await</span>;
-        }
+                .wait_into_rsp()
+                .<span class="kw">await
+        </span>}
     }
 
     enabled.set(<span class="bool-val">true</span>);
-}
-<span class="kw">async fn </span>error_message(message: Txt) {
-    WINDOWS
-        .native_message_dialog(
-            WINDOW.id(),
-            zng_view_api::dialog::MsgDialog {
-                title: <span class="string">"Error"</span>.into(),
-                message,
-                icon: zng_view_api::dialog::MsgDialogIcon::Error,
-                ..Default::default()
-            },
-        )
-        .wait_into_rsp()
-        .<span class="kw">await</span>;
 }
 
 <span class="kw">fn </span>plain_panel(txt: Txt, config_key: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; <span class="kw">impl </span>UiNode {

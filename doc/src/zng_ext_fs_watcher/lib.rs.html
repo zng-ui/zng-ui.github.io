@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-fs-watcher/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-081576b923113409.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_fs_watcher" data-themes="" data-resource-suffix="" data-rustdoc-version="1.79.0 (129f3b996 2024-06-10)" data-channel="1.79.0" data-search-js="search-bf21c90c8c1d92b1.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-e32f0c247825364d.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-09095024cf37855e.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><nav class="sub"><form class="search-form"><span></span><div id="sidebar-button" tabindex="-1"><a href="../../zng_ext_fs_watcher/all.html" title="show sidebar"></a></div><input class="search-input" name="search" aria-label="Run search in the documentation" autocomplete="off" spellcheck="false" placeholder="Type ‘S’ or ‘/’ to search, ‘?’ for more options…" type="search"><div id="help-button" tabindex="-1"><a href="../../help.html" title="help">?</a></div><div id="settings-menu" tabindex="-1"><a href="../../settings.html" title="settings">Settings</a></div></form></nav><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-fs-watcher/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_fs_watcher" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2201,6 +2201,35 @@
 <a href="#2201" id="2201">2201</a>
 <a href="#2202" id="2202">2202</a>
 <a href="#2203" id="2203">2203</a>
+<a href="#2204" id="2204">2204</a>
+<a href="#2205" id="2205">2205</a>
+<a href="#2206" id="2206">2206</a>
+<a href="#2207" id="2207">2207</a>
+<a href="#2208" id="2208">2208</a>
+<a href="#2209" id="2209">2209</a>
+<a href="#2210" id="2210">2210</a>
+<a href="#2211" id="2211">2211</a>
+<a href="#2212" id="2212">2212</a>
+<a href="#2213" id="2213">2213</a>
+<a href="#2214" id="2214">2214</a>
+<a href="#2215" id="2215">2215</a>
+<a href="#2216" id="2216">2216</a>
+<a href="#2217" id="2217">2217</a>
+<a href="#2218" id="2218">2218</a>
+<a href="#2219" id="2219">2219</a>
+<a href="#2220" id="2220">2220</a>
+<a href="#2221" id="2221">2221</a>
+<a href="#2222" id="2222">2222</a>
+<a href="#2223" id="2223">2223</a>
+<a href="#2224" id="2224">2224</a>
+<a href="#2225" id="2225">2225</a>
+<a href="#2226" id="2226">2226</a>
+<a href="#2227" id="2227">2227</a>
+<a href="#2228" id="2228">2228</a>
+<a href="#2229" id="2229">2229</a>
+<a href="#2230" id="2230">2230</a>
+<a href="#2231" id="2231">2231</a>
+<a href="#2232" id="2232">2232</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2224,12 +2253,10 @@
         atomic::{AtomicBool, AtomicU64},
         Arc,
     },
-    thread,
     time::{Duration, SystemTime},
 };
 
 <span class="kw">use </span>atomic::{Atomic, Ordering};
-<span class="kw">use </span>fs4::FileExt;
 <span class="kw">use </span>notify::Watcher;
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>path_absolutize::Absolutize;
@@ -4349,17 +4376,48 @@
     }
 }
 
-<span class="doccomment">/// Calls [`fs4::FileExt::lock_exclusive`] with a timeout.
-</span><span class="kw">fn </span>lock_exclusive(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>fs4::FileExt, timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+</span><span class="kw">use </span>fs4::FileExt;
+
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">trait </span>FileExt {
+    <span class="kw">fn </span>try_lock_shared(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::io::Result&lt;()&gt; {
+        not_supported()
+    }
+    <span class="kw">fn </span>try_lock_exclusive(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::io::Result&lt;()&gt; {
+        not_supported()
+    }
+    <span class="kw">fn </span>unlock(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::io::Result&lt;()&gt; {
+        not_supported()
+    }
+}
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">impl </span>FileExt <span class="kw">for </span>std::fs::File {}
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="kw">fn </span>not_supported() -&gt; std::io::Result&lt;()&gt; {
+    <span class="prelude-val">Err</span>(std::io::Error::new(
+        std::io::ErrorKind::Other,
+        <span class="string">"operation not supported on wasm yet"</span>,
+    ))
+}
+
+<span class="doccomment">/// Calls `fs4::FileExt::lock_exclusive` with a timeout.
+</span><span class="kw">fn </span>lock_exclusive(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>FileExt, timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
     lock_timeout(file, |f| f.try_lock_exclusive(), timeout)
 }
 
-<span class="doccomment">/// Calls [`fs4::FileExt::lock_shared`] with a timeout.
-</span><span class="kw">fn </span>lock_shared(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>fs4::FileExt, timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
+<span class="doccomment">/// Calls `fs4::FileExt::lock_shared` with a timeout.
+</span><span class="kw">fn </span>lock_shared(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>FileExt, timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
     lock_timeout(file, |f| f.try_lock_shared(), timeout)
 }
 
-<span class="kw">fn </span>lock_timeout&lt;F: fs4::FileExt&gt;(file: <span class="kw-2">&amp;</span>F, try_lock: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>F) -&gt; std::io::Result&lt;()&gt;, <span class="kw-2">mut </span>timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+
+</span><span class="kw">fn </span>lock_timeout&lt;F: FileExt&gt;(<span class="kw">_</span>: <span class="kw-2">&amp;</span>F, <span class="kw">_</span>: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>F) -&gt; std::io::Result&lt;()&gt;, <span class="kw">_</span>: Duration) -&gt; std::io::Result&lt;()&gt; {
+    not_supported()
+}
+<span class="attr">#[cfg(not(target_arch = <span class="string">"wasm32"</span>))]
+</span><span class="kw">fn </span>lock_timeout&lt;F: FileExt&gt;(file: <span class="kw-2">&amp;</span>F, try_lock: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>F) -&gt; std::io::Result&lt;()&gt;, <span class="kw-2">mut </span>timeout: Duration) -&gt; std::io::Result&lt;()&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>locked_error = <span class="prelude-val">None</span>;
     <span class="kw">loop </span>{
         <span class="kw">match </span>try_lock(file) {
@@ -4376,24 +4434,24 @@
                 <span class="kw">if </span>timeout.is_zero() {
                     <span class="kw">return </span><span class="prelude-val">Err</span>(std::io::Error::new(std::io::ErrorKind::TimedOut, e));
                 } <span class="kw">else </span>{
-                    thread::sleep(INTERVAL.min(timeout));
+                    std::thread::sleep(INTERVAL.min(timeout));
                 }
             }
         }
     }
 }
 
-<span class="kw">fn </span>unlock_ok(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>fs4::FileExt) -&gt; std::io::Result&lt;()&gt; {
+<span class="kw">fn </span>unlock_ok(file: <span class="kw-2">&amp;</span><span class="kw">impl </span>FileExt) -&gt; std::io::Result&lt;()&gt; {
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = file.unlock() {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(code) = e.raw_os_error() {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(_code) = e.raw_os_error() {
             <span class="attr">#[cfg(windows)]
-            </span><span class="kw">if </span>code == <span class="number">158 </span>{
+            </span><span class="kw">if </span>_code == <span class="number">158 </span>{
                 <span class="comment">// ERROR_NOT_LOCKED
                 </span><span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
 
             <span class="attr">#[cfg(unix)]
-            </span><span class="kw">if </span>code == <span class="number">22 </span>{
+            </span><span class="kw">if </span>_code == <span class="number">22 </span>{
                 <span class="comment">// EINVAL
                 </span><span class="kw">return </span><span class="prelude-val">Ok</span>(());
             }
