@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1571,6 +1571,14 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1535" id="1535">1535</a>
 <a href="#1536" id="1536">1536</a>
 <a href="#1537" id="1537">1537</a>
+<a href="#1538" id="1538">1538</a>
+<a href="#1539" id="1539">1539</a>
+<a href="#1540" id="1540">1540</a>
+<a href="#1541" id="1541">1541</a>
+<a href="#1542" id="1542">1542</a>
+<a href="#1543" id="1543">1543</a>
+<a href="#1544" id="1544">1544</a>
+<a href="#1545" id="1545">1545</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2981,6 +2989,8 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// In `"wasm32"` builds logs to the browser console.
 ///
+/// In `"android"` builds logs to logcat.
+///
 /// See also [`test_log`] to enable panicking on error log.
 ///
 /// See also [`print_tracing_filter`] for the filter used by this.
@@ -2989,16 +2999,22 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">pub fn </span>print_tracing(max: tracing::Level) -&gt; bool {
     <span class="kw">use </span>tracing_subscriber::prelude::<span class="kw-2">*</span>;
 
-    <span class="kw">let </span>fmt_layer = tracing_subscriber::fmt::layer().without_time();
+    <span class="kw">let </span>layers = tracing_subscriber::registry().with(FilterLayer(max));
 
-    <span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
-    </span><span class="kw">let </span>fmt_layer = fmt_layer.with_ansi(<span class="bool-val">false</span>).with_writer(tracing_web::MakeWebConsoleWriter::new());
+    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+    </span><span class="kw">let </span>layers = layers.with(tracing_android::layer(<span class="kw-2">&amp;</span>zng_env::about().pkg_name).unwrap());
 
-    tracing_subscriber::registry()
-        .with(FilterLayer(max))
-        .with(fmt_layer)
-        .try_init()
-        .is_ok()
+    <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+    </span><span class="kw">let </span>layers = {
+        <span class="kw">let </span>fmt_layer = tracing_subscriber::fmt::layer().without_time();
+
+        <span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+        </span><span class="kw">let </span>fmt_layer = fmt_layer.with_ansi(<span class="bool-val">false</span>).with_writer(tracing_web::MakeWebConsoleWriter::new());
+
+        layers.with(fmt_layer)
+    };
+
+    layers.try_init().is_ok()
 }
 
 <span class="kw">struct </span>FilterLayer(tracing::Level);

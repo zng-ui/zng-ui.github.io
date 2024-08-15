@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/running.rs`."><title>running.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/running.rs`."><title>running.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1679,6 +1679,28 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1643" id="1643">1643</a>
 <a href="#1644" id="1644">1644</a>
 <a href="#1645" id="1645">1645</a>
+<a href="#1646" id="1646">1646</a>
+<a href="#1647" id="1647">1647</a>
+<a href="#1648" id="1648">1648</a>
+<a href="#1649" id="1649">1649</a>
+<a href="#1650" id="1650">1650</a>
+<a href="#1651" id="1651">1651</a>
+<a href="#1652" id="1652">1652</a>
+<a href="#1653" id="1653">1653</a>
+<a href="#1654" id="1654">1654</a>
+<a href="#1655" id="1655">1655</a>
+<a href="#1656" id="1656">1656</a>
+<a href="#1657" id="1657">1657</a>
+<a href="#1658" id="1658">1658</a>
+<a href="#1659" id="1659">1659</a>
+<a href="#1660" id="1660">1660</a>
+<a href="#1661" id="1661">1661</a>
+<a href="#1662" id="1662">1662</a>
+<a href="#1663" id="1663">1663</a>
+<a href="#1664" id="1664">1664</a>
+<a href="#1665" id="1665">1665</a>
+<a href="#1666" id="1666">1666</a>
+<a href="#1667" id="1667">1667</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fmt, mem,
@@ -1694,7 +1716,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_task::DEADLINE_APP;
 <span class="kw">use </span>zng_time::{InstantMode, INSTANT_APP};
 <span class="kw">use </span>zng_txt::Txt;
-<span class="kw">use </span>zng_var::{response_var, ArcVar, ResponderVar, ResponseVar, Var <span class="kw">as _</span>, VARS, VARS_APP};
+<span class="kw">use </span>zng_var::{response_var, ArcVar, ReadOnlyArcVar, ResponderVar, ResponseVar, Var <span class="kw">as _</span>, VARS, VARS_APP};
 
 <span class="kw">use crate</span>::{
     event::{
@@ -2180,7 +2202,9 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             <span class="comment">// Others
-            </span>Event::Inited(zng_view_api::Inited { .. }) | Event::Disconnected(<span class="kw">_</span>) | Event::FrameRendered(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(), <span class="comment">// handled before coalesce.
+            </span>Event::Inited(zng_view_api::Inited { .. }) | Event::Suspended | Event::Disconnected(<span class="kw">_</span>) | Event::FrameRendered(<span class="kw">_</span>) =&gt; {
+                <span class="macro">unreachable!</span>()
+            } <span class="comment">// handled before coalesce.
         </span>}
     }
 
@@ -2253,6 +2277,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     <span class="comment">// notify immediately.
                     </span><span class="kw">if </span>is_respawn {
                         VIEW_PROCESS.on_respawned(generation);
+                        APP_PROCESS_SV.read().is_suspended.set(<span class="bool-val">false</span>);
                     }
 
                     VIEW_PROCESS.handle_inited(generation, extensions.clone());
@@ -2278,6 +2303,12 @@ document.addEventListener('DOMContentLoaded', function () {
                         extensions,
                     );
                     <span class="self">self</span>.notify_event(VIEW_PROCESS_INITED_EVENT.new_update(args), observer);
+                }
+                zng_view_api::Event::Suspended =&gt; {
+                    VIEW_PROCESS.handle_suspended();
+                    <span class="kw">let </span>args = <span class="kw">crate</span>::view_process::ViewProcessSuspendedArgs::now();
+                    <span class="self">self</span>.notify_event(VIEW_PROCESS_SUSPENDED_EVENT.new_update(args), observer);
+                    APP_PROCESS_SV.read().is_suspended.set(<span class="bool-val">true</span>);
                 }
                 zng_view_api::Event::Disconnected(gen) =&gt; {
                     <span class="comment">// update ViewProcess immediately.
@@ -2767,6 +2798,17 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub fn </span>exit(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ResponseVar&lt;ExitCancelled&gt; {
         APP_PROCESS_SV.write().exit()
     }
+
+    <span class="doccomment">/// Gets a variable that tracks if the app is suspended by the operating system.
+    ///
+    /// Suspended apps cannot create graphics contexts and are likely to be killed if the user does not
+    /// return. Operations that persist data should flush on suspension.
+    ///
+    /// App suspension is controlled by the view-process, the [`VIEW_PROCESS_SUSPENDED_EVENT`] notifies
+    /// on suspension and the [`VIEW_PROCESS_INITED_EVENT`] notifies a "respawn" on resume.
+    </span><span class="kw">pub fn </span>is_suspended(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;bool&gt; {
+        APP_PROCESS_SV.read().is_suspended.read_only()
+    }
 }
 
 <span class="doccomment">/// App time control.
@@ -3007,6 +3049,7 @@ document.addEventListener('DOMContentLoaded', function () {
         extensions: <span class="prelude-val">None</span>,
         device_events: <span class="bool-val">false</span>,
         pause_time_for_updates: zng_var::var(<span class="bool-val">true</span>),
+        is_suspended: zng_var::var(<span class="bool-val">false</span>),
     };
 }
 
@@ -3015,6 +3058,7 @@ document.addEventListener('DOMContentLoaded', function () {
     extensions: <span class="prelude-ty">Option</span>&lt;Arc&lt;AppExtensionsInfo&gt;&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) device_events: bool,
     pause_time_for_updates: ArcVar&lt;bool&gt;,
+    is_suspended: ArcVar&lt;bool&gt;,
 }
 <span class="kw">impl </span>AppProcessService {
     <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>take_requests(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ResponderVar&lt;ExitCancelled&gt;&gt; {
@@ -3259,8 +3303,8 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Cancellable event raised when app process exit is requested.
     ///
     /// App exit can be requested using the [`APP`] service or the [`EXIT_CMD`], some extensions
-    /// also request exit if some conditions are met, `WindowManager` requests it after the last window
-    /// is closed for example.
+    /// also request exit if some conditions are met, for example, `WindowManager` requests it after the last window
+    /// is closed.
     ///
     /// Requesting `propagation().stop()` on this event cancels the exit.
     </span><span class="kw">pub static </span>EXIT_REQUESTED_EVENT: ExitRequestedArgs;

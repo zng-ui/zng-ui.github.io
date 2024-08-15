@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/ipc.rs`."><title>ipc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/ipc.rs`."><title>ipc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -580,10 +580,10 @@
 
 <span class="kw">use crate</span>::{AnyResult, Event, Request, Response};
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="kw">use </span>ipc_channel::ipc::{channel, IpcOneShotServer, IpcReceiver, IpcSender};
 
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">use </span>flume::unbounded <span class="kw">as </span>channel;
 
 <span class="kw">use </span>parking_lot::Mutex;
@@ -595,22 +595,22 @@
 <span class="doccomment">/// Bytes sender.
 ///
 /// Use [`bytes_channel`] to create.
-</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(serde::Serialize, serde::Deserialize))]
+</span><span class="attr">#[cfg_attr(ipc, derive(serde::Serialize, serde::Deserialize))]
 </span><span class="kw">pub struct </span>IpcBytesSender {
-    <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    <span class="attr">#[cfg(ipc)]
     </span>sender: ipc_channel::ipc::IpcBytesSender,
-    <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    <span class="attr">#[cfg(not(ipc))]
     </span>sender: flume::Sender&lt;Vec&lt;u8&gt;&gt;,
 }
 <span class="kw">impl </span>IpcBytesSender {
     <span class="doccomment">/// Send a byte package.
     </span><span class="kw">pub fn </span>send(<span class="kw-2">&amp;</span><span class="self">self</span>, bytes: Vec&lt;u8&gt;) -&gt; IpcResult&lt;()&gt; {
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span>{
             <span class="self">self</span>.sender.send(<span class="kw-2">&amp;</span>bytes).map_err(handle_io_error)
         }
 
-        <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+        <span class="attr">#[cfg(not(ipc))]
         </span><span class="self">self</span>.sender.send(bytes).map_err(handle_send_error)
     }
 }
@@ -623,11 +623,11 @@
 <span class="doccomment">/// Bytes receiver.
 ///
 /// Use [`bytes_channel`] to create.
-</span><span class="attr">#[cfg_attr(feature = <span class="string">"ipc"</span>, derive(serde::Serialize, serde::Deserialize))]
+</span><span class="attr">#[cfg_attr(ipc, derive(serde::Serialize, serde::Deserialize))]
 </span><span class="kw">pub struct </span>IpcBytesReceiver {
-    <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    <span class="attr">#[cfg(ipc)]
     </span>recv: ipc_channel::ipc::IpcBytesReceiver,
-    <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    <span class="attr">#[cfg(not(ipc))]
     </span>recv: flume::Receiver&lt;Vec&lt;u8&gt;&gt;,
 }
 <span class="kw">impl </span>IpcBytesReceiver {
@@ -643,20 +643,20 @@
 }
 
 <span class="doccomment">/// Create a bytes channel.
-</span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="attr">#[cfg(ipc)]
 </span><span class="kw">pub fn </span>bytes_channel() -&gt; (IpcBytesSender, IpcBytesReceiver) {
     <span class="kw">let </span>(sender, recv) = ipc_channel::ipc::bytes_channel().unwrap();
     (IpcBytesSender { sender }, IpcBytesReceiver { recv })
 }
 
 <span class="doccomment">/// Create a bytes channel.
-</span><span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+</span><span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">pub fn </span>bytes_channel() -&gt; (IpcBytesSender, IpcBytesReceiver) {
     <span class="kw">let </span>(sender, recv) = flume::unbounded();
     (IpcBytesSender { sender }, IpcBytesReceiver { recv })
 }
 
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">mod </span>arc_bytes {
     <span class="kw">pub fn </span>serialize&lt;S&gt;(bytes: <span class="kw-2">&amp;</span>std::sync::Arc&lt;Vec&lt;u8&gt;&gt;, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
     <span class="kw">where
@@ -680,21 +680,21 @@
 </span><span class="attr">#[derive(Clone, Serialize, Deserialize)]
 </span><span class="kw">pub struct </span>IpcBytes {
     <span class="comment">// `IpcSharedMemory` cannot have zero length, we use `None` in this case.
-    </span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    </span><span class="attr">#[cfg(ipc)]
     </span>bytes: <span class="prelude-ty">Option</span>&lt;ipc_channel::ipc::IpcSharedMemory&gt;,
     <span class="comment">// `IpcSharedMemory` only clones a pointer.
-    </span><span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    </span><span class="attr">#[cfg(not(ipc))]
     #[serde(with = <span class="string">"arc_bytes"</span>)]
     </span>bytes: std::sync::Arc&lt;Vec&lt;u8&gt;&gt;,
 }
 <span class="doccomment">/// Pointer equal.
 </span><span class="kw">impl </span>PartialEq <span class="kw">for </span>IpcBytes {
-    <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    <span class="attr">#[cfg(not(ipc))]
     </span><span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
         std::sync::Arc::ptr_eq(<span class="kw-2">&amp;</span><span class="self">self</span>.bytes, <span class="kw-2">&amp;</span>other.bytes)
     }
 
-    <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    <span class="attr">#[cfg(ipc)]
     </span><span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
         <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.bytes, <span class="kw-2">&amp;</span>other.bytes) {
             (<span class="prelude-val">None</span>, <span class="prelude-val">None</span>) =&gt; <span class="bool-val">true</span>,
@@ -707,7 +707,7 @@
     <span class="doccomment">/// Copy the `bytes` to a new shared memory allocation.
     </span><span class="kw">pub fn </span>from_slice(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="self">Self </span>{
         IpcBytes {
-            <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+            <span class="attr">#[cfg(ipc)]
             </span>bytes: {
                 <span class="kw">if </span>bytes.is_empty() {
                     <span class="prelude-val">None
@@ -715,7 +715,7 @@
                     <span class="prelude-val">Some</span>(ipc_channel::ipc::IpcSharedMemory::from_bytes(bytes))
                 }
             },
-            <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+            <span class="attr">#[cfg(not(ipc))]
             </span>bytes: std::sync::Arc::new(bytes.to_vec()),
         }
     }
@@ -723,12 +723,12 @@
     <span class="doccomment">/// If the `"ipc"` feature is enabled copy the bytes to a new shared memory region, if not
     /// just wraps the `bytes` in a shared pointer.
     </span><span class="kw">pub fn </span>from_vec(bytes: Vec&lt;u8&gt;) -&gt; <span class="self">Self </span>{
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span>{
             <span class="self">Self</span>::from_slice(<span class="kw-2">&amp;</span>bytes)
         }
 
-        <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+        <span class="attr">#[cfg(not(ipc))]
         </span>IpcBytes {
             bytes: std::sync::Arc::new(bytes),
         }
@@ -738,11 +738,11 @@
     ///
     /// If the `"ipc"` feature is not enabled and `self` is the only reference this operation is zero-cost.
     </span><span class="kw">pub fn </span>to_vec(<span class="self">self</span>) -&gt; Vec&lt;u8&gt; {
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span>{
             <span class="self">self</span>.bytes.map(|s| s.to_vec()).unwrap_or_default()
         }
-        <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+        <span class="attr">#[cfg(not(ipc))]
         </span>{
             <span class="kw">match </span>std::sync::Arc::try_unwrap(<span class="self">self</span>.bytes) {
                 <span class="prelude-val">Ok</span>(d) =&gt; d,
@@ -752,13 +752,13 @@
     }
 
     <span class="doccomment">/// Returns the underlying shared memory reference, if the bytes are not zero-length.
-    </span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    </span><span class="attr">#[cfg(ipc)]
     </span><span class="kw">pub fn </span>ipc_shared_memory(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ipc_channel::ipc::IpcSharedMemory&gt; {
         <span class="self">self</span>.bytes.clone()
     }
 
     <span class="doccomment">/// Returns the underlying shared reference.
-    </span><span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+    </span><span class="attr">#[cfg(not(ipc))]
     </span><span class="kw">pub fn </span>arc(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::sync::Arc&lt;Vec&lt;u8&gt;&gt; {
         <span class="self">self</span>.bytes.clone()
     }
@@ -767,10 +767,10 @@
     <span class="kw">type </span>Target = [u8];
 
     <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span><span class="kw">return if let </span><span class="prelude-val">Some</span>(bytes) = <span class="kw-2">&amp;</span><span class="self">self</span>.bytes { bytes } <span class="kw">else </span>{ <span class="kw-2">&amp;</span>[] };
 
-        <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+        <span class="attr">#[cfg(not(ipc))]
         </span><span class="kw-2">&amp;</span><span class="self">self</span>.bytes
     }
 }
@@ -780,9 +780,9 @@
     }
 }
 
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">type </span>IpcSender&lt;T&gt; = flume::Sender&lt;T&gt;;
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">type </span>IpcReceiver&lt;T&gt; = flume::Receiver&lt;T&gt;;
 
 <span class="doccomment">/// Channel disconnected error.
@@ -796,12 +796,12 @@
 <span class="kw">impl </span>std::error::Error <span class="kw">for </span>Disconnected {}
 
 <span class="doccomment">/// Call `new`, then spawn the view-process using the `name` then call `connect`.
-</span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="attr">#[cfg(ipc)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>AppInit {
     server: IpcOneShotServer&lt;AppInitMsg&gt;,
     name: Txt,
 }
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="kw">impl </span>AppInit {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="kw">let </span>(server, name) = IpcOneShotServer::new().expect(<span class="string">"failed to create init channel"</span>);
@@ -842,7 +842,7 @@
 }
 
 <span class="doccomment">/// Start the view-process server and waits for `(request, response, event)`.
-</span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="attr">#[cfg(ipc)]
 </span><span class="kw">pub fn </span>connect_view_process(server_name: Txt) -&gt; IpcResult&lt;ViewChannels&gt; {
     <span class="kw">let </span>_s = <span class="macro">tracing::trace_span!</span>(<span class="string">"connect_view_process"</span>).entered();
 
@@ -871,7 +871,7 @@
 /// )
 </span><span class="kw">type </span>AppInitMsg = (IpcSender&lt;Request&gt;, IpcSender&lt;(IpcSender&lt;Response&gt;, IpcSender&lt;Event&gt;)&gt;);
 
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>AppInit {
     <span class="comment">// (
     //    RequestSender,
@@ -882,7 +882,7 @@
     </span>init: flume::Receiver&lt;AppInitMsg&gt;,
     name: Txt,
 }
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">mod </span>name_map {
     <span class="kw">use </span>std::{
         collections::HashMap,
@@ -909,7 +909,7 @@
         }
     }
 }
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">impl </span>AppInit {
     <span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
         <span class="kw">use </span>std::sync::atomic::{AtomicU32, Ordering};
@@ -948,7 +948,7 @@
 }
 
 <span class="doccomment">/// Start the view-process server and waits for `(request, response, event)`.
-</span><span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+</span><span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">pub fn </span>connect_view_process(server_name: Txt) -&gt; IpcResult&lt;ViewChannels&gt; {
     <span class="kw">let </span>app_init_sender = name_map::get().lock().unwrap().remove(<span class="kw-2">&amp;</span>server_name).unwrap();
 
@@ -1049,7 +1049,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="kw">fn </span>handle_recv_error(e: ipc_channel::ipc::IpcError) -&gt; Disconnected {
     <span class="kw">match </span>e {
         ipc_channel::ipc::IpcError::Disconnected =&gt; Disconnected,
@@ -1059,14 +1059,14 @@
         }
     }
 }
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">fn </span>handle_recv_error(e: flume::RecvError) -&gt; Disconnected {
     <span class="kw">match </span>e {
         flume::RecvError::Disconnected =&gt; Disconnected,
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[allow(clippy::boxed_local)]
 </span><span class="kw">fn </span>handle_send_error(e: ipc_channel::Error) -&gt; Disconnected {
     <span class="kw">match </span><span class="kw-2">*</span>e {
@@ -1090,12 +1090,12 @@
     }
 }
 
-<span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(not(ipc))]
 </span><span class="kw">fn </span>handle_send_error&lt;T&gt;(<span class="kw">_</span>: flume::SendError&lt;T&gt;) -&gt; Disconnected {
     Disconnected
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="kw">fn </span>handle_io_error(e: std::io::Error) -&gt; Disconnected {
     <span class="kw">match </span>e.kind() {
         std::io::ErrorKind::BrokenPipe =&gt; Disconnected,
@@ -1103,7 +1103,7 @@
     }
 }
 
-<span class="attr">#[cfg(all(test, feature = <span class="string">"ipc"</span>))]
+<span class="attr">#[cfg(all(test, ipc))]
 </span><span class="kw">mod </span>tests {
     <span class="kw">use </span>std::thread;
 

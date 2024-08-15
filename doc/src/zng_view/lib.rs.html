@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2144,6 +2144,104 @@
 <a href="#2144" id="2144">2144</a>
 <a href="#2145" id="2145">2145</a>
 <a href="#2146" id="2146">2146</a>
+<a href="#2147" id="2147">2147</a>
+<a href="#2148" id="2148">2148</a>
+<a href="#2149" id="2149">2149</a>
+<a href="#2150" id="2150">2150</a>
+<a href="#2151" id="2151">2151</a>
+<a href="#2152" id="2152">2152</a>
+<a href="#2153" id="2153">2153</a>
+<a href="#2154" id="2154">2154</a>
+<a href="#2155" id="2155">2155</a>
+<a href="#2156" id="2156">2156</a>
+<a href="#2157" id="2157">2157</a>
+<a href="#2158" id="2158">2158</a>
+<a href="#2159" id="2159">2159</a>
+<a href="#2160" id="2160">2160</a>
+<a href="#2161" id="2161">2161</a>
+<a href="#2162" id="2162">2162</a>
+<a href="#2163" id="2163">2163</a>
+<a href="#2164" id="2164">2164</a>
+<a href="#2165" id="2165">2165</a>
+<a href="#2166" id="2166">2166</a>
+<a href="#2167" id="2167">2167</a>
+<a href="#2168" id="2168">2168</a>
+<a href="#2169" id="2169">2169</a>
+<a href="#2170" id="2170">2170</a>
+<a href="#2171" id="2171">2171</a>
+<a href="#2172" id="2172">2172</a>
+<a href="#2173" id="2173">2173</a>
+<a href="#2174" id="2174">2174</a>
+<a href="#2175" id="2175">2175</a>
+<a href="#2176" id="2176">2176</a>
+<a href="#2177" id="2177">2177</a>
+<a href="#2178" id="2178">2178</a>
+<a href="#2179" id="2179">2179</a>
+<a href="#2180" id="2180">2180</a>
+<a href="#2181" id="2181">2181</a>
+<a href="#2182" id="2182">2182</a>
+<a href="#2183" id="2183">2183</a>
+<a href="#2184" id="2184">2184</a>
+<a href="#2185" id="2185">2185</a>
+<a href="#2186" id="2186">2186</a>
+<a href="#2187" id="2187">2187</a>
+<a href="#2188" id="2188">2188</a>
+<a href="#2189" id="2189">2189</a>
+<a href="#2190" id="2190">2190</a>
+<a href="#2191" id="2191">2191</a>
+<a href="#2192" id="2192">2192</a>
+<a href="#2193" id="2193">2193</a>
+<a href="#2194" id="2194">2194</a>
+<a href="#2195" id="2195">2195</a>
+<a href="#2196" id="2196">2196</a>
+<a href="#2197" id="2197">2197</a>
+<a href="#2198" id="2198">2198</a>
+<a href="#2199" id="2199">2199</a>
+<a href="#2200" id="2200">2200</a>
+<a href="#2201" id="2201">2201</a>
+<a href="#2202" id="2202">2202</a>
+<a href="#2203" id="2203">2203</a>
+<a href="#2204" id="2204">2204</a>
+<a href="#2205" id="2205">2205</a>
+<a href="#2206" id="2206">2206</a>
+<a href="#2207" id="2207">2207</a>
+<a href="#2208" id="2208">2208</a>
+<a href="#2209" id="2209">2209</a>
+<a href="#2210" id="2210">2210</a>
+<a href="#2211" id="2211">2211</a>
+<a href="#2212" id="2212">2212</a>
+<a href="#2213" id="2213">2213</a>
+<a href="#2214" id="2214">2214</a>
+<a href="#2215" id="2215">2215</a>
+<a href="#2216" id="2216">2216</a>
+<a href="#2217" id="2217">2217</a>
+<a href="#2218" id="2218">2218</a>
+<a href="#2219" id="2219">2219</a>
+<a href="#2220" id="2220">2220</a>
+<a href="#2221" id="2221">2221</a>
+<a href="#2222" id="2222">2222</a>
+<a href="#2223" id="2223">2223</a>
+<a href="#2224" id="2224">2224</a>
+<a href="#2225" id="2225">2225</a>
+<a href="#2226" id="2226">2226</a>
+<a href="#2227" id="2227">2227</a>
+<a href="#2228" id="2228">2228</a>
+<a href="#2229" id="2229">2229</a>
+<a href="#2230" id="2230">2230</a>
+<a href="#2231" id="2231">2231</a>
+<a href="#2232" id="2232">2232</a>
+<a href="#2233" id="2233">2233</a>
+<a href="#2234" id="2234">2234</a>
+<a href="#2235" id="2235">2235</a>
+<a href="#2236" id="2236">2236</a>
+<a href="#2237" id="2237">2237</a>
+<a href="#2238" id="2238">2238</a>
+<a href="#2239" id="2239">2239</a>
+<a href="#2240" id="2240">2240</a>
+<a href="#2241" id="2241">2241</a>
+<a href="#2242" id="2242">2242</a>
+<a href="#2243" id="2243">2243</a>
+<a href="#2244" id="2244">2244</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2157,8 +2255,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.11.0"
-//! zng-view = "0.4.11"
+//! zng = "0.11.1"
+//! zng-view = "0.4.12"
 //! ```
 //!
 //! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2251,8 +2349,13 @@
     event_loop::{ActiveEventLoop, EventLoop, EventLoopProxy},
     keyboard::ModifiersState,
     monitor::MonitorHandle,
-    platform::modifier_supplement::KeyEventExtModifierSupplement,
 };
+
+<span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+</span><span class="kw">use </span>winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
+
+<span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+</span><span class="kw">use </span>winit::platform::android::EventLoopBuilderExtAndroid;
 
 <span class="kw">mod </span>config;
 <span class="kw">mod </span>display_list;
@@ -2265,6 +2368,8 @@
 <span class="kw">use </span>surface::<span class="kw-2">*</span>;
 
 <span class="kw">pub mod </span>extensions;
+
+<span class="kw">pub mod </span>platform;
 
 <span class="doccomment">/// Webrender build used in the view-process.
 </span><span class="attr">#[doc(no_inline)]
@@ -2297,7 +2402,7 @@
 
 <span class="kw">use </span>rustc_hash::FxHashMap;
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="macro">zng_env::on_process_start!</span>(|<span class="kw">_</span>| {
     <span class="kw">if </span>std::env::var(<span class="string">"ZNG_VIEW_NO_INIT_START"</span>).is_err() {
         view_process_main();
@@ -2311,7 +2416,7 @@
 ///
 /// You can also disable start on init by setting the `ZNG_VIEW_NO_INIT_START` environment variable. In this
 /// case you must manually call this function.
-</span><span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+</span><span class="attr">#[cfg(ipc)]
 </span><span class="kw">pub fn </span>view_process_main() {
     <span class="kw">let </span>config = <span class="kw">match </span>ViewConfig::from_env() {
         <span class="prelude-val">Some</span>(c) =&gt; c,
@@ -2336,7 +2441,7 @@
     zng_env::exit(<span class="number">0</span>)
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[doc(hidden)]
 #[no_mangle]
 </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>extern_view_process_main() {
@@ -2360,6 +2465,10 @@
 /// the panics to the main thread, this causes the app to stop responding while still receiving
 /// event signals, causing the operating system to not detect that the app is frozen. It is recommended
 /// that you build with `panic=abort` or use [`std::panic::set_hook`] to detect these background panics.
+///
+/// # Android
+///
+/// In Android builds this function requires `android::init_android_app` must be called before this call.
 </span><span class="kw">pub fn </span>run_same_process(run_app: <span class="kw">impl </span>FnOnce() + Send + <span class="lifetime">'static</span>) {
     run_same_process_extended(run_app, ViewExtensions::new)
 }
@@ -2402,7 +2511,7 @@
     }
 }
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[doc(hidden)]
 #[no_mangle]
 </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>extern_run_same_process(patch: <span class="kw-2">&amp;</span>StaticPatch, run_app: <span class="kw">extern </span><span class="string">"C" </span><span class="kw">fn</span>()) {
@@ -2417,17 +2526,17 @@
     <span class="attr">#[allow(clippy::redundant_closure)]
     </span>run_same_process(<span class="kw">move </span>|| run_app())
 }
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[allow(deprecated)] </span><span class="comment">// std::panic::PanicInfo is deprecated on nightly (&gt;=1.81)
 </span><span class="kw">fn </span>init_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
     panic_hook(info, <span class="string">"note: aborting to respawn"</span>);
 }
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[allow(deprecated)] </span><span class="comment">// std::panic::PanicInfo is deprecated on nightly (&gt;=1.81)
 </span><span class="kw">fn </span>ffi_abort(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo) {
     panic_hook(info, <span class="string">"note: aborting to avoid unwind across FFI"</span>);
 }
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 #[allow(deprecated)] </span><span class="comment">// std::panic::PanicInfo is deprecated on nightly (&gt;=1.81)
 </span><span class="kw">fn </span>panic_hook(info: <span class="kw-2">&amp;</span>std::panic::PanicInfo, details: <span class="kw-2">&amp;</span>str) {
     <span class="comment">// see `default_hook` in https://doc.rust-lang.org/src/std/panicking.rs.html#182
@@ -2444,8 +2553,6 @@
 
 <span class="doccomment">/// The backend implementation.
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>App {
-    started: bool,
-
     headless: bool,
 
     exts: ViewExtensions,
@@ -2460,7 +2567,7 @@
     event_sender: ipc::EventSender,
     image_cache: ImageCache,
 
-    gen: ViewProcessGen,
+    generation: ViewProcessGen,
     device_events: bool,
 
     windows: Vec&lt;Window&gt;,
@@ -2491,18 +2598,19 @@
     pending_modifiers_update: <span class="prelude-ty">Option</span>&lt;ModifiersState&gt;,
     pending_modifiers_focus_clear: bool,
 
-    <span class="attr">#[cfg(not(windows))]
+    <span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
     </span>arboard: <span class="prelude-ty">Option</span>&lt;arboard::Clipboard&gt;,
 
     config_listener_exit: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>FnOnce()&gt;&gt;,
 
+    app_state: AppState,
     exited: bool,
 }
 <span class="kw">impl </span>fmt::Debug <span class="kw">for </span>App {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         f.debug_struct(<span class="string">"HeadlessBackend"</span>)
-            .field(<span class="string">"started"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.started)
-            .field(<span class="string">"gen"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.gen)
+            .field(<span class="string">"app_state"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.app_state)
+            .field(<span class="string">"generation"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.generation)
             .field(<span class="string">"device_events"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.device_events)
             .field(<span class="string">"windows"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.windows)
             .field(<span class="string">"surfaces"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.surfaces)
@@ -2510,7 +2618,33 @@
     }
 }
 <span class="kw">impl </span>winit::application::ApplicationHandler&lt;AppEvent&gt; <span class="kw">for </span>App {
-    <span class="kw">fn </span>resumed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop) {}
+    <span class="kw">fn </span>resumed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+        <span class="kw">if let </span>AppState::Suspended = <span class="self">self</span>.app_state {
+            <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.winit_loop.set(winit_loop);
+
+            <span class="self">self</span>.exts.resumed();
+            <span class="self">self</span>.generation = <span class="self">self</span>.generation.next();
+            <span class="kw">let </span>available_monitors = <span class="self">self</span>.available_monitors();
+            <span class="self">self</span>.notify(Event::Inited(Inited {
+                generation: <span class="self">self</span>.generation,
+                is_respawn: <span class="bool-val">true</span>,
+                available_monitors,
+                multi_click_config: config::multi_click_config(),
+                key_repeat_config: config::key_repeat_config(),
+                touch_config: config::touch_config(),
+                font_aa: config::font_aa(),
+                animations_config: config::animations_config(),
+                locale_config: config::locale_config(),
+                colors_config: config::colors_config(),
+                extensions: <span class="self">self</span>.exts.api_extensions(),
+            }));
+
+            winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.exts.init(<span class="kw-2">&amp;</span><span class="self">self</span>.app_sender);
+        }
+        <span class="self">self</span>.app_state = AppState::Resumed;
+    }
 
     <span class="kw">fn </span>window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop, window_id: winit::window::WindowId, event: WindowEvent) {
         <span class="kw">let </span>i = <span class="kw">if let </span><span class="prelude-val">Some</span>((i, <span class="kw">_</span>)) = <span class="self">self</span>.windows.iter_mut().enumerate().find(|(<span class="kw">_</span>, w)| w.window_id() == window_id) {
@@ -2751,8 +2885,11 @@
                     }
 
                     <span class="kw">let </span>state = util::element_state_to_key_state(event.state);
-                    <span class="kw">let </span>key = util::winit_key_to_key(event.key_without_modifiers());
+                    <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+                    </span><span class="kw">let </span>key = util::winit_key_to_key(event.key_without_modifiers());
                     <span class="kw">let </span>key_modified = util::winit_key_to_key(event.logical_key);
+                    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+                    </span><span class="kw">let </span>key = key_modified.clone();
                     <span class="kw">let </span>key_code = util::winit_physical_key_to_key_code(event.physical_key);
                     <span class="kw">let </span>key_location = util::winit_key_location_to_zng(event.location);
                     <span class="kw">let </span>d_id = <span class="self">self</span>.device_id(device_id);
@@ -3076,7 +3213,21 @@
     }
 
     <span class="kw">fn </span>suspended(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop) {
-        <span class="macro">unimplemented!</span>()
+        <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(w) = <span class="kw-2">&amp;</span><span class="self">self</span>.windows.first() {
+            <span class="self">self</span>.notify(Event::FocusChanged {
+                prev: <span class="prelude-val">Some</span>(w.id()),
+                new: <span class="prelude-val">None</span>,
+            });
+        }
+
+        <span class="self">self</span>.app_state = AppState::Suspended;
+        <span class="self">self</span>.windows.clear();
+        <span class="self">self</span>.surfaces.clear();
+        <span class="self">self</span>.image_cache.clear();
+        <span class="self">self</span>.exts.suspended();
+
+        <span class="self">self</span>.notify(Event::Suspended);
     }
 
     <span class="kw">fn </span>exiting(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
@@ -3102,6 +3253,13 @@
         winit_loop_guard.unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>.winit_loop);
     }
 }
+<span class="attr">#[derive(Debug, Clone, Copy)]
+</span><span class="kw">enum </span>AppState {
+    PreInitSuspended,
+    Resumed,
+    Suspended,
+}
+
 <span class="kw">struct </span>IdleTrace(<span class="prelude-ty">Option</span>&lt;tracing::span::EnteredSpan&gt;);
 <span class="kw">impl </span>IdleTrace {
     <span class="kw">pub fn </span>enter(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
@@ -3143,7 +3301,13 @@
         app.headless = <span class="bool-val">true</span>;
 
         <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
-        <span class="kw">let </span>event_loop = EventLoop::new().unwrap();
+        <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+        </span><span class="kw">let </span>event_loop = EventLoop::builder().build().unwrap();
+        <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+        </span><span class="kw">let </span>event_loop = EventLoop::builder()
+            .with_android_app(platform::android::android_app())
+            .build()
+            .unwrap();
         drop(winit_span);
 
         <span class="kw">let </span><span class="kw-2">mut </span>app = HeadlessApp {
@@ -3173,6 +3337,7 @@
             <span class="kw">fn </span>resumed(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
                 <span class="kw">let </span><span class="kw-2">mut </span>winit_loop_guard = <span class="self">self</span>.app.winit_loop.set(winit_loop);
 
+                <span class="self">self</span>.app.resumed(winit_loop);
                 <span class="self">self</span>.app.start_receiving(<span class="self">self</span>.request_receiver.take().unwrap());
 
                 <span class="lifetime">'app_loop</span>: <span class="kw">while </span>!<span class="self">self</span>.app.exited {
@@ -3242,6 +3407,10 @@
             }
 
             <span class="kw">fn </span>window_event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ActiveEventLoop, <span class="kw">_</span>: winit::window::WindowId, <span class="kw">_</span>: WindowEvent) {}
+
+            <span class="kw">fn </span>suspended(<span class="kw-2">&amp;mut </span><span class="self">self</span>, event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop) {
+                <span class="self">self</span>.app.suspended(event_loop);
+            }
         }
     }
 
@@ -3251,7 +3420,13 @@
         gl::warmup();
 
         <span class="kw">let </span>winit_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"winit::EventLoop::new"</span>).entered();
-        <span class="kw">let </span>event_loop = EventLoop::with_user_event().build().unwrap();
+        <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+        </span><span class="kw">let </span>event_loop = EventLoop::with_user_event().build().unwrap();
+        <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+        </span><span class="kw">let </span>event_loop = EventLoop::with_user_event()
+            .with_android_app(platform::android::android_app())
+            .build()
+            .unwrap();
         drop(winit_span);
         <span class="kw">let </span>app_sender = event_loop.create_proxy();
 
@@ -3281,16 +3456,14 @@
         response_sender: ipc::ResponseSender,
         event_sender: ipc::EventSender,
         request_recv: flume::Receiver&lt;RequestEvent&gt;,
-        <span class="kw-2">mut </span>ext: ViewExtensions,
+        <span class="kw-2">mut </span>exts: ViewExtensions,
     ) -&gt; <span class="self">Self </span>{
-        ext.renderer(<span class="string">"zng-view.webrender_debug"</span>, extensions::RendererDebugExt::new);
-        ext.init(<span class="kw-2">&amp;</span>app_sender);
+        exts.renderer(<span class="string">"zng-view.webrender_debug"</span>, extensions::RendererDebugExt::new);
         <span class="kw">let </span><span class="kw-2">mut </span>idle = IdleTrace(<span class="prelude-val">None</span>);
         idle.enter();
         App {
             headless: <span class="bool-val">false</span>,
-            started: <span class="bool-val">false</span>,
-            exts: ext,
+            exts,
             idle,
             gl_manager: GlContextManager::default(),
             image_cache: ImageCache::new(app_sender.clone()),
@@ -3299,7 +3472,7 @@
             response_sender,
             event_sender,
             winit_loop: util::WinitEventLoop::default(),
-            gen: ViewProcessGen::INVALID,
+            generation: ViewProcessGen::INVALID,
             device_events: <span class="bool-val">false</span>,
             windows: <span class="macro">vec!</span>[],
             surfaces: <span class="macro">vec!</span>[],
@@ -3311,6 +3484,7 @@
             resize_frame_wait_id_gen: FrameWaitId::INVALID,
             coalescing_event: <span class="prelude-val">None</span>,
             cursor_entered_expect_move: Vec::with_capacity(<span class="number">1</span>),
+            app_state: AppState::PreInitSuspended,
             exited: <span class="bool-val">false</span>,
             <span class="attr">#[cfg(windows)]
             </span>skip_ralt: <span class="bool-val">false</span>,
@@ -3319,7 +3493,7 @@
             pending_modifiers_focus_clear: <span class="bool-val">false</span>,
             config_listener_exit: <span class="prelude-val">None</span>,
 
-            <span class="attr">#[cfg(not(windows))]
+            <span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
             </span>arboard: <span class="prelude-val">None</span>,
         }
     }
@@ -3557,14 +3731,13 @@
         }
     }
 
-    <span class="kw">fn </span>assert_started(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-        <span class="kw">if </span>!<span class="self">self</span>.started {
-            <span class="macro">panic!</span>(<span class="string">"not started"</span>)
-        }
+    <span class="attr">#[track_caller]
+    </span><span class="kw">fn </span>assert_resumed(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="self">self</span>.app_state, AppState::Resumed));
     }
 
     <span class="kw">fn </span>with_window&lt;R&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, action: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>Window) -&gt; R, not_found: <span class="kw">impl </span>FnOnce() -&gt; R) -&gt; R {
-        <span class="self">self</span>.assert_started();
+        <span class="self">self</span>.assert_resumed();
         <span class="self">self</span>.windows.iter_mut().find(|w| w.id() == id).map(action).unwrap_or_else(|| {
             <span class="macro">tracing::error!</span>(<span class="string">"headed window `{id:?}` not found, will return fallback result"</span>);
             not_found()
@@ -3593,8 +3766,6 @@
 
     <span class="kw">fn </span>available_monitors(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; Vec&lt;(MonitorId, MonitorInfo)&gt; {
         <span class="kw">let </span>_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"available_monitors"</span>).entered();
-
-        <span class="self">self</span>.assert_started();
 
         <span class="kw">let </span>primary = <span class="self">self</span>.winit_loop.primary_monitor();
         <span class="self">self</span>.winit_loop
@@ -3630,9 +3801,9 @@
 }
 <span class="kw">impl </span>App {
     <span class="kw">fn </span>open_headless_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, config: HeadlessRequest) -&gt; HeadlessOpenData {
-        <span class="self">self</span>.assert_started();
+        <span class="self">self</span>.assert_resumed();
         <span class="kw">let </span>surf = Surface::open(
-            <span class="self">self</span>.gen,
+            <span class="self">self</span>.generation,
             config,
             <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop,
             <span class="kw-2">&amp;mut </span><span class="self">self</span>.gl_manager,
@@ -3646,7 +3817,7 @@
         HeadlessOpenData { render_mode }
     }
 
-    <span class="attr">#[cfg(not(windows))]
+    <span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
     </span><span class="kw">fn </span>arboard(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw-2">&amp;mut </span>arboard::Clipboard, clipboard::ClipboardError&gt; {
         <span class="kw">if </span><span class="self">self</span>.arboard.is_none() {
             <span class="kw">match </span>arboard::Clipboard::new() {
@@ -3660,14 +3831,11 @@
 
 <span class="kw">impl </span>Api <span class="kw">for </span>App {
     <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>, gen: ViewProcessGen, is_respawn: bool, device_events: bool, headless: bool) {
-        <span class="kw">if </span><span class="self">self</span>.started {
-            <span class="macro">panic!</span>(<span class="string">"already started"</span>);
-        }
         <span class="kw">if </span><span class="self">self</span>.exited {
             <span class="macro">panic!</span>(<span class="string">"cannot restart exited"</span>);
         }
-        <span class="self">self</span>.started = <span class="bool-val">true</span>;
-        <span class="self">self</span>.gen = gen;
+
+        <span class="self">self</span>.generation = gen;
         <span class="self">self</span>.device_events = device_events;
         <span class="self">self</span>.headless = headless;
 
@@ -3690,8 +3858,7 @@
     }
 
     <span class="kw">fn </span>exit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="self">self</span>.assert_started();
-        <span class="self">self</span>.started = <span class="bool-val">false</span>;
+        <span class="self">self</span>.assert_resumed();
         <span class="self">self</span>.exited = <span class="bool-val">true</span>;
         <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="self">self</span>.config_listener_exit.take() {
             t();
@@ -3734,11 +3901,17 @@
 
             <span class="self">self</span>.notify(Event::WindowOpened(id, msg));
         } <span class="kw">else </span>{
-            <span class="self">self</span>.assert_started();
+            <span class="self">self</span>.assert_resumed();
+
+            <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+            </span><span class="kw">if </span>!<span class="self">self</span>.windows.is_empty() {
+                <span class="macro">tracing::error!</span>(<span class="string">"android can only have one window"</span>);
+                <span class="kw">return</span>;
+            }
 
             <span class="kw">let </span>id = config.id;
             <span class="kw">let </span>win = Window::open(
-                <span class="self">self</span>.gen,
+                <span class="self">self</span>.generation,
                 config.icon.and_then(|i| <span class="self">self</span>.image_cache.get(i)).and_then(|i| i.icon()),
                 config
                     .cursor_image
@@ -3763,6 +3936,10 @@
             <span class="self">self</span>.windows.push(win);
 
             <span class="self">self</span>.notify(Event::WindowOpened(id, msg));
+
+            <span class="comment">// winit does not notify focus for Android window
+            </span><span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+            </span><span class="self">self</span>.notify(Event::FocusChanged { prev: <span class="prelude-val">None</span>, new: <span class="prelude-val">Some</span>(id) });
         }
     }
 
@@ -3778,7 +3955,7 @@
     <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) {
         <span class="kw">let </span>_s = <span class="macro">tracing::debug_span!</span>(<span class="string">"close_window"</span>, <span class="question-mark">?</span>id);
 
-        <span class="self">self</span>.assert_started();
+        <span class="self">self</span>.assert_resumed();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = <span class="self">self</span>.windows.iter().position(|w| w.id() == id) {
             <span class="kw">let _ </span>= <span class="self">self</span>.windows.swap_remove(i);
         }
@@ -3833,7 +4010,7 @@
     }
 
     <span class="kw">fn </span>set_headless_size(<span class="kw-2">&amp;mut </span><span class="self">self</span>, renderer: WindowId, size: DipSize, scale_factor: Factor) {
-        <span class="self">self</span>.assert_started();
+        <span class="self">self</span>.assert_resumed();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(surf) = <span class="self">self</span>.surfaces.iter_mut().find(|s| s.id() == renderer) {
             surf.set_size(size, scale_factor)
         }
@@ -4081,7 +4258,7 @@
         }
     }
 
-    <span class="attr">#[cfg(not(windows))]
+    <span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
     </span><span class="kw">fn </span>read_clipboard(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data_type: clipboard::ClipboardType) -&gt; <span class="prelude-ty">Result</span>&lt;clipboard::ClipboardData, clipboard::ClipboardError&gt; {
         <span class="kw">match </span>data_type {
             clipboard::ClipboardType::Text =&gt; <span class="self">self
@@ -4112,7 +4289,7 @@
         }
     }
 
-    <span class="attr">#[cfg(not(windows))]
+    <span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
     </span><span class="kw">fn </span>write_clipboard(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: clipboard::ClipboardData) -&gt; <span class="prelude-ty">Result</span>&lt;(), clipboard::ClipboardError&gt; {
         <span class="kw">match </span>data {
             clipboard::ClipboardData::Text(t) =&gt; <span class="self">self</span>.arboard()<span class="question-mark">?</span>.set_text(t).map_err(util::arboard_to_clip),
@@ -4138,6 +4315,22 @@
             clipboard::ClipboardData::FileList(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(clipboard::ClipboardError::NotSupported),
             clipboard::ClipboardData::Extension { .. } =&gt; <span class="prelude-val">Err</span>(clipboard::ClipboardError::NotSupported),
         }
+    }
+
+    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+    </span><span class="kw">fn </span>read_clipboard(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data_type: clipboard::ClipboardType) -&gt; <span class="prelude-ty">Result</span>&lt;clipboard::ClipboardData, clipboard::ClipboardError&gt; {
+        <span class="kw">let _ </span>= data_type;
+        <span class="prelude-val">Err</span>(clipboard::ClipboardError::Other(Txt::from_static(
+            <span class="string">"clipboard not implemented for Android"</span>,
+        )))
+    }
+
+    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+    </span><span class="kw">fn </span>write_clipboard(<span class="kw-2">&amp;mut </span><span class="self">self</span>, data: clipboard::ClipboardData) -&gt; <span class="prelude-ty">Result</span>&lt;(), clipboard::ClipboardError&gt; {
+        <span class="kw">let _ </span>= data;
+        <span class="prelude-val">Err</span>(clipboard::ClipboardError::Other(Txt::from_static(
+            <span class="string">"clipboard not implemented for Android"</span>,
+        )))
     }
 
     <span class="kw">fn </span>set_system_shutdown_warn(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId, reason: Txt) {
@@ -4290,4 +4483,7 @@
         <span class="kw">let _ </span>= <span class="self">self</span>.sender.frame_ready(<span class="self">self</span>.id, msg);
     }
 }
+
+<span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+</span><span class="macro">compile_error!</span>(<span class="string">"zng-view does not support Wasm"</span>);
 </code></pre></div></section></main></body></html>

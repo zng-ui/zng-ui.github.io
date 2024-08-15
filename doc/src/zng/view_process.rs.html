@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/view_process.rs`."><title>view_process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/view_process.rs`."><title>view_process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -51,22 +51,39 @@
 <a href="#50" id="50">50</a>
 <a href="#51" id="51">51</a>
 <a href="#52" id="52">52</a>
+<a href="#53" id="53">53</a>
+<a href="#54" id="54">54</a>
+<a href="#55" id="55">55</a>
+<a href="#56" id="56">56</a>
+<a href="#57" id="57">57</a>
+<a href="#58" id="58">58</a>
+<a href="#59" id="59">59</a>
+<a href="#60" id="60">60</a>
+<a href="#61" id="61">61</a>
+<a href="#62" id="62">62</a>
+<a href="#63" id="63">63</a>
+<a href="#64" id="64">64</a>
+<a href="#65" id="65">65</a>
+<a href="#66" id="66">66</a>
+<a href="#67" id="67">67</a>
+<a href="#68" id="68">68</a>
+<a href="#69" id="69">69</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process implementations.
 //!
 //! This module provides the [`default`] view-process implementation and a [`prebuilt`] version of it.
 //!
-//! ```
+//! ```no_run
 //! use zng::prelude::*;
 //! use zng::view_process::default as view_process;
 //! // use zng::view_process::prebuilt as view_process;
 //!
 //! fn main() {
+//!     zng::env::init!();
 //!     // single_process();
 //!     // multi_process();
 //! }
 //!
 //! fn multi_process() {
-//!     zng::env::init!();
 //!     app();
 //! }
 //!
@@ -83,15 +100,32 @@
 //! ```
 //!
 //! See the [`app`](crate::app) module documentation for more details about view-processes.
+//!
+//! See [`zng::env::init!`] for more details about running Android apps.
 
 /// Default view-process implementation.
 ///
 /// # Full API
 ///
 /// See [`zng_view`] for the full API.
-</span><span class="attr">#[cfg(all(feature = <span class="string">"view"</span>, not(target_arch = <span class="string">"wasm32"</span>)))]
+</span><span class="attr">#[cfg(view)]
 </span><span class="kw">pub mod </span>default {
     <span class="kw">pub use </span>zng_view::run_same_process;
+
+    <span class="doccomment">/// Android init types.
+    ///
+    /// See [`winit::platform::android`](https://docs.rs/winit/latest/winit/platform/android/) for more details
+    /// on how to select a backend "Activity".
+    ///
+    /// See [`zng::env::init!`] for more details about running Android apps.
+    ///
+    /// # Full API
+    ///
+    /// See [`zng_view::platform::android`] for the full API.
+    </span><span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+    </span><span class="kw">pub mod </span>android {
+        <span class="kw">pub use </span>zng_view::platform::android::{activity::AndroidApp, init_android_app};
+    }
 }
 
 <span class="doccomment">/// Default view-process implementation as an embedded precompiled binary.
@@ -99,7 +133,7 @@
 /// # Full API
 ///
 /// See [`zng_view_prebuilt`] and [`zng_view`] for the full API.
-</span><span class="attr">#[cfg(all(feature = <span class="string">"view_prebuilt"</span>, not(target_arch = <span class="string">"wasm32"</span>)))]
+</span><span class="attr">#[cfg(view_prebuilt)]
 </span><span class="kw">pub mod </span>prebuilt {
     <span class="kw">pub use </span>zng_view_prebuilt::run_same_process;
 }

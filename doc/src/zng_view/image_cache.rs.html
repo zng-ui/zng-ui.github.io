@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -1434,6 +1434,22 @@
 <a href="#1434" id="1434">1434</a>
 <a href="#1435" id="1435">1435</a>
 <a href="#1436" id="1436">1436</a>
+<a href="#1437" id="1437">1437</a>
+<a href="#1438" id="1438">1438</a>
+<a href="#1439" id="1439">1439</a>
+<a href="#1440" id="1440">1440</a>
+<a href="#1441" id="1441">1441</a>
+<a href="#1442" id="1442">1442</a>
+<a href="#1443" id="1443">1443</a>
+<a href="#1444" id="1444">1444</a>
+<a href="#1445" id="1445">1445</a>
+<a href="#1446" id="1446">1446</a>
+<a href="#1447" id="1447">1447</a>
+<a href="#1448" id="1448">1448</a>
+<a href="#1449" id="1449">1449</a>
+<a href="#1450" id="1450">1450</a>
+<a href="#1451" id="1451">1451</a>
+<a href="#1452" id="1452">1452</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, sync::Arc};
 
 <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
@@ -2283,6 +2299,10 @@
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>on_low_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="comment">// app-process controls this cache
     </span>}
+
+    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.images.clear();
+    }
 }
 
 <span class="doccomment">/// (pixels, size, ppi, is_opaque, is_mask)
@@ -2772,12 +2792,16 @@
             scale_factor: Factor,
             mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
         ) -&gt; ImageLoadedData {
+            <span class="kw">let </span>format = <span class="kw">match </span>gl.get_type() {
+                gleam::gl::GlType::Gl =&gt; gleam::gl::BGRA,
+                gleam::gl::GlType::Gles =&gt; gleam::gl::RGBA,
+            };
             <span class="kw">let </span>pixels_flipped = gl.read_pixels(
                 rect.origin.x.<span class="number">0</span>,
                 rect.origin.y.<span class="number">0</span>,
                 rect.size.width.<span class="number">0</span>,
                 rect.size.height.<span class="number">0</span>,
-                gleam::gl::BGRA,
+                format,
                 gleam::gl::UNSIGNED_BYTE,
             );
             <span class="kw">let </span><span class="kw-2">mut </span>buf = <span class="macro">vec!</span>[<span class="number">0u8</span>; pixels_flipped.len()];
@@ -2788,8 +2812,10 @@
             }
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(mask) = mask {
-                <span class="kw">for </span>bgra <span class="kw">in </span>buf.chunks_exact_mut(<span class="number">4</span>) {
-                    bgra.swap(<span class="number">0</span>, <span class="number">3</span>);
+                <span class="kw">if </span>format == gleam::gl::BGRA {
+                    <span class="kw">for </span>bgra <span class="kw">in </span>buf.chunks_exact_mut(<span class="number">4</span>) {
+                        bgra.swap(<span class="number">0</span>, <span class="number">3</span>);
+                    }
                 }
                 <span class="kw">let </span>(pixels, size, ppi, is_opaque, is_mask) = <span class="self">Self</span>::convert_decoded(
                     image::DynamicImage::ImageRgba8(
@@ -2815,6 +2841,12 @@
                     pixels,
                 }
             } <span class="kw">else </span>{
+                <span class="kw">if </span>format == gleam::gl::RGBA {
+                    <span class="kw">for </span>rgba <span class="kw">in </span>buf.chunks_exact_mut(<span class="number">4</span>) {
+                        rgba.swap(<span class="number">0</span>, <span class="number">3</span>);
+                    }
+                }
+
                 <span class="kw">let </span>is_opaque = buf.chunks_exact(<span class="number">4</span>).all(|bgra| bgra[<span class="number">3</span>] == <span class="number">255</span>);
 
                 <span class="kw">let </span>data = IpcBytes::from_vec(buf);

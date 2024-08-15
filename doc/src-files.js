@@ -12,7 +12,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_ext_clipboard",["",[],["lib.rs"]]],\
 ["zng_ext_config",["",[],["fallback.rs","json.rs","lib.rs","ron.rs","settings.rs","swap.rs","switch.rs","sync.rs","toml.rs","yaml.rs"]]],\
 ["zng_ext_font",["",[],["emoji_util.rs","font_features.rs","hyphenation.rs","lib.rs","ligature_util.rs","query_util.rs","segmenting.rs","shaping.rs","unicode_bidi_util.rs","unit.rs"]]],\
-["zng_ext_fs_watcher",["",[],["lib.rs"]]],\
+["zng_ext_fs_watcher",["",[],["lib.rs","lock.rs","service.rs"]]],\
 ["zng_ext_hot_reload",["",[],["cargo.rs","lib.rs","node.rs","util.rs"]]],\
 ["zng_ext_hot_reload_proc_macros",["",[],["hot_node.rs","lib.rs","util.rs"]]],\
 ["zng_ext_image",["",[],["lib.rs","render.rs","types.rs"]]],\
@@ -34,7 +34,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_unit",["",[],["angle.rs","byte.rs","color.rs","corner_radius.rs","distance_key.rs","factor.rs","float_eq.rs","lib.rs","orientation.rs","px_dip.rs","side_offsets.rs","time.rs","transform.rs"]]],\
 ["zng_var",["",[["animation",[],["easing.rs"]]],["animation.rs","arc.rs","boxed.rs","context.rs","contextualized.rs","cow.rs","expr.rs","flat_map.rs","future.rs","impls.rs","lib.rs","local.rs","map_ref.rs","merge.rs","read_only.rs","response.rs","util.rs","vars.rs","vec.rs","when.rs"]]],\
 ["zng_var_proc_macros",["",[],["expr_var.rs","lib.rs","merge_var.rs","transitionable.rs","util.rs","when_var.rs"]]],\
-["zng_view",["",[["config",[],["dconf.rs","other.rs"]]],["config.rs","display_list.rs","extensions.rs","gl.rs","image_cache.rs","lib.rs","px_wr.rs","surface.rs","util.rs","window.rs"]]],\
+["zng_view",["",[["config",[],["dconf.rs","other.rs"]]],["config.rs","display_list.rs","extensions.rs","gl.rs","image_cache.rs","lib.rs","platform.rs","px_wr.rs","surface.rs","util.rs","window.rs"]]],\
 ["zng_view_api",["",[],["access.rs","api_extension.rs","app_process.rs","clipboard.rs","config.rs","dialog.rs","display_list.rs","font.rs","image.rs","ipc.rs","keyboard.rs","lib.rs","mouse.rs","touch.rs","types.rs","view_process.rs","window.rs"]]],\
 ["zng_view_prebuilt",["",[],["lib.rs"]]],\
 ["zng_wgt",["",[],["border_props.rs","clip_props.rs","color_props.rs","func.rs","hit_test_props.rs","interactivity_props.rs","layout_props.rs","lib.rs","node.rs","node_events.rs","panel_props.rs","parallel_prop.rs","visibility_props.rs","wgt.rs"]]],\

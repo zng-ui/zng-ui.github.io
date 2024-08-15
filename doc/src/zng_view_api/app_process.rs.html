@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/app_process.rs`."><title>app_process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.0 (051478957 2024-07-21)" data-channel="1.80.0" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/app_process.rs`."><title>app_process.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -515,6 +515,30 @@
 <a href="#515" id="515">515</a>
 <a href="#516" id="516">516</a>
 <a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a>
+<a href="#520" id="520">520</a>
+<a href="#521" id="521">521</a>
+<a href="#522" id="522">522</a>
+<a href="#523" id="523">523</a>
+<a href="#524" id="524">524</a>
+<a href="#525" id="525">525</a>
+<a href="#526" id="526">526</a>
+<a href="#527" id="527">527</a>
+<a href="#528" id="528">528</a>
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     panic,
@@ -523,7 +547,7 @@
     time::Instant,
 };
 
-<span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+<span class="attr">#[cfg(ipc)]
 </span><span class="kw">use </span>std::time::Duration;
 
 <span class="kw">use </span>zng_txt::Txt;
@@ -537,6 +561,13 @@
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>VIEW_SERVER: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_VIEW_SERVER"</span>;
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>VIEW_MODE: <span class="kw-2">&amp;</span>str = <span class="string">"ZNG_VIEW_MODE"</span>;
 
+<span class="attr">#[derive(Clone, Copy)]
+</span><span class="kw">enum </span>ViewState {
+    Offline,
+    Online,
+    Suspended,
+}
+
 <span class="doccomment">/// View Process controller, used in the App Process.
 ///
 /// # Exit
@@ -546,10 +577,10 @@
 ///
 /// [killed]: std::process::Child::kill
 /// [exits]: std::process::exit
-</span><span class="attr">#[cfg_attr(not(feature = <span class="string">"ipc"</span>), allow(unused))]
+</span><span class="attr">#[cfg_attr(not(ipc), allow(unused))]
 </span><span class="kw">pub struct </span>Controller {
     process: <span class="prelude-ty">Option</span>&lt;std::process::Child&gt;,
-    online: bool,
+    view_state: ViewState,
     generation: ViewProcessGen,
     is_respawn: bool,
     view_process_exe: PathBuf,
@@ -624,7 +655,7 @@
 
         <span class="kw">let </span><span class="kw-2">mut </span>c = Controller {
             same_process: process.is_none(),
-            online: <span class="bool-val">false</span>,
+            view_state: ViewState::Offline,
             process,
             view_process_exe,
             view_process_env,
@@ -653,7 +684,7 @@
 
     <span class="doccomment">/// View-process is connected and ready to respond.
     </span><span class="kw">pub fn </span>online(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-        <span class="self">self</span>.online
+        <span class="macro">matches!</span>(<span class="self">self</span>.view_state, ViewState::Online)
     }
 
     <span class="doccomment">/// View-process generation.
@@ -677,7 +708,7 @@
     }
 
     <span class="kw">fn </span>offline_err(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;(), ViewProcessOffline&gt; {
-        <span class="kw">if </span><span class="self">self</span>.online {
+        <span class="kw">if </span><span class="self">self</span>.online() {
             <span class="prelude-val">Ok</span>(())
         } <span class="kw">else </span>{
             <span class="prelude-val">Err</span>(ViewProcessOffline)
@@ -743,13 +774,13 @@
             });
             <span class="prelude-val">None
         </span>} <span class="kw">else </span>{
-            <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+            <span class="attr">#[cfg(not(ipc))]
             </span>{
                 <span class="kw">let _ </span>= (view_process_exe, view_process_env);
                 <span class="macro">panic!</span>(<span class="string">"expected only same_process mode with `ipc` feature disabled"</span>);
             }
 
-            <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+            <span class="attr">#[cfg(ipc)]
             </span>{
                 <span class="kw">let </span><span class="kw-2">mut </span>process = std::process::Command::new(view_process_exe);
                 <span class="kw">for </span>(name, val) <span class="kw">in </span>view_process_env {
@@ -768,7 +799,7 @@
         <span class="kw">let </span>(req, rsp, ev) = <span class="kw">match </span>init.connect() {
             <span class="prelude-val">Ok</span>(r) =&gt; r,
             <span class="prelude-val">Err</span>(e) =&gt; {
-                <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+                <span class="attr">#[cfg(ipc)]
                 </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>p) = process {
                     <span class="kw">if let </span><span class="prelude-val">Err</span>(ke) = p.kill() {
                         <span class="macro">tracing::error!</span>(
@@ -806,11 +837,28 @@
 
     <span class="doccomment">/// Handle an [`Event::Inited`].
     ///
-    /// Set the online flag.
+    /// Set the online flag to `true`.
     </span><span class="kw">pub fn </span>handle_inited(<span class="kw-2">&amp;mut </span><span class="self">self</span>, gen: ViewProcessGen) {
-        <span class="kw">if </span>gen == <span class="self">self</span>.generation {
-            <span class="self">self</span>.online = <span class="bool-val">true</span>;
+        <span class="kw">match </span><span class="self">self</span>.view_state {
+            ViewState::Offline =&gt; {
+                <span class="kw">if </span><span class="self">self</span>.generation == gen {
+                    <span class="comment">// crash respawn already sets gen
+                    </span><span class="self">self</span>.view_state = ViewState::Online;
+                }
+            }
+            ViewState::Suspended =&gt; {
+                <span class="self">self</span>.generation = gen;
+                <span class="self">self</span>.view_state = ViewState::Online;
+            }
+            ViewState::Online =&gt; {}
         }
+    }
+
+    <span class="doccomment">/// Handle an [`Event::Suspended`].
+    ///
+    /// Set the online flat to `false`.
+    </span><span class="kw">pub fn </span>handle_suspended(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.view_state = ViewState::Suspended;
     }
 
     <span class="doccomment">/// Handle an [`Event::Disconnected`].
@@ -834,12 +882,12 @@
     /// If another disconnect happens during the view-process startup dialog.
     </span><span class="kw">pub fn </span>handle_disconnect(<span class="kw-2">&amp;mut </span><span class="self">self</span>, gen: ViewProcessGen) {
         <span class="kw">if </span>gen == <span class="self">self</span>.generation {
-            <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+            <span class="attr">#[cfg(not(ipc))]
             </span>{
                 <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"cannot recover in same_process mode (no ipc)"</span>);
             }
 
-            <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+            <span class="attr">#[cfg(ipc)]
             </span>{
                 <span class="self">self</span>.respawn_impl(<span class="bool-val">true</span>)
             }
@@ -853,19 +901,19 @@
     ///
     /// [`handle_disconnect`]: Controller::handle_disconnect
     </span><span class="kw">pub fn </span>respawn(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="attr">#[cfg(not(feature = <span class="string">"ipc"</span>))]
+        <span class="attr">#[cfg(not(ipc))]
         </span>{
             <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"cannot recover in same_process mode (no ipc)"</span>);
         }
 
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span><span class="self">self</span>.respawn_impl(<span class="bool-val">false</span>);
     }
-    <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+    <span class="attr">#[cfg(ipc)]
     </span><span class="kw">fn </span>respawn_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, is_crash: bool) {
         <span class="kw">use </span>zng_unit::TimeUnits;
 
-        <span class="self">self</span>.online = <span class="bool-val">false</span>;
+        <span class="self">self</span>.view_state = ViewState::Offline;
         <span class="self">self</span>.is_respawn = <span class="bool-val">true</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>process = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.process.take() {
@@ -1019,7 +1067,7 @@
     <span class="doccomment">/// Kills the View Process, unless it is running in the same process.
     </span><span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="kw">let _ </span>= <span class="self">self</span>.exit();
-        <span class="attr">#[cfg(feature = <span class="string">"ipc"</span>)]
+        <span class="attr">#[cfg(ipc)]
         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>process) = <span class="self">self</span>.process.take() {
             <span class="kw">if </span>process.try_wait().is_err() {
                 std::thread::sleep(Duration::from_secs(<span class="number">1</span>));
