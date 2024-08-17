@@ -1699,6 +1699,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1663" id="1663">1663</a>
 <a href="#1664" id="1664">1664</a>
 <a href="#1665" id="1665">1665</a>
+<a href="#1666" id="1666">1666</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget, UI node API.
 
 </span><span class="kw">pub mod </span>base;
@@ -1715,6 +1716,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>parking_lot::{Mutex, RwLock};
 <span class="kw">use </span>std::{
     borrow::Cow,
+    future::IntoFuture,
     sync::{atomic::Ordering::Relaxed, Arc},
 };
 <span class="kw">use </span>zng_app_context::context_local;
@@ -3352,12 +3354,12 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`update`]: UiTask::update
     /// [`UiNode::update`]: crate::widget::node::UiNode::update
     /// [`UiNode::info`]: crate::widget::node::UiNode::info
-    </span><span class="kw">fn </span>new&lt;F&gt;(target: <span class="prelude-ty">Option</span>&lt;WidgetId&gt;, task: F) -&gt; <span class="self">Self
+    </span><span class="kw">fn </span>new&lt;F&gt;(target: <span class="prelude-ty">Option</span>&lt;WidgetId&gt;, task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: std::future::Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>;
 }
 <span class="kw">impl</span>&lt;R&gt; UiTaskWidget&lt;R&gt; <span class="kw">for </span>UiTask&lt;R&gt; {
-    <span class="kw">fn </span>new&lt;F&gt;(target: <span class="prelude-ty">Option</span>&lt;WidgetId&gt;, task: F) -&gt; <span class="self">Self
+    <span class="kw">fn </span>new&lt;F&gt;(target: <span class="prelude-ty">Option</span>&lt;WidgetId&gt;, task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: std::future::Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>,
     {

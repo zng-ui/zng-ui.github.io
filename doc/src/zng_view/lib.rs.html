@@ -2255,8 +2255,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.11.1"
-//! zng-view = "0.4.12"
+//! zng = "0.11.2"
+//! zng-view = "0.4.13"
 //! ```
 //!
 //! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2468,7 +2468,7 @@
 ///
 /// # Android
 ///
-/// In Android builds this function requires `android::init_android_app` must be called before this call.
+/// In Android builds `android::init_android_app` must be called before this function, otherwise it will panic.
 </span><span class="kw">pub fn </span>run_same_process(run_app: <span class="kw">impl </span>FnOnce() + Send + <span class="lifetime">'static</span>) {
     run_same_process_extended(run_app, ViewExtensions::new)
 }

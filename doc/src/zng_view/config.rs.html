@@ -74,6 +74,12 @@
 <a href="#74" id="74">74</a>
 <a href="#75" id="75">75</a>
 <a href="#76" id="76">76</a>
+<a href="#77" id="77">77</a>
+<a href="#78" id="78">78</a>
+<a href="#79" id="79">79</a>
+<a href="#80" id="80">80</a>
+<a href="#81" id="81">81</a>
+<a href="#82" id="82">82</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_view_api::config::{
     AnimationsConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig,
 };
@@ -87,6 +93,11 @@
 </span><span class="kw">mod </span>macos;
 <span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
 </span><span class="kw">use </span>macos <span class="kw">as </span>platform;
+
+<span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+</span><span class="kw">mod </span>android;
+<span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+</span><span class="kw">use </span>android <span class="kw">as </span>platform;
 
 <span class="attr">#[cfg(any(
     target_os = <span class="string">"linux"</span>,
@@ -113,8 +124,9 @@
     target_os = <span class="string">"dragonfly"</span>,
     target_os = <span class="string">"freebsd"</span>,
     target_os = <span class="string">"netbsd"</span>,
-    target_os = <span class="string">"openbsd"
-</span>)))]
+    target_os = <span class="string">"openbsd"</span>,
+    target_os = <span class="string">"android"</span>,
+)))]
 </span><span class="kw">use </span>other <span class="kw">as </span>platform;
 
 <span class="kw">pub fn </span>font_aa() -&gt; FontAntiAliasing {

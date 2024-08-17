@@ -332,6 +332,7 @@
 <a href="#332" id="332">332</a>
 <a href="#333" id="333">333</a>
 <a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -365,7 +366,7 @@
 <span class="kw">mod </span>service;
 <span class="kw">pub use </span>service::<span class="kw-2">*</span>;
 
-<span class="kw">use </span>std::future::Future;
+<span class="kw">use </span>std::future::{Future, IntoFuture};
 <span class="kw">use </span>zng_app::{
     update::{EventUpdate, InfoUpdates, LayoutUpdates, RenderUpdates, WidgetUpdates},
     view_process::raw_events::{RawWindowFocusArgs, RAW_WINDOW_FOCUS_EVENT},
@@ -492,15 +493,16 @@
     /// ```
     ///
     /// [`WINDOW`]: zng_app::window::WINDOW
-    </span><span class="kw">fn </span>run_window&lt;F&gt;(<span class="self">self</span>, new_window: F)
+    </span><span class="kw">fn </span>run_window&lt;F&gt;(<span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>;
 }
 <span class="kw">impl</span>&lt;E: AppExtension&gt; AppRunWindowExt <span class="kw">for </span>AppExtended&lt;E&gt; {
-    <span class="kw">fn </span>run_window&lt;F&gt;(<span class="self">self</span>, new_window: F)
+    <span class="kw">fn </span>run_window&lt;F&gt;(<span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
     {
+        <span class="kw">let </span>new_window = new_window.into_future();
         <span class="self">self</span>.run(<span class="kw">async move </span>{
             WINDOWS.open(new_window);
         })
@@ -521,7 +523,7 @@
     ///
     /// [`WINDOW`]: zng_app::window::WINDOW
     /// [`WindowId`]: zng_app::window::WindowId
-    </span><span class="kw">fn </span>open_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F) -&gt; WindowId
+    </span><span class="kw">fn </span>open_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; WindowId
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>;
 
@@ -541,18 +543,18 @@
     </span><span class="kw">fn </span>close_window(<span class="kw-2">&amp;mut </span><span class="self">self</span>, window_id: WindowId) -&gt; bool;
 
     <span class="doccomment">/// Open a new headless window and update the app until the window closes.
-    </span><span class="kw">fn </span>run_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F)
+    </span><span class="kw">fn </span>run_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
         </span>F: Send + Future&lt;Output = WindowRoot&gt; + <span class="lifetime">'static</span>;
 
     <span class="doccomment">/// Open a new headless window and update the app until the window closes or 60 seconds elapse.
     </span><span class="attr">#[cfg(any(test, doc, feature = <span class="string">"test_util"</span>))]
-    </span><span class="kw">fn </span>doc_test_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F)
+    </span><span class="kw">fn </span>doc_test_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
-        </span>F: Send + Future&lt;Output = WindowRoot&gt; + <span class="lifetime">'static</span>;
+        </span>F: Future&lt;Output = WindowRoot&gt; + <span class="lifetime">'static </span>+ Send;
 }
 <span class="kw">impl </span>HeadlessAppWindowExt <span class="kw">for </span>HeadlessApp {
-    <span class="kw">fn </span>open_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F) -&gt; WindowId
+    <span class="kw">fn </span>open_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; WindowId
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
     {
@@ -628,7 +630,7 @@
         closed
     }
 
-    <span class="kw">fn </span>run_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F)
+    <span class="kw">fn </span>run_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
     {
@@ -641,7 +643,7 @@
     }
 
     <span class="attr">#[cfg(any(test, doc, feature = <span class="string">"test_util"</span>))]
-    </span><span class="kw">fn </span>doc_test_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: F)
+    </span><span class="kw">fn </span>doc_test_window&lt;F&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
     <span class="kw">where
         </span>F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
     {

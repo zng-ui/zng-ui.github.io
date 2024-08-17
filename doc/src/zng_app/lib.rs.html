@@ -1579,6 +1579,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1543" id="1543">1543</a>
 <a href="#1544" id="1544">1544</a>
 <a href="#1545" id="1545">1545</a>
+<a href="#1546" id="1546">1546</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1601,7 +1602,7 @@ document.addEventListener('DOMContentLoaded', function () {
     any::{type_name, TypeId},
     collections::HashMap,
     fmt,
-    future::Future,
+    future::{Future, IntoFuture},
     ops,
     path::PathBuf,
     sync::Arc,
@@ -2292,7 +2293,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Execute the async `task` in the UI thread, updating the app until it finishes or the app shuts-down.
     ///
     /// Returns the task result if the app has not shut-down.
-    </span><span class="kw">pub fn </span>run_task&lt;R, T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, task: T) -&gt; <span class="prelude-ty">Option</span>&lt;R&gt;
+    </span><span class="kw">pub fn </span>run_task&lt;R, T&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = T&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;R&gt;
     <span class="kw">where
         </span>R: <span class="lifetime">'static</span>,
         T: Future&lt;Output = R&gt; + Send + Sync + <span class="lifetime">'static</span>,
@@ -2957,7 +2958,8 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// The `start` task runs in a [`UiTask`] in the app context, note that it only needs to start the app, usually
     /// by opening a window, the app will keep running after `start` is finished.
-    </span><span class="kw">pub fn </span>run(<span class="self">self</span>, start: <span class="kw">impl </span>Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>) {
+    </span><span class="kw">pub fn </span>run&lt;F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>, start: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) {
+        <span class="kw">let </span>start = start.into_future();
         <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
         </span><span class="kw">let </span>start = Box::pin(start);
         <span class="self">self</span>.run_impl(start)

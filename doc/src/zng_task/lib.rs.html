@@ -2085,6 +2085,9 @@
 <a href="#2085" id="2085">2085</a>
 <a href="#2086" id="2086">2086</a>
 <a href="#2087" id="2087">2087</a>
+<a href="#2088" id="2088">2088</a>
+<a href="#2089" id="2089">2089</a>
+<a href="#2090" id="2090">2090</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2098,7 +2101,7 @@
 
 </span><span class="kw">use </span>std::{
     fmt,
-    future::Future,
+    future::{Future, IntoFuture},
     hash::Hash,
     mem, panic,
     pin::Pin,
@@ -2213,19 +2216,19 @@
 /// [`rayon`]: https://docs.rs/rayon
 /// [`LocalContext`]: zng_app_context::LocalContext
 /// [`response_var`]: zng_var::response_var
-</span><span class="kw">pub fn </span>spawn&lt;F&gt;(task: F)
+</span><span class="kw">pub fn </span>spawn&lt;F&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
 <span class="kw">where
     </span>F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>,
 {
     Arc::new(RayonTask {
         ctx: LocalContext::capture(),
-        fut: Mutex::new(<span class="prelude-val">Some</span>(Box::pin(task))),
+        fut: Mutex::new(<span class="prelude-val">Some</span>(Box::pin(task.into_future()))),
     })
     .poll()
 }
 
 <span class="doccomment">/// Polls the `task` once immediately on the calling thread, if the `task` is pending, continues execution in [`spawn`].
-</span><span class="kw">pub fn </span>poll_spawn&lt;F&gt;(task: F)
+</span><span class="kw">pub fn </span>poll_spawn&lt;F&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;)
 <span class="kw">where
     </span>F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>,
 {
@@ -2263,7 +2266,7 @@
     }
 
     Arc::new(PollRayonTask {
-        fut: Mutex::new(<span class="prelude-val">Some</span>((Box::pin(task), <span class="prelude-val">None</span>))),
+        fut: Mutex::new(<span class="prelude-val">Some</span>((Box::pin(task.into_future()), <span class="prelude-val">None</span>))),
     })
     .poll()
 }
@@ -2474,7 +2477,7 @@
 /// [`Waker`]: std::task::Waker
 /// [`rayon`]: https://docs.rs/rayon
 /// [`LocalContext`]: zng_app_context::LocalContext
-</span><span class="kw">pub async fn </span>run&lt;R, T&gt;(task: T) -&gt; R
+</span><span class="kw">pub async fn </span>run&lt;R, T&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = T&gt;) -&gt; R
 <span class="kw">where
     </span>R: Send + <span class="lifetime">'static</span>,
     T: Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>,
@@ -2498,7 +2501,7 @@
 /// if this function returns an error.
 ///
 /// [unwind safety validation]: std::panic::UnwindSafe
-</span><span class="kw">pub async fn </span>run_catch&lt;R, T&gt;(task: T) -&gt; PanicResult&lt;R&gt;
+</span><span class="kw">pub async fn </span>run_catch&lt;R, T&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = T&gt;) -&gt; PanicResult&lt;R&gt;
 <span class="kw">where
     </span>R: Send + <span class="lifetime">'static</span>,
     T: Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>,
@@ -2554,7 +2557,7 @@
 
     Arc::new(RayonCatchTask {
         ctx: LocalContext::capture(),
-        fut: Mutex::new(<span class="prelude-val">Some</span>(Box::pin(task))),
+        fut: Mutex::new(<span class="prelude-val">Some</span>(Box::pin(task.into_future()))),
         sender: sender.into(),
     })
     .poll();
@@ -2670,7 +2673,7 @@
 
 <span class="doccomment">/// Polls the `task` once immediately on the calling thread, if the `task` is ready returns the response already set,
 /// if the `task` is pending continues execution like [`respond`].
-</span><span class="kw">pub fn </span>poll_respond&lt;R, F&gt;(task: F) -&gt; ResponseVar&lt;R&gt;
+</span><span class="kw">pub fn </span>poll_respond&lt;R, F&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; ResponseVar&lt;R&gt;
 <span class="kw">where
     </span>R: VarValue,
     F: Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>,
@@ -2679,7 +2682,7 @@
         Quick(<span class="prelude-ty">Option</span>&lt;R&gt;),
         Response(zng_var::ResponderVar&lt;R&gt;),
     }
-
+    <span class="kw">let </span>task = task.into_future();
     <span class="kw">let </span>q = Arc::new(Mutex::new(QuickResponse::Quick(<span class="prelude-val">None</span>)));
     poll_spawn(<span class="macro">zng_clone_move::async_clmv!</span>(q, {
         <span class="kw">let </span>rsp = task.<span class="kw">await</span>;
@@ -2849,11 +2852,11 @@
 /// ```
 ///
 /// [`futures-lite`]: https://docs.rs/futures-lite/
-</span><span class="kw">pub fn </span>block_on&lt;F&gt;(task: F) -&gt; F::Output
+</span><span class="kw">pub fn </span>block_on&lt;F&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; F::Output
 <span class="kw">where
     </span>F: Future,
 {
-    futures_lite::future::block_on(task)
+    futures_lite::future::block_on(task.into_future())
 }
 
 <span class="doccomment">/// Continuous poll the `task` until if finishes.
@@ -2861,13 +2864,13 @@
 /// This function is useful for implementing some async tests only, futures don't expect to be polled
 /// continuously. This function is only available in test builds.
 </span><span class="attr">#[cfg(any(test, doc, feature = <span class="string">"test_util"</span>))]
-</span><span class="kw">pub fn </span>spin_on&lt;F&gt;(task: F) -&gt; F::Output
+</span><span class="kw">pub fn </span>spin_on&lt;F&gt;(task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; F::Output
 <span class="kw">where
     </span>F: Future,
 {
     <span class="kw">use </span>std::pin::pin;
 
-    <span class="kw">let </span><span class="kw-2">mut </span>task = <span class="macro">pin!</span>(task);
+    <span class="kw">let </span><span class="kw-2">mut </span>task = <span class="macro">pin!</span>(task.into_future());
     block_on(future_fn(|cx| <span class="kw">match </span>task.as_mut().poll(cx) {
         Poll::Ready(r) =&gt; Poll::Ready(r),
         Poll::Pending =&gt; {
@@ -2882,7 +2885,7 @@
 /// If `spin` is `true` the [`spin_on`] executor is used with a timeout of 500 milliseconds.
 /// IF `spin` is `false` the [`block_on`] executor is used with a timeout of 5 seconds.
 </span><span class="attr">#[cfg(any(test, doc, feature = <span class="string">"test_util"</span>))]
-</span><span class="kw">pub fn </span>doc_test&lt;F&gt;(spin: bool, task: F) -&gt; F::Output
+</span><span class="kw">pub fn </span>doc_test&lt;F&gt;(spin: bool, task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; F::Output
 <span class="kw">where
     </span>F: Future,
 {
@@ -3039,7 +3042,10 @@
 <span class="doccomment">/// Add a [`deadline`] to a future.
 ///
 /// Returns the `fut` output or [`DeadlineError`] if the deadline elapses first.
-</span><span class="kw">pub async fn </span>with_deadline&lt;O, F: Future&lt;Output = O&gt;&gt;(fut: F, deadline: <span class="kw">impl </span>Into&lt;Deadline&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;F::Output, DeadlineError&gt; {
+</span><span class="kw">pub async fn </span>with_deadline&lt;O, F: Future&lt;Output = O&gt;&gt;(
+    fut: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;,
+    deadline: <span class="kw">impl </span>Into&lt;Deadline&gt;,
+) -&gt; <span class="prelude-ty">Result</span>&lt;F::Output, DeadlineError&gt; {
     <span class="kw">let </span>deadline = deadline.into();
     <span class="macro">any!</span>(<span class="kw">async </span>{ <span class="prelude-val">Ok</span>(fut.<span class="kw">await</span>) }, <span class="kw">async </span>{
         <span class="self">self</span>::deadline(deadline).<span class="kw">await</span>;

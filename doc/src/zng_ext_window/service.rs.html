@@ -1811,7 +1811,20 @@
 <a href="#1811" id="1811">1811</a>
 <a href="#1812" id="1812">1812</a>
 <a href="#1813" id="1813">1813</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{any::Any, future::Future, mem, sync::Arc};
+<a href="#1814" id="1814">1814</a>
+<a href="#1815" id="1815">1815</a>
+<a href="#1816" id="1816">1816</a>
+<a href="#1817" id="1817">1817</a>
+<a href="#1818" id="1818">1818</a>
+<a href="#1819" id="1819">1819</a>
+<a href="#1820" id="1820">1820</a>
+<a href="#1821" id="1821">1821</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+    any::Any,
+    future::{Future, IntoFuture},
+    mem,
+    sync::Arc,
+};
 
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_app::{
@@ -2117,7 +2130,10 @@
     /// [loaded]: Self::is_loaded
     /// [`UiTask`]: zng_task::UiTask
     /// [`WINDOW`]: zng_app::window::WINDOW
-    </span><span class="kw">pub fn </span>open(<span class="kw-2">&amp;</span><span class="self">self</span>, new_window: <span class="kw">impl </span>Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>) -&gt; ResponseVar&lt;WindowId&gt; {
+    </span><span class="kw">pub fn </span>open&lt;F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>&gt;(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;,
+    ) -&gt; ResponseVar&lt;WindowId&gt; {
         WINDOWS_SV
             .write()
             .open_impl(WindowId::new_unique(), UiTask::new(<span class="prelude-val">None</span>, new_window), <span class="prelude-val">None</span>)
@@ -2128,10 +2144,10 @@
     /// # Panics
     ///
     /// If the `window_id` is already assigned to an open or opening window.
-    </span><span class="kw">pub fn </span>open_id(
+    </span><span class="kw">pub fn </span>open_id&lt;F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         window_id: <span class="kw">impl </span>Into&lt;WindowId&gt;,
-        new_window: <span class="kw">impl </span>Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
+        new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;,
     ) -&gt; ResponseVar&lt;WindowId&gt; {
         <span class="kw">let </span>window_id = window_id.into();
         <span class="self">self</span>.assert_id_unused(window_id);
@@ -2146,9 +2162,9 @@
     /// creates headless windows even in a headed app.
     ///
     /// [`open`]: WINDOWS::open
-    </span><span class="kw">pub fn </span>open_headless(
+    </span><span class="kw">pub fn </span>open_headless&lt;F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
-        new_window: <span class="kw">impl </span>Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
+        new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;,
         with_renderer: bool,
     ) -&gt; ResponseVar&lt;WindowId&gt; {
         WINDOWS_SV.write().open_impl(
@@ -2167,10 +2183,10 @@
     /// # Panics
     ///
     /// If the `window_id` is already assigned to an open or opening window.
-    </span><span class="kw">pub fn </span>open_headless_id(
+    </span><span class="kw">pub fn </span>open_headless_id&lt;F: Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>&gt;(
         <span class="kw-2">&amp;</span><span class="self">self</span>,
         window_id: <span class="kw">impl </span>Into&lt;WindowId&gt;,
-        new_window: <span class="kw">impl </span>Future&lt;Output = WindowRoot&gt; + Send + <span class="lifetime">'static</span>,
+        new_window: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;,
         with_renderer: bool,
     ) -&gt; ResponseVar&lt;WindowId&gt; {
         <span class="kw">let </span>window_id = window_id.into();

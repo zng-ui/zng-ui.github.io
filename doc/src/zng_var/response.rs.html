@@ -184,7 +184,23 @@
 <a href="#184" id="184">184</a>
 <a href="#185" id="185">185</a>
 <a href="#186" id="186">186</a>
-</pre></div><pre class="rust"><code><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::future::IntoFuture;
+
+<span class="kw">use super</span>::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// New paired [`ResponderVar`] and [`ResponseVar`] in the waiting state.
 </span><span class="kw">pub fn </span>response_var&lt;T: VarValue&gt;() -&gt; (ResponderVar&lt;T&gt;, ResponseVar&lt;T&gt;) {
@@ -305,6 +321,8 @@
     <span class="doccomment">/// Returns a future that awaits until a response is received and then returns it.
     ///
     /// Will clone the value if the variable is shared.
+    ///
+    /// Note that `ResponseVar&lt;T&gt;` implements [`IntoFuture`] so you can also just `.await` the variable.
     </span><span class="kw">pub async fn </span>wait_into_rsp(<span class="self">self</span>) -&gt; T {
         <span class="self">self</span>.wait_done().<span class="kw">await</span>;
         <span class="self">self</span>.into_rsp().unwrap()
@@ -356,6 +374,16 @@
             Response::Waiting =&gt; Response::Waiting,
             Response::Done(t) =&gt; Response::Done(map(t)),
         })
+    }
+}
+<span class="kw">impl</span>&lt;T: VarValue&gt; IntoFuture <span class="kw">for </span>ResponseVar&lt;T&gt; {
+    <span class="kw">type </span>Output = T;
+
+    <span class="comment">// refactor after 'impl_trait_in_assoc_type' is stable
+    </span><span class="kw">type </span>IntoFuture = std::pin::Pin&lt;Box&lt;<span class="kw">dyn </span>Future&lt;Output = T&gt; + Send + Sync&gt;&gt;;
+
+    <span class="kw">fn </span>into_future(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoFuture {
+        Box::pin(<span class="self">self</span>.wait_into_rsp())
     }
 }
 

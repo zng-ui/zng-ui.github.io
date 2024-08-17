@@ -406,6 +406,18 @@
 <a href="#406" id="406">406</a>
 <a href="#407" id="407">407</a>
 <a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fs,
@@ -421,10 +433,22 @@
 <span class="doccomment">/// Print warning message.
 </span><span class="macro">macro_rules!</span> warn {
     ($(<span class="macro-nonterminal">$format_args</span>:tt)<span class="kw-2">*</span>) =&gt; {
-        {
+        <span class="kw">if </span><span class="macro-nonterminal">$crate::util::deny_warnings</span>() {
+            <span class="macro">error!</span>($(<span class="macro-nonterminal">$format_args</span>)<span class="kw-2">*</span>);
+        }<span class="kw">else </span>{
             <span class="macro">eprintln!</span>(<span class="string">"{} {}"</span>, <span class="macro-nonterminal">$crate::util::WARN_PREFIX</span>, <span class="macro">format_args!</span>($(<span class="macro-nonterminal">$format_args</span>)<span class="kw-2">*</span>));
         }
     };
+}
+
+<span class="kw">pub fn </span>deny_warnings() -&gt; bool {
+    std::env::var(<span class="string">"RUSTFLAGS"</span>)
+        .map(|f| {
+            [<span class="string">"--deny=warnings"</span>, <span class="string">"-Dwarnings"</span>, <span class="string">"-D warnings"</span>, <span class="string">"--deny warnings"</span>]
+                .iter()
+                .any(|d| f.contains(d))
+        })
+        .unwrap_or(<span class="bool-val">false</span>)
 }
 
 <span class="doccomment">/// Print error message and flags the current process as failed.

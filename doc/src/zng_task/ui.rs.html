@@ -140,7 +140,7 @@
 
 </span><span class="kw">use </span>std::{
     fmt,
-    future::Future,
+    future::{Future, IntoFuture},
     mem,
     pin::Pin,
     task::{Poll, Waker},
@@ -179,12 +179,12 @@
     <span class="doccomment">/// New task with already build event-loop waker.
     ///
     /// App crate provides an integrated `UiTaskWidget::new` that creates the waker for widgets.
-    </span><span class="kw">pub fn </span>new_raw&lt;F&gt;(event_loop_waker: Waker, task: F) -&gt; <span class="self">Self
+    </span><span class="kw">pub fn </span>new_raw&lt;F&gt;(event_loop_waker: Waker, task: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) -&gt; <span class="self">Self
     </span><span class="kw">where
         </span>F: Future&lt;Output = R&gt; + Send + <span class="lifetime">'static</span>,
     {
         UiTask(UiTaskState::Pending {
-            future: Box::pin(task),
+            future: Box::pin(task.into_future()),
             event_loop_waker,
             <span class="attr">#[cfg(debug_assertions)]
             </span>last_update: <span class="prelude-val">None</span>,
