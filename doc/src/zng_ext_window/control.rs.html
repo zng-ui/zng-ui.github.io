@@ -2363,6 +2363,11 @@
 <a href="#2363" id="2363">2363</a>
 <a href="#2364" id="2364">2364</a>
 <a href="#2365" id="2365">2365</a>
+<a href="#2366" id="2366">2366</a>
+<a href="#2367" id="2367">2367</a>
+<a href="#2368" id="2368">2368</a>
+<a href="#2369" id="2369">2369</a>
+<a href="#2370" id="2370">2370</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -3007,6 +3012,10 @@
                     }
                 }
 
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(padding) = args.safe_padding {
+                    <span class="self">self</span>.vars.<span class="number">0</span>.safe_padding.set(padding);
+                }
+
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = args.frame_wait_id {
                     <span class="self">self</span>.resize_wait_id = <span class="prelude-val">Some</span>(id);
 
@@ -3081,6 +3090,7 @@
                 <span class="self">self</span>.vars.<span class="number">0</span>.global_position.set(args.data.position.<span class="number">0</span>);
                 <span class="self">self</span>.vars.<span class="number">0</span>.actual_position.set(args.data.position.<span class="number">1</span>);
                 <span class="self">self</span>.vars.<span class="number">0</span>.actual_size.set(args.data.size);
+                <span class="self">self</span>.vars.<span class="number">0</span>.safe_padding.set(args.data.safe_padding);
                 <span class="self">self</span>.vars.<span class="number">0</span>.actual_monitor.set(args.data.monitor);
                 <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(args.data.scale_factor);
 

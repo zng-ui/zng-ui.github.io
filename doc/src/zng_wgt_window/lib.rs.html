@@ -328,6 +328,15 @@
 <a href="#328" id="328">328</a>
 <a href="#329" id="329">329</a>
 <a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
+<a href="#336" id="336">336</a>
+<a href="#337" id="337">337</a>
+<a href="#338" id="338">338</a>
+<a href="#339" id="339">339</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -341,9 +350,10 @@
 
 </span><span class="kw">use </span>zng_ext_input::focus::{DirectionalNav, FocusScopeOnFocus, TabNav};
 <span class="kw">use </span>zng_ext_window::{
-    FrameImageReadyArgs, HeadlessMonitor, RenderMode, StartPosition, WindowChangedArgs, WindowCloseArgs, WindowCloseRequestedArgs,
-    WindowOpenArgs, WindowRoot,
+    FrameImageReadyArgs, HeadlessMonitor, RenderMode, StartPosition, WINDOW_Ext <span class="kw">as _</span>, WindowChangedArgs, WindowCloseArgs,
+    WindowCloseRequestedArgs, WindowOpenArgs, WindowRoot,
 };
+<span class="kw">use </span>zng_var::types::ContextualizedVar;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <span class="kw">use </span>zng_wgt_fill::background_color;
 <span class="kw">use </span>zng_wgt_input::focus::{
@@ -375,7 +385,7 @@
             <span class="self">self</span>;
 
             <span class="comment">// set the root font size
-            </span>font_size = FONT_SIZE_VAR;
+            </span>font_size = FONT_SIZE_VAR.boxed();
 
             <span class="comment">// optimization, actualize mapping context-vars early, see `context_var!` docs.
             </span>zng_wgt_text::font_palette = zng_wgt_text::FONT_PALETTE_VAR;
@@ -397,6 +407,14 @@
             focus_scope_behavior = FocusScopeOnFocus::LastFocused;
             config_block_window_load = <span class="bool-val">true</span>;
             save_state = SaveState::enabled();
+
+            padding = ContextualizedVar::new(|| WINDOW.vars().safe_padding().map(|p| SideOffsets::from(<span class="kw-2">*</span>p)));
+
+            when #is_mobile {
+                <span class="comment">// users tap the main background to dismiss `TextInput!` soft keyboard
+                </span>focus_scope_behavior = FocusScopeOnFocus::Widget;
+                font_size = FONT_SIZE_VAR.map(|f| f.clone() * <span class="number">1.5</span>.fct()).boxed();
+            }
         }
 
         <span class="self">self</span>.widget_builder().push_build_action(|wgt| {

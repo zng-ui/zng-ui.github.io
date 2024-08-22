@@ -1625,6 +1625,16 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1589" id="1589">1589</a>
 <a href="#1590" id="1590">1590</a>
 <a href="#1591" id="1591">1591</a>
+<a href="#1592" id="1592">1592</a>
+<a href="#1593" id="1593">1593</a>
+<a href="#1594" id="1594">1594</a>
+<a href="#1595" id="1595">1595</a>
+<a href="#1596" id="1596">1596</a>
+<a href="#1597" id="1597">1597</a>
+<a href="#1598" id="1598">1598</a>
+<a href="#1599" id="1599">1599</a>
+<a href="#1600" id="1600">1600</a>
+<a href="#1601" id="1601">1601</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process connection and other types.
 
 </span><span class="kw">use </span>std::{
@@ -1644,7 +1654,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">use </span>parking_lot::{MappedRwLockReadGuard, MappedRwLockWriteGuard, RwLock};
 <span class="kw">use </span>zng_app_context::app_local;
-<span class="kw">use </span>zng_layout::unit::{DipPoint, DipRect, DipSize, Factor, Px, PxPoint, PxRect, PxSize};
+<span class="kw">use </span>zng_layout::unit::{DipPoint, DipRect, DipSideOffsets, DipSize, Factor, Px, PxPoint, PxRect, PxSize};
 <span class="kw">use </span>zng_task::SignalOnce;
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::ResponderVar;
@@ -2277,6 +2287,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Actual render mode, can be different from the requested mode if it is not available.
     </span><span class="kw">pub </span>render_mode: RenderMode,
+
+    <span class="doccomment">/// Padding that must be applied to the window content so that it stays clear of screen obstructions
+    /// such as a camera notch cutout.
+    ///
+    /// Note that the *unsafe* area must still be rendered as it may be partially visible, just don't place nay
+    /// interactive or important content outside of this padding.
+    </span><span class="kw">pub </span>safe_padding: DipSideOffsets,
 }
 <span class="kw">impl </span>WindowOpenData {
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(data: zng_view_api::window::WindowOpenData, map_monitor: <span class="kw">impl </span>FnOnce(ApiMonitorId) -&gt; MonitorId) -&gt; <span class="self">Self </span>{
@@ -2287,6 +2304,7 @@ document.addEventListener('DOMContentLoaded', function () {
             size: data.size,
             scale_factor: data.scale_factor,
             render_mode: data.render_mode,
+            safe_padding: data.safe_padding,
         }
     }
 }
@@ -2473,6 +2491,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Enable or disable IME by setting a cursor area.
+    ///
+    /// In mobile platforms also shows the software keyboard for `Some(_)` and hides it for `None`.
     </span><span class="kw">pub fn </span>set_ime_area(<span class="kw-2">&amp;</span><span class="self">self</span>, area: <span class="prelude-ty">Option</span>&lt;DipRect&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
         <span class="self">self</span>.<span class="number">0</span>.call(|id, p| p.set_ime_area(id, area))
     }

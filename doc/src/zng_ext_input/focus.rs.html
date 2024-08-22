@@ -1718,6 +1718,10 @@
 <a href="#1718" id="1718">1718</a>
 <a href="#1719" id="1719">1719</a>
 <a href="#1720" id="1720">1720</a>
+<a href="#1721" id="1721">1721</a>
+<a href="#1722" id="1722">1722</a>
+<a href="#1723" id="1723">1723</a>
+<a href="#1724" id="1724">1724</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Keyboard focus manager.
 
 </span><span class="kw">pub mod </span>iter;
@@ -2158,9 +2162,13 @@
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(request) = request {
             <span class="kw">let </span><span class="kw-2">mut </span>focus = FOCUS_SV.write();
-            focus.pending_highlight = <span class="bool-val">false</span>;
-            <span class="kw">let </span>args = focus.fulfill_request(request, <span class="bool-val">false</span>);
-            <span class="self">self</span>.notify(<span class="kw-2">&amp;mut </span>focus, args);
+            <span class="kw">if </span>!<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>focus.request, PendingFocusRequest::Update(<span class="kw">_</span>)) {
+                focus.request = PendingFocusRequest::None;
+                focus.pending_highlight = <span class="bool-val">false</span>;
+                focus.pending_window_focus = <span class="prelude-val">None</span>;
+                <span class="kw">let </span>args = focus.fulfill_request(request, <span class="bool-val">false</span>);
+                <span class="self">self</span>.notify(<span class="kw-2">&amp;mut </span>focus, args);
+            }
         }
     }
 

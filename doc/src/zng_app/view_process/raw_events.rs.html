@@ -814,6 +814,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#778" id="778">778</a>
 <a href="#779" id="779">779</a>
 <a href="#780" id="780">780</a>
+<a href="#781" id="781">781</a>
+<a href="#782" id="782">782</a>
+<a href="#783" id="783">783</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Events directly from the view-process targeting the app windows.
 //!
 //! These events get processed by [app extensions] to generate the events used in widgets, for example
@@ -832,7 +835,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 </span><span class="kw">use </span>std::path::PathBuf;
 
-<span class="kw">use </span>zng_layout::unit::{DipPoint, DipSize, Factor, PxPoint, PxRect};
+<span class="kw">use </span>zng_layout::unit::{DipPoint, DipSideOffsets, DipSize, Factor, PxPoint, PxRect};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
@@ -967,6 +970,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <span class="doccomment">/// New window size if it was resized.
         </span><span class="kw">pub </span>size: <span class="prelude-ty">Option</span>&lt;DipSize&gt;,
+
+        <span class="doccomment">/// New window safe padding.
+        </span><span class="kw">pub </span>safe_padding: <span class="prelude-ty">Option</span>&lt;DipSideOffsets&gt;,
 
         <span class="doccomment">/// If the app or operating system caused the change.
         </span><span class="kw">pub </span>cause: EventCause,

@@ -734,6 +734,19 @@
 <a href="#734" id="734">734</a>
 <a href="#735" id="735">735</a>
 <a href="#736" id="736">736</a>
+<a href="#737" id="737">737</a>
+<a href="#738" id="738">738</a>
+<a href="#739" id="739">739</a>
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -742,7 +755,9 @@
 };
 <span class="kw">use </span>zng_color::LightDark;
 <span class="kw">use </span>zng_ext_image::Img;
-<span class="kw">use </span>zng_layout::unit::{Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Length, LengthUnits, Point, PxPoint, PxSize, Size};
+<span class="kw">use </span>zng_layout::unit::{
+    Dip, DipPoint, DipRect, DipSideOffsets, DipSize, DipToPx, Factor, FactorUnits, Length, LengthUnits, Point, PxPoint, PxSize, Size,
+};
 <span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_unique_id::IdSet;
@@ -781,6 +796,7 @@
     <span class="kw">pub</span>(<span class="kw">super</span>) global_position: ArcVar&lt;PxPoint&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) actual_monitor: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;MonitorId&gt;&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) actual_size: ArcVar&lt;DipSize&gt;,
+    <span class="kw">pub</span>(<span class="kw">super</span>) safe_padding: ArcVar&lt;DipSideOffsets&gt;,
 
     <span class="kw">pub</span>(<span class="kw">super</span>) scale_factor: ArcVar&lt;Factor&gt;,
 
@@ -850,6 +866,7 @@
             global_position: var(PxPoint::zero()),
             actual_monitor: var(<span class="prelude-val">None</span>),
             actual_size: var(DipSize::zero()),
+            safe_padding: var(DipSideOffsets::zero()),
 
             scale_factor: var(primary_scale_factor),
 
@@ -1140,6 +1157,15 @@
             PxSize::new(size.width.to_px(<span class="kw-2">*</span>factor), size.height.to_px(<span class="kw-2">*</span>factor))
         })
         .boxed()
+    }
+
+    <span class="doccomment">/// Padding that must be applied to the window content so that it stays clear of screen obstructions
+    /// such as a camera notch cutout.
+    ///
+    /// Note that the *unsafe* area must still be rendered as it may be partially visible, just don't place nay
+    /// interactive or important content outside of this padding.
+    </span><span class="kw">pub fn </span>safe_padding(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;DipSideOffsets&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.safe_padding.read_only()
     }
 
     <span class="doccomment">/// Window width and height on the screen when the window is [`Normal`].
