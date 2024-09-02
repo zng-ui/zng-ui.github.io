@@ -2162,15 +2162,50 @@
 <a href="#2162" id="2162">2162</a>
 <a href="#2163" id="2163">2163</a>
 <a href="#2164" id="2164">2164</a>
+<a href="#2165" id="2165">2165</a>
+<a href="#2166" id="2166">2166</a>
+<a href="#2167" id="2167">2167</a>
+<a href="#2168" id="2168">2168</a>
+<a href="#2169" id="2169">2169</a>
+<a href="#2170" id="2170">2170</a>
+<a href="#2171" id="2171">2171</a>
+<a href="#2172" id="2172">2172</a>
+<a href="#2173" id="2173">2173</a>
+<a href="#2174" id="2174">2174</a>
+<a href="#2175" id="2175">2175</a>
+<a href="#2176" id="2176">2176</a>
+<a href="#2177" id="2177">2177</a>
+<a href="#2178" id="2178">2178</a>
+<a href="#2179" id="2179">2179</a>
+<a href="#2180" id="2180">2180</a>
+<a href="#2181" id="2181">2181</a>
+<a href="#2182" id="2182">2182</a>
+<a href="#2183" id="2183">2183</a>
+<a href="#2184" id="2184">2184</a>
+<a href="#2185" id="2185">2185</a>
+<a href="#2186" id="2186">2186</a>
+<a href="#2187" id="2187">2187</a>
+<a href="#2188" id="2188">2188</a>
+<a href="#2189" id="2189">2189</a>
+<a href="#2190" id="2190">2190</a>
+<a href="#2191" id="2191">2191</a>
+<a href="#2192" id="2192">2192</a>
+<a href="#2193" id="2193">2193</a>
+<a href="#2194" id="2194">2194</a>
+<a href="#2195" id="2195">2195</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::sync::atomic::Ordering::Relaxed;
 
 <span class="kw">use </span>atomic::Atomic;
 <span class="kw">use </span>parking_lot::Mutex;
-<span class="kw">use </span>zng_app::widget::{
-    info::{TreeFilter, Visibility, WidgetInfo, WidgetInfoBuilder, WidgetInfoTree, WidgetPath},
-    WidgetId,
+<span class="kw">use </span>zng_app::{
+    widget::{
+        info::{TreeFilter, Visibility, WidgetInfo, WidgetInfoBuilder, WidgetInfoTree, WidgetPath},
+        WidgetId,
+    },
+    window::WindowId,
 };
+<span class="kw">use </span>zng_ext_window::NestedWindowWidgetInfoExt;
 <span class="kw">use </span>zng_layout::unit::{DistanceKey, Orientation2D, Px, PxBox, PxPoint, PxRect, PxSize};
 <span class="kw">use </span>zng_state_map::{static_id, StateId};
 <span class="kw">use </span>zng_unique_id::IdSet;
@@ -2842,6 +2877,20 @@
         <span class="self">self</span>.focus_info().is_alt_scope()
     }
 
+    <span class="doccomment">/// Gets the nested window ID, if this widget hosts a nested window.
+    ///
+    /// Nested window hosts always focus the nested window on focus.
+    </span><span class="kw">pub fn </span>nested_window(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt; {
+        <span class="self">self</span>.info.nested_window()
+    }
+
+    <span class="doccomment">/// Gets the nested window focus tree, if this widget hosts a nested window.
+    </span><span class="kw">pub fn </span>nested_window_tree(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;FocusInfoTree&gt; {
+        <span class="self">self</span>.info
+            .nested_window_tree()
+            .map(|t| FocusInfoTree::new(t, <span class="self">self</span>.focus_disabled_widgets(), <span class="self">self</span>.focus_hidden_widgets()))
+    }
+
     <span class="kw">fn </span>mode_allows_focus(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="kw">let </span>int = <span class="self">self</span>.info.interactivity();
         <span class="kw">if </span><span class="self">self</span>.mode.contains(FocusMode::DISABLED) {
@@ -2887,6 +2936,16 @@
         <span class="kw">if </span><span class="self">self</span>.mode_allows_focus() {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(builder) = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID) {
                 <span class="kw">return </span>builder.build();
+            } <span class="kw">else if </span><span class="self">self</span>.info.nested_window().is_some() {
+                <span class="comment">// service will actually focus nested window
+                </span><span class="kw">return </span>FocusInfo::FocusScope {
+                    tab_index: TabIndex::AUTO,
+                    skip_directional: <span class="bool-val">false</span>,
+                    tab_nav: TabNav::Contained,
+                    directional_nav: DirectionalNav::Contained,
+                    on_focus: FocusScopeOnFocus::FirstDescendant,
+                    alt: <span class="bool-val">false</span>,
+                };
             }
         }
         FocusInfo::NotFocusable
@@ -2981,7 +3040,7 @@
         </span>}
     }
     <span class="kw">fn </span>inner_alt_scope(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt; {
-        <span class="kw">let </span>inner_alt = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID).unwrap().inner_alt.load(Relaxed);
+        <span class="kw">let </span>inner_alt = <span class="self">self</span>.info.meta().get(<span class="kw-2">*</span>FOCUS_INFO_ID)<span class="question-mark">?</span>.inner_alt.load(Relaxed);
         <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = inner_alt {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = <span class="self">self</span>.info.tree().get(id) {
                 <span class="kw">let </span>wgt = wgt.into_focus_info(<span class="self">self</span>.focus_disabled_widgets(), <span class="self">self</span>.focus_hidden_widgets());
@@ -4163,6 +4222,9 @@
 /// [`directional_nav`](Self::directional_nav) and did not set [`scope`](Self::scope) to `false`.
 ///
 /// The widget is *focusable* if it set [`focusable`](Self::focusable) to `true` **or** if it set the [`tab_index`](Self::tab_index).
+///
+/// The widget is a *focus scope* if it sets [`nested_window`](NestedWindowWidgetInfoExt::nested_window), but the focus will always move inside
+/// the nested window.
 ///
 /// The widget is not focusable if it did not set any of the members mentioned.
 ///

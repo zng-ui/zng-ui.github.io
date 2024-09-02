@@ -1203,6 +1203,61 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1167" id="1167">1167</a>
 <a href="#1168" id="1168">1168</a>
 <a href="#1169" id="1169">1169</a>
+<a href="#1170" id="1170">1170</a>
+<a href="#1171" id="1171">1171</a>
+<a href="#1172" id="1172">1172</a>
+<a href="#1173" id="1173">1173</a>
+<a href="#1174" id="1174">1174</a>
+<a href="#1175" id="1175">1175</a>
+<a href="#1176" id="1176">1176</a>
+<a href="#1177" id="1177">1177</a>
+<a href="#1178" id="1178">1178</a>
+<a href="#1179" id="1179">1179</a>
+<a href="#1180" id="1180">1180</a>
+<a href="#1181" id="1181">1181</a>
+<a href="#1182" id="1182">1182</a>
+<a href="#1183" id="1183">1183</a>
+<a href="#1184" id="1184">1184</a>
+<a href="#1185" id="1185">1185</a>
+<a href="#1186" id="1186">1186</a>
+<a href="#1187" id="1187">1187</a>
+<a href="#1188" id="1188">1188</a>
+<a href="#1189" id="1189">1189</a>
+<a href="#1190" id="1190">1190</a>
+<a href="#1191" id="1191">1191</a>
+<a href="#1192" id="1192">1192</a>
+<a href="#1193" id="1193">1193</a>
+<a href="#1194" id="1194">1194</a>
+<a href="#1195" id="1195">1195</a>
+<a href="#1196" id="1196">1196</a>
+<a href="#1197" id="1197">1197</a>
+<a href="#1198" id="1198">1198</a>
+<a href="#1199" id="1199">1199</a>
+<a href="#1200" id="1200">1200</a>
+<a href="#1201" id="1201">1201</a>
+<a href="#1202" id="1202">1202</a>
+<a href="#1203" id="1203">1203</a>
+<a href="#1204" id="1204">1204</a>
+<a href="#1205" id="1205">1205</a>
+<a href="#1206" id="1206">1206</a>
+<a href="#1207" id="1207">1207</a>
+<a href="#1208" id="1208">1208</a>
+<a href="#1209" id="1209">1209</a>
+<a href="#1210" id="1210">1210</a>
+<a href="#1211" id="1211">1211</a>
+<a href="#1212" id="1212">1212</a>
+<a href="#1213" id="1213">1213</a>
+<a href="#1214" id="1214">1214</a>
+<a href="#1215" id="1215">1215</a>
+<a href="#1216" id="1216">1216</a>
+<a href="#1217" id="1217">1217</a>
+<a href="#1218" id="1218">1218</a>
+<a href="#1219" id="1219">1219</a>
+<a href="#1220" id="1220">1220</a>
+<a href="#1221" id="1221">1221</a>
+<a href="#1222" id="1222">1222</a>
+<a href="#1223" id="1223">1223</a>
+<a href="#1224" id="1224">1224</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::mem;
 
 <span class="kw">use </span>zng_layout::unit::PxSize;
@@ -1955,6 +2010,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <span class="kw">if </span>!mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.child.<span class="number">0</span>.delegated) {
                 <span class="self">self</span>.child.<span class="number">0</span>.child.info(info);
+            } <span class="kw">else </span>{
+                <span class="attr">#[cfg(debug_assertions)]
+                </span><span class="kw">if </span><span class="self">self
+                    </span>.child
+                    .<span class="number">0
+                    </span>.child
+                    .with_context(WidgetUpdateMode::Ignore, || {
+                        WIDGET.pending_update().contains(<span class="kw">crate</span>::update::UpdateFlags::INFO)
+                    })
+                    .unwrap_or(<span class="bool-val">false</span>)
+                {
+                    <span class="comment">// this is likely an error, but a child widget could have requested info again
+                    </span><span class="macro">tracing::warn!</span>(target: <span class="string">"match_widget-pending"</span>, <span class="string">"pending info build after info delegated"</span>);
+                }
             }
         }
 
@@ -2020,6 +2089,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 <span class="self">self</span>.child.<span class="number">0</span>.child.layout(wl)
             } <span class="kw">else </span>{
+                <span class="attr">#[cfg(debug_assertions)]
+                </span><span class="kw">if </span><span class="self">self
+                    </span>.child
+                    .<span class="number">0
+                    </span>.child
+                    .with_context(WidgetUpdateMode::Ignore, || {
+                        WIDGET.pending_update().contains(<span class="kw">crate</span>::update::UpdateFlags::LAYOUT)
+                    })
+                    .unwrap_or(<span class="bool-val">false</span>)
+                {
+                    <span class="comment">// this is likely an error, but a child widget could have requested layout again,
+                    </span><span class="macro">tracing::warn!</span>(target: <span class="string">"match_widget-pending"</span>, <span class="string">"pending layout after layout delegated"</span>);
+                }
                 size
             }
         }
@@ -2031,6 +2113,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <span class="kw">if </span>!mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.child.<span class="number">0</span>.delegated) {
                 <span class="self">self</span>.child.<span class="number">0</span>.child.render(frame);
+            } <span class="kw">else </span>{
+                <span class="attr">#[cfg(debug_assertions)]
+                </span><span class="kw">if </span><span class="self">self
+                    </span>.child
+                    .<span class="number">0
+                    </span>.child
+                    .with_context(WidgetUpdateMode::Ignore, || {
+                        WIDGET.pending_update().contains(<span class="kw">crate</span>::update::UpdateFlags::RENDER)
+                    })
+                    .unwrap_or(<span class="bool-val">false</span>)
+                {
+                    <span class="comment">// this is likely an error, but a child widget could have requested render again,
+                    </span><span class="macro">tracing::warn!</span>(target: <span class="string">"match_widget-pending"</span>, <span class="string">"pending render after render delegated"</span>);
+                }
             }
         }
 
@@ -2041,6 +2137,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
             <span class="kw">if </span>!mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.child.<span class="number">0</span>.delegated) {
                 <span class="self">self</span>.child.<span class="number">0</span>.child.render_update(update);
+            } <span class="kw">else </span>{
+                <span class="attr">#[cfg(debug_assertions)]
+                </span><span class="kw">if </span><span class="self">self
+                    </span>.child
+                    .<span class="number">0
+                    </span>.child
+                    .with_context(WidgetUpdateMode::Ignore, || {
+                        WIDGET.pending_update().contains(<span class="kw">crate</span>::update::UpdateFlags::RENDER_UPDATE)
+                    })
+                    .unwrap_or(<span class="bool-val">false</span>)
+                {
+                    <span class="comment">// this is likely an error, but a child widget could have requested render_update again,
+                    </span><span class="macro">tracing::warn!</span>(target: <span class="string">"match_widget-pending"</span>, <span class="string">"pending render_update after render_update delegated"</span>);
+                }
             }
         }
     }

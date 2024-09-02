@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["AnchorSize","AnchorTransform"],"fn":["adorner","adorner_fn"],"struct":["AnchorMode","AnchorOffset","LAYERS","LayerIndex"]};
+window.SIDEBAR_ITEMS = {"enum":["AnchorSize","AnchorTransform"],"fn":["adorner","adorner_fn"],"static":["LAYERS_INSERT_CMD","LAYERS_REMOVE_CMD"],"struct":["AnchorMode","AnchorOffset","LAYERS","LayerIndex"]};

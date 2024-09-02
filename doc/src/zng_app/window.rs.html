@@ -644,6 +644,13 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#608" id="608">608</a>
 <a href="#609" id="609">609</a>
 <a href="#610" id="610">610</a>
+<a href="#611" id="611">611</a>
+<a href="#612" id="612">612</a>
+<a href="#613" id="613">613</a>
+<a href="#614" id="614">614</a>
+<a href="#615" id="615">615</a>
+<a href="#616" id="616">616</a>
+<a href="#617" id="617">617</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window context API.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt, sync::Arc};
@@ -1184,6 +1191,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Call `f` with an exclusive lock to the window state.
     </span><span class="kw">pub fn </span>with_state&lt;R&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>OwnedStateMap&lt;WINDOW&gt;) -&gt; R) -&gt; R {
         f(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>.as_mut().unwrap().state.write())
+    }
+
+    <span class="doccomment">/// Clone a reference to the window context.
+    ///
+    /// This must be used only if the window implementation is split.
+    </span><span class="kw">pub fn </span>share(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone())
     }
 }
 

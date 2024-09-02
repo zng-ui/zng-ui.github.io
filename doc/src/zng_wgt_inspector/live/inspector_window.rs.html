@@ -761,14 +761,6 @@
 <a href="#761" id="761">761</a>
 <a href="#762" id="762">762</a>
 <a href="#763" id="763">763</a>
-<a href="#764" id="764">764</a>
-<a href="#765" id="765">765</a>
-<a href="#766" id="766">766</a>
-<a href="#767" id="767">767</a>
-<a href="#768" id="768">768</a>
-<a href="#769" id="769">769</a>
-<a href="#770" id="770">770</a>
-<a href="#771" id="771">771</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::mem;
 
 <span class="kw">use </span>zng_app::widget::{
@@ -786,6 +778,7 @@
 <span class="kw">use </span>zng_wgt::{border, corner_radius, margin, prelude::<span class="kw-2">*</span>, visibility, Wgt};
 <span class="kw">use </span>zng_wgt_button::Button;
 <span class="kw">use </span>zng_wgt_container::{child_align, padding, Container};
+<span class="kw">use </span>zng_wgt_dialog::{FileDialogFilters, DIALOG};
 <span class="kw">use </span>zng_wgt_fill::background_color;
 <span class="kw">use </span>zng_wgt_filter::opacity;
 <span class="kw">use </span>zng_wgt_input::{focus::focus_shortcut, gesture::click_shortcut, is_hovered};
@@ -1000,7 +993,7 @@
                                         <span class="comment">// not async_hn here because menu is dropped on click
                                         </span>task::spawn(<span class="macro">async_clmv!</span>(screenshot_idle, {
                                             screenshot_idle.set(<span class="bool-val">false</span>);
-                                            save_screenshot(inspected().unwrap(), WINDOW.id()).<span class="kw">await</span>;
+                                            save_screenshot(inspected().unwrap()).<span class="kw">await</span>;
                                             screenshot_idle.set(<span class="bool-val">true</span>);
                                         }));
                                     });
@@ -1012,7 +1005,7 @@
                                     on_click = <span class="macro">hn!</span>(screenshot_idle, |<span class="kw">_</span>| {
                                         task::spawn(<span class="macro">async_clmv!</span>(screenshot_idle, {
                                             screenshot_idle.set(<span class="bool-val">false</span>);
-                                            copy_screenshot(inspected().unwrap(), WINDOW.id()).<span class="kw">await</span>;
+                                            copy_screenshot(inspected().unwrap()).<span class="kw">await</span>;
                                             screenshot_idle.set(<span class="bool-val">true</span>);
                                         }));
                                     });
@@ -1453,30 +1446,30 @@
     <span class="bool-val">false
 </span>}
 
-<span class="kw">async fn </span>save_screenshot(inspected: WindowId, inspector: WindowId) {
+<span class="kw">async fn </span>save_screenshot(inspected: WindowId) {
     <span class="kw">let </span>frame = WINDOWS.frame_image(inspected, <span class="prelude-val">None</span>);
 
-    <span class="kw">let </span><span class="kw-2">mut </span>dlg = zng_view_api::dialog::FileDialog {
-        title: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-title"</span>, <span class="string">"Save Screenshot"</span>).get(),
-        kind: zng_view_api::dialog::FileDialogKind::SaveFile,
-        starting_name: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-starting-name"</span>, <span class="string">"screenshot.png"</span>).get(),
-        ..Default::default()
-    };
+    <span class="kw">let </span><span class="kw-2">mut </span>filters = FileDialogFilters::new();
     <span class="kw">let </span>encoders = zng_ext_image::IMAGES.available_encoders();
     <span class="kw">for </span>enc <span class="kw">in </span><span class="kw-2">&amp;</span>encoders {
-        dlg.push_filter(<span class="kw-2">&amp;</span>enc.to_uppercase(), <span class="kw-2">&amp;</span>[enc]);
+        filters.push_filter(<span class="kw-2">&amp;</span>enc.to_uppercase(), <span class="kw-2">&amp;</span>[enc]);
     }
-    dlg.push_filter(
+    filters.push_filter(
         <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-filter"</span>, <span class="string">"Image Files"</span>).get().as_str(),
         <span class="kw-2">&amp;</span>encoders,
     );
 
-    <span class="kw">let </span>r = WINDOWS.native_file_dialog(inspector, dlg).wait_rsp().<span class="kw">await</span>;
-    <span class="kw">let </span>path = <span class="kw">match </span>r {
+    <span class="kw">let </span>r = DIALOG.save_file(
+        <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-title"</span>, <span class="string">"Save Screenshot"</span>),
+        <span class="string">""</span>,
+        <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.save-dlg-starting-name"</span>, <span class="string">"screenshot.png"</span>),
+        filters,
+    );
+    <span class="kw">let </span>path = <span class="kw">match </span>r.<span class="kw">await </span>{
         zng_view_api::dialog::FileDialogResponse::Selected(<span class="kw-2">mut </span>p) =&gt; p.remove(<span class="number">0</span>),
         zng_view_api::dialog::FileDialogResponse::Cancel =&gt; <span class="kw">return</span>,
         zng_view_api::dialog::FileDialogResponse::Error(e) =&gt; {
-            screenshot_error(e, inspector).<span class="kw">await</span>;
+            screenshot_error(e).<span class="kw">await</span>;
             <span class="kw">return</span>;
         }
     };
@@ -1485,7 +1478,7 @@
     <span class="kw">let </span>frame = frame.get();
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = frame.error() {
-        screenshot_error(e, inspector).<span class="kw">await</span>;
+        screenshot_error(e).<span class="kw">await</span>;
     } <span class="kw">else </span>{
         <span class="kw">let </span>r = frame.save(path).<span class="kw">await</span>;
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
@@ -1496,21 +1489,20 @@
                     error = e.to_string()
                 )
                 .get(),
-                inspector,
             )
             .<span class="kw">await</span>;
         }
     }
 }
 
-<span class="kw">async fn </span>copy_screenshot(inspected: WindowId, inspector: WindowId) {
+<span class="kw">async fn </span>copy_screenshot(inspected: WindowId) {
     <span class="kw">let </span>frame = WINDOWS.frame_image(inspected, <span class="prelude-val">None</span>);
 
     frame.wait_value(|f| !f.is_loading()).<span class="kw">await</span>;
     <span class="kw">let </span>frame = frame.get();
 
     <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = frame.error() {
-        screenshot_error(e, inspector).<span class="kw">await</span>;
+        screenshot_error(e).<span class="kw">await</span>;
     } <span class="kw">else </span>{
         <span class="kw">let </span>r = zng_ext_clipboard::CLIPBOARD.set_image(frame).wait_rsp().<span class="kw">await</span>;
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
@@ -1521,23 +1513,15 @@
                     error = e.to_string()
                 )
                 .get(),
-                inspector,
             )
             .<span class="kw">await</span>;
         }
     }
 }
 
-<span class="kw">async fn </span>screenshot_error(e: Txt, inspector: WindowId) {
-    <span class="kw">let </span>r = WINDOWS.native_message_dialog(
-        inspector,
-        zng_view_api::dialog::MsgDialog {
-            title: <span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.error-dlg-title"</span>, <span class="string">"Screenshot Error"</span>).get(),
-            message: e,
-            icon: zng_view_api::dialog::MsgDialogIcon::Error,
-            ..Default::default()
-        },
-    );
-    r.wait_done().<span class="kw">await</span>;
+<span class="kw">async fn </span>screenshot_error(e: Txt) {
+    DIALOG
+        .error(<span class="macro">l10n!</span>(<span class="string">"inspector/screenshot.error-dlg-title"</span>, <span class="string">"Screenshot Error"</span>), e)
+        .<span class="kw">await</span>;
 }
 </code></pre></div></section></main></body></html>

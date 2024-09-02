@@ -399,6 +399,14 @@
 <a href="#399" id="399">399</a>
 <a href="#400" id="400">400</a>
 <a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>colors::{ACCENT_COLOR_VAR, BASE_COLOR_VAR};
 <span class="kw">use </span>zng_ext_clipboard::{COPY_CMD, CUT_CMD, PASTE_CMD};
 <span class="kw">use </span>zng_wgt::base_color;
@@ -667,12 +675,16 @@
                 c.delegated();
                 <span class="kw">if </span>txt_is_empty.as_ref().unwrap().get() {
                     c.render(frame);
+                } <span class="kw">else </span>{
+                    frame.hide(|frame| c.render(frame));
                 }
             }
             UiNodeOp::RenderUpdate { update } =&gt; {
                 c.delegated();
                 <span class="kw">if </span>txt_is_empty.as_ref().unwrap().get() {
                     c.render_update(update);
+                } <span class="kw">else </span>{
+                    update.hidden(|update| c.render_update(update));
                 }
             }
             <span class="kw">_ </span>=&gt; {}
@@ -722,47 +734,51 @@
                     BorderSides::hidden()
                 }),
             };
-            data_notes_adorner_fn = adorn.map(<span class="kw">move </span>|<span class="kw-2">&amp;</span>(top_txt_empty, help_empty)| <span class="kw">if </span>!top_txt_empty {
-                <span class="macro">wgt_fn!</span>(top_txt, top_color, |<span class="kw">_</span>| <span class="macro">Text!</span> {
-                    focusable = <span class="bool-val">false</span>;
-                    txt_editable = <span class="bool-val">false</span>;
-                    txt_selectable = <span class="bool-val">false</span>;
-                    txt = top_txt.clone();
-                    font_color = top_color.clone();
-                    font_size = <span class="number">0.8</span>.em();
-                    align = Align::BOTTOM_START;
-                    margin = (<span class="number">0</span>, <span class="number">4</span>);
-                    y = <span class="number">2</span>.dip() + <span class="number">100</span>.pct();
-                })
-            } <span class="kw">else if </span>!help_empty {
-                <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Text!</span> {
-                    focusable = <span class="bool-val">false</span>;
-                    txt_editable = <span class="bool-val">false</span>;
-                    txt_selectable = <span class="bool-val">false</span>;
-                    txt = FIELD_HELP_VAR;
-                    font_size = <span class="number">0.8</span>.em();
-                    font_color = text::FONT_COLOR_VAR.map(|c| colors::GRAY.with_alpha(<span class="number">10</span>.pct()).mix_normal(<span class="kw-2">*</span>c));
-                    align = Align::BOTTOM_START;
-                    margin = (<span class="number">0</span>, <span class="number">4</span>);
-                    y = <span class="number">2</span>.dip() + <span class="number">100</span>.pct();
-                })
-            } <span class="kw">else </span>{
-                WidgetFn::nil()
+            data_notes_adorner_fn = adorn.map(<span class="kw">move </span>|<span class="kw-2">&amp;</span>(top_txt_empty, help_empty)| {
+                <span class="kw">if </span>!top_txt_empty {
+                    <span class="macro">wgt_fn!</span>(top_txt, top_color, |<span class="kw">_</span>| <span class="macro">Text!</span> {
+                        focusable = <span class="bool-val">false</span>;
+                        txt_editable = <span class="bool-val">false</span>;
+                        txt_selectable = <span class="bool-val">false</span>;
+                        txt = top_txt.clone();
+                        font_color = top_color.clone();
+                        font_size = <span class="number">0.8</span>.em();
+                        align = Align::BOTTOM_START;
+                        margin = (<span class="number">0</span>, <span class="number">4</span>);
+                        y = <span class="number">2</span>.dip() + <span class="number">100</span>.pct();
+                    })
+                } <span class="kw">else if </span>!help_empty {
+                    <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Text!</span> {
+                        focusable = <span class="bool-val">false</span>;
+                        txt_editable = <span class="bool-val">false</span>;
+                        txt_selectable = <span class="bool-val">false</span>;
+                        txt = FIELD_HELP_VAR;
+                        font_size = <span class="number">0.8</span>.em();
+                        font_color = text::FONT_COLOR_VAR.map(|c| colors::GRAY.with_alpha(<span class="number">10</span>.pct()).mix_normal(<span class="kw-2">*</span>c));
+                        align = Align::BOTTOM_START;
+                        margin = (<span class="number">0</span>, <span class="number">4</span>);
+                        y = <span class="number">2</span>.dip() + <span class="number">100</span>.pct();
+                    })
+                } <span class="kw">else </span>{
+                    WidgetFn::nil()
+                }
             });
 
-            max_chars_count_adorner_fn = has_max_count.map(<span class="kw">move </span>|<span class="kw-2">&amp;</span>has| <span class="kw">if </span>has {
-                <span class="macro">wgt_fn!</span>(chars_count, |<span class="kw">_</span>| <span class="macro">Text!</span> {
-                    focusable = <span class="bool-val">false</span>;
-                    txt_editable = <span class="bool-val">false</span>;
-                    txt_selectable = <span class="bool-val">false</span>;
-                    txt = <span class="macro">merge_var!</span>(chars_count.clone(), text::MAX_CHARS_COUNT_VAR, |c, m| <span class="macro">formatx!</span>(<span class="string">"{c}/{m}"</span>));
-                    font_color = text::FONT_COLOR_VAR.map(|c| colors::GRAY.with_alpha(<span class="number">10</span>.pct()).mix_normal(<span class="kw-2">*</span>c));
-                    font_size = <span class="number">0.8</span>.em();
-                    align = Align::BOTTOM_END;
-                    offset = (-<span class="number">4</span>, <span class="number">2</span>.dip() + <span class="number">100</span>.pct());
-                })
-            } <span class="kw">else </span>{
-                WidgetFn::nil()
+            max_chars_count_adorner_fn = has_max_count.map(<span class="kw">move </span>|<span class="kw-2">&amp;</span>has| {
+                <span class="kw">if </span>has {
+                    <span class="macro">wgt_fn!</span>(chars_count, |<span class="kw">_</span>| <span class="macro">Text!</span> {
+                        focusable = <span class="bool-val">false</span>;
+                        txt_editable = <span class="bool-val">false</span>;
+                        txt_selectable = <span class="bool-val">false</span>;
+                        txt = <span class="macro">merge_var!</span>(chars_count.clone(), text::MAX_CHARS_COUNT_VAR, |c, m| <span class="macro">formatx!</span>(<span class="string">"{c}/{m}"</span>));
+                        font_color = text::FONT_COLOR_VAR.map(|c| colors::GRAY.with_alpha(<span class="number">10</span>.pct()).mix_normal(<span class="kw-2">*</span>c));
+                        font_size = <span class="number">0.8</span>.em();
+                        align = Align::BOTTOM_END;
+                        offset = (-<span class="number">4</span>, <span class="number">2</span>.dip() + <span class="number">100</span>.pct());
+                    })
+                } <span class="kw">else </span>{
+                    WidgetFn::nil()
+                }
             });
 
             margin = (<span class="number">0</span>, <span class="number">0</span>, <span class="number">1.2</span>.em(), <span class="number">0</span>);

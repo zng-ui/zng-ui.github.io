@@ -1722,6 +1722,9 @@
 <a href="#1722" id="1722">1722</a>
 <a href="#1723" id="1723">1723</a>
 <a href="#1724" id="1724">1724</a>
+<a href="#1725" id="1725">1725</a>
+<a href="#1726" id="1726">1726</a>
+<a href="#1727" id="1727">1727</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Keyboard focus manager.
 
 </span><span class="kw">pub mod </span>iter;
@@ -3073,7 +3076,10 @@
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(widget) = FocusInfoTree::new(info, <span class="self">self</span>.focus_disabled_widgets.get(), <span class="self">self</span>.focus_hidden_widgets.get())
                     .get(focused.path.widget_id())
                 {
-                    <span class="kw">if </span>widget.is_scope() {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(nested) = widget.nested_window() {
+                        <span class="macro">tracing::debug!</span>(<span class="string">"focus nested window {nested:?}"</span>);
+                        <span class="kw">let _ </span>= WINDOWS.focus(nested);
+                    } <span class="kw">else if </span>widget.is_scope() {
                         <span class="kw">let </span>last_focused = |id| <span class="self">self</span>.return_focused.get(<span class="kw-2">&amp;</span>id).map(|p| p.as_path());
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(widget) = widget.on_focus_scope_move(last_focused, is_tab_cycle_reentry, reverse) {
                             <span class="self">self</span>.enabled_nav = widget.enabled_nav_with_frame();

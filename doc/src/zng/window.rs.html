@@ -142,6 +142,96 @@
 <a href="#141" id="141">141</a>
 <a href="#142" id="142">142</a>
 <a href="#143" id="143">143</a>
+<a href="#144" id="144">144</a>
+<a href="#145" id="145">145</a>
+<a href="#146" id="146">146</a>
+<a href="#147" id="147">147</a>
+<a href="#148" id="148">148</a>
+<a href="#149" id="149">149</a>
+<a href="#150" id="150">150</a>
+<a href="#151" id="151">151</a>
+<a href="#152" id="152">152</a>
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a>
+<a href="#162" id="162">162</a>
+<a href="#163" id="163">163</a>
+<a href="#164" id="164">164</a>
+<a href="#165" id="165">165</a>
+<a href="#166" id="166">166</a>
+<a href="#167" id="167">167</a>
+<a href="#168" id="168">168</a>
+<a href="#169" id="169">169</a>
+<a href="#170" id="170">170</a>
+<a href="#171" id="171">171</a>
+<a href="#172" id="172">172</a>
+<a href="#173" id="173">173</a>
+<a href="#174" id="174">174</a>
+<a href="#175" id="175">175</a>
+<a href="#176" id="176">176</a>
+<a href="#177" id="177">177</a>
+<a href="#178" id="178">178</a>
+<a href="#179" id="179">179</a>
+<a href="#180" id="180">180</a>
+<a href="#181" id="181">181</a>
+<a href="#182" id="182">182</a>
+<a href="#183" id="183">183</a>
+<a href="#184" id="184">184</a>
+<a href="#185" id="185">185</a>
+<a href="#186" id="186">186</a>
+<a href="#187" id="187">187</a>
+<a href="#188" id="188">188</a>
+<a href="#189" id="189">189</a>
+<a href="#190" id="190">190</a>
+<a href="#191" id="191">191</a>
+<a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
+<a href="#214" id="214">214</a>
+<a href="#215" id="215">215</a>
+<a href="#216" id="216">216</a>
+<a href="#217" id="217">217</a>
+<a href="#218" id="218">218</a>
+<a href="#219" id="219">219</a>
+<a href="#220" id="220">220</a>
+<a href="#221" id="221">221</a>
+<a href="#222" id="222">222</a>
+<a href="#223" id="223">223</a>
+<a href="#224" id="224">224</a>
+<a href="#225" id="225">225</a>
+<a href="#226" id="226">226</a>
+<a href="#227" id="227">227</a>
+<a href="#228" id="228">228</a>
+<a href="#229" id="229">229</a>
+<a href="#230" id="230">230</a>
+<a href="#231" id="231">231</a>
+<a href="#232" id="232">232</a>
+<a href="#233" id="233">233</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Window service, widget, events, commands and other types.
 //!
 //! The [`Window!`](struct@Window) widget instantiates a window root, the windows service uses the window root as the
@@ -284,5 +374,95 @@
 /// [`cmd::INSPECT_CMD`]: crate::window::cmd::INSPECT_CMD
 </span><span class="kw">pub mod </span>inspector {
     <span class="kw">pub use </span>zng_wgt_inspector::debug::{show_bounds, show_center_points, show_directional_query, show_hit_test, show_rows, InspectMode};
+}
+
+<span class="doccomment">/// Default handler registered in mobile platforms.
+///
+/// This is registered on app init for platforms that only support one window, it intercepts headed window open requests after the
+/// first and opens them as a nested modal layer on the main window.
+///
+/// See [`WINDOWS::register_open_nested_handler`] for more details.
+</span><span class="kw">pub fn </span>default_mobile_nested_open_handler(args: <span class="kw-2">&amp;mut </span>zng_ext_window::OpenNestedHandlerArgs) {
+    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+
+    <span class="kw">if </span>!<span class="macro">matches!</span>(args.ctx().mode(), WindowMode::Headed) {
+        <span class="kw">return</span>;
+    }
+
+    <span class="kw">let </span>open: Vec&lt;<span class="kw">_</span>&gt; = WINDOWS
+        .widget_trees()
+        .into_iter()
+        .filter(|w| WINDOWS.mode(w.window_id()) == <span class="prelude-val">Ok</span>(window::WindowMode::Headed) &amp;&amp; WINDOWS.nest_parent(w.window_id()).is_none())
+        .take(<span class="number">2</span>)
+        .collect();
+
+    <span class="kw">if </span>open.len() == <span class="number">1 </span>{
+        <span class="kw">let </span>id = args.ctx().id();
+        <span class="kw">let </span>vars = args.vars();
+        <span class="kw">let </span>icon = vars.icon();
+        <span class="kw">let </span>title = vars.title();
+        <span class="kw">let </span>node = task::parking_lot::Mutex::new(<span class="prelude-val">Some</span>(args.nest()));
+
+        <span class="kw">let </span>host_win_id = open[<span class="number">0</span>].window_id();
+        <span class="kw">let </span>host_wgt_id = WidgetId::new_unique();
+        layer::LAYERS_INSERT_CMD.scoped(host_win_id).notify_param((
+            layer::LayerIndex::TOP_MOST,
+            <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>: ()| {
+                <span class="kw">let </span>frame = <span class="macro">Container!</span> {
+                    layout::margin = <span class="number">10</span>;
+                    layout::align = Align::CENTER;
+                    widget::modal = <span class="bool-val">true</span>;
+                    color::filter::drop_shadow = {
+                        offset: <span class="number">4</span>,
+                        blur_radius: <span class="number">6</span>,
+                        color: colors::BLACK.with_alpha(<span class="number">50</span>.pct()),
+                    };
+                    widget::background_color = light_dark(rgb(<span class="number">0.95</span>, <span class="number">0.95</span>, <span class="number">0.95</span>), rgb(<span class="number">0.05</span>, <span class="number">0.05</span>, <span class="number">0.05</span>));
+                    widget::corner_radius = <span class="number">4</span>;
+                    layout::padding = <span class="number">5</span>;
+                    child_top = {
+                        node: <span class="macro">Container!</span> {
+                            child_start = <span class="macro">Image!</span> {
+                                layout::size = <span class="number">24</span>;
+                                source = icon.map(|i| <span class="kw">match </span>i {
+                                    WindowIcon::Image(s) =&gt; s.clone(),
+                                    WindowIcon::Default =&gt; ImageSource::flood(layout::PxSize::zero(), rgba(<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>), <span class="prelude-val">None</span>),
+                                });
+                            }, <span class="number">4</span>;
+                            child = <span class="macro">Text!</span> {
+                                txt = title.clone();
+                                txt_align = Align::CENTER;
+                                font_weight = FontWeight::BOLD;
+                            };
+                            child_end = <span class="macro">Button!</span> {
+                                style_fn = <span class="macro">zng::button::LightStyle!</span>();
+                                child = ICONS.get_or(<span class="string">"close"</span>, || <span class="macro">Text!</span>(<span class="string">"x"</span>));
+                                on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+                                    <span class="kw">let _ </span>= WINDOWS.close(id);
+                                });
+                            }, <span class="number">4</span>;
+                        },
+                        spacing: <span class="number">5</span>,
+                    };
+                    child = node.lock().take().into_widget();
+                };
+                <span class="macro">Container!</span> {
+                    id = host_wgt_id;
+                    child = frame;
+                    widget::background_color = colors::BLACK.with_alpha(<span class="number">20</span>.pct());
+                    layout::padding = WINDOWS.vars(host_win_id).unwrap().safe_padding().map_into();
+                }
+            }),
+        ));
+
+        window::WINDOW_CLOSE_EVENT
+            .on_pre_event(<span class="macro">app_hn!</span>(|args: <span class="kw-2">&amp;</span>window::WindowCloseArgs, ev: <span class="kw-2">&amp;</span><span class="kw">dyn </span>zng::handler::AppWeakHandle| {
+                <span class="kw">if </span>args.windows.contains(<span class="kw-2">&amp;</span>id) {
+                    ev.unsubscribe();
+                    layer::LAYERS_REMOVE_CMD.scoped(host_win_id).notify_param(host_wgt_id);
+                }
+            }))
+            .perm();
+    }
 }
 </code></pre></div></section></main></body></html>

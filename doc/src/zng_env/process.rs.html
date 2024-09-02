@@ -323,6 +323,16 @@
 <a href="#323" id="323">323</a>
 <a href="#324" id="324">324</a>
 <a href="#325" id="325">325</a>
+<a href="#326" id="326">326</a>
+<a href="#327" id="327">327</a>
+<a href="#328" id="328">328</a>
+<a href="#329" id="329">329</a>
+<a href="#330" id="330">330</a>
+<a href="#331" id="331">331</a>
+<a href="#332" id="332">332</a>
+<a href="#333" id="333">333</a>
+<a href="#334" id="334">334</a>
+<a href="#335" id="335">335</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     mem,
     sync::atomic::{AtomicBool, Ordering},
@@ -382,7 +392,17 @@
 ///
 /// Try to match the version used by `zng-env`.
 ///
+/// # Linker Optimizer Issues
+///
+/// The macOS system linker can "optimize" away crates that are only referenced via this macro, that is, a crate dependency
+/// that is not otherwise directly addressed by code. To workaround this issue you can add a bogus reference to the crate code, something
+/// that is not trivial to optimize away. Unfortunately this code must be added on the dependent crate, or on an intermediary dependency,
+/// if your crate is at risk of being used this way please document this issue.
+///
+/// See [`zng#437`] for an example of how to fix this issue.
+///
 /// [`wasm_bindgen`]: https://crates.io/crates/wasm-bindgen
+/// [`zng#437`]: https://github.com/zng-ui/zng/pull/437
 </span><span class="attr">#[macro_export]
 </span><span class="macro">macro_rules!</span> on_process_start {
     (<span class="macro-nonterminal">$closure</span>:expr) =&gt; {

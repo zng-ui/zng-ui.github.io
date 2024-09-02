@@ -585,6 +585,7 @@
 <a href="#585" id="585">585</a>
 <a href="#586" id="586">586</a>
 <a href="#587" id="587">587</a>
+<a href="#588" id="588">588</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Keyboard manager.
 
 </span><span class="kw">use </span>std::{collections::HashSet, time::Duration};
@@ -607,6 +608,7 @@
 };
 <span class="kw">use </span>zng_app_context::app_local;
 <span class="kw">use </span>zng_clone_move::clmv;
+<span class="kw">use </span>zng_ext_window::WINDOWS;
 <span class="kw">use </span>zng_layout::unit::{Factor, FactorUnits};
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::{types::ArcCowVar, var, var_default, ArcVar, ReadOnlyArcVar, Var};
@@ -1030,9 +1032,9 @@
 
         <span class="comment">// notify events
         </span><span class="kw">if let </span><span class="prelude-val">Some</span>(target) = focused {
-            <span class="kw">if </span>target.window_id() == args.window_id {
+            <span class="kw">if </span>target.window_id() == args.window_id || WINDOWS.nest_parent(target.window_id()).map(|(p, <span class="kw">_</span>)| p) == <span class="prelude-val">Some</span>(args.window_id) {
                 <span class="kw">let </span>args = KeyInputArgs::now(
-                    args.window_id,
+                    target.window_id(),
                     args.device_id,
                     args.key_code,
                     args.key_location,

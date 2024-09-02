@@ -1826,6 +1826,86 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1790" id="1790">1790</a>
 <a href="#1791" id="1791">1791</a>
 <a href="#1792" id="1792">1792</a>
+<a href="#1793" id="1793">1793</a>
+<a href="#1794" id="1794">1794</a>
+<a href="#1795" id="1795">1795</a>
+<a href="#1796" id="1796">1796</a>
+<a href="#1797" id="1797">1797</a>
+<a href="#1798" id="1798">1798</a>
+<a href="#1799" id="1799">1799</a>
+<a href="#1800" id="1800">1800</a>
+<a href="#1801" id="1801">1801</a>
+<a href="#1802" id="1802">1802</a>
+<a href="#1803" id="1803">1803</a>
+<a href="#1804" id="1804">1804</a>
+<a href="#1805" id="1805">1805</a>
+<a href="#1806" id="1806">1806</a>
+<a href="#1807" id="1807">1807</a>
+<a href="#1808" id="1808">1808</a>
+<a href="#1809" id="1809">1809</a>
+<a href="#1810" id="1810">1810</a>
+<a href="#1811" id="1811">1811</a>
+<a href="#1812" id="1812">1812</a>
+<a href="#1813" id="1813">1813</a>
+<a href="#1814" id="1814">1814</a>
+<a href="#1815" id="1815">1815</a>
+<a href="#1816" id="1816">1816</a>
+<a href="#1817" id="1817">1817</a>
+<a href="#1818" id="1818">1818</a>
+<a href="#1819" id="1819">1819</a>
+<a href="#1820" id="1820">1820</a>
+<a href="#1821" id="1821">1821</a>
+<a href="#1822" id="1822">1822</a>
+<a href="#1823" id="1823">1823</a>
+<a href="#1824" id="1824">1824</a>
+<a href="#1825" id="1825">1825</a>
+<a href="#1826" id="1826">1826</a>
+<a href="#1827" id="1827">1827</a>
+<a href="#1828" id="1828">1828</a>
+<a href="#1829" id="1829">1829</a>
+<a href="#1830" id="1830">1830</a>
+<a href="#1831" id="1831">1831</a>
+<a href="#1832" id="1832">1832</a>
+<a href="#1833" id="1833">1833</a>
+<a href="#1834" id="1834">1834</a>
+<a href="#1835" id="1835">1835</a>
+<a href="#1836" id="1836">1836</a>
+<a href="#1837" id="1837">1837</a>
+<a href="#1838" id="1838">1838</a>
+<a href="#1839" id="1839">1839</a>
+<a href="#1840" id="1840">1840</a>
+<a href="#1841" id="1841">1841</a>
+<a href="#1842" id="1842">1842</a>
+<a href="#1843" id="1843">1843</a>
+<a href="#1844" id="1844">1844</a>
+<a href="#1845" id="1845">1845</a>
+<a href="#1846" id="1846">1846</a>
+<a href="#1847" id="1847">1847</a>
+<a href="#1848" id="1848">1848</a>
+<a href="#1849" id="1849">1849</a>
+<a href="#1850" id="1850">1850</a>
+<a href="#1851" id="1851">1851</a>
+<a href="#1852" id="1852">1852</a>
+<a href="#1853" id="1853">1853</a>
+<a href="#1854" id="1854">1854</a>
+<a href="#1855" id="1855">1855</a>
+<a href="#1856" id="1856">1856</a>
+<a href="#1857" id="1857">1857</a>
+<a href="#1858" id="1858">1858</a>
+<a href="#1859" id="1859">1859</a>
+<a href="#1860" id="1860">1860</a>
+<a href="#1861" id="1861">1861</a>
+<a href="#1862" id="1862">1862</a>
+<a href="#1863" id="1863">1863</a>
+<a href="#1864" id="1864">1864</a>
+<a href="#1865" id="1865">1865</a>
+<a href="#1866" id="1866">1866</a>
+<a href="#1867" id="1867">1867</a>
+<a href="#1868" id="1868">1868</a>
+<a href="#1869" id="1869">1869</a>
+<a href="#1870" id="1870">1870</a>
+<a href="#1871" id="1871">1871</a>
+<a href="#1872" id="1872">1872</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! App updates API.
 
 </span><span class="kw">use </span>std::{
@@ -2494,7 +2574,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 type_name: visit_str(|v| event.record(v), <span class="string">"type_name"</span>),
             },
             <span class="string">"request" </span>=&gt; UpdateAction::Update,
+            <span class="string">"info" </span>=&gt; UpdateAction::Info,
             <span class="string">"layout" </span>=&gt; UpdateAction::Layout,
+            <span class="string">"render" </span>=&gt; UpdateAction::Render,
             <span class="string">"custom" </span>=&gt; UpdateAction::Custom {
                 tag: visit_str(|v| event.record(v), <span class="string">"tag"</span>),
             },
@@ -2618,11 +2700,29 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    <span class="doccomment">/// Log a direct info rebuild request.
+    </span><span class="kw">pub fn </span>log_info() {
+        <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
+            <span class="macro">tracing::event!</span>(target: UpdatesTrace::UPDATES_TARGET, tracing::Level::TRACE, {
+                kind = <span class="string">"info"
+            </span>});
+        }
+    }
+
     <span class="doccomment">/// Log a direct layout request.
     </span><span class="kw">pub fn </span>log_layout() {
         <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
             <span class="macro">tracing::event!</span>(target: UpdatesTrace::UPDATES_TARGET, tracing::Level::TRACE, {
                 kind = <span class="string">"layout"
+            </span>});
+        }
+    }
+
+    <span class="doccomment">/// Log a direct render request.
+    </span><span class="kw">pub fn </span>log_render() {
+        <span class="kw">if </span><span class="self">Self</span>::is_tracing() {
+            <span class="macro">tracing::event!</span>(target: UpdatesTrace::UPDATES_TARGET, tracing::Level::TRACE, {
+                kind = <span class="string">"render"
             </span>});
         }
     }
@@ -2745,8 +2845,10 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="attr">#[derive(Debug, PartialEq, Eq, Hash)]
 </span><span class="kw">enum </span>UpdateAction {
+    Info,
     Update,
     Layout,
+    Render,
     Var { type_name: String },
     Event { type_name: String },
     Custom { tag: String },
@@ -2754,8 +2856,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">impl </span>fmt::Display <span class="kw">for </span>UpdateAction {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="kw">match </span><span class="self">self </span>{
+            UpdateAction::Info =&gt; <span class="macro">write!</span>(f, <span class="string">"info"</span>),
             UpdateAction::Update =&gt; <span class="macro">write!</span>(f, <span class="string">"update"</span>),
             UpdateAction::Layout =&gt; <span class="macro">write!</span>(f, <span class="string">"layout"</span>),
+            UpdateAction::Render =&gt; <span class="macro">write!</span>(f, <span class="string">"render"</span>),
             UpdateAction::Var { type_name } =&gt; <span class="macro">write!</span>(f, <span class="string">"update var of type {type_name}"</span>),
             UpdateAction::Event { type_name } =&gt; <span class="macro">write!</span>(f, <span class="string">"update event {type_name}"</span>),
             UpdateAction::Custom { tag } =&gt; <span class="macro">write!</span>(f, <span class="string">"{tag}"</span>),
@@ -3034,6 +3138,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// After the current update cycle ends a new update will happen that requests an info rebuild that includes the `target` widget.
     </span><span class="kw">pub fn </span>update_info(<span class="kw-2">&amp;</span><span class="self">self</span>, target: <span class="kw">impl </span>Into&lt;<span class="prelude-ty">Option</span>&lt;WidgetId&gt;&gt;) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_info();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::INFO);
         u.send_awake();
@@ -3045,6 +3150,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Schedules an info rebuild for the window only.
     </span><span class="kw">pub fn </span>update_info_window(<span class="kw-2">&amp;</span><span class="self">self</span>, target: WindowId) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_info();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::INFO);
         u.send_awake();
@@ -3083,6 +3189,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// If no `target` is provided only the app extensions receive a render request.
     </span><span class="kw">pub fn </span>render(<span class="kw-2">&amp;</span><span class="self">self</span>, target: <span class="kw">impl </span>Into&lt;<span class="prelude-ty">Option</span>&lt;WidgetId&gt;&gt;) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::RENDER);
         u.send_awake();
@@ -3094,6 +3201,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Schedules a new frame for the window only.
     </span><span class="kw">pub fn </span>render_window(<span class="kw-2">&amp;</span><span class="self">self</span>, target: WindowId) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::RENDER);
         u.send_awake();
@@ -3107,6 +3215,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// includes the `target` widget marked for render update only. Note that if a full render was requested for another widget
     /// on the same window this request is upgraded to a full frame render.
     </span><span class="kw">pub fn </span>render_update(<span class="kw-2">&amp;</span><span class="self">self</span>, target: <span class="kw">impl </span>Into&lt;<span class="prelude-ty">Option</span>&lt;WidgetId&gt;&gt;) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::RENDER_UPDATE);
         u.send_awake();
@@ -3118,6 +3227,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Schedules a render update for the window only.
     </span><span class="kw">pub fn </span>render_update_window(<span class="kw-2">&amp;</span><span class="self">self</span>, target: WindowId) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="kw">let </span><span class="kw-2">mut </span>u = UPDATES_SV.write();
         u.update_ext.insert(UpdateFlags::RENDER_UPDATE);
         u.send_awake();
@@ -3391,7 +3501,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="doccomment">/// Updates that must be reacted by an app owner.
 ///
 /// This type is public only for testing, it is the return type for test methods of [`WINDOW`].
-</span><span class="attr">#[derive(Debug, Default)]
+</span><span class="attr">#[derive(Default)]
 </span><span class="kw">pub struct </span>ContextUpdates {
     <span class="doccomment">/// Events to notify.
     ///
@@ -3446,6 +3556,56 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// When this is not empty [`render`](Self::render) is `true`.
     </span><span class="kw">pub </span>render_update_widgets: RenderUpdates,
+}
+
+<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ContextUpdates {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        <span class="kw">if </span>f.alternate() {
+            f.debug_struct(<span class="string">"ContextUpdates"</span>)
+                .field(<span class="string">"update"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.update)
+                .field(<span class="string">"info"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.info)
+                .field(<span class="string">"layout"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.layout)
+                .field(<span class="string">"render"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.render)
+                .field(<span class="string">"events"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.events)
+                .field(<span class="string">"update_widgets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.update_widgets)
+                .field(<span class="string">"info_widgets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.info_widgets)
+                .field(<span class="string">"layout_widgets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.layout_widgets)
+                .field(<span class="string">"render_widgets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.render_widgets)
+                .field(<span class="string">"render_update_widgets"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.render_update_widgets)
+                .finish()
+        } <span class="kw">else </span>{
+            <span class="macro">write!</span>(f, <span class="string">"ContextUpdates: "</span>)<span class="question-mark">?</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>sep = <span class="string">""</span>;
+            <span class="kw">if </span>!<span class="self">self</span>.events.is_empty() {
+                <span class="macro">write!</span>(f, <span class="string">"{sep}events["</span>)<span class="question-mark">?</span>;
+                <span class="kw">for </span>e <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.events {
+                    <span class="macro">write!</span>(f, <span class="string">"{sep}{}"</span>, e.event.name())<span class="question-mark">?</span>;
+                    sep = <span class="string">", "</span>;
+                }
+                <span class="macro">write!</span>(f, <span class="string">"]"</span>)<span class="question-mark">?</span>;
+            }
+            <span class="kw">if </span><span class="self">self</span>.update {
+                <span class="macro">write!</span>(f, <span class="string">"{sep}update"</span>)<span class="question-mark">?</span>;
+                sep = <span class="string">", "</span>;
+            }
+            <span class="kw">if </span><span class="self">self</span>.info {
+                <span class="macro">write!</span>(f, <span class="string">"{sep}info"</span>)<span class="question-mark">?</span>;
+                sep = <span class="string">", "</span>;
+            }
+            <span class="kw">if </span><span class="self">self</span>.layout {
+                <span class="macro">write!</span>(f, <span class="string">"{sep}layout"</span>)<span class="question-mark">?</span>;
+                sep = <span class="string">", "</span>;
+            }
+            <span class="kw">if </span><span class="self">self</span>.render {
+                <span class="macro">write!</span>(f, <span class="string">"{sep}render"</span>)<span class="question-mark">?</span>;
+                sep = <span class="string">", "</span>;
+            }
+            <span class="kw">if </span>sep.is_empty() {
+                <span class="macro">write!</span>(f, <span class="string">"&lt;none&gt;"</span>)<span class="question-mark">?</span>;
+            }
+            <span class="prelude-val">Ok</span>(())
+        }
+    }
 }
 <span class="kw">impl </span>ContextUpdates {
     <span class="doccomment">/// If has events, update, layout or render was requested.

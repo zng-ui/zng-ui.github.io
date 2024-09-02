@@ -1819,6 +1819,73 @@
 <a href="#1819" id="1819">1819</a>
 <a href="#1820" id="1820">1820</a>
 <a href="#1821" id="1821">1821</a>
+<a href="#1822" id="1822">1822</a>
+<a href="#1823" id="1823">1823</a>
+<a href="#1824" id="1824">1824</a>
+<a href="#1825" id="1825">1825</a>
+<a href="#1826" id="1826">1826</a>
+<a href="#1827" id="1827">1827</a>
+<a href="#1828" id="1828">1828</a>
+<a href="#1829" id="1829">1829</a>
+<a href="#1830" id="1830">1830</a>
+<a href="#1831" id="1831">1831</a>
+<a href="#1832" id="1832">1832</a>
+<a href="#1833" id="1833">1833</a>
+<a href="#1834" id="1834">1834</a>
+<a href="#1835" id="1835">1835</a>
+<a href="#1836" id="1836">1836</a>
+<a href="#1837" id="1837">1837</a>
+<a href="#1838" id="1838">1838</a>
+<a href="#1839" id="1839">1839</a>
+<a href="#1840" id="1840">1840</a>
+<a href="#1841" id="1841">1841</a>
+<a href="#1842" id="1842">1842</a>
+<a href="#1843" id="1843">1843</a>
+<a href="#1844" id="1844">1844</a>
+<a href="#1845" id="1845">1845</a>
+<a href="#1846" id="1846">1846</a>
+<a href="#1847" id="1847">1847</a>
+<a href="#1848" id="1848">1848</a>
+<a href="#1849" id="1849">1849</a>
+<a href="#1850" id="1850">1850</a>
+<a href="#1851" id="1851">1851</a>
+<a href="#1852" id="1852">1852</a>
+<a href="#1853" id="1853">1853</a>
+<a href="#1854" id="1854">1854</a>
+<a href="#1855" id="1855">1855</a>
+<a href="#1856" id="1856">1856</a>
+<a href="#1857" id="1857">1857</a>
+<a href="#1858" id="1858">1858</a>
+<a href="#1859" id="1859">1859</a>
+<a href="#1860" id="1860">1860</a>
+<a href="#1861" id="1861">1861</a>
+<a href="#1862" id="1862">1862</a>
+<a href="#1863" id="1863">1863</a>
+<a href="#1864" id="1864">1864</a>
+<a href="#1865" id="1865">1865</a>
+<a href="#1866" id="1866">1866</a>
+<a href="#1867" id="1867">1867</a>
+<a href="#1868" id="1868">1868</a>
+<a href="#1869" id="1869">1869</a>
+<a href="#1870" id="1870">1870</a>
+<a href="#1871" id="1871">1871</a>
+<a href="#1872" id="1872">1872</a>
+<a href="#1873" id="1873">1873</a>
+<a href="#1874" id="1874">1874</a>
+<a href="#1875" id="1875">1875</a>
+<a href="#1876" id="1876">1876</a>
+<a href="#1877" id="1877">1877</a>
+<a href="#1878" id="1878">1878</a>
+<a href="#1879" id="1879">1879</a>
+<a href="#1880" id="1880">1880</a>
+<a href="#1881" id="1881">1881</a>
+<a href="#1882" id="1882">1882</a>
+<a href="#1883" id="1883">1883</a>
+<a href="#1884" id="1884">1884</a>
+<a href="#1885" id="1885">1885</a>
+<a href="#1886" id="1886">1886</a>
+<a href="#1887" id="1887">1887</a>
+<a href="#1888" id="1888">1888</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::Any,
     future::{Future, IntoFuture},
@@ -1889,8 +1956,9 @@
     default_render_mode: ArcVar&lt;RenderMode&gt;,
     parallel: ArcVar&lt;ParallelWin&gt;,
     root_extenders: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(WindowRootExtenderArgs) -&gt; BoxedUiNode + Send&gt;&gt;&gt;, <span class="comment">// Mutex for +Sync only.
+    </span>open_nested_handlers: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span><span class="kw">crate</span>::OpenNestedHandlerArgs) + Send&gt;&gt;&gt;,
 
-    </span>windows: IdMap&lt;WindowId, AppWindow&gt;,
+    windows: IdMap&lt;WindowId, AppWindow&gt;,
     windows_info: IdMap&lt;WindowId, AppWindowInfo&gt;,
 
     open_loading: IdMap&lt;WindowId, WindowLoading&gt;,
@@ -1917,6 +1985,7 @@
             exit_on_last_close: var(<span class="bool-val">true</span>),
             default_render_mode: var(RenderMode::default()),
             root_extenders: Mutex::new(<span class="macro">vec!</span>[]),
+            open_nested_handlers: Mutex::new(<span class="macro">vec!</span>[]),
             parallel: var(ParallelWin::default()),
             windows: IdMap::default(),
             windows_info: IdMap::default(),
@@ -2304,9 +2373,18 @@
     ///
     /// [image error]: zng_ext_image::Img::error
     </span><span class="kw">pub fn </span>frame_image(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: <span class="kw">impl </span>Into&lt;WindowId&gt;, mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;) -&gt; ImageVar {
-        WINDOWS_SV
-            .write()
-            .frame_image_impl(window_id.into(), <span class="kw">move </span>|vr| vr.frame_image(mask))
+        <span class="kw">let </span>window_id = window_id.into();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>((win, wgt)) = <span class="self">self</span>.nest_parent(window_id) {
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(tree) = <span class="self">self</span>.widget_tree(win) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = tree.get(wgt) {
+                    <span class="kw">return </span>WINDOWS_SV
+                        .write()
+                        .frame_image_impl(win, |vr| vr.frame_image_rect(wgt.inner_bounds(), mask));
+                }
+            }
+            <span class="macro">tracing::error!</span>(<span class="string">"did not find nest parent {win:?}//.../{wgt:?}, will capture parent window frame"</span>)
+        }
+        WINDOWS_SV.write().frame_image_impl(window_id, <span class="kw">move </span>|vr| vr.frame_image(mask))
     }
 
     <span class="doccomment">/// Generate an image from a rectangular selection of the current rendered frame of the window.
@@ -2316,10 +2394,22 @@
     /// If the window is not found the error is reported in the image error.
     ///
     /// [image error]: zng_ext_image::Img::error
-    </span><span class="kw">pub fn </span>frame_image_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: <span class="kw">impl </span>Into&lt;WindowId&gt;, rect: PxRect, mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;) -&gt; ImageVar {
-        WINDOWS_SV
-            .write()
-            .frame_image_impl(window_id.into(), |vr| vr.frame_image_rect(rect, mask))
+    </span><span class="kw">pub fn </span>frame_image_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: <span class="kw">impl </span>Into&lt;WindowId&gt;, <span class="kw-2">mut </span>rect: PxRect, mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;) -&gt; ImageVar {
+        <span class="kw">let </span><span class="kw-2">mut </span>window_id = window_id.into();
+        <span class="kw">if let </span><span class="prelude-val">Some</span>((win, wgt)) = <span class="self">self</span>.nest_parent(window_id) {
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(tree) = <span class="self">self</span>.widget_tree(win) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = tree.get(wgt) {
+                    window_id = win;
+                    <span class="kw">let </span>bounds = wgt.inner_bounds();
+                    rect.origin += bounds.origin.to_vector();
+                    rect = rect.intersection(<span class="kw-2">&amp;</span>bounds).unwrap_or_default();
+                }
+            }
+            <span class="kw">if </span>window_id != win {
+                <span class="macro">tracing::error!</span>(<span class="string">"did not find nest parent {win:?}//.../{wgt:?}, will capture parent window frame"</span>)
+            }
+        }
+        WINDOWS_SV.write().frame_image_impl(window_id, |vr| vr.frame_image_rect(rect, mask))
     }
 
     <span class="doccomment">/// Returns a shared reference the variables that control the window.
@@ -2517,6 +2607,30 @@
             .root_extenders
             .get_mut()
             .push(Box::new(<span class="kw">move </span>|a| extender(a).boxed()))
+    }
+
+    <span class="doccomment">/// Register the closure `handler` to be called for every new window starting on the next update.
+    ///
+    /// The closure can use the args to inspect the new window context and optionally convert the request to a [`NestedWindowNode`].
+    /// Nested windows can be manipulated using the `WINDOWS` API just like other windows, but are layout and rendered inside another window.
+    ///
+    /// This is primarily an adapter for mobile platforms that only support one real window, it accelerates cross platform support from
+    /// projects originally desktop only. Note that this API is not recommended for implementing features such as *window docking* or
+    /// *tabbing*, you probably need to model *tabs* as objects that can outlive their host windows and use [`ArcNode`]
+    /// to transfer the content between host windows.
+    ///
+    /// [`NestedWindowNode`]: crate::NestedWindowNode
+    /// [`ArcNode`]: zng_app::widget::node::ArcNode
+    </span><span class="kw">pub fn </span>register_open_nested_handler(<span class="kw-2">&amp;</span><span class="self">self</span>, handler: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;mut </span><span class="kw">crate</span>::OpenNestedHandlerArgs) + Send + <span class="lifetime">'static</span>) {
+        WINDOWS_SV.write().open_nested_handlers.get_mut().push(Box::new(handler))
+    }
+
+    <span class="doccomment">/// Gets the parent actual window and widget that hosts `maybe_nested` if it is open and nested.
+    </span><span class="kw">pub fn </span>nest_parent(<span class="kw-2">&amp;</span><span class="self">self</span>, maybe_nested: <span class="kw">impl </span>Into&lt;WindowId&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;(WindowId, WidgetId)&gt; {
+        <span class="kw">let </span>vars = <span class="self">self</span>.vars(maybe_nested.into()).ok()<span class="question-mark">?</span>;
+        <span class="kw">let </span>nest = vars.nest_parent().get()<span class="question-mark">?</span>;
+        <span class="kw">let </span>parent = vars.parent().get()<span class="question-mark">?</span>;
+        <span class="prelude-val">Some</span>((parent, nest))
     }
 
     <span class="doccomment">/// Add a view-process extension payload to the window request for the view-process.
@@ -2950,12 +3064,16 @@
                     <span class="kw">let </span><span class="kw-2">mut </span>wns = WINDOWS_SV.write();
                     <span class="kw">let </span>loading = wns.open_loading.remove(<span class="kw-2">&amp;</span>window_id).unwrap();
                     <span class="kw">let </span><span class="kw-2">mut </span>root_extenders = mem::take(<span class="kw-2">&amp;mut </span>wns.root_extenders);
+                    <span class="kw">let </span><span class="kw-2">mut </span>open_nested_handlers = mem::take(<span class="kw-2">&amp;mut </span>wns.open_nested_handlers);
                     drop(wns);
-                    <span class="kw">let </span>(window, info, responder) = task.finish(loading, <span class="kw-2">&amp;mut </span>root_extenders.get_mut()[..]);
+                    <span class="kw">let </span>(window, info, responder) =
+                        task.finish(loading, <span class="kw-2">&amp;mut </span>root_extenders.get_mut()[..], <span class="kw-2">&amp;mut </span>open_nested_handlers.get_mut()[..]);
 
                     <span class="kw">let </span><span class="kw-2">mut </span>wns = WINDOWS_SV.write();
                     root_extenders.get_mut().append(wns.root_extenders.get_mut());
+                    open_nested_handlers.get_mut().append(wns.open_nested_handlers.get_mut());
                     wns.root_extenders = root_extenders;
+                    wns.open_nested_handlers = open_nested_handlers;
 
                     <span class="kw">if </span>wns.windows.insert(window_id, window).is_some() {
                         <span class="comment">// id conflict resolved on request.
@@ -3101,7 +3219,8 @@
                 <span class="kw-2">*</span>layout_widgets = w;
             }
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="macro">tracing::error!</span>(<span class="string">"layout_widgets not released by window"</span>)
+                <span class="comment">// expected in nested windows
+                </span><span class="macro">tracing::debug!</span>(<span class="string">"layout_widgets not released by window"</span>)
             }
         }
     }
@@ -3134,7 +3253,8 @@
                 <span class="kw-2">*</span>render_widgets = w;
             }
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="macro">tracing::error!</span>(<span class="string">"render_widgets not released by window"</span>)
+                <span class="comment">// expected in nested windows
+                </span><span class="macro">tracing::debug!</span>(<span class="string">"render_widgets not released by window"</span>)
             }
         }
         <span class="kw">match </span>Arc::try_unwrap(render_update_widgets_arc) {
@@ -3142,7 +3262,8 @@
                 <span class="kw-2">*</span>render_update_widgets = w;
             }
             <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
-                <span class="macro">tracing::error!</span>(<span class="string">"render_update_widgets not released by window"</span>)
+                <span class="comment">// expected in nested windows
+                </span><span class="macro">tracing::debug!</span>(<span class="string">"render_update_widgets not released by window"</span>)
             }
         }
     }
@@ -3301,6 +3422,7 @@
         <span class="self">self</span>,
         loading: WindowLoading,
         extenders: <span class="kw-2">&amp;mut </span>[Box&lt;<span class="kw">dyn </span>FnMut(WindowRootExtenderArgs) -&gt; BoxedUiNode + Send&gt;],
+        open_nested_handlers: <span class="kw-2">&amp;mut </span>[Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span><span class="kw">crate</span>::OpenNestedHandlerArgs) + Send&gt;],
     ) -&gt; (AppWindow, AppWindowInfo, ResponderVar&lt;WindowId&gt;) {
         <span class="kw">let </span><span class="kw-2">mut </span>window = <span class="self">self</span>.task.into_inner().into_result().unwrap_or_else(|<span class="kw">_</span>| <span class="macro">panic!</span>());
         <span class="kw">let </span><span class="kw-2">mut </span>ctx = <span class="self">self</span>.ctx;
@@ -3335,7 +3457,19 @@
         <span class="kw">let </span>commands = WindowCommands::new(id);
 
         <span class="kw">let </span>root_id = window.id;
-        <span class="kw">let </span>ctrl = WindowCtrl::new(<span class="kw-2">&amp;</span>vars, commands, mode, window);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>args = <span class="kw">crate</span>::OpenNestedHandlerArgs::new(ctx, vars.clone(), commands, window);
+        <span class="kw">for </span>h <span class="kw">in </span>open_nested_handlers.iter_mut().rev() {
+            h(<span class="kw-2">&amp;mut </span>args);
+            <span class="kw">if </span>args.has_nested() {
+                <span class="kw">break</span>;
+            }
+        }
+
+        <span class="kw">let </span>(ctx, ctrl) = <span class="kw">match </span>args.take_normal() {
+            <span class="prelude-val">Ok</span>((ctx, vars, commands, window)) =&gt; (ctx, WindowCtrl::new(<span class="kw-2">&amp;</span>vars, commands, mode, window)),
+            <span class="prelude-val">Err</span>((ctx, node)) =&gt; (ctx, WindowCtrl::new_nested(node)),
+        };
 
         <span class="kw">let </span>window = AppWindow {
             ctrl: Mutex::new(ctrl),

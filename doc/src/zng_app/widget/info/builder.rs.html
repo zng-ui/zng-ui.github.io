@@ -1692,6 +1692,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1656" id="1656">1656</a>
 <a href="#1657" id="1657">1657</a>
 <a href="#1658" id="1658">1658</a>
+<a href="#1659" id="1659">1659</a>
+<a href="#1660" id="1660">1660</a>
+<a href="#1661" id="1661">1661</a>
+<a href="#1662" id="1662">1662</a>
+<a href="#1663" id="1663">1663</a>
+<a href="#1664" id="1664">1664</a>
+<a href="#1665" id="1665">1665</a>
+<a href="#1666" id="1666">1666</a>
+<a href="#1667" id="1667">1667</a>
+<a href="#1668" id="1668">1668</a>
+<a href="#1669" id="1669">1669</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraints, InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegment, InlineSegmentPos, LayoutMask, LAYOUT},
@@ -3145,6 +3156,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`Collapsed`]: Visibility::Collapsed
     </span><span class="kw">pub fn </span>collapse(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        WIDGET.take_update(UpdateFlags::LAYOUT);
         <span class="kw">let </span>tree = WINDOW.info();
         <span class="kw">let </span>id = WIDGET.id();
         <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = tree.get(id) {
@@ -3307,6 +3319,16 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         <span class="kw">let </span>metrics = LAYOUT.metrics().with_inline_constraints(<span class="prelude-val">Some</span>(constraints));
         LAYOUT.with_context(metrics, || child.layout(<span class="self">self</span>))
+    }
+
+    <span class="doccomment">/// Call `layout` with a different set of `layout_updates`.
+    ///
+    /// This is usually managed by the window implementer, nested windows can use this to override the updates.
+    </span><span class="kw">pub fn </span>with_layout_updates(<span class="kw-2">&amp;mut </span><span class="self">self</span>, layout_updates: Arc&lt;LayoutUpdates&gt;, layout: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize) -&gt; PxSize {
+        <span class="kw">let </span>parent_layout_widgets = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.layout_widgets, layout_updates);
+        <span class="kw">let </span>r = layout(<span class="self">self</span>);
+        <span class="self">self</span>.layout_widgets = parent_layout_widgets;
+        r
     }
 }
 

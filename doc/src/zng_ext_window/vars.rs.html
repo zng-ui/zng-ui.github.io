@@ -747,10 +747,21 @@
 <a href="#747" id="747">747</a>
 <a href="#748" id="748">748</a>
 <a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a>
+<a href="#759" id="759">759</a>
+<a href="#760" id="760">760</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
-    widget::info::access::AccessEnabled,
+    widget::{info::access::AccessEnabled, WidgetId},
     window::{MonitorId, WindowId, WINDOW},
 };
 <span class="kw">use </span>zng_color::LightDark;
@@ -814,6 +825,7 @@
     taskbar_visible: ArcVar&lt;bool&gt;,
 
     parent: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;WindowId&gt;&gt;,
+    <span class="kw">pub</span>(<span class="kw">super</span>) nest_parent: ArcVar&lt;<span class="prelude-ty">Option</span>&lt;WidgetId&gt;&gt;,
     modal: ArcVar&lt;bool&gt;,
     <span class="kw">pub</span>(<span class="kw">super</span>) children: ArcVar&lt;IdSet&lt;WindowId&gt;&gt;,
 
@@ -858,7 +870,7 @@
             position: var(Point::default()),
             monitor: var(MonitorQuery::default()),
             video_mode: var(VideoMode::default()),
-            size: var(Size::new(<span class="number">800</span>, <span class="number">600</span>)),
+            size: var(Size::default()),
 
             font_size: var(<span class="number">11</span>.pt()),
 
@@ -893,6 +905,7 @@
             taskbar_visible: var(<span class="bool-val">true</span>),
 
             parent: var(<span class="prelude-val">None</span>),
+            nest_parent: var(<span class="prelude-val">None</span>),
             modal: var(<span class="bool-val">false</span>),
             children: var(IdSet::default()),
 
@@ -1331,6 +1344,15 @@
     /// [`accent_color`]: Self::accent_color
     </span><span class="kw">pub fn </span>parent(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;<span class="prelude-ty">Option</span>&lt;WindowId&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.parent.clone()
+    }
+
+    <span class="doccomment">/// Gets the widget in [`parent`] that hosts the window, if it is nesting.
+    ///
+    /// Nesting windows are presented as an widget, similar to an "iframe".
+    ///
+    /// [`parent`]: Self::parent
+    </span><span class="kw">pub fn </span>nest_parent(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;<span class="prelude-ty">Option</span>&lt;WidgetId&gt;&gt; {
+        <span class="self">self</span>.<span class="number">0</span>.nest_parent.read_only()
     }
 
     <span class="doccomment">/// Defines the [`parent`](Self::parent) connection.

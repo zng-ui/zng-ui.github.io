@@ -1700,6 +1700,18 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1664" id="1664">1664</a>
 <a href="#1665" id="1665">1665</a>
 <a href="#1666" id="1666">1666</a>
+<a href="#1667" id="1667">1667</a>
+<a href="#1668" id="1668">1668</a>
+<a href="#1669" id="1669">1669</a>
+<a href="#1670" id="1670">1670</a>
+<a href="#1671" id="1671">1671</a>
+<a href="#1672" id="1672">1672</a>
+<a href="#1673" id="1673">1673</a>
+<a href="#1674" id="1674">1674</a>
+<a href="#1675" id="1675">1675</a>
+<a href="#1676" id="1676">1676</a>
+<a href="#1677" id="1677">1677</a>
+<a href="#1678" id="1678">1678</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget, UI node API.
 
 </span><span class="kw">pub mod </span>base;
@@ -1731,7 +1743,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use crate</span>::{
     event::{Event, EventArgs, EventHandle, EventHandles},
     handler::{app_hn, app_hn_once, AppHandler, AppHandlerArgs},
-    update::{LayoutUpdates, RenderUpdates, UpdateFlags, UpdateOp, UPDATES},
+    update::{LayoutUpdates, RenderUpdates, UpdateFlags, UpdateOp, UpdatesTrace, UPDATES},
     window::WINDOW,
 };
 
@@ -2473,6 +2485,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// After the current update the app-extensions, parent window and widgets will update again.
     </span><span class="kw">pub fn </span>update(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_update();
         <span class="self">self</span>.update_impl(UpdateFlags::UPDATE)
     }
 
@@ -2480,6 +2493,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// After all requested updates apply the parent window and widgets will re-build the info tree.
     </span><span class="kw">pub fn </span>update_info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_info();
         <span class="self">self</span>.update_impl(UpdateFlags::INFO)
     }
 
@@ -2487,6 +2501,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// After all requested updates apply the parent window and widgets will re-layout.
     </span><span class="kw">pub fn </span>layout(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_layout();
         <span class="self">self</span>.update_impl(UpdateFlags::LAYOUT)
     }
 
@@ -2498,6 +2513,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`render_update`]: Self::render_update
     </span><span class="kw">pub fn </span>render(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="self">self</span>.update_impl(UpdateFlags::RENDER)
     }
 
@@ -2509,6 +2525,7 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`render`]: Self::render
     </span><span class="kw">pub fn </span>render_update(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self </span>{
+        UpdatesTrace::log_render();
         <span class="self">self</span>.update_impl(UpdateFlags::RENDER_UPDATE)
     }
 
@@ -2983,6 +3000,13 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Call `f` with an exclusive lock to the widget state.
     </span><span class="kw">pub fn </span>with_state&lt;R&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, f: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>OwnedStateMap&lt;WIDGET&gt;) -&gt; R) -&gt; R {
         f(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>.as_mut().unwrap().state.write())
+    }
+
+    <span class="doccomment">/// Clone a reference to the widget context.
+    ///
+    /// This must be used only if the widget implementation is split.
+    </span><span class="kw">pub fn </span>share(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
+        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone())
     }
 }
 
