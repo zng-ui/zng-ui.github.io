@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/control.rs`."><title>control.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/control.rs`."><title>control.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -2804,6 +2804,16 @@
 <a href="#2804" id="2804">2804</a>
 <a href="#2805" id="2805">2805</a>
 <a href="#2806" id="2806">2806</a>
+<a href="#2807" id="2807">2807</a>
+<a href="#2808" id="2808">2808</a>
+<a href="#2809" id="2809">2809</a>
+<a href="#2810" id="2810">2810</a>
+<a href="#2811" id="2811">2811</a>
+<a href="#2812" id="2812">2812</a>
+<a href="#2813" id="2813">2813</a>
+<a href="#2814" id="2814">2814</a>
+<a href="#2815" id="2815">2815</a>
+<a href="#2816" id="2816">2816</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -2851,7 +2861,7 @@
         EventCause, FrameCapture, FrameId, FrameRequest, FrameUpdateRequest, FrameWaitId, HeadlessRequest, RenderMode, WindowRequest,
         WindowState, WindowStateAll,
     },
-    Ime, ViewProcessOffline,
+    FocusResult, Ime, ViewProcessOffline,
 };
 <span class="kw">use </span>zng_wgt::prelude::WidgetInfo;
 
@@ -2981,27 +2991,28 @@
             }
         }
 
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(query) = <span class="self">self</span>.vars.monitor().get_new() {
+            <span class="kw">if </span><span class="self">self</span>.monitor.is_none() {
+                <span class="kw">let </span>monitor = query.select_fallback();
+                <span class="kw">let </span>scale_factor = monitor.scale_factor().get();
+                <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(scale_factor);
+                <span class="self">self</span>.monitor = <span class="prelude-val">Some</span>(monitor);
+                UPDATES.layout_window(WINDOW.id());
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(new) = query.select() {
+                <span class="kw">let </span>current = <span class="self">self</span>.vars.<span class="number">0</span>.actual_monitor.get();
+                <span class="kw">if </span><span class="prelude-val">Some</span>(new.id()) != current {
+                    <span class="kw">let </span>scale_factor = new.scale_factor().get();
+                    <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(scale_factor);
+                    <span class="self">self</span>.vars.<span class="number">0</span>.actual_monitor.set(new.id());
+                    <span class="self">self</span>.monitor = <span class="prelude-val">Some</span>(new);
+                    UPDATES.layout_window(WINDOW.id());
+                }
+            }
+        }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(prev_state) = <span class="self">self</span>.state.clone() {
             <span class="macro">debug_assert!</span>(<span class="self">self</span>.window.is_some() || <span class="self">self</span>.waiting_view || <span class="self">self</span>.respawned);
 
             <span class="kw">let </span><span class="kw-2">mut </span>new_state = prev_state.clone();
-
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(query) = <span class="self">self</span>.vars.monitor().get_new() {
-                <span class="kw">if </span><span class="self">self</span>.monitor.is_none() {
-                    <span class="kw">let </span>monitor = query.select_fallback();
-                    <span class="kw">let </span>scale_factor = monitor.scale_factor().get();
-                    <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(scale_factor);
-                    <span class="self">self</span>.monitor = <span class="prelude-val">Some</span>(monitor);
-                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(new) = query.select() {
-                    <span class="kw">let </span>current = <span class="self">self</span>.vars.<span class="number">0</span>.actual_monitor.get();
-                    <span class="kw">if </span><span class="prelude-val">Some</span>(new.id()) != current {
-                        <span class="kw">let </span>scale_factor = new.scale_factor().get();
-                        <span class="self">self</span>.vars.<span class="number">0</span>.scale_factor.set(scale_factor);
-                        <span class="self">self</span>.vars.<span class="number">0</span>.actual_monitor.set(new.id());
-                        <span class="self">self</span>.monitor = <span class="prelude-val">Some</span>(new);
-                    }
-                }
-            }
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>chrome) = <span class="self">self</span>.vars.chrome().get_new() {
                 <span class="kw">if </span><span class="self">self</span>.kiosk.is_some() &amp;&amp; !chrome {
@@ -4165,7 +4176,15 @@
 
     <span class="kw">pub fn </span>focus(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
         <span class="self">self</span>.update_gen(|view| {
-            <span class="kw">let _ </span>= view.focus();
+            <span class="kw">let </span>r = view.focus();
+            <span class="kw">if let </span><span class="prelude-val">Ok</span>(FocusResult::AlreadyFocused) = r {
+                <span class="kw">let </span>prev = WINDOWS.focused_window_id();
+                <span class="kw">let </span>new = <span class="prelude-val">Some</span>(WINDOW.id());
+                <span class="kw">if </span>prev != new {
+                    <span class="comment">// probably prev is a nested window
+                    </span>RAW_WINDOW_FOCUS_EVENT.notify(RawWindowFocusArgs::now(prev, new));
+                }
+            }
         });
     }
 
@@ -5336,7 +5355,8 @@
             .with_screen_ppi(LAYOUT.screen_ppi())
             .with_direction(DIRECTION_VAR.get());
 
-        LocalContext::new().with_context(|| {
+        <span class="comment">// only the same app_local!, APP.id
+        </span>LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only()).with_context(|| {
             WINDOW.with_context(<span class="kw-2">&amp;mut </span>c.ctx, || {
                 WIDGET.with_context(<span class="kw-2">&amp;mut </span>c.content.root_ctx, WidgetUpdateMode::Bubble, || {
                     LAYOUT.with_root_context(c.content.layout_pass, metrics, || {
@@ -5447,28 +5467,28 @@
             <span class="kw">return</span>;
         }
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>([render_widgets, render_update_widgets]) = c.pending_render.take() {
-            LocalContext::new().with_context(|| {
-                WINDOW.with_context(<span class="kw-2">&amp;mut </span>c.ctx, || {
-                    <span class="kw">let </span>root_id = c.content.root_ctx.id();
-                    <span class="kw">let </span>root_bounds = c.content.root_ctx.bounds();
-                    WIDGET.with_context(<span class="kw-2">&amp;mut </span>c.content.root_ctx, WidgetUpdateMode::Bubble, || {
-                        frame.with_nested_window(
-                            render_widgets,
-                            render_update_widgets,
-                            root_id,
-                            <span class="kw-2">&amp;</span>root_bounds,
-                            <span class="kw-2">&amp;</span>WINDOW.info(),
-                            FontAntiAliasing::Default,
-                            |frame| {
-                                c.content.root.render(frame);
-                            },
-                        );
-                    });
-                    c.pending_frame_capture = c.content.take_frame_capture();
-                })
+        <span class="kw">let </span>[render_widgets, render_update_widgets] = c.pending_render.take().unwrap_or_default();
+        <span class="comment">// only the same app_local!, APP.id
+        </span>LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only()).with_context(|| {
+            WINDOW.with_context(<span class="kw-2">&amp;mut </span>c.ctx, || {
+                <span class="kw">let </span>root_id = c.content.root_ctx.id();
+                <span class="kw">let </span>root_bounds = c.content.root_ctx.bounds();
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span>c.content.root_ctx, WidgetUpdateMode::Bubble, || {
+                    frame.with_nested_window(
+                        render_widgets,
+                        render_update_widgets,
+                        root_id,
+                        <span class="kw-2">&amp;</span>root_bounds,
+                        <span class="kw-2">&amp;</span>WINDOW.info(),
+                        FontAntiAliasing::Default,
+                        |frame| {
+                            c.content.root.render(frame);
+                        },
+                    );
+                });
+                c.pending_frame_capture = c.content.take_frame_capture();
             })
-        }
+        })
     }
 
     <span class="kw">fn </span>render_update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;mut </span>FrameUpdate) {
@@ -5479,17 +5499,17 @@
             <span class="kw">return</span>;
         }
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>([<span class="kw">_</span>, render_update_widgets]) = c.pending_render.take() {
-            LocalContext::new().with_context(|| {
-                WINDOW.with_context(<span class="kw-2">&amp;mut </span>c.ctx, || {
-                    WIDGET.with_context(<span class="kw-2">&amp;mut </span>c.content.root_ctx, WidgetUpdateMode::Bubble, || {
-                        update.with_nested_window(render_update_widgets, WIDGET.id(), WIDGET.bounds(), |update| {
-                            c.content.root.render_update(update);
-                        })
+        <span class="kw">let </span>[<span class="kw">_</span>, render_update_widgets] = c.pending_render.take().unwrap_or_default();
+        <span class="comment">// only the same app_local!, APP.id
+        </span>LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only()).with_context(|| {
+            WINDOW.with_context(<span class="kw-2">&amp;mut </span>c.ctx, || {
+                WIDGET.with_context(<span class="kw-2">&amp;mut </span>c.content.root_ctx, WidgetUpdateMode::Bubble, || {
+                    update.with_nested_window(render_update_widgets, WIDGET.id(), WIDGET.bounds(), |update| {
+                        c.content.root.render_update(update);
                     })
                 })
             })
-        }
+        })
     }
 }
 

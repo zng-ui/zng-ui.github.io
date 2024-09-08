@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/monitor.rs`."><title>monitor.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-dd39b87e5fcfba68.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.80.1 (3f5fd8dd4 2024-08-06)" data-channel="1.80.1" data-search-js="search-d52510db62a78183.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-20a3ad099b048cf2.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/monitor.rs`."><title>monitor.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -440,6 +440,26 @@
 <a href="#440" id="440">440</a>
 <a href="#441" id="441">441</a>
 <a href="#442" id="442">442</a>
+<a href="#443" id="443">443</a>
+<a href="#444" id="444">444</a>
+<a href="#445" id="445">445</a>
+<a href="#446" id="446">446</a>
+<a href="#447" id="447">447</a>
+<a href="#448" id="448">448</a>
+<a href="#449" id="449">449</a>
+<a href="#450" id="450">450</a>
+<a href="#451" id="451">451</a>
+<a href="#452" id="452">452</a>
+<a href="#453" id="453">453</a>
+<a href="#454" id="454">454</a>
+<a href="#455" id="455">455</a>
+<a href="#456" id="456">456</a>
+<a href="#457" id="457">457</a>
+<a href="#458" id="458">458</a>
+<a href="#459" id="459">459</a>
+<a href="#460" id="460">460</a>
+<a href="#461" id="461">461</a>
+<a href="#462" id="462">462</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>core::fmt;
 <span class="kw">use </span>std::sync::Arc;
 
@@ -449,7 +469,7 @@
 <span class="kw">use </span>zng_app::view_process::VIEW_PROCESS_INITED_EVENT;
 <span class="kw">use </span>zng_app::window::{MonitorId, WindowId, WINDOW};
 <span class="kw">use </span>zng_app_context::app_local;
-<span class="kw">use </span>zng_layout::unit::{Dip, DipRect, DipSize, DipToPx, Factor, FactorUnits, Ppi, PxPoint, PxRect, PxSize, PxToDip};
+<span class="kw">use </span>zng_layout::unit::{Dip, DipRect, DipSize, DipToPx, Factor, FactorUnits, Ppi, Px, PxPoint, PxRect, PxSize, PxToDip};
 <span class="kw">use </span>zng_txt::{ToTxt, Txt};
 <span class="kw">use </span>zng_unique_id::IdMap;
 <span class="kw">use </span>zng_var::{impl_from_and_into_var, var, ArcVar, ReadOnlyArcVar, Var, VarValue};
@@ -796,6 +816,18 @@
     </span><span class="attr">#[allow(clippy::type_complexity)]
     </span>Query(Arc&lt;<span class="kw">dyn </span>Fn() -&gt; <span class="prelude-ty">Option</span>&lt;MonitorInfo&gt; + Send + Sync&gt;),
 }
+<span class="kw">impl </span>std::fmt::Debug <span class="kw">for </span>MonitorQuery {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>std::fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; std::fmt::Result {
+        <span class="kw">if </span>f.alternate() {
+            <span class="macro">write!</span>(f, <span class="string">"MonitorQuery::"</span>)<span class="question-mark">?</span>;
+        }
+        <span class="kw">match </span><span class="self">self </span>{
+            <span class="self">Self</span>::ParentOrPrimary =&gt; <span class="macro">write!</span>(f, <span class="string">"ParentOrPrimary"</span>),
+            <span class="self">Self</span>::Primary =&gt; <span class="macro">write!</span>(f, <span class="string">"Primary"</span>),
+            <span class="self">Self</span>::Query(<span class="kw">_</span>) =&gt; <span class="macro">write!</span>(f, <span class="string">"Query(_)"</span>),
+        }
+    }
+}
 <span class="kw">impl </span>MonitorQuery {
     <span class="doccomment">/// New query.
     </span><span class="kw">pub fn </span>new(query: <span class="kw">impl </span>Fn() -&gt; <span class="prelude-ty">Option</span>&lt;MonitorInfo&gt; + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="self">Self </span>{
@@ -814,14 +846,27 @@
         }
     }
 
-    <span class="doccomment">/// Runs the query. Falls back to `Primary` or [`MonitorInfo::fallback`].
+    <span class="doccomment">/// Runs the query. Falls back to `Primary`, or the largest or [`MonitorInfo::fallback`].
     </span><span class="kw">pub fn </span>select_fallback(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MonitorInfo {
         <span class="kw">match </span><span class="self">self </span>{
             MonitorQuery::ParentOrPrimary =&gt; <span class="self">Self</span>::parent_or_primary_query(WINDOW.id()),
             MonitorQuery::Primary =&gt; <span class="self">Self</span>::primary_query(),
             MonitorQuery::Query(q) =&gt; q().or_else(<span class="self">Self</span>::primary_query),
         }
-        .unwrap_or_else(MonitorInfo::fallback)
+        .unwrap_or_else(<span class="self">Self</span>::fallback)
+    }
+
+    <span class="kw">fn </span>fallback() -&gt; MonitorInfo {
+        <span class="kw">let </span><span class="kw-2">mut </span>best = MonitorInfo::fallback();
+        <span class="kw">let </span><span class="kw-2">mut </span>best_area = Px(<span class="number">0</span>);
+        <span class="kw">for </span>m <span class="kw">in </span>MONITORS.available_monitors() {
+            <span class="kw">let </span>m_area = m.px_rect().area();
+            <span class="kw">if </span>m_area &gt; best_area {
+                best = m;
+                best_area = m_area;
+            }
+        }
+        best
     }
 
     <span class="kw">fn </span>parent_or_primary_query(win_id: WindowId) -&gt; <span class="prelude-ty">Option</span>&lt;MonitorInfo&gt; {
@@ -845,11 +890,6 @@
     <span class="doccomment">/// Returns `true` only if both are [`MonitorQuery::Primary`].
     </span><span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
         <span class="macro">matches!</span>((<span class="self">self</span>, other), (<span class="self">Self</span>::Primary, <span class="self">Self</span>::Primary))
-    }
-}
-<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>MonitorQuery {
-    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-        <span class="macro">write!</span>(f, <span class="string">"MonitorQuery(Arc&lt;..&gt;)"</span>)
     }
 }
 
