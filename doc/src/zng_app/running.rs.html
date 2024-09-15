@@ -1702,6 +1702,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1666" id="1666">1666</a>
 <a href="#1667" id="1667">1667</a>
 <a href="#1668" id="1668">1668</a>
+<a href="#1669" id="1669">1669</a>
+<a href="#1670" id="1670">1670</a>
+<a href="#1671" id="1671">1671</a>
+<a href="#1672" id="1672">1672</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fmt, mem,
@@ -2158,6 +2162,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="kw">let </span>args = RawColorsConfigChangedArgs::now(cfg);
                 <span class="self">self</span>.notify_event(RAW_COLORS_CONFIG_CHANGED_EVENT.new_update(args), observer);
             }
+            Event::ChromeConfigChanged(cfg) =&gt; {
+                <span class="kw">let </span>args = RawChromeConfigChangedArgs::now(cfg);
+                <span class="self">self</span>.notify_event(RAW_CHROME_CONFIG_CHANGED_EVENT.new_update(args), observer);
+            }
 
             <span class="comment">// `device_events`
             </span>Event::DeviceAdded(d_id) =&gt; {
@@ -2221,8 +2229,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>run_headed(<span class="kw-2">mut </span><span class="self">self</span>) {
-        <span class="attr">#[allow(clippy::let_unit_value)]
-        </span><span class="kw">let </span><span class="kw-2">mut </span>observer = ();
+        <span class="kw">let </span><span class="kw-2">mut </span>observer = ();
         <span class="attr">#[cfg(feature = <span class="string">"dyn_app_extension"</span>)]
         </span><span class="kw">let </span><span class="kw-2">mut </span>observer = observer.as_dyn();
 
@@ -2274,6 +2281,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     animations_config,
                     locale_config,
                     colors_config,
+                    chrome_config,
                     extensions,
                 }) =&gt; {
                     <span class="comment">// notify immediately.
@@ -2302,6 +2310,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         animations_config,
                         locale_config,
                         colors_config,
+                        chrome_config,
                         extensions,
                     );
                     <span class="self">self</span>.notify_event(VIEW_PROCESS_INITED_EVENT.new_update(args), observer);
@@ -2884,7 +2893,7 @@ document.addEventListener('DOMContentLoaded', function () {
     </span><span class="kw">pub static </span>EXIT_CMD = {
         <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
         name: <span class="string">"Exit"</span>,
-        info: <span class="string">"Close all windows and exit."</span>,
+        info: <span class="string">"Close all windows and exit"</span>,
         shortcut: <span class="macro">shortcut!</span>(Exit),
     };
 }
@@ -2901,8 +2910,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 <span class="kw">struct </span>AppIntrinsic {
-    <span class="attr">#[allow(dead_code)]
-    </span>exit_handle: CommandHandle,
+    exit_handle: CommandHandle,
     pending_exit: <span class="prelude-ty">Option</span>&lt;PendingExit&gt;,
 }
 <span class="kw">struct </span>PendingExit {
@@ -3092,7 +3100,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="doccomment">/// App events.
 </span><span class="attr">#[derive(Debug)]
-#[allow(clippy::large_enum_variant)]
+#[expect(clippy::large_enum_variant)]
 </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>AppEvent {
     <span class="doccomment">/// Event from the View Process.
     </span>ViewEvent(zng_view_api::Event),

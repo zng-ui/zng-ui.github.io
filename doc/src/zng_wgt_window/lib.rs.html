@@ -337,6 +337,30 @@
 <a href="#337" id="337">337</a>
 <a href="#338" id="338">338</a>
 <a href="#339" id="339">339</a>
+<a href="#340" id="340">340</a>
+<a href="#341" id="341">341</a>
+<a href="#342" id="342">342</a>
+<a href="#343" id="343">343</a>
+<a href="#344" id="344">344</a>
+<a href="#345" id="345">345</a>
+<a href="#346" id="346">346</a>
+<a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -348,7 +372,10 @@
 #![warn(unused_extern_crates)]
 #![warn(missing_docs)]
 
-</span><span class="kw">use </span>zng_ext_input::focus::{DirectionalNav, FocusScopeOnFocus, TabNav};
+</span><span class="comment">// used by fallback_chrome
+</span><span class="macro">zng_wgt::enable_widget_macros!</span>();
+
+<span class="kw">use </span>zng_ext_input::focus::{DirectionalNav, FocusScopeOnFocus, TabNav};
 <span class="kw">use </span>zng_ext_window::{
     FrameImageReadyArgs, HeadlessMonitor, RenderMode, StartPosition, WINDOW_Ext <span class="kw">as _</span>, WindowChangedArgs, WindowCloseArgs,
     WindowCloseRequestedArgs, WindowOpenArgs, WindowRoot,
@@ -364,9 +391,10 @@
 <span class="kw">pub mod </span>events;
 <span class="kw">mod </span>window_properties;
 
-<span class="attr">#[allow(clippy::useless_attribute)] </span><span class="comment">// not useless
-</span><span class="attr">#[allow(ambiguous_glob_reexports)] </span><span class="comment">// we override `font_size`.
-</span><span class="kw">pub use </span><span class="self">self</span>::window_properties::<span class="kw-2">*</span>;
+<span class="kw">pub use </span><span class="self">self</span>::window_properties::<span class="kw-2">*</span>;
+
+<span class="kw">mod </span>fallback_chrome;
+<span class="kw">pub use </span>fallback_chrome::fallback_chrome;
 
 <span class="doccomment">/// A window container.
 ///
@@ -414,6 +442,26 @@
                 <span class="comment">// users tap the main background to dismiss `TextInput!` soft keyboard
                 </span>focus_scope_behavior = FocusScopeOnFocus::Widget;
                 font_size = FONT_SIZE_VAR.map(|f| f.clone() * <span class="number">1.5</span>.fct()).boxed();
+            }
+
+            when #needs_fallback_chrome {
+                custom_chrome_adorner_fn = <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| {
+                    fallback_chrome()
+                });
+                padding = ContextualizedVar::new(|| {
+                    <span class="kw">let </span>vars = WINDOW.vars();
+                    <span class="macro">expr_var!</span> {
+                        <span class="kw">let </span>title_padding = SideOffsets::new(<span class="number">28</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>);
+                        <span class="kw">let </span>chrome_padding = <span class="kw">if </span><span class="macro">matches!</span>(#{vars.state()}, zng_ext_window::WindowState::Maximized) {
+                            title_padding
+                        } <span class="kw">else </span>{
+                            title_padding + SideOffsets::new_all(<span class="number">5</span>)
+                        };
+                        <span class="comment">// safe_padding is 0 in GNOME+Wayland, but better be safe :D
+                        </span><span class="kw">let </span>safe_padding = SideOffsets::from(<span class="kw-2">*</span>#{vars.safe_padding()});
+                        chrome_padding + safe_padding
+                    }
+                });
             }
         }
 

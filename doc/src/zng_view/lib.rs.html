@@ -2263,8 +2263,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.11.6"
-//! zng-view = "0.4.16"
+//! zng = "0.11.7"
+//! zng-view = "0.4.17"
 //! ```
 //!
 //! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2337,7 +2337,6 @@
 //! # Crate
 //!
 </span><span class="attr">#![doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">"../"</span>, <span class="macro">std::env!</span>(<span class="string">"CARGO_PKG_README"</span>)))]
-#![allow(clippy::needless_doctest_main)]
 #![doc(test(no_crate_inject))]
 #![warn(missing_docs)]
 #![warn(unused_extern_crates)]
@@ -2531,7 +2530,7 @@
         patch.install();
     }
 
-    <span class="attr">#[allow(clippy::redundant_closure)]
+    <span class="attr">#[expect(clippy::redundant_closure)] </span><span class="comment">// false positive
     </span>run_same_process(<span class="kw">move </span>|| run_app())
 }
 <span class="attr">#[cfg(ipc)]
@@ -2641,6 +2640,7 @@
                 animations_config: config::animations_config(),
                 locale_config: config::locale_config(),
                 colors_config: config::colors_config(),
+                chrome_config: config::chrome_config(),
                 extensions: <span class="self">self</span>.exts.api_extensions(),
             }));
 
@@ -3862,6 +3862,7 @@
             animations_config: config::animations_config(),
             locale_config: config::locale_config(),
             colors_config: config::colors_config(),
+            chrome_config: config::chrome_config(),
             extensions: <span class="self">self</span>.exts.api_extensions(),
         }));
     }
@@ -4427,7 +4428,6 @@
 /// These *events* are detached from [`AppEvent`] so that we can continue receiving requests while
 /// the main loop is blocked in a resize operation.
 </span><span class="attr">#[derive(Debug)]
-#[allow(clippy::large_enum_variant)]
 </span><span class="kw">enum </span>RequestEvent {
     <span class="doccomment">/// A request from the [`Api`].
     </span>Request(Request),

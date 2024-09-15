@@ -1137,7 +1137,7 @@
 }
 
 <span class="doccomment">/// Hot reload service.
-</span><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="attr">#[expect(non_camel_case_types)]
 </span><span class="kw">pub struct </span>HOT_RELOAD;
 <span class="kw">impl </span>HOT_RELOAD {
     <span class="doccomment">/// Hot reload status, libs that are rebuilding, errors.
@@ -1203,7 +1203,7 @@
 <span class="kw">struct </span>HotReloadService {
     libs: Vec&lt;HotLib&gt;,
     <span class="comment">// mutex for Sync only
-    </span><span class="attr">#[allow(clippy::type_complexity)]
+    </span><span class="attr">#[expect(clippy::type_complexity)]
     </span>rebuilders: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(BuildArgs) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; + Send + <span class="lifetime">'static</span>&gt;&gt;&gt;,
 
     status: ArcVar&lt;Vec&lt;HotStatus&gt;&gt;,

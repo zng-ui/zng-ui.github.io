@@ -817,6 +817,24 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#781" id="781">781</a>
 <a href="#782" id="782">782</a>
 <a href="#783" id="783">783</a>
+<a href="#784" id="784">784</a>
+<a href="#785" id="785">785</a>
+<a href="#786" id="786">786</a>
+<a href="#787" id="787">787</a>
+<a href="#788" id="788">788</a>
+<a href="#789" id="789">789</a>
+<a href="#790" id="790">790</a>
+<a href="#791" id="791">791</a>
+<a href="#792" id="792">792</a>
+<a href="#793" id="793">793</a>
+<a href="#794" id="794">794</a>
+<a href="#795" id="795">795</a>
+<a href="#796" id="796">796</a>
+<a href="#797" id="797">797</a>
+<a href="#798" id="798">798</a>
+<a href="#799" id="799">799</a>
+<a href="#800" id="800">800</a>
+<a href="#801" id="801">801</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Events directly from the view-process targeting the app windows.
 //!
 //! These events get processed by [app extensions] to generate the events used in widgets, for example
@@ -839,7 +857,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
-    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{
+        AnimationsConfig, ChromeConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig,
+    },
     keyboard::{Key, KeyCode, KeyLocation, KeyState},
     mouse::{ButtonState, MouseButton, MouseScrollDelta},
     touch::{TouchPhase, TouchUpdate},
@@ -1441,6 +1461,19 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    <span class="doccomment">/// Arguments for the [`RAW_CHROME_CONFIG_CHANGED_EVENT`].
+    </span><span class="kw">pub struct </span>RawChromeConfigChangedArgs {
+        <span class="doccomment">/// New config.
+        </span><span class="kw">pub </span>config: ChromeConfig,
+
+        ..
+
+        <span class="doccomment">/// Broadcast to all widgets.
+        </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
+            list.search_all();
+        }
+    }
+
     <span class="doccomment">/// Arguments for the [`RAW_EXTENSION_EVENT`].
     </span><span class="kw">pub struct </span>RawExtensionEventArgs {
         <span class="doccomment">/// Id of the sender extension.
@@ -1557,6 +1590,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
     <span class="doccomment">/// Color scheme or accent color preference changed for a window.
     </span><span class="kw">pub static </span>RAW_COLORS_CONFIG_CHANGED_EVENT: RawColorsConfigChangedArgs;
+
+    <span class="doccomment">/// System window chrome config changed.
+    </span><span class="kw">pub static </span>RAW_CHROME_CONFIG_CHANGED_EVENT: RawChromeConfigChangedArgs;
 
     <span class="doccomment">/// Change in system font anti-aliasing config.
     </span><span class="kw">pub static </span>RAW_FONT_AA_CHANGED_EVENT: RawFontAaChangedArgs;

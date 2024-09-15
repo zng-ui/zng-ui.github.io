@@ -1635,6 +1635,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1599" id="1599">1599</a>
 <a href="#1600" id="1600">1600</a>
 <a href="#1601" id="1601">1601</a>
+<a href="#1602" id="1602">1602</a>
+<a href="#1603" id="1603">1603</a>
+<a href="#1604" id="1604">1604</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! View process connection and other types.
 
 </span><span class="kw">use </span>std::{
@@ -1661,7 +1664,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_view_api::{
     <span class="self">self</span>,
     api_extension::{ApiExtensionId, ApiExtensionName, ApiExtensionPayload, ApiExtensionRecvError, ApiExtensions},
-    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{AnimationsConfig, ChromeConfig, ColorsConfig, FontAntiAliasing, LocaleConfig, MultiClickConfig, TouchConfig},
     dialog::{FileDialog, FileDialogResponse, MsgDialog, MsgDialogResponse},
     font::FontOptions,
     image::{ImageMaskMode, ImagePpi, ImageRequest, ImageTextureId},
@@ -1686,7 +1689,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use super</span>::{AppId, APP};
 
 <span class="doccomment">/// Connection to the running view-process for the context app.
-</span><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="attr">#[expect(non_camel_case_types)]
 </span><span class="kw">pub struct </span>VIEW_PROCESS;
 <span class="kw">struct </span>ViewProcessService {
     process: zng_view_api::Controller,
@@ -2230,6 +2233,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <span class="doccomment">/// System preferred color scheme and accent color.
         </span><span class="kw">pub </span>colors_config: ColorsConfig,
+
+        <span class="doccomment">/// System window chrome preferences.
+        </span><span class="kw">pub </span>chrome_config: ChromeConfig,
 
         <span class="doccomment">/// API extensions implemented by the view-process.
         ///

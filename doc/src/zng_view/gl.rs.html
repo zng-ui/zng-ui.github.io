@@ -1160,6 +1160,7 @@
 <a href="#1160" id="1160">1160</a>
 <a href="#1161" id="1161">1161</a>
 <a href="#1162" id="1162">1162</a>
+<a href="#1163" id="1163">1163</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{cell::Cell, error::Error, ffi::CString, fmt, mem, num::NonZeroU32, rc::Rc, thread};
 
 <span class="kw">use </span>gleam::gl;
@@ -1453,10 +1454,10 @@
             <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"no OpenGL or GLES3 available"</span>.into());
         };
 
+        check_wr_gl_version(<span class="kw-2">&amp;*</span>gl)<span class="question-mark">?</span>;
+
         <span class="attr">#[cfg(debug_assertions)]
         </span><span class="kw">let </span>gl = gl::ErrorCheckingGl::wrap(gl.clone());
-
-        check_wr_gl_version(<span class="kw-2">&amp;*</span>gl)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>context = GlContext {
             id,
@@ -1480,8 +1481,7 @@
         <span class="prelude-val">Ok</span>((window, context))
     }
 
-    <span class="attr">#[allow(unreachable_code)]
-    </span><span class="kw">fn </span>create_headed_swgl(
+    <span class="kw">fn </span>create_headed_swgl(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         event_loop: <span class="kw-2">&amp;</span>ActiveEventLoop,
         id: WindowId,
@@ -1609,10 +1609,10 @@
             <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="string">"no OpenGL or GLES3 available"</span>.into());
         };
 
+        check_wr_gl_version(<span class="kw-2">&amp;*</span>gl)<span class="question-mark">?</span>;
+
         <span class="attr">#[cfg(debug_assertions)]
         </span><span class="kw">let </span>gl = gl::ErrorCheckingGl::wrap(gl.clone());
-
-        check_wr_gl_version(<span class="kw-2">&amp;*</span>gl)<span class="question-mark">?</span>;
 
         <span class="kw">let </span><span class="kw-2">mut </span>context = GlContext {
             id,
@@ -1636,8 +1636,7 @@
         <span class="prelude-val">Ok</span>(context)
     }
 
-    <span class="attr">#[allow(unreachable_code)]
-    </span><span class="kw">fn </span>create_headless_swgl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) -&gt; <span class="prelude-ty">Result</span>&lt;GlContext, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
+    <span class="kw">fn </span>create_headless_swgl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: WindowId) -&gt; <span class="prelude-ty">Result</span>&lt;GlContext, Box&lt;<span class="kw">dyn </span>Error&gt;&gt; {
         <span class="attr">#[cfg(not(feature = <span class="string">"software"</span>))]
         </span>{
             <span class="kw">let _ </span>= id;
@@ -1702,14 +1701,16 @@
 }
 <span class="kw">impl </span>GlContext {
     <span class="doccomment">/// If the context is backed by SWGL.
-    </span><span class="attr">#[allow(unreachable_code)]
     </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>is_software(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="attr">#[cfg(feature = <span class="string">"software"</span>)]
         </span>{
-            <span class="kw">return </span><span class="macro">matches!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.backend, GlBackend::Swgl { .. });
+            <span class="macro">matches!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.backend, GlBackend::Swgl { .. })
         }
-        <span class="bool-val">false
-    </span>}
+        <span class="attr">#[cfg(not(feature = <span class="string">"software"</span>))]
+        </span>{
+            <span class="bool-val">false
+        </span>}
+    }
 
     <span class="kw">pub fn </span>is_current(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
         <span class="prelude-val">Some</span>(<span class="self">self</span>.id) == <span class="self">self</span>.current.get()
@@ -1845,13 +1846,15 @@
 <span class="comment">// check if equal or newer then 3.1
 </span><span class="kw">fn </span>check_wr_gl_version(gl: <span class="kw-2">&amp;</span><span class="kw">dyn </span>gl::Gl) -&gt; <span class="prelude-ty">Result</span>&lt;(), String&gt; {
     <span class="kw">let </span><span class="kw-2">mut </span>version = [<span class="number">0</span>; <span class="number">2</span>];
-    <span class="comment">// SAFETY: API available in all impls
+    <span class="kw">let </span>is_2_or_1;
+    <span class="comment">// SAFETY: get_integer_v API available in all impls
     </span><span class="kw">unsafe </span>{
         gl.get_integer_v(gl::MAJOR_VERSION, <span class="kw-2">&amp;mut </span>version[..<span class="number">1</span>]);
-        gl.get_integer_v(gl::MAJOR_VERSION, <span class="kw-2">&amp;mut </span>version[<span class="number">1</span>..]);
+        is_2_or_1 = gl.get_error() == gl::INVALID_ENUM; <span class="comment">// MAJOR_VERSION is only 3.0 and above
+        </span>gl.get_integer_v(gl::MINOR_VERSION, <span class="kw-2">&amp;mut </span>version[<span class="number">1</span>..]);
     };
 
-    <span class="kw">if </span>version[<span class="number">0</span>] &gt;= <span class="number">3 </span>{
+    <span class="kw">if </span>!is_2_or_1 &amp;&amp; version[<span class="number">0</span>] &gt;= <span class="number">3 </span>{
         <span class="kw">let </span>min_minor = <span class="kw">match </span>gl.get_type() {
             gl::GlType::Gl =&gt; <span class="number">1</span>,
             gl::GlType::Gles =&gt; <span class="number">0</span>,
@@ -2068,8 +2071,7 @@
         };
         <span class="kw">use </span>x11_dl::xlib::{GCGraphicsExposures, TrueColor, XGCValues, XVisualInfo, Xlib, ZPixmap, _XDisplay};
 
-        <span class="attr">#[allow(clippy::large_enum_variant)]
-        </span><span class="kw">pub enum </span>XLibOrWaylandBlit {
+        <span class="kw">pub enum </span>XLibOrWaylandBlit {
             XLib { xlib: Xlib, display: <span class="kw-2">*mut </span>_XDisplay, window: u64 },
             Wayland { surface: <span class="kw-2">*const </span>WlSurface, data: WaylandData },
         }

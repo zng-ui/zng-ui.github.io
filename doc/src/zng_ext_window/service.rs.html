@@ -1894,6 +1894,23 @@
 <a href="#1894" id="1894">1894</a>
 <a href="#1895" id="1895">1895</a>
 <a href="#1896" id="1896">1896</a>
+<a href="#1897" id="1897">1897</a>
+<a href="#1898" id="1898">1898</a>
+<a href="#1899" id="1899">1899</a>
+<a href="#1900" id="1900">1900</a>
+<a href="#1901" id="1901">1901</a>
+<a href="#1902" id="1902">1902</a>
+<a href="#1903" id="1903">1903</a>
+<a href="#1904" id="1904">1904</a>
+<a href="#1905" id="1905">1905</a>
+<a href="#1906" id="1906">1906</a>
+<a href="#1907" id="1907">1907</a>
+<a href="#1908" id="1908">1908</a>
+<a href="#1909" id="1909">1909</a>
+<a href="#1910" id="1910">1910</a>
+<a href="#1911" id="1911">1911</a>
+<a href="#1912" id="1912">1912</a>
+<a href="#1913" id="1913">1913</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     any::Any,
     future::{Future, IntoFuture},
@@ -1910,8 +1927,8 @@
     view_process::{
         <span class="self">self</span>,
         raw_events::{
-            RAW_COLORS_CONFIG_CHANGED_EVENT, RAW_IMAGE_LOADED_EVENT, RAW_IMAGE_LOAD_ERROR_EVENT, RAW_WINDOW_CLOSE_EVENT,
-            RAW_WINDOW_CLOSE_REQUESTED_EVENT, RAW_WINDOW_FOCUS_EVENT,
+            RAW_CHROME_CONFIG_CHANGED_EVENT, RAW_COLORS_CONFIG_CHANGED_EVENT, RAW_IMAGE_LOADED_EVENT, RAW_IMAGE_LOAD_ERROR_EVENT,
+            RAW_WINDOW_CLOSE_EVENT, RAW_WINDOW_CLOSE_REQUESTED_EVENT, RAW_WINDOW_FOCUS_EVENT,
         },
         ViewImage, ViewRenderer, ViewWindowOrHeadless, VIEW_PROCESS, VIEW_PROCESS_INITED_EVENT,
     },
@@ -1936,12 +1953,12 @@
 <span class="kw">use </span>zng_txt::{formatx, Txt};
 <span class="kw">use </span>zng_unique_id::{IdMap, IdSet};
 <span class="kw">use </span>zng_var::{
-    impl_from_and_into_var, response_done_var, response_var, types::WeakArcVar, var, AnyWeakVar, ArcVar, BoxedVar, LocalVar, ResponderVar,
-    ResponseVar, Var, WeakVar,
+    impl_from_and_into_var, response_done_var, response_var, types::WeakArcVar, var, AnyWeakVar, ArcVar, BoxedVar, LocalVar,
+    ReadOnlyArcVar, ResponderVar, ResponseVar, Var, WeakVar,
 };
 <span class="kw">use </span>zng_view_api::{
     api_extension::{ApiExtensionId, ApiExtensionPayload},
-    config::ColorsConfig,
+    config::{ChromeConfig, ColorsConfig},
     image::ImageMaskMode,
     window::{RenderMode, WindowState},
     ViewProcessOffline,
@@ -1963,6 +1980,7 @@
     exit_on_last_close: ArcVar&lt;bool&gt;,
     default_render_mode: ArcVar&lt;RenderMode&gt;,
     parallel: ArcVar&lt;ParallelWin&gt;,
+    system_chrome: ArcVar&lt;ChromeConfig&gt;,
     root_extenders: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(WindowRootExtenderArgs) -&gt; BoxedUiNode + Send&gt;&gt;&gt;, <span class="comment">// Mutex for +Sync only.
     </span>open_nested_handlers: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span><span class="kw">crate</span>::OpenNestedHandlerArgs) + Send&gt;&gt;&gt;,
 
@@ -1994,6 +2012,7 @@
             default_render_mode: var(RenderMode::default()),
             root_extenders: Mutex::new(<span class="macro">vec!</span>[]),
             open_nested_handlers: Mutex::new(<span class="macro">vec!</span>[]),
+            system_chrome: var(ChromeConfig::default()),
             parallel: var(ParallelWin::default()),
             windows: IdMap::default(),
             windows_info: IdMap::default(),
@@ -2617,6 +2636,17 @@
             .push(Box::new(<span class="kw">move </span>|a| extender(a).boxed()))
     }
 
+    <span class="doccomment">/// Variable that tracks the OS window manager configuration for the window chrome.
+    ///
+    /// The chrome (also known as window decorations) defines the title bar, window buttons and window border. Some
+    /// window managers don't provide a native chrome, you can use this config with the [`WindowVars::chrome`] setting
+    /// in a [`register_root_extender`] to provide a custom fallback chrome.
+    ///
+    /// [`register_root_extender`]: Self::register_root_extender
+    </span><span class="kw">pub fn </span>system_chrome(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;ChromeConfig&gt; {
+        WINDOWS_SV.read().system_chrome.read_only()
+    }
+
     <span class="doccomment">/// Register the closure `handler` to be called for every new window starting on the next update.
     ///
     /// The closure can use the args to inspect the new window context and optionally convert the request to a [`NestedWindowNode`].
@@ -2883,8 +2913,12 @@
             }
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = RAW_COLORS_CONFIG_CHANGED_EVENT.on(update) {
             WINDOWS_SV.write().latest_colors_cfg = args.config;
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = RAW_CHROME_CONFIG_CHANGED_EVENT.on(update) {
+            WINDOWS_SV.read().system_chrome.set(args.config);
         } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = VIEW_PROCESS_INITED_EVENT.on(update) {
-            WINDOWS_SV.write().latest_colors_cfg = args.colors_config;
+            <span class="kw">let </span><span class="kw-2">mut </span>wns = WINDOWS_SV.write();
+            wns.latest_colors_cfg = args.colors_config;
+            wns.system_chrome.set(args.chrome_config);
 
             <span class="comment">// we skipped request fulfillment until this event.
             </span>UPDATES.update(<span class="prelude-val">None</span>);
@@ -3616,7 +3650,7 @@
 <span class="doccomment">/// Extensions methods for [`WINDOW`] contexts of windows open by [`WINDOWS`].
 ///
 /// [`WINDOW`]: zng_app::window::WINDOW
-</span><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="attr">#[expect(non_camel_case_types)]
 </span><span class="kw">pub trait </span>WINDOW_Ext {
     <span class="doccomment">/// Clone a reference to the variables that get and set window properties.
     </span><span class="kw">fn </span>vars(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">super</span>::WindowVars {
@@ -3776,7 +3810,7 @@
 }
 
 <span class="doccomment">/// Window focused widget hook.
-</span><span class="attr">#[allow(non_camel_case_types)]
+</span><span class="attr">#[expect(non_camel_case_types)]
 </span><span class="kw">pub struct </span>WINDOW_FOCUS;
 <span class="kw">impl </span>WINDOW_FOCUS {
     <span class="doccomment">/// Setup a var that is controlled by the focus service and tracks the focused widget.

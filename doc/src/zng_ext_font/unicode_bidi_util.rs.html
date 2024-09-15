@@ -1198,8 +1198,8 @@
                 } <span class="kw">else </span>{
                     last_level.new_explicit_next_ltr()
                 };
-                <span class="attr">#[allow(clippy::unnecessary_unwrap)]
-                </span><span class="kw">if </span>new_level.is_ok() &amp;&amp; overflow_isolate_count == <span class="number">0 </span>&amp;&amp; overflow_embedding_count == <span class="number">0 </span>{
+
+                <span class="kw">if </span>new_level.is_ok() &amp;&amp; overflow_isolate_count == <span class="number">0 </span>&amp;&amp; overflow_embedding_count == <span class="number">0 </span>{
                     <span class="kw">let </span>new_level = new_level.unwrap();
                     stack.push(
                         new_level,
@@ -1423,7 +1423,7 @@
 }
 
 <span class="attr">#[derive(PartialEq)]
-#[allow(clippy::upper_case_acronyms)]
+#[expect(clippy::upper_case_acronyms)]
 </span><span class="kw">enum </span>OverrideStatus {
     Neutral,
     RTL,
@@ -2030,7 +2030,7 @@
 <span class="doccomment">/// Neutral or Isolate formatting character (B, S, WS, ON, FSI, LRI, RLI, PDI)
 ///
 /// &lt;http://www.unicode.org/reports/tr9/#NI&gt;
-</span><span class="attr">#[allow(non_snake_case)]
+</span><span class="attr">#[expect(non_snake_case)]
 </span><span class="kw">fn </span>is_NI(class: BidiClass) -&gt; bool {
     <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
     <span class="macro">matches!</span>(class, B | S | WS | ON | FSI | LRI | RLI | PDI)

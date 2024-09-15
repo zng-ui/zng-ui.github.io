@@ -71,7 +71,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_wgt_undo",["",[],["lib.rs"]]],\
 ["zng_wgt_undo_history",["",[],["lib.rs"]]],\
 ["zng_wgt_webrender_debug",["",[],["lib.rs"]]],\
-["zng_wgt_window",["",[],["events.rs","lib.rs","window_properties.rs"]]],\
+["zng_wgt_window",["",[],["events.rs","fallback_chrome.rs","lib.rs","window_properties.rs"]]],\
 ["zng_wgt_wrap",["",[],["crate_util.rs","lib.rs"]]]\
 ]'));
 createSrcSidebar();

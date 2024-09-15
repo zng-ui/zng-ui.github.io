@@ -758,6 +758,12 @@
 <a href="#758" id="758">758</a>
 <a href="#759" id="759">759</a>
 <a href="#760" id="760">760</a>
+<a href="#761" id="761">761</a>
+<a href="#762" id="762">762</a>
+<a href="#763" id="763">763</a>
+<a href="#764" id="764">764</a>
+<a href="#765" id="765">765</a>
+<a href="#766" id="766">766</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::Arc;
 
 <span class="kw">use </span>zng_app::{
@@ -940,6 +946,12 @@
     /// The window chrome is the non-client area of the window, usually a border with resize handles and a title bar.
     ///
     /// The default value is `true`.
+    ///
+    /// Note that if the [`WINDOWS.system_chrome`] reports the windowing system prefers a custom chrome **and** does not
+    /// provide one the system chrome is not requested, even if this is `true`. Window widget implementers can use this to
+    /// detect when a fallback chrome must be provided.
+    ///
+    /// [`WINDOWS.system_chrome`]: crate::WINDOWS::system_chrome
     </span><span class="kw">pub fn </span>chrome(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;bool&gt; {
         <span class="self">self</span>.<span class="number">0</span>.chrome.clone()
     }

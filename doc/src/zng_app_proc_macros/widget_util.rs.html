@@ -717,7 +717,7 @@
 
 <span class="kw">pub struct </span>PropertyField {
     <span class="kw">pub </span>ident: Ident,
-    <span class="attr">#[allow(dead_code)]
+    <span class="attr">#[expect(dead_code)]
     </span><span class="kw">pub </span>colon: <span class="macro">Token!</span>[:],
     <span class="kw">pub </span>expr: TokenStream,
 }
@@ -751,11 +751,11 @@
 <span class="comment">// Value assigned in a [`PropertyAssign`].
 </span><span class="kw">pub enum </span>PropertyValue {
     <span class="doccomment">/// `unset!`.
-    </span>Special(Ident, <span class="attr">#[allow(dead_code)] </span><span class="macro">Token!</span>[!]),
+    </span>Special(Ident, <span class="attr">#[expect(dead_code)] </span><span class="macro">Token!</span>[!]),
     <span class="doccomment">/// `arg0, arg1,`
     </span>Unnamed(TokenStream),
     <span class="doccomment">/// `{ field0: true, field1: false, }`
-    </span>Named(<span class="attr">#[allow(dead_code)] </span>syn::token::Brace, Punctuated&lt;PropertyField, <span class="macro">Token!</span>[,]&gt;),
+    </span>Named(<span class="attr">#[expect(dead_code)] </span>syn::token::Brace, Punctuated&lt;PropertyField, <span class="macro">Token!</span>[,]&gt;),
 }
 <span class="kw">impl </span>Parse <span class="kw">for </span>PropertyValue {
     <span class="kw">fn </span>parse(input: parse::ParseStream) -&gt; syn::Result&lt;<span class="self">Self</span>&gt; {
@@ -853,11 +853,11 @@
 
 <span class="kw">pub struct </span>WgtWhen {
     <span class="kw">pub </span>attrs: Attributes,
-    <span class="attr">#[allow(dead_code)]
+    <span class="attr">#[expect(dead_code)]
     </span><span class="kw">pub </span>when: keyword::when,
     <span class="kw">pub </span>condition_expr: TokenStream,
     <span class="kw">pub </span>condition_expr_str: String,
-    <span class="attr">#[allow(dead_code)]
+    <span class="attr">#[expect(dead_code)]
     </span><span class="kw">pub </span>brace_token: syn::token::Brace,
     <span class="kw">pub </span>assigns: Vec&lt;WgtProperty&gt;,
 }

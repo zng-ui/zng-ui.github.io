@@ -1033,12 +1033,20 @@
 <a href="#1033" id="1033">1033</a>
 <a href="#1034" id="1034">1034</a>
 <a href="#1035" id="1035">1035</a>
+<a href="#1036" id="1036">1036</a>
+<a href="#1037" id="1037">1037</a>
+<a href="#1038" id="1038">1038</a>
+<a href="#1039" id="1039">1039</a>
+<a href="#1040" id="1040">1040</a>
+<a href="#1041" id="1041">1041</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! General event types.
 
 </span><span class="kw">use crate</span>::{
     access::{AccessCmd, AccessNodeId},
     api_extension::{ApiExtensionId, ApiExtensionPayload, ApiExtensions},
-    config::{AnimationsConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig},
+    config::{
+        AnimationsConfig, ChromeConfig, ColorsConfig, FontAntiAliasing, KeyRepeatConfig, LocaleConfig, MultiClickConfig, TouchConfig,
+    },
     dialog::{DialogId, FileDialogResponse, MsgDialogResponse},
     image::{ImageId, ImageLoadedData, ImagePpi},
     ipc::IpcBytes,
@@ -1168,6 +1176,8 @@
     </span><span class="kw">pub </span>locale_config: LocaleConfig,
     <span class="doccomment">/// System preferred color scheme and colors.
     </span><span class="kw">pub </span>colors_config: ColorsConfig,
+    <span class="doccomment">/// Window chrome (decorations) preference.
+    </span><span class="kw">pub </span>chrome_config: ChromeConfig,
     <span class="doccomment">/// API extensions implemented by the view-process.
     ///
     /// The extension IDs will stay valid for the duration of the view-process.
@@ -1502,6 +1512,8 @@
     </span>LocaleChanged(LocaleConfig),
     <span class="doccomment">/// System color scheme or colors changed.
     </span>ColorsConfigChanged(ColorsConfig),
+    <span class="doccomment">/// System window chrome (decorations) preference changed.
+    </span>ChromeConfigChanged(ChromeConfig),
 
     <span class="comment">/* Raw device events */
     </span><span class="doccomment">/// Device added or installed.
@@ -1600,7 +1612,7 @@
 }
 <span class="kw">impl </span>Event {
     <span class="doccomment">/// Change `self` to incorporate `other` or returns `other` if both events cannot be coalesced.
-    </span><span class="attr">#[allow(clippy::result_large_err)]
+    </span><span class="attr">#[expect(clippy::result_large_err)]
     </span><span class="kw">pub fn </span>coalesce(<span class="kw-2">&amp;mut </span><span class="self">self</span>, other: Event) -&gt; <span class="prelude-ty">Result</span>&lt;(), Event&gt; {
         <span class="kw">use </span>Event::<span class="kw-2">*</span>;
 

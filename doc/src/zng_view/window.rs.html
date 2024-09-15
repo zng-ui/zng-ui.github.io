@@ -2136,6 +2136,11 @@
 <a href="#2136" id="2136">2136</a>
 <a href="#2137" id="2137">2137</a>
 <a href="#2138" id="2138">2138</a>
+<a href="#2139" id="2139">2139</a>
+<a href="#2140" id="2140">2140</a>
+<a href="#2141" id="2141">2141</a>
+<a href="#2142" id="2142">2142</a>
+<a href="#2143" id="2143">2143</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::VecDeque,
     fmt, mem,
@@ -2276,7 +2281,7 @@
     }
 }
 <span class="kw">impl </span>Window {
-    <span class="attr">#[allow(clippy::too_many_arguments)]
+    <span class="attr">#[expect(clippy::too_many_arguments)]
     </span><span class="kw">pub fn </span>open(
         gen: ViewProcessGen,
         cfg_icon: <span class="prelude-ty">Option</span>&lt;Icon&gt;,
@@ -2695,6 +2700,11 @@
 
     <span class="doccomment">/// Returns `true` if the cursor actually moved.
     </span><span class="kw">pub fn </span>cursor_moved(<span class="kw-2">&amp;mut </span><span class="self">self</span>, pos: DipPoint, device: DeviceId) -&gt; bool {
+        <span class="kw">if </span>!<span class="self">self</span>.cursor_over {
+            <span class="comment">// this can happen on X11
+            </span><span class="kw">return </span><span class="bool-val">false</span>;
+        }
+
         <span class="kw">let </span>moved = <span class="self">self</span>.cursor_pos != pos || <span class="self">self</span>.cursor_device != device;
 
         <span class="kw">if </span>moved {

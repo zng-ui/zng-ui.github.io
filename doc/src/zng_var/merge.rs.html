@@ -587,7 +587,7 @@
         ArcMergeVarInput(PhantomData)
     }
 
-    <span class="attr">#[allow(clippy::borrowed_box)]
+    <span class="attr">#[expect(clippy::borrowed_box)]
     </span><span class="kw">pub fn </span>get&lt;<span class="lifetime">'v</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, value: <span class="kw-2">&amp;</span><span class="lifetime">'v </span>Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'v </span>T {
         (<span class="kw-2">**</span>value).as_any().downcast_ref::&lt;T&gt;().unwrap()
     }
@@ -613,7 +613,7 @@
 
 <span class="kw">impl</span>&lt;T: VarValue&gt; ArcMergeVar&lt;T&gt; {
     <span class="attr">#[doc(hidden)]
-    #[allow(clippy::new_ret_no_self)]
+    #[expect(clippy::new_ret_no_self)]
     </span><span class="kw">pub fn </span>new(inputs: Box&lt;[BoxedAnyVar]&gt;, merge: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>[Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;]) -&gt; T + Send + <span class="lifetime">'static</span>) -&gt; BoxedVar&lt;T&gt; {
         <span class="kw">if </span>inputs.iter().any(|v| v.is_contextual()) {
             <span class="kw">let </span>merge = Arc::new(Mutex::new(merge));
@@ -1041,7 +1041,7 @@
 }
 <span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, I: VarValue&gt; MergeVarInputs&lt;<span class="lifetime">'a</span>, I&gt; {
     <span class="doccomment">/// Number of inputs.
-    </span><span class="attr">#[allow(clippy::len_without_is_empty)]
+    </span><span class="attr">#[expect(clippy::len_without_is_empty)]
     </span><span class="kw">pub fn </span>len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
         <span class="self">self</span>.inputs.len()
     }

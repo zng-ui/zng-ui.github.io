@@ -773,7 +773,7 @@
 /// [`is_cap_touched_from_start`]: fn@is_cap_touched_from_start
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>is_touched_from_start(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[allow(clippy::mutable_key_type)] </span><span class="comment">// EventPropagationHandle compares pointers, not value
+    <span class="attr">#[expect(clippy::mutable_key_type)] </span><span class="comment">// EventPropagationHandle compares pointers, not value
     </span><span class="kw">let </span><span class="kw-2">mut </span>touches_started = HashSet::new();
     event_state(child, state, <span class="bool-val">false</span>, TOUCHED_EVENT, <span class="kw">move </span>|args| {
         <span class="kw">if </span>args.is_touch_enter_enabled() {
@@ -841,7 +841,7 @@
 /// [`ENABLED`]: Interactivity::ENABLED
 </span><span class="attr">#[property(EVENT)]
 </span><span class="kw">pub fn </span>is_cap_touched_from_start(child: <span class="kw">impl </span>UiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="attr">#[allow(clippy::mutable_key_type)] </span><span class="comment">// EventPropagationHandle compares pointers, not value
+    <span class="attr">#[expect(clippy::mutable_key_type)] </span><span class="comment">// EventPropagationHandle compares pointers, not value
     </span><span class="kw">let </span><span class="kw-2">mut </span>touches_started = HashSet::new();
     event_state2(
         child,

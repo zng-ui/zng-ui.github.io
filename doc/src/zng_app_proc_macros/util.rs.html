@@ -1034,7 +1034,7 @@
 }
 
 <span class="doccomment">/// Returns `true` if the proc-macro is running in one of the rust-analyzer proc-macro servers.
-</span><span class="attr">#[allow(unexpected_cfgs)] </span><span class="comment">// rust_analyzer exists: https://github.com/rust-lang/rust-analyzer/pull/15528
+</span><span class="attr">#[expect(unexpected_cfgs)] </span><span class="comment">// rust_analyzer exists: https://github.com/rust-lang/rust-analyzer/pull/15528
 </span><span class="kw">pub fn </span>is_rust_analyzer() -&gt; bool {
     <span class="macro">cfg!</span>(rust_analyzer)
 }
@@ -1277,7 +1277,7 @@
 }
 
 <span class="doccomment">/// Does a `parenthesized!` parse but panics with [`non_user_error!()`](non_user_error) if the parsing fails.
-</span><span class="attr">#[allow(unused)]
+</span><span class="attr">#[allow(unused)] </span><span class="comment">// depends on cfg
 </span><span class="macro">macro_rules!</span> non_user_parenthesized {
     (<span class="macro-nonterminal">$input</span>:expr) =&gt; {
         <span class="macro">non_user_group!</span> { parenthesized, <span class="macro-nonterminal">$input </span>}
@@ -1358,7 +1358,7 @@
                     inline = <span class="prelude-val">Some</span>(attr);
                 } <span class="kw">else if </span>ident == <span class="string">"cfg" </span>{
                     cfg = <span class="prelude-val">Some</span>(attr);
-                } <span class="kw">else if </span>ident == <span class="string">"allow" </span>|| ident == <span class="string">"warn" </span>|| ident == <span class="string">"deny" </span>|| ident == <span class="string">"forbid" </span>{
+                } <span class="kw">else if </span>ident == <span class="string">"allow" </span>|| ident == <span class="string">"expect" </span>|| ident == <span class="string">"warn" </span>|| ident == <span class="string">"deny" </span>|| ident == <span class="string">"forbid" </span>{
                     lints.push(attr);
                 } <span class="kw">else </span>{
                     others.push(attr);
@@ -1718,8 +1718,8 @@
 // This is useful for debugging say the widget macros but only for a widget.
 //
 // Use [`enable_trace!`] and [`trace!`].
-</span><span class="attr">#[allow(unused)]
-#[cfg(debug_assertions)]
+</span><span class="attr">#[allow(unused)] </span><span class="comment">// depends on cfg
+</span><span class="attr">#[cfg(debug_assertions)]
 </span><span class="kw">pub mod </span>debug_trace {
     <span class="kw">use </span>std::sync::atomic::{AtomicBool, Ordering};
 
@@ -1739,8 +1739,8 @@
     }
 }
 
-<span class="attr">#[allow(unused)]
-#[cfg(debug_assertions)]
+<span class="attr">#[allow(unused)] </span><span class="comment">// depends on cfg
+</span><span class="attr">#[cfg(debug_assertions)]
 </span><span class="macro">macro_rules!</span> enable_trace {
     () =&gt; {
         <span class="macro-nonterminal">$crate::util::debug_trace::enable</span>(<span class="bool-val">true</span>);
@@ -1749,8 +1749,8 @@
         <span class="macro-nonterminal">$crate::util::debug_trace::enable</span>(<span class="macro-nonterminal">$bool_expr</span>);
     };
 }
-<span class="attr">#[allow(unused)]
-#[cfg(debug_assertions)]
+<span class="attr">#[allow(unused)] </span><span class="comment">// depends on cfg
+</span><span class="attr">#[cfg(debug_assertions)]
 </span><span class="macro">macro_rules!</span> trace {
     (<span class="macro-nonterminal">$msg</span>:tt) =&gt; {
         <span class="macro-nonterminal">$crate::util::debug_trace::display</span>(<span class="macro-nonterminal">$msg</span>);

@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">type </span>EasingFn = Arc&lt;<span class="kw">dyn </span>Fn(EasingTime) -&gt; EasingStep + Send + Sync&gt;;
 
 <span class="attr">#[doc(hidden)]
-#[allow(non_camel_case_types)]
+#[expect(non_camel_case_types)]
 </span><span class="kw">pub trait </span>easing_property: Send + Sync + Clone + Copy {
     <span class="kw">fn </span>easing_property_unset(<span class="self">self</span>);
     <span class="kw">fn </span>easing_property(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; Vec&lt;Box&lt;<span class="kw">dyn </span>AnyPropertyBuildAction&gt;&gt;;
@@ -168,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 
 <span class="attr">#[doc(hidden)]
-#[allow(non_camel_case_types)]
+#[expect(non_camel_case_types)]
 #[diagnostic::on_unimplemented(note = <span class="string">"property type must be `Transitionable` to support `#[easing]`"</span>)]
 </span><span class="kw">pub trait </span>easing_property_input_Transitionable: Any + Send {
     <span class="kw">fn </span>easing(<span class="self">self</span>, duration: Duration, easing: EasingFn, when_conditions_data: <span class="kw-2">&amp;</span>[<span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;&gt;]) -&gt; <span class="self">Self</span>;

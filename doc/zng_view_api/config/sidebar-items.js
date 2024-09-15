@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ColorScheme","FontAntiAliasing"],"struct":["AnimationsConfig","ColorsConfig","KeyRepeatConfig","LocaleConfig","MultiClickConfig","TouchConfig"]};
+window.SIDEBAR_ITEMS = {"enum":["ColorScheme","FontAntiAliasing"],"struct":["AnimationsConfig","ChromeConfig","ColorsConfig","KeyRepeatConfig","LocaleConfig","MultiClickConfig","TouchConfig"]};

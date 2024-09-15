@@ -3336,7 +3336,6 @@
 <a href="#3336" id="3336">3336</a>
 <a href="#3337" id="3337">3337</a>
 <a href="#3338" id="3338">3338</a>
-<a href="#3339" id="3339">3339</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -3346,7 +3345,7 @@
 //!
 </span><span class="attr">#![doc = <span class="macro">include_str!</span>(<span class="macro">concat!</span>(<span class="string">"../"</span>, <span class="macro">std::env!</span>(<span class="string">"CARGO_PKG_README"</span>)))]
 </span><span class="comment">// suppress nag about very simple boxed closure signatures.
-</span><span class="attr">#![allow(clippy::type_complexity)]
+</span><span class="attr">#![expect(clippy::type_complexity)]
 #![warn(unused_extern_crates)]
 #![warn(missing_docs)]
 
@@ -4976,7 +4975,7 @@
     requested_weight: FontWeight,
     requested_stretch: FontStretch,
 }
-<span class="attr">#[allow(clippy::len_without_is_empty)] </span><span class="comment">// cannot be empty.
+<span class="attr">#[expect(clippy::len_without_is_empty)] </span><span class="comment">// cannot be empty.
 </span><span class="kw">impl </span>FontList {
     <span class="doccomment">/// The font that best matches the requested properties.
     </span><span class="kw">pub fn </span>best(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Font {
@@ -5703,7 +5702,6 @@
 
 <span class="doccomment">/// Reference to in memory font data.
 </span><span class="attr">#[derive(Clone)]
-#[allow(clippy::rc_buffer)]
 </span><span class="kw">pub struct </span>FontDataRef(<span class="kw">pub </span>Arc&lt;Vec&lt;u8&gt;&gt;);
 <span class="kw">impl </span>FontDataRef {
     <span class="doccomment">/// Copy bytes from embedded font.

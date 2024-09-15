@@ -850,7 +850,7 @@
     <span class="kw">fn </span>build_impl(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; ArcWhenVar&lt;T&gt; {
         <span class="self">self</span>.conditions.shrink_to_fit();
         <span class="kw">for </span>(c, v) <span class="kw">in </span><span class="self">self</span>.conditions.iter_mut() {
-            <span class="attr">#[allow(unreachable_code)]
+            <span class="attr">#[expect(unreachable_code)]
             </span><span class="kw">fn </span>panic_placeholder&lt;T: VarValue&gt;() -&gt; BoxedVar&lt;T&gt; {
                 types::ContextualizedVar::&lt;T&gt;::new(|| LocalVar(<span class="macro">unreachable!</span>())).boxed()
             }

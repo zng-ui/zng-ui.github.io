@@ -2814,6 +2814,8 @@
 <a href="#2814" id="2814">2814</a>
 <a href="#2815" id="2815">2815</a>
 <a href="#2816" id="2816">2816</a>
+<a href="#2817" id="2817">2817</a>
+<a href="#2818" id="2818">2818</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! This module implements Management of window content and synchronization of WindowVars and View-Process.
 
 </span><span class="kw">use </span>std::{mem, sync::Arc};
@@ -3014,13 +3016,15 @@
 
             <span class="kw">let </span><span class="kw-2">mut </span>new_state = prev_state.clone();
 
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>chrome) = <span class="self">self</span>.vars.chrome().get_new() {
+            <span class="kw">if </span><span class="self">self</span>.vars.chrome().is_new() || WINDOWS.system_chrome().is_new() {
+                <span class="kw">let </span><span class="kw-2">mut </span>chrome = <span class="self">self</span>.vars.chrome().get();
+
                 <span class="kw">if </span><span class="self">self</span>.kiosk.is_some() &amp;&amp; !chrome {
                     <span class="macro">tracing::error!</span>(<span class="string">"window in `kiosk` mode can not show chrome"</span>);
                     chrome = <span class="bool-val">false</span>;
                 }
 
-                new_state.chrome_visible = chrome;
+                new_state.chrome_visible = chrome &amp;&amp; !WINDOWS.system_chrome().get().needs_custom();
             }
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>req_state) = <span class="self">self</span>.vars.state().get_new() {
@@ -3941,7 +3945,7 @@
             restore_state: WindowState::Normal,
             min_size: min_size.to_dip(scale_factor),
             max_size: max_size.to_dip(scale_factor),
-            chrome_visible: <span class="self">self</span>.vars.chrome().get(),
+            chrome_visible: <span class="self">self</span>.vars.chrome().get() &amp;&amp; !WINDOWS.system_chrome().get().needs_custom(),
         };
 
         <span class="kw">let </span>window_id = WINDOW.id();
@@ -4903,7 +4907,7 @@
     }
 
     <span class="doccomment">/// Layout content if there was a pending request, returns `Some(final_size)`.
-    </span><span class="attr">#[allow(clippy::too_many_arguments)]
+    </span><span class="attr">#[expect(clippy::too_many_arguments)]
     </span><span class="kw">pub fn </span>layout(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         layout_widgets: Arc&lt;LayoutUpdates&gt;,

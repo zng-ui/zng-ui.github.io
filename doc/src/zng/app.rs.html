@@ -595,7 +595,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.11.6", features = ["view_prebuilt"] }
+//! zng = { version = "0.11.7", features = ["view_prebuilt"] }
 //! ```
 //!
 //! ```no_run
@@ -718,7 +718,7 @@
 //!
 //! ```
 //! # use zng::var::*;
-//! #[allow(non_camel_case_types)]
+//! #[expect(non_camel_case_types)]
 //! pub struct SCREAMING_CASE;
 //! impl SCREAMING_CASE {
 //!     pub fn state(&amp;self) -&gt; impl Var&lt;bool&gt; {
@@ -1048,7 +1048,7 @@
 ///                         child = Text!("Crash (access violation)");
 ///                         on_click = hn_once!(|_| {
 ///                             // SAFETY: deliberate access violation
-///                             #[allow(deref_nullptr)]
+///                             #[expect(deref_nullptr)]
 ///                             unsafe {
 ///                                 *std::ptr::null_mut() = true;
 ///                             }

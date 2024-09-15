@@ -2283,6 +2283,36 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2247" id="2247">2247</a>
 <a href="#2248" id="2248">2248</a>
 <a href="#2249" id="2249">2249</a>
+<a href="#2250" id="2250">2250</a>
+<a href="#2251" id="2251">2251</a>
+<a href="#2252" id="2252">2252</a>
+<a href="#2253" id="2253">2253</a>
+<a href="#2254" id="2254">2254</a>
+<a href="#2255" id="2255">2255</a>
+<a href="#2256" id="2256">2256</a>
+<a href="#2257" id="2257">2257</a>
+<a href="#2258" id="2258">2258</a>
+<a href="#2259" id="2259">2259</a>
+<a href="#2260" id="2260">2260</a>
+<a href="#2261" id="2261">2261</a>
+<a href="#2262" id="2262">2262</a>
+<a href="#2263" id="2263">2263</a>
+<a href="#2264" id="2264">2264</a>
+<a href="#2265" id="2265">2265</a>
+<a href="#2266" id="2266">2266</a>
+<a href="#2267" id="2267">2267</a>
+<a href="#2268" id="2268">2268</a>
+<a href="#2269" id="2269">2269</a>
+<a href="#2270" id="2270">2270</a>
+<a href="#2271" id="2271">2271</a>
+<a href="#2272" id="2272">2272</a>
+<a href="#2273" id="2273">2273</a>
+<a href="#2274" id="2274">2274</a>
+<a href="#2275" id="2275">2275</a>
+<a href="#2276" id="2276">2276</a>
+<a href="#2277" id="2277">2277</a>
+<a href="#2278" id="2278">2278</a>
+<a href="#2279" id="2279">2279</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Helper nodes.
 //!
 //! This module defines some foundational nodes that can be used for declaring properties and widgets.
@@ -3353,7 +3383,7 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// When the `event#` is received `on_event#` is called, if it provides a new value `merge` is called, if merge
 /// provides a new value the `state` variable is set.
-</span><span class="attr">#[allow(clippy::too_many_arguments)]
+</span><span class="attr">#[expect(clippy::too_many_arguments)]
 </span><span class="kw">pub fn </span>event_state2&lt;A0, A1, S0, S1, S&gt;(
     child: <span class="kw">impl </span>UiNode,
     state: <span class="kw">impl </span>IntoVar&lt;S&gt;,
@@ -3421,7 +3451,7 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// When the `event#` is received `on_event#` is called, if it provides a new value `merge` is called, if merge
 /// provides a new value the `state` variable is set.
-</span><span class="attr">#[allow(clippy::too_many_arguments)]
+</span><span class="attr">#[expect(clippy::too_many_arguments)]
 </span><span class="kw">pub fn </span>event_state3&lt;A0, A1, A2, S0, S1, S2, S&gt;(
     child: <span class="kw">impl </span>UiNode,
     state: <span class="kw">impl </span>IntoVar&lt;S&gt;,
@@ -3501,7 +3531,7 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// When the `event#` is received `on_event#` is called, if it provides a new value `merge` is called, if merge
 /// provides a new value the `state` variable is set.
-</span><span class="attr">#[allow(clippy::too_many_arguments)]
+</span><span class="attr">#[expect(clippy::too_many_arguments)]
 </span><span class="kw">pub fn </span>event_state4&lt;A0, A1, A2, A3, S0, S1, S2, S3, S&gt;(
     child: <span class="kw">impl </span>UiNode,
     state: <span class="kw">impl </span>IntoVar&lt;S&gt;,
@@ -3606,6 +3636,36 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         UiNodeOp::Deinit =&gt; {
             _binding = VarHandle::dummy();
+        }
+        <span class="kw">_ </span>=&gt; {}
+    })
+}
+
+<span class="doccomment">/// Helper for declaring state properties that are controlled by a variable.
+///
+/// On init the `state` closure is called to provide a variable, the variable is set to `source` and bound to it,
+/// you can use this to create state properties that map from a context variable or to create composite properties
+/// that merge other state properties.
+</span><span class="kw">pub fn </span>bind_state_init&lt;T, V&gt;(child: <span class="kw">impl </span>UiNode, source: <span class="kw">impl </span>Fn() -&gt; V + Send + <span class="lifetime">'static</span>, state: <span class="kw">impl </span>IntoVar&lt;T&gt;) -&gt; <span class="kw">impl </span>UiNode
+<span class="kw">where
+    </span>T: VarValue,
+    V: Var&lt;T&gt;,
+{
+    <span class="kw">let </span>state = state.into_var();
+    <span class="kw">let </span><span class="kw-2">mut </span>_source_var = <span class="prelude-val">None</span>;
+    <span class="kw">let </span><span class="kw-2">mut </span>_binding = VarHandle::dummy();
+
+    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+        UiNodeOp::Init =&gt; {
+            validate_getter_var(<span class="kw-2">&amp;</span>state);
+            <span class="kw">let </span>source = source();
+            <span class="kw">let _ </span>= state.set_from(<span class="kw-2">&amp;</span>source);
+            _binding = source.bind(<span class="kw-2">&amp;</span>state);
+            _source_var = <span class="prelude-val">Some</span>(source);
+        }
+        UiNodeOp::Deinit =&gt; {
+            _binding = VarHandle::dummy();
+            _source_var = <span class="prelude-val">None</span>;
         }
         <span class="kw">_ </span>=&gt; {}
     })
