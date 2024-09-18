@@ -280,6 +280,12 @@
 <a href="#280" id="280">280</a>
 <a href="#281" id="281">281</a>
 <a href="#282" id="282">282</a>
+<a href="#283" id="283">283</a>
+<a href="#284" id="284">284</a>
+<a href="#285" id="285">285</a>
+<a href="#286" id="286">286</a>
+<a href="#287" id="287">287</a>
+<a href="#288" id="288">288</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -308,6 +314,7 @@
 <span class="kw">use </span>zng_wgt_size_offset::size;
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style, StyleMix};
 <span class="kw">use </span>zng_wgt_text::Text;
+<span class="kw">use </span>zng_wgt_window::is_mobile;
 
 <span class="kw">pub mod </span>context;
 <span class="kw">pub mod </span>popup;
@@ -432,6 +439,7 @@
                 });
                 align = Align::CENTER;
             };
+
             icon_fn = BUTTON.cmd().flat_map(|c| <span class="kw">match </span>c {
                 <span class="prelude-val">Some</span>(c) =&gt; c.icon().boxed(),
                 <span class="prelude-val">None </span>=&gt; LocalVar(WidgetFn::nil()).boxed()
@@ -446,6 +454,10 @@
                 saturate = <span class="bool-val">false</span>;
                 opacity = <span class="number">50</span>.pct();
                 cursor = CursorIcon::NotAllowed;
+            }
+
+            when <span class="kw-2">*</span>#is_mobile {
+                shortcut_txt = NilUiNode;
             }
         }
     }

@@ -345,6 +345,55 @@
 <a href="#345" id="345">345</a>
 <a href="#346" id="346">346</a>
 <a href="#347" id="347">347</a>
+<a href="#348" id="348">348</a>
+<a href="#349" id="349">349</a>
+<a href="#350" id="350">350</a>
+<a href="#351" id="351">351</a>
+<a href="#352" id="352">352</a>
+<a href="#353" id="353">353</a>
+<a href="#354" id="354">354</a>
+<a href="#355" id="355">355</a>
+<a href="#356" id="356">356</a>
+<a href="#357" id="357">357</a>
+<a href="#358" id="358">358</a>
+<a href="#359" id="359">359</a>
+<a href="#360" id="360">360</a>
+<a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
+<a href="#369" id="369">369</a>
+<a href="#370" id="370">370</a>
+<a href="#371" id="371">371</a>
+<a href="#372" id="372">372</a>
+<a href="#373" id="373">373</a>
+<a href="#374" id="374">374</a>
+<a href="#375" id="375">375</a>
+<a href="#376" id="376">376</a>
+<a href="#377" id="377">377</a>
+<a href="#378" id="378">378</a>
+<a href="#379" id="379">379</a>
+<a href="#380" id="380">380</a>
+<a href="#381" id="381">381</a>
+<a href="#382" id="382">382</a>
+<a href="#383" id="383">383</a>
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a>
+<a href="#387" id="387">387</a>
+<a href="#388" id="388">388</a>
+<a href="#389" id="389">389</a>
+<a href="#390" id="390">390</a>
+<a href="#391" id="391">391</a>
+<a href="#392" id="392">392</a>
+<a href="#393" id="393">393</a>
+<a href="#394" id="394">394</a>
+<a href="#395" id="395">395</a>
+<a href="#396" id="396">396</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scrapper.
 //!
 //! See the [`l10n!`] documentation for more details.
@@ -398,6 +447,24 @@
     /// Use with --package or --manifest-path to not scrap local dependencies.
     </span><span class="attr">#[arg(long, action)]
     </span>no_local: bool,
+
+    <span class="doccomment">/// Don't scrap the target package.
+    ///
+    /// Use with --package or --manifest-path to only scrap dependencies.
+    </span><span class="attr">#[arg(long, action)]
+    </span>no_pkg: bool,
+
+    <span class="doccomment">/// Remove all previously copied dependency localization files.
+    </span><span class="attr">#[arg(long, action)]
+    </span>clean_deps: bool,
+
+    <span class="doccomment">/// Remove all previously scraped resources before scraping.
+    </span><span class="attr">#[arg(long, action)]
+    </span>clean_template: bool,
+
+    <span class="doccomment">/// Same as --clean-deps --clean-template
+    </span><span class="attr">#[arg(long, action)]
+    </span>clean: bool,
 
     <span class="doccomment">/// Custom l10n macro names, comma separated
     </span><span class="attr">#[arg(short, long, default_value = <span class="string">""</span>)]
@@ -462,50 +529,69 @@
         }
     }
 
+    <span class="kw">if </span>args.check {
+        args.clean = <span class="bool-val">false</span>;
+        args.clean_deps = <span class="bool-val">false</span>;
+        args.clean_template = <span class="bool-val">false</span>;
+    } <span class="kw">else if </span>args.clean {
+        args.clean_deps = <span class="bool-val">true</span>;
+        args.clean_template = <span class="bool-val">true</span>;
+    }
+
     <span class="kw">if </span>!input.is_empty() {
         <span class="kw">if </span>output.is_empty() {
             <span class="macro">fatal!</span>(<span class="string">"--output is required for --input"</span>)
         }
 
-        <span class="kw">if </span>args.check {
-            <span class="macro">println!</span>(<span class="string">r#"checking "{input}".."#</span>);
-        } <span class="kw">else </span>{
-            <span class="macro">println!</span>(<span class="string">r#"scraping "{input}".."#</span>);
-        }
+        <span class="comment">// scrap the target package
+        </span><span class="kw">if </span>!args.no_pkg {
+            <span class="kw">if </span>args.check {
+                <span class="macro">println!</span>(<span class="string">r#"checking "{input}".."#</span>);
+            } <span class="kw">else </span>{
+                <span class="macro">println!</span>(<span class="string">r#"scraping "{input}".."#</span>);
+            }
 
-        <span class="kw">let </span>custom_macro_names: Vec&lt;<span class="kw-2">&amp;</span>str&gt; = args.macros.split(<span class="string">','</span>).map(|n| n.trim()).collect();
-        <span class="comment">// let args = ();
+            <span class="kw">let </span>custom_macro_names: Vec&lt;<span class="kw-2">&amp;</span>str&gt; = args.macros.split(<span class="string">','</span>).map(|n| n.trim()).collect();
+            <span class="comment">// let args = ();
 
-        </span><span class="kw">let </span><span class="kw-2">mut </span>template = scraper::scrape_fluent_text(<span class="kw-2">&amp;</span>input, <span class="kw-2">&amp;</span>custom_macro_names);
-        <span class="kw">if </span>!args.check {
-            <span class="kw">match </span>template.entries.len() {
-                <span class="number">0 </span>=&gt; <span class="macro">println!</span>(<span class="string">"did not find any entry"</span>),
-                <span class="number">1 </span>=&gt; <span class="macro">println!</span>(<span class="string">"found 1 entry"</span>),
-                n =&gt; <span class="macro">println!</span>(<span class="string">"found {n} entries"</span>),
+            </span><span class="kw">let </span><span class="kw-2">mut </span>template = scraper::scrape_fluent_text(<span class="kw-2">&amp;</span>input, <span class="kw-2">&amp;</span>custom_macro_names);
+            <span class="kw">if </span>!args.check {
+                <span class="kw">match </span>template.entries.len() {
+                    <span class="number">0 </span>=&gt; <span class="macro">println!</span>(<span class="string">"did not find any entry"</span>),
+                    <span class="number">1 </span>=&gt; <span class="macro">println!</span>(<span class="string">"found 1 entry"</span>),
+                    n =&gt; <span class="macro">println!</span>(<span class="string">"found {n} entries"</span>),
+                }
+            }
+
+            <span class="kw">if </span>!template.entries.is_empty() || !template.notes.is_empty() {
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output) {
+                    <span class="macro">fatal!</span>(<span class="string">"cannot create dir `{output}`, {e}"</span>);
+                }
+
+                template.sort();
+
+                <span class="kw">let </span>r = template.write(|file, contents| {
+                    <span class="kw">let </span><span class="kw-2">mut </span>output = PathBuf::from(<span class="kw-2">&amp;</span>output);
+                    output.push(<span class="string">"template"</span>);
+
+                    <span class="kw">if </span>args.clean_template {
+                        <span class="macro">debug_assert!</span>(!args.check);
+                        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::remove_dir_all(<span class="kw-2">&amp;</span>output) {
+                            <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, output.display());
+                        }
+                    }
+                    util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
+                    output.push(<span class="macro">format!</span>(<span class="string">"{}.ftl"</span>, <span class="kw">if </span>file.is_empty() { <span class="string">"_" </span>} <span class="kw">else </span>{ file }));
+                    util::check_or_write(args.check, output, contents)
+                });
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
+                    <span class="macro">fatal!</span>(<span class="string">"error writing template files, {e}"</span>);
+                }
             }
         }
 
-        <span class="kw">if </span>!template.entries.is_empty() || !template.notes.is_empty() {
-            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output) {
-                <span class="macro">fatal!</span>(<span class="string">"cannot create dir `{output}`, {e}"</span>);
-            }
-
-            template.sort();
-
-            <span class="kw">let </span>r = template.write(|file, contents| {
-                <span class="kw">let </span><span class="kw-2">mut </span>output = PathBuf::from(<span class="kw-2">&amp;</span>output);
-                output.push(<span class="string">"template"</span>);
-                util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
-                output.push(<span class="macro">format!</span>(<span class="string">"{}.ftl"</span>, <span class="kw">if </span>file.is_empty() { <span class="string">"_" </span>} <span class="kw">else </span>{ file }));
-                util::check_or_write(args.check, output, contents)
-            });
-            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
-                <span class="macro">fatal!</span>(<span class="string">"error writing template files, {e}"</span>);
-            }
-        }
-
-        <span class="kw">let </span><span class="kw-2">mut </span>local = <span class="macro">vec!</span>[];
-
+        <span class="comment">// collect dependencies
+        </span><span class="kw">let </span><span class="kw-2">mut </span>local = <span class="macro">vec!</span>[];
         <span class="kw">if </span>!args.no_deps {
             <span class="kw">let </span><span class="kw-2">mut </span>count = <span class="number">0</span>;
             <span class="kw">let </span>(workspace_root, deps) = util::dependencies(<span class="kw-2">&amp;</span>args.manifest_path);
@@ -533,6 +619,13 @@
                 </span><span class="kw">let </span><span class="kw-2">mut </span>l10n_dir = |lang: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>std::ffi::OsStr&gt;| {
                     any = <span class="bool-val">true</span>;
                     <span class="kw">let </span>dir = l10n_dir.join(lang.unwrap()).join(<span class="string">"deps"</span>);
+
+                    <span class="kw">if </span>args.clean_deps {
+                        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::remove_dir_all(<span class="kw-2">&amp;</span>dir) {
+                            <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, dir.display());
+                        }
+                    }
+
                     <span class="kw">let </span>ignore_file = dir.join(<span class="string">".gitignore"</span>);
 
                     <span class="kw">if </span>!ignore_file.exists() {
@@ -555,7 +648,7 @@
                             <span class="kw">if </span>!args.package.is_empty() {
                                 <span class="macro">writeln!</span>(
                                     <span class="kw-2">&amp;mut </span>ignore,
-                                    <span class="string">"# Call `cargo zng l10n --package {}{custom_output}` to update"</span>,
+                                    <span class="string">"# Call `cargo zng l10n --package {}{custom_output} --no-pkg --no-local --clean-deps` to update"</span>,
                                     args.package
                                 )
                                 .unwrap();
@@ -564,7 +657,7 @@
                                 <span class="kw">let </span>path = path.strip_prefix(std::env::current_dir().unwrap()).unwrap_or(path);
                                 <span class="macro">writeln!</span>(
                                     <span class="kw-2">&amp;mut </span>ignore,
-                                    <span class="string">"# Call `cargo zng l10n --manifest-path \"{}\"` to update"</span>,
+                                    <span class="string">"# Call `cargo zng l10n --manifest-path \"{}\" --no-pkg --no-local --clean-deps` to update"</span>,
                                     path.display()
                                 )
                                 .unwrap();
@@ -663,7 +756,8 @@
             <span class="macro">println!</span>(<span class="string">"found {count} dependencies with localization"</span>);
         }
 
-        <span class="kw">if </span>!args.no_local {
+        <span class="comment">// scrap local dependencies
+        </span><span class="kw">if </span>!args.no_local {
             <span class="kw">for </span>dep <span class="kw">in </span>local {
                 run(L10nArgs {
                     input: String::new(),
@@ -672,6 +766,10 @@
                     manifest_path: dep.manifest_path.display().to_string(),
                     no_deps: <span class="bool-val">true</span>,
                     no_local: <span class="bool-val">true</span>,
+                    no_pkg: <span class="bool-val">false</span>,
+                    clean_deps: <span class="bool-val">false</span>,
+                    clean_template: <span class="bool-val">false</span>,
+                    clean: <span class="bool-val">false</span>,
                     macros: args.macros.clone(),
                     pseudo: String::new(),
                     pseudo_m: String::new(),
