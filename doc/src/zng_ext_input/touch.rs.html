@@ -3305,7 +3305,7 @@
 
     <span class="kw">fn </span>inertia(velocity: Dip, friction: Dip) -&gt; (Dip, Duration) {
         <span class="kw">let </span>cfg = TOUCH.touch_config().get();
-        <span class="kw">let </span>signal = <span class="kw">if </span>velocity &gt;= Dip::new(<span class="number">0</span>) { Dip::new(<span class="number">1</span>) } <span class="kw">else </span>{ Dip::new(-<span class="number">1</span>) };
+        <span class="kw">let </span>signal = <span class="kw">if </span>velocity &gt;= <span class="number">0 </span>{ <span class="number">1.0 </span>} <span class="kw">else </span>{ -<span class="number">1.0 </span>};
         <span class="kw">let </span>velocity = velocity.abs();
 
         <span class="kw">if </span>velocity &lt; cfg.min_fling_velocity {
@@ -3692,7 +3692,7 @@
         <span class="kw">let </span>cfg = TOUCH.touch_config().get();
         <span class="kw">let </span>min_fling_velocity = cfg.min_fling_velocity.to_px(<span class="self">self</span>.scale_factor);
 
-        <span class="kw">let </span>signal = <span class="kw">if </span>velocity &gt;= Px(<span class="number">0</span>) { Px(<span class="number">1</span>) } <span class="kw">else </span>{ Px(-<span class="number">1</span>) };
+        <span class="kw">let </span>signal = <span class="kw">if </span>velocity &gt;= <span class="number">0 </span>{ <span class="number">1.0 </span>} <span class="kw">else </span>{ -<span class="number">1.0 </span>};
         <span class="kw">let </span>velocity = velocity.abs();
 
         <span class="kw">if </span>velocity &lt; min_fling_velocity {

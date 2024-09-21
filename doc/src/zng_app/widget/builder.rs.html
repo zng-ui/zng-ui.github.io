@@ -3020,6 +3020,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2984" id="2984">2984</a>
 <a href="#2985" id="2985">2985</a>
 <a href="#2986" id="2986">2986</a>
+<a href="#2987" id="2987">2987</a>
+<a href="#2988" id="2988">2988</a>
+<a href="#2989" id="2989">2989</a>
+<a href="#2990" id="2990">2990</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget and property builder types.
 
 </span><span class="kw">use crate</span>::{handler::WidgetHandler, widget::node::WhenUiNodeListBuilder};
@@ -5361,6 +5365,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         },
                     });
                 } <span class="kw">else </span>{
+                    <span class="macro">tracing::warn!</span>(
+                        <span class="string">"property `{}` ignored, it is only set in `when` block and has no default value"</span>,
+                        assign.property().name
+                    );
                     <span class="kw">continue</span>;
                 }
 

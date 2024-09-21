@@ -359,6 +359,13 @@
 <a href="#359" id="359">359</a>
 <a href="#360" id="360">360</a>
 <a href="#361" id="361">361</a>
+<a href="#362" id="362">362</a>
+<a href="#363" id="363">363</a>
+<a href="#364" id="364">364</a>
+<a href="#365" id="365">365</a>
+<a href="#366" id="366">366</a>
+<a href="#367" id="367">367</a>
+<a href="#368" id="368">368</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//! Settings widgets.
@@ -373,8 +380,8 @@
 <span class="kw">use </span>zng_ext_l10n::l10n;
 <span class="kw">use </span>zng_ext_window::{WINDOW_Ext <span class="kw">as _</span>, WINDOWS};
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
-<span class="kw">use </span>zng_wgt_container::Container;
 <span class="kw">use </span>zng_wgt_input::cmd::SETTINGS_CMD;
+<span class="kw">use </span>zng_wgt_size_offset::actual_width;
 <span class="kw">use </span>zng_wgt_window::{save_state_node, SaveState, Window};
 
 <span class="doccomment">/// Settings editor widget.
@@ -387,6 +394,11 @@
             save_state = SaveState::enabled();
             zng_wgt_fill::background_color = light_dark(rgb(<span class="number">0.85</span>, <span class="number">0.85</span>, <span class="number">0.85</span>), rgb(<span class="number">0.15</span>, <span class="number">0.15</span>, <span class="number">0.15</span>));
             zng_wgt_container::padding = <span class="number">10</span>;
+
+            when <span class="kw-2">*</span>#actual_width &lt;= <span class="number">400 </span>&amp;&amp; <span class="kw-2">*</span>#actual_width &gt; <span class="number">1 </span>{
+                panel_fn = WidgetFn::new(default_panel_mobile_fn);
+                categories_list_fn = WidgetFn::new(default_categories_list_mobile_fn);
+            }
         }
         <span class="self">self</span>.widget_builder().push_build_action(|wgt| {
             wgt.set_child(settings_editor_node());
@@ -412,7 +424,8 @@
                 .sub_var(<span class="kw-2">&amp;</span>SETTINGS_SEARCH_FN_VAR)
                 .sub_var(<span class="kw-2">&amp;</span>CATEGORIES_LIST_FN_VAR)
                 .sub_var(<span class="kw-2">&amp;</span>CATEGORY_HEADER_FN_VAR)
-                .sub_var(<span class="kw-2">&amp;</span>CATEGORY_ITEM_FN_VAR);
+                .sub_var(<span class="kw-2">&amp;</span>CATEGORY_ITEM_FN_VAR)
+                .sub_var(<span class="kw-2">&amp;</span>PANEL_FN_VAR);
             <span class="kw-2">*</span>c.child() = settings_view_fn().boxed();
         }
         UiNodeOp::Deinit =&gt; {
@@ -420,7 +433,8 @@
             <span class="kw-2">*</span>c.child() = NilUiNode.boxed();
         }
         UiNodeOp::Update { .. } =&gt; {
-            <span class="kw">if </span>SETTINGS_FN_VAR.is_new()
+            <span class="kw">if </span>PANEL_FN_VAR.is_new()
+                || SETTINGS_FN_VAR.is_new()
                 || SETTING_FN_VAR.is_new()
                 || SETTINGS_SEARCH_FN_VAR.is_new()
                 || CATEGORIES_LIST_FN_VAR.is_new()
@@ -535,7 +549,7 @@
 }
 
 <span class="kw">fn </span>settings_view_fn() -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span>search_box = SETTINGS_SEARCH_FN_VAR.get()(SettingsSearchArgs {});
+    <span class="kw">let </span>search = SETTINGS_SEARCH_FN_VAR.get()(SettingsSearchArgs {});
 
     <span class="kw">let </span>editor_state = SETTINGS.editor_state().actual_var();
 
@@ -551,7 +565,8 @@
 
             CATEGORIES_LIST_FN_VAR.get()(CategoriesListArgs { items: categories })
         }),
-    );
+    )
+    .boxed();
 
     <span class="kw">let </span>settings = presenter(
         editor_state,
@@ -580,15 +595,14 @@
 
             SETTINGS_FN_VAR.get()(SettingsArgs { header, items: settings })
         }),
-    );
+    )
+    .boxed();
 
-    <span class="macro">Container!</span> {
-        child_top = search_box, <span class="number">0</span>;
-        child = <span class="macro">Container!</span> {
-            child_start = categories, <span class="number">0</span>;
-            child = settings
-        };
-    }
+    PANEL_FN_VAR.get()(PanelArgs {
+        search,
+        categories,
+        settings,
+    })
 }
 
 <span class="doccomment">/// Save and restore settings search and selected category.

@@ -226,6 +226,27 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#190" id="190">190</a>
 <a href="#191" id="191">191</a>
 <a href="#192" id="192">192</a>
+<a href="#193" id="193">193</a>
+<a href="#194" id="194">194</a>
+<a href="#195" id="195">195</a>
+<a href="#196" id="196">196</a>
+<a href="#197" id="197">197</a>
+<a href="#198" id="198">198</a>
+<a href="#199" id="199">199</a>
+<a href="#200" id="200">200</a>
+<a href="#201" id="201">201</a>
+<a href="#202" id="202">202</a>
+<a href="#203" id="203">203</a>
+<a href="#204" id="204">204</a>
+<a href="#205" id="205">205</a>
+<a href="#206" id="206">206</a>
+<a href="#207" id="207">207</a>
+<a href="#208" id="208">208</a>
+<a href="#209" id="209">209</a>
+<a href="#210" id="210">210</a>
+<a href="#211" id="211">211</a>
+<a href="#212" id="212">212</a>
+<a href="#213" id="213">213</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 
 <span class="kw">use </span>zng_layout::context::DIRECTION_VAR;
@@ -417,5 +438,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         <span class="kw">_ </span>=&gt; {}
     })
+}
+
+<span class="macro">context_var!</span> {
+    <span class="doccomment">/// Variable that indicates the context should use mobile UI themes.
+    ///
+    /// This is `true` by default in Android and iOS builds. It can also be set using [`force_mobile`](fn@force_mobile).
+    </span><span class="kw">pub static </span>IS_MOBILE_VAR: bool = <span class="macro">cfg!</span>(any(target_os = <span class="string">"android"</span>, target_os = <span class="string">"ios"</span>));
+}
+
+<span class="doccomment">/// Requests mobile UI themes in desktop builds.
+///
+/// This property sets the [`IS_MOBILE_VAR`].
+</span><span class="attr">#[property(CONTEXT, default(IS_MOBILE_VAR))]
+</span><span class="kw">pub fn </span>force_mobile(child: <span class="kw">impl </span>UiNode, is_mobile: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    with_context_var(child, IS_MOBILE_VAR, is_mobile)
+}
+
+<span class="doccomment">/// Gets the [`IS_MOBILE_VAR`] that indicates the window or widget should use mobile UI themes.
+</span><span class="attr">#[property(EVENT)]
+</span><span class="kw">pub fn </span>is_mobile(child: <span class="kw">impl </span>UiNode, is_mobile: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+    zng_wgt::node::bind_state(child, IS_MOBILE_VAR, is_mobile)
 }
 </code></pre></div></section></main></body></html>

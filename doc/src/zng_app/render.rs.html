@@ -3110,15 +3110,6 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#3074" id="3074">3074</a>
 <a href="#3075" id="3075">3075</a>
 <a href="#3076" id="3076">3076</a>
-<a href="#3077" id="3077">3077</a>
-<a href="#3078" id="3078">3078</a>
-<a href="#3079" id="3079">3079</a>
-<a href="#3080" id="3080">3080</a>
-<a href="#3081" id="3081">3081</a>
-<a href="#3082" id="3082">3082</a>
-<a href="#3083" id="3083">3083</a>
-<a href="#3084" id="3084">3084</a>
-<a href="#3085" id="3085">3085</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
 
 </span><span class="kw">use </span>std::{marker::PhantomData, mem, sync::Arc};
@@ -5349,17 +5340,15 @@ document.addEventListener('DOMContentLoaded', function () {
     /// * `render_update_widgets` - External update requests.
     /// * `frame_id` - Id of the new frame.
     /// * `root_id` - Id of the window root widget.
-    /// * `renderer` - Reference to the renderer that will update.
+    /// * `root_bounds` - Bounds info of the window root widget.
     /// * `clear_color` - The current clear color.
     </span><span class="kw">pub fn </span>new(
         render_update_widgets: Arc&lt;RenderUpdates&gt;,
         frame_id: FrameId,
         root_id: WidgetId,
         root_bounds: WidgetBoundsInfo,
-        renderer: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>ViewRenderer&gt;,
         clear_color: Rgba,
     ) -&gt; <span class="self">Self </span>{
-        <span class="kw">let _ </span>= renderer;
         FrameUpdate {
             render_update_widgets,
             widget_id: root_id,
@@ -5831,14 +5820,7 @@ document.addEventListener('DOMContentLoaded', function () {
         root_bounds: WidgetBoundsInfo,
         update: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>),
     ) {
-        <span class="kw">let </span><span class="kw-2">mut </span>nested = <span class="self">Self</span>::new(
-            render_update_widgets,
-            <span class="self">self</span>.frame_id,
-            root_id,
-            root_bounds,
-            <span class="prelude-val">None</span>,
-            <span class="self">self</span>.current_clear_color,
-        );
+        <span class="kw">let </span><span class="kw-2">mut </span>nested = <span class="self">Self</span>::new(render_update_widgets, <span class="self">self</span>.frame_id, root_id, root_bounds, <span class="self">self</span>.current_clear_color);
 
         update(<span class="kw-2">&amp;mut </span>nested);
 

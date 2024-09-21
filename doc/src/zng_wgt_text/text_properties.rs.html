@@ -2037,7 +2037,7 @@
         UiNodeOp::Measure { wm, desired_size } =&gt; {
             <span class="kw">let </span>font_size = FONT_SIZE_VAR.get();
             <span class="kw">let </span>font_size_px = font_size.layout_dft_x(LAYOUT.root_font_size());
-            <span class="kw-2">*</span>desired_size = <span class="kw">if </span>font_size_px &gt;= Px(<span class="number">0</span>) {
+            <span class="kw-2">*</span>desired_size = <span class="kw">if </span>font_size_px &gt;= <span class="number">0 </span>{
                 LAYOUT.with_font_size(font_size_px, || child.measure(wm))
             } <span class="kw">else </span>{
                 <span class="macro">tracing::error!</span>(<span class="string">"invalid font size {font_size:?} =&gt; {font_size_px:?}"</span>);
@@ -2047,7 +2047,7 @@
         UiNodeOp::Layout { wl, final_size } =&gt; {
             <span class="kw">let </span>font_size = FONT_SIZE_VAR.get();
             <span class="kw">let </span>font_size_px = font_size.layout_dft_x(LAYOUT.root_font_size());
-            <span class="kw-2">*</span>final_size = <span class="kw">if </span>font_size_px &gt;= Px(<span class="number">0</span>) {
+            <span class="kw-2">*</span>final_size = <span class="kw">if </span>font_size_px &gt;= <span class="number">0 </span>{
                 LAYOUT.with_font_size(font_size_px, || child.layout(wl))
             } <span class="kw">else </span>{
                 <span class="macro">tracing::error!</span>(<span class="string">"invalid font size {font_size:?} =&gt; {font_size_px:?}"</span>);

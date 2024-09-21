@@ -1054,6 +1054,33 @@
 <a href="#1054" id="1054">1054</a>
 <a href="#1055" id="1055">1055</a>
 <a href="#1056" id="1056">1056</a>
+<a href="#1057" id="1057">1057</a>
+<a href="#1058" id="1058">1058</a>
+<a href="#1059" id="1059">1059</a>
+<a href="#1060" id="1060">1060</a>
+<a href="#1061" id="1061">1061</a>
+<a href="#1062" id="1062">1062</a>
+<a href="#1063" id="1063">1063</a>
+<a href="#1064" id="1064">1064</a>
+<a href="#1065" id="1065">1065</a>
+<a href="#1066" id="1066">1066</a>
+<a href="#1067" id="1067">1067</a>
+<a href="#1068" id="1068">1068</a>
+<a href="#1069" id="1069">1069</a>
+<a href="#1070" id="1070">1070</a>
+<a href="#1071" id="1071">1071</a>
+<a href="#1072" id="1072">1072</a>
+<a href="#1073" id="1073">1073</a>
+<a href="#1074" id="1074">1074</a>
+<a href="#1075" id="1075">1075</a>
+<a href="#1076" id="1076">1076</a>
+<a href="#1077" id="1077">1077</a>
+<a href="#1078" id="1078">1078</a>
+<a href="#1079" id="1079">1079</a>
+<a href="#1080" id="1080">1080</a>
+<a href="#1081" id="1081">1081</a>
+<a href="#1082" id="1082">1082</a>
+<a href="#1083" id="1083">1083</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1272,7 +1299,7 @@
 ///
 /// You can use the [`max_width`](fn@max_width) and [`max_height`](fn@max_height) properties to only
 /// set the maximum size of one dimension.
-</span><span class="attr">#[property(SIZE-<span class="number">1</span>)]
+</span><span class="attr">#[property(SIZE-<span class="number">1</span>,  default(PxSize::splat(Px::MAX)))]
 </span><span class="kw">pub fn </span>max_size(child: <span class="kw">impl </span>UiNode, max_size: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>max_size = max_size.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1309,7 +1336,7 @@
 /// # `max_size`
 ///
 /// You can set both `max_width` and `max_height` at the same time using the [`max_size`](fn@max_size) property.
-</span><span class="attr">#[property(SIZE-<span class="number">1</span>)]
+</span><span class="attr">#[property(SIZE-<span class="number">1</span>, default(Px::MAX))]
 </span><span class="kw">pub fn </span>max_width(child: <span class="kw">impl </span>UiNode, max_width: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>max_width = max_width.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1351,7 +1378,7 @@
 /// # `max_size`
 ///
 /// You can set both `max_width` and `max_height` at the same time using the [`max_size`](fn@max_size) property.
-</span><span class="attr">#[property(SIZE-<span class="number">1</span>)]
+</span><span class="attr">#[property(SIZE-<span class="number">1</span>, default(Px::MAX))]
 </span><span class="kw">pub fn </span>max_height(child: <span class="kw">impl </span>UiNode, max_height: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>max_height = max_height.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1739,29 +1766,38 @@
 </span><span class="attr">#[property(SIZE, default(<span class="bool-val">false</span>))]
 </span><span class="kw">pub fn </span>sticky_width(child: <span class="kw">impl </span>UiNode, sticky: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>sticky = sticky.into_var();
+    <span class="kw">let </span><span class="kw-2">mut </span>sticky_after_layout = <span class="bool-val">false</span>;
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
-            WIDGET.sub_var_layout(<span class="kw-2">&amp;</span>sticky);
+            WIDGET.sub_var(<span class="kw-2">&amp;</span>sticky);
+        }
+        UiNodeOp::Deinit =&gt; {
+            sticky_after_layout = <span class="bool-val">false</span>;
+        }
+        UiNodeOp::Update { .. } =&gt; {
+            <span class="kw">if </span>sticky.is_new() {
+                sticky_after_layout = <span class="bool-val">false</span>;
+            }
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky.get() {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size().width;
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || wm.measure_block(child));
+                size.width = size.width.max(min);
+                <span class="kw-2">*</span>desired_size = size;
             }
-
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size().width;
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || wm.measure_block(child));
-            size.width = size.width.max(min);
-            <span class="kw-2">*</span>desired_size = size;
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">let </span>sticky = sticky.get();
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size().width;
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || child.layout(wl));
+                size.width = size.width.max(min);
+                <span class="kw-2">*</span>final_size = size;
             }
 
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size().width;
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || child.layout(wl));
-            size.width = size.width.max(min);
-            <span class="kw-2">*</span>final_size = size;
+            <span class="comment">// only enable after the `WIDGET.bounds().inner_size()` updates
+            </span>sticky_after_layout = sticky;
         }
         <span class="kw">_ </span>=&gt; {}
     })
@@ -1774,29 +1810,38 @@
 </span><span class="attr">#[property(SIZE, default(<span class="bool-val">false</span>))]
 </span><span class="kw">pub fn </span>sticky_height(child: <span class="kw">impl </span>UiNode, sticky: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>sticky = sticky.into_var();
+    <span class="kw">let </span><span class="kw-2">mut </span>sticky_after_layout = <span class="bool-val">false</span>;
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
-            WIDGET.sub_var_layout(<span class="kw-2">&amp;</span>sticky);
+            WIDGET.sub_var(<span class="kw-2">&amp;</span>sticky);
+        }
+        UiNodeOp::Deinit =&gt; {
+            sticky_after_layout = <span class="bool-val">false</span>;
+        }
+        UiNodeOp::Update { .. } =&gt; {
+            <span class="kw">if </span>sticky.is_new() {
+                sticky_after_layout = <span class="bool-val">false</span>;
+            }
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky.get() {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size().height;
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_y(min), || wm.measure_block(child));
+                size.height = size.height.max(min);
+                <span class="kw-2">*</span>desired_size = size;
             }
-
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size().height;
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || wm.measure_block(child));
-            size.height = size.height.max(min);
-            <span class="kw-2">*</span>desired_size = size;
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">let </span>sticky = sticky.get();
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size().height;
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_y(min), || child.layout(wl));
+                size.height = size.height.max(min);
+                <span class="kw-2">*</span>final_size = size;
             }
 
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size().height;
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_x(min), || child.layout(wl));
-            size.height = size.height.max(min);
-            <span class="kw-2">*</span>final_size = size;
+            <span class="comment">// only enable after the `WIDGET.bounds().inner_size()` updates
+            </span>sticky_after_layout = sticky;
         }
         <span class="kw">_ </span>=&gt; {}
     })
@@ -1809,29 +1854,38 @@
 </span><span class="attr">#[property(SIZE, default(<span class="bool-val">false</span>))]
 </span><span class="kw">pub fn </span>sticky_size(child: <span class="kw">impl </span>UiNode, sticky: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>sticky = sticky.into_var();
+    <span class="kw">let </span><span class="kw-2">mut </span>sticky_after_layout = <span class="bool-val">false</span>;
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
         UiNodeOp::Init =&gt; {
-            WIDGET.sub_var_layout(<span class="kw-2">&amp;</span>sticky);
+            WIDGET.sub_var(<span class="kw-2">&amp;</span>sticky);
+        }
+        UiNodeOp::Deinit =&gt; {
+            sticky_after_layout = <span class="bool-val">false</span>;
+        }
+        UiNodeOp::Update { .. } =&gt; {
+            <span class="kw">if </span>sticky.is_new() {
+                sticky_after_layout = <span class="bool-val">false</span>;
+            }
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky.get() {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size();
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_size(min), || wm.measure_block(child));
+                size = size.max(min);
+                <span class="kw-2">*</span>desired_size = size;
             }
-
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size();
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_size(min), || wm.measure_block(child));
-            size = size.max(min);
-            <span class="kw-2">*</span>desired_size = size;
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">if </span>!sticky.get() {
-                <span class="kw">return</span>;
+            <span class="kw">let </span>sticky = sticky.get();
+            <span class="kw">if </span>sticky_after_layout &amp;&amp; sticky {
+                <span class="kw">let </span>min = WIDGET.bounds().inner_size();
+                <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_size(min), || child.layout(wl));
+                size = size.max(min);
+                <span class="kw-2">*</span>final_size = size;
             }
 
-            <span class="kw">let </span>min = WIDGET.bounds().inner_size();
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(LAYOUT.constraints().with_min_size(min), || child.layout(wl));
-            size = size.max(min);
-            <span class="kw-2">*</span>final_size = size;
+            <span class="comment">// only enable after the `WIDGET.bounds().inner_size()` updates
+            </span>sticky_after_layout = sticky;
         }
         <span class="kw">_ </span>=&gt; {}
     })
