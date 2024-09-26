@@ -286,7 +286,6 @@
 <a href="#286" id="286">286</a>
 <a href="#287" id="287">287</a>
 <a href="#288" id="288">288</a>
-<a href="#289" id="289">289</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -302,7 +301,8 @@
 
 </span><span class="kw">use </span>core::fmt;
 <span class="kw">use </span>libloading::<span class="kw-2">*</span>;
-<span class="kw">use </span>std::{env, io, path::PathBuf};
+<span class="kw">use </span>parking_lot::Mutex;
+<span class="kw">use </span>std::{env, io, mem, path::PathBuf};
 <span class="kw">use </span>zng_view_api::StaticPatch;
 
 <span class="macro">zng_env::on_process_start!</span>(|<span class="kw">_</span>| {
@@ -505,33 +505,31 @@
     }
     <span class="kw">fn </span>run_same_process_impl(<span class="self">self</span>, run_app: Box&lt;<span class="kw">dyn </span>FnOnce() + Send&gt;) -&gt; ! {
         <span class="kw">let </span>patch = StaticPatch::capture();
-        <span class="kw">unsafe </span>{
-            <span class="kw">use </span>std::sync::atomic::{AtomicU8, Ordering};
 
-            <span class="kw">static </span>STATE: AtomicU8 = AtomicU8::new(ST_NONE);
-            <span class="kw">const </span>ST_NONE: u8 = <span class="number">0</span>;
-            <span class="kw">const </span>ST_SOME: u8 = <span class="number">1</span>;
-            <span class="kw">const </span>ST_TAKEN: u8 = <span class="number">2</span>;
-
-            <span class="kw">static </span><span class="kw-2">mut </span>RUN: <span class="prelude-ty">Option</span>&lt;Box&lt;<span class="kw">dyn </span>FnOnce() + Send&gt;&gt; = <span class="prelude-val">None</span>;
-
-            <span class="kw">if </span>STATE.swap(ST_SOME, Ordering::SeqCst) != ST_NONE {
-                <span class="macro">panic!</span>(<span class="string">"expected only one call to `run_same_process`"</span>);
-            }
-
-            RUN = <span class="prelude-val">Some</span>(run_app);
-
-            <span class="kw">extern </span><span class="string">"C" </span><span class="kw">fn </span>run() {
-                <span class="kw">if </span>STATE.swap(ST_TAKEN, Ordering::SeqCst) != ST_SOME {
-                    <span class="macro">panic!</span>(<span class="string">"expected only one call to `run_app` closure"</span>);
-                }
-
-                <span class="kw">let </span>run_app = <span class="kw">unsafe </span>{ RUN.take() }.unwrap();
-                run_app();
-            }
-
-            (<span class="self">self</span>.run_same_process_fn)(<span class="kw-2">&amp;</span>patch, run)
+        <span class="kw">enum </span>Run {
+            Waiting,
+            Set(Box&lt;<span class="kw">dyn </span>FnOnce() + Send&gt;),
+            Taken,
         }
+        <span class="kw">static </span>RUN: Mutex&lt;Run&gt; = Mutex::new(Run::Waiting);
+
+        <span class="kw">match </span>mem::replace(<span class="kw-2">&amp;mut *</span>RUN.lock(), Run::Set(Box::new(run_app))) {
+            Run::Waiting =&gt; {}
+            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">"expected only one call to `run_same_process`"</span>),
+        };
+
+        <span class="kw">extern </span><span class="string">"C" </span><span class="kw">fn </span>run() {
+            <span class="kw">match </span>mem::replace(<span class="kw-2">&amp;mut *</span>RUN.lock(), Run::Taken) {
+                Run::Set(run_app) =&gt; run_app(),
+                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+            }
+        }
+
+        <span class="comment">// SAFETY: we need to trust a compatible library is loaded at this point
+        </span><span class="kw">unsafe </span>{
+            (<span class="self">self</span>.run_same_process_fn)(<span class="kw-2">&amp;</span>patch, run);
+        }
+
         <span class="comment">// exit the process to ensure all threads are stopped
         </span>zng_env::exit(<span class="number">0</span>)
     }
