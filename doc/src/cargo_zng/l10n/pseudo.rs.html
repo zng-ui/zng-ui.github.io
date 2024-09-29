@@ -191,23 +191,23 @@
 
 <span class="kw">use </span><span class="kw">crate</span>::util;
 
-<span class="kw">pub fn </span>pseudo(dir: <span class="kw-2">&amp;</span>str, check: bool) {
-    fluent_pseudo_impl(dir, <span class="string">"pseudo"</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>, check)
+<span class="kw">pub fn </span>pseudo(dir: <span class="kw-2">&amp;</span>str, check: bool, verbose: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo"</span>, <span class="bool-val">false</span>, <span class="bool-val">false</span>, check, verbose)
 }
 
-<span class="kw">pub fn </span>pseudo_mirr(dir: <span class="kw-2">&amp;</span>str, check: bool) {
-    fluent_pseudo_impl(dir, <span class="string">"pseudo-mirr"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, check)
+<span class="kw">pub fn </span>pseudo_mirr(dir: <span class="kw-2">&amp;</span>str, check: bool, verbose: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo-mirr"</span>, <span class="bool-val">true</span>, <span class="bool-val">false</span>, check, verbose)
 }
 
-<span class="kw">pub fn </span>pseudo_wide(dir: <span class="kw-2">&amp;</span>str, check: bool) {
-    fluent_pseudo_impl(dir, <span class="string">"pseudo-wide"</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, check)
+<span class="kw">pub fn </span>pseudo_wide(dir: <span class="kw-2">&amp;</span>str, check: bool, verbose: bool) {
+    fluent_pseudo_impl(dir, <span class="string">"pseudo-wide"</span>, <span class="bool-val">false</span>, <span class="bool-val">true</span>, check, verbose)
 }
 
-<span class="kw">fn </span>fluent_pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, flipped: bool, elongate: bool, check: bool) {
-    pseudo_impl(dir, to_name, <span class="kw-2">&amp;</span>|s| fluent_pseudo::transform(s, flipped, elongate), check)
+<span class="kw">fn </span>fluent_pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, flipped: bool, elongate: bool, check: bool, verbose: bool) {
+    pseudo_impl(dir, to_name, <span class="kw-2">&amp;</span>|s| fluent_pseudo::transform(s, flipped, elongate), check, verbose)
 }
 
-<span class="kw">fn </span>pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool) {
+<span class="kw">fn </span>pseudo_impl(dir: <span class="kw-2">&amp;</span>str, to_name: <span class="kw-2">&amp;</span>str, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool, verbose: bool) {
     <span class="kw">let </span>dir = Path::new(dir);
     <span class="kw">let </span>to_dir = dir.with_file_name(to_name);
 
@@ -216,17 +216,17 @@
         <span class="kw">let </span>path = entry.path();
         <span class="kw">if </span>path.is_file() &amp;&amp; path.extension().map(|e| e == <span class="string">"ftl"</span>).unwrap_or(<span class="bool-val">false</span>) {
             <span class="kw">let _ </span>= util::check_or_create_dir(check, <span class="kw-2">&amp;</span>to_dir);
-            generate(<span class="kw-2">&amp;</span>path, <span class="kw-2">&amp;</span>to_dir.join(path.file_name().unwrap()), transform, check);
+            generate(<span class="kw-2">&amp;</span>path, <span class="kw-2">&amp;</span>to_dir.join(path.file_name().unwrap()), transform, check, verbose);
         }
     }
 
     <span class="kw">let </span>unnamed = dir.with_extension(<span class="string">"ftl"</span>);
     <span class="kw">if </span>unnamed.exists() {
-        generate(<span class="kw-2">&amp;</span>unnamed, <span class="kw-2">&amp;</span>to_dir.with_extension(<span class="string">"ftl"</span>), transform, check);
+        generate(<span class="kw-2">&amp;</span>unnamed, <span class="kw-2">&amp;</span>to_dir.with_extension(<span class="string">"ftl"</span>), transform, check, verbose);
     }
 }
 
-<span class="kw">fn </span>generate(from: <span class="kw-2">&amp;</span>Path, to: <span class="kw-2">&amp;</span>Path, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool) {
+<span class="kw">fn </span>generate(from: <span class="kw-2">&amp;</span>Path, to: <span class="kw-2">&amp;</span>Path, transform: <span class="kw-2">&amp;</span><span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>str) -&gt; Cow&lt;str&gt;, check: bool, verbose: bool) {
     <span class="kw">let </span>source = <span class="kw">match </span>fs::read_to_string(from) {
         <span class="prelude-val">Ok</span>(s) =&gt; s,
         <span class="prelude-val">Err</span>(e) =&gt; {
@@ -257,7 +257,7 @@
         }
     }
 
-    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_write(check, to, output.as_bytes()) {
+    <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_write(check, to, output.as_bytes(), verbose) {
         <span class="macro">error!</span>(<span class="string">"cannot write `{}`, {e}"</span>, to.display());
     } <span class="kw">else </span>{
         <span class="macro">println!</span>(<span class="string">"  generated {}"</span>, to.display());

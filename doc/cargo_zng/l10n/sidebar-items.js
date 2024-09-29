@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["run"],"mod":["pseudo","scraper"],"struct":["L10nArgs"]};
+window.SIDEBAR_ITEMS = {"fn":["run","run_impl"],"mod":["pseudo","scraper"],"struct":["L10nArgs"]};

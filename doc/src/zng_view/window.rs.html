@@ -2141,6 +2141,13 @@
 <a href="#2141" id="2141">2141</a>
 <a href="#2142" id="2142">2142</a>
 <a href="#2143" id="2143">2143</a>
+<a href="#2144" id="2144">2144</a>
+<a href="#2145" id="2145">2145</a>
+<a href="#2146" id="2146">2146</a>
+<a href="#2147" id="2147">2147</a>
+<a href="#2148" id="2148">2148</a>
+<a href="#2149" id="2149">2149</a>
+<a href="#2150" id="2150">2150</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::VecDeque,
     fmt, mem,
@@ -3491,6 +3498,13 @@
     }
 
     <span class="kw">pub fn </span>add_font_face(<span class="kw-2">&amp;mut </span><span class="self">self</span>, font: Vec&lt;u8&gt;, index: u32) -&gt; FontFaceId {
+        <span class="attr">#[cfg(target_os = <span class="string">"macos"</span>)]
+        </span><span class="kw">let </span>index = {
+            <span class="kw">if </span>index != <span class="number">0 </span>{
+                <span class="macro">tracing::error!</span>(<span class="string">"webrender does not support font index on macOS, ignoring `{index}` will use `0`"</span>);
+            }
+            <span class="number">0
+        </span>};
         <span class="kw">let </span>key = <span class="self">self</span>.api.generate_font_key();
         <span class="kw">let </span><span class="kw-2">mut </span>txn = webrender::Transaction::new();
         txn.add_raw_font(key, font, index);

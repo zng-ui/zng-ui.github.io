@@ -394,6 +394,36 @@
 <a href="#394" id="394">394</a>
 <a href="#395" id="395">395</a>
 <a href="#396" id="396">396</a>
+<a href="#397" id="397">397</a>
+<a href="#398" id="398">398</a>
+<a href="#399" id="399">399</a>
+<a href="#400" id="400">400</a>
+<a href="#401" id="401">401</a>
+<a href="#402" id="402">402</a>
+<a href="#403" id="403">403</a>
+<a href="#404" id="404">404</a>
+<a href="#405" id="405">405</a>
+<a href="#406" id="406">406</a>
+<a href="#407" id="407">407</a>
+<a href="#408" id="408">408</a>
+<a href="#409" id="409">409</a>
+<a href="#410" id="410">410</a>
+<a href="#411" id="411">411</a>
+<a href="#412" id="412">412</a>
+<a href="#413" id="413">413</a>
+<a href="#414" id="414">414</a>
+<a href="#415" id="415">415</a>
+<a href="#416" id="416">416</a>
+<a href="#417" id="417">417</a>
+<a href="#418" id="418">418</a>
+<a href="#419" id="419">419</a>
+<a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scrapper.
 //!
 //! See the [`l10n!`] documentation for more details.
@@ -487,9 +517,16 @@
     <span class="doccomment">/// Only verify that the generated files are the same
     </span><span class="attr">#[arg(long, action)]
     </span>check: bool,
+
+    <span class="doccomment">/// Use verbose output.
+    </span><span class="attr">#[arg(short, long, action)]
+    </span>verbose: bool,
 }
 
-<span class="kw">pub fn </span>run(<span class="kw-2">mut </span>args: L10nArgs) {
+<span class="kw">pub fn </span>run(args: L10nArgs) {
+    run_impl(args, <span class="bool-val">false</span>);
+}
+<span class="kw">fn </span>run_impl(<span class="kw-2">mut </span>args: L10nArgs, is_local_scrap_recursion: bool) {
     <span class="kw">if </span>!args.package.is_empty() &amp;&amp; !args.manifest_path.is_empty() {
         <span class="macro">fatal!</span>(<span class="string">"only one of --package --manifest-path must be set"</span>)
     }
@@ -538,6 +575,13 @@
         args.clean_template = <span class="bool-val">true</span>;
     }
 
+    <span class="kw">if </span>args.verbose &amp;&amp; !is_local_scrap_recursion {
+        <span class="macro">println!</span>(
+            <span class="string">"input: `{input}`\noutput: `{output}`\nclean_deps: {}\nclean_template: {}"</span>,
+            args.clean_deps, args.clean_template
+        );
+    }
+
     <span class="kw">if </span>!input.is_empty() {
         <span class="kw">if </span>output.is_empty() {
             <span class="macro">fatal!</span>(<span class="string">"--output is required for --input"</span>)
@@ -576,16 +620,35 @@
 
                     <span class="kw">if </span>args.clean_template {
                         <span class="macro">debug_assert!</span>(!args.check);
+                        <span class="kw">if </span>args.verbose {
+                            <span class="macro">println!</span>(<span class="string">"removing `{}` to clean template"</span>, output.display());
+                        }
                         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::remove_dir_all(<span class="kw-2">&amp;</span>output) {
                             <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, output.display());
                         }
                     }
                     util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
                     output.push(<span class="macro">format!</span>(<span class="string">"{}.ftl"</span>, <span class="kw">if </span>file.is_empty() { <span class="string">"_" </span>} <span class="kw">else </span>{ file }));
-                    util::check_or_write(args.check, output, contents)
+                    util::check_or_write(args.check, output, contents, args.verbose)
                 });
                 <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = r {
                     <span class="macro">fatal!</span>(<span class="string">"error writing template files, {e}"</span>);
+                }
+            }
+        }
+
+        <span class="comment">// cleanup dependencies
+        </span><span class="kw">let </span>l10n_dir = Path::new(<span class="kw-2">&amp;</span>output);
+        <span class="kw">if </span>args.clean_deps {
+            <span class="kw">for </span>entry <span class="kw">in </span>glob::glob(<span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"{}/*/deps"</span>, l10n_dir.display()))
+                .unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot cleanup deps in `{}`, {e}"</span>, l10n_dir.display()))
+            {
+                <span class="kw">let </span>dir = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot cleanup deps, {e}"</span>));
+                <span class="kw">if </span>args.verbose {
+                    <span class="macro">println!</span>(<span class="string">"removing `{}` to clean deps"</span>, dir.display());
+                }
+                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::remove_dir_all(<span class="kw-2">&amp;</span>dir) {
+                    <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, dir.display());
                 }
             }
         }
@@ -614,17 +677,10 @@
 
                 <span class="kw">let </span><span class="kw-2">mut </span>any = <span class="bool-val">false</span>;
 
-                <span class="kw">let </span>l10n_dir = Path::new(<span class="kw-2">&amp;</span>output);
                 <span class="comment">// get l10n_dir/{lang}/deps/dep.name/dep.version/
                 </span><span class="kw">let </span><span class="kw-2">mut </span>l10n_dir = |lang: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>std::ffi::OsStr&gt;| {
                     any = <span class="bool-val">true</span>;
                     <span class="kw">let </span>dir = l10n_dir.join(lang.unwrap()).join(<span class="string">"deps"</span>);
-
-                    <span class="kw">if </span>args.clean_deps {
-                        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::remove_dir_all(<span class="kw-2">&amp;</span>dir) {
-                            <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, dir.display());
-                        }
-                    }
 
                     <span class="kw">let </span>ignore_file = dir.join(<span class="string">".gitignore"</span>);
 
@@ -721,7 +777,7 @@
                             } <span class="kw">else if </span>lang_entry.is_file() &amp;&amp; lang_entry.extension().map(|e| e == <span class="string">"ftl"</span>).unwrap_or(<span class="bool-val">false</span>) {
                                 <span class="kw">let _ </span>= util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output_dir);
                                 <span class="kw">let </span>to = output_dir.join(lang_entry.file_name().unwrap());
-                                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_copy(args.check, <span class="kw-2">&amp;</span>lang_entry, <span class="kw-2">&amp;</span>to) {
+                                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_copy(args.check, <span class="kw-2">&amp;</span>lang_entry, <span class="kw-2">&amp;</span>to, args.verbose) {
                                     <span class="macro">error!</span>(<span class="string">"cannot copy `{}` to `{}`, {e}"</span>, lang_entry.display(), to.display());
                                     <span class="kw">continue</span>;
                                 }
@@ -744,7 +800,7 @@
                         <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{}` entry, {e}"</span>, deps.display()));
                         <span class="kw">let </span>target = target.join(entry.strip_prefix(<span class="kw-2">&amp;</span>deps).unwrap());
                         <span class="kw">if </span>!target.exists() &amp;&amp; entry.is_file() {
-                            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_copy(args.check, <span class="kw-2">&amp;</span>entry, <span class="kw-2">&amp;</span>target) {
+                            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = util::check_or_copy(args.check, <span class="kw-2">&amp;</span>entry, <span class="kw-2">&amp;</span>target, args.verbose) {
                                 <span class="macro">error!</span>(<span class="string">"cannot copy `{}` to `{}`, {e}"</span>, entry.display(), target.display());
                             }
                         }
@@ -759,35 +815,39 @@
         <span class="comment">// scrap local dependencies
         </span><span class="kw">if </span>!args.no_local {
             <span class="kw">for </span>dep <span class="kw">in </span>local {
-                run(L10nArgs {
-                    input: String::new(),
-                    output: output.clone(),
-                    package: String::new(),
-                    manifest_path: dep.manifest_path.display().to_string(),
-                    no_deps: <span class="bool-val">true</span>,
-                    no_local: <span class="bool-val">true</span>,
-                    no_pkg: <span class="bool-val">false</span>,
-                    clean_deps: <span class="bool-val">false</span>,
-                    clean_template: <span class="bool-val">false</span>,
-                    clean: <span class="bool-val">false</span>,
-                    macros: args.macros.clone(),
-                    pseudo: String::new(),
-                    pseudo_m: String::new(),
-                    pseudo_w: String::new(),
-                    check: args.check,
-                })
+                run_impl(
+                    L10nArgs {
+                        input: String::new(),
+                        output: output.clone(),
+                        package: String::new(),
+                        manifest_path: dep.manifest_path.display().to_string(),
+                        no_deps: <span class="bool-val">true</span>,
+                        no_local: <span class="bool-val">true</span>,
+                        no_pkg: <span class="bool-val">false</span>,
+                        clean_deps: <span class="bool-val">false</span>,
+                        clean_template: <span class="bool-val">false</span>,
+                        clean: <span class="bool-val">false</span>,
+                        macros: args.macros.clone(),
+                        pseudo: String::new(),
+                        pseudo_m: String::new(),
+                        pseudo_w: String::new(),
+                        check: args.check,
+                        verbose: args.verbose,
+                    },
+                    <span class="bool-val">true</span>,
+                )
             }
         }
     }
 
     <span class="kw">if </span>!args.pseudo.is_empty() {
-        pseudo::pseudo(<span class="kw-2">&amp;</span>args.pseudo, args.check);
+        pseudo::pseudo(<span class="kw-2">&amp;</span>args.pseudo, args.check, args.verbose);
     }
     <span class="kw">if </span>!args.pseudo_m.is_empty() {
-        pseudo::pseudo_mirr(<span class="kw-2">&amp;</span>args.pseudo_m, args.check);
+        pseudo::pseudo_mirr(<span class="kw-2">&amp;</span>args.pseudo_m, args.check, args.verbose);
     }
     <span class="kw">if </span>!args.pseudo_w.is_empty() {
-        pseudo::pseudo_wide(<span class="kw-2">&amp;</span>args.pseudo_w, args.check);
+        pseudo::pseudo_wide(<span class="kw-2">&amp;</span>args.pseudo_w, args.check, args.verbose);
     }
 }
 </code></pre></div></section></main></body></html>

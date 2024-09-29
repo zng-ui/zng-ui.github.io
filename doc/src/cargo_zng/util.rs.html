@@ -418,6 +418,15 @@
 <a href="#418" id="418">418</a>
 <a href="#419" id="419">419</a>
 <a href="#420" id="420">420</a>
+<a href="#421" id="421">421</a>
+<a href="#422" id="422">422</a>
+<a href="#423" id="423">423</a>
+<a href="#424" id="424">424</a>
+<a href="#425" id="425">425</a>
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fs,
@@ -786,10 +795,10 @@
     }
 }
 
-<span class="kw">pub fn </span>check_or_write(check: bool, path: <span class="kw">impl </span>AsRef&lt;Path&gt;, contents: <span class="kw">impl </span>AsRef&lt;[u8]&gt;) -&gt; io::Result&lt;()&gt; {
+<span class="kw">pub fn </span>check_or_write(check: bool, path: <span class="kw">impl </span>AsRef&lt;Path&gt;, contents: <span class="kw">impl </span>AsRef&lt;[u8]&gt;, verbose: bool) -&gt; io::Result&lt;()&gt; {
+    <span class="kw">let </span>path = path.as_ref();
+    <span class="kw">let </span>contents = contents.as_ref();
     <span class="kw">if </span>check {
-        <span class="kw">let </span>path = path.as_ref();
-        <span class="kw">let </span>contents = contents.as_ref();
         <span class="kw">if </span>!path.is_file() {
             <span class="macro">fatal!</span>(<span class="string">"expected `{}` file"</span>, path.display());
         }
@@ -801,19 +810,23 @@
 
         <span class="kw">if </span>bytes != contents {
             <span class="macro">fatal!</span>(<span class="string">"file `{}` contents changed"</span>, path.display());
+        } <span class="kw">else if </span>verbose {
+            <span class="macro">println!</span>(<span class="string">"file `{}` contents did not change"</span>, path.display());
         }
 
         <span class="prelude-val">Ok</span>(())
     } <span class="kw">else </span>{
+        <span class="kw">if </span>verbose {
+            <span class="macro">println!</span>(<span class="string">"writing `{}`"</span>, path.display());
+        }
         fs::write(path, contents)
     }
 }
 
-<span class="kw">pub fn </span>check_or_copy(check: bool, from: <span class="kw">impl </span>AsRef&lt;Path&gt;, to: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; io::Result&lt;u64&gt; {
+<span class="kw">pub fn </span>check_or_copy(check: bool, from: <span class="kw">impl </span>AsRef&lt;Path&gt;, to: <span class="kw">impl </span>AsRef&lt;Path&gt;, verbose: bool) -&gt; io::Result&lt;u64&gt; {
+    <span class="kw">let </span>from = from.as_ref();
+    <span class="kw">let </span>to = to.as_ref();
     <span class="kw">if </span>check {
-        <span class="kw">let </span>from = from.as_ref();
-        <span class="kw">let </span>to = to.as_ref();
-
         <span class="kw">if </span>!to.is_file() {
             <span class="macro">fatal!</span>(<span class="string">"expected `{}` file"</span>, to.display());
         }
@@ -831,10 +844,15 @@
 
         <span class="kw">if </span>bytes[<span class="number">0</span>] != bytes[<span class="number">1</span>] {
             <span class="macro">fatal!</span>(<span class="string">"file `{}` contents changed"</span>, to.display());
+        } <span class="kw">else if </span>verbose {
+            <span class="macro">println!</span>(<span class="string">"file `{}` contents did not change"</span>, to.display());
         }
 
         <span class="prelude-val">Ok</span>(bytes[<span class="number">1</span>].len() <span class="kw">as </span>u64)
     } <span class="kw">else </span>{
+        <span class="kw">if </span>verbose {
+            <span class="macro">println!</span>(<span class="string">"copying\n  from: `{}`\n    to: `{}`"</span>, from.display(), to.display());
+        }
         fs::copy(from, to)
     }
 }
