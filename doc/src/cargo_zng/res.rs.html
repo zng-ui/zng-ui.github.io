@@ -292,6 +292,10 @@
 <a href="#292" id="292">292</a>
 <a href="#293" id="293">293</a>
 <a href="#294" id="294">294</a>
+<a href="#295" id="295">295</a>
+<a href="#296" id="296">296</a>
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fs, io,
     ops::ControlFlow,
@@ -359,6 +363,10 @@
     <span class="doccomment">/// Writes the metadata extracted the workspace or --metadata
     </span><span class="attr">#[arg(long, action)]
     </span>metadata_dump: bool,
+
+    <span class="doccomment">/// Use verbose output.
+    </span><span class="attr">#[arg(short, long, action)]
+    </span>verbose: bool,
 }
 
 <span class="kw">fn </span>canonicalize(path: <span class="kw-2">&amp;</span>Path) -&gt; PathBuf {
@@ -377,7 +385,7 @@
     }
 
     <span class="kw">if </span>args.metadata_dump {
-        <span class="kw">let </span>about = about::find_about(args.metadata.as_deref());
+        <span class="kw">let </span>about = about::find_about(args.metadata.as_deref(), args.verbose);
         <span class="kw">crate</span>::res::tool::visit_about_vars(<span class="kw-2">&amp;</span>about, |key, value| {
             <span class="macro">println!</span>(<span class="string">"{key}={value}"</span>);
         });
@@ -407,7 +415,7 @@
         <span class="macro">fatal!</span>(<span class="string">"cannot build res to same dir"</span>);
     }
 
-    <span class="kw">let </span>about = about::find_about(args.metadata.as_deref());
+    <span class="kw">let </span>about = about::find_about(args.metadata.as_deref(), args.verbose);
 
     <span class="comment">// tool request paths are relative to the workspace root
     </span><span class="kw">if let </span><span class="prelude-val">Some</span>(p) = util::workspace_dir() {
@@ -415,7 +423,7 @@
             <span class="macro">fatal!</span>(<span class="string">"cannot change dir, {e}"</span>);
         }
     } <span class="kw">else </span>{
-        <span class="macro">warn!</span>(<span class="string">"source is not in a Cargo workspace, tools will run using source as root"</span>);
+        <span class="macro">warn!</span>(<span class="string">"source is not in a cargo workspace, tools will run using source as root"</span>);
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::env::set_current_dir(<span class="kw-2">&amp;</span>args.source) {
             <span class="macro">fatal!</span>(<span class="string">"cannot change dir, {e}"</span>);
         }
@@ -438,7 +446,7 @@
 }
 
 <span class="kw">fn </span>build(args: <span class="kw-2">&amp;</span>ResArgs, about: About) -&gt; anyhow::Result&lt;()&gt; {
-    <span class="kw">let </span>tools = Tools::capture(<span class="kw-2">&amp;</span>args.tool_dir, args.tool_cache.clone(), about)<span class="question-mark">?</span>;
+    <span class="kw">let </span>tools = Tools::capture(<span class="kw-2">&amp;</span>args.tool_dir, args.tool_cache.clone(), about, args.verbose)<span class="question-mark">?</span>;
     source_to_target_pass(args, <span class="kw-2">&amp;</span>tools, <span class="kw-2">&amp;</span>args.source, <span class="kw-2">&amp;</span>args.target)<span class="question-mark">?</span>;
 
     <span class="kw">let </span><span class="kw-2">mut </span>passes = <span class="number">0</span>;

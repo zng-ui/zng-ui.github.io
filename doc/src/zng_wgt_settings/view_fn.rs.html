@@ -470,6 +470,7 @@
 <a href="#470" id="470">470</a>
 <a href="#471" id="471">471</a>
 <a href="#472" id="472">472</a>
+<a href="#473" id="473">473</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>zng_app::{
     static_id,
     widget::{
@@ -482,6 +483,7 @@
     ConfigKey,
 };
 <span class="kw">use </span>zng_ext_font::FontWeight;
+<span class="kw">use </span>zng_ext_l10n::l10n;
 <span class="kw">use </span>zng_var::{ContextInitHandle, ReadOnlyContextVar};
 <span class="kw">use </span>zng_wgt::{node::with_context_var, prelude::<span class="kw-2">*</span>, Wgt, WidgetFn, EDITORS, ICONS};
 <span class="kw">use </span>zng_wgt_container::Container;
@@ -730,7 +732,7 @@
             txt = SETTINGS.editor_search();
             style_fn = <span class="macro">zng_wgt_text_input::SearchStyle!</span>();
             zng_wgt_input::focus::focus_shortcut = [<span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
-            placeholder_txt = <span class="string">"search settings (Ctrl+F)"</span>;
+            placeholder_txt = <span class="macro">l10n!</span>(<span class="string">"search.placeholder"</span>, <span class="string">"search settings ({$shortcut})"</span>, shortcut = <span class="string">"Ctrl+F"</span>);
         };
         child_bottom = <span class="macro">Hr!</span>(zng_wgt::margin = (<span class="number">10</span>, <span class="number">10</span>, <span class="number">0</span>, <span class="number">10</span>)), <span class="number">0</span>;
     }
