@@ -2311,6 +2311,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2275" id="2275">2275</a>
 <a href="#2276" id="2276">2276</a>
 <a href="#2277" id="2277">2277</a>
+<a href="#2278" id="2278">2278</a>
+<a href="#2279" id="2279">2279</a>
+<a href="#2280" id="2280">2280</a>
+<a href="#2281" id="2281">2281</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget info tree.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt, mem, ops, sync::Arc, time::Duration};
@@ -2642,11 +2646,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             TRANSFORM_CHANGED_EVENT.notify(TransformChangedArgs::now(<span class="self">self</span>.clone(), changes));
         }
+        drop(frame); <span class="comment">// wgt.visibility can read frame
 
-        <span class="kw">let </span><span class="kw-2">mut </span>changes = IdMap::new();
+        </span><span class="kw">let </span><span class="kw-2">mut </span>changes = IdMap::new();
         VISIBILITY_CHANGED_EVENT.visit_subscribers(|wid| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = <span class="self">self</span>.get(wid) {
                 <span class="kw">let </span>visibility = wgt.visibility();
+                <span class="kw">let </span><span class="kw-2">mut </span>frame = <span class="self">self</span>.<span class="number">0</span>.frame.write();
                 <span class="kw">match </span>frame.visibility_changed_subs.entry(wid) {
                     IdEntry::Occupied(<span class="kw-2">mut </span>e) =&gt; {
                         <span class="kw">let </span>prev = e.insert(visibility);
@@ -2661,8 +2667,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
         <span class="kw">if </span>!changes.is_empty() {
-            <span class="kw">if </span>(frame.visibility_changed_subs.len() - changes.len()) &gt; <span class="number">500 </span>{
-                frame
+            <span class="kw">if </span>(<span class="self">self</span>.<span class="number">0</span>.frame.read().visibility_changed_subs.len() - changes.len()) &gt; <span class="number">500 </span>{
+                <span class="self">self</span>.<span class="number">0
+                    </span>.frame
+                    .write()
                     .visibility_changed_subs
                     .retain(|k, <span class="kw">_</span>| VISIBILITY_CHANGED_EVENT.is_subscriber(<span class="kw-2">*</span>k));
             }
