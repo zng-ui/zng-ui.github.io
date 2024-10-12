@@ -20,6 +20,7 @@ var srcIndex = new Map(JSON.parse('[\
 ["zng_ext_l10n",["",[],["lib.rs","service.rs","sources.rs","types.rs"]]],\
 ["zng_ext_l10n_proc_macros",["",[],["l10n.rs","lang.rs","lib.rs","util.rs"]]],\
 ["zng_ext_single_instance",["",[],["lib.rs"]]],\
+["zng_ext_svg",["",[],["lib.rs"]]],\
 ["zng_ext_undo",["",[],["lib.rs"]]],\
 ["zng_ext_window",["",[],["cmd.rs","control.rs","ime.rs","lib.rs","monitor.rs","service.rs","types.rs","vars.rs"]]],\
 ["zng_handle",["",[],["lib.rs"]]],\

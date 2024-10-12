@@ -1060,6 +1060,64 @@
 <a href="#1060" id="1060">1060</a>
 <a href="#1061" id="1061">1061</a>
 <a href="#1062" id="1062">1062</a>
+<a href="#1063" id="1063">1063</a>
+<a href="#1064" id="1064">1064</a>
+<a href="#1065" id="1065">1065</a>
+<a href="#1066" id="1066">1066</a>
+<a href="#1067" id="1067">1067</a>
+<a href="#1068" id="1068">1068</a>
+<a href="#1069" id="1069">1069</a>
+<a href="#1070" id="1070">1070</a>
+<a href="#1071" id="1071">1071</a>
+<a href="#1072" id="1072">1072</a>
+<a href="#1073" id="1073">1073</a>
+<a href="#1074" id="1074">1074</a>
+<a href="#1075" id="1075">1075</a>
+<a href="#1076" id="1076">1076</a>
+<a href="#1077" id="1077">1077</a>
+<a href="#1078" id="1078">1078</a>
+<a href="#1079" id="1079">1079</a>
+<a href="#1080" id="1080">1080</a>
+<a href="#1081" id="1081">1081</a>
+<a href="#1082" id="1082">1082</a>
+<a href="#1083" id="1083">1083</a>
+<a href="#1084" id="1084">1084</a>
+<a href="#1085" id="1085">1085</a>
+<a href="#1086" id="1086">1086</a>
+<a href="#1087" id="1087">1087</a>
+<a href="#1088" id="1088">1088</a>
+<a href="#1089" id="1089">1089</a>
+<a href="#1090" id="1090">1090</a>
+<a href="#1091" id="1091">1091</a>
+<a href="#1092" id="1092">1092</a>
+<a href="#1093" id="1093">1093</a>
+<a href="#1094" id="1094">1094</a>
+<a href="#1095" id="1095">1095</a>
+<a href="#1096" id="1096">1096</a>
+<a href="#1097" id="1097">1097</a>
+<a href="#1098" id="1098">1098</a>
+<a href="#1099" id="1099">1099</a>
+<a href="#1100" id="1100">1100</a>
+<a href="#1101" id="1101">1101</a>
+<a href="#1102" id="1102">1102</a>
+<a href="#1103" id="1103">1103</a>
+<a href="#1104" id="1104">1104</a>
+<a href="#1105" id="1105">1105</a>
+<a href="#1106" id="1106">1106</a>
+<a href="#1107" id="1107">1107</a>
+<a href="#1108" id="1108">1108</a>
+<a href="#1109" id="1109">1109</a>
+<a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a>
+<a href="#1113" id="1113">1113</a>
+<a href="#1114" id="1114">1114</a>
+<a href="#1115" id="1115">1115</a>
+<a href="#1116" id="1116">1116</a>
+<a href="#1117" id="1117">1117</a>
+<a href="#1118" id="1118">1118</a>
+<a href="#1119" id="1119">1119</a>
+<a href="#1120" id="1120">1120</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     env, fmt, fs, io, mem, ops,
     path::{Path, PathBuf},
@@ -1090,6 +1148,9 @@
 ///
 /// Implementers can intercept cache requests and redirect to another cache request or returns an image directly.
 ///
+/// The methods on this API are synchronous, implementers that do any potential slow processing must output
+/// a *loading* [`ImageVar`] immediately and update it with the finished pixels when ready.
+///
 /// [`IMAGES`]: super::IMAGES
 </span><span class="kw">pub trait </span>ImageCacheProxy: Send + Sync {
     <span class="doccomment">/// Intercept a get request.
@@ -1101,9 +1162,44 @@
         downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
         mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
     ) -&gt; ProxyGetResult {
-        <span class="kw">let _ </span>= (key, source, mode, downscale, mask);
-        ProxyGetResult::None
+        <span class="kw">let </span>r = <span class="kw">match </span>source {
+            ImageSource::Static(<span class="kw">_</span>, data, image_format) =&gt; <span class="self">self</span>.data(key, data, image_format, mode, downscale, mask, <span class="bool-val">false</span>),
+            ImageSource::Data(<span class="kw">_</span>, data, image_format) =&gt; <span class="self">self</span>.data(key, data, image_format, mode, downscale, mask, <span class="bool-val">false</span>),
+            <span class="kw">_ </span>=&gt; <span class="kw">return </span>ProxyGetResult::None,
+        };
+        <span class="kw">match </span>r {
+            <span class="prelude-val">Some</span>(img) =&gt; ProxyGetResult::Image(img),
+            <span class="prelude-val">None </span>=&gt; ProxyGetResult::None,
+        }
     }
+
+    <span class="doccomment">/// Intercept a [`Data`] or [`Static`] request.
+    ///
+    /// If [`is_data_proxy`] also intercept the [`Read`] or [`Download`] data.
+    ///
+    /// If `is_loaded` is `true` the data was read or downloaded and the return var will be bound to an existing var that may already be cached.
+    /// If it is `false` the data was already loaded on the source and the return var will be returned directly, without caching.
+    ///
+    ///
+    /// [`Data`]: ImageSource::Data
+    /// [`Static`]: ImageSource::Static
+    /// [`is_data_proxy`]: ImageCacheProxy::is_data_proxy
+    /// [`Read`]: ImageSource::Read
+    /// [`Download`]: ImageSource::Download
+    </span><span class="attr">#[allow(clippy::too_many_arguments)]
+    </span><span class="kw">fn </span>data(
+        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+        key: <span class="kw-2">&amp;</span>ImageHash,
+        data: <span class="kw-2">&amp;</span>[u8],
+        image_format: <span class="kw-2">&amp;</span>ImageDataFormat,
+        mode: ImageCacheMode,
+        downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
+        mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
+        is_loaded: bool,
+    ) -&gt; <span class="prelude-ty">Option</span>&lt;ImageVar&gt; {
+        <span class="kw">let _ </span>= (key, data, image_format, mode, downscale, mask, is_loaded);
+        <span class="prelude-val">None
+    </span>}
 
     <span class="doccomment">/// Intercept a remove request.
     </span><span class="kw">fn </span>remove(<span class="kw-2">&amp;mut </span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>ImageHash, purge: bool) -&gt; ProxyRemoveResult {
@@ -1112,7 +1208,27 @@
     }
 
     <span class="doccomment">/// Called when the cache is cleaned or purged.
-    </span><span class="kw">fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>, purge: bool);
+    </span><span class="kw">fn </span>clear(<span class="kw-2">&amp;mut </span><span class="self">self</span>, purge: bool) {
+        <span class="kw">let _ </span>= purge;
+    }
+
+    <span class="doccomment">/// If this proxy only handles [`Data`] and [`Static`] sources.
+    ///
+    /// When this is `true` the [`get`] call is delayed to after [`Read`] and [`Download`] have loaded the data
+    /// and is skipped for [`Render`] and [`Image`].
+    ///
+    /// This is `false` by default.
+    ///
+    /// [`get`]: ImageCacheProxy::get
+    /// [`Data`]: ImageSource::Data
+    /// [`Static`]: ImageSource::Static
+    /// [`Read`]: ImageSource::Read
+    /// [`Download`]: ImageSource::Download
+    /// [`Render`]: ImageSource::Render
+    /// [`Image`]: ImageSource::Image
+    </span><span class="kw">fn </span>is_data_proxy(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        <span class="bool-val">false
+    </span>}
 }
 
 <span class="doccomment">/// Result of an [`ImageCacheProxy`] *get* redirect.
@@ -1557,7 +1673,7 @@
     /// The closure is set by the image widget user, the args is set by the image widget.
     </span>Render(RenderFn, <span class="prelude-ty">Option</span>&lt;ImageRenderArgs&gt;),
 
-    <span class="doccomment">/// Already loaded image.
+    <span class="doccomment">/// Already resolved (loaded or loading) image.
     ///
     /// The image is passed-through, not cached.
     </span>Image(ImageVar),

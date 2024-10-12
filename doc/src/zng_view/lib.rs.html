@@ -2250,6 +2250,21 @@
 <a href="#2250" id="2250">2250</a>
 <a href="#2251" id="2251">2251</a>
 <a href="#2252" id="2252">2252</a>
+<a href="#2253" id="2253">2253</a>
+<a href="#2254" id="2254">2254</a>
+<a href="#2255" id="2255">2255</a>
+<a href="#2256" id="2256">2256</a>
+<a href="#2257" id="2257">2257</a>
+<a href="#2258" id="2258">2258</a>
+<a href="#2259" id="2259">2259</a>
+<a href="#2260" id="2260">2260</a>
+<a href="#2261" id="2261">2261</a>
+<a href="#2262" id="2262">2262</a>
+<a href="#2263" id="2263">2263</a>
+<a href="#2264" id="2264">2264</a>
+<a href="#2265" id="2265">2265</a>
+<a href="#2266" id="2266">2266</a>
+<a href="#2267" id="2267">2267</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -2263,8 +2278,8 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = "0.12.2"
-//! zng-view = "0.5.0"
+//! zng = "0.12.3"
+//! zng-view = "0.6.0"
 //! ```
 //!
 //! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2325,10 +2340,12 @@
 //!
 //! # API Extensions
 //!
-//! This implementation of the view API provides one extension:
+//! This implementation of the view API provides these extensions:
 //!
 //! * `"zng-view.webrender_debug"`: `{ flags: DebugFlags, profiler_ui: String }`, sets Webrender debug flags.
 //!     - The `zng-wgt-webrender-debug` implements a property that uses this extension.
+//! * `"zng-view.prefer_angle": bool`, on Windows, prefer ANGLE(EGL) over WGL if the `libEGL.dll` and `libGLESv2.dll`
+//!    libraries can by dynamically loaded. The `extend-view` example demonstrates this extension.
 //!
 //! You can also inject your own extensions, see the [`extensions`] module for more details.
 //!
@@ -2372,6 +2389,7 @@
 <span class="kw">mod </span>surface;
 <span class="kw">mod </span>util;
 <span class="kw">mod </span>window;
+
 <span class="kw">use </span>surface::<span class="kw-2">*</span>;
 
 <span class="kw">pub mod </span>extensions;
@@ -2481,6 +2499,8 @@
 }
 
 <span class="doccomment">/// Like [`run_same_process`] but with custom API extensions.
+///
+/// Note that any linked [`view_process_extension!`] extensions are also run, after `ext`.
 </span><span class="kw">pub fn </span>run_same_process_extended(run_app: <span class="kw">impl </span>FnOnce() + Send + <span class="lifetime">'static</span>, ext: <span class="kw">fn</span>() -&gt; ViewExtensions) {
     <span class="kw">let </span>app_thread = thread::Builder::new()
         .name(<span class="string">"app"</span>.to_owned())
@@ -2507,10 +2527,15 @@
 
     <span class="kw">let </span>c = ipc::connect_view_process(config.server_name).expect(<span class="string">"failed to connect to app in same process"</span>);
 
+    <span class="kw">let </span><span class="kw-2">mut </span>ext = ext();
+    <span class="kw">for </span>e <span class="kw">in </span>extensions::VIEW_EXTENSIONS {
+        e(<span class="kw-2">&amp;mut </span>ext);
+    }
+
     <span class="kw">if </span>config.headless {
-        App::run_headless(c, ext());
+        App::run_headless(c, ext);
     } <span class="kw">else </span>{
-        App::run_headed(c, ext());
+        App::run_headed(c, ext);
     }
 
     <span class="kw">if let </span><span class="prelude-val">Err</span>(p) = app_thread.join() {
@@ -3468,6 +3493,10 @@
         <span class="kw-2">mut </span>exts: ViewExtensions,
     ) -&gt; <span class="self">Self </span>{
         exts.renderer(<span class="string">"zng-view.webrender_debug"</span>, extensions::RendererDebugExt::new);
+        <span class="attr">#[cfg(windows)]
+        </span>{
+            exts.window(<span class="string">"zng-view.prefer_angle"</span>, extensions::PreferAngleExt::new);
+        }
         <span class="kw">let </span><span class="kw-2">mut </span>idle = IdleTrace(<span class="prelude-val">None</span>);
         idle.enter();
         App {
@@ -3816,6 +3845,7 @@
             config,
             <span class="kw-2">&amp;</span><span class="self">self</span>.winit_loop,
             <span class="kw-2">&amp;mut </span><span class="self">self</span>.gl_manager,
+            <span class="self">self</span>.exts.new_window(),
             <span class="self">self</span>.exts.new_renderer(),
             <span class="self">self</span>.app_sender.clone(),
         );

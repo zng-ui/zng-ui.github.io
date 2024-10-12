@@ -1032,6 +1032,11 @@
 <a href="#1031" id="1031">1031</a>
 <a href="#1032" id="1032">1032</a>
 <a href="#1033" id="1033">1033</a>
+<a href="#1034" id="1034">1034</a>
+<a href="#1035" id="1035">1035</a>
+<a href="#1036" id="1036">1036</a>
+<a href="#1037" id="1037">1037</a>
+<a href="#1038" id="1038">1038</a>
 </pre></div><pre class="rust"><code><span class="attr">#![expect(clippy::needless_doctest_main)]
 #![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
@@ -1051,7 +1056,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.12.2", features = ["view_prebuilt"] }
+//! zng = { version = "0.12.3", features = ["view_prebuilt"] }
 //! ```
 //!
 //! Then create your first app:
@@ -1889,6 +1894,7 @@
         /// * [`SingleInstanceManager`] if the `"single_instance"` feature is enabled.
         /// * [`HotReloadManager`] if the `"hot_reload"` feature is enabled.
         /// * [`MaterialIconsManager`] if any `"material_icons*"` feature is enabled.
+        /// * [`SvgManager`] if the `"svg"` feature is enabled.
         ///
         /// [`MaterialIconsManager`]: zng_wgt_material_icons::MaterialIconsManager
         /// [`SingleInstanceManager`]: zng_ext_single_instance::SingleInstanceManager
@@ -1896,6 +1902,7 @@
         /// [`ConfigManager`]: zng_ext_config::ConfigManager
         /// [`L10nManager`]: zng_ext_l10n::L10nManager
         /// [`FontManager`]: zng_ext_font::FontManager
+        /// [`SvgManager`]: zng_ext_svg::SvgManager
         </span><span class="kw">pub fn </span>defaults(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="macro">DefaultsAppExtended!</span>[] {
             <span class="kw">let </span>r = <span class="self">self
                 </span>.minimal()
@@ -1930,6 +1937,9 @@
                 feature = <span class="string">"material_icons_sharp"</span>,
             ))]
             </span><span class="kw">let </span>r = r.extend(zng_wgt_material_icons::MaterialIconsManager);
+
+            <span class="attr">#[cfg(feature = <span class="string">"svg"</span>)]
+            </span><span class="kw">let </span>r = r.extend(zng_ext_svg::SvgManager::default());
 
             r.extend(DefaultsInit {})
         }
