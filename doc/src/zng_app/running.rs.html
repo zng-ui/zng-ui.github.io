@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/running.rs`."><title>running.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/running.rs`."><title>running.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1706,6 +1706,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1670" id="1670">1670</a>
 <a href="#1671" id="1671">1671</a>
 <a href="#1672" id="1672">1672</a>
+<a href="#1673" id="1673">1673</a>
+<a href="#1674" id="1674">1674</a>
+<a href="#1675" id="1675">1675</a>
+<a href="#1676" id="1676">1676</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     collections::HashMap,
     fmt, mem,
@@ -2205,7 +2209,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 <span class="self">self</span>.notify_event(KEY_EVENT.new_update(args), observer);
             }
 
-            Event::LowMemory =&gt; {}
+            Event::LowMemory =&gt; {
+                LOW_MEMORY_EVENT.notify(LowMemoryArgs::now());
+            }
 
             Event::RecoveredFromComponentPanic { component, recover, panic } =&gt; {
                 <span class="macro">tracing::error!</span>(<span class="string">"view-process recovered from internal component panic\n  component: {component}\n  recover: {recover}\n```panic\n{panic}\n```"</span>);
@@ -3127,12 +3133,14 @@ document.addEventListener('DOMContentLoaded', function () {
         (<span class="self">Self</span>(sender), receiver)
     }
 
-    <span class="kw">fn </span>send_app_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: AppEvent) -&gt; <span class="prelude-ty">Result</span>&lt;(), AppDisconnected&lt;AppEvent&gt;&gt; {
+    <span class="attr">#[allow(clippy::result_large_err)] </span><span class="comment">// error does not move far up the stack
+    </span><span class="kw">fn </span>send_app_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: AppEvent) -&gt; <span class="prelude-ty">Result</span>&lt;(), AppDisconnected&lt;AppEvent&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.send(event)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }
 
-    <span class="kw">fn </span>send_view_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: zng_view_api::Event) -&gt; <span class="prelude-ty">Result</span>&lt;(), AppDisconnected&lt;AppEvent&gt;&gt; {
+    <span class="attr">#[allow(clippy::result_large_err)]
+    </span><span class="kw">fn </span>send_view_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: zng_view_api::Event) -&gt; <span class="prelude-ty">Result</span>&lt;(), AppDisconnected&lt;AppEvent&gt;&gt; {
         <span class="self">self</span>.<span class="number">0</span>.send(AppEvent::ViewEvent(event))<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(())
     }

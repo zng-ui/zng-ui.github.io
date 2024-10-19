@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers"><a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
 <a href="#4" id="4">4</a>
@@ -4156,19 +4156,325 @@
 <a href="#4156" id="4156">4156</a>
 <a href="#4157" id="4157">4157</a>
 <a href="#4158" id="4158">4158</a>
+<a href="#4159" id="4159">4159</a>
+<a href="#4160" id="4160">4160</a>
+<a href="#4161" id="4161">4161</a>
+<a href="#4162" id="4162">4162</a>
+<a href="#4163" id="4163">4163</a>
+<a href="#4164" id="4164">4164</a>
+<a href="#4165" id="4165">4165</a>
+<a href="#4166" id="4166">4166</a>
+<a href="#4167" id="4167">4167</a>
+<a href="#4168" id="4168">4168</a>
+<a href="#4169" id="4169">4169</a>
+<a href="#4170" id="4170">4170</a>
+<a href="#4171" id="4171">4171</a>
+<a href="#4172" id="4172">4172</a>
+<a href="#4173" id="4173">4173</a>
+<a href="#4174" id="4174">4174</a>
+<a href="#4175" id="4175">4175</a>
+<a href="#4176" id="4176">4176</a>
+<a href="#4177" id="4177">4177</a>
+<a href="#4178" id="4178">4178</a>
+<a href="#4179" id="4179">4179</a>
+<a href="#4180" id="4180">4180</a>
+<a href="#4181" id="4181">4181</a>
+<a href="#4182" id="4182">4182</a>
+<a href="#4183" id="4183">4183</a>
+<a href="#4184" id="4184">4184</a>
+<a href="#4185" id="4185">4185</a>
+<a href="#4186" id="4186">4186</a>
+<a href="#4187" id="4187">4187</a>
+<a href="#4188" id="4188">4188</a>
+<a href="#4189" id="4189">4189</a>
+<a href="#4190" id="4190">4190</a>
+<a href="#4191" id="4191">4191</a>
+<a href="#4192" id="4192">4192</a>
+<a href="#4193" id="4193">4193</a>
+<a href="#4194" id="4194">4194</a>
+<a href="#4195" id="4195">4195</a>
+<a href="#4196" id="4196">4196</a>
+<a href="#4197" id="4197">4197</a>
+<a href="#4198" id="4198">4198</a>
+<a href="#4199" id="4199">4199</a>
+<a href="#4200" id="4200">4200</a>
+<a href="#4201" id="4201">4201</a>
+<a href="#4202" id="4202">4202</a>
+<a href="#4203" id="4203">4203</a>
+<a href="#4204" id="4204">4204</a>
+<a href="#4205" id="4205">4205</a>
+<a href="#4206" id="4206">4206</a>
+<a href="#4207" id="4207">4207</a>
+<a href="#4208" id="4208">4208</a>
+<a href="#4209" id="4209">4209</a>
+<a href="#4210" id="4210">4210</a>
+<a href="#4211" id="4211">4211</a>
+<a href="#4212" id="4212">4212</a>
+<a href="#4213" id="4213">4213</a>
+<a href="#4214" id="4214">4214</a>
+<a href="#4215" id="4215">4215</a>
+<a href="#4216" id="4216">4216</a>
+<a href="#4217" id="4217">4217</a>
+<a href="#4218" id="4218">4218</a>
+<a href="#4219" id="4219">4219</a>
+<a href="#4220" id="4220">4220</a>
+<a href="#4221" id="4221">4221</a>
+<a href="#4222" id="4222">4222</a>
+<a href="#4223" id="4223">4223</a>
+<a href="#4224" id="4224">4224</a>
+<a href="#4225" id="4225">4225</a>
+<a href="#4226" id="4226">4226</a>
+<a href="#4227" id="4227">4227</a>
+<a href="#4228" id="4228">4228</a>
+<a href="#4229" id="4229">4229</a>
+<a href="#4230" id="4230">4230</a>
+<a href="#4231" id="4231">4231</a>
+<a href="#4232" id="4232">4232</a>
+<a href="#4233" id="4233">4233</a>
+<a href="#4234" id="4234">4234</a>
+<a href="#4235" id="4235">4235</a>
+<a href="#4236" id="4236">4236</a>
+<a href="#4237" id="4237">4237</a>
+<a href="#4238" id="4238">4238</a>
+<a href="#4239" id="4239">4239</a>
+<a href="#4240" id="4240">4240</a>
+<a href="#4241" id="4241">4241</a>
+<a href="#4242" id="4242">4242</a>
+<a href="#4243" id="4243">4243</a>
+<a href="#4244" id="4244">4244</a>
+<a href="#4245" id="4245">4245</a>
+<a href="#4246" id="4246">4246</a>
+<a href="#4247" id="4247">4247</a>
+<a href="#4248" id="4248">4248</a>
+<a href="#4249" id="4249">4249</a>
+<a href="#4250" id="4250">4250</a>
+<a href="#4251" id="4251">4251</a>
+<a href="#4252" id="4252">4252</a>
+<a href="#4253" id="4253">4253</a>
+<a href="#4254" id="4254">4254</a>
+<a href="#4255" id="4255">4255</a>
+<a href="#4256" id="4256">4256</a>
+<a href="#4257" id="4257">4257</a>
+<a href="#4258" id="4258">4258</a>
+<a href="#4259" id="4259">4259</a>
+<a href="#4260" id="4260">4260</a>
+<a href="#4261" id="4261">4261</a>
+<a href="#4262" id="4262">4262</a>
+<a href="#4263" id="4263">4263</a>
+<a href="#4264" id="4264">4264</a>
+<a href="#4265" id="4265">4265</a>
+<a href="#4266" id="4266">4266</a>
+<a href="#4267" id="4267">4267</a>
+<a href="#4268" id="4268">4268</a>
+<a href="#4269" id="4269">4269</a>
+<a href="#4270" id="4270">4270</a>
+<a href="#4271" id="4271">4271</a>
+<a href="#4272" id="4272">4272</a>
+<a href="#4273" id="4273">4273</a>
+<a href="#4274" id="4274">4274</a>
+<a href="#4275" id="4275">4275</a>
+<a href="#4276" id="4276">4276</a>
+<a href="#4277" id="4277">4277</a>
+<a href="#4278" id="4278">4278</a>
+<a href="#4279" id="4279">4279</a>
+<a href="#4280" id="4280">4280</a>
+<a href="#4281" id="4281">4281</a>
+<a href="#4282" id="4282">4282</a>
+<a href="#4283" id="4283">4283</a>
+<a href="#4284" id="4284">4284</a>
+<a href="#4285" id="4285">4285</a>
+<a href="#4286" id="4286">4286</a>
+<a href="#4287" id="4287">4287</a>
+<a href="#4288" id="4288">4288</a>
+<a href="#4289" id="4289">4289</a>
+<a href="#4290" id="4290">4290</a>
+<a href="#4291" id="4291">4291</a>
+<a href="#4292" id="4292">4292</a>
+<a href="#4293" id="4293">4293</a>
+<a href="#4294" id="4294">4294</a>
+<a href="#4295" id="4295">4295</a>
+<a href="#4296" id="4296">4296</a>
+<a href="#4297" id="4297">4297</a>
+<a href="#4298" id="4298">4298</a>
+<a href="#4299" id="4299">4299</a>
+<a href="#4300" id="4300">4300</a>
+<a href="#4301" id="4301">4301</a>
+<a href="#4302" id="4302">4302</a>
+<a href="#4303" id="4303">4303</a>
+<a href="#4304" id="4304">4304</a>
+<a href="#4305" id="4305">4305</a>
+<a href="#4306" id="4306">4306</a>
+<a href="#4307" id="4307">4307</a>
+<a href="#4308" id="4308">4308</a>
+<a href="#4309" id="4309">4309</a>
+<a href="#4310" id="4310">4310</a>
+<a href="#4311" id="4311">4311</a>
+<a href="#4312" id="4312">4312</a>
+<a href="#4313" id="4313">4313</a>
+<a href="#4314" id="4314">4314</a>
+<a href="#4315" id="4315">4315</a>
+<a href="#4316" id="4316">4316</a>
+<a href="#4317" id="4317">4317</a>
+<a href="#4318" id="4318">4318</a>
+<a href="#4319" id="4319">4319</a>
+<a href="#4320" id="4320">4320</a>
+<a href="#4321" id="4321">4321</a>
+<a href="#4322" id="4322">4322</a>
+<a href="#4323" id="4323">4323</a>
+<a href="#4324" id="4324">4324</a>
+<a href="#4325" id="4325">4325</a>
+<a href="#4326" id="4326">4326</a>
+<a href="#4327" id="4327">4327</a>
+<a href="#4328" id="4328">4328</a>
+<a href="#4329" id="4329">4329</a>
+<a href="#4330" id="4330">4330</a>
+<a href="#4331" id="4331">4331</a>
+<a href="#4332" id="4332">4332</a>
+<a href="#4333" id="4333">4333</a>
+<a href="#4334" id="4334">4334</a>
+<a href="#4335" id="4335">4335</a>
+<a href="#4336" id="4336">4336</a>
+<a href="#4337" id="4337">4337</a>
+<a href="#4338" id="4338">4338</a>
+<a href="#4339" id="4339">4339</a>
+<a href="#4340" id="4340">4340</a>
+<a href="#4341" id="4341">4341</a>
+<a href="#4342" id="4342">4342</a>
+<a href="#4343" id="4343">4343</a>
+<a href="#4344" id="4344">4344</a>
+<a href="#4345" id="4345">4345</a>
+<a href="#4346" id="4346">4346</a>
+<a href="#4347" id="4347">4347</a>
+<a href="#4348" id="4348">4348</a>
+<a href="#4349" id="4349">4349</a>
+<a href="#4350" id="4350">4350</a>
+<a href="#4351" id="4351">4351</a>
+<a href="#4352" id="4352">4352</a>
+<a href="#4353" id="4353">4353</a>
+<a href="#4354" id="4354">4354</a>
+<a href="#4355" id="4355">4355</a>
+<a href="#4356" id="4356">4356</a>
+<a href="#4357" id="4357">4357</a>
+<a href="#4358" id="4358">4358</a>
+<a href="#4359" id="4359">4359</a>
+<a href="#4360" id="4360">4360</a>
+<a href="#4361" id="4361">4361</a>
+<a href="#4362" id="4362">4362</a>
+<a href="#4363" id="4363">4363</a>
+<a href="#4364" id="4364">4364</a>
+<a href="#4365" id="4365">4365</a>
+<a href="#4366" id="4366">4366</a>
+<a href="#4367" id="4367">4367</a>
+<a href="#4368" id="4368">4368</a>
+<a href="#4369" id="4369">4369</a>
+<a href="#4370" id="4370">4370</a>
+<a href="#4371" id="4371">4371</a>
+<a href="#4372" id="4372">4372</a>
+<a href="#4373" id="4373">4373</a>
+<a href="#4374" id="4374">4374</a>
+<a href="#4375" id="4375">4375</a>
+<a href="#4376" id="4376">4376</a>
+<a href="#4377" id="4377">4377</a>
+<a href="#4378" id="4378">4378</a>
+<a href="#4379" id="4379">4379</a>
+<a href="#4380" id="4380">4380</a>
+<a href="#4381" id="4381">4381</a>
+<a href="#4382" id="4382">4382</a>
+<a href="#4383" id="4383">4383</a>
+<a href="#4384" id="4384">4384</a>
+<a href="#4385" id="4385">4385</a>
+<a href="#4386" id="4386">4386</a>
+<a href="#4387" id="4387">4387</a>
+<a href="#4388" id="4388">4388</a>
+<a href="#4389" id="4389">4389</a>
+<a href="#4390" id="4390">4390</a>
+<a href="#4391" id="4391">4391</a>
+<a href="#4392" id="4392">4392</a>
+<a href="#4393" id="4393">4393</a>
+<a href="#4394" id="4394">4394</a>
+<a href="#4395" id="4395">4395</a>
+<a href="#4396" id="4396">4396</a>
+<a href="#4397" id="4397">4397</a>
+<a href="#4398" id="4398">4398</a>
+<a href="#4399" id="4399">4399</a>
+<a href="#4400" id="4400">4400</a>
+<a href="#4401" id="4401">4401</a>
+<a href="#4402" id="4402">4402</a>
+<a href="#4403" id="4403">4403</a>
+<a href="#4404" id="4404">4404</a>
+<a href="#4405" id="4405">4405</a>
+<a href="#4406" id="4406">4406</a>
+<a href="#4407" id="4407">4407</a>
+<a href="#4408" id="4408">4408</a>
+<a href="#4409" id="4409">4409</a>
+<a href="#4410" id="4410">4410</a>
+<a href="#4411" id="4411">4411</a>
+<a href="#4412" id="4412">4412</a>
+<a href="#4413" id="4413">4413</a>
+<a href="#4414" id="4414">4414</a>
+<a href="#4415" id="4415">4415</a>
+<a href="#4416" id="4416">4416</a>
+<a href="#4417" id="4417">4417</a>
+<a href="#4418" id="4418">4418</a>
+<a href="#4419" id="4419">4419</a>
+<a href="#4420" id="4420">4420</a>
+<a href="#4421" id="4421">4421</a>
+<a href="#4422" id="4422">4422</a>
+<a href="#4423" id="4423">4423</a>
+<a href="#4424" id="4424">4424</a>
+<a href="#4425" id="4425">4425</a>
+<a href="#4426" id="4426">4426</a>
+<a href="#4427" id="4427">4427</a>
+<a href="#4428" id="4428">4428</a>
+<a href="#4429" id="4429">4429</a>
+<a href="#4430" id="4430">4430</a>
+<a href="#4431" id="4431">4431</a>
+<a href="#4432" id="4432">4432</a>
+<a href="#4433" id="4433">4433</a>
+<a href="#4434" id="4434">4434</a>
+<a href="#4435" id="4435">4435</a>
+<a href="#4436" id="4436">4436</a>
+<a href="#4437" id="4437">4437</a>
+<a href="#4438" id="4438">4438</a>
+<a href="#4439" id="4439">4439</a>
+<a href="#4440" id="4440">4440</a>
+<a href="#4441" id="4441">4441</a>
+<a href="#4442" id="4442">4442</a>
+<a href="#4443" id="4443">4443</a>
+<a href="#4444" id="4444">4444</a>
+<a href="#4445" id="4445">4445</a>
+<a href="#4446" id="4446">4446</a>
+<a href="#4447" id="4447">4447</a>
+<a href="#4448" id="4448">4448</a>
+<a href="#4449" id="4449">4449</a>
+<a href="#4450" id="4450">4450</a>
+<a href="#4451" id="4451">4451</a>
+<a href="#4452" id="4452">4452</a>
+<a href="#4453" id="4453">4453</a>
+<a href="#4454" id="4454">4454</a>
+<a href="#4455" id="4455">4455</a>
+<a href="#4456" id="4456">4456</a>
+<a href="#4457" id="4457">4457</a>
+<a href="#4458" id="4458">4458</a>
+<a href="#4459" id="4459">4459</a>
+<a href="#4460" id="4460">4460</a>
+<a href="#4461" id="4461">4461</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
+    sync::Arc,
 };
 
 <span class="kw">use </span>zng_app::widget::info::InlineSegmentInfo;
+<span class="kw">use </span>zng_ext_image::{ImageDataFormat, ImageSource, ImageVar, IMAGES};
 <span class="kw">use </span>zng_ext_l10n::{lang, Lang};
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegmentPos, LayoutDirection, TextSegmentKind},
     unit::{euclid, Align, Factor2d, FactorUnits, Px, PxBox, PxConstraints2d, PxPoint, PxRect, PxSize},
 };
 <span class="kw">use </span>zng_txt::Txt;
+<span class="kw">use </span>zng_var::{AnyVar, Var <span class="kw">as _</span>};
 <span class="kw">use </span>zng_view_api::font::{GlyphIndex, GlyphInstance};
 
 <span class="kw">use crate</span>::{
@@ -4446,6 +4752,19 @@
     }
 }
 
+<span class="attr">#[derive(Clone)]
+</span><span class="kw">struct </span>GlyphImage(ImageVar);
+<span class="kw">impl </span>PartialEq <span class="kw">for </span>GlyphImage {
+    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+        <span class="self">self</span>.<span class="number">0</span>.var_ptr() == other.<span class="number">0</span>.var_ptr()
+    }
+}
+<span class="kw">impl </span>fmt::Debug <span class="kw">for </span>GlyphImage {
+    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+        <span class="macro">write!</span>(f, <span class="string">"GlyphImage(_)"</span>)
+    }
+}
+
 <span class="doccomment">/// Output of [text layout].
 ///
 /// [text layout]: Font::shape_text
@@ -4459,6 +4778,8 @@
     </span>segments: GlyphSegmentVec,
     lines: LineRangeVec,
     fonts: FontRangeVec,
+    <span class="comment">// sorted map of `glyphs` index -&gt; image.
+    </span>images: Vec&lt;(u32, GlyphImage)&gt;,
 
     line_height: Px,
     line_spacing: Px,
@@ -4511,6 +4832,25 @@
     },
 }
 
+<span class="doccomment">/// Represents normal and image glyphs in [`ShapedText::image_glyphs`].
+</span><span class="kw">pub enum </span>ShapedImageGlyphs&lt;<span class="lifetime">'a</span>&gt; {
+    <span class="doccomment">/// Sequence of not image glyphs.
+    </span>Normal(<span class="kw-2">&amp;</span><span class="lifetime">'a </span>[GlyphInstance]),
+    <span class="doccomment">/// Image glyph.
+    </span>Image {
+        <span class="doccomment">/// Origin and size of the image in the shaped text.
+        ///
+        /// The size is empty is the image has not loaded yet.
+        </span>rect: euclid::Rect&lt;f32, Px&gt;,
+        <span class="doccomment">/// The glyph that is replaced by `img`.
+        ///
+        /// Must be used as fallback if the `img` cannot be rendered.
+        </span>base_glyph: GlyphIndex,
+        <span class="doccomment">/// The image.
+        </span>img: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>ImageVar,
+    },
+}
+
 <span class="kw">impl </span>ShapedText {
     <span class="doccomment">/// New empty text.
     </span><span class="kw">pub fn </span>new(font: <span class="kw-2">&amp;</span>Font) -&gt; <span class="self">Self </span>{
@@ -4546,6 +4886,11 @@
         <span class="self">self</span>.has_colored_glyphs
     }
 
+    <span class="doccomment">/// If the shaped text has any Emoji glyph associated with a pixel image.
+    </span><span class="kw">pub fn </span>has_images(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+        !<span class="self">self</span>.images.is_empty()
+    }
+
     <span class="doccomment">/// Glyphs by font and palette color.
     </span><span class="kw">pub fn </span>colored_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedColoredGlyphs)&gt; {
         ColoredGlyphsIter {
@@ -4559,6 +4904,27 @@
         ColoredGlyphsIter {
             glyphs: <span class="self">self</span>.glyphs_slice_impl(IndexRange::from_bounds(range)),
             maybe_colored: <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="doccomment">/// Glyphs by font and associated image.
+    </span><span class="kw">pub fn </span>image_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs)&gt; {
+        ImageGlyphsIter {
+            glyphs: <span class="self">self</span>.glyphs(),
+            glyphs_i: <span class="number">0</span>,
+            images: <span class="kw-2">&amp;</span><span class="self">self</span>.images,
+            maybe_img: <span class="prelude-val">None</span>,
+        }
+    }
+
+    <span class="doccomment">/// Glyphs in a range by font and associated image.
+    </span><span class="kw">pub fn </span>image_glyphs_slice(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs)&gt; {
+        <span class="kw">let </span>range = IndexRange::from_bounds(range);
+        ImageGlyphsIter {
+            glyphs_i: range.start() <span class="kw">as _</span>,
+            glyphs: <span class="self">self</span>.glyphs_slice_impl(range),
+            images: <span class="kw-2">&amp;</span><span class="self">self</span>.images,
+            maybe_img: <span class="prelude-val">None</span>,
         }
     }
 
@@ -5165,6 +5531,7 @@
                 font: <span class="self">self</span>.fonts.font(<span class="number">0</span>).clone(),
                 end: <span class="number">0</span>,
             }]),
+            images: <span class="macro">vec!</span>[],
             orig_line_height: <span class="self">self</span>.orig_line_height,
             orig_line_spacing: <span class="self">self</span>.orig_line_spacing,
             orig_first_line: PxSize::zero(),
@@ -5834,6 +6201,71 @@
     }
 }
 
+<span class="kw">struct </span>ImageGlyphsIter&lt;<span class="lifetime">'a</span>, G&gt;
+<span class="kw">where
+    </span>G: Iterator&lt;Item = (<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Font, <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[GlyphInstance])&gt; + <span class="lifetime">'a</span>,
+{
+    glyphs: G,
+    glyphs_i: u32,
+    images: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[(u32, GlyphImage)],
+    maybe_img: <span class="prelude-ty">Option</span>&lt;(<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Font, <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[GlyphInstance])&gt;,
+}
+<span class="kw">impl</span>&lt;<span class="lifetime">'a</span>, G&gt; Iterator <span class="kw">for </span>ImageGlyphsIter&lt;<span class="lifetime">'a</span>, G&gt;
+<span class="kw">where
+    </span>G: Iterator&lt;Item = (<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Font, <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[GlyphInstance])&gt; + <span class="lifetime">'a</span>,
+{
+    <span class="kw">type </span>Item = (<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Font, ShapedImageGlyphs&lt;<span class="lifetime">'a</span>&gt;);
+
+    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+        <span class="kw">loop </span>{
+            <span class="kw">if let </span><span class="prelude-val">Some</span>((font, glyphs)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.maybe_img {
+                <span class="kw">while </span><span class="self">self</span>.images.first().map(|(i, <span class="kw">_</span>)| <span class="kw-2">*</span>i &lt; <span class="self">self</span>.glyphs_i).unwrap_or(<span class="bool-val">false</span>) {
+                    <span class="self">self</span>.images = <span class="kw-2">&amp;</span><span class="self">self</span>.images[<span class="number">1</span>..];
+                }
+                <span class="kw">if let </span><span class="prelude-val">Some</span>((i, img)) = <span class="self">self</span>.images.first() {
+                    <span class="kw">if </span><span class="kw-2">*</span>i == <span class="self">self</span>.glyphs_i {
+                        <span class="self">self</span>.glyphs_i += <span class="number">1</span>;
+                        <span class="kw">let </span><span class="kw-2">mut </span>size = img.<span class="number">0</span>.with(|i| i.size()).cast::&lt;f32&gt;();
+                        <span class="kw">let </span>scale = font.size().<span class="number">0 </span><span class="kw">as </span>f32 / size.width.max(size.height);
+                        size <span class="kw-2">*</span>= scale;
+                        <span class="kw">let </span>r = (
+                            <span class="kw-2">*</span>font,
+                            ShapedImageGlyphs::Image {
+                                rect: euclid::Rect::new(glyphs[<span class="number">0</span>].point - euclid::vec2(<span class="number">0.0</span>, size.height), size),
+                                base_glyph: glyphs[<span class="number">0</span>].index,
+                                img: <span class="kw-2">&amp;</span>img.<span class="number">0</span>,
+                            },
+                        );
+                        <span class="kw-2">*</span>glyphs = <span class="kw-2">&amp;</span>glyphs[<span class="number">1</span>..];
+                        <span class="kw">if </span>glyphs.is_empty() {
+                            <span class="self">self</span>.maybe_img = <span class="prelude-val">None</span>;
+                        }
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(r);
+                    } <span class="kw">else </span>{
+                        <span class="kw">let </span>normal = <span class="kw-2">&amp;</span>glyphs[..glyphs.len().min(<span class="kw-2">*</span>i <span class="kw">as _</span>)];
+                        <span class="self">self</span>.glyphs_i += normal.len() <span class="kw">as </span>u32;
+
+                        <span class="kw-2">*</span>glyphs = <span class="kw-2">&amp;</span>glyphs[normal.len()..];
+                        <span class="kw">let </span>r = (<span class="kw-2">*</span>font, ShapedImageGlyphs::Normal(normal));
+
+                        <span class="kw">if </span>glyphs.is_empty() {
+                            <span class="self">self</span>.maybe_img = <span class="prelude-val">None</span>;
+                        }
+                        <span class="kw">return </span><span class="prelude-val">Some</span>(r);
+                    }
+                } <span class="kw">else </span>{
+                    <span class="kw">let </span>r = (<span class="kw-2">*</span>font, ShapedImageGlyphs::Normal(glyphs));
+                    <span class="kw">return </span><span class="prelude-val">Some</span>(r);
+                }
+            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(seq) = <span class="self">self</span>.glyphs.next() {
+                <span class="self">self</span>.maybe_img = <span class="prelude-val">Some</span>(seq);
+            } <span class="kw">else </span>{
+                <span class="kw">return </span><span class="prelude-val">None</span>;
+            }
+        }
+    }
+}
+
 <span class="kw">struct </span>ColoredGlyphsIter&lt;<span class="lifetime">'a</span>, G&gt;
 <span class="kw">where
     </span>G: Iterator&lt;Item = (<span class="kw-2">&amp;</span><span class="lifetime">'a </span>Font, <span class="kw-2">&amp;</span><span class="lifetime">'a </span>[GlyphInstance])&gt; + <span class="lifetime">'a</span>,
@@ -6032,6 +6464,7 @@
                 mid_size: PxSize::zero(),
                 last_line: PxRect::zero(),
                 has_colored_glyphs: <span class="bool-val">false</span>,
+                images: <span class="macro">vec!</span>[],
             },
 
             line_height: <span class="number">0.0</span>,
@@ -6332,8 +6765,26 @@
                     <span class="self">self</span>.push_text_seg(seg, info);
                 }
 
-                <span class="kw">if </span><span class="macro">matches!</span>(info.kind, TextSegmentKind::Emoji) &amp;&amp; !font.face().color_glyphs().is_empty() {
-                    <span class="self">self</span>.out.has_colored_glyphs = <span class="bool-val">true</span>;
+                <span class="kw">if </span><span class="macro">matches!</span>(info.kind, TextSegmentKind::Emoji) {
+                    <span class="kw">if </span>!font.face().color_glyphs().is_empty() {
+                        <span class="self">self</span>.out.has_colored_glyphs = <span class="bool-val">true</span>;
+                    }
+                    <span class="kw">if </span>font.face().has_raster_images() || (<span class="macro">cfg!</span>(feature = <span class="string">"svg"</span>) &amp;&amp; font.face().has_svg_images()) {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(ttf) = font.face().ttf() {
+                            <span class="kw">for </span>(i, g) <span class="kw">in </span>shaped_seg.glyphs.iter().enumerate() {
+                                <span class="kw">let </span>id = ttf_parser::GlyphId(g.index <span class="kw">as _</span>);
+                                <span class="kw">let </span>ppm = font.size().<span class="number">0 </span><span class="kw">as </span>u16;
+                                <span class="kw">let </span>glyphs_i = <span class="self">self</span>.out.glyphs.len() - shaped_seg.glyphs.len() + i;
+                                <span class="kw">if let </span><span class="prelude-val">Some</span>(img) = ttf.glyph_raster_image(id, ppm) {
+                                    <span class="self">self</span>.push_glyph_raster(glyphs_i <span class="kw">as _</span>, img);
+                                } <span class="kw">else if </span><span class="macro">cfg!</span>(feature = <span class="string">"svg"</span>) {
+                                    <span class="kw">if let </span><span class="prelude-val">Some</span>(img) = ttf.glyph_svg_image(id) {
+                                        <span class="self">self</span>.push_glyph_svg(glyphs_i <span class="kw">as _</span>, img);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
 
                 <span class="self">self</span>.push_font(font);
@@ -6384,6 +6835,161 @@
         } <span class="kw">else </span>{
             <span class="self">self</span>.push_text_seg(seg, info)
         }
+    }
+
+    <span class="kw">fn </span>push_glyph_raster(<span class="kw-2">&amp;mut </span><span class="self">self</span>, glyphs_i: u32, img: ttf_parser::RasterGlyphImage) {
+        <span class="kw">use </span>ttf_parser::RasterImageFormat;
+        <span class="kw">let </span>size = PxSize::new(Px(img.width <span class="kw">as _</span>), Px(img.height <span class="kw">as _</span>));
+        <span class="kw">let </span>bgra_fmt = ImageDataFormat::Bgra8 { size, ppi: <span class="prelude-val">None </span>};
+        <span class="kw">let </span>bgra_len = img.width <span class="kw">as </span>usize * img.height <span class="kw">as </span>usize * <span class="number">4</span>;
+        <span class="kw">let </span>(data, fmt) = <span class="kw">match </span>img.format {
+            RasterImageFormat::PNG =&gt; (img.data.to_vec(), ImageDataFormat::from(<span class="string">"png"</span>)),
+            RasterImageFormat::BitmapMono =&gt; {
+                <span class="comment">// row aligned 1-bitmap
+                </span><span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">let </span>bytes_per_row = (img.width <span class="kw">as </span>usize + <span class="number">7</span>) / <span class="number">8</span>;
+                <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..img.height <span class="kw">as </span>usize {
+                    <span class="kw">let </span>row_start = y * bytes_per_row;
+                    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..img.width <span class="kw">as </span>usize {
+                        <span class="kw">let </span>byte_index = row_start + x / <span class="number">8</span>;
+                        <span class="kw">let </span>bit_index = <span class="number">7 </span>- (x % <span class="number">8</span>);
+                        <span class="kw">let </span>bit = (img.data[byte_index] &gt;&gt; bit_index) &amp; <span class="number">1</span>;
+                        <span class="kw">let </span>color = <span class="kw">if </span>bit == <span class="number">1 </span>{ [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>] } <span class="kw">else </span>{ [<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>] };
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>color);
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapMonoPacked =&gt; {
+                <span class="comment">// packed 1-bitmap
+                </span><span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">for </span><span class="kw-2">&amp;</span>c8 <span class="kw">in </span>img.data {
+                    <span class="kw">for </span>bit <span class="kw">in </span><span class="number">0</span>..<span class="number">8 </span>{
+                        <span class="kw">let </span>color = <span class="kw">if </span>(c8 &gt;&gt; (<span class="number">7 </span>- bit)) &amp; <span class="number">1 </span>== <span class="number">1 </span>{
+                            [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>]
+                        } <span class="kw">else </span>{
+                            [<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>]
+                        };
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>color);
+                        <span class="kw">if </span>bgra.len() == bgra_len {
+                            <span class="kw">break</span>;
+                        }
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapGray2 =&gt; {
+                <span class="comment">// row aligned 2-bitmap
+                </span><span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">let </span>bytes_per_row = (img.width <span class="kw">as </span>usize + <span class="number">3</span>) / <span class="number">4</span>;
+                <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..img.height <span class="kw">as </span>usize {
+                    <span class="kw">let </span>row_start = y * bytes_per_row;
+                    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..img.width <span class="kw">as </span>usize {
+                        <span class="kw">let </span>byte_index = row_start + x / <span class="number">4</span>;
+                        <span class="kw">let </span>shift = (<span class="number">3 </span>- (x % <span class="number">4</span>)) * <span class="number">2</span>;
+                        <span class="kw">let </span>gray = (img.data[byte_index] &gt;&gt; shift) &amp; <span class="number">0b11</span>;
+                        <span class="kw">let </span>color = <span class="kw">match </span>gray {
+                            <span class="number">0b00 </span>=&gt; [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>],       <span class="comment">// Black
+                            </span><span class="number">0b01 </span>=&gt; [<span class="number">85</span>, <span class="number">85</span>, <span class="number">85</span>, <span class="number">255</span>],    <span class="comment">// Dark gray
+                            </span><span class="number">0b10 </span>=&gt; [<span class="number">170</span>, <span class="number">170</span>, <span class="number">170</span>, <span class="number">255</span>], <span class="comment">// Light gray
+                            </span><span class="number">0b11 </span>=&gt; [<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>], <span class="comment">// White
+                            </span><span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+                        };
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>color);
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapGray2Packed =&gt; {
+                <span class="comment">// packed 2-bitmap
+                </span><span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">for </span><span class="kw-2">&amp;</span>c4 <span class="kw">in </span>img.data {
+                    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">4 </span>{
+                        <span class="kw">let </span>gray = (c4 &gt;&gt; (<span class="number">7 </span>- i * <span class="number">2</span>)) &amp; <span class="number">0b11</span>;
+                        <span class="kw">let </span>color = <span class="kw">match </span>gray {
+                            <span class="number">0b00 </span>=&gt; [<span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>],       <span class="comment">// Black
+                            </span><span class="number">0b01 </span>=&gt; [<span class="number">85</span>, <span class="number">85</span>, <span class="number">85</span>, <span class="number">255</span>],    <span class="comment">// Dark gray
+                            </span><span class="number">0b10 </span>=&gt; [<span class="number">170</span>, <span class="number">170</span>, <span class="number">170</span>, <span class="number">255</span>], <span class="comment">// Light gray
+                            </span><span class="number">0b11 </span>=&gt; [<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>], <span class="comment">// White
+                            </span><span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+                        };
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>color);
+                        <span class="kw">if </span>bgra.len() == bgra_len {
+                            <span class="kw">break</span>;
+                        }
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapGray4 =&gt; {
+                <span class="comment">// row aligned 4-bitmap
+                </span><span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">let </span>bytes_per_row = (img.width <span class="kw">as </span>usize + <span class="number">1</span>) / <span class="number">2</span>;
+                <span class="kw">for </span>y <span class="kw">in </span><span class="number">0</span>..img.height <span class="kw">as </span>usize {
+                    <span class="kw">let </span>row_start = y * bytes_per_row;
+                    <span class="kw">for </span>x <span class="kw">in </span><span class="number">0</span>..img.width <span class="kw">as </span>usize {
+                        <span class="kw">let </span>byte_index = row_start + x / <span class="number">2</span>;
+                        <span class="kw">let </span>shift = <span class="kw">if </span>x % <span class="number">2 </span>== <span class="number">0 </span>{ <span class="number">4 </span>} <span class="kw">else </span>{ <span class="number">0 </span>};
+                        <span class="kw">let </span>gray = (img.data[byte_index] &gt;&gt; shift) &amp; <span class="number">0b1111</span>;
+                        <span class="kw">let </span>g = gray * <span class="number">17</span>;
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>[g, g, g, <span class="number">255</span>]);
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapGray4Packed =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">for </span><span class="kw-2">&amp;</span>c2 <span class="kw">in </span>img.data {
+                    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..<span class="number">2 </span>{
+                        <span class="kw">let </span>gray = (c2 &gt;&gt; (<span class="number">7 </span>- i * <span class="number">4</span>)) &amp; <span class="number">0b1111</span>;
+                        <span class="kw">let </span>g = gray * <span class="number">17</span>;
+                        bgra.extend_from_slice(<span class="kw-2">&amp;</span>[g, g, g, <span class="number">255</span>]);
+                        <span class="kw">if </span>bgra.len() == bgra_len {
+                            <span class="kw">break</span>;
+                        }
+                    }
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapGray8 =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>bgra = Vec::with_capacity(bgra_len);
+                <span class="kw">for </span><span class="kw-2">&amp;</span>c <span class="kw">in </span>img.data {
+                    bgra.extend_from_slice(<span class="kw-2">&amp;</span>[c, c, c, <span class="number">255</span>]);
+                }
+                (bgra, bgra_fmt)
+            }
+            RasterImageFormat::BitmapPremulBgra32 =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>bgra = img.data.to_vec();
+                <span class="kw">for </span>c <span class="kw">in </span>bgra.chunks_exact_mut(<span class="number">4</span>) {
+                    <span class="kw">let </span>(b, g, r, a) = (c[<span class="number">0</span>], c[<span class="number">1</span>], c[<span class="number">2</span>], c[<span class="number">3</span>]);
+                    <span class="kw">let </span>unp = <span class="kw">if </span>a == <span class="number">255 </span>{
+                        [b, g, r]
+                    } <span class="kw">else </span>{
+                        [
+                            (b <span class="kw">as </span>u32 * <span class="number">255 </span>/ a <span class="kw">as </span>u32) <span class="kw">as </span>u8,
+                            (g <span class="kw">as </span>u32 * <span class="number">255 </span>/ a <span class="kw">as </span>u32) <span class="kw">as </span>u8,
+                            (r <span class="kw">as </span>u32 * <span class="number">255 </span>/ a <span class="kw">as </span>u32) <span class="kw">as </span>u8,
+                        ]
+                    };
+                    c.copy_from_slice(<span class="kw-2">&amp;</span>unp);
+                }
+                (bgra, bgra_fmt)
+            }
+        };
+        <span class="self">self</span>.push_glyph_img(glyphs_i, ImageSource::from_data(Arc::new(data), fmt));
+    }
+
+    <span class="kw">fn </span>push_glyph_svg(<span class="kw-2">&amp;mut </span><span class="self">self</span>, glyphs_i: u32, img: ttf_parser::svg::SvgDocument) {
+        <span class="self">self</span>.push_glyph_img(
+            glyphs_i,
+            ImageSource::from_data(Arc::new(img.data.to_vec()), ImageDataFormat::from(<span class="string">"svg"</span>)),
+        );
+    }
+
+    <span class="kw">fn </span>push_glyph_img(<span class="kw-2">&amp;mut </span><span class="self">self</span>, glyphs_i: u32, source: ImageSource) {
+        <span class="kw">let </span>img = IMAGES.cache(source);
+
+        <span class="self">self</span>.out.images.push((glyphs_i, GlyphImage(img)));
     }
 
     <span class="kw">fn </span>push_last_line(<span class="kw-2">&amp;mut </span><span class="self">self</span>, text: <span class="kw-2">&amp;</span>SegmentedText) {

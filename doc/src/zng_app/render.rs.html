@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-c5d6553a23f1e5a6.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.81.0 (eeb90cda1 2024-09-04)" data-channel="1.81.0" data-search-js="search-d234aafac6c221dd.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-d2fab2bf619172d3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-df360f571f6edeae.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../../static.files/storage-118b08c4c78b968e.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -3110,6 +3110,21 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#3074" id="3074">3074</a>
 <a href="#3075" id="3075">3075</a>
 <a href="#3076" id="3076">3076</a>
+<a href="#3077" id="3077">3077</a>
+<a href="#3078" id="3078">3078</a>
+<a href="#3079" id="3079">3079</a>
+<a href="#3080" id="3080">3080</a>
+<a href="#3081" id="3081">3081</a>
+<a href="#3082" id="3082">3082</a>
+<a href="#3083" id="3083">3083</a>
+<a href="#3084" id="3084">3084</a>
+<a href="#3085" id="3085">3085</a>
+<a href="#3086" id="3086">3086</a>
+<a href="#3087" id="3087">3087</a>
+<a href="#3088" id="3088">3088</a>
+<a href="#3089" id="3089">3089</a>
+<a href="#3090" id="3090">3090</a>
+<a href="#3091" id="3091">3091</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
 
 </span><span class="kw">use </span>std::{marker::PhantomData, mem, sync::Arc};
@@ -5027,6 +5042,16 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.debug_dot_overlays.extend(nested.debug_dot_overlays);
     }
 
+    <span class="doccomment">/// External render requests for this frame.
+    </span><span class="kw">pub fn </span>render_widgets(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.render_widgets
+    }
+
+    <span class="doccomment">/// External render update requests for this frame.
+    </span><span class="kw">pub fn </span>render_update_widgets(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.render_update_widgets
+    }
+
     <span class="doccomment">/// Finalizes the build.
     </span><span class="kw">pub fn </span>finalize(<span class="self">self</span>, info_tree: <span class="kw-2">&amp;</span>WidgetInfoTree) -&gt; BuiltFrame {
         info_tree.root().bounds_info().set_rendered(
@@ -5836,6 +5861,11 @@ document.addEventListener('DOMContentLoaded', function () {
         take_or_append(<span class="kw-2">&amp;mut </span><span class="self">self</span>.floats, <span class="kw-2">&amp;mut </span>nested.floats);
         take_or_append(<span class="kw-2">&amp;mut </span><span class="self">self</span>.colors, <span class="kw-2">&amp;mut </span>nested.colors);
         take_or_append(<span class="kw-2">&amp;mut </span><span class="self">self</span>.extensions, <span class="kw-2">&amp;mut </span>nested.extensions);
+    }
+
+    <span class="doccomment">/// External render update requests for this frame.
+    </span><span class="kw">pub fn </span>render_update_widgets(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt; {
+        <span class="kw-2">&amp;</span><span class="self">self</span>.render_update_widgets
     }
 
     <span class="doccomment">/// Finalize the update.
