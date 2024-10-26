@@ -843,7 +843,7 @@
     <span class="comment">// skip UTF-8 BOM
     </span><span class="kw">let </span>file = file.strip_prefix(<span class="string">'\u{feff}'</span>).unwrap_or(file.as_str());
     <span class="comment">// skip shebang line
-    </span><span class="kw">let </span>file = <span class="kw">if </span>file.starts_with(<span class="string">"#!"</span>) {
+    </span><span class="kw">let </span>file = <span class="kw">if </span>file.starts_with(<span class="string">"#!"</span>) &amp;&amp; !file.starts_with(<span class="string">"#!["</span>) {
         <span class="kw-2">&amp;</span>file[file.find(<span class="string">'\n'</span>).unwrap_or(file.len())..]
     } <span class="kw">else </span>{
         file

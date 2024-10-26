@@ -1654,6 +1654,13 @@
 <a href="#1654" id="1654">1654</a>
 <a href="#1655" id="1655">1655</a>
 <a href="#1656" id="1656">1656</a>
+<a href="#1657" id="1657">1657</a>
+<a href="#1658" id="1658">1658</a>
+<a href="#1659" id="1659">1659</a>
+<a href="#1660" id="1660">1660</a>
+<a href="#1661" id="1661">1661</a>
+<a href="#1662" id="1662">1662</a>
+<a href="#1663" id="1663">1663</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1674,6 +1681,7 @@
 <span class="kw">use </span>zng_ext_input::touch::TOUCH;
 <span class="kw">use </span>zng_ext_window::WINDOW_Ext <span class="kw">as _</span>;
 <span class="kw">use </span>zng_var::{animation, ContextInitHandle, ReadOnlyContextVar};
+<span class="kw">use </span>zng_view_api::window::FrameId;
 <span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 
 <span class="kw">use </span>std::sync::atomic::{AtomicBool, Ordering};
@@ -2252,7 +2260,13 @@
                         }
                     } <span class="kw">else </span>{
                         <span class="comment">// anchor not visible, call render to properly hide or collapse (if collapsed during layout)
-                        </span>frame.hide(|frame| widget.render(frame))
+                        </span>frame.hide(|frame| widget.render(frame));
+
+                        <span class="kw">if </span>frame.frame_id() == FrameId::first() &amp;&amp; anchor.get() == WIDGET.id() {
+                            <span class="comment">// anchor is the root widget, the only widget that is not done rendering before the layers
+                            // if only the first frame is rendered the layer can remain hidden, so ensure a second frame renders.
+                            </span>WIDGET.render();
+                        }
                     }
                 } <span class="kw">else </span>{
                     widget.render(frame);
