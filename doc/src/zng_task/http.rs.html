@@ -1780,6 +1780,32 @@
 <a href="#1780" id="1780">1780</a>
 <a href="#1781" id="1781">1781</a>
 <a href="#1782" id="1782">1782</a>
+<a href="#1783" id="1783">1783</a>
+<a href="#1784" id="1784">1784</a>
+<a href="#1785" id="1785">1785</a>
+<a href="#1786" id="1786">1786</a>
+<a href="#1787" id="1787">1787</a>
+<a href="#1788" id="1788">1788</a>
+<a href="#1789" id="1789">1789</a>
+<a href="#1790" id="1790">1790</a>
+<a href="#1791" id="1791">1791</a>
+<a href="#1792" id="1792">1792</a>
+<a href="#1793" id="1793">1793</a>
+<a href="#1794" id="1794">1794</a>
+<a href="#1795" id="1795">1795</a>
+<a href="#1796" id="1796">1796</a>
+<a href="#1797" id="1797">1797</a>
+<a href="#1798" id="1798">1798</a>
+<a href="#1799" id="1799">1799</a>
+<a href="#1800" id="1800">1800</a>
+<a href="#1801" id="1801">1801</a>
+<a href="#1802" id="1802">1802</a>
+<a href="#1803" id="1803">1803</a>
+<a href="#1804" id="1804">1804</a>
+<a href="#1805" id="1805">1805</a>
+<a href="#1806" id="1806">1806</a>
+<a href="#1807" id="1807">1807</a>
+<a href="#1808" id="1808">1808</a>
 </pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"http"</span>)]
 </span><span class="comment">// suppress nag about very simple boxed closure signatures.
 </span><span class="attr">#![expect(clippy::type_complexity)]
@@ -1807,6 +1833,7 @@
 <span class="kw">mod </span>util;
 
 <span class="kw">pub use </span>cache::<span class="kw-2">*</span>;
+<span class="kw">use </span>zng_var::impl_from_and_into_var;
 
 <span class="kw">use </span>std::convert::TryFrom;
 <span class="kw">use </span>std::error::Error <span class="kw">as </span>StdError;
@@ -1814,6 +1841,8 @@
 <span class="kw">use </span>std::sync::Arc;
 <span class="kw">use </span>std::time::Duration;
 <span class="kw">use </span>std::{fmt, mem};
+
+<span class="kw">use </span><span class="kw">crate</span>::Progress;
 
 <span class="kw">use </span><span class="kw">super</span>::io::AsyncRead;
 
@@ -1826,7 +1855,7 @@
 <span class="kw">use </span>isahc::{AsyncReadResponseExt, ResponseExt};
 <span class="kw">use </span>parking_lot::{const_mutex, Mutex};
 
-<span class="kw">use </span>zng_txt::Txt;
+<span class="kw">use </span>zng_txt::{formatx, Txt};
 <span class="kw">use </span>zng_unit::<span class="kw-2">*</span>;
 
 <span class="doccomment">/// Marker trait for types that try-to-convert to [`Uri`].
@@ -2825,7 +2854,7 @@
         </span><span class="kw">if </span><span class="self">self</span>.upload_progress.<span class="number">0 </span>!= <span class="self">self</span>.upload_progress.<span class="number">1 </span>{
             <span class="macro">write!</span>(
                 f,
-                <span class="string">"upload: {} of {}, {}/s"</span>,
+                <span class="string">"↑ {} - {}, {}/s"</span>,
                 <span class="self">self</span>.upload_progress.<span class="number">0</span>, <span class="self">self</span>.upload_progress.<span class="number">1</span>, <span class="self">self</span>.upload_speed
             )<span class="question-mark">?</span>;
             ws = <span class="bool-val">true</span>;
@@ -2833,7 +2862,7 @@
         <span class="kw">if </span><span class="self">self</span>.download_progress.<span class="number">0 </span>!= <span class="self">self</span>.download_progress.<span class="number">1 </span>{
             <span class="macro">write!</span>(
                 f,
-                <span class="string">"{}download: {} of {}, {}/s"</span>,
+                <span class="string">"{}↓ {} - {}, {}/s"</span>,
                 <span class="kw">if </span>ws { <span class="string">"\n" </span>} <span class="kw">else </span>{ <span class="string">"" </span>},
                 <span class="self">self</span>.download_progress.<span class="number">0</span>,
                 <span class="self">self</span>.download_progress.<span class="number">1</span>,
@@ -2844,21 +2873,44 @@
 
         <span class="kw">if </span>!ws {
             <span class="kw">if </span><span class="self">self</span>.upload_progress.<span class="number">1</span>.bytes() &gt; <span class="number">0 </span>{
-                <span class="macro">write!</span>(f, <span class="string">"uploaded: {}"</span>, <span class="self">self</span>.upload_progress.<span class="number">1</span>)<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"↑ {}"</span>, <span class="self">self</span>.upload_progress.<span class="number">1</span>)<span class="question-mark">?</span>;
                 ws = <span class="bool-val">true</span>;
             }
             <span class="kw">if </span><span class="self">self</span>.download_progress.<span class="number">1</span>.bytes() &gt; <span class="number">0 </span>{
-                <span class="macro">write!</span>(f, <span class="string">"{}downloaded: {}"</span>, <span class="kw">if </span>ws { <span class="string">"\n" </span>} <span class="kw">else </span>{ <span class="string">"" </span>}, <span class="self">self</span>.download_progress.<span class="number">1</span>)<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"{}↓ {}"</span>, <span class="kw">if </span>ws { <span class="string">"\n" </span>} <span class="kw">else </span>{ <span class="string">"" </span>}, <span class="self">self</span>.download_progress.<span class="number">1</span>)<span class="question-mark">?</span>;
                 ws = <span class="bool-val">true</span>;
             }
 
             <span class="kw">if </span>ws {
-                <span class="macro">write!</span>(f, <span class="string">"\ntotal time: {:?}"</span>, <span class="self">self</span>.total_time)<span class="question-mark">?</span>;
+                <span class="macro">write!</span>(f, <span class="string">"\n{:?}"</span>, <span class="self">self</span>.total_time)<span class="question-mark">?</span>;
             }
         }
 
         <span class="prelude-val">Ok</span>(())
     }
+}
+<span class="macro">impl_from_and_into_var!</span> {
+    <span class="kw">fn </span>from(metrics: Metrics) -&gt; Progress {
+        <span class="kw">let </span><span class="kw-2">mut </span>status = Progress::indeterminate();
+        <span class="kw">if </span>metrics.download_progress.<span class="number">1 </span>&gt; <span class="number">0</span>.bytes() {
+            status = Progress::from_n_of(metrics.download_progress.<span class="number">0 </span>.<span class="number">0</span>, metrics.download_progress.<span class="number">1 </span>.<span class="number">0</span>);
+        }
+        <span class="kw">if </span>metrics.upload_progress.<span class="number">1 </span>&gt; <span class="number">0</span>.bytes() {
+            <span class="kw">let </span>u_status = Progress::from_n_of(metrics.upload_progress.<span class="number">0 </span>.<span class="number">0</span>, metrics.upload_progress.<span class="number">1 </span>.<span class="number">0</span>);
+            <span class="kw">if </span>status.is_indeterminate() {
+                status = u_status;
+            } <span class="kw">else </span>{
+                status = status.and_fct(u_status.fct());
+            }
+        }
+        status.with_msg(<span class="macro">formatx!</span>(<span class="string">"{metrics}"</span>)).with_meta_mut(|<span class="kw-2">mut </span>m| {
+            m.set(<span class="kw-2">*</span>METRICS_ID, metrics);
+        })
+    }
+}
+<span class="macro">zng_state_map::static_id!</span> {
+    <span class="doccomment">/// Metrics in a [`Progress::with_meta`] metadata.
+    </span><span class="kw">pub static </span><span class="kw-2">ref </span>METRICS_ID: zng_state_map::StateId&lt;Metrics&gt;;
 }
 
 <span class="doccomment">/// HTTP client.

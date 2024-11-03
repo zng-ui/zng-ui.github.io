@@ -3024,6 +3024,18 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2988" id="2988">2988</a>
 <a href="#2989" id="2989">2989</a>
 <a href="#2990" id="2990">2990</a>
+<a href="#2991" id="2991">2991</a>
+<a href="#2992" id="2992">2992</a>
+<a href="#2993" id="2993">2993</a>
+<a href="#2994" id="2994">2994</a>
+<a href="#2995" id="2995">2995</a>
+<a href="#2996" id="2996">2996</a>
+<a href="#2997" id="2997">2997</a>
+<a href="#2998" id="2998">2998</a>
+<a href="#2999" id="2999">2999</a>
+<a href="#3000" id="3000">3000</a>
+<a href="#3001" id="3001">3001</a>
+<a href="#3002" id="3002">3002</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Widget and property builder types.
 
 </span><span class="kw">use crate</span>::{handler::WidgetHandler, widget::node::WhenUiNodeListBuilder};
@@ -5575,6 +5587,18 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="kw">match </span>item {
                 WidgetItem::Property { args, captured, .. } =&gt; {
                     <span class="kw">if </span>!captured {
+                        <span class="attr">#[cfg(debug_assertions)]
+                        </span>{
+                            <span class="kw">let </span>p = args.property();
+                            <span class="kw">if </span>p.capture {
+                                <span class="macro">tracing::error!</span>(
+                                    <span class="string">"capture only property `{}` is not captured in `{}!`, it will have no effect"</span>,
+                                    p.name,
+                                    <span class="self">self</span>.widget_type.name()
+                                );
+                            }
+                        }
+
                         node = args.instantiate(node);
 
                         <span class="attr">#[cfg(feature = <span class="string">"trace_wgt_item"</span>)]

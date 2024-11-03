@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["CloneableError","McBufReader","Measure","Metrics","ReadLimited"],"trait":["McBufErrorExt"]};
+window.SIDEBAR_ITEMS = {"static":["METRICS_ID"],"struct":["CloneableError","McBufReader","Measure","Metrics","ReadLimited"],"trait":["McBufErrorExt"]};

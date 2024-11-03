@@ -1628,17 +1628,6 @@
 <a href="#1628" id="1628">1628</a>
 <a href="#1629" id="1629">1629</a>
 <a href="#1630" id="1630">1630</a>
-<a href="#1631" id="1631">1631</a>
-<a href="#1632" id="1632">1632</a>
-<a href="#1633" id="1633">1633</a>
-<a href="#1634" id="1634">1634</a>
-<a href="#1635" id="1635">1635</a>
-<a href="#1636" id="1636">1636</a>
-<a href="#1637" id="1637">1637</a>
-<a href="#1638" id="1638">1638</a>
-<a href="#1639" id="1639">1639</a>
-<a href="#1640" id="1640">1640</a>
-<a href="#1641" id="1641">1641</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::any::Any;
 <span class="kw">use </span>std::backtrace::Backtrace;
 <span class="kw">use </span>std::cell::RefCell;
@@ -2817,7 +2806,7 @@
         window: window_id,
         target,
         command: <span class="kw">match </span>request.action {
-            Action::Default =&gt; AccessCmd::Click(<span class="bool-val">true</span>),
+            Action::Click =&gt; AccessCmd::Click(<span class="bool-val">true</span>),
             Action::ShowContextMenu =&gt; AccessCmd::Click(<span class="bool-val">false</span>),
             Action::Focus =&gt; AccessCmd::Focus(<span class="bool-val">true</span>),
             Action::SetSequentialFocusNavigationStartingPoint =&gt; AccessCmd::FocusNavOrigin,
@@ -2907,7 +2896,7 @@
 ) -&gt; accesskit::NodeId {
     <span class="kw">let </span>node_id = access_id_to_kit(node.id);
     <span class="kw">let </span>node_role = node.role.map(access_role_to_kit).unwrap_or(accesskit::Role::Unknown);
-    <span class="kw">let </span><span class="kw-2">mut </span>builder = accesskit::NodeBuilder::new(node_role);
+    <span class="kw">let </span><span class="kw-2">mut </span>builder = accesskit::Node::new(node_role);
 
     <span class="comment">// add bounds and transform
     </span><span class="kw">if </span>!node.size.is_empty() {
@@ -2924,25 +2913,18 @@
         builder.set_bounds(bounds);
     }
 
-    <span class="comment">// action that will be performed on click.
-    </span><span class="kw">let </span><span class="kw-2">mut </span>default_verb = <span class="prelude-val">None</span>;
-
     <span class="comment">// add actions
     </span><span class="kw">for </span>cmd <span class="kw">in </span><span class="kw-2">&amp;</span>node.commands {
         <span class="kw">use </span>zng_view_api::access::AccessCmdName::<span class="kw-2">*</span>;
 
         <span class="kw">match </span>cmd {
             Click =&gt; {
-                builder.add_action(accesskit::Action::Default);
+                builder.add_action(accesskit::Action::Click);
                 builder.add_action(accesskit::Action::ShowContextMenu);
-                default_verb = <span class="prelude-val">Some</span>(accesskit::DefaultActionVerb::Click);
             }
             Focus =&gt; {
                 builder.add_action(accesskit::Action::Focus);
                 builder.add_action(accesskit::Action::Blur);
-                <span class="kw">if </span>default_verb.is_none() {
-                    default_verb = <span class="prelude-val">Some</span>(accesskit::DefaultActionVerb::Focus);
-                }
             }
             SetExpanded =&gt; {
                 builder.add_action(accesskit::Action::Expand);
@@ -2979,10 +2961,6 @@
             }
             <span class="kw">_ </span>=&gt; {}
         }
-    }
-
-    <span class="kw">if let </span><span class="prelude-val">Some</span>(v) = default_verb {
-        builder.set_default_action_verb(v);
     }
 
     <span class="comment">// add state
@@ -3031,7 +3009,7 @@
                     builder.set_invalid(accesskit::Invalid::True)
                 }
             }
-            Label(s) =&gt; builder.set_name(s.clone().into_owned().into_boxed_str()),
+            Label(s) =&gt; builder.set_label(s.clone().into_owned().into_boxed_str()),
             Level(n) =&gt; builder.set_level(n.get() <span class="kw">as </span>usize),
             Modal =&gt; builder.set_modal(),
             MultiSelectable =&gt; builder.set_multiselectable(),
@@ -3122,7 +3100,7 @@
         }
     }
 
-    <span class="kw">let </span>node = builder.build();
+    <span class="kw">let </span>node = builder;
     output.push((node_id, node));
     node_id
 }

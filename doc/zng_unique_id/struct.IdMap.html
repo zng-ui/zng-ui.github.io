@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Map specialized for unique IDs that are already a randomized hash."><title>IdMap in zng_unique_id - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="zng_unique_id" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-118b08c4c78b968e.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc struct"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_unique_id/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_unique_id/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_unique_id/index.html">zng_<wbr>unique_<wbr>id</a><span class="version">0.4.6</span></h2></div><h2 class="location"><a href="#">IdMap</a></h2><div class="sidebar-elems"><section><h3><a href="#implementations">Methods</a></h3><ul class="block method"><li><a href="#method.new">new</a></li></ul><h3><a href="#deref-methods-HashMap%3CK,+V,+BuildIdHasher%3E">Methods from Deref&lt;<wbr>Target=<wbr>Hash<wbr>Map&lt;<wbr>K, V, Build<wbr>IdHasher&gt;&gt;</a></h3><ul class="block deref-methods"><li><a href="#method.allocator">allocator</a></li><li><a href="#method.capacity">capacity</a></li><li><a href="#method.clear">clear</a></li><li><a href="#method.contains_key">contains_key</a></li><li><a href="#method.drain">drain</a></li><li><a href="#method.entry">entry</a></li><li><a href="#method.entry_ref">entry_ref</a></li><li><a href="#method.extract_if">extract_if</a></li><li><a href="#method.get">get</a></li><li><a href="#method.get_key_value">get_key_value</a></li><li><a href="#method.get_key_value_mut">get_key_value_mut</a></li><li><a href="#method.get_many_key_value_mut">get_many_key_value_mut</a></li><li><a href="#method.get_many_key_value_unchecked_mut">get_many_key_value_unchecked_mut</a></li><li><a href="#method.get_many_mut">get_many_mut</a></li><li><a href="#method.get_many_unchecked_mut">get_many_unchecked_mut</a></li><li><a href="#method.get_mut">get_mut</a></li><li><a href="#method.hasher">hasher</a></li><li><a href="#method.insert">insert</a></li><li><a href="#method.insert_unique_unchecked">insert_unique_unchecked</a></li><li><a href="#method.is_empty">is_empty</a></li><li><a href="#method.iter">iter</a></li><li><a href="#method.iter_mut">iter_mut</a></li><li><a href="#method.keys">keys</a></li><li><a href="#method.len">len</a></li><li><a href="#method.par_drain">par_drain</a></li><li><a href="#method.par_eq">par_eq</a></li><li><a href="#method.par_keys">par_keys</a></li><li><a href="#method.par_values">par_values</a></li><li><a href="#method.par_values_mut">par_values_mut</a></li><li><a href="#method.raw_entry">raw_entry</a></li><li><a href="#method.raw_entry_mut">raw_entry_mut</a></li><li><a href="#method.remove">remove</a></li><li><a href="#method.remove_entry">remove_entry</a></li><li><a href="#method.reserve">reserve</a></li><li><a href="#method.retain">retain</a></li><li><a href="#method.shrink_to">shrink_to</a></li><li><a href="#method.shrink_to_fit">shrink_to_fit</a></li><li><a href="#method.try_insert">try_insert</a></li><li><a href="#method.try_reserve">try_reserve</a></li><li><a href="#method.values">values</a></li><li><a href="#method.values_mut">values_mut</a></li></ul><h3><a href="#trait-implementations">Trait Implementations</a></h3><ul class="block trait-implementation"><li><a href="#impl-Clone-for-IdMap%3CK,+V%3E">Clone</a></li><li><a href="#impl-Debug-for-IdMap%3CK,+V%3E">Debug</a></li><li><a href="#impl-Default-for-IdMap%3CK,+V%3E">Default</a></li><li><a href="#impl-Deref-for-IdMap%3CK,+V%3E">Deref</a></li><li><a href="#impl-DerefMut-for-IdMap%3CK,+V%3E">DerefMut</a></li><li><a href="#impl-FromIterator%3C(K,+V)%3E-for-IdMap%3CK,+V%3E">FromIterator&#60;(K, V)&#62;</a></li><li><a href="#impl-FromParallelIterator%3C(K,+V)%3E-for-IdMap%3CK,+V%3E">FromParallelIterator&#60;(K, V)&#62;</a></li><li><a href="#impl-IntoIterator-for-%26IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoIterator-for-%26mut+IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoIterator-for-IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoParallelIterator-for-%26IdMap%3CK,+V%3E">IntoParallelIterator</a></li><li><a href="#impl-IntoParallelIterator-for-%26mut+IdMap%3CK,+V%3E">IntoParallelIterator</a></li><li><a href="#impl-IntoParallelIterator-for-IdMap%3CK,+V%3E">IntoParallelIterator</a></li></ul><h3><a href="#synthetic-implementations">Auto Trait Implementations</a></h3><ul class="block synthetic-implementation"><li><a href="#impl-Freeze-for-IdMap%3CK,+V%3E">Freeze</a></li><li><a href="#impl-RefUnwindSafe-for-IdMap%3CK,+V%3E">RefUnwindSafe</a></li><li><a href="#impl-Send-for-IdMap%3CK,+V%3E">Send</a></li><li><a href="#impl-Sync-for-IdMap%3CK,+V%3E">Sync</a></li><li><a href="#impl-Unpin-for-IdMap%3CK,+V%3E">Unpin</a></li><li><a href="#impl-UnwindSafe-for-IdMap%3CK,+V%3E">UnwindSafe</a></li></ul><h3><a href="#blanket-implementations">Blanket Implementations</a></h3><ul class="block blanket-implementation"><li><a href="#impl-Any-for-T">Any</a></li><li><a href="#impl-Borrow%3CT%3E-for-T">Borrow&#60;T&#62;</a></li><li><a href="#impl-BorrowMut%3CT%3E-for-T">BorrowMut&#60;T&#62;</a></li><li><a href="#impl-CloneToUninit-for-T">CloneToUninit</a></li><li><a href="#impl-From%3CT%3E-for-T">From&#60;T&#62;</a></li><li><a href="#impl-Instrument-for-T">Instrument</a></li><li><a href="#impl-Into%3CU%3E-for-T">Into&#60;U&#62;</a></li><li><a href="#impl-IntoEither-for-T">IntoEither</a></li><li><a href="#impl-IntoParallelRefIterator%3C'data%3E-for-I">IntoParallelRefIterator&#60;&#39;data&#62;</a></li><li><a href="#impl-IntoParallelRefMutIterator%3C'data%3E-for-I">IntoParallelRefMutIterator&#60;&#39;data&#62;</a></li><li><a href="#impl-Pointable-for-T">Pointable</a></li><li><a href="#impl-ToOwned-for-T">ToOwned</a></li><li><a href="#impl-TryFrom%3CU%3E-for-T">TryFrom&#60;U&#62;</a></li><li><a href="#impl-TryInto%3CU%3E-for-T">TryInto&#60;U&#62;</a></li><li><a href="#impl-WithSubscriber-for-T">WithSubscriber</a></li></ul></section><h2><a href="index.html">In crate zng_<wbr>unique_<wbr>id</a></h2></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Struct <a href="index.html">zng_unique_id</a>::<wbr><a class="struct" href="#">IdMap</a><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><span class="out-of-band"><a class="src" href="../src/zng_unique_id/lib.rs.html#408">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub struct IdMap&lt;K, V&gt;(<span class="comment">/* private fields */</span>);</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Map specialized for unique IDs that are already a randomized hash.</p>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Map specialized for unique IDs that are already a randomized hash."><title>IdMap in zng_unique_id - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../static.files/rustdoc-492a78a4a87dcc01.css"><meta name="rustdoc-vars" data-root-path="../" data-static-root-path="../static.files/" data-current-crate="zng_unique_id" data-themes="" data-resource-suffix="" data-rustdoc-version="1.82.0 (f6e511eec 2024-10-15)" data-channel="1.82.0" data-search-js="search-a99f1315e7cc5121.js" data-settings-js="settings-4313503d2e1961c2.js" ><script src="../static.files/storage-118b08c4c78b968e.js"></script><script defer src="sidebar-items.js"></script><script defer src="../static.files/main-921df33f47b8780c.js"></script><noscript><link rel="stylesheet" href="../static.files/noscript-3b12f09e550e0385.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc struct"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_unique_id/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_unique_id/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_unique_id/index.html">zng_<wbr>unique_<wbr>id</a><span class="version">0.4.7</span></h2></div><h2 class="location"><a href="#">IdMap</a></h2><div class="sidebar-elems"><section><h3><a href="#implementations">Methods</a></h3><ul class="block method"><li><a href="#method.new">new</a></li></ul><h3><a href="#deref-methods-HashMap%3CK,+V,+BuildIdHasher%3E">Methods from Deref&lt;<wbr>Target=<wbr>Hash<wbr>Map&lt;<wbr>K, V, Build<wbr>IdHasher&gt;&gt;</a></h3><ul class="block deref-methods"><li><a href="#method.allocation_size">allocation_size</a></li><li><a href="#method.allocator">allocator</a></li><li><a href="#method.capacity">capacity</a></li><li><a href="#method.clear">clear</a></li><li><a href="#method.contains_key">contains_key</a></li><li><a href="#method.drain">drain</a></li><li><a href="#method.entry">entry</a></li><li><a href="#method.entry_ref">entry_ref</a></li><li><a href="#method.extract_if">extract_if</a></li><li><a href="#method.get">get</a></li><li><a href="#method.get_key_value">get_key_value</a></li><li><a href="#method.get_key_value_mut">get_key_value_mut</a></li><li><a href="#method.get_many_key_value_mut">get_many_key_value_mut</a></li><li><a href="#method.get_many_key_value_unchecked_mut">get_many_key_value_unchecked_mut</a></li><li><a href="#method.get_many_mut">get_many_mut</a></li><li><a href="#method.get_many_unchecked_mut">get_many_unchecked_mut</a></li><li><a href="#method.get_mut">get_mut</a></li><li><a href="#method.hasher">hasher</a></li><li><a href="#method.insert">insert</a></li><li><a href="#method.insert_unique_unchecked">insert_unique_unchecked</a></li><li><a href="#method.is_empty">is_empty</a></li><li><a href="#method.iter">iter</a></li><li><a href="#method.iter_mut">iter_mut</a></li><li><a href="#method.keys">keys</a></li><li><a href="#method.len">len</a></li><li><a href="#method.par_drain">par_drain</a></li><li><a href="#method.par_eq">par_eq</a></li><li><a href="#method.par_keys">par_keys</a></li><li><a href="#method.par_values">par_values</a></li><li><a href="#method.par_values_mut">par_values_mut</a></li><li><a href="#method.raw_entry">raw_entry</a></li><li><a href="#method.raw_entry_mut">raw_entry_mut</a></li><li><a href="#method.remove">remove</a></li><li><a href="#method.remove_entry">remove_entry</a></li><li><a href="#method.reserve">reserve</a></li><li><a href="#method.retain">retain</a></li><li><a href="#method.shrink_to">shrink_to</a></li><li><a href="#method.shrink_to_fit">shrink_to_fit</a></li><li><a href="#method.try_insert">try_insert</a></li><li><a href="#method.try_reserve">try_reserve</a></li><li><a href="#method.values">values</a></li><li><a href="#method.values_mut">values_mut</a></li></ul><h3><a href="#trait-implementations">Trait Implementations</a></h3><ul class="block trait-implementation"><li><a href="#impl-Clone-for-IdMap%3CK,+V%3E">Clone</a></li><li><a href="#impl-Debug-for-IdMap%3CK,+V%3E">Debug</a></li><li><a href="#impl-Default-for-IdMap%3CK,+V%3E">Default</a></li><li><a href="#impl-Deref-for-IdMap%3CK,+V%3E">Deref</a></li><li><a href="#impl-DerefMut-for-IdMap%3CK,+V%3E">DerefMut</a></li><li><a href="#impl-FromIterator%3C(K,+V)%3E-for-IdMap%3CK,+V%3E">FromIterator&#60;(K, V)&#62;</a></li><li><a href="#impl-FromParallelIterator%3C(K,+V)%3E-for-IdMap%3CK,+V%3E">FromParallelIterator&#60;(K, V)&#62;</a></li><li><a href="#impl-IntoIterator-for-%26IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoIterator-for-%26mut+IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoIterator-for-IdMap%3CK,+V%3E">IntoIterator</a></li><li><a href="#impl-IntoParallelIterator-for-%26IdMap%3CK,+V%3E">IntoParallelIterator</a></li><li><a href="#impl-IntoParallelIterator-for-%26mut+IdMap%3CK,+V%3E">IntoParallelIterator</a></li><li><a href="#impl-IntoParallelIterator-for-IdMap%3CK,+V%3E">IntoParallelIterator</a></li></ul><h3><a href="#synthetic-implementations">Auto Trait Implementations</a></h3><ul class="block synthetic-implementation"><li><a href="#impl-Freeze-for-IdMap%3CK,+V%3E">Freeze</a></li><li><a href="#impl-RefUnwindSafe-for-IdMap%3CK,+V%3E">RefUnwindSafe</a></li><li><a href="#impl-Send-for-IdMap%3CK,+V%3E">Send</a></li><li><a href="#impl-Sync-for-IdMap%3CK,+V%3E">Sync</a></li><li><a href="#impl-Unpin-for-IdMap%3CK,+V%3E">Unpin</a></li><li><a href="#impl-UnwindSafe-for-IdMap%3CK,+V%3E">UnwindSafe</a></li></ul><h3><a href="#blanket-implementations">Blanket Implementations</a></h3><ul class="block blanket-implementation"><li><a href="#impl-Any-for-T">Any</a></li><li><a href="#impl-Borrow%3CT%3E-for-T">Borrow&#60;T&#62;</a></li><li><a href="#impl-BorrowMut%3CT%3E-for-T">BorrowMut&#60;T&#62;</a></li><li><a href="#impl-CloneToUninit-for-T">CloneToUninit</a></li><li><a href="#impl-From%3CT%3E-for-T">From&#60;T&#62;</a></li><li><a href="#impl-Instrument-for-T">Instrument</a></li><li><a href="#impl-Into%3CU%3E-for-T">Into&#60;U&#62;</a></li><li><a href="#impl-IntoEither-for-T">IntoEither</a></li><li><a href="#impl-IntoParallelRefIterator%3C'data%3E-for-I">IntoParallelRefIterator&#60;&#39;data&#62;</a></li><li><a href="#impl-IntoParallelRefMutIterator%3C'data%3E-for-I">IntoParallelRefMutIterator&#60;&#39;data&#62;</a></li><li><a href="#impl-Pointable-for-T">Pointable</a></li><li><a href="#impl-ToOwned-for-T">ToOwned</a></li><li><a href="#impl-TryFrom%3CU%3E-for-T">TryFrom&#60;U&#62;</a></li><li><a href="#impl-TryInto%3CU%3E-for-T">TryInto&#60;U&#62;</a></li><li><a href="#impl-WithSubscriber-for-T">WithSubscriber</a></li></ul></section><h2><a href="index.html">In crate zng_<wbr>unique_<wbr>id</a></h2></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1>Struct <a href="index.html">zng_unique_id</a>::<wbr><a class="struct" href="#">IdMap</a><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><span class="out-of-band"><a class="src" href="../src/zng_unique_id/lib.rs.html#408">source</a> · <button id="toggle-all-docs" title="collapse all docs">[<span>&#x2212;</span>]</button></span></div><pre class="rust item-decl"><code>pub struct IdMap&lt;K, V&gt;(<span class="comment">/* private fields */</span>);</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Map specialized for unique IDs that are already a randomized hash.</p>
 </div></details><h2 id="implementations" class="section-header">Implementations<a href="#implementations" class="anchor">§</a></h2><div id="implementations-list"><details class="toggle implementors-toggle" open><summary><section id="impl-IdMap%3CK,+V%3E" class="impl"><a class="src rightside" href="../src/zng_unique_id/lib.rs.html#409-414">source</a><a href="#impl-IdMap%3CK,+V%3E" class="anchor">§</a><h3 class="code-header">impl&lt;K, V&gt; <a class="struct" href="struct.IdMap.html" title="struct zng_unique_id::IdMap">IdMap</a>&lt;K, V&gt;</h3></section></summary><div class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.new" class="method"><a class="src rightside" href="../src/zng_unique_id/lib.rs.html#411-413">source</a><h4 class="code-header">pub const fn <a href="#method.new" class="fn">new</a>() -&gt; Self</h4></section></summary><div class="docblock"><p>New <code>const</code> default.</p>
 </div></details></div></details></div><h2 id="deref-methods-HashMap%3CK,+V,+BuildIdHasher%3E" class="section-header"><span>Methods from <a class="trait" href="https://doc.rust-lang.org/1.82.0/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref">Deref</a>&lt;Target = HashMap&lt;K, V, <a class="struct" href="struct.BuildIdHasher.html" title="struct zng_unique_id::BuildIdHasher">BuildIdHasher</a>&gt;&gt;</span><a href="#deref-methods-HashMap%3CK,+V,+BuildIdHasher%3E" class="anchor">§</a></h2><div id="deref-methods-HashMap%3CK,+V,+BuildIdHasher%3E-1" class="impl-items"><details class="toggle method-toggle" open><summary><section id="method.par_keys" class="method"><h4 class="code-header">pub fn <a href="#method.par_keys" class="fn">par_keys</a>(&amp;self) -&gt; ParKeys&lt;'_, K, V&gt;</h4></section></summary><div class="docblock"><p>Visits (potentially in parallel) immutably borrowed keys in an arbitrary order.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.par_values" class="method"><h4 class="code-header">pub fn <a href="#method.par_values" class="fn">par_values</a>(&amp;self) -&gt; ParValues&lt;'_, K, V&gt;</h4></section></summary><div class="docblock"><p>Visits (potentially in parallel) immutably borrowed values in an arbitrary order.</p>
@@ -12,7 +12,7 @@ i.e. both maps contain the same keys mapped to the same values.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.hasher" class="method"><h4 class="code-header">pub fn <a href="#method.hasher" class="fn">hasher</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;S</a></h4></section></summary><div class="docblock"><p>Returns a reference to the map’s <a href="https://doc.rust-lang.org/std/hash/trait.BuildHasher.html"><code>BuildHasher</code></a>.</p>
 <h5 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
-<span class="kw">use </span>hashbrown::hash_map::DefaultHashBuilder;
+<span class="kw">use </span>hashbrown::DefaultHashBuilder;
 
 <span class="kw">let </span>hasher = DefaultHashBuilder::default();
 <span class="kw">let </span>map: HashMap&lt;i32, i32&gt; = HashMap::with_hasher(hasher);
@@ -451,11 +451,12 @@ map.insert(<span class="number">1</span>, <span class="string">"a"</span>);
 </div></details><details class="toggle method-toggle" open><summary><section id="method.get_many_mut" class="method"><h4 class="code-header">pub fn <a href="#method.get_many_mut" class="fn">get_many_mut</a>&lt;Q, const N: <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.usize.html">usize</a>&gt;(
     &amp;mut self,
     ks: [<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;Q</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>],
-) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;[<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]&gt;<div class="where">where
+) -&gt; [<a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]<div class="where">where
     Q: <a class="trait" href="https://doc.rust-lang.org/1.82.0/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> + Equivalent&lt;K&gt; + ?<a class="trait" href="https://doc.rust-lang.org/1.82.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h4></section></summary><div class="docblock"><p>Attempts to get mutable references to <code>N</code> values in the map at once.</p>
 <p>Returns an array of length <code>N</code> with the results of each query. For soundness, at most one
-mutable reference will be returned to any value. <code>None</code> will be returned if any of the
-keys are duplicates or missing.</p>
+mutable reference will be returned to any value. <code>None</code> will be used if the key is missing.</p>
+<h5 id="panics-1"><a class="doc-anchor" href="#panics-1">§</a>Panics</h5>
+<p>Panics if any keys are overlapping.</p>
 <h5 id="examples-24"><a class="doc-anchor" href="#examples-24">§</a>Examples</h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
 
@@ -465,16 +466,23 @@ libraries.insert(<span class="string">"Athenæum"</span>.to_string(), <span clas
 libraries.insert(<span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="number">1691</span>);
 libraries.insert(<span class="string">"Library of Congress"</span>.to_string(), <span class="number">1800</span>);
 
-<span class="kw">let </span>got = libraries.get_many_mut([
+<span class="comment">// Get Athenæum and Bodleian Library
+</span><span class="kw">let </span>[<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)] = libraries.get_many_mut([
+    <span class="string">"Athenæum"</span>,
+    <span class="string">"Bodleian Library"</span>,
+]) <span class="kw">else </span>{ <span class="macro">panic!</span>() };
+
+<span class="comment">// Assert values of Athenæum and Library of Congress
+</span><span class="kw">let </span>got = libraries.get_many_mut([
     <span class="string">"Athenæum"</span>,
     <span class="string">"Library of Congress"</span>,
 ]);
 <span class="macro">assert_eq!</span>(
     got,
-    <span class="prelude-val">Some</span>([
-        <span class="kw-2">&amp;mut </span><span class="number">1807</span>,
-        <span class="kw-2">&amp;mut </span><span class="number">1800</span>,
-    ]),
+    [
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1807</span>),
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1800</span>),
+    ],
 );
 
 <span class="comment">// Missing keys result in None
@@ -482,22 +490,32 @@ libraries.insert(<span class="string">"Library of Congress"</span>.to_string(), 
     <span class="string">"Athenæum"</span>,
     <span class="string">"New York Public Library"</span>,
 ]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(
+    got,
+    [
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1807</span>),
+        <span class="prelude-val">None
+    </span>]
+);</code></pre></div>
 
-<span class="comment">// Duplicate keys result in None
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
+
+<span class="kw">let </span><span class="kw-2">mut </span>libraries = HashMap::new();
+libraries.insert(<span class="string">"Athenæum"</span>.to_string(), <span class="number">1807</span>);
+
+<span class="comment">// Duplicate keys panic!
 </span><span class="kw">let </span>got = libraries.get_many_mut([
     <span class="string">"Athenæum"</span>,
     <span class="string">"Athenæum"</span>,
-]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);</code></pre></div>
+]);</code></pre></div>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.get_many_unchecked_mut" class="method"><h4 class="code-header">pub unsafe fn <a href="#method.get_many_unchecked_mut" class="fn">get_many_unchecked_mut</a>&lt;Q, const N: <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.usize.html">usize</a>&gt;(
     &amp;mut self,
     ks: [<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;Q</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>],
-) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;[<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]&gt;<div class="where">where
+) -&gt; [<a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]<div class="where">where
     Q: <a class="trait" href="https://doc.rust-lang.org/1.82.0/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> + Equivalent&lt;K&gt; + ?<a class="trait" href="https://doc.rust-lang.org/1.82.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h4></section></summary><div class="docblock"><p>Attempts to get mutable references to <code>N</code> values in the map at once, without validating that
 the values are unique.</p>
-<p>Returns an array of length <code>N</code> with the results of each query. <code>None</code> will be returned if
-any of the keys are missing.</p>
+<p>Returns an array of length <code>N</code> with the results of each query. <code>None</code> will be used if
+the key is missing.</p>
 <p>For a safe alternative see <a href="%60HashMap::get_many_mut%60"><code>get_many_mut</code></a>.</p>
 <h5 id="safety"><a class="doc-anchor" href="#safety">§</a>Safety</h5>
 <p>Calling this method with overlapping keys is <em><a href="https://doc.rust-lang.org/reference/behavior-considered-undefined.html">undefined behavior</a></em> even if the resulting
@@ -511,33 +529,42 @@ libraries.insert(<span class="string">"Athenæum"</span>.to_string(), <span clas
 libraries.insert(<span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="number">1691</span>);
 libraries.insert(<span class="string">"Library of Congress"</span>.to_string(), <span class="number">1800</span>);
 
-<span class="kw">let </span>got = libraries.get_many_mut([
+<span class="comment">// SAFETY: The keys do not overlap.
+</span><span class="kw">let </span>[<span class="prelude-val">Some</span>(a), <span class="prelude-val">Some</span>(b)] = (<span class="kw">unsafe </span>{ libraries.get_many_unchecked_mut([
+    <span class="string">"Athenæum"</span>,
+    <span class="string">"Bodleian Library"</span>,
+]) }) <span class="kw">else </span>{ <span class="macro">panic!</span>() };
+
+<span class="comment">// SAFETY: The keys do not overlap.
+</span><span class="kw">let </span>got = <span class="kw">unsafe </span>{ libraries.get_many_unchecked_mut([
     <span class="string">"Athenæum"</span>,
     <span class="string">"Library of Congress"</span>,
-]);
+]) };
 <span class="macro">assert_eq!</span>(
     got,
-    <span class="prelude-val">Some</span>([
-        <span class="kw-2">&amp;mut </span><span class="number">1807</span>,
-        <span class="kw-2">&amp;mut </span><span class="number">1800</span>,
-    ]),
+    [
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1807</span>),
+        <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1800</span>),
+    ],
 );
 
-<span class="comment">// Missing keys result in None
-</span><span class="kw">let </span>got = libraries.get_many_mut([
+<span class="comment">// SAFETY: The keys do not overlap.
+</span><span class="kw">let </span>got = <span class="kw">unsafe </span>{ libraries.get_many_unchecked_mut([
     <span class="string">"Athenæum"</span>,
     <span class="string">"New York Public Library"</span>,
-]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);</code></pre></div>
+]) };
+<span class="comment">// Missing keys result in None
+</span><span class="macro">assert_eq!</span>(got, [<span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span><span class="number">1807</span>), <span class="prelude-val">None</span>]);</code></pre></div>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.get_many_key_value_mut" class="method"><h4 class="code-header">pub fn <a href="#method.get_many_key_value_mut" class="fn">get_many_key_value_mut</a>&lt;Q, const N: <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.usize.html">usize</a>&gt;(
     &amp;mut self,
     ks: [<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;Q</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>],
-) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;[(<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>); <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]&gt;<div class="where">where
+) -&gt; [<a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;(<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>)&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]<div class="where">where
     Q: <a class="trait" href="https://doc.rust-lang.org/1.82.0/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> + Equivalent&lt;K&gt; + ?<a class="trait" href="https://doc.rust-lang.org/1.82.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h4></section></summary><div class="docblock"><p>Attempts to get mutable references to <code>N</code> values in the map at once, with immutable
 references to the corresponding keys.</p>
 <p>Returns an array of length <code>N</code> with the results of each query. For soundness, at most one
-mutable reference will be returned to any value. <code>None</code> will be returned if any of the keys
-are duplicates or missing.</p>
+mutable reference will be returned to any value. <code>None</code> will be used if the key is missing.</p>
+<h5 id="panics-2"><a class="doc-anchor" href="#panics-2">§</a>Panics</h5>
+<p>Panics if any keys are overlapping.</p>
 <h5 id="examples-26"><a class="doc-anchor" href="#examples-26">§</a>Examples</h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
 
@@ -553,29 +580,34 @@ libraries.insert(<span class="string">"Library of Congress"</span>.to_string(), 
 ]);
 <span class="macro">assert_eq!</span>(
     got,
-    <span class="prelude-val">Some</span>([
-        (<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>),
-        (<span class="kw-2">&amp;</span><span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1691</span>),
-    ]),
+    [
+        <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>)),
+        <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1691</span>)),
+    ],
 );
 <span class="comment">// Missing keys result in None
 </span><span class="kw">let </span>got = libraries.get_many_key_value_mut([
     <span class="string">"Bodleian Library"</span>,
     <span class="string">"Gewandhaus"</span>,
 ]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);
+<span class="macro">assert_eq!</span>(got, [<span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>)), <span class="prelude-val">None</span>]);</code></pre></div>
 
-<span class="comment">// Duplicate keys result in None
+<div class="example-wrap should_panic"><a href="#" class="tooltip" title="This example panics">ⓘ</a><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
+
+<span class="kw">let </span><span class="kw-2">mut </span>libraries = HashMap::new();
+libraries.insert(<span class="string">"Bodleian Library"</span>.to_string(), <span class="number">1602</span>);
+libraries.insert(<span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="number">1691</span>);
+
+<span class="comment">// Duplicate keys result in panic!
 </span><span class="kw">let </span>got = libraries.get_many_key_value_mut([
     <span class="string">"Bodleian Library"</span>,
     <span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>,
     <span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>,
-]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);</code></pre></div>
+]);</code></pre></div>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.get_many_key_value_unchecked_mut" class="method"><h4 class="code-header">pub unsafe fn <a href="#method.get_many_key_value_unchecked_mut" class="fn">get_many_key_value_unchecked_mut</a>&lt;Q, const N: <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.usize.html">usize</a>&gt;(
     &amp;mut self,
     ks: [<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;Q</a>; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>],
-) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;[(<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>); <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]&gt;<div class="where">where
+) -&gt; [<a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;(<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>)&gt;; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.array.html">N</a>]<div class="where">where
     Q: <a class="trait" href="https://doc.rust-lang.org/1.82.0/core/hash/trait.Hash.html" title="trait core::hash::Hash">Hash</a> + Equivalent&lt;K&gt; + ?<a class="trait" href="https://doc.rust-lang.org/1.82.0/core/marker/trait.Sized.html" title="trait core::marker::Sized">Sized</a>,</div></h4></section></summary><div class="docblock"><p>Attempts to get mutable references to <code>N</code> values in the map at once, with immutable
 references to the corresponding keys, without validating that the values are unique.</p>
 <p>Returns an array of length <code>N</code> with the results of each query. <code>None</code> will be returned if
@@ -599,17 +631,23 @@ libraries.insert(<span class="string">"Library of Congress"</span>.to_string(), 
 ]);
 <span class="macro">assert_eq!</span>(
     got,
-    <span class="prelude-val">Some</span>([
-        (<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>),
-        (<span class="kw-2">&amp;</span><span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1691</span>),
-    ]),
+    [
+        <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>)),
+        <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Herzogin-Anna-Amalia-Bibliothek"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1691</span>)),
+    ],
 );
 <span class="comment">// Missing keys result in None
 </span><span class="kw">let </span>got = libraries.get_many_key_value_mut([
     <span class="string">"Bodleian Library"</span>,
     <span class="string">"Gewandhaus"</span>,
 ]);
-<span class="macro">assert_eq!</span>(got, <span class="prelude-val">None</span>);</code></pre></div>
+<span class="macro">assert_eq!</span>(
+    got,
+    [
+        <span class="prelude-val">Some</span>((<span class="kw-2">&amp;</span><span class="string">"Bodleian Library"</span>.to_string(), <span class="kw-2">&amp;mut </span><span class="number">1602</span>)),
+        <span class="prelude-val">None</span>,
+    ],
+);</code></pre></div>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.insert" class="method"><h4 class="code-header">pub fn <a href="#method.insert" class="fn">insert</a>(&amp;mut self, k: K, v: V) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.82.0/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;V&gt;</h4></section></summary><div class="docblock"><p>Inserts a key-value pair into the map.</p>
 <p>If the map did not have this key present, <a href="https://doc.rust-lang.org/std/option/enum.Option.html#variant.None"><code>None</code></a> is returned.</p>
 <p>If the map did have this key present, the value is updated, and the old
@@ -626,20 +664,24 @@ types that can be <code>==</code> without being identical. See the <a href="http
 map.insert(<span class="number">37</span>, <span class="string">"b"</span>);
 <span class="macro">assert_eq!</span>(map.insert(<span class="number">37</span>, <span class="string">"c"</span>), <span class="prelude-val">Some</span>(<span class="string">"b"</span>));
 <span class="macro">assert_eq!</span>(map[<span class="kw-2">&amp;</span><span class="number">37</span>], <span class="string">"c"</span>);</code></pre></div>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.insert_unique_unchecked" class="method"><h4 class="code-header">pub fn <a href="#method.insert_unique_unchecked" class="fn">insert_unique_unchecked</a>(&amp;mut self, k: K, v: V) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>)</h4></section></summary><div class="docblock"><p>Insert a key-value pair into the map without checking
+</div></details><details class="toggle method-toggle" open><summary><section id="method.insert_unique_unchecked" class="method"><h4 class="code-header">pub unsafe fn <a href="#method.insert_unique_unchecked" class="fn">insert_unique_unchecked</a>(&amp;mut self, k: K, v: V) -&gt; (<a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;K</a>, <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.reference.html">&amp;mut V</a>)</h4></section></summary><div class="docblock"><p>Insert a key-value pair into the map without checking
 if the key already exists in the map.</p>
+<p>This operation is faster than regular insert, because it does not perform
+lookup before insertion.</p>
+<p>This operation is useful during initial population of the map.
+For example, when constructing a map from another map, we know
+that keys are unique.</p>
 <p>Returns a reference to the key and value just inserted.</p>
+<h5 id="safety-2"><a class="doc-anchor" href="#safety-2">§</a>Safety</h5>
 <p>This operation is safe if a key does not exist in the map.</p>
 <p>However, if a key exists in the map already, the behavior is unspecified:
 this operation may panic, loop forever, or any following operation with the map
 may panic, loop forever or return arbitrary result.</p>
 <p>That said, this operation (and following operations) are guaranteed to
 not violate memory safety.</p>
-<p>This operation is faster than regular insert, because it does not perform
-lookup before insertion.</p>
-<p>This operation is useful during initial population of the map.
-For example, when constructing a map from another map, we know
-that keys are unique.</p>
+<p>However this operation is still unsafe because the resulting <code>HashMap</code>
+may be passed to unsafe code which does expect the map to behave
+correctly, and would cause unsoundness as a result.</p>
 <h5 id="examples-29"><a class="doc-anchor" href="#examples-29">§</a>Examples</h5>
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>hashbrown::HashMap;
 
@@ -652,10 +694,12 @@ that keys are unique.</p>
 <span class="kw">let </span><span class="kw-2">mut </span>map2 = HashMap::new();
 
 <span class="kw">for </span>(key, value) <span class="kw">in </span>map1.into_iter() {
-    map2.insert_unique_unchecked(key, value);
+    <span class="kw">unsafe </span>{
+        map2.insert_unique_unchecked(key, value);
+    }
 }
 
-<span class="kw">let </span>(key, value) = map2.insert_unique_unchecked(<span class="number">4</span>, <span class="string">"d"</span>);
+<span class="kw">let </span>(key, value) = <span class="kw">unsafe </span>{ map2.insert_unique_unchecked(<span class="number">4</span>, <span class="string">"d"</span>) };
 <span class="macro">assert_eq!</span>(key, <span class="kw-2">&amp;</span><span class="number">4</span>);
 <span class="macro">assert_eq!</span>(value, <span class="kw-2">&amp;mut </span><span class="string">"d"</span>);
 <span class="kw-2">*</span>value = <span class="string">"e"</span>;
@@ -731,7 +775,11 @@ map.insert(<span class="number">1</span>, <span class="string">"a"</span>);
 
 <span class="comment">// Now map hold none elements
 </span><span class="macro">assert!</span>(map.is_empty());</code></pre></div>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.raw_entry_mut" class="method"><h4 class="code-header">pub fn <a href="#method.raw_entry_mut" class="fn">raw_entry_mut</a>(&amp;mut self) -&gt; RawEntryBuilderMut&lt;'_, K, V, S, A&gt;</h4></section></summary><div class="docblock"><p>Creates a raw entry builder for the HashMap.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.allocation_size" class="method"><h4 class="code-header">pub fn <a href="#method.allocation_size" class="fn">allocation_size</a>(&amp;self) -&gt; <a class="primitive" href="https://doc.rust-lang.org/1.82.0/std/primitive.usize.html">usize</a></h4></section></summary><div class="docblock"><p>Returns the total amount of memory allocated internally by the hash
+set, in bytes.</p>
+<p>The returned number is informational only. It is intended to be
+primarily used for memory profiling.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.raw_entry_mut" class="method"><h4 class="code-header">pub fn <a href="#method.raw_entry_mut" class="fn">raw_entry_mut</a>(&amp;mut self) -&gt; RawEntryBuilderMut&lt;'_, K, V, S, A&gt;</h4></section></summary><div class="docblock"><p>Creates a raw entry builder for the <code>HashMap</code>.</p>
 <p>Raw entries provide the lowest level of control for searching and
 manipulating a map. They must be manually initialized with a hash and
 then manually searched. After this, insertions into a vacant entry
@@ -744,12 +792,12 @@ still require an owned key to be provided.</p>
 <li>Using custom comparison logic without newtype wrappers</li>
 </ul>
 <p>Because raw entries provide much more low-level control, it’s much easier
-to put the HashMap into an inconsistent state which, while memory-safe,
+to put the <code>HashMap</code> into an inconsistent state which, while memory-safe,
 will cause the map to produce seemingly random results. Higher-level and
 more foolproof APIs like <code>entry</code> should be preferred when possible.</p>
 <p>In particular, the hash used to initialized the raw entry must still be
 consistent with the hash of the key that is ultimately stored in the entry.
-This is because implementations of HashMap may need to recompute hashes
+This is because implementations of <code>HashMap</code> may need to recompute hashes
 when resizing, at which point only the keys are available.</p>
 <p>Raw entries give mutable access to the keys. This must not be used
 to modify how the key would compare or hash, as the map will not re-evaluate
@@ -820,7 +868,7 @@ map.extend([(<span class="string">"a"</span>, <span class="number">100</span>), 
 }
 <span class="macro">assert_eq!</span>(map.get(<span class="kw-2">&amp;</span><span class="string">"d"</span>), <span class="prelude-val">None</span>);
 <span class="macro">assert_eq!</span>(map.len(), <span class="number">2</span>);</code></pre></div>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.raw_entry" class="method"><h4 class="code-header">pub fn <a href="#method.raw_entry" class="fn">raw_entry</a>(&amp;self) -&gt; RawEntryBuilder&lt;'_, K, V, S, A&gt;</h4></section></summary><div class="docblock"><p>Creates a raw immutable entry builder for the HashMap.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.raw_entry" class="method"><h4 class="code-header">pub fn <a href="#method.raw_entry" class="fn">raw_entry</a>(&amp;self) -&gt; RawEntryBuilder&lt;'_, K, V, S, A&gt;</h4></section></summary><div class="docblock"><p>Creates a raw immutable entry builder for the <code>HashMap</code>.</p>
 <p>Raw entries provide the lowest level of control for searching and
 manipulating a map. They must be manually initialized with a hash and
 then manually searched.</p>

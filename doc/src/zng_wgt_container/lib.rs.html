@@ -570,6 +570,9 @@
 <a href="#570" id="570">570</a>
 <a href="#571" id="571">571</a>
 <a href="#572" id="572">572</a>
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -607,13 +610,18 @@
     }
 }
 
-<span class="doccomment">/// The content.
+<span class="doccomment">/// The widget's child.
 ///
 /// Can be any type that implements [`UiNode`], any widget.
 ///
+/// In `Container!` derived widgets or similar this property is captured and used as the actual child, in other widgets
+/// this property is an alias for [`child_under`](fn@child_under).
+///
 /// [`UiNode`]: zng_app::widget::node::UiNode
-</span><span class="attr">#[property(CHILD, capture, default(FillUiNode), widget_impl(Container))]
-</span><span class="kw">pub fn </span>child(child: <span class="kw">impl </span>UiNode) {}
+</span><span class="attr">#[property(CHILD, default(FillUiNode), widget_impl(Container))]
+</span><span class="kw">pub fn </span>child(widget_child: <span class="kw">impl </span>UiNode, child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
+    child_under(widget_child, child)
+}
 
 <span class="doccomment">/// Margin space around the content of a widget.
 ///
@@ -922,10 +930,8 @@
                 }
                 ChildInsert::Over | ChildInsert::Under =&gt; {
                     <span class="kw">let </span>child_size = children.with_node(<span class="number">0</span>, |n| n.layout(wl));
-                    children.with_node(<span class="number">1</span>, |n| {
-                        LAYOUT.with_constraints(PxConstraints2d::new_exact_size(child_size), || n.layout(wl));
-                    });
-                    child_size
+                    <span class="kw">let </span>insert_size = children.with_node(<span class="number">1</span>, |n| n.layout(wl));
+                    child_size.max(insert_size)
                 }
                 ChildInsert::Start | ChildInsert::End =&gt; <span class="macro">unreachable!</span>(), <span class="comment">// already resolved
             </span>};

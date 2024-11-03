@@ -1080,7 +1080,6 @@
 <a href="#1080" id="1080">1080</a>
 <a href="#1081" id="1081">1081</a>
 <a href="#1082" id="1082">1082</a>
-<a href="#1083" id="1083">1083</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1096,7 +1095,7 @@
 
 <span class="doccomment">/// Widget layout offset.
 ///
-/// Relative values are computed of the parent fill size or the widget's size, whichever is greater.
+/// Relative values are computed from the constraints maximum bounded size.
 ///
 /// # `x` and `y`
 ///
@@ -1122,7 +1121,7 @@
 
 <span class="doccomment">/// Offset on the ***x*** axis.
 ///
-/// Relative values are computed of the parent fill width or the widget's width, whichever is greater.
+/// Relative values are computed from the constraints maximum bounded width.
 ///
 /// # `offset`
 ///
@@ -1136,9 +1135,8 @@
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
             <span class="kw">let </span>size = child.layout(wl);
-            <span class="kw">let </span>x = LAYOUT.with_constraints(PxConstraints2d::new_exact_size(LAYOUT.constraints().fill_size().max(size)), || {
-                x.layout_x()
-            });
+
+            <span class="kw">let </span>x = with_fill_metrics(LAYOUT.constraints(), |<span class="kw">_</span>| x.layout_x());
             wl.translate(PxVector::new(x, Px(<span class="number">0</span>)));
             <span class="kw-2">*</span>final_size = size;
         }
@@ -1148,7 +1146,7 @@
 
 <span class="doccomment">/// Offset on the ***y*** axis.
 ///
-/// Relative values are computed of the parent fill height or the widget's height, whichever is greater.
+/// Relative values are computed from the constraints maximum bounded height.
 ///
 /// # `offset`
 ///
