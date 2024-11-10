@@ -1076,10 +1076,6 @@
 <a href="#1076" id="1076">1076</a>
 <a href="#1077" id="1077">1077</a>
 <a href="#1078" id="1078">1078</a>
-<a href="#1079" id="1079">1079</a>
-<a href="#1080" id="1080">1080</a>
-<a href="#1081" id="1081">1081</a>
-<a href="#1082" id="1082">1082</a>
 </pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
@@ -1425,7 +1421,7 @@
 /// [`height`]: fn@height
 /// [`force_size`]: fn@force_size
 /// [`align`]: fn@zng_wgt::align
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Size::default()))]
 </span><span class="kw">pub fn </span>size(child: <span class="kw">impl </span>UiNode, size: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>size = size.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1481,7 +1477,7 @@
 /// [`min_width`]: fn@min_width
 /// [`max_width`]: fn@max_width
 /// [`force_width`]: fn@force_width
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Length::Default))]
 </span><span class="kw">pub fn </span>width(child: <span class="kw">impl </span>UiNode, width: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>width = width.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1536,7 +1532,7 @@
 /// [`min_height`]: fn@min_height
 /// [`max_height`]: fn@max_height
 /// [`force_height`]: fn@force_height
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Length::Default))]
 </span><span class="kw">pub fn </span>height(child: <span class="kw">impl </span>UiNode, height: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>height = height.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1589,7 +1585,7 @@
 ///
 /// [`force_width`]: fn@force_width
 /// [`force_height`]: fn@force_height
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Size::default()))]
 </span><span class="kw">pub fn </span>force_size(child: <span class="kw">impl </span>UiNode, size: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>size = size.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1607,16 +1603,16 @@
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
             child.delegated();
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>size = with_fill_metrics(parent_constraints.with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>)), |d| size.layout_dft(d));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>)).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>);
+            <span class="kw">let </span>size = with_fill_metrics(c, |d| size.layout_dft(d));
             wm.measure_block(<span class="kw-2">&amp;mut </span>NilUiNode);
-            <span class="kw-2">*</span>desired_size = Align::TOP_LEFT.measure(size, parent_constraints);
+            <span class="kw-2">*</span>desired_size = Align::TOP_LEFT.measure(size, c);
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>size = with_fill_metrics(parent_constraints.with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>)), |d| size.layout_dft(d));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>)).with_fill(<span class="bool-val">false</span>, <span class="bool-val">false</span>);
+            <span class="kw">let </span>size = with_fill_metrics(c, |d| size.layout_dft(d));
             LAYOUT.with_constraints(PxConstraints2d::new_exact_size(size), || child.layout(wl));
-            <span class="kw-2">*</span>final_size = Align::TOP_LEFT.measure(size, parent_constraints);
+            <span class="kw-2">*</span>final_size = Align::TOP_LEFT.measure(size, c);
         }
         <span class="kw">_ </span>=&gt; {}
     })
@@ -1633,7 +1629,7 @@
 /// # `force_size`
 ///
 /// You can set both `force_width` and `force_height` at the same time using the [`force_size`](fn@force_size) property.
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Length::Default))]
 </span><span class="kw">pub fn </span>force_width(child: <span class="kw">impl </span>UiNode, width: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>width = width.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1650,21 +1646,19 @@
             });
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>constraints = parent_constraints.with_new_min_x(Px(<span class="number">0</span>));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min_x(Px(<span class="number">0</span>)).with_fill_x(<span class="bool-val">false</span>);
 
-            <span class="kw">let </span>width = with_fill_metrics(constraints, |d| width.layout_dft_x(d.width));
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(constraints.with_unbounded_x().with_exact_x(width), || wm.measure_block(child));
-            size.width = Align::TOP_LEFT.measure_x(width, parent_constraints.x);
+            <span class="kw">let </span>width = with_fill_metrics(c, |d| width.layout_dft_x(d.width));
+            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(c.with_unbounded_x().with_exact_x(width), || wm.measure_block(child));
+            size.width = Align::TOP_LEFT.measure_x(width, c.x);
             <span class="kw-2">*</span>desired_size = size;
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>constraints = parent_constraints.with_new_min_x(Px(<span class="number">0</span>));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min_x(Px(<span class="number">0</span>)).with_fill_x(<span class="bool-val">false</span>);
 
-            <span class="kw">let </span>width = with_fill_metrics(constraints, |d| width.layout_dft_x(d.width));
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(constraints.with_unbounded_x().with_exact_x(width), || child.layout(wl));
-            size.width = Align::TOP_LEFT.measure_x(width, parent_constraints.x);
+            <span class="kw">let </span>width = with_fill_metrics(c, |d| width.layout_dft_x(d.width));
+            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(c.with_unbounded_x().with_exact_x(width), || child.layout(wl));
+            size.width = Align::TOP_LEFT.measure_x(width, c.x);
             <span class="kw-2">*</span>final_size = size;
         }
         <span class="kw">_ </span>=&gt; {}
@@ -1682,7 +1676,7 @@
 /// # `force_size`
 ///
 /// You can set both `force_width` and `force_height` at the same time using the [`force_size`](fn@force_size) property.
-</span><span class="attr">#[property(SIZE)]
+</span><span class="attr">#[property(SIZE, default(Length::Default))]
 </span><span class="kw">pub fn </span>force_height(child: <span class="kw">impl </span>UiNode, height: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>height = height.into_var();
     match_node(child, <span class="kw">move </span>|child, op| <span class="kw">match </span>op {
@@ -1700,21 +1694,19 @@
             });
         }
         UiNodeOp::Measure { wm, desired_size } =&gt; {
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>constraints = parent_constraints.with_new_min_y(Px(<span class="number">0</span>));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min_y(Px(<span class="number">0</span>)).with_fill_y(<span class="bool-val">false</span>);
 
-            <span class="kw">let </span>height = with_fill_metrics(constraints, |d| height.layout_dft_y(d.height));
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(constraints.with_unbounded_y().with_exact_y(height), || wm.measure_block(child));
-            size.height = Align::TOP_LEFT.measure_y(height, parent_constraints.y);
+            <span class="kw">let </span>height = with_fill_metrics(c, |d| height.layout_dft_y(d.height));
+            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(c.with_unbounded_y().with_exact_y(height), || wm.measure_block(child));
+            size.height = Align::TOP_LEFT.measure_y(height, c.y);
             <span class="kw-2">*</span>desired_size = size;
         }
         UiNodeOp::Layout { wl, final_size } =&gt; {
-            <span class="kw">let </span>parent_constraints = LAYOUT.constraints();
-            <span class="kw">let </span>constraints = parent_constraints.with_new_min_y(Px(<span class="number">0</span>));
+            <span class="kw">let </span>c = LAYOUT.constraints().with_new_min_y(Px(<span class="number">0</span>)).with_fill_y(<span class="bool-val">false</span>);
 
-            <span class="kw">let </span>height = with_fill_metrics(constraints, |d| height.layout_dft_y(d.height));
-            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(constraints.with_unbounded_y().with_exact_y(height), || child.layout(wl));
-            size.height = Align::TOP_LEFT.measure_y(height, parent_constraints.y);
+            <span class="kw">let </span>height = with_fill_metrics(c, |d| height.layout_dft_y(d.height));
+            <span class="kw">let </span><span class="kw-2">mut </span>size = LAYOUT.with_constraints(c.with_unbounded_y().with_exact_y(height), || child.layout(wl));
+            size.height = Align::TOP_LEFT.measure_y(height, c.y);
             <span class="kw-2">*</span>final_size = size;
         }
         <span class="kw">_ </span>=&gt; {}

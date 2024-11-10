@@ -544,6 +544,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#508" id="508">508</a>
 <a href="#509" id="509">509</a>
 <a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
 </pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::{atomic::AtomicUsize, Arc};
 
 <span class="kw">use </span>zng_layout::unit::{PxBox, PxCornerRadius, PxPoint, PxSize, PxTransform, PxVector};
@@ -571,10 +572,11 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="self">self</span>.items.push(HitTestItem::Clip(HitTestPrimitive::Rect(clip_rect), clip_out));
     }
 
-    <span class="kw">pub fn </span>push_rounded_rect(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rect: PxBox, radii: PxCornerRadius) {
+    <span class="kw">pub fn </span>push_rounded_rect(<span class="kw-2">&amp;mut </span><span class="self">self</span>, rect: PxBox, <span class="kw-2">mut </span>radii: PxCornerRadius) {
         <span class="kw">if </span>radii == PxCornerRadius::zero() {
             <span class="self">self</span>.push_rect(rect);
         } <span class="kw">else </span>{
+            ensure_no_corner_overlap(<span class="kw-2">&amp;mut </span>radii, rect.size());
             <span class="self">self</span>.items.push(HitTestItem::Hit(HitTestPrimitive::RoundedRect(rect, radii)));
         }
     }

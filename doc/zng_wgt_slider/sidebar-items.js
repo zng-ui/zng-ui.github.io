@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["SliderDirection"],"fn":["selector","style_fn","thumb_fn"],"mod":["thumb"],"static":["SELECTOR","SLIDER_DIRECTION_VAR","STYLE_FN_VAR","THUMB_FN_VAR"],"struct":["DefaultStyle","Selector","Slider","SliderTrack","ThumbArgs","ThumbValue"],"trait":["SelectorValue","WidgetInfoExt"]};
