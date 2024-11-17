@@ -1455,7 +1455,7 @@
 }
 <span class="kw">impl </span>Drop <span class="kw">for </span>WatchFile {
     <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-        <span class="kw">let _ </span>= <span class="self">self</span>.<span class="number">0</span>.unlock();
+        <span class="kw">let _ </span>= FileExt::unlock(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>);
     }
 }
 
@@ -1716,18 +1716,18 @@
         <span class="self">self</span>.cleaned = <span class="bool-val">true</span>;
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(tmp) = <span class="self">self</span>.temp_file.take() {
-            <span class="kw">let _ </span>= tmp.unlock();
+            <span class="kw">let _ </span>= FileExt::unlock(<span class="kw-2">&amp;</span>tmp);
         }
         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::remove_file(<span class="kw-2">&amp;</span><span class="self">self</span>.temp_path) {
             <span class="macro">tracing::debug!</span>(<span class="string">"failed to cleanup temp file, {e}"</span>)
         }
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(file) = <span class="self">self</span>.actual_file.take() {
-            <span class="kw">let _ </span>= file.unlock();
+            <span class="kw">let _ </span>= FileExt::unlock(<span class="kw-2">&amp;</span>file);
         }
 
         <span class="kw">let </span>transaction = <span class="self">self</span>.transaction_lock.take().unwrap();
-        <span class="kw">let _ </span>= transaction.unlock();
+        <span class="kw">let _ </span>= FileExt::unlock(<span class="kw-2">&amp;</span>transaction);
         <span class="kw">let _ </span>= fs::remove_file(<span class="kw-2">&amp;</span><span class="self">self</span>.transaction_path);
     }
 }

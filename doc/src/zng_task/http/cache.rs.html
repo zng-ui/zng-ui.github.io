@@ -1261,7 +1261,7 @@
                         <span class="kw">let </span>entry = entry.path();
                         <span class="kw">if </span>entry.is_dir() {
                             <span class="kw">if let </span><span class="prelude-val">Ok</span>(lock) = File::open(entry.join(CacheEntry::LOCK)) {
-                                <span class="kw">if </span>lock.try_lock_shared().is_ok() {
+                                <span class="kw">if </span>FileExt::try_lock_shared(<span class="kw-2">&amp;</span>lock).is_ok() {
                                     CacheEntry::try_delete_locked_dir(<span class="kw-2">&amp;</span>entry, <span class="kw-2">&amp;</span>lock);
                                 }
                             }

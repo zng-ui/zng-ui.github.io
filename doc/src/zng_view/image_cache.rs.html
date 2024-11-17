@@ -1448,8 +1448,36 @@
 <a href="#1448" id="1448">1448</a>
 <a href="#1449" id="1449">1449</a>
 <a href="#1450" id="1450">1450</a>
-</pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, sync::Arc};
+<a href="#1451" id="1451">1451</a>
+<a href="#1452" id="1452">1452</a>
+<a href="#1453" id="1453">1453</a>
+<a href="#1454" id="1454">1454</a>
+<a href="#1455" id="1455">1455</a>
+<a href="#1456" id="1456">1456</a>
+<a href="#1457" id="1457">1457</a>
+<a href="#1458" id="1458">1458</a>
+<a href="#1459" id="1459">1459</a>
+<a href="#1460" id="1460">1460</a>
+<a href="#1461" id="1461">1461</a>
+<a href="#1462" id="1462">1462</a>
+<a href="#1463" id="1463">1463</a>
+<a href="#1464" id="1464">1464</a>
+<a href="#1465" id="1465">1465</a>
+<a href="#1466" id="1466">1466</a>
+<a href="#1467" id="1467">1467</a>
+<a href="#1468" id="1468">1468</a>
+<a href="#1469" id="1469">1469</a>
+<a href="#1470" id="1470">1470</a>
+<a href="#1471" id="1471">1471</a>
+<a href="#1472" id="1472">1472</a>
+<a href="#1473" id="1473">1473</a>
+<a href="#1474" id="1474">1474</a>
+<a href="#1475" id="1475">1475</a>
+<a href="#1476" id="1476">1476</a>
+<a href="#1477" id="1477">1477</a>
+</pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, sync::Arc};
 
+<span class="kw">use </span>image::ImageDecoder;
 <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
 <span class="kw">use </span>winit::{
     event_loop::ActiveEventLoop,
@@ -1574,7 +1602,7 @@
                     }
                 }
                 fmt =&gt; <span class="kw">match </span><span class="self">Self</span>::get_format_and_size(<span class="kw-2">&amp;</span>fmt, <span class="kw-2">&amp;</span>data[..]) {
-                    <span class="prelude-val">Ok</span>((fmt, <span class="kw-2">mut </span>size)) =&gt; {
+                    <span class="prelude-val">Ok</span>((fmt, <span class="kw-2">mut </span>size, orientation)) =&gt; {
                         <span class="kw">let </span>decoded_len = size.width.<span class="number">0 </span><span class="kw">as </span>u64 * size.height.<span class="number">0 </span><span class="kw">as </span>u64 * <span class="number">4</span>;
                         <span class="kw">if </span>decoded_len &gt; max_decoded_len {
                             <span class="prelude-val">Err</span>(<span class="macro">formatx!</span>(
@@ -1590,7 +1618,7 @@
                                 ppi: <span class="prelude-val">None</span>,
                                 is_mask: <span class="bool-val">false</span>,
                             }));
-                            <span class="kw">match </span><span class="self">Self</span>::image_decode(<span class="kw-2">&amp;</span>data[..], fmt, downscale) {
+                            <span class="kw">match </span><span class="self">Self</span>::image_decode(<span class="kw-2">&amp;</span>data[..], fmt, downscale, orientation) {
                                 <span class="prelude-val">Ok</span>(img) =&gt; <span class="prelude-val">Ok</span>(<span class="self">Self</span>::convert_decoded(img, mask)),
                                 <span class="prelude-val">Err</span>(e) =&gt; <span class="prelude-val">Err</span>(e.to_txt()),
                             }
@@ -1638,6 +1666,7 @@
             <span class="kw">let </span><span class="kw-2">mut </span>size = <span class="prelude-val">None</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>ppi = <span class="prelude-val">None</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>is_encoded = <span class="bool-val">true</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>orientation = image::metadata::Orientation::NoTransforms;
 
             <span class="kw">let </span><span class="kw-2">mut </span>format = <span class="kw">match </span>format {
                 ImageDataFormat::Bgra8 { size: s, ppi: p } =&gt; {
@@ -1666,10 +1695,19 @@
 
                         <span class="kw">if let </span><span class="prelude-val">Some</span>(fmt) = format {
                             <span class="kw">if </span>size.is_none() {
-                                size = image::ImageReader::with_format(std::io::Cursor::new(<span class="kw-2">&amp;</span>full), fmt)
-                                    .into_dimensions()
-                                    .ok()
-                                    .map(|(w, h)| PxSize::new(Px(w <span class="kw">as </span>i32), Px(h <span class="kw">as </span>i32)));
+                                <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>d) = image::ImageReader::with_format(std::io::Cursor::new(<span class="kw-2">&amp;</span>full), fmt).into_decoder() {
+                                    <span class="kw">use </span>image::metadata::Orientation::<span class="kw-2">*</span>;
+
+                                    <span class="kw">let </span>(<span class="kw-2">mut </span>w, <span class="kw-2">mut </span>h) = d.dimensions();
+                                    orientation = d.orientation().unwrap_or(NoTransforms);
+
+                                    <span class="kw">if </span><span class="macro">matches!</span>(orientation, Rotate90 | Rotate270 | Rotate90FlipH | Rotate270FlipH) {
+                                        mem::swap(<span class="kw-2">&amp;mut </span>w, <span class="kw-2">&amp;mut </span>h)
+                                    }
+
+                                    size = <span class="prelude-val">Some</span>(PxSize::new(Px(w <span class="kw">as </span>i32), Px(h <span class="kw">as </span>i32)));
+                                }
+
                                 <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = size {
                                     <span class="kw">let </span>decoded_len = s.width.<span class="number">0 </span><span class="kw">as </span>u64 * s.height.<span class="number">0 </span><span class="kw">as </span>u64 * <span class="number">4</span>;
                                     <span class="kw">if </span>decoded_len &gt; max_decoded_len {
@@ -1693,7 +1731,7 @@
             }
 
             <span class="kw">if let </span><span class="prelude-val">Some</span>(fmt) = format {
-                <span class="kw">match </span><span class="self">Self</span>::image_decode(<span class="kw-2">&amp;</span>full[..], fmt, downscale) {
+                <span class="kw">match </span><span class="self">Self</span>::image_decode(<span class="kw-2">&amp;</span>full[..], fmt, downscale, orientation) {
                     <span class="prelude-val">Ok</span>(img) =&gt; {
                         <span class="kw">let </span>(pixels, size, ppi, is_opaque, is_mask) = <span class="self">Self</span>::convert_decoded(img, mask);
                         <span class="kw">let _ </span>= app_sender.send(AppEvent::ImageLoaded(ImageLoadedData {
@@ -1766,7 +1804,7 @@
         <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::ImageLoaded(data)));
     }
 
-    <span class="kw">fn </span>get_format_and_size(fmt: <span class="kw-2">&amp;</span>ImageDataFormat, data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(image::ImageFormat, PxSize), Txt&gt; {
+    <span class="kw">fn </span>get_format_and_size(fmt: <span class="kw-2">&amp;</span>ImageDataFormat, data: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;(image::ImageFormat, PxSize, image::metadata::Orientation), Txt&gt; {
         <span class="kw">let </span>fmt = <span class="kw">match </span>fmt {
             ImageDataFormat::FileExtension(ext) =&gt; image::ImageFormat::from_extension(ext.as_str()),
             ImageDataFormat::MimeType(t) =&gt; t.strip_prefix(<span class="string">"image/"</span>).and_then(image::ImageFormat::from_extension),
@@ -1784,20 +1822,36 @@
 
         <span class="kw">match </span>reader.format() {
             <span class="prelude-val">Some</span>(fmt) =&gt; {
-                <span class="kw">let </span>(w, h) = reader.into_dimensions().map_err(|e| e.to_string())<span class="question-mark">?</span>;
-                <span class="prelude-val">Ok</span>((fmt, PxSize::new(Px(w <span class="kw">as </span>i32), Px(h <span class="kw">as </span>i32))))
+                <span class="kw">use </span>image::metadata::Orientation::<span class="kw-2">*</span>;
+
+                <span class="kw">let </span><span class="kw-2">mut </span>decoder = reader.into_decoder().map_err(|e| e.to_string())<span class="question-mark">?</span>;
+                <span class="kw">let </span>(<span class="kw-2">mut </span>w, <span class="kw-2">mut </span>h) = decoder.dimensions();
+                <span class="kw">let </span>orientation = decoder.orientation().unwrap_or(NoTransforms);
+
+                <span class="kw">if </span><span class="macro">matches!</span>(orientation, Rotate90 | Rotate270 | Rotate90FlipH | Rotate270FlipH) {
+                    mem::swap(<span class="kw-2">&amp;mut </span>w, <span class="kw-2">&amp;mut </span>h)
+                }
+
+                <span class="prelude-val">Ok</span>((fmt, PxSize::new(Px(w <span class="kw">as </span>i32), Px(h <span class="kw">as </span>i32)), orientation))
             }
             <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Err</span>(Txt::from_static(<span class="string">"unknown format"</span>)),
         }
     }
 
-    <span class="kw">fn </span>image_decode(buf: <span class="kw-2">&amp;</span>[u8], format: image::ImageFormat, downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;) -&gt; image::ImageResult&lt;image::DynamicImage&gt; {
+    <span class="kw">fn </span>image_decode(
+        buf: <span class="kw-2">&amp;</span>[u8],
+        format: image::ImageFormat,
+        downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
+        orientation: image::metadata::Orientation,
+    ) -&gt; image::ImageResult&lt;image::DynamicImage&gt; {
         <span class="kw">let </span>buf = std::io::Cursor::new(buf);
 
         <span class="kw">let </span><span class="kw-2">mut </span>reader = image::ImageReader::new(buf);
         reader.set_format(format);
         reader.no_limits();
         <span class="kw">let </span><span class="kw-2">mut </span>image = reader.decode()<span class="question-mark">?</span>;
+
+        image.apply_orientation(orientation);
 
         <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = downscale {
             <span class="kw">let </span>(img_w, img_h) = (image.width(), image.height());
