@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["draggable","is_drag_hovered","is_drag_hovered_disabled","is_dragging","on_drag_end","on_drag_enter","on_drag_hovered","on_drag_leave","on_drag_start","on_drop","on_pre_drag_end","on_pre_drag_enter","on_pre_drag_hovered","on_pre_drag_leave","on_pre_drag_start","on_pre_drop"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["border_img","border_img_fill","border_img_repeat"],"static":["BORDER_IMG_FILL_VAR","BORDER_IMG_REPEAT_VAR"],"struct":["BorderRepeats"]};
