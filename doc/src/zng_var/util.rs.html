@@ -538,7 +538,8 @@
 <a href="#537" id="537">537</a>
 <a href="#538" id="538">538</a>
 <a href="#539" id="539">539</a>
-<a href="#540" id="540">540</a></pre></div><pre class="rust"><code><span class="doccomment">///Implements `T: IntoVar&lt;U&gt;`, `T: IntoValue&lt;U&gt;` and optionally `U: From&lt;T&gt;` without boilerplate.
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a></pre></div><pre class="rust"><code><span class="doccomment">///Implements `T: IntoVar&lt;U&gt;`, `T: IntoValue&lt;U&gt;` and optionally `U: From&lt;T&gt;` without boilerplate.
 ///
 /// The macro syntax is one or more functions with signature `fn from(t: T) -&gt; U`. The [`LocalVar&lt;U&gt;`]
 /// type is selected for variables. The syntax also supports generic types and constraints, but not `where` constraints.
@@ -1031,6 +1032,7 @@
     <span class="kw">let </span><span class="kw-2">mut </span>value = VarModify::new(<span class="kw-2">&amp;</span>meta.value);
     modify(<span class="kw-2">&amp;mut </span>value);
     <span class="kw">let </span>(notify, new_value, update, tags, custom_importance) = value.finish();
+    drop(meta);
 
     <span class="comment">// code size optimization, removes the impl FnOnce generic
     </span><span class="kw">fn </span>finish&lt;T: VarValue&gt;(
