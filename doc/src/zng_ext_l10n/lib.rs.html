@@ -504,7 +504,20 @@
 <a href="#503" id="503">503</a>
 <a href="#504" id="504">504</a>
 <a href="#505" id="505">505</a>
-<a href="#506" id="506">506</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#506" id="506">506</a>
+<a href="#507" id="507">507</a>
+<a href="#508" id="508">508</a>
+<a href="#509" id="509">509</a>
+<a href="#510" id="510">510</a>
+<a href="#511" id="511">511</a>
+<a href="#512" id="512">512</a>
+<a href="#513" id="513">513</a>
+<a href="#514" id="514">514</a>
+<a href="#515" id="515">515</a>
+<a href="#516" id="516">516</a>
+<a href="#517" id="517">517</a>
+<a href="#518" id="518">518</a>
+<a href="#519" id="519">519</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Localization service, [`l10n!`] and helpers.
@@ -737,6 +750,19 @@
     /// [`available_langs`]: Self::available_langs
     </span><span class="kw">pub fn </span>load_dir(<span class="kw-2">&amp;</span><span class="self">self</span>, dir: <span class="kw">impl </span>Into&lt;PathBuf&gt;) {
         <span class="self">self</span>.load(L10nDir::open(dir))
+    }
+
+    <span class="doccomment">/// Load localization resources from a `.tar` or `.tar.gz` container.
+    ///
+    /// The expected container layout is `root_dir/{lang}/{file}.ftl` app files and `root_dir/{lang}/deps/{pkg-name}/{pkg-version}/{file}.ftl`
+    /// for dependencies, same as [`load_dir`], `root_dir` can have any name.
+    ///
+    /// The data can be embedded using [`include_bytes!`] or loaded into a `Vec&lt;u8&gt;` and must be in the `.tar` or `.tar.gz` format.
+    ///
+    /// [`load_dir`]: L10N::load_dir
+    </span><span class="attr">#[cfg(feature = <span class="string">"tar"</span>)]
+    </span><span class="kw">pub fn </span>load_tar(<span class="kw-2">&amp;</span><span class="self">self</span>, data: <span class="kw">impl </span>Into&lt;L10nTarData&gt;) {
+        <span class="self">self</span>.load(L10nTar::load(data))
     }
 
     <span class="doccomment">/// Available localization files.

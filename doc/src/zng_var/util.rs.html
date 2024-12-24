@@ -527,7 +527,18 @@
 <a href="#526" id="526">526</a>
 <a href="#527" id="527">527</a>
 <a href="#528" id="528">528</a>
-<a href="#529" id="529">529</a></pre></div><pre class="rust"><code><span class="doccomment">///Implements `T: IntoVar&lt;U&gt;`, `T: IntoValue&lt;U&gt;` and optionally `U: From&lt;T&gt;` without boilerplate.
+<a href="#529" id="529">529</a>
+<a href="#530" id="530">530</a>
+<a href="#531" id="531">531</a>
+<a href="#532" id="532">532</a>
+<a href="#533" id="533">533</a>
+<a href="#534" id="534">534</a>
+<a href="#535" id="535">535</a>
+<a href="#536" id="536">536</a>
+<a href="#537" id="537">537</a>
+<a href="#538" id="538">538</a>
+<a href="#539" id="539">539</a>
+<a href="#540" id="540">540</a></pre></div><pre class="rust"><code><span class="doccomment">///Implements `T: IntoVar&lt;U&gt;`, `T: IntoValue&lt;U&gt;` and optionally `U: From&lt;T&gt;` without boilerplate.
 ///
 /// The macro syntax is one or more functions with signature `fn from(t: T) -&gt; U`. The [`LocalVar&lt;U&gt;`]
 /// type is selected for variables. The syntax also supports generic types and constraints, but not `where` constraints.
@@ -1009,6 +1020,8 @@
 
 <span class="attr">#[cfg(not(feature = <span class="string">"dyn_closure"</span>))]
 </span><span class="kw">fn </span>apply_modify&lt;T: VarValue&gt;(inner: <span class="kw-2">&amp;</span>RwLock&lt;VarDataInner&lt;T&gt;&gt;, modify: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;)) {
+    <span class="kw">use </span><span class="kw">crate</span>::AnyVarValue;
+
     <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
     <span class="kw">if </span>data.meta.skip_modify() {
         <span class="kw">return</span>;
@@ -1019,38 +1032,47 @@
     modify(<span class="kw-2">&amp;mut </span>value);
     <span class="kw">let </span>(notify, new_value, update, tags, custom_importance) = value.finish();
 
-    <span class="kw">if </span>notify {
-        drop(meta);
-        <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(nv) = new_value {
-            data.value = nv;
-        }
-        data.meta.last_update = VARS.update_id();
+    <span class="comment">// code size optimization, removes the impl FnOnce generic
+    </span><span class="kw">fn </span>finish&lt;T: VarValue&gt;(
+        inner: <span class="kw-2">&amp;</span>RwLock&lt;VarDataInner&lt;T&gt;&gt;,
+        notify: bool,
+        new_value: <span class="prelude-ty">Option</span>&lt;T&gt;,
+        update: bool,
+        tags: Vec&lt;Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;&gt;,
+        custom_importance: <span class="prelude-ty">Option</span>&lt;usize&gt;,
+    ) {
+        <span class="kw">if </span>notify {
+            <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(nv) = new_value {
+                data.value = nv;
+            }
+            data.meta.last_update = VARS.update_id();
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = custom_importance {
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = custom_importance {
+                data.meta.animation.importance = i;
+            }
+
+            <span class="kw">if </span>!data.meta.hooks.is_empty() {
+                <span class="kw">let </span><span class="kw-2">mut </span>hooks = std::mem::take(<span class="kw-2">&amp;mut </span>data.meta.hooks);
+
+                <span class="kw">let </span>meta = parking_lot::RwLockWriteGuard::downgrade(data);
+
+                <span class="kw">let </span>args = AnyVarHookArgs::new(<span class="kw-2">&amp;</span>meta.value, update, <span class="kw-2">&amp;</span>tags);
+                call_hooks(<span class="kw-2">&amp;mut </span>hooks, args);
+                drop(meta);
+
+                <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
+                hooks.append(<span class="kw-2">&amp;mut </span>data.meta.hooks);
+                data.meta.hooks = hooks;
+            }
+
+            VARS.wake_app();
+        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(i) = custom_importance {
+            <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
             data.meta.animation.importance = i;
         }
-
-        <span class="kw">if </span>!data.meta.hooks.is_empty() {
-            <span class="kw">let </span><span class="kw-2">mut </span>hooks = std::mem::take(<span class="kw-2">&amp;mut </span>data.meta.hooks);
-
-            <span class="kw">let </span>meta = parking_lot::RwLockWriteGuard::downgrade(data);
-
-            <span class="kw">let </span>args = AnyVarHookArgs::new(<span class="kw-2">&amp;</span>meta.value, update, <span class="kw-2">&amp;</span>tags);
-            call_hooks(<span class="kw-2">&amp;mut </span>hooks, args);
-            drop(meta);
-
-            <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
-            hooks.append(<span class="kw-2">&amp;mut </span>data.meta.hooks);
-            data.meta.hooks = hooks;
-        }
-
-        VARS.wake_app();
-    } <span class="kw">else if let </span><span class="prelude-val">Some</span>(i) = custom_importance {
-        drop(meta);
-        <span class="kw">let </span><span class="kw-2">mut </span>data = inner.write();
-        data.meta.animation.importance = i;
     }
+    finish(inner, notify, new_value, update, tags, custom_importance);
 }
 
 <span class="kw">fn </span>call_hooks(hooks: <span class="kw-2">&amp;mut </span>Vec&lt;VarHook&gt;, args: AnyVarHookArgs) {

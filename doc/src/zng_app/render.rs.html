@@ -3141,7 +3141,97 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#3104" id="3104">3104</a>
 <a href="#3105" id="3105">3105</a>
 <a href="#3106" id="3106">3106</a>
-<a href="#3107" id="3107">3107</a></pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
+<a href="#3107" id="3107">3107</a>
+<a href="#3108" id="3108">3108</a>
+<a href="#3109" id="3109">3109</a>
+<a href="#3110" id="3110">3110</a>
+<a href="#3111" id="3111">3111</a>
+<a href="#3112" id="3112">3112</a>
+<a href="#3113" id="3113">3113</a>
+<a href="#3114" id="3114">3114</a>
+<a href="#3115" id="3115">3115</a>
+<a href="#3116" id="3116">3116</a>
+<a href="#3117" id="3117">3117</a>
+<a href="#3118" id="3118">3118</a>
+<a href="#3119" id="3119">3119</a>
+<a href="#3120" id="3120">3120</a>
+<a href="#3121" id="3121">3121</a>
+<a href="#3122" id="3122">3122</a>
+<a href="#3123" id="3123">3123</a>
+<a href="#3124" id="3124">3124</a>
+<a href="#3125" id="3125">3125</a>
+<a href="#3126" id="3126">3126</a>
+<a href="#3127" id="3127">3127</a>
+<a href="#3128" id="3128">3128</a>
+<a href="#3129" id="3129">3129</a>
+<a href="#3130" id="3130">3130</a>
+<a href="#3131" id="3131">3131</a>
+<a href="#3132" id="3132">3132</a>
+<a href="#3133" id="3133">3133</a>
+<a href="#3134" id="3134">3134</a>
+<a href="#3135" id="3135">3135</a>
+<a href="#3136" id="3136">3136</a>
+<a href="#3137" id="3137">3137</a>
+<a href="#3138" id="3138">3138</a>
+<a href="#3139" id="3139">3139</a>
+<a href="#3140" id="3140">3140</a>
+<a href="#3141" id="3141">3141</a>
+<a href="#3142" id="3142">3142</a>
+<a href="#3143" id="3143">3143</a>
+<a href="#3144" id="3144">3144</a>
+<a href="#3145" id="3145">3145</a>
+<a href="#3146" id="3146">3146</a>
+<a href="#3147" id="3147">3147</a>
+<a href="#3148" id="3148">3148</a>
+<a href="#3149" id="3149">3149</a>
+<a href="#3150" id="3150">3150</a>
+<a href="#3151" id="3151">3151</a>
+<a href="#3152" id="3152">3152</a>
+<a href="#3153" id="3153">3153</a>
+<a href="#3154" id="3154">3154</a>
+<a href="#3155" id="3155">3155</a>
+<a href="#3156" id="3156">3156</a>
+<a href="#3157" id="3157">3157</a>
+<a href="#3158" id="3158">3158</a>
+<a href="#3159" id="3159">3159</a>
+<a href="#3160" id="3160">3160</a>
+<a href="#3161" id="3161">3161</a>
+<a href="#3162" id="3162">3162</a>
+<a href="#3163" id="3163">3163</a>
+<a href="#3164" id="3164">3164</a>
+<a href="#3165" id="3165">3165</a>
+<a href="#3166" id="3166">3166</a>
+<a href="#3167" id="3167">3167</a>
+<a href="#3168" id="3168">3168</a>
+<a href="#3169" id="3169">3169</a>
+<a href="#3170" id="3170">3170</a>
+<a href="#3171" id="3171">3171</a>
+<a href="#3172" id="3172">3172</a>
+<a href="#3173" id="3173">3173</a>
+<a href="#3174" id="3174">3174</a>
+<a href="#3175" id="3175">3175</a>
+<a href="#3176" id="3176">3176</a>
+<a href="#3177" id="3177">3177</a>
+<a href="#3178" id="3178">3178</a>
+<a href="#3179" id="3179">3179</a>
+<a href="#3180" id="3180">3180</a>
+<a href="#3181" id="3181">3181</a>
+<a href="#3182" id="3182">3182</a>
+<a href="#3183" id="3183">3183</a>
+<a href="#3184" id="3184">3184</a>
+<a href="#3185" id="3185">3185</a>
+<a href="#3186" id="3186">3186</a>
+<a href="#3187" id="3187">3187</a>
+<a href="#3188" id="3188">3188</a>
+<a href="#3189" id="3189">3189</a>
+<a href="#3190" id="3190">3190</a>
+<a href="#3191" id="3191">3191</a>
+<a href="#3192" id="3192">3192</a>
+<a href="#3193" id="3193">3193</a>
+<a href="#3194" id="3194">3194</a>
+<a href="#3195" id="3195">3195</a>
+<a href="#3196" id="3196">3196</a>
+<a href="#3197" id="3197">3197</a></pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
 
 </span><span class="kw">use </span>std::{marker::PhantomData, mem, sync::Arc};
 
@@ -3531,268 +3621,310 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`can_reuse`]: Self::can_reuse
     /// [`WidgetLayout::collapse`]: crate::widget::info::WidgetLayout::collapse
     </span><span class="kw">pub fn </span>push_widget(<span class="kw-2">&amp;mut </span><span class="self">self</span>, render: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>)) {
-        <span class="kw">let </span>wgt_info = WIDGET.info();
-        <span class="kw">let </span>id = wgt_info.id();
+        <span class="comment">// to reduce code bloat, method split to before, push and after. Only push is generic.
+        </span><span class="attr">#[derive(Default)]
+        </span><span class="kw">struct </span>PushWidget {
+            parent_visible: bool,
+            parent_perspective: <span class="prelude-ty">Option</span>&lt;(f32, PxPoint)&gt;,
+            parent_can_reuse: bool,
+            widget_z: usize,
+            outer_transform: PxTransform,
+            undo_prev_outer_transform: <span class="prelude-ty">Option</span>&lt;PxTransform&gt;,
+            reuse: <span class="prelude-ty">Option</span>&lt;ReuseRange&gt;,
+            reused: bool,
+            display_count: usize,
+            child_offset: PxVector,
 
-        <span class="attr">#[cfg(debug_assertions)]
-        </span><span class="kw">if </span><span class="self">self</span>.widget_data.is_some() &amp;&amp; WIDGET.parent_id().is_some() {
-            <span class="macro">tracing::error!</span>(
-                <span class="string">"called `push_widget` for `{}` without calling `push_inner` for the parent `{}`"</span>,
-                WIDGET.trace_id(),
-                <span class="self">self</span>.widget_id
-            );
+            wgt_info: <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt;,
+            collapsed: bool,
         }
+        <span class="kw">impl </span>PushWidget {
+            <span class="kw">fn </span>before(<span class="kw-2">&amp;mut </span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FrameBuilder) {
+                <span class="kw">let </span>wgt_info = WIDGET.info();
+                <span class="kw">let </span>id = wgt_info.id();
 
-        <span class="kw">let </span>bounds = wgt_info.bounds_info();
-        <span class="kw">let </span>tree = wgt_info.tree();
-
-        <span class="kw">if </span>bounds.is_collapsed() {
-            <span class="comment">// collapse
-            </span><span class="kw">for </span>info <span class="kw">in </span>wgt_info.self_and_descendants() {
-                info.bounds_info().set_rendered(<span class="prelude-val">None</span>, tree);
-            }
-            <span class="comment">// LAYOUT can be pending if parent called `collapse_child`, cleanup here.
-            </span><span class="kw">let _ </span>= WIDGET.take_update(UpdateFlags::LAYOUT | UpdateFlags::RENDER | UpdateFlags::RENDER_UPDATE);
-            <span class="kw">let _ </span>= WIDGET.take_render_reuse(<span class="kw-2">&amp;</span><span class="self">self</span>.render_widgets, <span class="kw-2">&amp;</span><span class="self">self</span>.render_update_widgets);
-            <span class="kw">return</span>;
-        } <span class="kw">else </span>{
-            <span class="attr">#[cfg(debug_assertions)]
-            </span><span class="kw">if </span>WIDGET.pending_update().contains(UpdateFlags::LAYOUT) {
-                <span class="comment">// pending layout requested from inside the widget should have updated before render,
-                // this indicates that a widget skipped layout without properly collapsing.
-                </span><span class="macro">tracing::error!</span>(<span class="string">"called `push_widget` for `{}` with pending layout"</span>, WIDGET.trace_id());
-            }
-        }
-
-        <span class="kw">let </span><span class="kw-2">mut </span>try_reuse = <span class="bool-val">true</span>;
-
-        <span class="kw">let </span>prev_outer = bounds.outer_transform();
-        <span class="kw">let </span>outer_transform = PxTransform::from(<span class="self">self</span>.child_offset).then(<span class="kw-2">&amp;</span><span class="self">self</span>.transform);
-        bounds.set_outer_transform(outer_transform, tree);
-
-        <span class="kw">if </span>bounds.parent_child_offset() != <span class="self">self</span>.child_offset {
-            bounds.set_parent_child_offset(<span class="self">self</span>.child_offset);
-            try_reuse = <span class="bool-val">false</span>;
-        }
-        <span class="kw">let </span>outer_bounds = bounds.outer_bounds();
-
-        <span class="kw">let </span>parent_visible = <span class="self">self</span>.visible;
-
-        <span class="kw">if </span>bounds.can_auto_hide() {
-            <span class="comment">// collapse already handled, don't hide empty bounds here
-            // the bounds could be empty with visible content still,
-            // for example a Preserve3D object rotated 90º with 3D children also rotated.
-            </span><span class="kw">let </span><span class="kw-2">mut </span>outer_bounds = outer_bounds;
-            <span class="kw">if </span>outer_bounds.size.width &lt; Px(<span class="number">1</span>) {
-                outer_bounds.size.width = Px(<span class="number">1</span>);
-            }
-            <span class="kw">if </span>outer_bounds.size.height &lt; Px(<span class="number">1</span>) {
-                outer_bounds.size.height = Px(<span class="number">1</span>);
-            }
-            <span class="kw">match </span><span class="self">self</span>.auto_hide_rect.intersection(<span class="kw-2">&amp;</span>outer_bounds) {
-                <span class="prelude-val">Some</span>(cull) =&gt; {
-                    <span class="kw">let </span>partial = cull != outer_bounds;
-                    <span class="kw">if </span>partial || bounds.is_partially_culled() {
-                        <span class="comment">// partial cull, cannot reuse because descendant vis may have changed.
-                        </span>try_reuse = <span class="bool-val">false</span>;
-                        bounds.set_is_partially_culled(partial);
-                    }
-                }
-                <span class="prelude-val">None </span>=&gt; {
-                    <span class="comment">// full cull
-                    </span><span class="self">self</span>.visible = <span class="bool-val">false</span>;
-                }
-            }
-        } <span class="kw">else </span>{
-            bounds.set_is_partially_culled(<span class="bool-val">false</span>);
-        }
-
-        <span class="kw">let </span>parent_perspective = <span class="self">self</span>.perspective;
-        <span class="self">self</span>.perspective = wgt_info.perspective();
-        <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, o)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.perspective {
-            <span class="kw-2">*</span>o -= <span class="self">self</span>.child_offset;
-        }
-
-        <span class="kw">let </span>can_reuse = <span class="self">self</span>.view_process_has_frame
-            &amp;&amp; <span class="kw">match </span>bounds.render_info() {
-                <span class="prelude-val">Some</span>(i) =&gt; i.visible == <span class="self">self</span>.visible &amp;&amp; i.parent_perspective == <span class="self">self</span>.perspective,
-                <span class="comment">// cannot reuse if the widget was not rendered in the previous frame (clear stale reuse ranges in descendants).
-                </span><span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
-            };
-        <span class="kw">let </span>parent_can_reuse = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.can_reuse, can_reuse);
-
-        try_reuse &amp;= can_reuse;
-
-        <span class="self">self</span>.widget_count += <span class="number">1</span>;
-        <span class="kw">let </span>widget_z = <span class="self">self</span>.widget_count;
-
-        <span class="kw">let </span><span class="kw-2">mut </span>reuse = WIDGET.take_render_reuse(<span class="kw-2">&amp;</span><span class="self">self</span>.render_widgets, <span class="kw-2">&amp;</span><span class="self">self</span>.render_update_widgets);
-        <span class="kw">if </span>!try_reuse {
-            reuse = <span class="prelude-val">None</span>;
-        }
-
-        <span class="kw">let </span><span class="kw-2">mut </span>undo_prev_outer_transform = <span class="prelude-val">None</span>;
-        <span class="kw">if </span>reuse.is_some() {
-            <span class="comment">// check if is possible to reuse.
-            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(undo_prev) = prev_outer.inverse() {
-                undo_prev_outer_transform = <span class="prelude-val">Some</span>(undo_prev);
-            } <span class="kw">else </span>{
-                reuse = <span class="prelude-val">None</span>; <span class="comment">// cannot reuse because cannot undo prev-transform.
-            </span>}
-        }
-
-        <span class="kw">let </span>index = <span class="self">self</span>.hit_clips.push_child(id);
-        bounds.set_hit_index(index);
-
-        <span class="kw">let </span><span class="kw-2">mut </span>reused = <span class="bool-val">true</span>;
-        <span class="kw">let </span>display_count = <span class="self">self</span>.display_list.len();
-
-        <span class="kw">let </span>child_offset = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.child_offset);
-
-        <span class="comment">// try to reuse, or calls the closure and saves the reuse range.
-        </span><span class="self">self</span>.push_reuse(<span class="kw-2">&amp;mut </span>reuse, |frame| {
-            <span class="comment">// did not reuse, render widget.
-
-            </span>reused = <span class="bool-val">false</span>;
-            undo_prev_outer_transform = <span class="prelude-val">None</span>;
-
-            frame.widget_data = <span class="prelude-val">Some</span>(WidgetData {
-                filter: <span class="macro">vec!</span>[],
-                blend: RenderMixBlendMode::Normal,
-                backdrop_filter: <span class="macro">vec!</span>[],
-                parent_child_offset: child_offset,
-                inner_is_set: frame.perspective.is_some(),
-                inner_transform: PxTransform::identity(),
-            });
-            <span class="kw">let </span>parent_widget = mem::replace(<span class="kw-2">&amp;mut </span>frame.widget_id, id);
-
-            render(frame);
-
-            frame.widget_id = parent_widget;
-            frame.widget_data = <span class="prelude-val">None</span>;
-        });
-
-        WIDGET.set_render_reuse(reuse);
-
-        <span class="kw">if </span>reused {
-            <span class="comment">// if did reuse, patch transforms and z-indexes.
-
-            </span><span class="kw">let </span>_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"reuse-descendants"</span>, <span class="question-mark">?</span>id).entered();
-
-            <span class="kw">let </span>transform_patch = undo_prev_outer_transform.and_then(|t| {
-                <span class="kw">let </span>t = t.then(<span class="kw-2">&amp;</span>outer_transform);
-                <span class="kw">if </span>t != PxTransform::identity() {
-                    <span class="prelude-val">Some</span>(t)
-                } <span class="kw">else </span>{
-                    <span class="prelude-val">None
-                </span>}
-            });
-
-            <span class="kw">let </span>current_wgt = tree.get(id).unwrap();
-            <span class="kw">let </span>z_patch = widget_z <span class="kw">as </span>i64 - current_wgt.z_index().map(|(b, <span class="kw">_</span>)| b.<span class="number">0 </span><span class="kw">as </span>i64).unwrap_or(<span class="number">0</span>);
-
-            <span class="kw">let </span>update_transforms = transform_patch.is_some();
-            <span class="kw">let </span>seg_id = <span class="self">self</span>.widget_count_offsets.id();
-
-            <span class="comment">// apply patches, only iterates over descendants once.
-            </span><span class="kw">if </span>update_transforms {
-                <span class="kw">let </span>transform_patch = transform_patch.unwrap();
-
-                <span class="comment">// patch descendants outer and inner.
-                </span><span class="kw">let </span>update_transforms_and_z = |info: WidgetInfo| {
-                    <span class="kw">let </span>b = info.bounds_info();
-
-                    <span class="kw">if </span>b != bounds {
-                        <span class="comment">// only patch outer of descendants
-                        </span>b.set_outer_transform(b.outer_transform().then(<span class="kw-2">&amp;</span>transform_patch), tree);
-                    }
-                    b.set_inner_transform(
-                        b.inner_transform().then(<span class="kw-2">&amp;</span>transform_patch),
-                        tree,
-                        info.id(),
-                        info.parent().map(|p| p.inner_bounds()),
+                <span class="attr">#[cfg(debug_assertions)]
+                </span><span class="kw">if </span>builder.widget_data.is_some() &amp;&amp; WIDGET.parent_id().is_some() {
+                    <span class="macro">tracing::error!</span>(
+                        <span class="string">"called `push_widget` for `{}` without calling `push_inner` for the parent `{}`"</span>,
+                        WIDGET.trace_id(),
+                        builder.widget_id
                     );
-
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = b.render_info() {
-                        <span class="kw">let </span>(back, front) = info.z_index().unwrap();
-                        <span class="kw">let </span>back = back.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
-                        <span class="kw">let </span>front = front.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
-
-                        b.set_rendered(
-                            <span class="prelude-val">Some</span>(WidgetRenderInfo {
-                                visible: i.visible,
-                                parent_perspective: i.parent_perspective,
-                                seg_id,
-                                back: back.try_into().unwrap(),
-                                front: front.try_into().unwrap(),
-                            }),
-                            tree,
-                        );
-                    }
-                };
-
-                <span class="kw">let </span>targets = current_wgt.self_and_descendants();
-                <span class="kw">if </span>PARALLEL_VAR.get().contains(Parallel::RENDER) {
-                    targets.par_bridge().for_each(update_transforms_and_z);
-                } <span class="kw">else </span>{
-                    targets.for_each(update_transforms_and_z);
                 }
-            } <span class="kw">else </span>{
-                <span class="kw">let </span>update_z = |info: WidgetInfo| {
-                    <span class="kw">let </span>bounds = info.bounds_info();
 
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = bounds.render_info() {
-                        <span class="kw">let </span>(back, front) = info.z_index().unwrap();
-                        <span class="kw">let </span><span class="kw-2">mut </span>back = back.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
-                        <span class="kw">let </span><span class="kw-2">mut </span>front = front.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
-                        <span class="kw">if </span>back &lt; <span class="number">0 </span>{
-                            <span class="macro">tracing::error!</span>(<span class="string">"incorrect back Z-index ({back}) after patch ({z_patch})"</span>);
-                            back = <span class="number">0</span>;
-                        }
-                        <span class="kw">if </span>front &lt; <span class="number">0 </span>{
-                            <span class="macro">tracing::error!</span>(<span class="string">"incorrect front Z-index ({front}) after patch ({z_patch})"</span>);
-                            front = <span class="number">0</span>;
-                        }
-                        bounds.set_rendered(
-                            <span class="prelude-val">Some</span>(WidgetRenderInfo {
-                                visible: i.visible,
-                                parent_perspective: i.parent_perspective,
-                                seg_id,
-                                back: back <span class="kw">as _</span>,
-                                front: front <span class="kw">as _</span>,
-                            }),
-                            tree,
-                        );
+                <span class="kw">let </span>bounds = wgt_info.bounds_info();
+                <span class="kw">let </span>tree = wgt_info.tree();
+
+                <span class="kw">if </span>bounds.is_collapsed() {
+                    <span class="comment">// collapse
+                    </span><span class="kw">for </span>info <span class="kw">in </span>wgt_info.self_and_descendants() {
+                        info.bounds_info().set_rendered(<span class="prelude-val">None</span>, tree);
                     }
-                };
-
-                <span class="kw">let </span>targets = current_wgt.self_and_descendants();
-                <span class="kw">if </span>PARALLEL_VAR.get().contains(Parallel::RENDER) {
-                    targets.par_bridge().for_each(update_z);
+                    <span class="comment">// LAYOUT can be pending if parent called `collapse_child`, cleanup here.
+                    </span><span class="kw">let _ </span>= WIDGET.take_update(UpdateFlags::LAYOUT | UpdateFlags::RENDER | UpdateFlags::RENDER_UPDATE);
+                    <span class="kw">let _ </span>= WIDGET.take_render_reuse(<span class="kw-2">&amp;</span>builder.render_widgets, <span class="kw-2">&amp;</span>builder.render_update_widgets);
+                    <span class="self">self</span>.collapsed = <span class="bool-val">true</span>;
+                    <span class="kw">return</span>;
                 } <span class="kw">else </span>{
-                    targets.for_each(update_z);
+                    <span class="attr">#[cfg(debug_assertions)]
+                    </span><span class="kw">if </span>WIDGET.pending_update().contains(UpdateFlags::LAYOUT) {
+                        <span class="comment">// pending layout requested from inside the widget should have updated before render,
+                        // this indicates that a widget skipped layout without properly collapsing.
+                        </span><span class="macro">tracing::error!</span>(<span class="string">"called `push_widget` for `{}` with pending layout"</span>, WIDGET.trace_id());
+                    }
                 }
+
+                <span class="kw">let </span><span class="kw-2">mut </span>try_reuse = <span class="bool-val">true</span>;
+
+                <span class="kw">let </span>prev_outer = bounds.outer_transform();
+                <span class="self">self</span>.outer_transform = PxTransform::from(builder.child_offset).then(<span class="kw-2">&amp;</span>builder.transform);
+                bounds.set_outer_transform(<span class="self">self</span>.outer_transform, tree);
+
+                <span class="kw">if </span>bounds.parent_child_offset() != builder.child_offset {
+                    bounds.set_parent_child_offset(builder.child_offset);
+                    try_reuse = <span class="bool-val">false</span>;
+                }
+                <span class="kw">let </span>outer_bounds = bounds.outer_bounds();
+
+                <span class="self">self</span>.parent_visible = builder.visible;
+
+                <span class="kw">if </span>bounds.can_auto_hide() {
+                    <span class="comment">// collapse already handled, don't hide empty bounds here
+                    // the bounds could be empty with visible content still,
+                    // for example a Preserve3D object rotated 90º with 3D children also rotated.
+                    </span><span class="kw">let </span><span class="kw-2">mut </span>outer_bounds = outer_bounds;
+                    <span class="kw">if </span>outer_bounds.size.width &lt; Px(<span class="number">1</span>) {
+                        outer_bounds.size.width = Px(<span class="number">1</span>);
+                    }
+                    <span class="kw">if </span>outer_bounds.size.height &lt; Px(<span class="number">1</span>) {
+                        outer_bounds.size.height = Px(<span class="number">1</span>);
+                    }
+                    <span class="kw">match </span>builder.auto_hide_rect.intersection(<span class="kw-2">&amp;</span>outer_bounds) {
+                        <span class="prelude-val">Some</span>(cull) =&gt; {
+                            <span class="kw">let </span>partial = cull != outer_bounds;
+                            <span class="kw">if </span>partial || bounds.is_partially_culled() {
+                                <span class="comment">// partial cull, cannot reuse because descendant vis may have changed.
+                                </span>try_reuse = <span class="bool-val">false</span>;
+                                bounds.set_is_partially_culled(partial);
+                            }
+                        }
+                        <span class="prelude-val">None </span>=&gt; {
+                            <span class="comment">// full cull
+                            </span>builder.visible = <span class="bool-val">false</span>;
+                        }
+                    }
+                } <span class="kw">else </span>{
+                    bounds.set_is_partially_culled(<span class="bool-val">false</span>);
+                }
+
+                <span class="self">self</span>.parent_perspective = builder.perspective;
+                builder.perspective = wgt_info.perspective();
+                <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, o)) = <span class="kw-2">&amp;mut </span>builder.perspective {
+                    <span class="kw-2">*</span>o -= builder.child_offset;
+                }
+
+                <span class="kw">let </span>can_reuse = builder.view_process_has_frame
+                    &amp;&amp; <span class="kw">match </span>bounds.render_info() {
+                        <span class="prelude-val">Some</span>(i) =&gt; i.visible == builder.visible &amp;&amp; i.parent_perspective == builder.perspective,
+                        <span class="comment">// cannot reuse if the widget was not rendered in the previous frame (clear stale reuse ranges in descendants).
+                        </span><span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+                    };
+                <span class="self">self</span>.parent_can_reuse = mem::replace(<span class="kw-2">&amp;mut </span>builder.can_reuse, can_reuse);
+
+                try_reuse &amp;= can_reuse;
+
+                builder.widget_count += <span class="number">1</span>;
+                <span class="self">self</span>.widget_z = builder.widget_count;
+
+                <span class="self">self</span>.reuse = WIDGET.take_render_reuse(<span class="kw-2">&amp;</span>builder.render_widgets, <span class="kw-2">&amp;</span>builder.render_update_widgets);
+                <span class="kw">if </span>!try_reuse {
+                    <span class="self">self</span>.reuse = <span class="prelude-val">None</span>;
+                }
+
+                <span class="kw">if </span><span class="self">self</span>.reuse.is_some() {
+                    <span class="comment">// check if is possible to reuse.
+                    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(undo_prev) = prev_outer.inverse() {
+                        <span class="self">self</span>.undo_prev_outer_transform = <span class="prelude-val">Some</span>(undo_prev);
+                    } <span class="kw">else </span>{
+                        <span class="self">self</span>.reuse = <span class="prelude-val">None</span>; <span class="comment">// cannot reuse because cannot undo prev-transform.
+                    </span>}
+                }
+
+                <span class="kw">let </span>index = builder.hit_clips.push_child(id);
+                bounds.set_hit_index(index);
+
+                <span class="self">self</span>.reused = <span class="bool-val">true</span>;
+                <span class="self">self</span>.display_count = builder.display_list.len();
+
+                <span class="self">self</span>.child_offset = mem::take(<span class="kw-2">&amp;mut </span>builder.child_offset);
+
+                <span class="self">self</span>.wgt_info = <span class="prelude-val">Some</span>(wgt_info);
             }
+            <span class="kw">fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FrameBuilder, render: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>FrameBuilder)) {
+                <span class="kw">if </span><span class="self">self</span>.collapsed {
+                    <span class="kw">return</span>;
+                }
 
-            <span class="comment">// increment by reused
-            </span><span class="self">self</span>.widget_count = bounds.render_info().map(|i| i.front).unwrap_or(<span class="self">self</span>.widget_count);
-        } <span class="kw">else </span>{
-            <span class="comment">// if did not reuse and rendered
-            </span>bounds.set_rendered(
-                <span class="prelude-val">Some</span>(WidgetRenderInfo {
-                    visible: <span class="self">self</span>.display_list.len() &gt; display_count,
-                    parent_perspective: <span class="self">self</span>.perspective,
-                    seg_id: <span class="self">self</span>.widget_count_offsets.id(),
-                    back: widget_z,
-                    front: <span class="self">self</span>.widget_count,
-                }),
-                tree,
-            );
+                <span class="comment">// try to reuse, or calls the closure and saves the reuse range.
+                </span>builder.push_reuse(<span class="kw-2">&amp;mut </span><span class="self">self</span>.reuse, |frame| {
+                    <span class="comment">// did not reuse, render widget.
+
+                    </span><span class="self">self</span>.reused = <span class="bool-val">false</span>;
+                    <span class="self">self</span>.undo_prev_outer_transform = <span class="prelude-val">None</span>;
+
+                    frame.widget_data = <span class="prelude-val">Some</span>(WidgetData {
+                        filter: <span class="macro">vec!</span>[],
+                        blend: RenderMixBlendMode::Normal,
+                        backdrop_filter: <span class="macro">vec!</span>[],
+                        parent_child_offset: <span class="self">self</span>.child_offset,
+                        inner_is_set: frame.perspective.is_some(),
+                        inner_transform: PxTransform::identity(),
+                    });
+                    <span class="kw">let </span>parent_widget = mem::replace(<span class="kw-2">&amp;mut </span>frame.widget_id, <span class="self">self</span>.wgt_info.as_ref().unwrap().id());
+
+                    render(frame);
+
+                    frame.widget_id = parent_widget;
+                    frame.widget_data = <span class="prelude-val">None</span>;
+                });
+            }
+            <span class="kw">fn </span>after(<span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FrameBuilder) {
+                <span class="kw">if </span><span class="self">self</span>.collapsed {
+                    <span class="kw">return</span>;
+                }
+
+                WIDGET.set_render_reuse(<span class="self">self</span>.reuse);
+
+                <span class="kw">let </span>wgt_info = <span class="self">self</span>.wgt_info.unwrap();
+                <span class="kw">let </span>id = wgt_info.id();
+                <span class="kw">let </span>tree = wgt_info.tree();
+                <span class="kw">let </span>bounds = wgt_info.bounds_info();
+
+                <span class="kw">if </span><span class="self">self</span>.reused {
+                    <span class="comment">// if did reuse, patch transforms and z-indexes.
+
+                    </span><span class="kw">let </span>_span = <span class="macro">tracing::trace_span!</span>(<span class="string">"reuse-descendants"</span>, <span class="question-mark">?</span>id).entered();
+
+                    <span class="kw">let </span>transform_patch = <span class="self">self</span>.undo_prev_outer_transform.and_then(|t| {
+                        <span class="kw">let </span>t = t.then(<span class="kw-2">&amp;</span><span class="self">self</span>.outer_transform);
+                        <span class="kw">if </span>t != PxTransform::identity() {
+                            <span class="prelude-val">Some</span>(t)
+                        } <span class="kw">else </span>{
+                            <span class="prelude-val">None
+                        </span>}
+                    });
+
+                    <span class="kw">let </span>current_wgt = tree.get(id).unwrap();
+                    <span class="kw">let </span>z_patch = <span class="self">self</span>.widget_z <span class="kw">as </span>i64 - current_wgt.z_index().map(|(b, <span class="kw">_</span>)| b.<span class="number">0 </span><span class="kw">as </span>i64).unwrap_or(<span class="number">0</span>);
+
+                    <span class="kw">let </span>update_transforms = transform_patch.is_some();
+                    <span class="kw">let </span>seg_id = builder.widget_count_offsets.id();
+
+                    <span class="comment">// apply patches, only iterates over descendants once.
+                    </span><span class="kw">if </span>update_transforms {
+                        <span class="kw">let </span>transform_patch = transform_patch.unwrap();
+
+                        <span class="comment">// patch descendants outer and inner.
+                        </span><span class="kw">let </span>update_transforms_and_z = |info: WidgetInfo| {
+                            <span class="kw">let </span>b = info.bounds_info();
+
+                            <span class="kw">if </span>b != bounds {
+                                <span class="comment">// only patch outer of descendants
+                                </span>b.set_outer_transform(b.outer_transform().then(<span class="kw-2">&amp;</span>transform_patch), tree);
+                            }
+                            b.set_inner_transform(
+                                b.inner_transform().then(<span class="kw-2">&amp;</span>transform_patch),
+                                tree,
+                                info.id(),
+                                info.parent().map(|p| p.inner_bounds()),
+                            );
+
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = b.render_info() {
+                                <span class="kw">let </span>(back, front) = info.z_index().unwrap();
+                                <span class="kw">let </span>back = back.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
+                                <span class="kw">let </span>front = front.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
+
+                                b.set_rendered(
+                                    <span class="prelude-val">Some</span>(WidgetRenderInfo {
+                                        visible: i.visible,
+                                        parent_perspective: i.parent_perspective,
+                                        seg_id,
+                                        back: back.try_into().unwrap(),
+                                        front: front.try_into().unwrap(),
+                                    }),
+                                    tree,
+                                );
+                            }
+                        };
+
+                        <span class="kw">let </span>targets = current_wgt.self_and_descendants();
+                        <span class="kw">if </span>PARALLEL_VAR.get().contains(Parallel::RENDER) {
+                            targets.par_bridge().for_each(update_transforms_and_z);
+                        } <span class="kw">else </span>{
+                            targets.for_each(update_transforms_and_z);
+                        }
+                    } <span class="kw">else </span>{
+                        <span class="kw">let </span>update_z = |info: WidgetInfo| {
+                            <span class="kw">let </span>bounds = info.bounds_info();
+
+                            <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = bounds.render_info() {
+                                <span class="kw">let </span>(back, front) = info.z_index().unwrap();
+                                <span class="kw">let </span><span class="kw-2">mut </span>back = back.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
+                                <span class="kw">let </span><span class="kw-2">mut </span>front = front.<span class="number">0 </span><span class="kw">as </span>i64 + z_patch;
+                                <span class="kw">if </span>back &lt; <span class="number">0 </span>{
+                                    <span class="macro">tracing::error!</span>(<span class="string">"incorrect back Z-index ({back}) after patch ({z_patch})"</span>);
+                                    back = <span class="number">0</span>;
+                                }
+                                <span class="kw">if </span>front &lt; <span class="number">0 </span>{
+                                    <span class="macro">tracing::error!</span>(<span class="string">"incorrect front Z-index ({front}) after patch ({z_patch})"</span>);
+                                    front = <span class="number">0</span>;
+                                }
+                                bounds.set_rendered(
+                                    <span class="prelude-val">Some</span>(WidgetRenderInfo {
+                                        visible: i.visible,
+                                        parent_perspective: i.parent_perspective,
+                                        seg_id,
+                                        back: back <span class="kw">as _</span>,
+                                        front: front <span class="kw">as _</span>,
+                                    }),
+                                    tree,
+                                );
+                            }
+                        };
+
+                        <span class="kw">let </span>targets = current_wgt.self_and_descendants();
+                        <span class="kw">if </span>PARALLEL_VAR.get().contains(Parallel::RENDER) {
+                            targets.par_bridge().for_each(update_z);
+                        } <span class="kw">else </span>{
+                            targets.for_each(update_z);
+                        }
+                    }
+
+                    <span class="comment">// increment by reused
+                    </span>builder.widget_count = bounds.render_info().map(|i| i.front).unwrap_or(builder.widget_count);
+                } <span class="kw">else </span>{
+                    <span class="comment">// if did not reuse and rendered
+                    </span>bounds.set_rendered(
+                        <span class="prelude-val">Some</span>(WidgetRenderInfo {
+                            visible: builder.display_list.len() &gt; <span class="self">self</span>.display_count,
+                            parent_perspective: builder.perspective,
+                            seg_id: builder.widget_count_offsets.id(),
+                            back: <span class="self">self</span>.widget_z,
+                            front: builder.widget_count,
+                        }),
+                        tree,
+                    );
+                }
+
+                builder.visible = <span class="self">self</span>.parent_visible;
+                builder.perspective = <span class="self">self</span>.parent_perspective;
+                builder.can_reuse = <span class="self">self</span>.parent_can_reuse;
+            }
         }
-
-        <span class="self">self</span>.visible = parent_visible;
-        <span class="self">self</span>.perspective = parent_perspective;
-        <span class="self">self</span>.can_reuse = parent_can_reuse;
+        <span class="kw">let </span><span class="kw-2">mut </span>push = PushWidget::default();
+        push.before(<span class="self">self</span>);
+        push.push(<span class="self">self</span>, render);
+        push.after(<span class="self">self</span>);
     }
 
     <span class="doccomment">/// If previously generated display list items are available for reuse.
@@ -4024,163 +4156,211 @@ document.addEventListener('DOMContentLoaded', function () {
         layout_translation_animating: bool,
         render: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span><span class="self">Self</span>),
     ) {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>data) = <span class="self">self</span>.widget_data.take() {
-            <span class="kw">let </span>parent_transform = <span class="self">self</span>.transform;
-            <span class="kw">let </span>parent_transform_style = <span class="self">self</span>.transform_style;
-            <span class="kw">let </span>parent_hit_clips = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.hit_clips);
+        <span class="comment">// like push_widget, split to reduce generics code bloating
+        </span><span class="attr">#[derive(Default)]
+        </span><span class="kw">struct </span>PushInner {
+            invalid: bool,
+            parent_transform: PxTransform,
+            parent_transform_style: TransformStyle,
+            parent_hit_clips: HitTestClips,
+            parent_parent_inner_bounds: <span class="prelude-ty">Option</span>&lt;PxRect&gt;,
+            visible: bool,
+            ctx_outside_ref_frame: i32,
+            ctx_inside_ref_frame: i32,
 
-            <span class="kw">let </span>wgt_info = WIDGET.info();
-            <span class="kw">let </span>id = wgt_info.id();
-            <span class="kw">let </span>bounds = wgt_info.bounds_info();
-            <span class="kw">let </span>tree = wgt_info.tree();
-
-            <span class="kw">let </span>inner_offset = bounds.inner_offset();
-            <span class="kw">let </span><span class="kw-2">mut </span>inner_transform = data.inner_transform;
-            <span class="kw">if let </span><span class="prelude-val">Some</span>((d, <span class="kw-2">mut </span>o)) = <span class="self">self</span>.perspective {
-                o -= inner_offset;
-                <span class="kw">let </span>x = o.x.<span class="number">0 </span><span class="kw">as </span>f32;
-                <span class="kw">let </span>y = o.y.<span class="number">0 </span><span class="kw">as </span>f32;
-                <span class="kw">let </span>p = PxTransform::translation(-x, -y)
-                    .then(<span class="kw-2">&amp;</span>PxTransform::perspective(d))
-                    .then_translate(euclid::vec2(x, y));
-                inner_transform = inner_transform.then(<span class="kw-2">&amp;</span>p);
-            }
-            <span class="kw">let </span>inner_transform = inner_transform.then_translate((data.parent_child_offset + inner_offset).cast());
-
-            <span class="self">self</span>.transform = inner_transform.then(<span class="kw-2">&amp;</span>parent_transform);
-
-            bounds.set_inner_transform(<span class="self">self</span>.transform, tree, id, <span class="self">self</span>.parent_inner_bounds);
-
-            <span class="kw">let </span>parent_parent_inner_bounds = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.parent_inner_bounds, <span class="prelude-val">Some</span>(bounds.inner_bounds()));
-
-            <span class="kw">if </span><span class="self">self</span>.visible {
-                <span class="self">self</span>.transform_style = wgt_info.transform_style();
-
-                <span class="kw">let </span>has_3d_ctx = <span class="macro">matches!</span>(<span class="self">self</span>.transform_style, TransformStyle::Preserve3D);
-                <span class="kw">let </span>has_filters = !data.filter.is_empty() || data.blend != RenderMixBlendMode::Normal;
-
-                <span class="kw">let </span><span class="kw-2">mut </span>ctx_outside_ref_frame = <span class="number">0</span>;
-                <span class="kw">let </span><span class="kw-2">mut </span>ctx_inside_ref_frame = <span class="number">0</span>;
-
-                <span class="comment">// reference frame must be just outside the stacking context, except for the
-                // pre-filter context in Preserve3D roots.
-                </span><span class="macro">macro_rules!</span> push_reference_frame {
-                    () =&gt; {
-                        <span class="self">self</span>.display_list.push_reference_frame(
-                            ReferenceFrameId::from_widget(<span class="self">self</span>.widget_id).into(),
-                            layout_translation_key.bind(inner_transform, layout_translation_animating),
-                            <span class="self">self</span>.transform_style.into(),
-                            !data.inner_is_set,
-                        );
-                        <span class="kw">if </span>!data.backdrop_filter.is_empty() {
-                            <span class="self">self</span>.display_list
-                                .push_backdrop_filter(PxRect::from_size(bounds.inner_size()), <span class="kw-2">&amp;</span>data.backdrop_filter);
-                        }
-                    };
-                }
-
-                <span class="kw">if </span>has_filters {
-                    <span class="comment">// we want to apply filters in the top-to-bottom, left-to-right order they appear in
-                    // the widget declaration, but the widget declaration expands to have the top property
-                    // node be inside the bottom property node, so the bottom property ends up inserting
-                    // a filter first, because we cannot insert filters after the child node render is called
-                    // so we need to reverse the filters here. Left-to-right sequences are reversed on insert
-                    // so they get reversed again here and everything ends up in order.
-                    </span>data.filter.reverse();
-
-                    <span class="kw">if </span>has_3d_ctx {
-                        <span class="comment">// webrender ignores Preserve3D if there are filters, we work around the issue when possible here.
-
-                        // push the Preserve3D, unlike CSS we prefer this over filters.
-
-                        </span><span class="kw">if </span><span class="macro">matches!</span>(
-                            (<span class="self">self</span>.transform_style, bounds.transform_style()),
-                            (TransformStyle::Preserve3D, TransformStyle::Flat)
-                        ) {
-                            <span class="comment">// is "flat root", push a nested stacking context with the filters.
-                            </span><span class="macro">push_reference_frame!</span>();
-                            <span class="self">self</span>.display_list
-                                .push_stacking_context(RenderMixBlendMode::Normal, <span class="self">self</span>.transform_style, <span class="kw-2">&amp;</span>[]);
-                            <span class="self">self</span>.display_list
-                                .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
-                            ctx_inside_ref_frame = <span class="number">2</span>;
-                        } <span class="kw">else if </span>wgt_info
-                            .parent()
-                            .map(|p| <span class="macro">matches!</span>(p.bounds_info().transform_style(), TransformStyle::Flat))
-                            .unwrap_or(<span class="bool-val">false</span>)
-                        {
-                            <span class="comment">// is "3D root", push the filters first, then the 3D root.
-
-                            </span><span class="self">self</span>.display_list
-                                .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
-                            ctx_outside_ref_frame = <span class="number">1</span>;
-                            <span class="macro">push_reference_frame!</span>();
-                            <span class="self">self</span>.display_list
-                                .push_stacking_context(RenderMixBlendMode::Normal, <span class="self">self</span>.transform_style, <span class="kw-2">&amp;</span>[]);
-                            ctx_inside_ref_frame = <span class="number">1</span>;
-                        } <span class="kw">else </span>{
-                            <span class="comment">// extends 3D space, cannot splice a filters stacking context because that
-                            // would disconnect the sub-tree from the parent space.
-                            </span><span class="macro">tracing::warn!</span>(
-                                <span class="string">"widget `{id}` cannot have filters because it is `Preserve3D` inside `Preserve3D`, filters &amp; blend ignored"
-                            </span>);
-
-                            <span class="macro">push_reference_frame!</span>();
-                            <span class="self">self</span>.display_list
-                                .push_stacking_context(RenderMixBlendMode::Normal, <span class="self">self</span>.transform_style, <span class="kw-2">&amp;</span>[]);
-                            ctx_inside_ref_frame = <span class="number">1</span>;
-                        }
-                    } <span class="kw">else </span>{
-                        <span class="comment">// no 3D context, push the filters context
-                        </span><span class="macro">push_reference_frame!</span>();
-                        <span class="self">self</span>.display_list
-                            .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
-                        ctx_inside_ref_frame = <span class="number">1</span>;
-                    }
-                } <span class="kw">else if </span>has_3d_ctx {
-                    <span class="comment">// just 3D context
-                    </span><span class="macro">push_reference_frame!</span>();
-                    <span class="self">self</span>.display_list
-                        .push_stacking_context(RenderMixBlendMode::Normal, <span class="self">self</span>.transform_style, <span class="kw-2">&amp;</span>[]);
-                    ctx_inside_ref_frame = <span class="number">1</span>;
-                } <span class="kw">else </span>{
-                    <span class="comment">// just flat, no filters
-                    </span><span class="macro">push_reference_frame!</span>();
-                }
-
-                render(<span class="self">self</span>);
-
-                <span class="kw">while </span>ctx_inside_ref_frame &gt; <span class="number">0 </span>{
-                    <span class="self">self</span>.display_list.pop_stacking_context();
-                    ctx_inside_ref_frame -= <span class="number">1</span>;
-                }
-
-                <span class="self">self</span>.display_list.pop_reference_frame();
-
-                <span class="kw">while </span>ctx_outside_ref_frame &gt; <span class="number">0 </span>{
-                    <span class="self">self</span>.display_list.pop_stacking_context();
-                    ctx_outside_ref_frame -= <span class="number">1</span>;
-                }
-            } <span class="kw">else </span>{
-                render(<span class="self">self</span>);
-            }
-
-            <span class="self">self</span>.transform = parent_transform;
-            <span class="self">self</span>.transform_style = parent_transform_style;
-            <span class="self">self</span>.parent_inner_bounds = parent_parent_inner_bounds;
-
-            <span class="kw">let </span>hit_clips = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.hit_clips, parent_hit_clips);
-            bounds.set_hit_clips(hit_clips);
-
-            <span class="kw">if </span>!<span class="self">self</span>.debug_dot_overlays.is_empty() &amp;&amp; wgt_info.parent().is_none() {
-                <span class="kw">for </span>(offset, color) <span class="kw">in </span>mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.debug_dot_overlays) {
-                    <span class="self">self</span>.push_debug_dot(offset, color);
-                }
-            }
-        } <span class="kw">else </span>{
-            <span class="macro">tracing::error!</span>(<span class="string">"called `push_inner` more then once for `{}`"</span>, <span class="self">self</span>.widget_id);
-            render(<span class="self">self</span>)
+            wgt_info: <span class="prelude-ty">Option</span>&lt;WidgetInfo&gt;,
         }
+        <span class="kw">impl </span>PushInner {
+            <span class="kw">fn </span>before(
+                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+                builder: <span class="kw-2">&amp;mut </span>FrameBuilder,
+                layout_translation_key: FrameValueKey&lt;PxTransform&gt;,
+                layout_translation_animating: bool,
+            ) {
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>data) = builder.widget_data.take() {
+                    <span class="self">self</span>.parent_transform = builder.transform;
+                    <span class="self">self</span>.parent_transform_style = builder.transform_style;
+                    <span class="self">self</span>.parent_hit_clips = mem::take(<span class="kw-2">&amp;mut </span>builder.hit_clips);
+
+                    <span class="kw">let </span>wgt_info = WIDGET.info();
+                    <span class="kw">let </span>id = wgt_info.id();
+                    <span class="kw">let </span>bounds = wgt_info.bounds_info();
+                    <span class="kw">let </span>tree = wgt_info.tree();
+
+                    <span class="kw">let </span>inner_offset = bounds.inner_offset();
+                    <span class="kw">let </span><span class="kw-2">mut </span>inner_transform = data.inner_transform;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>((d, <span class="kw-2">mut </span>o)) = builder.perspective {
+                        o -= inner_offset;
+                        <span class="kw">let </span>x = o.x.<span class="number">0 </span><span class="kw">as </span>f32;
+                        <span class="kw">let </span>y = o.y.<span class="number">0 </span><span class="kw">as </span>f32;
+                        <span class="kw">let </span>p = PxTransform::translation(-x, -y)
+                            .then(<span class="kw-2">&amp;</span>PxTransform::perspective(d))
+                            .then_translate(euclid::vec2(x, y));
+                        inner_transform = inner_transform.then(<span class="kw-2">&amp;</span>p);
+                    }
+                    <span class="kw">let </span>inner_transform = inner_transform.then_translate((data.parent_child_offset + inner_offset).cast());
+
+                    builder.transform = inner_transform.then(<span class="kw-2">&amp;</span><span class="self">self</span>.parent_transform);
+
+                    bounds.set_inner_transform(builder.transform, tree, id, builder.parent_inner_bounds);
+
+                    <span class="self">self</span>.parent_parent_inner_bounds = mem::replace(<span class="kw-2">&amp;mut </span>builder.parent_inner_bounds, <span class="prelude-val">Some</span>(bounds.inner_bounds()));
+
+                    <span class="kw">if </span>builder.visible {
+                        <span class="self">self</span>.visible = <span class="bool-val">true</span>;
+                        builder.transform_style = wgt_info.transform_style();
+
+                        <span class="kw">let </span>has_3d_ctx = <span class="macro">matches!</span>(builder.transform_style, TransformStyle::Preserve3D);
+                        <span class="kw">let </span>has_filters = !data.filter.is_empty() || data.blend != RenderMixBlendMode::Normal;
+
+                        <span class="comment">// reference frame must be just outside the stacking context, except for the
+                        // pre-filter context in Preserve3D roots.
+                        </span><span class="macro">macro_rules!</span> push_reference_frame {
+                            () =&gt; {
+                                builder.display_list.push_reference_frame(
+                                    ReferenceFrameId::from_widget(builder.widget_id).into(),
+                                    layout_translation_key.bind(inner_transform, layout_translation_animating),
+                                    builder.transform_style.into(),
+                                    !data.inner_is_set,
+                                );
+                                <span class="kw">if </span>!data.backdrop_filter.is_empty() {
+                                    builder
+                                        .display_list
+                                        .push_backdrop_filter(PxRect::from_size(bounds.inner_size()), <span class="kw-2">&amp;</span>data.backdrop_filter);
+                                }
+                            };
+                        }
+
+                        <span class="kw">if </span>has_filters {
+                            <span class="comment">// we want to apply filters in the top-to-bottom, left-to-right order they appear in
+                            // the widget declaration, but the widget declaration expands to have the top property
+                            // node be inside the bottom property node, so the bottom property ends up inserting
+                            // a filter first, because we cannot insert filters after the child node render is called
+                            // so we need to reverse the filters here. Left-to-right sequences are reversed on insert
+                            // so they get reversed again here and everything ends up in order.
+                            </span>data.filter.reverse();
+
+                            <span class="kw">if </span>has_3d_ctx {
+                                <span class="comment">// webrender ignores Preserve3D if there are filters, we work around the issue when possible here.
+
+                                // push the Preserve3D, unlike CSS we prefer this over filters.
+
+                                </span><span class="kw">if </span><span class="macro">matches!</span>(
+                                    (builder.transform_style, bounds.transform_style()),
+                                    (TransformStyle::Preserve3D, TransformStyle::Flat)
+                                ) {
+                                    <span class="comment">// is "flat root", push a nested stacking context with the filters.
+                                    </span><span class="macro">push_reference_frame!</span>();
+                                    builder
+                                        .display_list
+                                        .push_stacking_context(RenderMixBlendMode::Normal, builder.transform_style, <span class="kw-2">&amp;</span>[]);
+                                    builder
+                                        .display_list
+                                        .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
+                                    <span class="self">self</span>.ctx_inside_ref_frame = <span class="number">2</span>;
+                                } <span class="kw">else if </span>wgt_info
+                                    .parent()
+                                    .map(|p| <span class="macro">matches!</span>(p.bounds_info().transform_style(), TransformStyle::Flat))
+                                    .unwrap_or(<span class="bool-val">false</span>)
+                                {
+                                    <span class="comment">// is "3D root", push the filters first, then the 3D root.
+
+                                    </span>builder
+                                        .display_list
+                                        .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
+                                    <span class="self">self</span>.ctx_outside_ref_frame = <span class="number">1</span>;
+                                    <span class="macro">push_reference_frame!</span>();
+                                    builder
+                                        .display_list
+                                        .push_stacking_context(RenderMixBlendMode::Normal, builder.transform_style, <span class="kw-2">&amp;</span>[]);
+                                    <span class="self">self</span>.ctx_inside_ref_frame = <span class="number">1</span>;
+                                } <span class="kw">else </span>{
+                                    <span class="comment">// extends 3D space, cannot splice a filters stacking context because that
+                                    // would disconnect the sub-tree from the parent space.
+                                    </span><span class="macro">tracing::warn!</span>(
+                                        <span class="string">"widget `{id}` cannot have filters because it is `Preserve3D` inside `Preserve3D`, filters &amp; blend ignored"
+                                    </span>);
+
+                                    <span class="macro">push_reference_frame!</span>();
+                                    builder
+                                        .display_list
+                                        .push_stacking_context(RenderMixBlendMode::Normal, builder.transform_style, <span class="kw-2">&amp;</span>[]);
+                                    <span class="self">self</span>.ctx_inside_ref_frame = <span class="number">1</span>;
+                                }
+                            } <span class="kw">else </span>{
+                                <span class="comment">// no 3D context, push the filters context
+                                </span><span class="macro">push_reference_frame!</span>();
+                                builder
+                                    .display_list
+                                    .push_stacking_context(data.blend, TransformStyle::Flat, <span class="kw-2">&amp;</span>data.filter);
+                                <span class="self">self</span>.ctx_inside_ref_frame = <span class="number">1</span>;
+                            }
+                        } <span class="kw">else if </span>has_3d_ctx {
+                            <span class="comment">// just 3D context
+                            </span><span class="macro">push_reference_frame!</span>();
+                            builder
+                                .display_list
+                                .push_stacking_context(RenderMixBlendMode::Normal, builder.transform_style, <span class="kw-2">&amp;</span>[]);
+                            <span class="self">self</span>.ctx_inside_ref_frame = <span class="number">1</span>;
+                        } <span class="kw">else </span>{
+                            <span class="comment">// just flat, no filters
+                            </span><span class="macro">push_reference_frame!</span>();
+                        }
+                    }
+
+                    <span class="self">self</span>.wgt_info = <span class="prelude-val">Some</span>(wgt_info);
+                } <span class="kw">else </span>{
+                    <span class="macro">tracing::error!</span>(<span class="string">"called `push_inner` more then once for `{}`"</span>, builder.widget_id);
+                    <span class="self">self</span>.invalid = <span class="bool-val">true</span>;
+                }
+            }
+            <span class="kw">fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FrameBuilder, render: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>FrameBuilder)) {
+                <span class="kw">if </span><span class="self">self</span>.invalid {
+                    <span class="kw">return</span>;
+                }
+                render(builder)
+            }
+            <span class="kw">fn </span>after(<span class="kw-2">mut </span><span class="self">self</span>, builder: <span class="kw-2">&amp;mut </span>FrameBuilder) {
+                <span class="kw">if </span><span class="self">self</span>.invalid {
+                    <span class="kw">return</span>;
+                }
+
+                <span class="kw">if </span><span class="self">self</span>.visible {
+                    <span class="kw">while </span><span class="self">self</span>.ctx_inside_ref_frame &gt; <span class="number">0 </span>{
+                        builder.display_list.pop_stacking_context();
+                        <span class="self">self</span>.ctx_inside_ref_frame -= <span class="number">1</span>;
+                    }
+
+                    builder.display_list.pop_reference_frame();
+
+                    <span class="kw">while </span><span class="self">self</span>.ctx_outside_ref_frame &gt; <span class="number">0 </span>{
+                        builder.display_list.pop_stacking_context();
+                        <span class="self">self</span>.ctx_outside_ref_frame -= <span class="number">1</span>;
+                    }
+                }
+
+                <span class="kw">let </span>wgt_info = <span class="self">self</span>.wgt_info.unwrap();
+                <span class="kw">let </span>bounds = wgt_info.bounds_info();
+
+                <span class="comment">// shared finish
+                </span>builder.transform = <span class="self">self</span>.parent_transform;
+                builder.transform_style = <span class="self">self</span>.parent_transform_style;
+                builder.parent_inner_bounds = <span class="self">self</span>.parent_parent_inner_bounds;
+
+                <span class="kw">let </span>hit_clips = mem::replace(<span class="kw-2">&amp;mut </span>builder.hit_clips, <span class="self">self</span>.parent_hit_clips);
+                bounds.set_hit_clips(hit_clips);
+
+                <span class="kw">if </span>!builder.debug_dot_overlays.is_empty() &amp;&amp; wgt_info.parent().is_none() {
+                    <span class="kw">for </span>(offset, color) <span class="kw">in </span>mem::take(<span class="kw-2">&amp;mut </span>builder.debug_dot_overlays) {
+                        builder.push_debug_dot(offset, color);
+                    }
+                }
+            }
+        }
+        <span class="kw">let </span><span class="kw-2">mut </span>push_inner = PushInner::default();
+        push_inner.before(<span class="self">self</span>, layout_translation_key, layout_translation_animating);
+        push_inner.push(<span class="self">self</span>, render);
+        push_inner.after(<span class="self">self</span>);
     }
 
     <span class="doccomment">/// Returns `true` if the widget reference frame and stacking context is pushed and now is time for rendering the widget.

@@ -152,7 +152,15 @@
 <a href="#150" id="150">150</a>
 <a href="#151" id="151">151</a>
 <a href="#152" id="152">152</a>
-<a href="#153" id="153">153</a></pre></div><pre class="rust"><code><span class="doccomment">//! Localization service, sources and other types.
+<a href="#153" id="153">153</a>
+<a href="#154" id="154">154</a>
+<a href="#155" id="155">155</a>
+<a href="#156" id="156">156</a>
+<a href="#157" id="157">157</a>
+<a href="#158" id="158">158</a>
+<a href="#159" id="159">159</a>
+<a href="#160" id="160">160</a>
+<a href="#161" id="161">161</a></pre></div><pre class="rust"><code><span class="doccomment">//! Localization service, sources and other types.
 //!
 //! Localized text is declared using the [`l10n!`] macro, it provides a read-only text variable that automatically
 //! updates to be best localized text available given the current loaded localization and the app language.
@@ -178,7 +186,7 @@
 //! fallback is used.
 //!
 //! The [`L10N`] service can be used to set the app language and load localization resources. The example below
-//! sets the language to en-US and loads localization from a directory.
+//! sets the language to en-US and loads localization from a directory using [`L10N.load_dir`].
 //!
 //! ```no_run
 //! use zng::prelude::*;
@@ -196,6 +204,14 @@
 //!     }
 //! });
 //! ```
+//!
+//! The service also supports embedded localization resources in the `.tar` and `.tar.gz` formats using
+//! [`L10N.load_tar`], see the [localize example] for more details. You can also implement more container formats using [`L10N.load`].
+//!
+//! [`L10N.load_dir`]: crate::l10n::L10N::load_dir
+//! [`L10N.load_tar`]: crate::l10n::L10N::load_tar
+//! [`L10N.load`]: crate::l10n::L10N::load
+//! [localize example]: https://github.com/zng-ui/zng/blob/main/examples/localize/build.rs
 //!
 //! # Fluent
 //!
@@ -302,7 +318,7 @@
 //! See [`zng_ext_l10n`] for the full localization API.
 
 </span><span class="kw">pub use </span>zng_ext_l10n::{
-    l10n, lang, IntoL10nVar, L10nArgument, L10nDir, L10nMessageBuilder, L10nSource, Lang, LangFilePath, LangMap, LangResource,
+    l10n, lang, IntoL10nVar, L10nArgument, L10nDir, L10nMessageBuilder, L10nSource, L10nTar, Lang, LangFilePath, LangMap, LangResource,
     LangResourceStatus, LangResources, Langs, NilL10nSource, SwapL10nSource, L10N, LANG_VAR,
 };
 </code></pre></div></section></main></body></html>

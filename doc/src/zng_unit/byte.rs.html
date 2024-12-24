@@ -382,7 +382,9 @@
 <a href="#381" id="381">381</a>
 <a href="#382" id="382">382</a>
 <a href="#383" id="383">383</a>
-<a href="#384" id="384">384</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, ops};
+<a href="#384" id="384">384</a>
+<a href="#385" id="385">385</a>
+<a href="#386" id="386">386</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, ops};
 
 <span class="kw">use </span><span class="kw">super</span>::Factor;
 
@@ -710,32 +712,34 @@
         }
     }
 }
-<span class="kw">impl </span>fmt::Display <span class="kw">for </span>ByteLength {
+
+<span class="doccomment">/// Alternative mode prints in binary units (kibi, mebi, gibi, tebi)
+</span><span class="kw">impl </span>fmt::Display <span class="kw">for </span>ByteLength {
     <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
         <span class="comment">// alternate uses 0..=1000 units, normal used 0..=1024 units.
 
         </span><span class="kw">if </span>f.alternate() {
             <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">4</span>) {
-                <span class="macro">write!</span>(f, <span class="string">"{:.2} tebibytes"</span>, <span class="self">self</span>.tebis())
+                <span class="macro">write!</span>(f, <span class="string">"{:.2}TiB"</span>, <span class="self">self</span>.tebis())
             } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">3</span>) {
-                <span class="macro">write!</span>(f, <span class="string">"{:.2} gibibytes"</span>, <span class="self">self</span>.gibis())
+                <span class="macro">write!</span>(f, <span class="string">"{:.2}GiB"</span>, <span class="self">self</span>.gibis())
             } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">2</span>) {
-                <span class="macro">write!</span>(f, <span class="string">"{:.2} mebibytes"</span>, <span class="self">self</span>.mebis())
+                <span class="macro">write!</span>(f, <span class="string">"{:.2}MiB"</span>, <span class="self">self</span>.mebis())
             } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024 </span>{
-                <span class="macro">write!</span>(f, <span class="string">"{:.2} kibibytes"</span>, <span class="self">self</span>.kibis())
+                <span class="macro">write!</span>(f, <span class="string">"{:.2}KiB"</span>, <span class="self">self</span>.kibis())
             } <span class="kw">else </span>{
-                <span class="macro">write!</span>(f, <span class="string">"{} bytes"</span>, <span class="self">self</span>.bytes())
+                <span class="macro">write!</span>(f, <span class="string">"{}B"</span>, <span class="self">self</span>.bytes())
             }
         } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">4</span>) {
-            <span class="macro">write!</span>(f, <span class="string">"{:.2} terabytes"</span>, <span class="self">self</span>.teras())
+            <span class="macro">write!</span>(f, <span class="string">"{:.2}TB"</span>, <span class="self">self</span>.teras())
         } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">3</span>) {
-            <span class="macro">write!</span>(f, <span class="string">"{:.2} gigabytes"</span>, <span class="self">self</span>.gigas())
+            <span class="macro">write!</span>(f, <span class="string">"{:.2}GB"</span>, <span class="self">self</span>.gigas())
         } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">2</span>) {
-            <span class="macro">write!</span>(f, <span class="string">"{:.2} megabytes"</span>, <span class="self">self</span>.megas())
+            <span class="macro">write!</span>(f, <span class="string">"{:.2}MB"</span>, <span class="self">self</span>.megas())
         } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000 </span>{
-            <span class="macro">write!</span>(f, <span class="string">"{:.2} kilobytes"</span>, <span class="self">self</span>.kilos())
+            <span class="macro">write!</span>(f, <span class="string">"{:.2}kB"</span>, <span class="self">self</span>.kilos())
         } <span class="kw">else </span>{
-            <span class="macro">write!</span>(f, <span class="string">"{} bytes"</span>, <span class="self">self</span>.bytes())
+            <span class="macro">write!</span>(f, <span class="string">"{}B"</span>, <span class="self">self</span>.bytes())
         }
     }
 }

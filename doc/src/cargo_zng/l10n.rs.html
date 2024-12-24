@@ -424,7 +424,11 @@
 <a href="#423" id="423">423</a>
 <a href="#424" id="424">424</a>
 <a href="#425" id="425">425</a>
-<a href="#426" id="426">426</a></pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scrapper.
+<a href="#426" id="426">426</a>
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a></pre></div><pre class="rust"><code><span class="doccomment">//! Localization text scrapper.
 //!
 //! See the [`l10n!`] documentation for more details.
 //!
@@ -624,7 +628,9 @@
                             <span class="macro">println!</span>(<span class="string">"removing `{}` to clean template"</span>, output.display());
                         }
                         <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::remove_dir_all(<span class="kw-2">&amp;</span>output) {
-                            <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, output.display());
+                            <span class="kw">if </span>!<span class="macro">matches!</span>(e.kind(), io::ErrorKind::NotFound) {
+                                <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, output.display());
+                            }
                         }
                     }
                     util::check_or_create_dir_all(args.check, <span class="kw-2">&amp;</span>output)<span class="question-mark">?</span>;
@@ -648,7 +654,9 @@
                     <span class="macro">println!</span>(<span class="string">"removing `{}` to clean deps"</span>, dir.display());
                 }
                 <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = std::fs::remove_dir_all(<span class="kw-2">&amp;</span>dir) {
-                    <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, dir.display());
+                    <span class="kw">if </span>!<span class="macro">matches!</span>(e.kind(), io::ErrorKind::NotFound) {
+                        <span class="macro">error!</span>(<span class="string">"cannot remove `{}`, {e}"</span>, dir.display());
+                    }
                 }
             }
         }
