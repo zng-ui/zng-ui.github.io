@@ -4459,7 +4459,18 @@
 <a href="#4458" id="4458">4458</a>
 <a href="#4459" id="4459">4459</a>
 <a href="#4460" id="4460">4460</a>
-<a href="#4461" id="4461">4461</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#4461" id="4461">4461</a>
+<a href="#4462" id="4462">4462</a>
+<a href="#4463" id="4463">4463</a>
+<a href="#4464" id="4464">4464</a>
+<a href="#4465" id="4465">4465</a>
+<a href="#4466" id="4466">4466</a>
+<a href="#4467" id="4467">4467</a>
+<a href="#4468" id="4468">4468</a>
+<a href="#4469" id="4469">4469</a>
+<a href="#4470" id="4470">4470</a>
+<a href="#4471" id="4471">4471</a>
+<a href="#4472" id="4472">4472</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
@@ -6219,12 +6230,18 @@
     <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
         <span class="kw">loop </span>{
             <span class="kw">if let </span><span class="prelude-val">Some</span>((font, glyphs)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.maybe_img {
-                <span class="kw">while </span><span class="self">self</span>.images.first().map(|(i, <span class="kw">_</span>)| <span class="kw-2">*</span>i &lt; <span class="self">self</span>.glyphs_i).unwrap_or(<span class="bool-val">false</span>) {
+                <span class="comment">// new glyph sequence or single emoji(maybe img)
+
+                // advance images to the next in or after glyph sequence
+                </span><span class="kw">while </span><span class="self">self</span>.images.first().map(|(i, <span class="kw">_</span>)| <span class="kw-2">*</span>i &lt; <span class="self">self</span>.glyphs_i).unwrap_or(<span class="bool-val">false</span>) {
                     <span class="self">self</span>.images = <span class="kw-2">&amp;</span><span class="self">self</span>.images[<span class="number">1</span>..];
                 }
+
                 <span class="kw">if let </span><span class="prelude-val">Some</span>((i, img)) = <span class="self">self</span>.images.first() {
-                    <span class="kw">if </span><span class="kw-2">*</span>i == <span class="self">self</span>.glyphs_i {
-                        <span class="self">self</span>.glyphs_i += <span class="number">1</span>;
+                    <span class="comment">// if there is still images
+                    </span><span class="kw">if </span><span class="kw-2">*</span>i == <span class="self">self</span>.glyphs_i {
+                        <span class="comment">// if the next glyph is replaced by image
+                        </span><span class="self">self</span>.glyphs_i += <span class="number">1</span>;
                         <span class="kw">let </span><span class="kw-2">mut </span>size = img.<span class="number">0</span>.with(|i| i.size()).cast::&lt;f32&gt;();
                         <span class="kw">let </span>scale = font.size().<span class="number">0 </span><span class="kw">as </span>f32 / size.width.max(size.height);
                         size <span class="kw-2">*</span>= scale;
@@ -6242,7 +6259,8 @@
                         }
                         <span class="kw">return </span><span class="prelude-val">Some</span>(r);
                     } <span class="kw">else </span>{
-                        <span class="kw">let </span>normal = <span class="kw-2">&amp;</span>glyphs[..glyphs.len().min(<span class="kw-2">*</span>i <span class="kw">as _</span>)];
+                        <span class="comment">// if the next glyph is not replaced by image, yield slice to end or next image
+                        </span><span class="kw">let </span>normal = <span class="kw-2">&amp;</span>glyphs[..glyphs.len().min(<span class="kw-2">*</span>i <span class="kw">as _</span>)];
                         <span class="self">self</span>.glyphs_i += normal.len() <span class="kw">as </span>u32;
 
                         <span class="kw-2">*</span>glyphs = <span class="kw-2">&amp;</span>glyphs[normal.len()..];
@@ -6254,13 +6272,17 @@
                         <span class="kw">return </span><span class="prelude-val">Some</span>(r);
                     }
                 } <span class="kw">else </span>{
-                    <span class="kw">let </span>r = (<span class="kw-2">*</span>font, ShapedImageGlyphs::Normal(glyphs));
+                    <span class="comment">// if there are no more images
+                    </span><span class="kw">let </span>r = (<span class="kw-2">*</span>font, ShapedImageGlyphs::Normal(glyphs));
+                    <span class="self">self</span>.maybe_img = <span class="prelude-val">None</span>;
                     <span class="kw">return </span><span class="prelude-val">Some</span>(r);
                 }
             } <span class="kw">else if let </span><span class="prelude-val">Some</span>(seq) = <span class="self">self</span>.glyphs.next() {
-                <span class="self">self</span>.maybe_img = <span class="prelude-val">Some</span>(seq);
+                <span class="comment">// all sequences can contain images
+                </span><span class="self">self</span>.maybe_img = <span class="prelude-val">Some</span>(seq);
             } <span class="kw">else </span>{
-                <span class="kw">return </span><span class="prelude-val">None</span>;
+                <span class="comment">// no more glyphs to yield
+                </span><span class="kw">return </span><span class="prelude-val">None</span>;
             }
         }
     }
