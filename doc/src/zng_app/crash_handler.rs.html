@@ -2353,8 +2353,8 @@ document.addEventListener('DOMContentLoaded', function () {
             <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {
                 <span class="kw">let </span>uuid = uuid::Uuid::new_v4();
                 <span class="kw">let </span>dump_file = dump_dir.join(<span class="macro">format!</span>(<span class="string">"{}.dmp"</span>, uuid.simple()));
-                <span class="kw">let </span>dump_channel = <span class="macro">format!</span>(<span class="string">"zng-crash-{}"</span>, uuid.simple());
-                <span class="kw">match </span>minidumper::Server::with_name(<span class="kw-2">&amp;</span>dump_channel) {
+                <span class="kw">let </span>dump_channel = std::env::temp_dir().join(<span class="macro">format!</span>(<span class="string">"zng-crash-{}"</span>, uuid.simple()));
+                <span class="kw">match </span>minidumper::Server::with_name(dump_channel.as_path()) {
                     <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>s) =&gt; {
                         command.env(DUMP_CHANNEL, <span class="kw-2">&amp;</span>dump_channel);
                         <span class="kw">let </span>shutdown = Arc::new(AtomicBool::new(<span class="bool-val">false</span>));
@@ -2531,13 +2531,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
 <span class="kw">fn </span>minidump_attach() {
     <span class="kw">let </span>channel_name = <span class="kw">match </span>std::env::var(DUMP_CHANNEL) {
-        <span class="prelude-val">Ok</span>(n) <span class="kw">if </span>!n.is_empty() =&gt; n,
+        <span class="prelude-val">Ok</span>(n) <span class="kw">if </span>!n.is_empty() =&gt; PathBuf::from(n),
         <span class="kw">_ </span>=&gt; {
             <span class="macro">eprintln!</span>(<span class="string">"expected minidump channel name, this instance will not handle crashes"</span>);
             <span class="kw">return</span>;
         }
     };
-    <span class="kw">let </span>client = <span class="kw">match </span>minidumper::Client::with_name(<span class="kw-2">&amp;</span>channel_name) {
+    <span class="kw">let </span>client = <span class="kw">match </span>minidumper::Client::with_name(channel_name.as_path()) {
         <span class="prelude-val">Ok</span>(c) =&gt; c,
         <span class="prelude-val">Err</span>(e) =&gt; {
             <span class="macro">eprintln!</span>(<span class="string">"failed to connect minidump client, this instance will not handle crashes, {e}"</span>);
