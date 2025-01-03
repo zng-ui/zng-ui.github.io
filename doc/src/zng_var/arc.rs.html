@@ -371,15 +371,15 @@
 ///
 /// This is the primary variable type, it can be instantiated using the [`var`] and [`var_from`] functions.
 </span><span class="attr">#[derive(Clone)]
-</span><span class="kw">pub struct </span>ArcVar&lt;T: VarValue&gt;(Arc&lt;VarData&lt;T&gt;&gt;);
+</span><span class="kw">pub struct </span>ArcVar&lt;T: VarValue&gt;(Arc&lt;VarData&gt;, PhantomData&lt;T&gt;);
 
 <span class="doccomment">/// Weak reference to a [`ArcVar&lt;T&gt;`].
 </span><span class="attr">#[derive(Clone)]
-</span><span class="kw">pub struct </span>WeakArcVar&lt;T: VarValue&gt;(Weak&lt;VarData&lt;T&gt;&gt;);
+</span><span class="kw">pub struct </span>WeakArcVar&lt;T: VarValue&gt;(Weak&lt;VarData&gt;, PhantomData&lt;T&gt;);
 
 <span class="doccomment">/// New ref counted read/write variable with initial `value`.
 </span><span class="kw">pub fn </span>var&lt;T: VarValue&gt;(value: T) -&gt; ArcVar&lt;T&gt; {
-    ArcVar(Arc::new(VarData::new(value)))
+    ArcVar(Arc::new(VarData::new(value)), PhantomData)
 }
 
 <span class="doccomment">/// New ref counted read/write variable with initial value converted from `source`.
@@ -395,7 +395,7 @@
 <span class="kw">impl</span>&lt;T: VarValue&gt; WeakArcVar&lt;T&gt; {
     <span class="doccomment">/// New reference to nothing.
     </span><span class="kw">pub fn </span>new() -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(Weak::new())
+        <span class="self">Self</span>(Weak::new(), PhantomData)
     }
 }
 
@@ -481,7 +481,7 @@
     }
 
     <span class="kw">fn </span>downgrade_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedAnyWeakVar {
-        Box::new(WeakArcVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)))
+        Box::new(WeakArcVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>), PhantomData::&lt;T&gt;))
     }
 
     <span class="kw">fn </span>is_animating(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
@@ -523,7 +523,7 @@
     }
 
     <span class="kw">fn </span>upgrade_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BoxedAnyVar&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| Box::new(ArcVar(rc)) <span class="kw">as _</span>)
+        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| Box::new(ArcVar(rc, PhantomData::&lt;T&gt;)) <span class="kw">as _</span>)
     }
 
     <span class="kw">fn </span>as_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>Any {
@@ -610,13 +610,13 @@
     </span>}
 
     <span class="kw">fn </span>downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; WeakArcVar&lt;T&gt; {
-        WeakArcVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>))
+        WeakArcVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>), PhantomData::&lt;T&gt;)
     }
 
     <span class="kw">fn </span>into_value(<span class="self">self</span>) -&gt; T {
         <span class="kw">match </span>Arc::try_unwrap(<span class="self">self</span>.<span class="number">0</span>) {
             <span class="prelude-val">Ok</span>(data) =&gt; data.into_value(),
-            <span class="prelude-val">Err</span>(rc) =&gt; <span class="self">Self</span>(rc).get(),
+            <span class="prelude-val">Err</span>(rc) =&gt; <span class="self">Self</span>(rc, PhantomData).get(),
         }
     }
 
@@ -708,7 +708,7 @@
     <span class="kw">type </span>Upgrade = ArcVar&lt;T&gt;;
 
     <span class="kw">fn </span>upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ArcVar&lt;T&gt;&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| ArcVar(rc))
+        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| ArcVar(rc, PhantomData))
     }
 }
 

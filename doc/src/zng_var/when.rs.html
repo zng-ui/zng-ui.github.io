@@ -738,7 +738,25 @@
 <a href="#737" id="737">737</a>
 <a href="#738" id="738">738</a>
 <a href="#739" id="739">739</a>
-<a href="#740" id="740">740</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::{Arc, Weak};
+<a href="#740" id="740">740</a>
+<a href="#741" id="741">741</a>
+<a href="#742" id="742">742</a>
+<a href="#743" id="743">743</a>
+<a href="#744" id="744">744</a>
+<a href="#745" id="745">745</a>
+<a href="#746" id="746">746</a>
+<a href="#747" id="747">747</a>
+<a href="#748" id="748">748</a>
+<a href="#749" id="749">749</a>
+<a href="#750" id="750">750</a>
+<a href="#751" id="751">751</a>
+<a href="#752" id="752">752</a>
+<a href="#753" id="753">753</a>
+<a href="#754" id="754">754</a>
+<a href="#755" id="755">755</a>
+<a href="#756" id="756">756</a>
+<a href="#757" id="757">757</a>
+<a href="#758" id="758">758</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::sync::{Arc, Weak};
 
 <span class="kw">use </span><span class="kw">crate</span>::animation::AnimationHandle;
 
@@ -822,21 +840,23 @@
 <span class="doccomment">/// Manually build a [`ArcWhenVar&lt;T&gt;`].
 </span><span class="attr">#[derive(Clone)]
 </span><span class="kw">pub struct </span>WhenVarBuilder&lt;T: VarValue&gt; {
-    default: BoxedVar&lt;T&gt;,
-    conditions: Vec&lt;(BoxedVar&lt;bool&gt;, BoxedVar&lt;T&gt;)&gt;,
+    default: BoxedAnyVar,
+    conditions: Vec&lt;(BoxedVar&lt;bool&gt;, BoxedAnyVar)&gt;,
+    _t: PhantomData&lt;T&gt;,
 }
 <span class="kw">impl</span>&lt;T: VarValue&gt; WhenVarBuilder&lt;T&gt; {
     <span class="doccomment">/// Start building with the default value.
     </span><span class="kw">pub fn </span>new(default: <span class="kw">impl </span>IntoVar&lt;T&gt;) -&gt; <span class="self">Self </span>{
         <span class="self">Self </span>{
-            default: default.into_var().boxed(),
+            default: default.into_var().boxed_any(),
             conditions: <span class="macro">vec!</span>[],
+            _t: PhantomData,
         }
     }
 
     <span class="doccomment">/// Push a condition and value.
     </span><span class="kw">pub fn </span>push(<span class="kw-2">&amp;mut </span><span class="self">self</span>, condition: <span class="kw">impl </span>IntoVar&lt;bool&gt;, value: <span class="kw">impl </span>IntoVar&lt;T&gt;) {
-        <span class="self">self</span>.conditions.push((condition.into_var().boxed(), value.into_var().boxed()));
+        <span class="self">self</span>.conditions.push((condition.into_var().boxed(), value.into_var().boxed_any()));
     }
 
     <span class="doccomment">/// Finish the build.
@@ -847,55 +867,11 @@
             <span class="self">self</span>.build_impl().boxed()
         }
     }
-    <span class="kw">fn </span>build_impl(<span class="kw-2">mut </span><span class="self">self</span>) -&gt; ArcWhenVar&lt;T&gt; {
-        <span class="self">self</span>.conditions.shrink_to_fit();
-        <span class="kw">for </span>(c, v) <span class="kw">in </span><span class="self">self</span>.conditions.iter_mut() {
-            <span class="attr">#[expect(unreachable_code)]
-            </span><span class="kw">fn </span>panic_placeholder&lt;T: VarValue&gt;() -&gt; BoxedVar&lt;T&gt; {
-                types::ContextualizedVar::&lt;T&gt;::new(|| LocalVar(<span class="macro">unreachable!</span>())).boxed()
-            }
-            take_mut::take_or_recover(c, panic_placeholder::&lt;bool&gt;, Var::actual_var);
-            take_mut::take_or_recover(v, panic_placeholder::&lt;T&gt;, Var::actual_var);
-        }
-
-        <span class="kw">let </span>rc_when = Arc::new(Data {
-            default: <span class="self">self</span>.default.actual_var(),
-            conditions: <span class="self">self</span>.conditions,
-            w: Mutex::new(WhenData {
-                input_handles: Box::new([]),
-                hooks: <span class="macro">vec!</span>[],
-                last_update: VarUpdateId::never(),
-                active: usize::MAX,
-            }),
-        });
-        <span class="kw">let </span>wk_when = Arc::downgrade(<span class="kw-2">&amp;</span>rc_when);
-
-        {
-            <span class="kw">let </span><span class="kw-2">mut </span>data = rc_when.w.lock();
-            <span class="kw">let </span>data = <span class="kw-2">&amp;mut *</span>data;
-
-            <span class="comment">// capacity can be n*2+1, but we only bet on conditions being `NEW`.
-            </span><span class="kw">let </span><span class="kw-2">mut </span>input_handles = Vec::with_capacity(rc_when.conditions.len());
-            <span class="kw">if </span>rc_when.default.capabilities().contains(VarCapability::NEW) {
-                input_handles.push(rc_when.default.hook_any(ArcWhenVar::handle_value(wk_when.clone(), usize::MAX)));
-            }
-            <span class="kw">for </span>(i, (c, v)) <span class="kw">in </span>rc_when.conditions.iter().enumerate() {
-                <span class="kw">if </span>c.get() &amp;&amp; data.active &gt; i {
-                    data.active = i;
-                }
-
-                <span class="kw">if </span>c.capabilities().contains(VarCapability::NEW) {
-                    input_handles.push(c.hook_any(ArcWhenVar::handle_condition(wk_when.clone(), i)));
-                }
-                <span class="kw">if </span>v.capabilities().contains(VarCapability::NEW) {
-                    input_handles.push(v.hook_any(ArcWhenVar::handle_value(wk_when.clone(), i)));
-                }
-            }
-
-            data.input_handles = input_handles.into_boxed_slice();
-        }
-
-        ArcWhenVar(rc_when)
+    <span class="kw">fn </span>build_impl(<span class="self">self</span>) -&gt; ArcWhenVar&lt;T&gt; {
+        ArcWhenVar(
+            build_impl_any(<span class="self">self</span>.default, <span class="self">self</span>.conditions, std::any::type_name::&lt;T&gt;()),
+            PhantomData,
+        )
     }
 }
 
@@ -980,16 +956,17 @@
 
     <span class="doccomment">/// Build the when var if all value variables are of type [`BoxedVar&lt;T&gt;`].
     </span><span class="kw">pub fn </span>build&lt;T: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BoxedVar&lt;T&gt;&gt; {
-        <span class="kw">let </span>default = <span class="kw-2">*</span><span class="self">self</span>.default.clone().double_boxed_any().downcast::&lt;BoxedVar&lt;T&gt;&gt;().ok()<span class="question-mark">?</span>;
-
-        <span class="kw">let </span><span class="kw-2">mut </span>when = WhenVarBuilder::new(default);
-
-        <span class="kw">for </span>(c, v) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.conditions {
-            <span class="kw">let </span>value = <span class="kw-2">*</span>v.clone().double_boxed_any().downcast::&lt;BoxedVar&lt;T&gt;&gt;().ok()<span class="question-mark">?</span>;
-
-            when.push(c.clone(), value);
+        <span class="kw">let </span>t = <span class="self">self</span>.default.var_type_id();
+        <span class="kw">for </span>(<span class="kw">_</span>, v) <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>.conditions {
+            <span class="kw">if </span>v.var_type_id() != t {
+                <span class="kw">return </span><span class="prelude-val">None</span>;
+            }
         }
-
+        <span class="kw">let </span>when = WhenVarBuilder {
+            default: <span class="self">self</span>.default.clone(),
+            conditions: <span class="self">self</span>.conditions.clone(),
+            _t: PhantomData,
+        };
         <span class="prelude-val">Some</span>(when.build())
     }
 }
@@ -1016,20 +993,146 @@
     active: usize,
 }
 
-<span class="kw">struct </span>Data&lt;T&gt; {
-    default: BoxedVar&lt;T&gt;,
-    conditions: Vec&lt;(BoxedVar&lt;bool&gt;, BoxedVar&lt;T&gt;)&gt;,
+<span class="kw">struct </span>Data {
+    default: BoxedAnyVar,
+    conditions: Vec&lt;(BoxedVar&lt;bool&gt;, BoxedAnyVar)&gt;,
     w: Mutex&lt;WhenData&gt;,
 }
 
 <span class="doccomment">/// See [`when_var!`].
-</span><span class="kw">pub struct </span>ArcWhenVar&lt;T&gt;(Arc&lt;Data&lt;T&gt;&gt;);
+</span><span class="kw">pub struct </span>ArcWhenVar&lt;T&gt;(Arc&lt;Data&gt;, PhantomData&lt;T&gt;);
 
 <span class="doccomment">/// Weak reference to a [`ArcWhenVar&lt;T&gt;`].
-</span><span class="kw">pub struct </span>WeakWhenVar&lt;T&gt;(Weak&lt;Data&lt;T&gt;&gt;);
+</span><span class="kw">pub struct </span>WeakWhenVar&lt;T&gt;(Weak&lt;Data&gt;, PhantomData&lt;T&gt;);
+
+<span class="kw">fn </span>build_impl_any(default: BoxedAnyVar, <span class="kw-2">mut </span>conditions: Vec&lt;(BoxedVar&lt;bool&gt;, BoxedAnyVar)&gt;, type_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Arc&lt;Data&gt; {
+    conditions.shrink_to_fit();
+    <span class="kw">for </span>(c, v) <span class="kw">in </span>conditions.iter_mut() {
+        <span class="attr">#[expect(unreachable_code)]
+        </span><span class="kw">fn </span>panic_placeholder() -&gt; BoxedVar&lt;bool&gt; {
+            types::ContextualizedVar::&lt;bool&gt;::new(|| LocalVar(<span class="macro">unreachable!</span>())).boxed()
+        }
+
+        take_mut::take_or_recover(c, panic_placeholder, Var::actual_var);
+        <span class="kw-2">*</span>v = v.actual_var_any();
+    }
+
+    <span class="kw">let </span>rc_when = Arc::new(Data {
+        default: default.actual_var_any(),
+        conditions,
+        w: Mutex::new(WhenData {
+            input_handles: Box::new([]),
+            hooks: <span class="macro">vec!</span>[],
+            last_update: VarUpdateId::never(),
+            active: usize::MAX,
+        }),
+    });
+    <span class="kw">let </span>wk_when = Arc::downgrade(<span class="kw-2">&amp;</span>rc_when);
+
+    {
+        <span class="kw">let </span><span class="kw-2">mut </span>data = rc_when.w.lock();
+        <span class="kw">let </span>data = <span class="kw-2">&amp;mut *</span>data;
+
+        <span class="comment">// capacity can be n*2+1, but we only bet on conditions being `NEW`.
+        </span><span class="kw">let </span><span class="kw-2">mut </span>input_handles = Vec::with_capacity(rc_when.conditions.len());
+        <span class="kw">if </span>rc_when.default.capabilities().contains(VarCapability::NEW) {
+            input_handles.push(rc_when.default.hook_any(handle_value(wk_when.clone(), usize::MAX, type_name)));
+        }
+        <span class="kw">for </span>(i, (c, v)) <span class="kw">in </span>rc_when.conditions.iter().enumerate() {
+            <span class="kw">if </span>c.get() &amp;&amp; data.active &gt; i {
+                data.active = i;
+            }
+
+            <span class="kw">if </span>c.capabilities().contains(VarCapability::NEW) {
+                input_handles.push(c.hook_any(handle_condition(wk_when.clone(), i, type_name)));
+            }
+            <span class="kw">if </span>v.capabilities().contains(VarCapability::NEW) {
+                input_handles.push(v.hook_any(handle_value(wk_when.clone(), i, type_name)));
+            }
+        }
+
+        data.input_handles = input_handles.into_boxed_slice();
+    }
+    rc_when
+}
+
+<span class="kw">fn </span>handle_condition(wk_when: Weak&lt;Data&gt;, i: usize, type_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>AnyVarHookArgs) -&gt; bool + Send + Sync&gt; {
+    Box::new(<span class="kw">move </span>|args| {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(rc_when) = wk_when.upgrade() {
+            <span class="kw">let </span>data = rc_when.w.lock();
+            <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
+
+            <span class="kw">match </span>data.active.cmp(<span class="kw-2">&amp;</span>i) {
+                std::cmp::Ordering::Equal =&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="bool-val">false</span>) = args.downcast_value::&lt;bool&gt;() {
+                        update = <span class="bool-val">true</span>;
+                    }
+                }
+                std::cmp::Ordering::Greater =&gt; {
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="bool-val">true</span>) = args.downcast_value::&lt;bool&gt;() {
+                        update = <span class="bool-val">true</span>;
+                    }
+                }
+                std::cmp::Ordering::Less =&gt; {}
+            }
+
+            <span class="kw">if </span>update {
+                drop(data);
+                VARS.schedule_update(apply_update(rc_when, <span class="bool-val">false</span>, args.tags_vec()), type_name);
+            }
+
+            <span class="bool-val">true
+        </span>} <span class="kw">else </span>{
+            <span class="bool-val">false
+        </span>}
+    })
+}
+
+<span class="kw">fn </span>handle_value(wk_when: Weak&lt;Data&gt;, i: usize, type_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>AnyVarHookArgs) -&gt; bool + Send + Sync&gt; {
+    Box::new(<span class="kw">move </span>|args| {
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(rc_when) = wk_when.upgrade() {
+            <span class="kw">let </span>data = rc_when.w.lock();
+            <span class="kw">if </span>data.active == i {
+                drop(data);
+                VARS.schedule_update(apply_update(rc_when, args.update(), args.tags_vec()), type_name);
+            }
+            <span class="bool-val">true
+        </span>} <span class="kw">else </span>{
+            <span class="bool-val">false
+        </span>}
+    })
+}
+
+<span class="kw">fn </span>apply_update(rc_merge: Arc&lt;Data&gt;, update: bool, tags: Vec&lt;Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;&gt;) -&gt; VarUpdateFn {
+    Box::new(<span class="kw">move </span>|| {
+        <span class="kw">let </span><span class="kw-2">mut </span>data = rc_merge.w.lock();
+        <span class="kw">let </span>data = <span class="kw-2">&amp;mut *</span>data;
+
+        data.active = usize::MAX;
+        <span class="kw">for </span>(i, (c, <span class="kw">_</span>)) <span class="kw">in </span>rc_merge.conditions.iter().enumerate() {
+            <span class="kw">if </span>c.get() {
+                data.active = i;
+                <span class="kw">break</span>;
+            }
+        }
+        data.last_update = VARS.update_id();
+
+        <span class="kw">let </span>active = <span class="kw">if </span>data.active == usize::MAX {
+            <span class="kw-2">&amp;</span>rc_merge.default
+        } <span class="kw">else </span>{
+            <span class="kw-2">&amp;</span>rc_merge.conditions[data.active].<span class="number">1
+        </span>};
+
+        active.with_any(<span class="kw-2">&amp;mut </span>|value| {
+            <span class="kw">let </span>args = AnyVarHookArgs::new(value, update, <span class="kw-2">&amp;</span>tags);
+            data.hooks.retain(|h| h.call(<span class="kw-2">&amp;</span>args));
+        });
+        VARS.wake_app();
+    })
+}
 
 <span class="kw">impl</span>&lt;T: VarValue&gt; ArcWhenVar&lt;T&gt; {
-    <span class="kw">fn </span>active(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>BoxedVar&lt;T&gt; {
+    <span class="kw">fn </span>active(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>BoxedAnyVar {
         <span class="kw">let </span>active = <span class="self">self</span>.<span class="number">0</span>.w.lock().active;
         <span class="kw">if </span>active == usize::MAX {
             <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.default
@@ -1038,99 +1141,22 @@
         </span>}
     }
 
-    <span class="kw">fn </span>handle_condition(wk_when: Weak&lt;Data&lt;T&gt;&gt;, i: usize) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>AnyVarHookArgs) -&gt; bool + Send + Sync&gt; {
-        Box::new(<span class="kw">move </span>|args| {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(rc_when) = wk_when.upgrade() {
-                <span class="kw">let </span>data = rc_when.w.lock();
-                <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
-
-                <span class="kw">match </span>data.active.cmp(<span class="kw-2">&amp;</span>i) {
-                    std::cmp::Ordering::Equal =&gt; {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="bool-val">false</span>) = args.downcast_value::&lt;bool&gt;() {
-                            update = <span class="bool-val">true</span>;
-                        }
-                    }
-                    std::cmp::Ordering::Greater =&gt; {
-                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span><span class="bool-val">true</span>) = args.downcast_value::&lt;bool&gt;() {
-                            update = <span class="bool-val">true</span>;
-                        }
-                    }
-                    std::cmp::Ordering::Less =&gt; {}
-                }
-
-                <span class="kw">if </span>update {
-                    drop(data);
-                    VARS.schedule_update(
-                        ArcWhenVar::apply_update(rc_when, <span class="bool-val">false</span>, args.tags_vec()),
-                        std::any::type_name::&lt;T&gt;(),
-                    );
-                }
-
-                <span class="bool-val">true
-            </span>} <span class="kw">else </span>{
-                <span class="bool-val">false
-            </span>}
-        })
-    }
-
-    <span class="kw">fn </span>handle_value(wk_when: Weak&lt;Data&lt;T&gt;&gt;, i: usize) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>AnyVarHookArgs) -&gt; bool + Send + Sync&gt; {
-        Box::new(<span class="kw">move </span>|args| {
-            <span class="kw">if let </span><span class="prelude-val">Some</span>(rc_when) = wk_when.upgrade() {
-                <span class="kw">let </span>data = rc_when.w.lock();
-                <span class="kw">if </span>data.active == i {
-                    drop(data);
-                    VARS.schedule_update(
-                        ArcWhenVar::apply_update(rc_when, args.update(), args.tags_vec()),
-                        std::any::type_name::&lt;T&gt;(),
-                    );
-                }
-                <span class="bool-val">true
-            </span>} <span class="kw">else </span>{
-                <span class="bool-val">false
-            </span>}
-        })
-    }
-
-    <span class="kw">fn </span>apply_update(rc_merge: Arc&lt;Data&lt;T&gt;&gt;, update: bool, tags: Vec&lt;Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;&gt;) -&gt; VarUpdateFn {
-        Box::new(<span class="kw">move </span>|| {
-            <span class="kw">let </span><span class="kw-2">mut </span>data = rc_merge.w.lock();
-            <span class="kw">let </span>data = <span class="kw-2">&amp;mut *</span>data;
-
-            data.active = usize::MAX;
-            <span class="kw">for </span>(i, (c, <span class="kw">_</span>)) <span class="kw">in </span>rc_merge.conditions.iter().enumerate() {
-                <span class="kw">if </span>c.get() {
-                    data.active = i;
-                    <span class="kw">break</span>;
-                }
-            }
-            data.last_update = VARS.update_id();
-
-            <span class="kw">let </span>active = <span class="kw">if </span>data.active == usize::MAX {
-                <span class="kw-2">&amp;</span>rc_merge.default
-            } <span class="kw">else </span>{
-                <span class="kw-2">&amp;</span>rc_merge.conditions[data.active].<span class="number">1
-            </span>};
-
-            active.with(|value| {
-                <span class="kw">let </span>args = AnyVarHookArgs::new(value, update, <span class="kw-2">&amp;</span>tags);
-                data.hooks.retain(|h| h.call(<span class="kw-2">&amp;</span>args));
-            });
-            VARS.wake_app();
-        })
-    }
-
     <span class="doccomment">/// Reference condition, value pairs.
     ///
     /// The active condition is the first `true`.
-    </span><span class="kw">pub fn </span>conditions(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[(BoxedVar&lt;bool&gt;, BoxedVar&lt;T&gt;)] {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.conditions
+    </span><span class="kw">pub fn </span>conditions(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;(BoxedVar&lt;bool&gt;, BoxedVar&lt;T&gt;)&gt; {
+        <span class="self">self</span>.<span class="number">0
+            </span>.conditions
+            .iter()
+            .map(|(c, v)| (c.clone(), <span class="kw-2">*</span>v.clone().double_boxed_any().downcast::&lt;BoxedVar&lt;T&gt;&gt;().unwrap()))
+            .collect()
     }
 
     <span class="doccomment">/// The default value var.
     ///
     /// When no condition is active this is the backing var.
-    </span><span class="kw">pub fn </span>default(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>BoxedVar&lt;T&gt; {
-        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.default
+    </span><span class="kw">pub fn </span>default(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;T&gt; {
+        <span class="kw-2">*</span><span class="self">self</span>.<span class="number">0</span>.default.clone().double_boxed_any().downcast::&lt;BoxedVar&lt;T&gt;&gt;().unwrap()
     }
 
     <span class="doccomment">/// Create a variable similar to [`Var::easing`], but with different duration and easing functions for each condition.
@@ -1147,7 +1173,7 @@
     {
         <span class="kw">let </span>source = <span class="self">self</span>.clone();
         types::ContextualizedVar::new(<span class="kw">move </span>|| {
-            <span class="macro">debug_assert_eq!</span>(source.conditions().len(), condition_easing.len());
+            <span class="macro">debug_assert_eq!</span>(source.<span class="number">0</span>.conditions.len(), condition_easing.len());
 
             <span class="kw">let </span>source_wk = source.downgrade();
             <span class="kw">let </span>easing_var = <span class="kw">super</span>::var(source.get());
@@ -1157,7 +1183,7 @@
             <span class="kw">let </span><span class="kw-2">mut </span>_anim_handle = AnimationHandle::dummy();
             var_bind(<span class="kw-2">&amp;</span>source, <span class="kw-2">&amp;</span>easing_var, <span class="kw">move </span>|value, <span class="kw">_</span>, easing_var| {
                 <span class="kw">let </span>source = source_wk.upgrade().unwrap();
-                <span class="kw">for </span>((c, <span class="kw">_</span>), easing) <span class="kw">in </span>source.conditions().iter().zip(<span class="kw-2">&amp;</span>condition_easing) {
+                <span class="kw">for </span>((c, <span class="kw">_</span>), easing) <span class="kw">in </span>source.<span class="number">0</span>.conditions.iter().zip(<span class="kw-2">&amp;</span>condition_easing) {
                     <span class="kw">if let </span><span class="prelude-val">Some</span>((duration, func)) = easing {
                         <span class="kw">if </span>c.get() {
                             <span class="kw">let </span>func = func.clone();
@@ -1179,12 +1205,12 @@
 
 <span class="kw">impl</span>&lt;T&gt; Clone <span class="kw">for </span>ArcWhenVar&lt;T&gt; {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone())
+        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone(), PhantomData)
     }
 }
 <span class="kw">impl</span>&lt;T&gt; Clone <span class="kw">for </span>WeakWhenVar&lt;T&gt; {
     <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self </span>{
-        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone())
+        <span class="self">Self</span>(<span class="self">self</span>.<span class="number">0</span>.clone(), PhantomData)
     }
 }
 
@@ -1226,7 +1252,7 @@
     }
 
     <span class="kw">fn </span>set_any(<span class="kw-2">&amp;</span><span class="self">self</span>, value: Box&lt;<span class="kw">dyn </span>AnyVarValue&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;(), VarIsReadOnlyError&gt; {
-        <span class="self">self</span>.modify(var_set_any(value))
+        <span class="self">self</span>.active().set_any(value)
     }
 
     <span class="kw">fn </span>last_update(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; VarUpdateId {
@@ -1272,7 +1298,7 @@
     }
 
     <span class="kw">fn </span>downgrade_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedAnyWeakVar {
-        Box::new(WeakWhenVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)))
+        Box::new(WeakWhenVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>), PhantomData::&lt;T&gt;))
     }
 
     <span class="kw">fn </span>is_animating(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
@@ -1314,7 +1340,7 @@
     }
 
     <span class="kw">fn </span>upgrade_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;BoxedAnyVar&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| Box::new(ArcWhenVar(rc)) <span class="kw">as _</span>)
+        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| Box::new(ArcWhenVar(rc, PhantomData::&lt;T&gt;)) <span class="kw">as _</span>)
     }
 
     <span class="kw">fn </span>as_any(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>Any {
@@ -1354,14 +1380,33 @@
     <span class="kw">where
         </span>F: FnOnce(<span class="kw-2">&amp;</span>T) -&gt; R,
     {
-        <span class="self">self</span>.active().with(read)
+        <span class="kw">let </span><span class="kw-2">mut </span>read = <span class="prelude-val">Some</span>(read);
+        <span class="kw">let </span><span class="kw-2">mut </span>rsp = <span class="prelude-val">None</span>;
+        <span class="self">self</span>.active().with_any(<span class="kw-2">&amp;mut </span>|v| {
+            <span class="kw">let </span>read = read.take().unwrap();
+            <span class="kw">let </span>r = read(v.as_any().downcast_ref::&lt;T&gt;().unwrap());
+            rsp = <span class="prelude-val">Some</span>(r);
+        });
+        rsp.unwrap()
     }
 
     <span class="kw">fn </span>modify&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, modify: F) -&gt; <span class="prelude-ty">Result</span>&lt;(), VarIsReadOnlyError&gt;
     <span class="kw">where
         </span>F: FnOnce(<span class="kw-2">&amp;mut </span>VarModify&lt;T&gt;) + Send + <span class="lifetime">'static</span>,
     {
-        <span class="self">self</span>.active().modify(modify)
+        <span class="self">self</span>.active()
+            .clone()
+            .double_boxed_any()
+            .downcast::&lt;BoxedVar&lt;T&gt;&gt;()
+            .unwrap()
+            .modify(modify)
+    }
+
+    <span class="kw">fn </span>set&lt;I&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, value: I) -&gt; <span class="prelude-ty">Result</span>&lt;(), VarIsReadOnlyError&gt;
+    <span class="kw">where
+        </span>I: Into&lt;T&gt;,
+    {
+        <span class="self">self</span>.active().set_any(Box::new(value.into()))
     }
 
     <span class="kw">fn </span>actual_var(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
@@ -1370,21 +1415,12 @@
     </span>}
 
     <span class="kw">fn </span>downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; WeakWhenVar&lt;T&gt; {
-        WeakWhenVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>))
+        WeakWhenVar(Arc::downgrade(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>), PhantomData)
     }
 
     <span class="kw">fn </span>into_value(<span class="self">self</span>) -&gt; T {
-        <span class="kw">match </span>Arc::try_unwrap(<span class="self">self</span>.<span class="number">0</span>) {
-            <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>v) =&gt; {
-                <span class="kw">let </span>active = v.w.into_inner().active;
-                <span class="kw">if </span>active == usize::MAX {
-                    v.default.into_value()
-                } <span class="kw">else </span>{
-                    v.conditions.swap_remove(active).<span class="number">1</span>.into_value()
-                }
-            }
-            <span class="prelude-val">Err</span>(rc) =&gt; <span class="self">Self</span>(rc).get(),
-        }
+        <span class="comment">// need to clone the value anyway because of type erased internals
+        </span><span class="self">self</span>.get()
     }
 
     <span class="kw">fn </span>read_only(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="self">Self</span>::ReadOnly {
@@ -1475,7 +1511,7 @@
     <span class="kw">type </span>Upgrade = ArcWhenVar&lt;T&gt;;
 
     <span class="kw">fn </span>upgrade(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ArcWhenVar&lt;T&gt;&gt; {
-        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| ArcWhenVar(rc))
+        <span class="self">self</span>.<span class="number">0</span>.upgrade().map(|rc| ArcWhenVar(rc, PhantomData))
     }
 }
 </code></pre></div></section></main></body></html>

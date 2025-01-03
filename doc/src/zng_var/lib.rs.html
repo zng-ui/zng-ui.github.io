@@ -2871,7 +2871,11 @@
 <a href="#2870" id="2870">2870</a>
 <a href="#2871" id="2871">2871</a>
 <a href="#2872" id="2872">2872</a>
-<a href="#2873" id="2873">2873</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#2873" id="2873">2873</a>
+<a href="#2874" id="2874">2874</a>
+<a href="#2875" id="2875">2875</a>
+<a href="#2876" id="2876">2876</a>
+<a href="#2877" id="2877">2877</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Batch updated variables in an app context.
@@ -3528,11 +3532,15 @@
 
     <span class="doccomment">/// Keep `other` alive until the handle or `self` are dropped.
     </span><span class="kw">fn </span>hold_any(<span class="kw-2">&amp;</span><span class="self">self</span>, value: Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;) -&gt; VarHandle {
-        <span class="self">self</span>.hook_any(Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
-            <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>value;
-            <span class="bool-val">true
-        </span>}))
+        <span class="self">self</span>.hook_any(hold_any_impl(value))
     }
+}
+<span class="comment">// separate function to avoid code bloat
+</span><span class="kw">fn </span>hold_any_impl(value: Box&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;) -&gt; Box&lt;<span class="kw">dyn </span>Fn(<span class="kw-2">&amp;</span>AnyVarHookArgs) -&gt; bool + Send + Sync&gt; {
+    Box::new(<span class="kw">move </span>|<span class="kw">_</span>| {
+        <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>value;
+        <span class="bool-val">true
+    </span>})
 }
 
 <span class="attr">#[derive(Debug)]
