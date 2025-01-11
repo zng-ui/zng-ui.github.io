@@ -1,5 +1,5 @@
 (function() {
-    var implementors = Object.fromEntries([["zng_unit",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.83.0/core/ops/arith/trait.RemAssign.html\" title=\"trait core::ops::arith::RemAssign\">RemAssign</a> for <a class=\"struct\" href=\"zng_unit/struct.Dip.html\" title=\"struct zng_unit::Dip\">Dip</a>"]]]]);
+    var implementors = Object.fromEntries([["zng_unit",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.84.0/core/ops/arith/trait.RemAssign.html\" title=\"trait core::ops::arith::RemAssign\">RemAssign</a> for <a class=\"struct\" href=\"zng_unit/struct.Dip.html\" title=\"struct zng_unit::Dip\">Dip</a>"]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {

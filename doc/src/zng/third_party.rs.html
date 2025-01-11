@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/third_party.rs`."><title>third_party.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/third_party.rs`."><title>third_party.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0 (9fc6b4312 2025-01-07)" data-channel="1.84.0" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>third_party.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -296,7 +296,12 @@
 <a href="#294" id="294">294</a>
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
-<a href="#297" id="297">297</a></pre></div><pre class="rust"><code><span class="doccomment">//! Third party licenses service and types.
+<a href="#297" id="297">297</a>
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a></pre></div><pre class="rust"><code><span class="attr">#![cfg(feature = <span class="string">"third_party"</span>)]
+
+</span><span class="doccomment">//! Third party licenses service and types.
 //!
 //! Rust projects depend on many crated with a variety of licenses, some of these licenses require that they must be
 //! displayed in the app binary, usually in an "about" screen. This module can be used together with the [`zng_tp_licenses`]
@@ -436,11 +441,13 @@
 //! [`cargo-about`]: https://github.com/EmbarkStudios/cargo-about/
 //! [`on_pre_event`]: crate::event::Command::on_pre_event
 
-</span><span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
-<span class="kw">pub use </span>zng_app::third_party::{License, LicenseUsed, User, UserLicense, LICENSES, OPEN_LICENSES_CMD};
-<span class="kw">use </span>zng_wgt_container::ChildInsert;
+</span><span class="kw">pub use </span>zng_app::third_party::{License, LicenseUsed, User, UserLicense, LICENSES, OPEN_LICENSES_CMD};
 
-<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>setup_default_view() {
+<span class="attr">#[cfg(feature = <span class="string">"third_party_default"</span>)]
+</span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>setup_default_view() {
+    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+    <span class="kw">use </span>zng_wgt_container::ChildInsert;
+
     <span class="kw">let </span>id = WindowId::named(<span class="string">"zng-third_party-default"</span>);
     OPEN_LICENSES_CMD
         .on_event(
@@ -470,127 +477,126 @@
             }),
         )
         .perm();
-}
 
-<span class="kw">fn </span>default_view() -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span><span class="kw-2">mut </span>licenses = LICENSES.user_licenses();
-    <span class="kw">if </span>licenses.is_empty() {
-        licenses.push(UserLicense {
-            user: User {
-                <span class="comment">// l10n-# "user" is the package that uses the license
-                </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.user-name"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
-                version: <span class="string">""</span>.into(),
-                url: <span class="string">""</span>.into(),
-            },
-            license: License {
-                id: <span class="macro">l10n!</span>(<span class="string">"license-none.id"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
-                <span class="comment">// l10n-# License name
-                </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.name"</span>, <span class="string">"No license data"</span>).get(),
-                text: <span class="string">""</span>.into(),
-            },
-        });
-    }
-    <span class="kw">let </span>selected = var(licenses[<span class="number">0</span>].clone());
-    <span class="kw">let </span>search = var(Txt::from(<span class="string">""</span>));
+    <span class="kw">fn </span>default_view() -&gt; <span class="kw">impl </span>UiNode {
+        <span class="kw">let </span><span class="kw-2">mut </span>licenses = LICENSES.user_licenses();
+        <span class="kw">if </span>licenses.is_empty() {
+            licenses.push(UserLicense {
+                user: User {
+                    <span class="comment">// l10n-# "user" is the package that uses the license
+                    </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.user-name"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
+                    version: <span class="string">""</span>.into(),
+                    url: <span class="string">""</span>.into(),
+                },
+                license: License {
+                    id: <span class="macro">l10n!</span>(<span class="string">"license-none.id"</span>, <span class="string">"&lt;none&gt;"</span>).get(),
+                    <span class="comment">// l10n-# License name
+                    </span>name: <span class="macro">l10n!</span>(<span class="string">"license-none.name"</span>, <span class="string">"No license data"</span>).get(),
+                    text: <span class="string">""</span>.into(),
+                },
+            });
+        }
+        <span class="kw">let </span>selected = var(licenses[<span class="number">0</span>].clone());
+        <span class="kw">let </span>search = var(Txt::from(<span class="string">""</span>));
 
-    <span class="kw">let </span>actual_width = var(zng_layout::unit::Dip::new(<span class="number">0</span>));
-    <span class="kw">let </span>alternate_layout = actual_width.map(|<span class="kw-2">&amp;</span>w| w &lt;= <span class="number">500 </span>&amp;&amp; w &gt; <span class="number">1</span>);
+        <span class="kw">let </span>actual_width = var(zng_layout::unit::Dip::new(<span class="number">0</span>));
+        <span class="kw">let </span>alternate_layout = actual_width.map(|<span class="kw-2">&amp;</span>w| w &lt;= <span class="number">500 </span>&amp;&amp; w &gt; <span class="number">1</span>);
 
-    <span class="kw">let </span>selector = <span class="macro">Container!</span> {
-        widget::background_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
+        <span class="kw">let </span>selector = <span class="macro">Container!</span> {
+            widget::background_color = light_dark(rgb(<span class="number">0.82</span>, <span class="number">0.82</span>, <span class="number">0.82</span>), rgb(<span class="number">0.18</span>, <span class="number">0.18</span>, <span class="number">0.18</span>));
 
-        <span class="comment">// search
-        </span>child_top = <span class="macro">TextInput!</span> {
-            txt = search.clone();
-            style_fn = <span class="macro">zng_wgt_text_input::SearchStyle!</span>();
-            zng_wgt_input::focus::focus_shortcut = [<span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
-            placeholder_txt = <span class="macro">l10n!</span>(<span class="string">"search.placeholder"</span>, <span class="string">"search licenses ({$shortcut})"</span>, shortcut=<span class="string">"Ctrl+F"</span>);
-        }, <span class="number">0</span>;
-        <span class="comment">// list
-        </span>child = <span class="macro">Scroll!</span> {
-            id = <span class="string">"scrol"</span>;
-            layout::min_width = <span class="number">100</span>;
-            layout::sticky_width = <span class="bool-val">true</span>;
-            mode = zng::scroll::ScrollMode::VERTICAL;
-            child_align = Align::FILL;
-            child = <span class="macro">DataView!</span> {
-                view::&lt;Txt&gt; = search, <span class="macro">hn!</span>(selected, |a: <span class="kw-2">&amp;</span>DataViewArgs&lt;Txt&gt;| {
-                    <span class="kw">let </span>search = a.data().get();
-                    <span class="kw">let </span>licenses = <span class="kw">if </span>search.is_empty() {
-                        licenses.clone()
-                    } <span class="kw">else </span>{
-                        licenses.iter().filter(|t| t.user.name.contains(search.as_str())).cloned().collect()
-                    };
+            <span class="comment">// search
+            </span>child_top = <span class="macro">TextInput!</span> {
+                txt = search.clone();
+                style_fn = <span class="macro">zng_wgt_text_input::SearchStyle!</span>();
+                zng_wgt_input::focus::focus_shortcut = [<span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>], <span class="macro">shortcut!</span>[Find]];
+                placeholder_txt = <span class="macro">l10n!</span>(<span class="string">"search.placeholder"</span>, <span class="string">"search licenses ({$shortcut})"</span>, shortcut=<span class="string">"Ctrl+F"</span>);
+            }, <span class="number">0</span>;
+            <span class="comment">// list
+            </span>child = <span class="macro">Scroll!</span> {
+                layout::min_width = <span class="number">100</span>;
+                layout::sticky_width = <span class="bool-val">true</span>;
+                mode = zng::scroll::ScrollMode::VERTICAL;
+                child_align = Align::FILL;
+                child = <span class="macro">DataView!</span> {
+                    view::&lt;Txt&gt; = search, <span class="macro">hn!</span>(selected, |a: <span class="kw-2">&amp;</span>DataViewArgs&lt;Txt&gt;| {
+                        <span class="kw">let </span>search = a.data().get();
+                        <span class="kw">let </span>licenses = <span class="kw">if </span>search.is_empty() {
+                            licenses.clone()
+                        } <span class="kw">else </span>{
+                            licenses.iter().filter(|t| t.user.name.contains(search.as_str())).cloned().collect()
+                        };
 
-                    a.set_view(<span class="macro">Stack!</span> {
-                        toggle::selector = toggle::Selector::single(selected.clone());
-                        direction = StackDirection::top_to_bottom();
-                        children = licenses.into_iter().map(default_item_view).collect::&lt;UiVec&gt;();
-                    })
-                });
+                        a.set_view(<span class="macro">Stack!</span> {
+                            toggle::selector = toggle::Selector::single(selected.clone());
+                            direction = StackDirection::top_to_bottom();
+                            children = licenses.into_iter().map(default_item_view).collect::&lt;UiVec&gt;();
+                        })
+                    });
+                };
+                when <span class="kw-2">*</span>#{alternate_layout.clone()} {
+                    layout::max_height = <span class="number">100</span>; <span class="comment">// placed on top in small width screens
+                    </span>layout::sticky_width = <span class="bool-val">false</span>; <span class="comment">// reset sticky width
+                </span>}
             };
-            when <span class="kw-2">*</span>#{alternate_layout.clone()} {
-                layout::max_height = <span class="number">100</span>; <span class="comment">// placed on top in small width screens
-                </span>layout::sticky_width = <span class="bool-val">false</span>; <span class="comment">// reset sticky width
-            </span>}
         };
-    };
 
-    <span class="macro">Container!</span> {
-        layout::actual_width;
+        <span class="macro">Container!</span> {
+            layout::actual_width;
 
-        child_insert = {
-            placement: alternate_layout.map(|<span class="kw-2">&amp;</span>y| <span class="kw">if </span>y { ChildInsert::Top } <span class="kw">else </span>{ ChildInsert::Start }),
-            node: selector,
-            spacing: <span class="number">0</span>,
+            child_insert = {
+                placement: alternate_layout.map(|<span class="kw-2">&amp;</span>y| <span class="kw">if </span>y { ChildInsert::Top } <span class="kw">else </span>{ ChildInsert::Start }),
+                node: selector,
+                spacing: <span class="number">0</span>,
+            };
+            <span class="comment">// selected
+            </span>child = <span class="macro">Scroll!</span> {
+                mode = zng::scroll::ScrollMode::VERTICAL;
+                child_align = Align::TOP_START;
+                padding = <span class="number">10</span>;
+                child = <span class="macro">zng::markdown::Markdown!</span>(selected.map(default_markdown));
+            };
+        }
+    }
+
+    <span class="kw">fn </span>default_item_view(item: UserLicense) -&gt; <span class="kw">impl </span>UiNode {
+        <span class="kw">let </span>txt = <span class="kw">if </span>item.user.version.is_empty() {
+            item.user.name.clone()
+        } <span class="kw">else </span>{
+            <span class="macro">formatx!</span>(<span class="string">"{} - {}"</span>, item.user.name, item.user.version)
         };
-        <span class="comment">// selected
-        </span>child = <span class="macro">Scroll!</span> {
-            mode = zng::scroll::ScrollMode::VERTICAL;
-            child_align = Align::TOP_START;
-            padding = <span class="number">10</span>;
-            child = <span class="macro">zng::markdown::Markdown!</span>(selected.map(default_markdown));
-        };
-    }
-}
-
-<span class="kw">fn </span>default_item_view(item: UserLicense) -&gt; <span class="kw">impl </span>UiNode {
-    <span class="kw">let </span>txt = <span class="kw">if </span>item.user.version.is_empty() {
-        item.user.name.clone()
-    } <span class="kw">else </span>{
-        <span class="macro">formatx!</span>(<span class="string">"{} - {}"</span>, item.user.name, item.user.version)
-    };
-    <span class="macro">Toggle!</span> {
-        child = <span class="macro">Text!</span>(txt);
-        value = item;
-        child_align = layout::Align::START;
-        widget::corner_radius = <span class="number">0</span>;
-        layout::padding = <span class="number">2</span>;
-        widget::border = <span class="macro">unset!</span>;
-    }
-}
-
-<span class="kw">fn </span>default_markdown(item: <span class="kw-2">&amp;</span>UserLicense) -&gt; Txt {
-    <span class="kw">use </span>std::fmt::<span class="kw-2">*</span>;
-
-    <span class="kw">let </span><span class="kw-2">mut </span>t = Txt::from(<span class="string">""</span>);
-
-    <span class="kw">if </span>item.user.version.is_empty() {
-        <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"# {}\n"</span>, item.user.name).unwrap();
-    } <span class="kw">else </span>{
-        <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"# {} - {}\n"</span>, item.user.name, item.user.version).unwrap();
-    }
-    <span class="kw">if </span>!item.user.url.is_empty() {
-        <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"[{0}]({0})\n"</span>, item.user.url).unwrap();
+        <span class="macro">Toggle!</span> {
+            child = <span class="macro">Text!</span>(txt);
+            value = item;
+            child_align = layout::Align::START;
+            widget::corner_radius = <span class="number">0</span>;
+            layout::padding = <span class="number">2</span>;
+            widget::border = <span class="macro">unset!</span>;
+        }
     }
 
-    <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"## {}\n\n"</span>, item.license.name).unwrap();
+    <span class="kw">fn </span>default_markdown(item: <span class="kw-2">&amp;</span>UserLicense) -&gt; Txt {
+        <span class="kw">use </span>std::fmt::<span class="kw-2">*</span>;
 
-    <span class="kw">if </span>!item.license.text.is_empty() {
-        <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"```\n{}\n```\n"</span>, item.license.text).unwrap();
+        <span class="kw">let </span><span class="kw-2">mut </span>t = Txt::from(<span class="string">""</span>);
+
+        <span class="kw">if </span>item.user.version.is_empty() {
+            <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"# {}\n"</span>, item.user.name).unwrap();
+        } <span class="kw">else </span>{
+            <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"# {} - {}\n"</span>, item.user.name, item.user.version).unwrap();
+        }
+        <span class="kw">if </span>!item.user.url.is_empty() {
+            <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"[{0}]({0})\n"</span>, item.user.url).unwrap();
+        }
+
+        <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"## {}\n\n"</span>, item.license.name).unwrap();
+
+        <span class="kw">if </span>!item.license.text.is_empty() {
+            <span class="macro">writeln!</span>(<span class="kw-2">&amp;mut </span>t, <span class="string">"```\n{}\n```\n"</span>, item.license.text).unwrap();
+        }
+
+        t.end_mut();
+        t
     }
-
-    t.end_mut();
-    t
 }
 </code></pre></div></section></main></body></html>

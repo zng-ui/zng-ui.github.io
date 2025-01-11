@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0 (9fc6b4312 2025-01-07)" data-channel="1.84.0" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>app.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -572,7 +572,18 @@
 <a href="#570" id="570">570</a>
 <a href="#571" id="571">571</a>
 <a href="#572" id="572">572</a>
-<a href="#573" id="573">573</a></pre></div><pre class="rust"><code><span class="doccomment">//! App extensions, context, events and commands API.
+<a href="#573" id="573">573</a>
+<a href="#574" id="574">574</a>
+<a href="#575" id="575">575</a>
+<a href="#576" id="576">576</a>
+<a href="#577" id="577">577</a>
+<a href="#578" id="578">578</a>
+<a href="#579" id="579">579</a>
+<a href="#580" id="580">580</a>
+<a href="#581" id="581">581</a>
+<a href="#582" id="582">582</a>
+<a href="#583" id="583">583</a>
+<a href="#584" id="584">584</a></pre></div><pre class="rust"><code><span class="doccomment">//! App extensions, context, events and commands API.
 //!
 //! # Runtime
 //!
@@ -597,7 +608,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.13.5", features = ["view_prebuilt"] }
+//! zng = { version = "0.13.6", features = ["view_prebuilt"] }
 //! ```
 //!
 //! ```no_run
@@ -1125,10 +1136,10 @@
 </span><span class="kw">pub mod </span>crash_handler {
     <span class="kw">pub use </span>zng_app::crash_handler::{crash_handler_config, BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic};
 
-    <span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
+    <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
 
     <span class="macro">crash_handler_config!</span>(|cfg| {
-        <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
         cfg.default_dialog(|args| {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;</span>args.dialog_crash {
                 <span class="macro">eprintln!</span>(<span class="string">"DEBUG CRASH DIALOG ALSO CRASHED"</span>);
@@ -1136,11 +1147,22 @@
                 <span class="macro">eprintln!</span>(<span class="string">"ORIGINAL APP CRASH"</span>);
                 <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, args.latest().message());
                 args.exit(<span class="number">0xBADC0DE</span>)
+            } <span class="kw">else </span>{
+                <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+                </span>{
+                    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+                    APP.defaults()
+                        .run_window(<span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }));
+                }
+
+                <span class="attr">#[cfg(not(feature = <span class="string">"crash_handler_debug"</span>))]
+                </span>{
+                    <span class="macro">eprintln!</span>(
+                        <span class="string">"app crashed {}\n\nbuild with feature = \"crash_handler_debug\" to se the debug crash dialog"</span>,
+                        args.latest().message()
+                    );
+                }
             }
-
-            APP.defaults()
-                .run_window(<span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }));
-
             args.exit(<span class="number">0</span>)
         });
     });

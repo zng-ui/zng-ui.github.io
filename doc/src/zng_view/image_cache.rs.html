@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view/</div>image_cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/image_cache.rs`."><title>image_cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0 (9fc6b4312 2025-01-07)" data-channel="1.84.0" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view/</div>image_cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -1475,7 +1475,37 @@
 <a href="#1474" id="1474">1474</a>
 <a href="#1475" id="1475">1475</a>
 <a href="#1476" id="1476">1476</a>
-<a href="#1477" id="1477">1477</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, sync::Arc};
+<a href="#1477" id="1477">1477</a>
+<a href="#1478" id="1478">1478</a>
+<a href="#1479" id="1479">1479</a>
+<a href="#1480" id="1480">1480</a>
+<a href="#1481" id="1481">1481</a>
+<a href="#1482" id="1482">1482</a>
+<a href="#1483" id="1483">1483</a>
+<a href="#1484" id="1484">1484</a>
+<a href="#1485" id="1485">1485</a>
+<a href="#1486" id="1486">1486</a>
+<a href="#1487" id="1487">1487</a>
+<a href="#1488" id="1488">1488</a>
+<a href="#1489" id="1489">1489</a>
+<a href="#1490" id="1490">1490</a>
+<a href="#1491" id="1491">1491</a>
+<a href="#1492" id="1492">1492</a>
+<a href="#1493" id="1493">1493</a>
+<a href="#1494" id="1494">1494</a>
+<a href="#1495" id="1495">1495</a>
+<a href="#1496" id="1496">1496</a>
+<a href="#1497" id="1497">1497</a>
+<a href="#1498" id="1498">1498</a>
+<a href="#1499" id="1499">1499</a>
+<a href="#1500" id="1500">1500</a>
+<a href="#1501" id="1501">1501</a>
+<a href="#1502" id="1502">1502</a>
+<a href="#1503" id="1503">1503</a>
+<a href="#1504" id="1504">1504</a>
+<a href="#1505" id="1505">1505</a>
+<a href="#1506" id="1506">1506</a>
+<a href="#1507" id="1507">1507</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{fmt, mem, sync::Arc};
 
 <span class="kw">use </span>image::ImageDecoder;
 <span class="kw">use </span>webrender::api::{ImageDescriptor, ImageDescriptorFlags, ImageFormat};
@@ -1495,40 +1525,68 @@
 <span class="kw">use </span>rustc_hash::FxHashMap;
 
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>ENCODERS: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[
-    <span class="string">"png"</span>,
-    <span class="string">"jpg"</span>,
-    <span class="string">"jpeg"</span>,
-    <span class="string">"webp"</span>,
-    <span class="attr">#[cfg(any(feature = <span class="string">"avif"</span>, zng_view_image_has_avif))]
+    <span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
+    </span><span class="string">"png"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jpg"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jpeg"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_webp"</span>)]
+    </span><span class="string">"webp"</span>,
+    <span class="attr">#[cfg(any(feature = <span class="string">"image_avif"</span>, zng_view_image_has_avif))]
     </span><span class="string">"avif"</span>,
-    <span class="string">"gif"</span>,
-    <span class="string">"ico"</span>,
-    <span class="string">"bmp"</span>,
-    <span class="string">"jfif"</span>,
-    <span class="string">"exr"</span>,
-    <span class="string">"hdr"</span>,
-    <span class="string">"pnm"</span>,
-    <span class="string">"qoi"</span>,
-    <span class="string">"ff"</span>,
-    <span class="string">"farbfeld"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_gif"</span>)]
+    </span><span class="string">"gif"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ico"</span>)]
+    </span><span class="string">"ico"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_bmp"</span>)]
+    </span><span class="string">"bmp"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jfif"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_exr"</span>)]
+    </span><span class="string">"exr"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_hdr"</span>)]
+    </span><span class="string">"hdr"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_pnm"</span>)]
+    </span><span class="string">"pnm"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_qoi"</span>)]
+    </span><span class="string">"qoi"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ff"</span>)]
+    </span><span class="string">"ff"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ff"</span>)]
+    </span><span class="string">"farbfeld"</span>,
 ];
 <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">const </span>DECODERS: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str] = <span class="kw-2">&amp;</span>[
-    <span class="string">"png"</span>,
-    <span class="string">"jpg"</span>,
-    <span class="string">"jpeg"</span>,
-    <span class="string">"webp"</span>,
-    <span class="attr">#[cfg(any(feature = <span class="string">"avif"</span>, zng_view_image_has_avif))]
+    <span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
+    </span><span class="string">"png"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jpg"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jpeg"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_webp"</span>)]
+    </span><span class="string">"webp"</span>,
+    <span class="attr">#[cfg(any(feature = <span class="string">"image_avif"</span>, zng_view_image_has_avif))]
     </span><span class="string">"avif"</span>,
-    <span class="string">"gif"</span>,
-    <span class="string">"ico"</span>,
-    <span class="string">"bmp"</span>,
-    <span class="string">"jfif"</span>,
-    <span class="string">"exr"</span>,
-    <span class="string">"pnm"</span>,
-    <span class="string">"qoi"</span>,
-    <span class="string">"ff"</span>,
-    <span class="string">"farbfeld"</span>,
-    <span class="string">"dds"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_gif"</span>)]
+    </span><span class="string">"gif"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ico"</span>)]
+    </span><span class="string">"ico"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_bmp"</span>)]
+    </span><span class="string">"bmp"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+    </span><span class="string">"jfif"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_exr"</span>)]
+    </span><span class="string">"exr"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_pnm"</span>)]
+    </span><span class="string">"pnm"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_qoi"</span>)]
+    </span><span class="string">"qoi"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ff"</span>)]
+    </span><span class="string">"ff"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_ff"</span>)]
+    </span><span class="string">"farbfeld"</span>,
+    <span class="attr">#[cfg(feature = <span class="string">"image_dds"</span>)]
+    </span><span class="string">"dds"</span>,
 ];
 
 <span class="doccomment">/// Decode and cache image resources.
@@ -2496,8 +2554,6 @@
             )));
         }
 
-        <span class="kw">use </span>image::<span class="kw-2">*</span>;
-
         <span class="kw">if </span><span class="self">self</span>.<span class="number">0</span>.is_mask() {
             <span class="kw">let </span>width = size.width.<span class="number">0 </span><span class="kw">as </span>u32;
             <span class="kw">let </span>height = size.height.<span class="number">0 </span><span class="kw">as </span>u32;
@@ -2524,17 +2580,19 @@
         <span class="kw">let </span>is_opaque = <span class="self">self</span>.<span class="number">0</span>.is_opaque();
 
         <span class="kw">match </span>format {
-            ImageFormat::Jpeg =&gt; {
-                <span class="kw">let </span><span class="kw-2">mut </span>jpg = codecs::jpeg::JpegEncoder::new(buffer);
+            <span class="attr">#[cfg(feature = <span class="string">"image_jpeg"</span>)]
+            </span>image::ImageFormat::Jpeg =&gt; {
+                <span class="kw">let </span><span class="kw-2">mut </span>jpg = image::codecs::jpeg::JpegEncoder::new(buffer);
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(ppi) = ppi {
-                    jpg.set_pixel_density(codecs::jpeg::PixelDensity {
+                    jpg.set_pixel_density(image::codecs::jpeg::PixelDensity {
                         density: (ppi.x <span class="kw">as </span>u16, ppi.y <span class="kw">as </span>u16),
-                        unit: codecs::jpeg::PixelDensityUnit::Inches,
+                        unit: image::codecs::jpeg::PixelDensityUnit::Inches,
                     });
                 }
-                jpg.encode(<span class="kw-2">&amp;</span>rgba, width, height, ColorType::Rgba8.into())<span class="question-mark">?</span>;
+                jpg.encode(<span class="kw-2">&amp;</span>rgba, width, height, image::ColorType::Rgba8.into())<span class="question-mark">?</span>;
             }
-            ImageFormat::Png =&gt; {
+            <span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
+            </span>image::ImageFormat::Png =&gt; {
                 <span class="kw">let </span><span class="kw-2">mut </span>img = image::DynamicImage::ImageRgba8(image::ImageBuffer::from_raw(width, height, rgba).unwrap());
                 <span class="kw">if </span>is_opaque {
                     img = image::DynamicImage::ImageRgb8(img.to_rgb8());
@@ -2542,7 +2600,7 @@
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(ppi) = ppi {
                     <span class="kw">let </span><span class="kw-2">mut </span>png_bytes = <span class="macro">vec!</span>[];
 
-                    img.write_to(<span class="kw-2">&amp;mut </span>std::io::Cursor::new(<span class="kw-2">&amp;mut </span>png_bytes), ImageFormat::Png)<span class="question-mark">?</span>;
+                    img.write_to(<span class="kw-2">&amp;mut </span>std::io::Cursor::new(<span class="kw-2">&amp;mut </span>png_bytes), image::ImageFormat::Png)<span class="question-mark">?</span>;
 
                     <span class="kw">let </span><span class="kw-2">mut </span>png = img_parts::png::Png::from_bytes(png_bytes.into()).unwrap();
 
@@ -2565,11 +2623,13 @@
 
                     png.encoder().write_to(buffer)<span class="question-mark">?</span>;
                 } <span class="kw">else </span>{
-                    img.write_to(<span class="kw-2">&amp;mut </span>std::io::Cursor::new(buffer), ImageFormat::Png)<span class="question-mark">?</span>;
+                    img.write_to(<span class="kw-2">&amp;mut </span>std::io::Cursor::new(buffer), image::ImageFormat::Png)<span class="question-mark">?</span>;
                 }
             }
             <span class="kw">_ </span>=&gt; {
                 <span class="comment">// other formats that we don't with custom PPI meta.
+
+                </span><span class="kw">let _ </span>= ppi; <span class="comment">// suppress warning when both png an jpeg are not enabled
 
                 </span><span class="kw">let </span><span class="kw-2">mut </span>img = image::DynamicImage::ImageRgba8(image::ImageBuffer::from_raw(width, height, rgba).unwrap());
                 <span class="kw">if </span>is_opaque {

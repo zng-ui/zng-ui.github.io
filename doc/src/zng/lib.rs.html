@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-46f98efaafac5295.ttf.woff2,FiraSans-Regular-018c141bf0843ffd.woff2,FiraSans-Medium-8f9a781e4970d388.woff2,SourceCodePro-Regular-562dcc5011b6de7d.ttf.woff2,SourceCodePro-Semibold-d899c5a5c4aeb14a.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-76eba96aa4d2e634.css"><link rel="stylesheet" href="../../static.files/rustdoc-b0742ba02757f159.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.83.0 (90b35a623 2024-11-26)" data-channel="1.83.0" data-search-js="search-f0d225181b97f9a4.js" data-settings-js="settings-805db61a62df4bd2.js" ><script src="../../static.files/storage-1d39b6787ed640ff.js"></script><script defer src="../../static.files/src-script-e66d777a5a92e9b2.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-f070b9041d14864c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-0111fcff984fae8f.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0 (9fc6b4312 2025-01-07)" data-channel="1.84.0" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -1042,7 +1042,76 @@
 <a href="#1040" id="1040">1040</a>
 <a href="#1041" id="1041">1041</a>
 <a href="#1042" id="1042">1042</a>
-<a href="#1043" id="1043">1043</a></pre></div><pre class="rust"><code><span class="attr">#![expect(clippy::needless_doctest_main)]
+<a href="#1043" id="1043">1043</a>
+<a href="#1044" id="1044">1044</a>
+<a href="#1045" id="1045">1045</a>
+<a href="#1046" id="1046">1046</a>
+<a href="#1047" id="1047">1047</a>
+<a href="#1048" id="1048">1048</a>
+<a href="#1049" id="1049">1049</a>
+<a href="#1050" id="1050">1050</a>
+<a href="#1051" id="1051">1051</a>
+<a href="#1052" id="1052">1052</a>
+<a href="#1053" id="1053">1053</a>
+<a href="#1054" id="1054">1054</a>
+<a href="#1055" id="1055">1055</a>
+<a href="#1056" id="1056">1056</a>
+<a href="#1057" id="1057">1057</a>
+<a href="#1058" id="1058">1058</a>
+<a href="#1059" id="1059">1059</a>
+<a href="#1060" id="1060">1060</a>
+<a href="#1061" id="1061">1061</a>
+<a href="#1062" id="1062">1062</a>
+<a href="#1063" id="1063">1063</a>
+<a href="#1064" id="1064">1064</a>
+<a href="#1065" id="1065">1065</a>
+<a href="#1066" id="1066">1066</a>
+<a href="#1067" id="1067">1067</a>
+<a href="#1068" id="1068">1068</a>
+<a href="#1069" id="1069">1069</a>
+<a href="#1070" id="1070">1070</a>
+<a href="#1071" id="1071">1071</a>
+<a href="#1072" id="1072">1072</a>
+<a href="#1073" id="1073">1073</a>
+<a href="#1074" id="1074">1074</a>
+<a href="#1075" id="1075">1075</a>
+<a href="#1076" id="1076">1076</a>
+<a href="#1077" id="1077">1077</a>
+<a href="#1078" id="1078">1078</a>
+<a href="#1079" id="1079">1079</a>
+<a href="#1080" id="1080">1080</a>
+<a href="#1081" id="1081">1081</a>
+<a href="#1082" id="1082">1082</a>
+<a href="#1083" id="1083">1083</a>
+<a href="#1084" id="1084">1084</a>
+<a href="#1085" id="1085">1085</a>
+<a href="#1086" id="1086">1086</a>
+<a href="#1087" id="1087">1087</a>
+<a href="#1088" id="1088">1088</a>
+<a href="#1089" id="1089">1089</a>
+<a href="#1090" id="1090">1090</a>
+<a href="#1091" id="1091">1091</a>
+<a href="#1092" id="1092">1092</a>
+<a href="#1093" id="1093">1093</a>
+<a href="#1094" id="1094">1094</a>
+<a href="#1095" id="1095">1095</a>
+<a href="#1096" id="1096">1096</a>
+<a href="#1097" id="1097">1097</a>
+<a href="#1098" id="1098">1098</a>
+<a href="#1099" id="1099">1099</a>
+<a href="#1100" id="1100">1100</a>
+<a href="#1101" id="1101">1101</a>
+<a href="#1102" id="1102">1102</a>
+<a href="#1103" id="1103">1103</a>
+<a href="#1104" id="1104">1104</a>
+<a href="#1105" id="1105">1105</a>
+<a href="#1106" id="1106">1106</a>
+<a href="#1107" id="1107">1107</a>
+<a href="#1108" id="1108">1108</a>
+<a href="#1109" id="1109">1109</a>
+<a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a></pre></div><pre class="rust"><code><span class="attr">#![expect(clippy::needless_doctest_main)]
 #![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 
@@ -1061,7 +1130,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.13.5", features = ["view_prebuilt"] }
+//! zng = { version = "0.13.6", features = ["view_prebuilt"] }
 //! ```
 //!
 //! Then create your first app:
@@ -1509,7 +1578,7 @@
 //!
 //! See the [Cargo Features] section in the crate README for Cargo features documentation.
 //!
-//! [Cargo Features]: https://github.com/zng-ui/zng/tree/master/crates/zng#cargo-features
+//! [Cargo Features]: https://github.com/zng-ui/zng/tree/main/crates/zng#cargo-features
 
 </span><span class="attr">#![warn(unused_extern_crates)]
 #![warn(missing_docs)]
@@ -1648,15 +1717,19 @@
 
     <span class="kw">pub use </span>zng_color::{colors, hex, hsl, hsla, hsv, hsva, light_dark, rgb, rgba, web_colors, LightDarkVarExt <span class="kw">as _</span>, MixAdjust <span class="kw">as _</span>};
 
-    <span class="kw">pub use </span>zng_ext_clipboard::CLIPBOARD;
+    <span class="attr">#[cfg(feature = <span class="string">"clipboard"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_clipboard::CLIPBOARD;
 
-    <span class="kw">pub use </span>zng_ext_config::CONFIG;
+    <span class="attr">#[cfg(feature = <span class="string">"config"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_config::CONFIG;
 
     <span class="kw">pub use </span>zng_ext_font::{FontStretch, FontStyle, FontWeight};
 
-    <span class="kw">pub use </span>zng_ext_image::ImageSource;
+    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_image::ImageSource;
 
-    <span class="kw">pub use </span>zng_wgt_image::Image;
+    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_image::Image;
 
     <span class="kw">pub use </span>zng_ext_input::{
         focus::{cmd::CommandFocusExt <span class="kw">as _</span>, iter::IterFocusableExt <span class="kw">as _</span>, WidgetInfoFocusExt <span class="kw">as _</span>, FOCUS},
@@ -1669,9 +1742,11 @@
 
     <span class="kw">pub use </span>zng_wgt_text::lang;
 
-    <span class="kw">pub use </span>zng_ext_undo::{CommandUndoExt <span class="kw">as _</span>, REDO_CMD, UNDO, UNDO_CMD};
+    <span class="attr">#[cfg(feature = <span class="string">"undo"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_undo::{CommandUndoExt <span class="kw">as _</span>, REDO_CMD, UNDO, UNDO_CMD};
 
-    <span class="kw">pub use </span>zng_ext_window::{
+    <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_window::{
         AppRunWindowExt <span class="kw">as _</span>, HeadlessAppWindowExt <span class="kw">as _</span>, WINDOW_Ext <span class="kw">as _</span>, WidgetInfoImeArea <span class="kw">as _</span>, WindowCloseRequestedArgs, WindowIcon,
         WINDOWS,
     };
@@ -1681,19 +1756,26 @@
     <span class="kw">pub use </span><span class="kw">crate</span>::text;
     <span class="kw">pub use </span>zng_wgt_text::Text;
 
-    <span class="kw">pub use </span>zng_wgt_text_input::{selectable::SelectableText, TextInput};
+    <span class="attr">#[cfg(feature = <span class="string">"text_input"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_text_input::{selectable::SelectableText, TextInput};
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::window;
-    <span class="kw">pub use </span>zng_wgt_window::Window;
+    <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::window;
+    <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_window::Window;
 
     <span class="kw">pub use </span>zng_wgt_container::Container;
 
-    <span class="kw">pub use </span>zng_wgt_button::Button;
+    <span class="attr">#[cfg(feature = <span class="string">"button"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_button::Button;
 
-    <span class="kw">pub use </span>zng_wgt_data::{data, DATA};
+    <span class="attr">#[cfg(feature = <span class="string">"data_context"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_data::{data, DATA};
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::grid;
-    <span class="kw">pub use </span>zng_wgt_grid::Grid;
+    <span class="attr">#[cfg(feature = <span class="string">"grid"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::grid;
+    <span class="attr">#[cfg(feature = <span class="string">"grid"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_grid::Grid;
 
     <span class="kw">pub use </span><span class="kw">crate</span>::layer;
     <span class="kw">pub use </span>zng_wgt_layer::{AnchorMode, LayerIndex, LAYERS};
@@ -1701,37 +1783,50 @@
     <span class="kw">pub use </span><span class="kw">crate</span>::popup;
     <span class="kw">pub use </span>zng_wgt_layer::popup::POPUP;
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::menu;
-    <span class="kw">pub use </span>zng_wgt_menu::{
+    <span class="attr">#[cfg(feature = <span class="string">"menu"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::menu;
+    <span class="attr">#[cfg(feature = <span class="string">"menu"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_menu::{
         context::{context_menu, context_menu_fn, ContextMenu},
         sub::SubMenu,
         Menu,
     };
 
-    <span class="kw">pub use </span>zng_wgt_rule_line::hr::Hr;
+    <span class="attr">#[cfg(feature = <span class="string">"rule_line"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_rule_line::hr::Hr;
 
-    <span class="kw">pub use </span>zng_wgt_scroll::{Scroll, SCROLL};
+    <span class="attr">#[cfg(feature = <span class="string">"scroll"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_scroll::{Scroll, SCROLL};
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::toggle;
-    <span class="kw">pub use </span>zng_wgt_toggle::Toggle;
+    <span class="attr">#[cfg(feature = <span class="string">"toggle"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::toggle;
+    <span class="attr">#[cfg(feature = <span class="string">"toggle"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_toggle::Toggle;
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::tip;
-    <span class="kw">pub use </span>zng_wgt_tooltip::{tooltip, tooltip_fn, Tip};
+    <span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::tip;
+    <span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_tooltip::{tooltip, tooltip_fn, Tip};
 
     <span class="kw">pub use </span>zng_wgt::{wgt_fn, WidgetFn};
 
     <span class="kw">pub use </span>zng_wgt_style::{style_fn, Style};
 
-    <span class="kw">pub use </span>zng_wgt_stack::{Stack, StackDirection};
+    <span class="attr">#[cfg(feature = <span class="string">"stack"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_stack::{Stack, StackDirection};
 
-    <span class="kw">pub use </span>zng_wgt_wrap::Wrap;
+    <span class="attr">#[cfg(feature = <span class="string">"wrap"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_wrap::Wrap;
 
-    <span class="kw">pub use </span>zng_wgt_data_view::{DataView, DataViewArgs};
+    <span class="attr">#[cfg(feature = <span class="string">"data_view"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_data_view::{DataView, DataViewArgs};
 
     <span class="kw">pub use </span>zng_wgt_settings::SettingBuilderEditorExt <span class="kw">as _</span>;
 
-    <span class="kw">pub use </span><span class="kw">crate</span>::dialog;
-    <span class="kw">pub use </span>zng_wgt_dialog::DIALOG;
+    <span class="attr">#[cfg(feature = <span class="string">"dialog"</span>)]
+    </span><span class="kw">pub use </span><span class="kw">crate</span>::dialog;
+    <span class="attr">#[cfg(feature = <span class="string">"dialog"</span>)]
+    </span><span class="kw">pub use </span>zng_wgt_dialog::DIALOG;
 }
 
 <span class="doccomment">/// Prelude for declaring new properties and widgets.
@@ -1842,7 +1937,8 @@
         with_context_local, with_context_local_init, with_context_var, with_context_var_init, with_widget_state, with_widget_state_modify,
     };
 
-    <span class="kw">pub use </span>zng_ext_window::WidgetInfoBuilderImeArea <span class="kw">as _</span>;
+    <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+    </span><span class="kw">pub use </span>zng_ext_window::WidgetInfoBuilderImeArea <span class="kw">as _</span>;
 
     <span class="attr">#[cfg(hot_reload)]
     </span><span class="kw">pub use </span><span class="kw">crate</span>::hot_reload::hot_node;
@@ -1850,18 +1946,29 @@
 
 <span class="kw">mod </span>defaults {
     <span class="kw">use </span>zng_app::{AppExtended, AppExtension};
-    <span class="kw">use </span>zng_ext_clipboard::ClipboardManager;
-    <span class="kw">use </span>zng_ext_config::ConfigManager;
+    <span class="attr">#[cfg(feature = <span class="string">"clipboard"</span>)]
+    </span><span class="kw">use </span>zng_ext_clipboard::ClipboardManager;
+    <span class="attr">#[cfg(feature = <span class="string">"config"</span>)]
+    </span><span class="kw">use </span>zng_ext_config::ConfigManager;
     <span class="kw">use </span>zng_ext_font::FontManager;
-    <span class="kw">use </span>zng_ext_fs_watcher::FsWatcherManager;
-    <span class="kw">use </span>zng_ext_image::ImageManager;
+    <span class="attr">#[cfg(feature = <span class="string">"fs_watcher"</span>)]
+    </span><span class="kw">use </span>zng_ext_fs_watcher::FsWatcherManager;
+    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+    </span><span class="kw">use </span>zng_ext_image::ImageManager;
     <span class="kw">use </span>zng_ext_input::{
-        drag_drop::DragDropManager, focus::FocusManager, gesture::GestureManager, keyboard::KeyboardManager, mouse::MouseManager,
+        focus::FocusManager, gesture::GestureManager, keyboard::KeyboardManager, mouse::MouseManager,
         pointer_capture::PointerCaptureManager, touch::TouchManager,
     };
+
+    <span class="attr">#[cfg(feature = <span class="string">"drag_drop"</span>)]
+    </span><span class="kw">use </span>zng_ext_input::drag_drop::DragDropManager;
+
     <span class="kw">use </span>zng_ext_l10n::L10nManager;
-    <span class="kw">use </span>zng_ext_undo::UndoManager;
-    <span class="kw">use </span>zng_ext_window::WindowManager;
+    <span class="attr">#[cfg(feature = <span class="string">"undo"</span>)]
+    </span><span class="kw">use </span>zng_ext_undo::UndoManager;
+
+    <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+    </span><span class="kw">use </span>zng_ext_window::WindowManager;
 
     <span class="kw">use </span><span class="kw">crate</span>::default_editors;
 
@@ -1885,20 +1992,20 @@
         ///
         /// Extensions included.
         ///
-        /// * [`FsWatcherManager`]
-        /// * [`ConfigManager`]
+        /// * [`FsWatcherManager`] if the `"fs_watcher"` feature is enabled.
+        /// * [`ConfigManager`] if the `"config"` feature is enabled.
         /// * [`L10nManager`]
         /// * [`PointerCaptureManager`]
         /// * [`MouseManager`]
         /// * [`TouchManager`]
         /// * [`KeyboardManager`]
         /// * [`GestureManager`]
-        /// * [`WindowManager`]
+        /// * [`WindowManager`] if the `"window"` feature is enabled.
         /// * [`FontManager`]
         /// * [`FocusManager`]
-        /// * [`DragDropManager`]
-        /// * [`ImageManager`]
-        /// * [`ClipboardManager`]
+        /// * [`DragDropManager`] if the `"drag_drop"` feature is enabled.
+        /// * [`ImageManager`] if the `"image"` feature is enabled.
+        /// * [`ClipboardManager`] if the `"clipboard"` feature is enabled.
         /// * [`UndoManager`]
         /// * [`SingleInstanceManager`] if the `"single_instance"` feature is enabled.
         /// * [`HotReloadManager`] if the `"hot_reload"` feature is enabled.
@@ -1913,23 +2020,44 @@
         /// [`FontManager`]: zng_ext_font::FontManager
         /// [`SvgManager`]: zng_ext_svg::SvgManager
         </span><span class="kw">pub fn </span>defaults(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="macro">DefaultsAppExtended!</span>[] {
-            <span class="kw">let </span>r = <span class="self">self
-                </span>.minimal()
-                .extend(FsWatcherManager::default())
-                .extend(ConfigManager::default())
-                .extend(L10nManager::default())
-                .extend(PointerCaptureManager::default())
-                .extend(MouseManager::default())
-                .extend(TouchManager::default())
-                .extend(KeyboardManager::default())
-                .extend(GestureManager::default())
-                .extend(WindowManager::default())
-                .extend(FontManager::default())
-                .extend(FocusManager::default())
-                .extend(DragDropManager::default())
-                .extend(ImageManager::default())
-                .extend(ClipboardManager::default())
-                .extend(UndoManager::default());
+            <span class="kw">let </span>r = <span class="self">self</span>.minimal();
+
+            <span class="attr">#[cfg(feature = <span class="string">"fs_watcher"</span>)]
+            </span><span class="kw">let </span>r = r.extend(FsWatcherManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"config"</span>)]
+            </span><span class="kw">let </span>r = r.extend(ConfigManager::default());
+
+            <span class="kw">let </span>r = r.extend(L10nManager::default());
+
+            <span class="kw">let </span>r = r.extend(PointerCaptureManager::default());
+
+            <span class="kw">let </span>r = r.extend(MouseManager::default());
+
+            <span class="kw">let </span>r = r.extend(TouchManager::default());
+
+            <span class="kw">let </span>r = r.extend(KeyboardManager::default());
+
+            <span class="kw">let </span>r = r.extend(GestureManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+            </span><span class="kw">let </span>r = r.extend(WindowManager::default());
+
+            <span class="kw">let </span>r = r.extend(FontManager::default());
+
+            <span class="kw">let </span>r = r.extend(FocusManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"drag_drop"</span>)]
+            </span><span class="kw">let </span>r = r.extend(DragDropManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+            </span><span class="kw">let </span>r = r.extend(ImageManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"clipboard"</span>)]
+            </span><span class="kw">let </span>r = r.extend(ClipboardManager::default());
+
+            <span class="attr">#[cfg(feature = <span class="string">"undo"</span>)]
+            </span><span class="kw">let </span>r = r.extend(UndoManager::default());
 
             <span class="attr">#[cfg(all(view, view_prebuilt))]
             </span><span class="macro">tracing::debug!</span>(<span class="string">r#"both "view" and "view_prebuilt" enabled, will use only one, indeterminate witch"#</span>);
@@ -1963,16 +2091,18 @@
             <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, var_editor set"</span>);
 
             <span class="comment">// injected in all windows
-            </span>zng_ext_window::WINDOWS.register_root_extender(|a| {
-                <span class="kw">let </span>child = a.root;
+            </span><span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+            </span>{
+                zng_ext_window::WINDOWS.register_root_extender(|a| {
+                    <span class="kw">let </span>child = a.root;
 
-                <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
-                </span><span class="kw">let </span>child = zng_wgt_inspector::inspector(child, zng_wgt_inspector::live_inspector(<span class="bool-val">true</span>));
+                    <span class="attr">#[cfg(feature = <span class="string">"inspector"</span>)]
+                    </span><span class="kw">let </span>child = zng_wgt_inspector::inspector(child, zng_wgt_inspector::live_inspector(<span class="bool-val">true</span>));
 
-                child
-            });
-            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, root_extender set"</span>);
-
+                    child
+                });
+                <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, root_extender set"</span>);
+            }
             <span class="attr">#[cfg(any(target_os = <span class="string">"android"</span>, target_os = <span class="string">"ios"</span>))]
             </span>{
                 zng_ext_window::WINDOWS.register_open_nested_handler(<span class="kw">crate</span>::window::default_mobile_nested_open_handler);
@@ -1980,14 +2110,17 @@
             }
 
             <span class="comment">// setup OPEN_LICENSES_CMD handler
-            </span><span class="kw">crate</span>::third_party::setup_default_view();
-            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, third_party set"</span>);
+            </span><span class="attr">#[cfg(all(feature = <span class="string">"third_party_default"</span>, feature = <span class="string">"third_party"</span>))]
+            </span>{
+                <span class="kw">crate</span>::third_party::setup_default_view();
+                <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, third_party set"</span>);
+            }
 
             <span class="comment">// setup SETTINGS_CMD handler
             </span>zng_wgt_settings::handle_settings_cmd();
             <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, settings set"</span>);
 
-            <span class="attr">#[cfg(single_instance)]
+            <span class="attr">#[cfg(all(single_instance, feature = <span class="string">"window"</span>))]
             </span>{
                 <span class="kw">crate</span>::app::APP_INSTANCE_EVENT
                     .on_pre_event(<span class="macro">crate::handler::app_hn!</span>(|args: <span class="kw-2">&amp;</span><span class="kw">crate</span>::app::AppInstanceArgs, <span class="kw">_</span>| {
@@ -2028,7 +2161,6 @@
 <span class="kw">mod </span>default_editors {
     <span class="kw">use </span>zng::{
         prelude::<span class="kw-2">*</span>,
-        text_input,
         widget::{
             node::{BoxedUiNode, NilUiNode},
             EditorRequestArgs,
@@ -2036,27 +2168,31 @@
     };
 
     <span class="kw">pub fn </span>handler(args: EditorRequestArgs) -&gt; BoxedUiNode {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(txt) = args.value::&lt;Txt&gt;() {
+        <span class="attr">#[cfg(feature = <span class="string">"text_input"</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(txt) = args.value::&lt;Txt&gt;() {
             <span class="kw">return </span><span class="macro">TextInput!</span> {
                 txt;
             }
             .boxed();
         }
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = args.value::&lt;String&gt;() {
+        <span class="attr">#[cfg(feature = <span class="string">"text_input"</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(s) = args.value::&lt;String&gt;() {
             <span class="kw">return </span><span class="macro">TextInput!</span> {
                 txt = s.map_bidi(|s| Txt::from_str(s), |t: <span class="kw-2">&amp;</span>Txt| t.to_string());
             }
             .boxed();
         }
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = args.value::&lt;char&gt;() {
+        <span class="attr">#[cfg(feature = <span class="string">"text_input"</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = args.value::&lt;char&gt;() {
             <span class="kw">return </span><span class="macro">TextInput!</span> {
                 txt_parse::&lt;char&gt; = c;
-                style_fn = <span class="macro">text_input::FieldStyle!</span>();
+                style_fn = <span class="macro">crate::text_input::FieldStyle!</span>();
             }
             .boxed();
         }
 
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(checked) = args.value::&lt;bool&gt;() {
+        <span class="attr">#[cfg(feature = <span class="string">"toggle"</span>)]
+        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(checked) = args.value::&lt;bool&gt;() {
             <span class="kw">return </span><span class="macro">Toggle!</span> {
                 style_fn = <span class="macro">toggle::CheckStyle!</span>();
                 checked;
@@ -2067,10 +2203,11 @@
         <span class="macro">macro_rules!</span> parse {
             ($(<span class="macro-nonterminal">$ty</span>:ty),+ $(,)<span class="question-mark">?</span>) =&gt; {
                 $(
-                    <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = args.value::&lt;<span class="macro-nonterminal">$ty</span>&gt;() {
+                    <span class="attr">#[cfg(feature = <span class="string">"text_input"</span>)]
+                    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(n) = args.value::&lt;<span class="macro-nonterminal">$ty</span>&gt;() {
                         <span class="kw">return </span><span class="macro">TextInput!</span> {
                             txt_parse::&lt;<span class="macro-nonterminal">$ty</span>&gt; = n;
-                            style_fn = <span class="macro">text_input::FieldStyle!</span>();
+                            style_fn = <span class="macro">crate::text_input::FieldStyle!</span>();
                         }
                         .boxed();
                     }
@@ -2082,6 +2219,7 @@
             u8, i8, u16, i16, u32, i32, u64, i64, u128, i128, f32, f64,
         }
 
+        <span class="kw">let _ </span>= args;
         NilUiNode.boxed()
     }
 }
