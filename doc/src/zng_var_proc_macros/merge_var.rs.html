@@ -72,7 +72,8 @@
 <a href="#71" id="71">71</a>
 <a href="#72" id="72">72</a>
 <a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a></pre></div><pre class="rust"><code><span class="kw">use </span>syn::{
+<a href="#74" id="74">74</a>
+<a href="#75" id="75">75</a></pre></div><pre class="rust"><code><span class="kw">use </span>syn::{
     parse::{Parse, ParseStream},
     parse_macro_input,
     punctuated::Punctuated,
@@ -100,7 +101,8 @@
 
     <span class="kw">let </span>out = <span class="macro">quote!</span> {
         {
-            <span class="kw">fn </span>merge_var__&lt;
+            <span class="attr">#[inline(always)]
+            </span><span class="kw">fn </span>merge_var__&lt;
                 #(#type_idents: #vars_mod::VarValue,)*
                 #(#var_idents: #vars_mod::Var&lt;#type_idents&gt;,)*
                 O: #vars_mod::VarValue,

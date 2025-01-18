@@ -425,7 +425,18 @@
 <a href="#424" id="424">424</a>
 <a href="#425" id="425">425</a>
 <a href="#426" id="426">426</a>
-<a href="#427" id="427">427</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#427" id="427">427</a>
+<a href="#428" id="428">428</a>
+<a href="#429" id="429">429</a>
+<a href="#430" id="430">430</a>
+<a href="#431" id="431">431</a>
+<a href="#432" id="432">432</a>
+<a href="#433" id="433">433</a>
+<a href="#434" id="434">434</a>
+<a href="#435" id="435">435</a>
+<a href="#436" id="436">436</a>
+<a href="#437" id="437">437</a>
+<a href="#438" id="438">438</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Button widget.
@@ -438,7 +449,7 @@
 
 </span><span class="macro">zng_wgt::enable_widget_macros!</span>();
 
-<span class="kw">use </span>std::{any::TypeId, ops};
+<span class="kw">use </span>std::any::TypeId;
 
 <span class="kw">use </span>colors::{ACCENT_COLOR_VAR, BASE_COLOR_VAR};
 <span class="kw">use </span>zng_app::event::CommandParam;
@@ -458,7 +469,9 @@
 };
 <span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn, Style, StyleMix};
 <span class="kw">use </span>zng_wgt_text::{font_color, underline, Text, FONT_COLOR_VAR};
-<span class="kw">use </span>zng_wgt_tooltip::{tooltip, tooltip_fn, Tip, TooltipArgs};
+
+<span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+</span><span class="kw">use </span>zng_wgt_tooltip::{tooltip, tooltip_fn, Tip, TooltipArgs};
 
 <span class="doccomment">/// A clickable container.
 ///
@@ -507,7 +520,10 @@
 
                 <span class="kw">let </span>on_click = wgt.property(<span class="macro">property_id!</span>(<span class="self">Self</span>::on_click)).is_none();
                 <span class="kw">let </span>on_disabled_click = wgt.property(<span class="macro">property_id!</span>(on_disabled_click)).is_none();
-                <span class="kw">let </span>tooltip = wgt.property(<span class="macro">property_id!</span>(tooltip)).is_none() &amp;&amp; wgt.property(<span class="macro">property_id!</span>(tooltip_fn)).is_none();
+                <span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+                </span><span class="kw">let </span>tooltip = wgt.property(<span class="macro">property_id!</span>(tooltip)).is_none() &amp;&amp; wgt.property(<span class="macro">property_id!</span>(tooltip_fn)).is_none();
+                <span class="attr">#[cfg(not(feature = <span class="string">"tooltip"</span>))]
+                </span><span class="kw">let </span>tooltip = <span class="bool-val">false</span>;
                 <span class="kw">if </span>on_click || on_disabled_click || tooltip {
                     wgt.push_intrinsic(
                         NestGroup::EVENT,
@@ -547,7 +563,8 @@
                                 )
                                 .boxed();
                             }
-                            <span class="kw">if </span>tooltip {
+                            <span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+                            </span><span class="kw">if </span>tooltip {
                                 child = <span class="self">self</span>::tooltip_fn(
                                     child,
                                     <span class="macro">merge_var!</span>(cmd, CMD_TOOLTIP_FN_VAR, |cmd, tt_fn| {
@@ -588,12 +605,14 @@
     </span><span class="kw">pub static </span>CMD_CHILD_FN_VAR: WidgetFn&lt;Command&gt; = WidgetFn::new(default_cmd_child_fn);
 
     <span class="doccomment">/// Widget function used when `cmd` is set and `tooltip_fn`, `tooltip` are not set.
+    </span><span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
     </span><span class="kw">pub static </span>CMD_TOOLTIP_FN_VAR: WidgetFn&lt;CmdTooltipArgs&gt; = WidgetFn::new(default_cmd_tooltip_fn);
 
     <span class="kw">static </span>CMD_VAR: <span class="prelude-ty">Option</span>&lt;Command&gt; = <span class="prelude-val">None</span>;
 }
 
-<span class="doccomment">/// Arguments for [`cmd_tooltip_fn`].
+<span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+</span><span class="doccomment">/// Arguments for [`cmd_tooltip_fn`].
 ///
 /// [`cmd_tooltip_fn`]: fn@cmd_tooltip_fn
 </span><span class="attr">#[derive(Clone)]
@@ -603,7 +622,8 @@
     <span class="doccomment">/// The command.
     </span><span class="kw">pub </span>cmd: Command,
 }
-<span class="kw">impl </span>ops::Deref <span class="kw">for </span>CmdTooltipArgs {
+<span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+</span><span class="kw">impl </span>std::ops::Deref <span class="kw">for </span>CmdTooltipArgs {
     <span class="kw">type </span>Target = TooltipArgs;
 
     <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
@@ -616,7 +636,8 @@
     <span class="macro">Text!</span>(cmd.name())
 }
 
-<span class="doccomment">/// Default [`CMD_TOOLTIP_FN_VAR`].
+<span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+</span><span class="doccomment">/// Default [`CMD_TOOLTIP_FN_VAR`].
 </span><span class="kw">pub fn </span>default_cmd_tooltip_fn(args: CmdTooltipArgs) -&gt; <span class="kw">impl </span>UiNode {
     <span class="kw">let </span>info = args.cmd.info();
     <span class="kw">let </span>has_info = info.map(|s| !s.is_empty());
@@ -699,7 +720,8 @@
     with_context_var(child, CMD_CHILD_FN_VAR, cmd_child)
 }
 
-<span class="doccomment">/// Sets the widget function used to produce the button tooltip when [`cmd`] is set and tooltip is not.
+<span class="attr">#[cfg(feature = <span class="string">"tooltip"</span>)]
+</span><span class="doccomment">/// Sets the widget function used to produce the button tooltip when [`cmd`] is set and tooltip is not.
 ///
 /// [`cmd`]: fn@cmd
 </span><span class="attr">#[property(CONTEXT, default(CMD_TOOLTIP_FN_VAR), widget_impl(Button))]
