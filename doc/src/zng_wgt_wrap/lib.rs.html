@@ -1103,7 +1103,12 @@
 <a href="#1102" id="1102">1102</a>
 <a href="#1103" id="1103">1103</a>
 <a href="#1104" id="1104">1104</a>
-<a href="#1105" id="1105">1105</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#1105" id="1105">1105</a>
+<a href="#1106" id="1106">1106</a>
+<a href="#1107" id="1107">1107</a>
+<a href="#1108" id="1108">1108</a>
+<a href="#1109" id="1109">1109</a>
+<a href="#1110" id="1110">1110</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Wrap panel, properties and nodes.
@@ -1875,7 +1880,12 @@
 
                 <span class="kw">let </span>(inline, size) = wm.measure_inline(inline_constrain, row.size.height - spacing.row, child);
 
-                <span class="kw">if </span>size.is_empty() {
+                <span class="kw">let </span>can_collapse = size.is_empty()
+                    &amp;&amp; <span class="kw">match </span><span class="kw-2">&amp;</span>inline {
+                        <span class="prelude-val">Some</span>(i) =&gt; i.first_segs.is_empty(),
+                        <span class="prelude-val">None </span>=&gt; <span class="bool-val">true</span>,
+                    };
+                <span class="kw">if </span>can_collapse {
                     row.item_segs.push(ItemSegsInfo::new_collapsed());
                     <span class="comment">// collapsed, continue.
                     </span><span class="kw">return</span>;

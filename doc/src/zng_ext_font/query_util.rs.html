@@ -538,7 +538,29 @@
 <a href="#537" id="537">537</a>
 <a href="#538" id="538">538</a>
 <a href="#539" id="539">539</a>
-<a href="#540" id="540">540</a></pre></div><pre class="rust"><code><span class="attr">#[cfg(not(any(target_arch = <span class="string">"wasm32"</span>, target_os = <span class="string">"android"</span>)))]
+<a href="#540" id="540">540</a>
+<a href="#541" id="541">541</a>
+<a href="#542" id="542">542</a>
+<a href="#543" id="543">543</a>
+<a href="#544" id="544">544</a>
+<a href="#545" id="545">545</a>
+<a href="#546" id="546">546</a>
+<a href="#547" id="547">547</a>
+<a href="#548" id="548">548</a>
+<a href="#549" id="549">549</a>
+<a href="#550" id="550">550</a>
+<a href="#551" id="551">551</a>
+<a href="#552" id="552">552</a>
+<a href="#553" id="553">553</a>
+<a href="#554" id="554">554</a>
+<a href="#555" id="555">555</a>
+<a href="#556" id="556">556</a>
+<a href="#557" id="557">557</a>
+<a href="#558" id="558">558</a>
+<a href="#559" id="559">559</a>
+<a href="#560" id="560">560</a>
+<a href="#561" id="561">561</a>
+<a href="#562" id="562">562</a></pre></div><pre class="rust"><code><span class="attr">#[cfg(not(any(target_arch = <span class="string">"wasm32"</span>, target_os = <span class="string">"android"</span>)))]
 </span><span class="kw">pub use </span>desktop::<span class="kw-2">*</span>;
 
 <span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
@@ -549,11 +571,19 @@
 
 <span class="attr">#[cfg(not(any(target_arch = <span class="string">"wasm32"</span>, target_os = <span class="string">"android"</span>)))]
 </span><span class="kw">mod </span>desktop {
-    <span class="kw">use </span>std::{borrow::Cow, path::Path, sync::Arc};
+    <span class="kw">use </span>std::{
+        borrow::Cow,
+        path::{Path, PathBuf},
+        sync::Arc,
+    };
 
+    <span class="kw">use </span>parking_lot::Mutex;
+    <span class="kw">use </span>zng_layout::unit::ByteUnits;
     <span class="kw">use </span>zng_var::ResponseVar;
 
     <span class="kw">use crate</span>::{FontDataRef, FontLoadingError, FontName, FontStretch, FontStyle, FontWeight, GlyphLoadingError};
+
+    <span class="kw">static </span>DATA_CACHE: Mutex&lt;Vec&lt;(PathBuf, std::sync::Weak&lt;Vec&lt;u8&gt;&gt;)&gt;&gt; = Mutex::new(<span class="macro">vec!</span>[]);
 
     <span class="kw">pub fn </span>system_all() -&gt; ResponseVar&lt;Vec&lt;FontName&gt;&gt; {
         zng_task::wait_respond(|| {
@@ -706,9 +736,23 @@
                     }
                 }
 
-                <span class="kw">let </span>bytes = std::fs::read(<span class="kw-2">&amp;*</span>path)<span class="question-mark">?</span>;
+                <span class="kw">for </span>(k, data) <span class="kw">in </span>DATA_CACHE.lock().iter() {
+                    <span class="kw">if </span><span class="kw-2">*</span>k == <span class="kw-2">*</span>path {
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = data.upgrade() {
+                            <span class="kw">return </span><span class="prelude-val">Ok</span>((FontDataRef(data), <span class="kw-2">*</span>font_index));
+                        }
+                    }
+                }
 
-                <span class="prelude-val">Ok</span>((FontDataRef(Arc::new(bytes)), <span class="kw-2">*</span>font_index))
+                <span class="kw">let </span>bytes = std::fs::read(<span class="kw-2">&amp;*</span>path)<span class="question-mark">?</span>;
+                <span class="macro">tracing::debug!</span>(<span class="string">"read font `{}:{}`, using {}"</span>, path.display(), font_index, bytes.capacity().bytes());
+
+                <span class="kw">let </span>data = Arc::new(bytes);
+                <span class="kw">let </span><span class="kw-2">mut </span>cache = DATA_CACHE.lock();
+                cache.retain(|(<span class="kw">_</span>, v)| v.strong_count() &gt; <span class="number">0</span>);
+                cache.push((path.to_path_buf(), Arc::downgrade(<span class="kw-2">&amp;</span>data)));
+
+                <span class="prelude-val">Ok</span>((FontDataRef(data), <span class="kw-2">*</span>font_index))
             }
             font_kit::handle::Handle::Memory { bytes, font_index } =&gt; <span class="prelude-val">Ok</span>((FontDataRef(bytes.clone()), <span class="kw-2">*</span>font_index)),
         }

@@ -1223,7 +1223,12 @@
 <a href="#1222" id="1222">1222</a>
 <a href="#1223" id="1223">1223</a>
 <a href="#1224" id="1224">1224</a>
-<a href="#1225" id="1225">1225</a></pre></div><pre class="rust"><code><span class="doccomment">//! Built-in tools
+<a href="#1225" id="1225">1225</a>
+<a href="#1226" id="1226">1226</a>
+<a href="#1227" id="1227">1227</a>
+<a href="#1228" id="1228">1228</a>
+<a href="#1229" id="1229">1229</a>
+<a href="#1230" id="1230">1230</a></pre></div><pre class="rust"><code><span class="doccomment">//! Built-in tools
 
 </span><span class="kw">use </span>std::{
     env, fs,
@@ -2407,7 +2412,12 @@ ZR_APK_KEY_PASS - key password
 
     <span class="attr">#[test]
     </span><span class="kw">fn </span>replace_tests() {
-        std::env::set_var(<span class="string">"ZR_RP_TEST"</span>, <span class="string">"test value"</span>);
+        <span class="kw">unsafe </span>{
+            <span class="comment">// SAFETY: potentially not safe as tests run in parallel and I don't want to audit every C dep
+            // of code that runs in other tests. If a segfault happen during test run caused by this I intend
+            // to print the test runner log and frame it.
+            </span>std::env::set_var(<span class="string">"ZR_RP_TEST"</span>, <span class="string">"test value"</span>);
+        }
 
         <span class="macro">assert_eq!</span>(<span class="string">""</span>, replace(<span class="string">""</span>, <span class="number">0</span>).unwrap());
         <span class="macro">assert_eq!</span>(<span class="string">"normal text"</span>, replace(<span class="string">"normal text"</span>, <span class="number">0</span>).unwrap());

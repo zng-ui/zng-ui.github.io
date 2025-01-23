@@ -595,7 +595,15 @@
 <a href="#594" id="594">594</a>
 <a href="#595" id="595">595</a>
 <a href="#596" id="596">596</a>
-<a href="#597" id="597">597</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#597" id="597">597</a>
+<a href="#598" id="598">598</a>
+<a href="#599" id="599">599</a>
+<a href="#600" id="600">600</a>
+<a href="#601" id="601">601</a>
+<a href="#602" id="602">602</a>
+<a href="#603" id="603">603</a>
+<a href="#604" id="604">604</a>
+<a href="#605" id="605">605</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Markdown widget, properties and nodes.
@@ -795,6 +803,11 @@
     <span class="kw">let </span><span class="kw-2">mut </span>last_txt_end = <span class="string">'\0'</span>;
 
     <span class="kw">for </span>item <span class="kw">in </span>Parser::new_with_broken_link_callback(md, Options::all(), <span class="prelude-val">Some</span>(<span class="kw-2">&amp;mut </span>|b: BrokenLink&lt;<span class="lifetime">'a</span>&gt;| <span class="prelude-val">Some</span>((b.reference, <span class="string">""</span>.into())))) {
+        <span class="kw">let </span>item = <span class="kw">match </span>item {
+            Event::SoftBreak =&gt; Event::Text(pulldown_cmark::CowStr::Borrowed(<span class="string">" "</span>)),
+            Event::HardBreak =&gt; Event::Text(pulldown_cmark::CowStr::Borrowed(<span class="string">"\n"</span>)),
+            item =&gt; item,
+        };
         <span class="kw">match </span>item {
             Event::Start(tag) =&gt; <span class="kw">match </span>tag {
                 Tag::Paragraph =&gt; {
@@ -1099,23 +1112,26 @@
                     <span class="comment">// apply `WhiteSpace::MergeAll` across texts.
                     </span><span class="kw">let </span>txt_end = txt.chars().next_back().unwrap();
 
-                    <span class="kw">let </span>starts_with_space = txt.chars().next().unwrap().is_whitespace();
-                    <span class="kw">match </span>WhiteSpace::MergeAll.transform(<span class="kw-2">&amp;</span>txt) {
-                        std::borrow::Cow::Borrowed(<span class="kw">_</span>) =&gt; {
-                            <span class="kw">if </span>starts_with_space &amp;&amp; last_txt_end != <span class="string">'\0' </span>|| !txt.is_empty() &amp;&amp; last_txt_end.is_whitespace() {
-                                txt.to_mut().insert(<span class="number">0</span>, <span class="string">' '</span>);
-                            }
-                            txt.end_mut();
-                            last_txt_end = txt_end;
-                        }
-                        std::borrow::Cow::Owned(t) =&gt; {
-                            txt = t;
-                            <span class="kw">if </span>!txt.is_empty() {
+                    <span class="kw">if </span>txt != <span class="string">" " </span>&amp;&amp; txt != <span class="string">"\n" </span>{
+                        <span class="comment">// not Soft/HardBreak
+                        </span><span class="kw">let </span>starts_with_space = txt.chars().next().unwrap().is_whitespace();
+                        <span class="kw">match </span>WhiteSpace::MergeAll.transform(<span class="kw-2">&amp;</span>txt) {
+                            std::borrow::Cow::Borrowed(<span class="kw">_</span>) =&gt; {
                                 <span class="kw">if </span>starts_with_space &amp;&amp; last_txt_end != <span class="string">'\0' </span>|| !txt.is_empty() &amp;&amp; last_txt_end.is_whitespace() {
                                     txt.to_mut().insert(<span class="number">0</span>, <span class="string">' '</span>);
-                                    txt.end_mut();
                                 }
+                                txt.end_mut();
                                 last_txt_end = txt_end;
+                            }
+                            std::borrow::Cow::Owned(t) =&gt; {
+                                txt = t;
+                                <span class="kw">if </span>!txt.is_empty() {
+                                    <span class="kw">if </span>starts_with_space &amp;&amp; last_txt_end != <span class="string">'\0' </span>|| !txt.is_empty() &amp;&amp; last_txt_end.is_whitespace() {
+                                        txt.to_mut().insert(<span class="number">0</span>, <span class="string">' '</span>);
+                                        txt.end_mut();
+                                    }
+                                    last_txt_end = txt_end;
+                                }
                             }
                         }
                     }
@@ -1175,8 +1191,6 @@
                     inlines.push(txt);
                 }
             }
-            Event::SoftBreak =&gt; {}
-            Event::HardBreak =&gt; {}
             Event::Rule =&gt; {
                 blocks.push(rule_view(RuleFnArgs {}));
             }
@@ -1187,6 +1201,8 @@
             }
             Event::InlineMath(<span class="kw">_</span>) =&gt; {}
             Event::DisplayMath(<span class="kw">_</span>) =&gt; {}
+            <span class="comment">// handled early
+            </span>Event::SoftBreak | Event::HardBreak =&gt; <span class="macro">unreachable!</span>(),
         }
     }
 

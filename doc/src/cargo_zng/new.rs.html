@@ -562,7 +562,11 @@
 <a href="#561" id="561">561</a>
 <a href="#562" id="562">562</a>
 <a href="#563" id="563">563</a>
-<a href="#564" id="564">564</a></pre></div><pre class="rust"><code><span class="doccomment">//! Initialize a new project from a Zng template repository
+<a href="#564" id="564">564</a>
+<a href="#565" id="565">565</a>
+<a href="#566" id="566">566</a>
+<a href="#567" id="567">567</a>
+<a href="#568" id="568">568</a></pre></div><pre class="rust"><code><span class="doccomment">//! Initialize a new project from a Zng template repository
 
 </span><span class="kw">use </span>std::{
     fs, io, mem,
@@ -839,7 +843,11 @@
         apply(cx, <span class="bool-val">true</span>, <span class="kw-2">&amp;</span>post, <span class="kw-2">&amp;</span>post_replaced)<span class="question-mark">?</span>;
         fs::remove_dir_all(<span class="kw-2">&amp;</span>post)<span class="question-mark">?</span>;
         fs::rename(<span class="kw-2">&amp;</span>post_replaced, <span class="kw-2">&amp;</span>post)<span class="question-mark">?</span>;
-        std::env::set_var(<span class="string">"ZNG_TEMPLATE_POST_DIR"</span>, <span class="kw-2">&amp;</span>post);
+
+        <span class="kw">unsafe </span>{
+            <span class="comment">// SAFETY: cargo-zng new is single-threaded
+            </span>std::env::set_var(<span class="string">"ZNG_TEMPLATE_POST_DIR"</span>, <span class="kw-2">&amp;</span>post);
+        }
     }
 
     <span class="comment">// rename/rewrite template and move it to new package dir

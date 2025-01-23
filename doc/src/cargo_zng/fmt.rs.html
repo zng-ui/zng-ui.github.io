@@ -917,7 +917,7 @@
     <span class="kw">static </span>POUND_MARKER: <span class="kw-2">&amp;</span>str = <span class="string">"__P_"</span>;
 
     <span class="kw">if </span>!reverse {
-        RGX.replace(code, |caps: <span class="kw-2">&amp;</span>regex::Captures| {
+        RGX.replace_all(code, |caps: <span class="kw-2">&amp;</span>regex::Captures| {
             <span class="kw">let </span>prefix_spaces = <span class="kw-2">&amp;</span>caps[<span class="number">0</span>][..caps.get(<span class="number">1</span>).unwrap().start() - caps.get(<span class="number">0</span>).unwrap().start()];
 
             <span class="kw">let </span>expr = <span class="kw-2">&amp;</span>caps[<span class="number">0</span>][caps.get(<span class="number">1</span>).unwrap().end() - caps.get(<span class="number">0</span>).unwrap().start()..];

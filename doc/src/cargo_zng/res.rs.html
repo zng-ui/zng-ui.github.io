@@ -296,7 +296,11 @@
 <a href="#295" id="295">295</a>
 <a href="#296" id="296">296</a>
 <a href="#297" id="297">297</a>
-<a href="#298" id="298">298</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#298" id="298">298</a>
+<a href="#299" id="299">299</a>
+<a href="#300" id="300">300</a>
+<a href="#301" id="301">301</a>
+<a href="#302" id="302">302</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     fs, io,
     ops::ControlFlow,
     path::{Path, PathBuf},
@@ -429,8 +433,12 @@
         }
     }
 
-    <span class="comment">// to use `display_path` in the tool runner (current process)
-    </span>std::env::set_var(ZR_WORKSPACE_DIR, std::env::current_dir().unwrap());
+    <span class="kw">unsafe </span>{
+        <span class="comment">// SAFETY: cargo-zng res is single-threaded
+        //
+        // to use `display_path` in the tool runner (current process)
+        </span>std::env::set_var(ZR_WORKSPACE_DIR, std::env::current_dir().unwrap());
+    }
 
     <span class="kw">let </span>start = Instant::now();
     <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = build(<span class="kw-2">&amp;</span>args, about) {
