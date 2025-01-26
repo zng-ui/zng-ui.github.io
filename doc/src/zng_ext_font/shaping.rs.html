@@ -4470,7 +4470,10 @@
 <a href="#4469" id="4469">4469</a>
 <a href="#4470" id="4470">4470</a>
 <a href="#4471" id="4471">4471</a>
-<a href="#4472" id="4472">4472</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#4472" id="4472">4472</a>
+<a href="#4473" id="4473">4473</a>
+<a href="#4474" id="4474">4474</a>
+<a href="#4475" id="4475">4475</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
@@ -6752,6 +6755,7 @@
         word_ctx_key.direction = info.direction();
         <span class="kw">if </span>info.kind.is_word() {
             <span class="kw">let </span>max_width = <span class="self">self</span>.actual_max_width();
+
             fonts.shape_segment(seg, word_ctx_key, features, |shaped_seg, font| {
                 <span class="kw">if </span><span class="self">self</span>.origin.x + shaped_seg.x_advance &gt; max_width {
                     <span class="comment">// need wrap
@@ -6772,6 +6776,8 @@
                             };
                             <span class="kw">if </span>!<span class="self">self</span>.out.segments.<span class="number">0</span>[current_start..].is_empty() {
                                 <span class="self">self</span>.push_line_break(<span class="bool-val">true</span>, text);
+                            } <span class="kw">else if </span>current_start == <span class="number">0 </span>&amp;&amp; <span class="self">self</span>.allow_first_wrap {
+                                <span class="self">self</span>.out.first_wrapped = <span class="bool-val">true</span>;
                             }
                             <span class="self">self</span>.push_glyphs(shaped_seg, <span class="self">self</span>.letter_spacing);
                             <span class="self">self</span>.push_text_seg(seg, info);

@@ -1295,7 +1295,10 @@
 <a href="#1294" id="1294">1294</a>
 <a href="#1295" id="1295">1295</a>
 <a href="#1296" id="1296">1296</a>
-<a href="#1297" id="1297">1297</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, sync::Arc};
+<a href="#1297" id="1297">1297</a>
+<a href="#1298" id="1298">1298</a>
+<a href="#1299" id="1299">1299</a>
+<a href="#1300" id="1300">1300</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, sync::Arc};
 
 <span class="kw">use </span>atomic::Atomic;
 <span class="kw">use </span>parking_lot::RwLock;
@@ -1855,19 +1858,22 @@
             <span class="self">self</span>.pending.insert(PendingLayout::RESHAPE_LINES);
         }
 
+        <span class="kw">if </span><span class="self">self</span>.pending.contains(PendingLayout::RESHAPE_LINES) {
+            ctx.shaped_text.reshape_lines(
+                metrics.constraints(),
+                metrics.inline_constraints().map(|c| c.layout()),
+                align,
+                overflow_align,
+                line_height,
+                line_spacing,
+                metrics.direction(),
+            );
+        }
+
         <span class="kw">if </span>!is_measure {
             <span class="self">self</span>.last_layout = (metrics.clone(), <span class="self">self</span>.shaping_args.inline_constraints);
 
             <span class="kw">if </span><span class="self">self</span>.pending.contains(PendingLayout::RESHAPE_LINES) {
-                ctx.shaped_text.reshape_lines(
-                    metrics.constraints(),
-                    metrics.inline_constraints().map(|c| c.layout()),
-                    align,
-                    overflow_align,
-                    line_height,
-                    line_spacing,
-                    metrics.direction(),
-                );
                 ctx.shaped_text_version = ctx.shaped_text_version.wrapping_add(<span class="number">1</span>);
                 drop(resolved);
                 <span class="self">self</span>.baseline = ctx.shaped_text.baseline();
