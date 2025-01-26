@@ -1298,7 +1298,27 @@
 <a href="#1297" id="1297">1297</a>
 <a href="#1298" id="1298">1298</a>
 <a href="#1299" id="1299">1299</a>
-<a href="#1300" id="1300">1300</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, sync::Arc};
+<a href="#1300" id="1300">1300</a>
+<a href="#1301" id="1301">1301</a>
+<a href="#1302" id="1302">1302</a>
+<a href="#1303" id="1303">1303</a>
+<a href="#1304" id="1304">1304</a>
+<a href="#1305" id="1305">1305</a>
+<a href="#1306" id="1306">1306</a>
+<a href="#1307" id="1307">1307</a>
+<a href="#1308" id="1308">1308</a>
+<a href="#1309" id="1309">1309</a>
+<a href="#1310" id="1310">1310</a>
+<a href="#1311" id="1311">1311</a>
+<a href="#1312" id="1312">1312</a>
+<a href="#1313" id="1313">1313</a>
+<a href="#1314" id="1314">1314</a>
+<a href="#1315" id="1315">1315</a>
+<a href="#1316" id="1316">1316</a>
+<a href="#1317" id="1317">1317</a>
+<a href="#1318" id="1318">1318</a>
+<a href="#1319" id="1319">1319</a>
+<a href="#1320" id="1320">1320</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{mem, sync::Arc};
 
 <span class="kw">use </span>atomic::Atomic;
 <span class="kw">use </span>parking_lot::RwLock;
@@ -1858,8 +1878,15 @@
             <span class="self">self</span>.pending.insert(PendingLayout::RESHAPE_LINES);
         }
 
-        <span class="kw">if </span><span class="self">self</span>.pending.contains(PendingLayout::RESHAPE_LINES) {
-            ctx.shaped_text.reshape_lines(
+        <span class="kw">if </span><span class="self">self</span>.pending.contains(PendingLayout::RESHAPE_LINES) &amp;&amp; metrics.inline_constraints().is_none() {
+            <span class="comment">// Affects block size in measure too
+            //
+            // This breaks inline context, so it is avoided here and called later in the `if !is_measure` block.
+            // This is needed to measure the same block size a layout call would output.
+            //
+            // Not sure if it is a bug that it does not work inlining, but it is not needed there anyway, so for now
+            // this fix is sufficient.
+            </span>ctx.shaped_text.reshape_lines(
                 metrics.constraints(),
                 metrics.inline_constraints().map(|c| c.layout()),
                 align,
@@ -1874,6 +1901,19 @@
             <span class="self">self</span>.last_layout = (metrics.clone(), <span class="self">self</span>.shaping_args.inline_constraints);
 
             <span class="kw">if </span><span class="self">self</span>.pending.contains(PendingLayout::RESHAPE_LINES) {
+                <span class="kw">if </span>metrics.inline_constraints().is_some() {
+                    <span class="comment">// when inlining, only reshape lines in layout passes
+                    </span>ctx.shaped_text.reshape_lines(
+                        metrics.constraints(),
+                        metrics.inline_constraints().map(|c| c.layout()),
+                        align,
+                        overflow_align,
+                        line_height,
+                        line_spacing,
+                        metrics.direction(),
+                    );
+                }
+
                 ctx.shaped_text_version = ctx.shaped_text_version.wrapping_add(<span class="number">1</span>);
                 drop(resolved);
                 <span class="self">self</span>.baseline = ctx.shaped_text.baseline();
