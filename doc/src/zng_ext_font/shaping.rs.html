@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.0 (9fc6b4312 2025-01-07)" data-channel="1.84.0" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -4473,7 +4473,327 @@
 <a href="#4472" id="4472">4472</a>
 <a href="#4473" id="4473">4473</a>
 <a href="#4474" id="4474">4474</a>
-<a href="#4475" id="4475">4475</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#4475" id="4475">4475</a>
+<a href="#4476" id="4476">4476</a>
+<a href="#4477" id="4477">4477</a>
+<a href="#4478" id="4478">4478</a>
+<a href="#4479" id="4479">4479</a>
+<a href="#4480" id="4480">4480</a>
+<a href="#4481" id="4481">4481</a>
+<a href="#4482" id="4482">4482</a>
+<a href="#4483" id="4483">4483</a>
+<a href="#4484" id="4484">4484</a>
+<a href="#4485" id="4485">4485</a>
+<a href="#4486" id="4486">4486</a>
+<a href="#4487" id="4487">4487</a>
+<a href="#4488" id="4488">4488</a>
+<a href="#4489" id="4489">4489</a>
+<a href="#4490" id="4490">4490</a>
+<a href="#4491" id="4491">4491</a>
+<a href="#4492" id="4492">4492</a>
+<a href="#4493" id="4493">4493</a>
+<a href="#4494" id="4494">4494</a>
+<a href="#4495" id="4495">4495</a>
+<a href="#4496" id="4496">4496</a>
+<a href="#4497" id="4497">4497</a>
+<a href="#4498" id="4498">4498</a>
+<a href="#4499" id="4499">4499</a>
+<a href="#4500" id="4500">4500</a>
+<a href="#4501" id="4501">4501</a>
+<a href="#4502" id="4502">4502</a>
+<a href="#4503" id="4503">4503</a>
+<a href="#4504" id="4504">4504</a>
+<a href="#4505" id="4505">4505</a>
+<a href="#4506" id="4506">4506</a>
+<a href="#4507" id="4507">4507</a>
+<a href="#4508" id="4508">4508</a>
+<a href="#4509" id="4509">4509</a>
+<a href="#4510" id="4510">4510</a>
+<a href="#4511" id="4511">4511</a>
+<a href="#4512" id="4512">4512</a>
+<a href="#4513" id="4513">4513</a>
+<a href="#4514" id="4514">4514</a>
+<a href="#4515" id="4515">4515</a>
+<a href="#4516" id="4516">4516</a>
+<a href="#4517" id="4517">4517</a>
+<a href="#4518" id="4518">4518</a>
+<a href="#4519" id="4519">4519</a>
+<a href="#4520" id="4520">4520</a>
+<a href="#4521" id="4521">4521</a>
+<a href="#4522" id="4522">4522</a>
+<a href="#4523" id="4523">4523</a>
+<a href="#4524" id="4524">4524</a>
+<a href="#4525" id="4525">4525</a>
+<a href="#4526" id="4526">4526</a>
+<a href="#4527" id="4527">4527</a>
+<a href="#4528" id="4528">4528</a>
+<a href="#4529" id="4529">4529</a>
+<a href="#4530" id="4530">4530</a>
+<a href="#4531" id="4531">4531</a>
+<a href="#4532" id="4532">4532</a>
+<a href="#4533" id="4533">4533</a>
+<a href="#4534" id="4534">4534</a>
+<a href="#4535" id="4535">4535</a>
+<a href="#4536" id="4536">4536</a>
+<a href="#4537" id="4537">4537</a>
+<a href="#4538" id="4538">4538</a>
+<a href="#4539" id="4539">4539</a>
+<a href="#4540" id="4540">4540</a>
+<a href="#4541" id="4541">4541</a>
+<a href="#4542" id="4542">4542</a>
+<a href="#4543" id="4543">4543</a>
+<a href="#4544" id="4544">4544</a>
+<a href="#4545" id="4545">4545</a>
+<a href="#4546" id="4546">4546</a>
+<a href="#4547" id="4547">4547</a>
+<a href="#4548" id="4548">4548</a>
+<a href="#4549" id="4549">4549</a>
+<a href="#4550" id="4550">4550</a>
+<a href="#4551" id="4551">4551</a>
+<a href="#4552" id="4552">4552</a>
+<a href="#4553" id="4553">4553</a>
+<a href="#4554" id="4554">4554</a>
+<a href="#4555" id="4555">4555</a>
+<a href="#4556" id="4556">4556</a>
+<a href="#4557" id="4557">4557</a>
+<a href="#4558" id="4558">4558</a>
+<a href="#4559" id="4559">4559</a>
+<a href="#4560" id="4560">4560</a>
+<a href="#4561" id="4561">4561</a>
+<a href="#4562" id="4562">4562</a>
+<a href="#4563" id="4563">4563</a>
+<a href="#4564" id="4564">4564</a>
+<a href="#4565" id="4565">4565</a>
+<a href="#4566" id="4566">4566</a>
+<a href="#4567" id="4567">4567</a>
+<a href="#4568" id="4568">4568</a>
+<a href="#4569" id="4569">4569</a>
+<a href="#4570" id="4570">4570</a>
+<a href="#4571" id="4571">4571</a>
+<a href="#4572" id="4572">4572</a>
+<a href="#4573" id="4573">4573</a>
+<a href="#4574" id="4574">4574</a>
+<a href="#4575" id="4575">4575</a>
+<a href="#4576" id="4576">4576</a>
+<a href="#4577" id="4577">4577</a>
+<a href="#4578" id="4578">4578</a>
+<a href="#4579" id="4579">4579</a>
+<a href="#4580" id="4580">4580</a>
+<a href="#4581" id="4581">4581</a>
+<a href="#4582" id="4582">4582</a>
+<a href="#4583" id="4583">4583</a>
+<a href="#4584" id="4584">4584</a>
+<a href="#4585" id="4585">4585</a>
+<a href="#4586" id="4586">4586</a>
+<a href="#4587" id="4587">4587</a>
+<a href="#4588" id="4588">4588</a>
+<a href="#4589" id="4589">4589</a>
+<a href="#4590" id="4590">4590</a>
+<a href="#4591" id="4591">4591</a>
+<a href="#4592" id="4592">4592</a>
+<a href="#4593" id="4593">4593</a>
+<a href="#4594" id="4594">4594</a>
+<a href="#4595" id="4595">4595</a>
+<a href="#4596" id="4596">4596</a>
+<a href="#4597" id="4597">4597</a>
+<a href="#4598" id="4598">4598</a>
+<a href="#4599" id="4599">4599</a>
+<a href="#4600" id="4600">4600</a>
+<a href="#4601" id="4601">4601</a>
+<a href="#4602" id="4602">4602</a>
+<a href="#4603" id="4603">4603</a>
+<a href="#4604" id="4604">4604</a>
+<a href="#4605" id="4605">4605</a>
+<a href="#4606" id="4606">4606</a>
+<a href="#4607" id="4607">4607</a>
+<a href="#4608" id="4608">4608</a>
+<a href="#4609" id="4609">4609</a>
+<a href="#4610" id="4610">4610</a>
+<a href="#4611" id="4611">4611</a>
+<a href="#4612" id="4612">4612</a>
+<a href="#4613" id="4613">4613</a>
+<a href="#4614" id="4614">4614</a>
+<a href="#4615" id="4615">4615</a>
+<a href="#4616" id="4616">4616</a>
+<a href="#4617" id="4617">4617</a>
+<a href="#4618" id="4618">4618</a>
+<a href="#4619" id="4619">4619</a>
+<a href="#4620" id="4620">4620</a>
+<a href="#4621" id="4621">4621</a>
+<a href="#4622" id="4622">4622</a>
+<a href="#4623" id="4623">4623</a>
+<a href="#4624" id="4624">4624</a>
+<a href="#4625" id="4625">4625</a>
+<a href="#4626" id="4626">4626</a>
+<a href="#4627" id="4627">4627</a>
+<a href="#4628" id="4628">4628</a>
+<a href="#4629" id="4629">4629</a>
+<a href="#4630" id="4630">4630</a>
+<a href="#4631" id="4631">4631</a>
+<a href="#4632" id="4632">4632</a>
+<a href="#4633" id="4633">4633</a>
+<a href="#4634" id="4634">4634</a>
+<a href="#4635" id="4635">4635</a>
+<a href="#4636" id="4636">4636</a>
+<a href="#4637" id="4637">4637</a>
+<a href="#4638" id="4638">4638</a>
+<a href="#4639" id="4639">4639</a>
+<a href="#4640" id="4640">4640</a>
+<a href="#4641" id="4641">4641</a>
+<a href="#4642" id="4642">4642</a>
+<a href="#4643" id="4643">4643</a>
+<a href="#4644" id="4644">4644</a>
+<a href="#4645" id="4645">4645</a>
+<a href="#4646" id="4646">4646</a>
+<a href="#4647" id="4647">4647</a>
+<a href="#4648" id="4648">4648</a>
+<a href="#4649" id="4649">4649</a>
+<a href="#4650" id="4650">4650</a>
+<a href="#4651" id="4651">4651</a>
+<a href="#4652" id="4652">4652</a>
+<a href="#4653" id="4653">4653</a>
+<a href="#4654" id="4654">4654</a>
+<a href="#4655" id="4655">4655</a>
+<a href="#4656" id="4656">4656</a>
+<a href="#4657" id="4657">4657</a>
+<a href="#4658" id="4658">4658</a>
+<a href="#4659" id="4659">4659</a>
+<a href="#4660" id="4660">4660</a>
+<a href="#4661" id="4661">4661</a>
+<a href="#4662" id="4662">4662</a>
+<a href="#4663" id="4663">4663</a>
+<a href="#4664" id="4664">4664</a>
+<a href="#4665" id="4665">4665</a>
+<a href="#4666" id="4666">4666</a>
+<a href="#4667" id="4667">4667</a>
+<a href="#4668" id="4668">4668</a>
+<a href="#4669" id="4669">4669</a>
+<a href="#4670" id="4670">4670</a>
+<a href="#4671" id="4671">4671</a>
+<a href="#4672" id="4672">4672</a>
+<a href="#4673" id="4673">4673</a>
+<a href="#4674" id="4674">4674</a>
+<a href="#4675" id="4675">4675</a>
+<a href="#4676" id="4676">4676</a>
+<a href="#4677" id="4677">4677</a>
+<a href="#4678" id="4678">4678</a>
+<a href="#4679" id="4679">4679</a>
+<a href="#4680" id="4680">4680</a>
+<a href="#4681" id="4681">4681</a>
+<a href="#4682" id="4682">4682</a>
+<a href="#4683" id="4683">4683</a>
+<a href="#4684" id="4684">4684</a>
+<a href="#4685" id="4685">4685</a>
+<a href="#4686" id="4686">4686</a>
+<a href="#4687" id="4687">4687</a>
+<a href="#4688" id="4688">4688</a>
+<a href="#4689" id="4689">4689</a>
+<a href="#4690" id="4690">4690</a>
+<a href="#4691" id="4691">4691</a>
+<a href="#4692" id="4692">4692</a>
+<a href="#4693" id="4693">4693</a>
+<a href="#4694" id="4694">4694</a>
+<a href="#4695" id="4695">4695</a>
+<a href="#4696" id="4696">4696</a>
+<a href="#4697" id="4697">4697</a>
+<a href="#4698" id="4698">4698</a>
+<a href="#4699" id="4699">4699</a>
+<a href="#4700" id="4700">4700</a>
+<a href="#4701" id="4701">4701</a>
+<a href="#4702" id="4702">4702</a>
+<a href="#4703" id="4703">4703</a>
+<a href="#4704" id="4704">4704</a>
+<a href="#4705" id="4705">4705</a>
+<a href="#4706" id="4706">4706</a>
+<a href="#4707" id="4707">4707</a>
+<a href="#4708" id="4708">4708</a>
+<a href="#4709" id="4709">4709</a>
+<a href="#4710" id="4710">4710</a>
+<a href="#4711" id="4711">4711</a>
+<a href="#4712" id="4712">4712</a>
+<a href="#4713" id="4713">4713</a>
+<a href="#4714" id="4714">4714</a>
+<a href="#4715" id="4715">4715</a>
+<a href="#4716" id="4716">4716</a>
+<a href="#4717" id="4717">4717</a>
+<a href="#4718" id="4718">4718</a>
+<a href="#4719" id="4719">4719</a>
+<a href="#4720" id="4720">4720</a>
+<a href="#4721" id="4721">4721</a>
+<a href="#4722" id="4722">4722</a>
+<a href="#4723" id="4723">4723</a>
+<a href="#4724" id="4724">4724</a>
+<a href="#4725" id="4725">4725</a>
+<a href="#4726" id="4726">4726</a>
+<a href="#4727" id="4727">4727</a>
+<a href="#4728" id="4728">4728</a>
+<a href="#4729" id="4729">4729</a>
+<a href="#4730" id="4730">4730</a>
+<a href="#4731" id="4731">4731</a>
+<a href="#4732" id="4732">4732</a>
+<a href="#4733" id="4733">4733</a>
+<a href="#4734" id="4734">4734</a>
+<a href="#4735" id="4735">4735</a>
+<a href="#4736" id="4736">4736</a>
+<a href="#4737" id="4737">4737</a>
+<a href="#4738" id="4738">4738</a>
+<a href="#4739" id="4739">4739</a>
+<a href="#4740" id="4740">4740</a>
+<a href="#4741" id="4741">4741</a>
+<a href="#4742" id="4742">4742</a>
+<a href="#4743" id="4743">4743</a>
+<a href="#4744" id="4744">4744</a>
+<a href="#4745" id="4745">4745</a>
+<a href="#4746" id="4746">4746</a>
+<a href="#4747" id="4747">4747</a>
+<a href="#4748" id="4748">4748</a>
+<a href="#4749" id="4749">4749</a>
+<a href="#4750" id="4750">4750</a>
+<a href="#4751" id="4751">4751</a>
+<a href="#4752" id="4752">4752</a>
+<a href="#4753" id="4753">4753</a>
+<a href="#4754" id="4754">4754</a>
+<a href="#4755" id="4755">4755</a>
+<a href="#4756" id="4756">4756</a>
+<a href="#4757" id="4757">4757</a>
+<a href="#4758" id="4758">4758</a>
+<a href="#4759" id="4759">4759</a>
+<a href="#4760" id="4760">4760</a>
+<a href="#4761" id="4761">4761</a>
+<a href="#4762" id="4762">4762</a>
+<a href="#4763" id="4763">4763</a>
+<a href="#4764" id="4764">4764</a>
+<a href="#4765" id="4765">4765</a>
+<a href="#4766" id="4766">4766</a>
+<a href="#4767" id="4767">4767</a>
+<a href="#4768" id="4768">4768</a>
+<a href="#4769" id="4769">4769</a>
+<a href="#4770" id="4770">4770</a>
+<a href="#4771" id="4771">4771</a>
+<a href="#4772" id="4772">4772</a>
+<a href="#4773" id="4773">4773</a>
+<a href="#4774" id="4774">4774</a>
+<a href="#4775" id="4775">4775</a>
+<a href="#4776" id="4776">4776</a>
+<a href="#4777" id="4777">4777</a>
+<a href="#4778" id="4778">4778</a>
+<a href="#4779" id="4779">4779</a>
+<a href="#4780" id="4780">4780</a>
+<a href="#4781" id="4781">4781</a>
+<a href="#4782" id="4782">4782</a>
+<a href="#4783" id="4783">4783</a>
+<a href="#4784" id="4784">4784</a>
+<a href="#4785" id="4785">4785</a>
+<a href="#4786" id="4786">4786</a>
+<a href="#4787" id="4787">4787</a>
+<a href="#4788" id="4788">4788</a>
+<a href="#4789" id="4789">4789</a>
+<a href="#4790" id="4790">4790</a>
+<a href="#4791" id="4791">4791</a>
+<a href="#4792" id="4792">4792</a>
+<a href="#4793" id="4793">4793</a>
+<a href="#4794" id="4794">4794</a>
+<a href="#4795" id="4795">4795</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
@@ -4492,8 +4812,8 @@
 <span class="kw">use </span>zng_view_api::font::{GlyphIndex, GlyphInstance};
 
 <span class="kw">use crate</span>::{
-    font_features::RFontFeatures, BidiLevel, CaretIndex, Font, FontList, Hyphens, LineBreak, SegmentedText, TextSegment, WordBreak,
-    HYPHENATION,
+    font_features::RFontFeatures, BidiLevel, CaretIndex, Font, FontList, Hyphens, Justify, LineBreak, SegmentedText, TextSegment,
+    WordBreak, HYPHENATION,
 };
 
 <span class="doccomment">/// Reasons why a font might fail to load a glyph.
@@ -4814,7 +5134,9 @@
     </span>mid_offset: f32,
     align_size: PxSize,
     align: Align,
-    overflow_align: Align,
+    justify: Justify,    <span class="comment">// applied justify if `align` is FILL_X
+    </span>justified: Vec&lt;f32&gt;, <span class="comment">// each line has up to 3 values here, depending on first/last segs are trimmed
+    </span>overflow_align: Align,
     direction: LayoutDirection,
 
     <span class="comment">// inline layout values
@@ -5136,6 +5458,21 @@
         <span class="self">self</span>.align
     }
 
+    <span class="doccomment">/// Last applied justify.
+    ///
+    /// This is the resolved mode, it is never `Auto`.
+    ///
+    /// [`align`]: Self::align
+    </span><span class="kw">pub fn </span>justify_mode(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Justify&gt; {
+        <span class="kw">match </span><span class="self">self</span>.justify {
+            Justify::Auto =&gt; <span class="prelude-val">None</span>,
+            m =&gt; {
+                <span class="macro">debug_assert!</span>(<span class="self">self</span>.align.is_fill_x());
+                <span class="prelude-val">Some</span>(m)
+            }
+        }
+    }
+
     <span class="doccomment">/// Last applied overflow alignment.
     ///
     /// Only used in dimensions of the text that overflow [`align_size`].
@@ -5173,6 +5510,10 @@
     ///
     /// The general process of shaping text is to generate a shaped-text without align during *measure*, and then reuse
     /// this shaped text every layout that does not invalidate any property that affects the text wrap.
+    ///
+    /// Note that this method clears justify fill, of `align` is fill X you must call [`reshape_lines_justify`] after to refill.
+    ///
+    /// [`reshape_lines_justify`]: Self::reshape_lines_justify
     </span><span class="attr">#[expect(clippy::too_many_arguments)]
     </span><span class="kw">pub fn </span>reshape_lines(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
@@ -5184,6 +5525,7 @@
         line_spacing: Px,
         direction: LayoutDirection,
     ) {
+        <span class="self">self</span>.clear_justify_impl(align.is_fill_x());
         <span class="self">self</span>.reshape_line_height_and_spacing(line_height, line_spacing);
 
         <span class="kw">let </span>is_inlined = inline_constraints.is_some();
@@ -5448,6 +5790,255 @@
         );
     }
 
+    <span class="kw">fn </span>justify_lines_range(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ops::Range&lt;usize&gt; {
+        <span class="kw">let </span><span class="kw-2">mut </span>range = <span class="number">0</span>..<span class="self">self</span>.lines_len().saturating_sub(<span class="number">1</span>); <span class="comment">// skip last line
+
+        </span><span class="kw">if </span><span class="self">self</span>.is_inlined {
+            <span class="comment">// justify on inline not implemented
+            </span>range.start += <span class="number">1</span>;
+            range.end = range.end.saturating_sub(<span class="number">1</span>);
+            <span class="kw">if </span>range.start &gt; range.end {
+                range = <span class="number">0</span>..<span class="number">0
+            </span>}
+        }
+
+        range
+    }
+
+    <span class="doccomment">/// Replace the applied [`justify_mode`], if the [`align`] is fill X.
+    ///
+    /// [`justify_mode`]: Self::justify_mode
+    /// [`align`]: Self::align
+    </span><span class="kw">pub fn </span>reshape_lines_justify(<span class="kw-2">&amp;mut </span><span class="self">self</span>, mode: Justify, lang: <span class="kw-2">&amp;</span>Lang) {
+        <span class="self">self</span>.clear_justify_impl(<span class="bool-val">true</span>);
+
+        <span class="kw">if </span>!<span class="self">self</span>.align.is_fill_x() {
+            <span class="kw">return</span>;
+        }
+
+        <span class="kw">let </span>mode = mode.resolve(lang);
+
+        <span class="kw">let </span>range = <span class="self">self</span>.justify_lines_range();
+
+        <span class="kw">let </span>fill_width = <span class="self">self</span>.align_size.width.<span class="number">0 </span><span class="kw">as </span>f32;
+
+        <span class="kw">for </span>li <span class="kw">in </span>range.clone() {
+            <span class="kw">let </span><span class="kw-2">mut </span>count;
+            <span class="kw">let </span><span class="kw-2">mut </span>space;
+            <span class="kw">let </span><span class="kw-2">mut </span>line_seg_range;
+            <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0.0</span>;
+            <span class="kw">let </span><span class="kw-2">mut </span>last_is_space = <span class="bool-val">false</span>;
+
+            {
+                <span class="comment">// line scope
+                </span><span class="kw">let </span>line = <span class="self">self</span>.line(li).unwrap();
+
+                <span class="comment">// count of space insert points
+                </span>count = <span class="kw">match </span>mode {
+                    Justify::InterWord =&gt; line.segs().filter(|s| s.kind().is_space()).count(),
+                    Justify::InterLetter =&gt; line
+                        .segs()
+                        .map(|s| {
+                            <span class="kw">if </span>s.kind().is_space() {
+                                s.clusters_count().saturating_sub(<span class="number">1</span>).max(<span class="number">1</span>)
+                            } <span class="kw">else if </span>s.kind().is_word() {
+                                s.clusters_count().saturating_sub(<span class="number">1</span>)
+                            } <span class="kw">else </span>{
+                                <span class="number">0
+                            </span>}
+                        })
+                        .sum(),
+                    Justify::Auto =&gt; <span class="macro">unreachable!</span>(),
+                };
+
+                <span class="comment">// space to distribute
+                </span>space = fill_width - <span class="self">self</span>.lines.<span class="number">0</span>[li].width;
+
+                line_seg_range = <span class="number">0</span>..line.segs_len();
+
+                <span class="comment">// trim spaces at start and end
+                </span><span class="kw">let </span><span class="kw-2">mut </span>first_is_space = <span class="bool-val">false</span>;
+
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(<span class="number">0</span>) {
+                    <span class="kw">if </span>s.kind().is_space() {
+                        first_is_space = <span class="bool-val">true</span>;
+                        count -= <span class="number">1</span>;
+                        space += s.advance();
+                    }
+                }
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(line.segs_len().saturating_sub(<span class="number">1</span>)) {
+                    <span class="kw">if </span>s.kind().is_space() {
+                        last_is_space = <span class="bool-val">true</span>;
+                        count -= <span class="number">1</span>;
+                        space += s.advance();
+                    }
+                }
+                <span class="kw">if </span>first_is_space {
+                    line_seg_range.start += <span class="number">1</span>;
+                    <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.start();
+                    <span class="kw">let </span>adv = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance);
+                    offset -= adv;
+                    <span class="self">self</span>.justified.push(adv);
+                }
+                <span class="kw">if </span>last_is_space {
+                    line_seg_range.end = line_seg_range.end.saturating_sub(<span class="number">1</span>);
+                    <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.end().saturating_sub(<span class="number">1</span>);
+                    <span class="kw">let </span>adv = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance);
+                    <span class="self">self</span>.justified.push(adv);
+                }
+                <span class="kw">if </span>line_seg_range.start &gt; line_seg_range.end {
+                    line_seg_range = <span class="number">0</span>..<span class="number">0</span>;
+                }
+            }
+            <span class="kw">let </span>justify_advance = space / count <span class="kw">as </span>f32;
+            <span class="self">self</span>.justified.push(justify_advance);
+
+            <span class="kw">for </span>si <span class="kw">in </span>line_seg_range {
+                <span class="kw">let </span>is_space;
+                <span class="kw">let </span>glyphs_range;
+                <span class="kw">let </span>gsi;
+                {
+                    <span class="kw">let </span>line = <span class="self">self</span>.line(li).unwrap();
+                    <span class="kw">let </span>seg = line.seg(si).unwrap();
+
+                    is_space = seg.kind().is_space();
+                    glyphs_range = seg.glyphs_range();
+                    gsi = line.seg_range.start() + si;
+                }
+
+                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="self">self</span>.clusters[glyphs_range.start()];
+                <span class="kw">for </span>gi <span class="kw">in </span>glyphs_range {
+                    <span class="self">self</span>.glyphs[gi].point.x += offset;
+
+                    <span class="kw">if </span><span class="macro">matches!</span>(mode, Justify::InterLetter) &amp;&amp; <span class="self">self</span>.clusters[gi] != cluster {
+                        cluster = <span class="self">self</span>.clusters[gi];
+                        offset += justify_advance;
+                        <span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance += justify_advance;
+                    }
+                }
+
+                <span class="kw">let </span>seg = <span class="kw-2">&amp;mut </span><span class="self">self</span>.segments.<span class="number">0</span>[gsi];
+                seg.x += offset;
+                <span class="kw">if </span>is_space {
+                    offset += justify_advance;
+                    seg.advance += justify_advance;
+                }
+            }
+            <span class="kw">if </span>last_is_space {
+                <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.end().saturating_sub(<span class="number">1</span>);
+                <span class="kw">let </span>seg = <span class="kw-2">&amp;mut </span><span class="self">self</span>.segments.<span class="number">0</span>[gsi];
+                <span class="macro">debug_assert_eq!</span>(seg.advance, <span class="number">0.0</span>);
+                seg.x += offset;
+            }
+            <span class="self">self</span>.justified.shrink_to_fit();
+        }
+
+        <span class="self">self</span>.justify = mode;
+    }
+
+    <span class="doccomment">/// Remove the currently applied [`justify_mode`].
+    ///
+    /// [`justify_mode`]: Self::justify_mode
+    </span><span class="kw">pub fn </span>clear_justify(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+        <span class="self">self</span>.clear_justify_impl(<span class="bool-val">false</span>)
+    }
+    <span class="kw">fn </span>clear_justify_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, keep_alloc: bool) {
+        <span class="kw">if </span><span class="self">self</span>.justify_mode().is_none() {
+            <span class="kw">return</span>;
+        }
+
+        <span class="kw">let </span>range = <span class="self">self</span>.justify_lines_range();
+        <span class="macro">debug_assert!</span>(range.len() &lt;= <span class="self">self</span>.justified.len());
+
+        <span class="kw">let </span><span class="kw-2">mut </span>justified_alloc = mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.justified);
+
+        <span class="kw">let </span><span class="kw-2">mut </span>justified = justified_alloc.drain(..);
+        <span class="kw">for </span>li <span class="kw">in </span>range {
+            <span class="kw">let </span><span class="kw-2">mut </span>line_seg_range;
+            <span class="kw">let </span><span class="kw-2">mut </span>last_is_space = <span class="bool-val">false</span>;
+
+            <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0.0</span>;
+
+            {
+                <span class="kw">let </span>line = <span class="self">self</span>.line(li).unwrap();
+
+                line_seg_range = <span class="number">0</span>..line.segs_len();
+
+                <span class="comment">// trim spaces at start and end
+                </span><span class="kw">let </span><span class="kw-2">mut </span>first_is_space = <span class="bool-val">false</span>;
+
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(<span class="number">0</span>) {
+                    first_is_space = s.kind().is_space();
+                }
+                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(line.segs_len().saturating_sub(<span class="number">1</span>)) {
+                    last_is_space = s.kind().is_space();
+                }
+                <span class="kw">if </span>first_is_space {
+                    line_seg_range.start += <span class="number">1</span>;
+                    <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.start();
+
+                    <span class="kw">let </span>adv = justified.next().unwrap();
+                    <span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance = adv;
+                    offset -= adv;
+                }
+                <span class="kw">if </span>last_is_space {
+                    line_seg_range.end = line_seg_range.end.saturating_sub(<span class="number">1</span>);
+                    <span class="kw">let </span>adv = justified.next().unwrap();
+                    <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.end().saturating_sub(<span class="number">1</span>);
+                    <span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance = adv;
+                }
+                <span class="kw">if </span>line_seg_range.start &gt; line_seg_range.end {
+                    line_seg_range = <span class="number">0</span>..<span class="number">0</span>;
+                }
+            }
+
+            <span class="kw">let </span>justify_advance = justified.next().unwrap();
+
+            <span class="kw">for </span>si <span class="kw">in </span>line_seg_range {
+                <span class="kw">let </span>is_space;
+                <span class="kw">let </span>glyphs_range;
+                <span class="kw">let </span>gsi;
+                {
+                    <span class="kw">let </span>line = <span class="self">self</span>.line(li).unwrap();
+                    <span class="kw">let </span>seg = line.seg(si).unwrap();
+
+                    is_space = seg.kind().is_space();
+                    glyphs_range = seg.glyphs_range();
+                    gsi = line.seg_range.start() + si;
+                }
+
+                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="self">self</span>.clusters[glyphs_range.start()];
+                <span class="kw">for </span>gi <span class="kw">in </span>glyphs_range {
+                    <span class="self">self</span>.glyphs[gi].point.x -= offset;
+
+                    <span class="kw">if </span><span class="macro">matches!</span>(<span class="self">self</span>.justify, Justify::InterLetter) &amp;&amp; <span class="self">self</span>.clusters[gi] != cluster {
+                        cluster = <span class="self">self</span>.clusters[gi];
+                        offset += justify_advance;
+                        <span class="self">self</span>.segments.<span class="number">0</span>[gsi].advance -= justify_advance;
+                    }
+                }
+
+                <span class="kw">let </span>seg = <span class="kw-2">&amp;mut </span><span class="self">self</span>.segments.<span class="number">0</span>[gsi];
+                seg.x -= offset;
+                <span class="kw">if </span>is_space {
+                    offset += justify_advance;
+                    seg.advance -= justify_advance;
+                }
+            }
+            <span class="kw">if </span>last_is_space {
+                <span class="kw">let </span>gsi = <span class="self">self</span>.line(li).unwrap().seg_range.end().saturating_sub(<span class="number">1</span>);
+                <span class="self">self</span>.segments.<span class="number">0</span>[gsi].x -= offset;
+            }
+        }
+
+        <span class="self">self</span>.justify = Justify::Auto;
+
+        <span class="kw">if </span>keep_alloc {
+            drop(justified);
+            <span class="self">self</span>.justified = justified_alloc;
+        }
+    }
+
     <span class="doccomment">/// Height of a single line.
     </span><span class="kw">pub fn </span>line_height(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
         <span class="self">self</span>.line_height
@@ -5497,11 +6088,12 @@
     ///
     /// [`LineBreak`]: TextSegmentKind::LineBreak
     </span><span class="kw">pub fn </span>lines(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = ShapedLine&gt; {
+        <span class="kw">let </span>just_width = <span class="self">self</span>.justify_mode().map(|<span class="kw">_</span>| <span class="self">self</span>.align_size.width);
         <span class="self">self</span>.lines.iter_segs().enumerate().map(<span class="kw">move </span>|(i, (w, r))| ShapedLine {
             text: <span class="self">self</span>,
             seg_range: r,
             index: i,
-            width: Px(w.round() <span class="kw">as </span>i32),
+            width: just_width.unwrap_or_else(|| Px(w.round() <span class="kw">as </span>i32)),
         })
     }
 
@@ -5560,6 +6152,8 @@
             mid_offset: <span class="number">0.0</span>,
             align_size: PxSize::zero(),
             align: Align::TOP_LEFT,
+            justify: Justify::Auto,
+            justified: <span class="macro">vec!</span>[],
             overflow_align: Align::TOP_LEFT,
             direction: LayoutDirection::LTR,
             first_wrapped: <span class="bool-val">false</span>,
@@ -6439,6 +7033,7 @@
     tab_x_advance: f32,
     tab_index: u32,
     hyphens: Hyphens,
+    lang: Lang,
 
     origin: euclid::Point2D&lt;f32, ()&gt;,
     allow_first_wrap: bool,
@@ -6480,6 +7075,8 @@
                 mid_offset: <span class="number">0.0</span>,
                 align_size: PxSize::zero(),
                 align: Align::TOP_LEFT,
+                justify: Justify::Auto,
+                justified: <span class="macro">vec!</span>[],
                 overflow_align: Align::TOP_LEFT,
                 direction: LayoutDirection::LTR,
                 first_wrapped: <span class="bool-val">false</span>,
@@ -6502,6 +7099,7 @@
             tab_x_advance: <span class="number">0.0</span>,
             tab_index: <span class="number">0</span>,
             hyphens: config.hyphens,
+            lang: config.lang.clone(),
             allow_first_wrap: <span class="bool-val">false</span>,
 
             origin: euclid::point2(<span class="number">0.0</span>, <span class="number">0.0</span>),
@@ -6580,6 +7178,13 @@
         } <span class="kw">else </span>{
             t.push_text(fonts, <span class="kw-2">&amp;</span>config.font_features, <span class="kw-2">&amp;mut </span>word_ctx_key, text);
         }
+
+        t.out.glyphs.shrink_to_fit();
+        t.out.clusters.shrink_to_fit();
+        t.out.segments.<span class="number">0</span>.shrink_to_fit();
+        t.out.lines.<span class="number">0</span>.shrink_to_fit();
+        t.out.fonts.<span class="number">0</span>.shrink_to_fit();
+        t.out.images.shrink_to_fit();
 
         t.out.debug_assert_ranges();
         t.out
@@ -6763,7 +7368,7 @@
                         <span class="comment">// need segment split
 
                         // try to hyphenate
-                        </span><span class="kw">let </span>hyphenated = <span class="self">self</span>.push_hyphenate(word_ctx_key, seg, font, shaped_seg, info, text);
+                        </span><span class="kw">let </span>hyphenated = <span class="self">self</span>.push_hyphenate(seg, font, shaped_seg, info, text);
 
                         <span class="kw">if </span>!hyphenated &amp;&amp; <span class="self">self</span>.break_words {
                             <span class="comment">// break word
@@ -7038,26 +7643,20 @@
         }
     }
 
-    <span class="kw">fn </span>push_hyphenate(
-        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-        word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
-        seg: <span class="kw-2">&amp;</span>str,
-        font: <span class="kw-2">&amp;</span>Font,
-        shaped_seg: <span class="kw-2">&amp;</span>ShapedSegmentData,
-        info: TextSegment,
-        text: <span class="kw-2">&amp;</span>SegmentedText,
-    ) -&gt; bool {
+    <span class="kw">fn </span>push_hyphenate(<span class="kw-2">&amp;mut </span><span class="self">self</span>, seg: <span class="kw-2">&amp;</span>str, font: <span class="kw-2">&amp;</span>Font, shaped_seg: <span class="kw-2">&amp;</span>ShapedSegmentData, info: TextSegment, text: <span class="kw-2">&amp;</span>SegmentedText) -&gt; bool {
         <span class="kw">if </span>!<span class="macro">matches!</span>(<span class="self">self</span>.hyphens, Hyphens::Auto) {
             <span class="kw">return </span><span class="bool-val">false</span>;
         }
 
-        <span class="kw">let </span>split_points = HYPHENATION.hyphenate(<span class="kw-2">&amp;</span>word_ctx_key.lang(), seg);
-        <span class="self">self</span>.push_hyphenate_pt(<span class="kw-2">&amp;</span>split_points, font, shaped_seg, seg, info, text)
+        <span class="kw">let </span>split_points = HYPHENATION.hyphenate(<span class="kw-2">&amp;</span><span class="self">self</span>.lang, seg);
+        <span class="self">self</span>.push_hyphenate_pt(<span class="kw-2">&amp;</span>split_points, <span class="number">0</span>, font, shaped_seg, seg, info, text)
     }
 
-    <span class="kw">fn </span>push_hyphenate_pt(
+    <span class="attr">#[allow(clippy::too_many_arguments)]
+    </span><span class="kw">fn </span>push_hyphenate_pt(
         <span class="kw-2">&amp;mut </span><span class="self">self</span>,
         split_points: <span class="kw-2">&amp;</span>[usize],
+        split_points_sub: usize,
         font: <span class="kw-2">&amp;</span>Font,
         shaped_seg: <span class="kw-2">&amp;</span>ShapedSegmentData,
         seg: <span class="kw-2">&amp;</span>str,
@@ -7073,14 +7672,16 @@
         <span class="kw">let </span><span class="kw-2">mut </span>end_point_i = <span class="number">0</span>;
         <span class="kw">let </span>max_width = <span class="self">self</span>.actual_max_width();
         <span class="kw">for </span>(i, point) <span class="kw">in </span>split_points.iter().enumerate() {
-            <span class="kw">let </span><span class="kw-2">mut </span>point = <span class="kw-2">*</span>point;
+            <span class="kw">let </span><span class="kw-2">mut </span>point = <span class="kw-2">*</span>point - split_points_sub;
             <span class="kw">let </span><span class="kw-2">mut </span>width = <span class="number">0.0</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>c = u32::MAX;
             <span class="kw">let </span><span class="kw-2">mut </span>gi = <span class="number">0</span>;
-            <span class="kw">for </span>(i, g) <span class="kw">in </span>shaped_seg.glyphs.iter().enumerate() {
+            <span class="comment">// find the first glyph in the cluster at the char byte index `point`
+            </span><span class="kw">for </span>(i, g) <span class="kw">in </span>shaped_seg.glyphs.iter().enumerate() {
                 width = g.point.<span class="number">0</span>;
                 <span class="kw">if </span>g.cluster != c {
-                    <span class="kw">if </span>point == <span class="number">0 </span>{
+                    <span class="comment">// advanced cluster, advance point
+                    </span><span class="kw">if </span>point == <span class="number">0 </span>{
                         <span class="kw">break</span>;
                     }
                     c = g.cluster;
@@ -7090,17 +7691,26 @@
             }
 
             <span class="kw">if </span><span class="self">self</span>.origin.x + width + <span class="self">self</span>.hyphen_glyphs.<span class="number">0</span>.x_advance &gt; max_width {
+                <span class="comment">// fragment+hyphen is to large
+                </span><span class="kw">if </span>end_glyph == <span class="number">0 </span>{
+                    <span class="comment">// found no candidate, there is no way to avoid overflow, use smallest option
+                    </span>end_glyph = gi + <span class="number">1</span>;
+                    end_point_i = i + <span class="number">1</span>;
+                }
                 <span class="kw">break</span>;
             } <span class="kw">else </span>{
-                end_glyph = gi;
-                end_point_i = i;
+                <span class="comment">// found candidate fragment
+                </span>end_glyph = gi + <span class="number">1</span>;
+                end_point_i = i + <span class="number">1</span>;
             }
         }
 
         <span class="comment">// split and push the first half + hyphen
         </span><span class="kw">let </span>end_glyph_x = shaped_seg.glyphs[end_glyph].point.<span class="number">0</span>;
         <span class="kw">let </span>(glyphs_a, glyphs_b) = shaped_seg.glyphs.split_at(end_glyph);
+
         <span class="kw">if </span>glyphs_a.is_empty() || glyphs_b.is_empty() {
+            <span class="macro">debug_assert!</span>(<span class="bool-val">false</span>, <span class="string">"invalid hyphenation split"</span>);
             <span class="kw">return </span><span class="bool-val">false</span>;
         }
         <span class="kw">let </span>end_cluster = glyphs_b[<span class="number">0</span>].cluster;
@@ -7136,7 +7746,15 @@
 
         <span class="kw">if </span>shaped_seg_b.x_advance &gt; <span class="self">self</span>.actual_max_width() {
             <span class="comment">// second half still does not fit, try to hyphenate again.
-            </span><span class="kw">if </span><span class="self">self</span>.push_hyphenate_pt(<span class="kw-2">&amp;</span>split_points[end_point_i..], font, <span class="kw-2">&amp;</span>shaped_seg_b, seg_b, info, text) {
+            </span><span class="kw">if </span><span class="self">self</span>.push_hyphenate_pt(
+                <span class="kw-2">&amp;</span>split_points[end_point_i..],
+                split_points_sub + seg_a.len(),
+                font,
+                <span class="kw-2">&amp;</span>shaped_seg_b,
+                seg_b,
+                info,
+                text,
+            ) {
                 <span class="kw">return </span><span class="bool-val">true</span>;
             }
         }
@@ -7393,6 +8011,17 @@
             <span class="self">self</span>.text.last_line.height()
         } <span class="kw">else </span>{
             <span class="self">self</span>.text.line_height
+        }
+    }
+
+    <span class="doccomment">/// Width of the line.
+    </span><span class="kw">pub fn </span>width(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
+        <span class="kw">if </span><span class="self">self</span>.index == <span class="number">0 </span>{
+            <span class="self">self</span>.text.first_line.width()
+        } <span class="kw">else if </span><span class="self">self</span>.index == <span class="self">self</span>.text.lines.<span class="number">0</span>.len() - <span class="number">1 </span>{
+            <span class="self">self</span>.text.last_line.width()
+        } <span class="kw">else </span>{
+            <span class="self">self</span>.width
         }
     }
 
@@ -7869,6 +8498,21 @@
     </span><span class="kw">pub fn </span>clusters(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>[u32] {
         <span class="kw">let </span>r = <span class="self">self</span>.glyphs_range();
         <span class="self">self</span>.text.clusters_range(r)
+    }
+
+    <span class="doccomment">/// Count the deduplicated [`clusters`].
+    ///
+    /// [`clusters`]: Self::clusters
+    </span><span class="kw">pub fn </span>clusters_count(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+        <span class="kw">let </span><span class="kw-2">mut </span>c = u32::MAX;
+        <span class="kw">let </span><span class="kw-2">mut </span>count = <span class="number">0</span>;
+        <span class="kw">for </span><span class="kw-2">&amp;</span>i <span class="kw">in </span><span class="self">self</span>.clusters() {
+            <span class="kw">if </span>i != c {
+                c = i;
+                count += <span class="number">1</span>;
+            }
+        }
+        count
     }
 
     <span class="doccomment">/// Number of next segments that are empty because their text is included in a ligature
@@ -8356,10 +9000,6 @@
 
     <span class="kw">pub fn </span>harfbuzz_direction(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rustybuzz::Direction {
         into_harf_direction(<span class="self">self</span>.direction)
-    }
-
-    <span class="kw">pub fn </span>lang(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Lang {
-        Lang(unic_langid::LanguageIdentifier::from_parts(<span class="self">self</span>.lang, <span class="self">self</span>.script, <span class="prelude-val">None</span>, <span class="kw-2">&amp;</span>[]))
     }
 }
 
