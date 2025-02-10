@@ -1108,7 +1108,59 @@
 <a href="#1107" id="1107">1107</a>
 <a href="#1108" id="1108">1108</a>
 <a href="#1109" id="1109">1109</a>
-<a href="#1110" id="1110">1110</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<a href="#1110" id="1110">1110</a>
+<a href="#1111" id="1111">1111</a>
+<a href="#1112" id="1112">1112</a>
+<a href="#1113" id="1113">1113</a>
+<a href="#1114" id="1114">1114</a>
+<a href="#1115" id="1115">1115</a>
+<a href="#1116" id="1116">1116</a>
+<a href="#1117" id="1117">1117</a>
+<a href="#1118" id="1118">1118</a>
+<a href="#1119" id="1119">1119</a>
+<a href="#1120" id="1120">1120</a>
+<a href="#1121" id="1121">1121</a>
+<a href="#1122" id="1122">1122</a>
+<a href="#1123" id="1123">1123</a>
+<a href="#1124" id="1124">1124</a>
+<a href="#1125" id="1125">1125</a>
+<a href="#1126" id="1126">1126</a>
+<a href="#1127" id="1127">1127</a>
+<a href="#1128" id="1128">1128</a>
+<a href="#1129" id="1129">1129</a>
+<a href="#1130" id="1130">1130</a>
+<a href="#1131" id="1131">1131</a>
+<a href="#1132" id="1132">1132</a>
+<a href="#1133" id="1133">1133</a>
+<a href="#1134" id="1134">1134</a>
+<a href="#1135" id="1135">1135</a>
+<a href="#1136" id="1136">1136</a>
+<a href="#1137" id="1137">1137</a>
+<a href="#1138" id="1138">1138</a>
+<a href="#1139" id="1139">1139</a>
+<a href="#1140" id="1140">1140</a>
+<a href="#1141" id="1141">1141</a>
+<a href="#1142" id="1142">1142</a>
+<a href="#1143" id="1143">1143</a>
+<a href="#1144" id="1144">1144</a>
+<a href="#1145" id="1145">1145</a>
+<a href="#1146" id="1146">1146</a>
+<a href="#1147" id="1147">1147</a>
+<a href="#1148" id="1148">1148</a>
+<a href="#1149" id="1149">1149</a>
+<a href="#1150" id="1150">1150</a>
+<a href="#1151" id="1151">1151</a>
+<a href="#1152" id="1152">1152</a>
+<a href="#1153" id="1153">1153</a>
+<a href="#1154" id="1154">1154</a>
+<a href="#1155" id="1155">1155</a>
+<a href="#1156" id="1156">1156</a>
+<a href="#1157" id="1157">1157</a>
+<a href="#1158" id="1158">1158</a>
+<a href="#1159" id="1159">1159</a>
+<a href="#1160" id="1160">1160</a>
+<a href="#1161" id="1161">1161</a>
+<a href="#1162" id="1162">1162</a></pre></div><pre class="rust"><code><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 #![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 </span><span class="doccomment">//!
 //! Wrap panel, properties and nodes.
@@ -1193,9 +1245,6 @@
 </span><span class="kw">pub fn </span>spacing(spacing: <span class="kw">impl </span>IntoVar&lt;GridSpacing&gt;) {}
 
 <span class="doccomment">/// Children align.
-///
-/// [`TEXT_ALIGN_VAR`]: zng_wgt_text::TEXT_ALIGN_VAR
-/// [`txt_align`]: fn@zng_wgt_text::txt_align
 </span><span class="attr">#[property(LAYOUT, capture, widget_impl(Wrap))]
 </span><span class="kw">pub fn </span>children_align(align: <span class="kw">impl </span>IntoVar&lt;Align&gt;) {}
 
@@ -1640,12 +1689,26 @@
             inline.rows.clear();
         }
 
+        <span class="kw">let </span>fill_width = <span class="kw">if </span>child_align.is_fill_x() {
+            <span class="prelude-val">Some</span>(panel_width.<span class="number">0 </span><span class="kw">as </span>f32)
+        } <span class="kw">else </span>{
+            <span class="prelude-val">None
+        </span>};
+
         LAYOUT.with_constraints(child_constraints, || {
             <span class="kw">let </span><span class="kw-2">mut </span>row = first;
             <span class="kw">let </span><span class="kw-2">mut </span>row_segs = <span class="kw-2">&amp;</span><span class="self">self</span>.rows[<span class="number">0</span>].item_segs;
             <span class="kw">let </span><span class="kw-2">mut </span>row_advance = Px(<span class="number">0</span>);
             <span class="kw">let </span><span class="kw-2">mut </span>next_row_i = <span class="number">1</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>row_segs_i_start = <span class="number">0</span>;
+
+            <span class="kw">let </span><span class="kw-2">mut </span>fill_scale = <span class="prelude-val">None</span>;
+            <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>f) = fill_width {
+                <span class="kw">if </span>wl.is_inline() {
+                    f = first.width().<span class="number">0 </span><span class="kw">as </span>f32;
+                }
+                fill_scale = <span class="prelude-val">Some</span>(f / <span class="self">self</span>.rows[<span class="number">0</span>].size.width.<span class="number">0 </span><span class="kw">as </span>f32);
+            }
 
             children.for_each(|i, child, o| {
                 <span class="kw">if </span>next_row_i &lt; <span class="self">self</span>.rows.len() &amp;&amp; <span class="self">self</span>.rows[next_row_i].first_child == i {
@@ -1669,6 +1732,17 @@
                     row_segs_i_start = <span class="self">self</span>.rows[next_row_i].first_child;
                     next_row_i += <span class="number">1</span>;
                     row_advance = Px(<span class="number">0</span>);
+
+                    fill_scale = <span class="prelude-val">None</span>;
+                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>f) = fill_width {
+                        <span class="kw">if </span>wl.is_inline() || next_row_i &lt; <span class="self">self</span>.rows.len() {
+                            <span class="kw">if </span>wl.is_inline() &amp;&amp; next_row_i == <span class="self">self</span>.rows.len() {
+                                f = last.width().<span class="number">0 </span><span class="kw">as </span>f32;
+                            }
+                            <span class="comment">// fill row, if it is not the last in a block layout
+                            </span>fill_scale = <span class="prelude-val">Some</span>(f / <span class="self">self</span>.rows[next_row_i - <span class="number">1</span>].size.width.<span class="number">0 </span><span class="kw">as </span>f32);
+                        }
+                    }
                 }
 
                 <span class="kw">let </span>(bidi_x, bidi_width, bidi_segs) = <span class="kw">if </span><span class="self">self</span>.has_bidi_inline {
@@ -1737,6 +1811,24 @@
                             child_last.size.width = last_bidi_width;
                         }
 
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = fill_scale {
+                            child_first.size.width <span class="kw-2">*</span>= s;
+
+                            <span class="comment">// child wraps, so last is different row
+                            </span><span class="kw">if </span>wl.is_inline() || next_row_i &lt; <span class="self">self</span>.rows.len() - <span class="number">1 </span>{
+                                <span class="kw">let </span><span class="kw-2">mut </span>f = fill_width.unwrap();
+                                <span class="kw">if </span>wl.is_inline() &amp;&amp; next_row_i == <span class="self">self</span>.rows.len() - <span class="number">1 </span>{
+                                    f = last.width().<span class="number">0 </span><span class="kw">as </span>f32;
+                                }
+                                fill_scale = <span class="prelude-val">Some</span>(f / next_row.size.width.<span class="number">0 </span><span class="kw">as </span>f32);
+                                <span class="kw">let </span>s = fill_scale.unwrap();
+                                child_last.size.width <span class="kw-2">*</span>= s;
+                            } <span class="kw">else </span>{
+                                <span class="comment">// only fill last row if Wrap! is nested/inlined
+                                </span>fill_scale = <span class="prelude-val">None</span>;
+                            }
+                        }
+
                         <span class="kw">let </span>(<span class="kw">_</span>, define_ref_frame) =
                             wl.with_child(|wl| wl.layout_inline(child_first, child_mid, child_last, bidi_segs, last_bidi_segs, child));
                         o.child_offset = PxVector::new(Px(<span class="number">0</span>), row.origin.y);
@@ -1780,6 +1872,12 @@
                             max_size.width = bidi_width;
                             child_first.size.width = bidi_width;
                             child_last.size.width = bidi_width;
+                        }
+
+                        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = fill_scale {
+                            child_first.size.width <span class="kw-2">*</span>= s;
+                            child_last.size.width <span class="kw-2">*</span>= s;
+                            max_size.width <span class="kw-2">*</span>= s;
                         }
 
                         <span class="kw">let </span>(<span class="kw">_</span>, define_ref_frame) = wl.with_child(|wl| {
@@ -1984,11 +2082,17 @@
 
             <span class="kw">if </span>(sum_width - width) &gt; Px(<span class="number">1</span>) {
                 <span class="kw">if </span>metrics.inline_constraints().is_some() &amp;&amp; (i == <span class="number">0 </span>|| i == <span class="self">self</span>.rows.len() - <span class="number">1</span>) {
-                    <span class="macro">tracing::error!</span>(<span class="string">"Wrap! panel row {i} inline width is {width}, but sum of segs is {sum_width}"</span>);
+                    <span class="macro">tracing::error!</span>(
+                        <span class="string">"Wrap![{}] panel row {i} inline width is {width}, but sum of segs is {sum_width}"</span>,
+                        WIDGET.id()
+                    );
                     <span class="kw">continue</span>;
                 }
 
-                <span class="macro">tracing::error!</span>(<span class="string">"Wrap! panel row {i} computed width {width}, but sum of segs is {sum_width}"</span>);
+                <span class="macro">tracing::error!</span>(
+                    <span class="string">"Wrap![{}] panel row {i} computed width {width}, but sum of segs is {sum_width}"</span>,
+                    WIDGET.id()
+                );
             }
         }
     }

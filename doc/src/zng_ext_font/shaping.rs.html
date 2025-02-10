@@ -4793,7 +4793,30 @@
 <a href="#4792" id="4792">4792</a>
 <a href="#4793" id="4793">4793</a>
 <a href="#4794" id="4794">4794</a>
-<a href="#4795" id="4795">4795</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
+<a href="#4795" id="4795">4795</a>
+<a href="#4796" id="4796">4796</a>
+<a href="#4797" id="4797">4797</a>
+<a href="#4798" id="4798">4798</a>
+<a href="#4799" id="4799">4799</a>
+<a href="#4800" id="4800">4800</a>
+<a href="#4801" id="4801">4801</a>
+<a href="#4802" id="4802">4802</a>
+<a href="#4803" id="4803">4803</a>
+<a href="#4804" id="4804">4804</a>
+<a href="#4805" id="4805">4805</a>
+<a href="#4806" id="4806">4806</a>
+<a href="#4807" id="4807">4807</a>
+<a href="#4808" id="4808">4808</a>
+<a href="#4809" id="4809">4809</a>
+<a href="#4810" id="4810">4810</a>
+<a href="#4811" id="4811">4811</a>
+<a href="#4812" id="4812">4812</a>
+<a href="#4813" id="4813">4813</a>
+<a href="#4814" id="4814">4814</a>
+<a href="#4815" id="4815">4815</a>
+<a href="#4816" id="4816">4816</a>
+<a href="#4817" id="4817">4817</a>
+<a href="#4818" id="4818">4818</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::{
     cmp, fmt,
     hash::{BuildHasher, Hash},
     mem, ops,
@@ -4805,7 +4828,7 @@
 <span class="kw">use </span>zng_ext_l10n::{lang, Lang};
 <span class="kw">use </span>zng_layout::{
     context::{InlineConstraintsLayout, InlineConstraintsMeasure, InlineSegmentPos, LayoutDirection, TextSegmentKind},
-    unit::{euclid, Align, Factor2d, FactorUnits, Px, PxBox, PxConstraints2d, PxPoint, PxRect, PxSize},
+    unit::{about_eq, euclid, Align, Factor2d, FactorUnits, Px, PxBox, PxConstraints2d, PxPoint, PxRect, PxSize},
 };
 <span class="kw">use </span>zng_txt::Txt;
 <span class="kw">use </span>zng_var::{AnyVar, Var <span class="kw">as _</span>};
@@ -5592,8 +5615,10 @@
 
                 <span class="kw">let </span>first_line = <span class="self">self</span>.lines.first_mut();
                 first_line.x_offset = first.origin.x.<span class="number">0 </span><span class="kw">as </span>f32;
-                first_line.width = first.size.width.<span class="number">0 </span><span class="kw">as </span>f32;
-            }
+                <span class="comment">// width is the same measured, unless the parent inliner changed it to fill,
+                // in that case we need the original width in `reshape_lines_justify`.
+                // first_line.width = first.size.width.0 as f32;
+            </span>}
             <span class="kw">if </span>!first_segs.is_empty() {
                 <span class="comment">// parent set first_segs.
                 </span><span class="kw">let </span>first_range = <span class="self">self</span>.lines.segs(<span class="number">0</span>);
@@ -5630,8 +5655,9 @@
 
                 <span class="kw">let </span>last_line = <span class="self">self</span>.lines.last_mut();
                 last_line.x_offset = last.origin.x.<span class="number">0 </span><span class="kw">as </span>f32;
-                last_line.width = last.size.width.<span class="number">0 </span><span class="kw">as </span>f32;
-            }
+                <span class="comment">// width is the same measured, unless the parent inliner changed it to justify, that is handled later.
+                // last_line.width = last.size.width.0 as f32;
+            </span>}
             <span class="kw">if </span>!last_segs.is_empty() {
                 <span class="comment">// parent set last_segs.
                 </span><span class="kw">let </span>last_range = <span class="self">self</span>.lines.segs(<span class="self">self</span>.lines.<span class="number">0</span>.len() - <span class="number">1</span>);
@@ -5791,18 +5817,15 @@
     }
 
     <span class="kw">fn </span>justify_lines_range(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ops::Range&lt;usize&gt; {
-        <span class="kw">let </span><span class="kw-2">mut </span>range = <span class="number">0</span>..<span class="self">self</span>.lines_len().saturating_sub(<span class="number">1</span>); <span class="comment">// skip last line
+        <span class="kw">let </span><span class="kw-2">mut </span>range = <span class="number">0</span>..<span class="self">self</span>.lines_len();
 
-        </span><span class="kw">if </span><span class="self">self</span>.is_inlined {
-            <span class="comment">// justify on inline not implemented
-            </span>range.start += <span class="number">1</span>;
-            range.end = range.end.saturating_sub(<span class="number">1</span>);
-            <span class="kw">if </span>range.start &gt; range.end {
-                range = <span class="number">0</span>..<span class="number">0
-            </span>}
+        <span class="kw">if </span>!<span class="self">self</span>.is_inlined {
+            <span class="comment">// skip last line
+            </span>range.end = range.end.saturating_sub(<span class="number">1</span>);
         }
+        <span class="comment">// else inlined fills the first and last line rects
 
-        range
+        </span>range
     }
 
     <span class="doccomment">/// Replace the applied [`justify_mode`], if the [`align`] is fill X.
@@ -5821,6 +5844,7 @@
         <span class="kw">let </span>range = <span class="self">self</span>.justify_lines_range();
 
         <span class="kw">let </span>fill_width = <span class="self">self</span>.align_size.width.<span class="number">0 </span><span class="kw">as </span>f32;
+        <span class="kw">let </span>last_li = range.end.saturating_sub(<span class="number">1</span>);
 
         <span class="kw">for </span>li <span class="kw">in </span>range.clone() {
             <span class="kw">let </span><span class="kw-2">mut </span>count;
@@ -5828,6 +5852,16 @@
             <span class="kw">let </span><span class="kw-2">mut </span>line_seg_range;
             <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0.0</span>;
             <span class="kw">let </span><span class="kw-2">mut </span>last_is_space = <span class="bool-val">false</span>;
+
+            <span class="kw">let </span><span class="kw-2">mut </span>fill_width = fill_width;
+            <span class="kw">if </span><span class="self">self</span>.is_inlined {
+                <span class="comment">// inlining parent provides the fill space for the first and last segment
+                </span><span class="kw">if </span>li == <span class="number">0 </span>{
+                    fill_width = <span class="self">self</span>.first_line.width().<span class="number">0 </span><span class="kw">as </span>f32;
+                } <span class="kw">else if </span>li == last_li {
+                    fill_width = <span class="self">self</span>.last_line.width().<span class="number">0 </span><span class="kw">as </span>f32;
+                }
+            }
 
             {
                 <span class="comment">// line scope
@@ -5860,15 +5894,19 @@
                 </span><span class="kw">let </span><span class="kw-2">mut </span>first_is_space = <span class="bool-val">false</span>;
 
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(<span class="number">0</span>) {
-                    <span class="kw">if </span>s.kind().is_space() {
-                        first_is_space = <span class="bool-val">true</span>;
+                    <span class="kw">if </span>s.kind().is_space() &amp;&amp; (!<span class="self">self</span>.is_inlined || li &gt; <span class="number">0 </span>|| <span class="self">self</span>.first_line.origin.x == Px(<span class="number">0</span>)) {
+                        <span class="comment">// trim start, unless it inlining and the first seg is actually a continuation of another text on the same row
+                        </span>first_is_space = <span class="bool-val">true</span>;
                         count -= <span class="number">1</span>;
                         space += s.advance();
                     }
                 }
                 <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = line.seg(line.segs_len().saturating_sub(<span class="number">1</span>)) {
-                    <span class="kw">if </span>s.kind().is_space() {
-                        last_is_space = <span class="bool-val">true</span>;
+                    <span class="kw">if </span>s.kind().is_space()
+                        &amp;&amp; (!<span class="self">self</span>.is_inlined || li &lt; range.end - <span class="number">1 </span>|| about_eq(<span class="self">self</span>.first_line.size.width.<span class="number">0 </span><span class="kw">as </span>f32, fill_width, <span class="number">1.0</span>))
+                    {
+                        <span class="comment">// trim end, unless its inlining and the last seg continues
+                        </span>last_is_space = <span class="bool-val">true</span>;
                         count -= <span class="number">1</span>;
                         space += s.advance();
                     }
@@ -5906,7 +5944,11 @@
                     gsi = line.seg_range.start() + si;
                 }
 
-                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="self">self</span>.clusters[glyphs_range.start()];
+                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="kw">if </span><span class="self">self</span>.clusters.is_empty() {
+                    <span class="number">0
+                </span>} <span class="kw">else </span>{
+                    <span class="self">self</span>.clusters[glyphs_range.start()]
+                };
                 <span class="kw">for </span>gi <span class="kw">in </span>glyphs_range {
                     <span class="self">self</span>.glyphs[gi].point.x += offset;
 
@@ -6007,7 +6049,11 @@
                     gsi = line.seg_range.start() + si;
                 }
 
-                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="self">self</span>.clusters[glyphs_range.start()];
+                <span class="kw">let </span><span class="kw-2">mut </span>cluster = <span class="kw">if </span><span class="self">self</span>.clusters.is_empty() {
+                    <span class="number">0
+                </span>} <span class="kw">else </span>{
+                    <span class="self">self</span>.clusters[glyphs_range.start()]
+                };
                 <span class="kw">for </span>gi <span class="kw">in </span>glyphs_range {
                     <span class="self">self</span>.glyphs[gi].point.x -= offset;
 
