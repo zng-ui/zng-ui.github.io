@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info.rs`."><title>info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info.rs`."><title>info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -2317,7 +2317,16 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2280" id="2280">2280</a>
 <a href="#2281" id="2281">2281</a>
 <a href="#2282" id="2282">2282</a>
-<a href="#2283" id="2283">2283</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget info tree.
+<a href="#2283" id="2283">2283</a>
+<a href="#2284" id="2284">2284</a>
+<a href="#2285" id="2285">2285</a>
+<a href="#2286" id="2286">2286</a>
+<a href="#2287" id="2287">2287</a>
+<a href="#2288" id="2288">2288</a>
+<a href="#2289" id="2289">2289</a>
+<a href="#2290" id="2290">2290</a>
+<a href="#2291" id="2291">2291</a>
+<a href="#2292" id="2292">2292</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget info tree.
 
 </span><span class="kw">use </span>std::{borrow::Cow, fmt, mem, ops, sync::Arc, time::Duration};
 
@@ -2342,22 +2351,22 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_layout::{
     context::{LayoutMask, LayoutMetricsSnapshot},
     unit::{
-        euclid, DistanceKey, Factor, FactorUnits, Orientation2D, Px, PxBox, PxCornerRadius, PxPoint, PxRect, PxSideOffsets, PxSize,
-        PxTransform, PxVector,
+        DistanceKey, Factor, FactorUnits, Orientation2D, Px, PxBox, PxCornerRadius, PxPoint, PxRect, PxSideOffsets, PxSize, PxTransform,
+        PxVector, euclid,
     },
 };
 <span class="kw">use </span>zng_state_map::{OwnedStateMap, StateMapRef};
-<span class="kw">use </span>zng_txt::{formatx, Txt};
+<span class="kw">use </span>zng_txt::{Txt, formatx};
 <span class="kw">use </span>zng_unique_id::{IdEntry, IdMap};
 <span class="kw">use </span>zng_var::impl_from_and_into_var;
-<span class="kw">use </span>zng_view_api::{display_list::FrameValueUpdate, window::FrameId, ViewProcessGen};
+<span class="kw">use </span>zng_view_api::{ViewProcessGen, display_list::FrameValueUpdate, window::FrameId};
 
-<span class="kw">use crate</span>::{render::TransformStyle, window::WindowId, DInstant};
+<span class="kw">use crate</span>::{DInstant, render::TransformStyle, window::WindowId};
 
 <span class="kw">pub use </span><span class="self">self</span>::hit::RelativeHitZ;
 <span class="kw">use </span><span class="self">self</span>::{access::AccessEnabled, hit::ParallelSegmentId, iter::TreeIterator};
 
-<span class="kw">use super</span>::{node::ZIndex, WidgetId};
+<span class="kw">use super</span>::{WidgetId, node::ZIndex};
 
 <span class="doccomment">/// Stats over the lifetime of a widget info tree.
 ///
@@ -2546,7 +2555,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Iterator over all widgets with inner-bounds not fully contained by their parent inner bounds.
-    </span><span class="kw">pub fn </span>out_of_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>std::iter::ExactSizeIterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>out_of_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>std::iter::ExactSizeIterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>out = <span class="self">self</span>.<span class="number">0</span>.frame.read().out_of_bounds.clone();
         <span class="kw">let </span>me = <span class="self">self</span>.clone();
         (<span class="number">0</span>..out.len()).map(<span class="kw">move </span>|i| WidgetInfo::new(me.clone(), out[i]))
@@ -2615,8 +2624,8 @@ document.addEventListener('DOMContentLoaded', function () {
         frame.spatial_bounds = spatial_bounds;
 
         frame.scale_factor = scale_factor;
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(gen) = view_process_gen {
-            frame.view_process_gen = gen;
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(vp_gen) = view_process_gen {
+            frame.view_process_gen = vp_gen;
         }
         <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = widget_count_offsets {
             frame.widget_count_offsets = w;
@@ -2852,11 +2861,7 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`baseline`]: Self::baseline
     </span><span class="kw">pub fn </span>final_baseline(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
         <span class="kw">let </span>s = <span class="self">self</span>.<span class="number">0</span>.lock();
-        <span class="kw">if </span>s.inner_offset_baseline {
-            Px(<span class="number">0</span>)
-        } <span class="kw">else </span>{
-            s.baseline
-        }
+        <span class="kw">if </span>s.inner_offset_baseline { Px(<span class="number">0</span>) } <span class="kw">else </span>{ s.baseline }
     }
 
     <span class="doccomment">/// Gets the global transform of the widget's outer bounds during the last render or render update.
@@ -3734,7 +3739,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// All parent children except this widget.
-    </span><span class="kw">pub fn </span>siblings(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>siblings(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="self">self</span>.prev_siblings().chain(<span class="self">self</span>.next_siblings())
     }
 
@@ -3949,7 +3954,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Iterator over all descendants with inner bounds not fully contained by their parent inner bounds.
-    </span><span class="kw">pub fn </span>out_of_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>out_of_bounds(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>range = <span class="self">self</span>.descendants_range();
         <span class="self">self</span>.tree.out_of_bounds().filter(<span class="kw">move </span>|w| range.contains(w))
     }
@@ -3959,7 +3964,10 @@ document.addEventListener('DOMContentLoaded', function () {
     /// If the `filter` returns `false` the widget and all it's in-bounds descendants are skipped, otherwise they are yielded. After
     /// all in-bounds descendants reachable from `self` and filtered the iterator changes to each out-of-bounds descendants and their
     /// in-bounds descendants that are also filtered.
-    </span><span class="kw">pub fn </span>spatial_iter(<span class="kw-2">&amp;</span><span class="self">self</span>, filter: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>WidgetInfo) -&gt; bool + Clone) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>spatial_iter&lt;F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, filter: F) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="kw">use</span>&lt;F&gt;
+    <span class="kw">where
+        </span>F: Fn(<span class="kw-2">&amp;</span>WidgetInfo) -&gt; bool + Clone,
+    {
         <span class="kw">let </span>self_id = <span class="self">self</span>.id();
         <span class="self">self</span>.self_and_descendants()
             .tree_filter(<span class="macro">clmv!</span>(filter, |w| {
@@ -3982,37 +3990,37 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="doccomment">/// Iterator over self and all descendants with inner bounds that contain the `point`.
-    </span><span class="kw">pub fn </span>inner_contains(<span class="kw-2">&amp;</span><span class="self">self</span>, point: PxPoint) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>inner_contains(<span class="kw-2">&amp;</span><span class="self">self</span>, point: PxPoint) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="self">self</span>.spatial_iter(<span class="kw">move </span>|w| w.inner_bounds().contains(point))
     }
 
     <span class="doccomment">/// Spatial iterator over self and descendants with inner bounds that intersects the `rect`.
-    </span><span class="kw">pub fn </span>inner_intersects(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>inner_intersects(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>rect = rect.to_box2d();
         <span class="self">self</span>.spatial_iter(<span class="kw">move </span>|w| w.inner_bounds().to_box2d().intersects(<span class="kw-2">&amp;</span>rect))
     }
 
     <span class="doccomment">/// Spatial iterator over self and descendants with inner bounds that fully envelops the `rect`.
-    </span><span class="kw">pub fn </span>inner_contains_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>inner_contains_rect(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>rect = rect.to_box2d();
         <span class="self">self</span>.spatial_iter(<span class="kw">move </span>|w| w.inner_bounds().to_box2d().contains_box(<span class="kw-2">&amp;</span>rect))
     }
 
     <span class="doccomment">/// Spatial iterator over self and descendants with inner bounds that are fully inside the `rect`.
-    </span><span class="kw">pub fn </span>inner_contained(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>inner_contained(<span class="kw-2">&amp;</span><span class="self">self</span>, rect: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>rect = rect.to_box2d();
         <span class="self">self</span>.spatial_iter(<span class="kw">move </span>|w| rect.contains_box(<span class="kw-2">&amp;</span>w.inner_bounds().to_box2d()))
     }
 
     <span class="doccomment">/// Spatial iterator over self and descendants with center point inside the `area`.
-    </span><span class="kw">pub fn </span>center_contained(<span class="kw-2">&amp;</span><span class="self">self</span>, area: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>center_contained(<span class="kw-2">&amp;</span><span class="self">self</span>, area: PxRect) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>area = area.to_box2d();
         <span class="self">self</span>.spatial_iter(<span class="kw">move </span>|w| w.inner_bounds().to_box2d().intersects(<span class="kw-2">&amp;</span>area))
             .filter(<span class="kw">move </span>|w| area.contains(w.center()))
     }
 
     <span class="doccomment">/// Spatial iterator over self and descendants with center point within the `max_radius` of the `origin`.
-    </span><span class="kw">pub fn </span>center_in_distance(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxPoint, max_radius: Px) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'_ </span>{
+    </span><span class="kw">pub fn </span>center_in_distance(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxPoint, max_radius: Px) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>area = PxRect::new(origin, PxSize::splat(max_radius))
             .inflate(max_radius, max_radius)
             .to_box2d();
@@ -4136,7 +4144,12 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`spatial_bounds`]: WidgetInfoTree::spatial_bounds
     /// [`center`]: WidgetInfo::center
     /// [`Orientation2D::point_is`]: zng_layout::unit::Orientation2D::point_is
-    </span><span class="kw">pub fn </span>oriented(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxPoint, max_distance: Px, orientation: Orientation2D) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>oriented(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        origin: PxPoint,
+        max_distance: Px,
+        orientation: Orientation2D,
+    ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>distance_bounded = max_distance != Px::MAX;
         <span class="kw">let </span>distance_key = <span class="kw">if </span>distance_bounded {
             DistanceKey::from_distance(max_distance)
@@ -4172,7 +4185,12 @@ document.addEventListener('DOMContentLoaded', function () {
     /// [`inner_bounds`]: WidgetInfo::inner_bounds
     /// [`center`]: WidgetInfo::center
     /// [`Orientation2D::box_is`]: zng_layout::unit::Orientation2D::box_is
-    </span><span class="kw">pub fn </span>oriented_box(<span class="kw-2">&amp;</span><span class="self">self</span>, origin: PxBox, max_distance: Px, orientation: Orientation2D) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; {
+    </span><span class="kw">pub fn </span>oriented_box(
+        <span class="kw-2">&amp;</span><span class="self">self</span>,
+        origin: PxBox,
+        max_distance: Px,
+        orientation: Orientation2D,
+    ) -&gt; <span class="kw">impl </span>Iterator&lt;Item = WidgetInfo&gt; + <span class="lifetime">'static </span>+ <span class="kw">use</span>&lt;&gt; {
         <span class="kw">let </span>distance_bounded = max_distance != Px::MAX;
         <span class="kw">let </span>distance_key = <span class="kw">if </span>distance_bounded {
             DistanceKey::from_distance(max_distance)

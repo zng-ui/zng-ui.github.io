@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/gesture.rs`."><title>gesture.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/</div>gesture.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/gesture.rs`."><title>gesture.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/</div>gesture.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -1180,10 +1180,7 @@
 <a href="#1179" id="1179">1179</a>
 <a href="#1180" id="1180">1180</a>
 <a href="#1181" id="1181">1181</a>
-<a href="#1182" id="1182">1182</a>
-<a href="#1183" id="1183">1183</a>
-<a href="#1184" id="1184">1184</a>
-<a href="#1185" id="1185">1185</a></pre></div><pre class="rust"><code><span class="doccomment">//! Aggregate events.
+<a href="#1182" id="1182">1182</a></pre></div><pre class="rust"><code><span class="doccomment">//! Aggregate events.
 
 </span><span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>std::{
@@ -1194,36 +1191,36 @@
     time::Duration,
 };
 <span class="kw">use </span>zng_app::{
-    access::{AccessClickArgs, ACCESS_CLICK_EVENT},
-    event::{event, event_args, AnyEventArgs, Command, CommandScope, EventPropagationHandle, EVENTS},
+    AppExtension, DInstant, HeadlessApp,
+    access::{ACCESS_CLICK_EVENT, AccessClickArgs},
+    event::{AnyEventArgs, Command, CommandScope, EVENTS, EventPropagationHandle, event, event_args},
     shortcut::{
-        shortcut, CommandShortcutExt, GestureKey, KeyChord, KeyGesture, ModifierGesture, ModifiersState, Shortcut, ShortcutFilter,
-        Shortcuts,
+        CommandShortcutExt, GestureKey, KeyChord, KeyGesture, ModifierGesture, ModifiersState, Shortcut, ShortcutFilter, Shortcuts,
+        shortcut,
     },
     update::EventUpdate,
     view_process::raw_device_events::DeviceId,
     widget::{
-        info::{HitTestInfo, InteractionPath, WidgetPath},
         WidgetId,
+        info::{HitTestInfo, InteractionPath, WidgetPath},
     },
     window::WindowId,
-    AppExtension, DInstant, HeadlessApp,
 };
 <span class="kw">use </span>zng_app_context::app_local;
 <span class="kw">use </span>zng_ext_window::WINDOWS;
 <span class="kw">use </span>zng_handle::{Handle, HandleOwner, WeakHandle};
 <span class="kw">use </span>zng_layout::unit::DipPoint;
-<span class="kw">use </span>zng_var::{var, ArcVar, Var};
+<span class="kw">use </span>zng_var::{ArcVar, Var, var};
 <span class="kw">use </span>zng_view_api::{
     keyboard::{Key, KeyCode, KeyLocation, KeyState, NativeKeyCode},
     mouse::MouseButton,
 };
 
 <span class="kw">use crate</span>::{
-    focus::{FocusRequest, FocusTarget, FOCUS},
-    keyboard::{HeadlessAppKeyboardExt, KeyInputArgs, KEY_INPUT_EVENT},
-    mouse::{MouseClickArgs, MOUSE_CLICK_EVENT},
-    touch::{TouchLongPressArgs, TouchTapArgs, TOUCH_LONG_PRESS_EVENT, TOUCH_TAP_EVENT},
+    focus::{FOCUS, FocusRequest, FocusTarget},
+    keyboard::{HeadlessAppKeyboardExt, KEY_INPUT_EVENT, KeyInputArgs},
+    mouse::{MOUSE_CLICK_EVENT, MouseClickArgs},
+    touch::{TOUCH_LONG_PRESS_EVENT, TOUCH_TAP_EVENT, TouchLongPressArgs, TouchTapArgs},
 };
 
 <span class="doccomment">/// Specific information from the source of a [`ClickArgs`].
@@ -2294,9 +2291,6 @@
 <span class="doccomment">/// Adds the `shortcut_matches` method to commands.
 </span><span class="kw">pub trait </span>CommandShortcutMatchesExt: CommandShortcutExt {
     <span class="doccomment">/// Returns `true` if the command has handlers, enabled or disabled, and the shortcut if one of the command shortcuts.
-    ///
-    /// [`App`]: crate::event::CommandScope::App
-    /// [`Custom`]: crate::event::CommandScope::Custom
     </span><span class="kw">fn </span>shortcut_matches(<span class="self">self</span>, shortcut: <span class="kw-2">&amp;</span>Shortcut) -&gt; bool;
 }
 <span class="kw">impl </span>CommandShortcutMatchesExt <span class="kw">for </span>Command {

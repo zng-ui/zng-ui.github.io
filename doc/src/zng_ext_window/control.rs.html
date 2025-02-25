@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/control.rs`."><title>control.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_window/</div>control.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-window/src/control.rs`."><title>control.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_window/</div>control.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -2879,34 +2879,34 @@
 
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_app::{
+    Deadline,
     access::{ACCESS_DEINITED_EVENT, ACCESS_INITED_EVENT},
     app_hn_once,
     event::{AnyEventArgs, CommandHandle},
     render::{FrameBuilder, FrameUpdate},
     static_id,
     timer::TIMERS,
-    update::{EventUpdate, InfoUpdates, LayoutUpdates, RenderUpdates, WidgetUpdates, UPDATES},
+    update::{EventUpdate, InfoUpdates, LayoutUpdates, RenderUpdates, UPDATES, WidgetUpdates},
     view_process::{
+        VIEW_PROCESS, VIEW_PROCESS_INITED_EVENT, ViewHeadless, ViewRenderer, ViewWindow,
         raw_events::{
-            RawWindowFocusArgs, RAW_COLORS_CONFIG_CHANGED_EVENT, RAW_FRAME_RENDERED_EVENT, RAW_HEADLESS_OPEN_EVENT, RAW_IME_EVENT,
-            RAW_WINDOW_CHANGED_EVENT, RAW_WINDOW_FOCUS_EVENT, RAW_WINDOW_OPEN_EVENT, RAW_WINDOW_OR_HEADLESS_OPEN_ERROR_EVENT,
+            RAW_COLORS_CONFIG_CHANGED_EVENT, RAW_FRAME_RENDERED_EVENT, RAW_HEADLESS_OPEN_EVENT, RAW_IME_EVENT, RAW_WINDOW_CHANGED_EVENT,
+            RAW_WINDOW_FOCUS_EVENT, RAW_WINDOW_OPEN_EVENT, RAW_WINDOW_OR_HEADLESS_OPEN_ERROR_EVENT, RawWindowFocusArgs,
         },
-        ViewHeadless, ViewRenderer, ViewWindow, VIEW_PROCESS, VIEW_PROCESS_INITED_EVENT,
     },
     widget::{
-        info::{access::AccessEnabled, WidgetInfoBuilder, WidgetInfoTree, WidgetLayout, WidgetMeasure, WidgetPath},
+        VarLayout, WIDGET, WidgetCtx, WidgetId, WidgetUpdateMode,
+        info::{WidgetInfoBuilder, WidgetInfoTree, WidgetLayout, WidgetMeasure, WidgetPath, access::AccessEnabled},
         node::{BoxedUiNode, UiNode},
-        VarLayout, WidgetCtx, WidgetId, WidgetUpdateMode, WIDGET,
     },
-    window::{WindowCtx, WindowId, WindowMode, WINDOW},
-    Deadline,
+    window::{WINDOW, WindowCtx, WindowId, WindowMode},
 };
 <span class="kw">use </span>zng_app_context::LocalContext;
 <span class="kw">use </span>zng_clone_move::clmv;
-<span class="kw">use </span>zng_color::{colors, LightDark, Rgba};
-<span class="kw">use </span>zng_ext_image::{ImageRenderArgs, ImageSource, ImageVar, Img, IMAGES};
+<span class="kw">use </span>zng_color::{LightDark, Rgba, colors};
+<span class="kw">use </span>zng_ext_image::{IMAGES, ImageRenderArgs, ImageSource, ImageVar, Img};
 <span class="kw">use </span>zng_layout::{
-    context::{LayoutMetrics, LayoutPassId, DIRECTION_VAR, LAYOUT},
+    context::{DIRECTION_VAR, LAYOUT, LayoutMetrics, LayoutPassId},
     unit::{
         Dip, DipPoint, DipRect, DipSize, DipToPx, Factor, FactorUnits, Layout1d, Layout2d, Length, Ppi, Px, PxConstraints, PxPoint, PxRect,
         PxSize, PxToDip, PxVector, TimeUnits,
@@ -2915,21 +2915,21 @@
 <span class="kw">use </span>zng_state_map::StateId;
 <span class="kw">use </span>zng_var::{AnyVar, ReadOnlyArcVar, Var, VarHandle, VarHandles};
 <span class="kw">use </span>zng_view_api::{
+    DragDropId, FocusResult, Ime, ViewProcessOffline,
     config::{ColorScheme, FontAntiAliasing},
     drag_drop::{DragDropData, DragDropEffect, DragDropError},
     window::{
         EventCause, FrameCapture, FrameId, FrameRequest, FrameUpdateRequest, FrameWaitId, HeadlessRequest, RenderMode, WindowRequest,
         WindowState, WindowStateAll,
     },
-    DragDropId, FocusResult, Ime, ViewProcessOffline,
 };
 <span class="kw">use </span>zng_wgt::prelude::WidgetInfo;
 
 <span class="kw">use crate</span>::{
-    cmd::{WindowCommands, MINIMIZE_CMD, RESTORE_CMD},
-    AutoSize, FrameCaptureMode, FrameImageReadyArgs, HeadlessMonitor, MonitorInfo, StartPosition, WINDOW_Ext, WidgetInfoImeArea,
-    WindowChangedArgs, WindowIcon, WindowRoot, WindowVars, FRAME_IMAGE_READY_EVENT, MONITORS, MONITORS_CHANGED_EVENT, WINDOWS,
-    WINDOWS_DRAG_DROP, WINDOW_CHANGED_EVENT, WINDOW_FOCUS,
+    AutoSize, FRAME_IMAGE_READY_EVENT, FrameCaptureMode, FrameImageReadyArgs, HeadlessMonitor, MONITORS, MONITORS_CHANGED_EVENT,
+    MonitorInfo, StartPosition, WINDOW_CHANGED_EVENT, WINDOW_Ext, WINDOW_FOCUS, WINDOWS, WINDOWS_DRAG_DROP, WidgetInfoImeArea,
+    WindowChangedArgs, WindowIcon, WindowRoot, WindowVars,
+    cmd::{MINIMIZE_CMD, RESTORE_CMD, WindowCommands},
 };
 
 <span class="kw">struct </span>ImageResources {

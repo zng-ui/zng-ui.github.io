@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>app.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
@@ -608,7 +608,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! zng = { version = "0.13.12", features = ["view_prebuilt"] }
+//! zng = { version = "0.14.0", features = ["view_prebuilt"] }
 //! ```
 //!
 //! ```no_run
@@ -985,23 +985,23 @@
 //! may be available at the [`zng_app`], [`zng_app_context`] and [`zng_ext_single_instance`] base crates.
 
 </span><span class="kw">pub use </span>zng_app::{
-    on_app_start, print_tracing, print_tracing_filter, AppControlFlow, AppEventObserver, AppExtended, AppExtension, AppExtensionBoxed,
-    AppExtensionInfo, AppStartArgs, DInstant, Deadline, ExitRequestedArgs, HeadlessApp, InstantMode, EXIT_CMD, EXIT_REQUESTED_EVENT,
-    INSTANT,
+    AppControlFlow, AppEventObserver, AppExtended, AppExtension, AppExtensionBoxed, AppExtensionInfo, AppStartArgs, DInstant, Deadline,
+    EXIT_CMD, EXIT_REQUESTED_EVENT, ExitRequestedArgs, HeadlessApp, INSTANT, InstantMode, on_app_start, print_tracing,
+    print_tracing_filter,
 };
 
 <span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
 </span><span class="kw">pub use </span>zng_app::test_log;
 
 <span class="kw">pub use </span>zng_app_context::{
-    app_local, context_local, AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext,
-    MappedRwLockReadGuardOwned, MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned,
+    AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, MappedRwLockReadGuardOwned,
+    MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned, app_local, context_local,
 };
 <span class="kw">pub use </span>zng_wgt_input::cmd::{
-    on_new, on_open, on_pre_new, on_pre_open, on_pre_save, on_pre_save_as, on_save, on_save_as, NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD,
+    NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD, on_new, on_open, on_pre_new, on_pre_open, on_pre_save, on_pre_save_as, on_save, on_save_as,
 };
 
-<span class="kw">pub use </span>zng_app::view_process::raw_events::{LowMemoryArgs, LOW_MEMORY_EVENT};
+<span class="kw">pub use </span>zng_app::view_process::raw_events::{LOW_MEMORY_EVENT, LowMemoryArgs};
 
 <span class="doccomment">/// Input device hardware ID and events.
 ///
@@ -1010,12 +1010,12 @@
 /// See [`zng_app::view_process::raw_device_events`] for the full API.
 </span><span class="kw">pub mod </span>raw_device_events {
     <span class="kw">pub use </span>zng_app::view_process::raw_device_events::{
-        DeviceArgs, DeviceId, MotionArgs, DEVICE_ADDED_EVENT, DEVICE_REMOVED_EVENT, MOTION_EVENT,
+        DEVICE_ADDED_EVENT, DEVICE_REMOVED_EVENT, DeviceArgs, DeviceId, MOTION_EVENT, MotionArgs,
     };
 }
 
 <span class="attr">#[cfg(single_instance)]
-</span><span class="kw">pub use </span>zng_ext_single_instance::{AppInstanceArgs, APP_INSTANCE_EVENT};
+</span><span class="kw">pub use </span>zng_ext_single_instance::{APP_INSTANCE_EVENT, AppInstanceArgs};
 
 <span class="doccomment">/// App-process crash handler.
 ///
@@ -1134,7 +1134,7 @@
 /// See [`zng_app::crash_handler`] and [`zng_wgt_inspector::crash_handler`] for the full API.
 </span><span class="attr">#[cfg(crash_handler)]
 </span><span class="kw">pub mod </span>crash_handler {
-    <span class="kw">pub use </span>zng_app::crash_handler::{crash_handler_config, BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic};
+    <span class="kw">pub use </span>zng_app::crash_handler::{BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic, crash_handler_config};
 
     <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
     </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;

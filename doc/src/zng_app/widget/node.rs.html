@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1538,15 +1538,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1501" id="1501">1501</a>
 <a href="#1502" id="1502">1502</a>
 <a href="#1503" id="1503">1503</a>
-<a href="#1504" id="1504">1504</a>
-<a href="#1505" id="1505">1505</a>
-<a href="#1506" id="1506">1506</a>
-<a href="#1507" id="1507">1507</a>
-<a href="#1508" id="1508">1508</a>
-<a href="#1509" id="1509">1509</a>
-<a href="#1510" id="1510">1510</a>
-<a href="#1511" id="1511">1511</a>
-<a href="#1512" id="1512">1512</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget nodes types, [`UiNode`], [`UiNodeList`] and others.
+<a href="#1504" id="1504">1504</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget nodes types, [`UiNode`], [`UiNodeList`] and others.
 
 </span><span class="kw">use </span>std::{
     any::{Any, TypeId},
@@ -1580,9 +1572,9 @@ document.addEventListener('DOMContentLoaded', function () {
 };
 
 <span class="kw">use super</span>::{
-    base::{Parallel, PARALLEL_VAR},
+    WIDGET, WidgetId, WidgetUpdateMode,
+    base::{PARALLEL_VAR, Parallel},
     info::{WidgetInfoBuilder, WidgetLayout, WidgetMeasure},
-    WidgetId, WidgetUpdateMode, WIDGET,
 };
 
 <span class="doccomment">/// Represents an UI tree node.
@@ -2836,19 +2828,11 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     <span class="kw">fn </span>measure(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wm: <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(node) = <span class="self">self </span>{
-            node.measure(wm)
-        } <span class="kw">else </span>{
-            PxSize::zero()
-        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(node) = <span class="self">self </span>{ node.measure(wm) } <span class="kw">else </span>{ PxSize::zero() }
     }
 
     <span class="kw">fn </span>layout(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wl: <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize {
-        <span class="kw">if let </span><span class="prelude-val">Some</span>(node) = <span class="self">self </span>{
-            node.layout(wl)
-        } <span class="kw">else </span>{
-            PxSize::zero()
-        }
+        <span class="kw">if let </span><span class="prelude-val">Some</span>(node) = <span class="self">self </span>{ node.layout(wl) } <span class="kw">else </span>{ PxSize::zero() }
     }
 
     <span class="kw">fn </span>render(<span class="kw-2">&amp;mut </span><span class="self">self</span>, frame: <span class="kw-2">&amp;mut </span>FrameBuilder) {

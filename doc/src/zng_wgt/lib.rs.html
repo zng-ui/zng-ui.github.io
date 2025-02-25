@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -196,44 +196,44 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">mod </span>__prelude {
     <span class="kw">pub use </span>zng_app::{
+        DInstant, Deadline, INSTANT,
         event::{
-            command, event, event_args, AnyEventArgs <span class="kw">as _</span>, Command, CommandHandle, CommandInfoExt <span class="kw">as _</span>, CommandNameExt <span class="kw">as _</span>, Event,
-            EventArgs <span class="kw">as _</span>, EventHandle, EventHandles, EventPropagationHandle,
+            AnyEventArgs <span class="kw">as _</span>, Command, CommandHandle, CommandInfoExt <span class="kw">as _</span>, CommandNameExt <span class="kw">as _</span>, Event, EventArgs <span class="kw">as _</span>, EventHandle,
+            EventHandles, EventPropagationHandle, command, event, event_args,
         },
-        handler::{app_hn, app_hn_once, async_app_hn, async_app_hn_once, async_hn, async_hn_once, hn, hn_once, AppHandler, WidgetHandler},
+        handler::{AppHandler, WidgetHandler, app_hn, app_hn_once, async_app_hn, async_app_hn_once, async_hn, async_hn_once, hn, hn_once},
         render::{FrameBuilder, FrameUpdate, FrameValue, FrameValueKey, FrameValueUpdate, SpatialFrameId, TransformStyle},
-        shortcut::{shortcut, CommandShortcutExt <span class="kw">as _</span>, Shortcut, ShortcutFilter, Shortcuts},
-        timer::{DeadlineHandle, DeadlineVar, TimerHandle, TimerVar, TIMERS},
-        update::{EventUpdate, UpdateDeliveryList, UpdateOp, WidgetUpdates, UPDATES},
+        shortcut::{CommandShortcutExt <span class="kw">as _</span>, Shortcut, ShortcutFilter, Shortcuts, shortcut},
+        timer::{DeadlineHandle, DeadlineVar, TIMERS, TimerHandle, TimerVar},
+        update::{EventUpdate, UPDATES, UpdateDeliveryList, UpdateOp, WidgetUpdates},
         widget::{
+            AnyVarSubscribe <span class="kw">as _</span>, VarLayout <span class="kw">as _</span>, VarSubscribe <span class="kw">as _</span>, WIDGET, WidgetId, WidgetUpdateMode,
             base::{WidgetBase, WidgetImpl},
-            border::{BorderSides, BorderStyle, CornerRadius, CornerRadiusFit, LineOrientation, LineStyle, BORDER},
-            builder::{property_id, NestGroup, WidgetBuilder, WidgetBuilding},
+            border::{BORDER, BorderSides, BorderStyle, CornerRadius, CornerRadiusFit, LineOrientation, LineStyle},
+            builder::{NestGroup, WidgetBuilder, WidgetBuilding, property_id},
             easing,
             info::{
                 InteractionPath, Interactivity, Visibility, WidgetBorderInfo, WidgetBoundsInfo, WidgetInfo, WidgetInfoBuilder,
                 WidgetLayout, WidgetMeasure, WidgetPath,
             },
             node::{
-                match_node, match_node_leaf, match_node_list, match_node_typed, match_widget, ui_vec, ArcNode, ArcNodeList, BoxedUiNode,
-                BoxedUiNodeList, EditableUiNodeList, EditableUiNodeListRef, FillUiNode, NilUiNode, PanelList, PanelListData <span class="kw">as _</span>,
-                SortingList, UiNode, UiNodeList, UiNodeListChain <span class="kw">as _</span>, UiNodeListObserver, UiNodeOp, UiVec, ZIndex, SORTING_LIST,
+                ArcNode, ArcNodeList, BoxedUiNode, BoxedUiNodeList, EditableUiNodeList, EditableUiNodeListRef, FillUiNode, NilUiNode,
+                PanelList, PanelListData <span class="kw">as _</span>, SORTING_LIST, SortingList, UiNode, UiNodeList, UiNodeListChain <span class="kw">as _</span>, UiNodeListObserver,
+                UiNodeOp, UiVec, ZIndex, match_node, match_node_leaf, match_node_list, match_node_typed, match_widget, ui_vec,
             },
-            property, ui_node, widget, widget_impl, widget_mixin, widget_set, AnyVarSubscribe <span class="kw">as _</span>, VarLayout <span class="kw">as _</span>, VarSubscribe <span class="kw">as _</span>,
-            WidgetId, WidgetUpdateMode, WIDGET,
+            property, ui_node, widget, widget_impl, widget_mixin, widget_set,
         },
-        window::{MonitorId, WindowId, WINDOW},
-        DInstant, Deadline, INSTANT,
+        window::{MonitorId, WINDOW, WindowId},
     };
 
     <span class="kw">pub use </span>zng_var::{
-        context_var, expr_var, impl_from_and_into_var, merge_var, response_done_var, response_var, state_var, var, var_from, when_var,
         AnyVar <span class="kw">as _</span>, AnyWeakVar <span class="kw">as _</span>, ArcVar, BoxedVar, ContextVar, IntoValue, IntoVar, LocalVar, ObservableVec, ReadOnlyArcVar,
-        ResponderVar, ResponseVar, Var, VarCapability, VarHandle, VarHandles, VarUpdateId, VarValue, WeakVar <span class="kw">as _</span>,
+        ResponderVar, ResponseVar, Var, VarCapability, VarHandle, VarHandles, VarUpdateId, VarValue, WeakVar <span class="kw">as _</span>, context_var, expr_var,
+        impl_from_and_into_var, merge_var, response_done_var, response_var, state_var, var, var_from, when_var,
     };
 
     <span class="kw">pub use </span>zng_layout::{
-        context::{LayoutDirection, LayoutMetrics, DIRECTION_VAR, LAYOUT},
+        context::{DIRECTION_VAR, LAYOUT, LayoutDirection, LayoutMetrics},
         unit::{
             Align, AngleDegree, AngleGradian, AngleRadian, AngleUnits <span class="kw">as _</span>, ByteUnits <span class="kw">as _</span>, Dip, DipBox, DipPoint, DipRect, DipSideOffsets,
             DipSize, DipToPx <span class="kw">as _</span>, DipVector, Factor, Factor2d, FactorPercent, FactorSideOffsets, FactorUnits <span class="kw">as _</span>, Layout1d <span class="kw">as _</span>,
@@ -243,21 +243,21 @@ document.addEventListener('DOMContentLoaded', function () {
         },
     };
 
-    <span class="kw">pub use </span>zng_txt::{formatx, ToTxt, Txt};
+    <span class="kw">pub use </span>zng_txt::{ToTxt, Txt, formatx};
 
     <span class="kw">pub use </span>zng_clone_move::{async_clmv, async_clmv_fn, async_clmv_fn_once, clmv};
 
     <span class="kw">pub use </span>zng_task <span class="kw">as </span>task;
 
-    <span class="kw">pub use </span>zng_app_context::{app_local, context_local, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, RunOnDrop};
+    <span class="kw">pub use </span>zng_app_context::{CaptureFilter, ContextLocal, ContextValueSet, LocalContext, RunOnDrop, app_local, context_local};
 
-    <span class="kw">pub use </span>zng_state_map::{state_map, static_id, OwnedStateMap, StateId, StateMapMut, StateMapRef};
+    <span class="kw">pub use </span>zng_state_map::{OwnedStateMap, StateId, StateMapMut, StateMapRef, state_map, static_id};
 
     <span class="kw">pub use </span>zng_unique_id::{IdEntry, IdMap, IdSet};
 
     <span class="kw">pub use </span>zng_color::{
-        colors, gradient, hex, hsl, hsla, hsv, hsva, light_dark, rgb, rgba, web_colors, ColorScheme, Hsla, Hsva, LightDark,
-        LightDarkVarExt <span class="kw">as _</span>, MixAdjust <span class="kw">as _</span>, MixBlendMode, Rgba,
+        ColorScheme, Hsla, Hsva, LightDark, LightDarkVarExt <span class="kw">as _</span>, MixAdjust <span class="kw">as _</span>, MixBlendMode, Rgba, colors, gradient, hex, hsl, hsla,
+        hsv, hsva, light_dark, rgb, rgba, web_colors,
     };
 
     <span class="kw">pub use </span><span class="kw">crate</span>::node::{
@@ -266,7 +266,7 @@ document.addEventListener('DOMContentLoaded', function () {
         with_context_local_init, with_context_var, with_context_var_init, with_widget_state, with_widget_state_modify,
     };
 
-    <span class="kw">pub use crate</span>::{wgt_fn, CommandIconExt <span class="kw">as _</span>, WidgetFn};
+    <span class="kw">pub use crate</span>::{CommandIconExt <span class="kw">as _</span>, WidgetFn, wgt_fn};
 }
 
 <span class="kw">pub mod </span>node;

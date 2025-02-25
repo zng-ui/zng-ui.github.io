@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/handler.rs`."><title>handler.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/handler.rs`."><title>handler.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1416,14 +1416,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1379" id="1379">1379</a>
 <a href="#1380" id="1380">1380</a>
 <a href="#1381" id="1381">1381</a>
-<a href="#1382" id="1382">1382</a>
-<a href="#1383" id="1383">1383</a>
-<a href="#1384" id="1384">1384</a>
-<a href="#1385" id="1385">1385</a>
-<a href="#1386" id="1386">1386</a></pre></div><pre class="rust"><code><span class="doccomment">//! Handler types and macros.
+<a href="#1382" id="1382">1382</a></pre></div><pre class="rust"><code><span class="doccomment">//! Handler types and macros.
 
 </span><span class="kw">use </span>std::any::Any;
-<span class="kw">use </span>std::future::Future;
 <span class="kw">use </span>std::marker::PhantomData;
 <span class="kw">use </span>std::time::Duration;
 <span class="kw">use </span>std::{mem, thread};
@@ -1451,7 +1446,6 @@ document.addEventListener('DOMContentLoaded', function () {
     ///
     /// [`update`]: WidgetHandler::update
     /// [`info`]: crate::widget::node::UiNode::info
-    /// [`subscribe`]: WidgetHandler::subscribe
     </span><span class="kw">fn </span>event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: <span class="kw-2">&amp;</span>A) -&gt; bool;
 
     <span class="doccomment">/// Called every widget update.
@@ -1850,10 +1844,12 @@ document.addEventListener('DOMContentLoaded', function () {
 ///
 /// ## Futures and Clone-Move
 ///
-/// You may want to always *clone-move* captures for async handlers, because they then automatically get cloned again for each event. This
+/// You want to always *clone-move* captures for async handlers, because they then automatically get cloned again for each event. This
 /// needs to happen because you can have more then one *handler task* running at the same type, and both want access to the captured variables.
 ///
 /// This second cloning can be avoided by using the [`async_hn_once!`] macro instead, but only if you expect a single event.
+///
+/// Note that this means you are declaring a normal closure that returns a `'static` future, not an async closure, see [`async_clmv_fn!`].
 ///
 /// [`async_clmv_fn!`]: zng_clone_move::async_clmv_fn
 </span><span class="attr">#[macro_export]
@@ -2629,11 +2625,7 @@ document.addEventListener('DOMContentLoaded', function () {
     F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>,
 {
     <span class="kw">fn </span>event(<span class="kw-2">&amp;mut </span><span class="self">self</span>, args: <span class="kw-2">&amp;</span>A) -&gt; bool {
-        <span class="kw">if </span>(<span class="self">self</span>.filter)(args) {
-            <span class="self">self</span>.handler.event(args)
-        } <span class="kw">else </span>{
-            <span class="bool-val">false
-        </span>}
+        <span class="kw">if </span>(<span class="self">self</span>.filter)(args) { <span class="self">self</span>.handler.event(args) } <span class="kw">else </span>{ <span class="bool-val">false </span>}
     }
 
     <span class="kw">fn </span>update(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {

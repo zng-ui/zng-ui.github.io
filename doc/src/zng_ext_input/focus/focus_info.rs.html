@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/focus/focus_info.rs`."><title>focus_info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/focus/</div>focus_info.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/focus/focus_info.rs`."><title>focus_info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/focus/</div>focus_info.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
 <a href="#1" id="1">1</a>
 <a href="#2" id="2">2</a>
 <a href="#3" id="3">3</a>
@@ -2169,45 +2169,21 @@
 <a href="#2168" id="2168">2168</a>
 <a href="#2169" id="2169">2169</a>
 <a href="#2170" id="2170">2170</a>
-<a href="#2171" id="2171">2171</a>
-<a href="#2172" id="2172">2172</a>
-<a href="#2173" id="2173">2173</a>
-<a href="#2174" id="2174">2174</a>
-<a href="#2175" id="2175">2175</a>
-<a href="#2176" id="2176">2176</a>
-<a href="#2177" id="2177">2177</a>
-<a href="#2178" id="2178">2178</a>
-<a href="#2179" id="2179">2179</a>
-<a href="#2180" id="2180">2180</a>
-<a href="#2181" id="2181">2181</a>
-<a href="#2182" id="2182">2182</a>
-<a href="#2183" id="2183">2183</a>
-<a href="#2184" id="2184">2184</a>
-<a href="#2185" id="2185">2185</a>
-<a href="#2186" id="2186">2186</a>
-<a href="#2187" id="2187">2187</a>
-<a href="#2188" id="2188">2188</a>
-<a href="#2189" id="2189">2189</a>
-<a href="#2190" id="2190">2190</a>
-<a href="#2191" id="2191">2191</a>
-<a href="#2192" id="2192">2192</a>
-<a href="#2193" id="2193">2193</a>
-<a href="#2194" id="2194">2194</a>
-<a href="#2195" id="2195">2195</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
+<a href="#2171" id="2171">2171</a></pre></div><pre class="rust"><code><span class="kw">use </span>std::fmt;
 <span class="kw">use </span>std::sync::atomic::Ordering::Relaxed;
 
 <span class="kw">use </span>atomic::Atomic;
 <span class="kw">use </span>parking_lot::Mutex;
 <span class="kw">use </span>zng_app::{
     widget::{
-        info::{TreeFilter, Visibility, WidgetInfo, WidgetInfoBuilder, WidgetInfoTree, WidgetPath},
         WidgetId,
+        info::{TreeFilter, Visibility, WidgetInfo, WidgetInfoBuilder, WidgetInfoTree, WidgetPath},
     },
     window::WindowId,
 };
 <span class="kw">use </span>zng_ext_window::NestedWindowWidgetInfoExt;
 <span class="kw">use </span>zng_layout::unit::{DistanceKey, Orientation2D, Px, PxBox, PxPoint, PxRect, PxSize};
-<span class="kw">use </span>zng_state_map::{static_id, StateId};
+<span class="kw">use </span>zng_state_map::{StateId, static_id};
 <span class="kw">use </span>zng_unique_id::IdSet;
 <span class="kw">use </span>zng_var::impl_from_and_into_var;
 <span class="kw">use </span>zng_view_api::window::FocusIndicator;
@@ -2787,11 +2763,7 @@
     }
     <span class="kw">fn </span>into_focusable(<span class="self">self</span>, focus_disabled_widgets: bool, focus_hidden_widgets: bool) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetFocusInfo&gt; {
         <span class="kw">let </span>r = <span class="self">self</span>.into_focus_info(focus_disabled_widgets, focus_hidden_widgets);
-        <span class="kw">if </span>r.is_focusable() {
-            <span class="prelude-val">Some</span>(r)
-        } <span class="kw">else </span>{
-            <span class="prelude-val">None
-        </span>}
+        <span class="kw">if </span>r.is_focusable() { <span class="prelude-val">Some</span>(r) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}
     }
 }
 
@@ -2979,11 +2951,7 @@
         <span class="kw">let </span>focus_hidden_widgets = <span class="self">self</span>.focus_hidden_widgets();
         <span class="self">self</span>.info.ancestors().filter_map(<span class="kw">move </span>|i| {
             <span class="kw">let </span>i = i.into_focus_info(focus_disabled_widgets, focus_hidden_widgets);
-            <span class="kw">if </span>i.is_scope() {
-                <span class="prelude-val">Some</span>(i)
-            } <span class="kw">else </span>{
-                <span class="prelude-val">None
-            </span>}
+            <span class="kw">if </span>i.is_scope() { <span class="prelude-val">Some</span>(i) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}
         })
     }
 
@@ -3157,11 +3125,7 @@
             }
         }
 
-        <span class="kw">if </span>best.<span class="number">0</span>.is_skip() {
-            <span class="prelude-val">None
-        </span>} <span class="kw">else </span>{
-            <span class="prelude-val">Some</span>(best.<span class="number">1</span>)
-        }
+        <span class="kw">if </span>best.<span class="number">0</span>.is_skip() { <span class="prelude-val">None </span>} <span class="kw">else </span>{ <span class="prelude-val">Some</span>(best.<span class="number">1</span>) }
     }
 
     <span class="doccomment">/// Last descendant considering TAB index.
@@ -3176,11 +3140,7 @@
             }
         }
 
-        <span class="kw">if </span>best.<span class="number">0 </span>&lt; <span class="number">0 </span>{
-            <span class="prelude-val">None
-        </span>} <span class="kw">else </span>{
-            <span class="prelude-val">Some</span>(best.<span class="number">1</span>)
-        }
+        <span class="kw">if </span>best.<span class="number">0 </span>&lt; <span class="number">0 </span>{ <span class="prelude-val">None </span>} <span class="kw">else </span>{ <span class="prelude-val">Some</span>(best.<span class="number">1</span>) }
     }
 
     <span class="doccomment">/// Iterator over all focusable widgets in the same scope after this widget.
@@ -3263,11 +3223,7 @@
             }
         }
 
-        <span class="kw">if </span>best.<span class="number">0</span>.is_skip() {
-            <span class="prelude-val">None
-        </span>} <span class="kw">else </span>{
-            <span class="prelude-val">Some</span>(best.<span class="number">1</span>)
-        }
+        <span class="kw">if </span>best.<span class="number">0</span>.is_skip() { <span class="prelude-val">None </span>} <span class="kw">else </span>{ <span class="prelude-val">Some</span>(best.<span class="number">1</span>) }
     }
 
     <span class="doccomment">/// Iterator over all focusable widgets in the same scope before this widget in reverse.
@@ -3343,11 +3299,7 @@
             }
         }
 
-        <span class="kw">if </span>best.<span class="number">0 </span>&lt; <span class="number">0 </span>{
-            <span class="prelude-val">None
-        </span>} <span class="kw">else </span>{
-            <span class="prelude-val">Some</span>(best.<span class="number">1</span>)
-        }
+        <span class="kw">if </span>best.<span class="number">0 </span>&lt; <span class="number">0 </span>{ <span class="prelude-val">None </span>} <span class="kw">else </span>{ <span class="prelude-val">Some</span>(best.<span class="number">1</span>) }
     }
 
     <span class="doccomment">/// Widget to focus when pressing TAB from this widget.

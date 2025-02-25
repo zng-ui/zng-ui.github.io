@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/render.rs`."><title>render.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -3226,12 +3226,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#3189" id="3189">3189</a>
 <a href="#3190" id="3190">3190</a>
 <a href="#3191" id="3191">3191</a>
-<a href="#3192" id="3192">3192</a>
-<a href="#3193" id="3193">3193</a>
-<a href="#3194" id="3194">3194</a>
-<a href="#3195" id="3195">3195</a>
-<a href="#3196" id="3196">3196</a>
-<a href="#3197" id="3197">3197</a></pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
+<a href="#3192" id="3192">3192</a></pre></div><pre class="rust"><code><span class="doccomment">//! Frame render and metadata API.
 
 </span><span class="kw">use </span>std::{marker::PhantomData, mem, sync::Arc};
 
@@ -3240,40 +3235,39 @@ document.addEventListener('DOMContentLoaded', function () {
     window::WINDOW,
 };
 <span class="kw">use </span>zng_color::{
-    colors,
+    RenderMixBlendMode, Rgba, colors,
     filter::RenderFilter,
     gradient::{RenderExtendMode, RenderGradientStop},
-    RenderMixBlendMode, Rgba,
 };
 <span class="kw">use </span>zng_layout::unit::{
-    euclid, AngleRadian, Factor, FactorUnits, Px, PxCornerRadius, PxLine, PxPoint, PxRect, PxSideOffsets, PxSize, PxTransform, PxVector,
+    AngleRadian, Factor, FactorUnits, Px, PxCornerRadius, PxLine, PxPoint, PxRect, PxSideOffsets, PxSize, PxTransform, PxVector, euclid,
 };
 <span class="kw">use </span>zng_task::rayon::iter::{ParallelBridge, ParallelIterator};
 <span class="kw">use </span>zng_unique_id::{impl_unique_id_bytemuck, unique_id_32};
-<span class="kw">use </span>zng_var::{impl_from_and_into_var, Var, VarCapability, VarValue};
+<span class="kw">use </span>zng_var::{Var, VarCapability, VarValue, impl_from_and_into_var};
 <span class="kw">use </span>zng_view_api::{
+    ReferenceFrameId <span class="kw">as </span>RenderReferenceFrameId, ViewProcessGen,
     api_extension::{ApiExtensionId, ApiExtensionPayload},
     config::FontAntiAliasing,
     display_list::{DisplayList, DisplayListBuilder, FilterOp, NinePatchSource, ReuseStart},
     font::{GlyphInstance, GlyphOptions},
     window::FrameId,
-    ReferenceFrameId <span class="kw">as </span>RenderReferenceFrameId, ViewProcessGen,
 };
 
 <span class="kw">use crate</span>::{
     update::{RenderUpdates, UpdateFlags},
     view_process::ViewRenderer,
     widget::{
-        base::{Parallel, PARALLEL_VAR},
+        WIDGET, WidgetId,
+        base::{PARALLEL_VAR, Parallel},
         border::{<span class="self">self</span>, BorderSides},
         info::{HitTestClips, ParallelBuilder, WidgetInfo, WidgetInfoTree, WidgetRenderInfo},
-        WidgetId, WIDGET,
     },
 };
 
 <span class="kw">pub use </span>zng_view_api::{
-    display_list::{FrameValue, FrameValueUpdate, ReuseRange},
     ImageRendering, RepeatMode, TransformStyle,
+    display_list::{FrameValue, FrameValueUpdate, ReuseRange},
 };
 
 <span class="doccomment">/// A text font.
@@ -3417,11 +3411,11 @@ document.addEventListener('DOMContentLoaded', function () {
         <span class="kw">let </span>auto_hide_rect = PxRect::from_size(root_size).inflate(root_size.width, root_size.height);
         root_bounds.set_outer_transform(PxTransform::identity(), info_tree);
 
-        <span class="kw">let </span>gen = renderer
+        <span class="kw">let </span>vp_gen = renderer
             .as_ref()
             .and_then(|r| r.generation().ok())
             .unwrap_or(ViewProcessGen::INVALID);
-        <span class="kw">let </span>view_process_has_frame = gen != ViewProcessGen::INVALID &amp;&amp; gen == info_tree.view_process_gen();
+        <span class="kw">let </span>view_process_has_frame = vp_gen != ViewProcessGen::INVALID &amp;&amp; vp_gen == info_tree.view_process_gen();
 
         FrameBuilder {
             render_widgets,
@@ -3807,11 +3801,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     <span class="kw">let </span>transform_patch = <span class="self">self</span>.undo_prev_outer_transform.and_then(|t| {
                         <span class="kw">let </span>t = t.then(<span class="kw-2">&amp;</span><span class="self">self</span>.outer_transform);
-                        <span class="kw">if </span>t != PxTransform::identity() {
-                            <span class="prelude-val">Some</span>(t)
-                        } <span class="kw">else </span>{
-                            <span class="prelude-val">None
-                        </span>}
+                        <span class="kw">if </span>t != PxTransform::identity() { <span class="prelude-val">Some</span>(t) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}
                     });
 
                     <span class="kw">let </span>current_wgt = tree.get(id).unwrap();
@@ -5523,8 +5513,8 @@ document.addEventListener('DOMContentLoaded', function () {
 }
 <span class="kw">impl </span>border::LineStyle {
     <span class="kw">fn </span>render_command(<span class="self">self</span>) -&gt; RenderLineCommand {
-        <span class="kw">use </span>border::LineStyle <span class="kw">as </span>LS;
         <span class="kw">use </span>RenderLineCommand::<span class="kw-2">*</span>;
+        <span class="kw">use </span>border::LineStyle <span class="kw">as </span>LS;
         <span class="kw">match </span><span class="self">self </span>{
             LS::Solid =&gt; Line(zng_view_api::LineStyle::Solid),
             LS::Double =&gt; Border(zng_view_api::BorderStyle::Double),

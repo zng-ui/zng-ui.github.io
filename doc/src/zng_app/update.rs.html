@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/update.rs`."><title>update.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/update.rs`."><title>update.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1909,9 +1909,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#1872" id="1872">1872</a></pre></div><pre class="rust"><code><span class="doccomment">//! App updates API.
 
 </span><span class="kw">use </span>std::{
-    collections::{hash_map, HashMap},
+    collections::{HashMap, hash_map},
     fmt, mem,
-    sync::{atomic::AtomicBool, Arc},
+    sync::{Arc, atomic::AtomicBool},
     task::Waker,
 };
 
@@ -1922,16 +1922,16 @@ document.addEventListener('DOMContentLoaded', function () {
 <span class="kw">use </span>zng_var::VARS_APP;
 
 <span class="kw">use crate</span>::{
+    AppEventSender, AppExtension, LoopTimer,
     event::{AnyEvent, AnyEventArgs, AppDisconnected, EVENTS, EVENTS_SV},
-    handler::{async_app_hn_once, AppHandler, AppHandlerArgs, AppWeakHandle},
+    handler::{AppHandler, AppHandlerArgs, AppWeakHandle, async_app_hn_once},
     timer::TIMERS_SV,
     widget::{
+        WIDGET, WidgetId,
         info::{InteractionPath, WidgetInfo, WidgetInfoTree, WidgetPath},
         node::{BoxedUiNode, UiNode},
-        WidgetId, WIDGET,
     },
-    window::{WindowId, WINDOW},
-    AppEventSender, AppExtension, LoopTimer,
+    window::{WINDOW, WindowId},
 };
 
 <span class="doccomment">/// Represents all the widgets and windows marked to receive an update.
@@ -3244,7 +3244,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Schedule the `future` to run in the app context, each future awake work runs as a *preview* update.
     ///
     /// Returns a handle that can be dropped to cancel execution.
-    </span><span class="kw">pub fn </span>run&lt;F: std::future::Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, future: F) -&gt; OnUpdateHandle {
+    </span><span class="kw">pub fn </span>run&lt;F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, future: F) -&gt; OnUpdateHandle {
         <span class="self">self</span>.run_hn_once(<span class="macro">async_app_hn_once!</span>(|<span class="kw">_</span>| future.<span class="kw">await</span>))
     }
 

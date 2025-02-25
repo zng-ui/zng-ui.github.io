@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/builder.rs`."><title>builder.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/builder.rs`."><title>builder.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../../static.files/storage-59e33391.js"></script><script defer src="../../../static.files/src-script-56102188.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -3033,15 +3033,12 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href="#2996" id="2996">2996</a>
 <a href="#2997" id="2997">2997</a>
 <a href="#2998" id="2998">2998</a>
-<a href="#2999" id="2999">2999</a>
-<a href="#3000" id="3000">3000</a>
-<a href="#3001" id="3001">3001</a>
-<a href="#3002" id="3002">3002</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget and property builder types.
+<a href="#2999" id="2999">2999</a></pre></div><pre class="rust"><code><span class="doccomment">//! Widget and property builder types.
 
 </span><span class="kw">use crate</span>::{handler::WidgetHandler, widget::node::WhenUiNodeListBuilder};
 <span class="kw">use </span>std::{
     any::{Any, TypeId},
-    collections::{hash_map, HashMap},
+    collections::{HashMap, hash_map},
     fmt, ops,
     sync::Arc,
 };
@@ -3254,18 +3251,17 @@ document.addEventListener('DOMContentLoaded', function () {
 </span><span class="kw">pub use </span>widget_type;
 <span class="kw">use </span>zng_app_context::context_local;
 <span class="kw">use </span>zng_app_proc_macros::widget;
-<span class="kw">use </span>zng_txt::{formatx, Txt};
-<span class="kw">use </span>zng_unique_id::{unique_id_32, IdEntry, IdMap, IdSet};
+<span class="kw">use </span>zng_txt::{Txt, formatx};
+<span class="kw">use </span>zng_unique_id::{IdEntry, IdMap, IdSet, unique_id_32};
 <span class="kw">use </span>zng_var::{
-    impl_from_and_into_var,
+    AnyVar, AnyVarValue, BoxedAnyVar, BoxedVar, ContextInitHandle, IntoValue, IntoVar, LocalVar, Var, VarValue, impl_from_and_into_var,
     types::{AnyWhenVarBuilder, ContextualizedVar, WeakContextInitHandle},
-    AnyVar, AnyVarValue, BoxedAnyVar, BoxedVar, ContextInitHandle, IntoValue, IntoVar, LocalVar, Var, VarValue,
 };
 
 <span class="kw">use super</span>::{
     base::{WidgetBase, WidgetExt},
     node::{
-        with_new_context_init_id, ArcNode, ArcNodeList, BoxedUiNode, BoxedUiNodeList, FillUiNode, UiNode, UiNodeList, WhenUiNodeBuilder,
+        ArcNode, ArcNodeList, BoxedUiNode, BoxedUiNodeList, FillUiNode, UiNode, UiNodeList, WhenUiNodeBuilder, with_new_context_init_id,
     },
 };
 
@@ -4402,8 +4398,6 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// New input setter and input var.
     ///
     /// Trying to use the input var outside of the widget will panic.
-    ///
-    /// [`can_use`]: Self::can_use
     </span><span class="kw">pub fn </span>new&lt;T: VarValue&gt;() -&gt; (<span class="self">Self</span>, <span class="kw">impl </span>Var&lt;T&gt;) {
         <span class="kw">let </span>arc: Arc&lt;Mutex&lt;<span class="kw">dyn </span>AnyWhenInputVarInner&gt;&gt; = Arc::new(Mutex::new(WhenInputInitData::&lt;T&gt;::empty()));
         (

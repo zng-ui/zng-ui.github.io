@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node/arc.rs`."><title>arc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-42caa33d.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.84.1 (e71f9a9a9 2025-01-27)" data-channel="1.84.1" data-search-js="search-92e6798f.js" data-settings-js="settings-0f613d39.js" ><script src="../../../../static.files/storage-59e33391.js"></script><script defer src="../../../../static.files/src-script-56102188.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/node/arc.rs`."><title>arc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.0 (4d91de4e4 2025-02-17)" data-channel="1.85.0" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../../../static.files/storage-59e33391.js"></script><script defer src="../../../../static.files/src-script-56102188.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -792,7 +792,10 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Create a slot node that takes ownership of this node when `var` updates to `true`.
     ///
     /// The slot node also takes ownership on init if the `var` is already `true`.
-    </span><span class="kw">pub fn </span>take_when(<span class="kw-2">&amp;</span><span class="self">self</span>, var: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; TakeSlot&lt;U, <span class="kw">impl </span>TakeOn&gt; {
+    </span><span class="kw">pub fn </span>take_when&lt;I&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, var: I) -&gt; TakeSlot&lt;U, impls::TakeWhenVar&lt;I::Var&gt;&gt;
+    <span class="kw">where
+        </span>I: IntoVar&lt;bool&gt;,
+    {
         impls::TakeSlot {
             slot: <span class="self">self</span>.<span class="number">0</span>.slots.lock().next_slot(),
             rc: <span class="self">self</span>.<span class="number">0</span>.clone(),
@@ -806,12 +809,11 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Create a slot node that takes ownership of this node when `event` updates and `filter` returns `true`.
     ///
     /// The slot node also takes ownership on init if `take_on_init` is `true`.
-    </span><span class="kw">pub fn </span>take_on&lt;A: EventArgs&gt;(
-        <span class="kw-2">&amp;</span><span class="self">self</span>,
-        event: Event&lt;A&gt;,
-        filter: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>,
-        take_on_init: bool,
-    ) -&gt; TakeSlot&lt;U, <span class="kw">impl </span>TakeOn&gt; {
+    </span><span class="kw">pub fn </span>take_on&lt;A, F&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, event: Event&lt;A&gt;, filter: F, take_on_init: bool) -&gt; TakeSlot&lt;U, impls::TakeOnEvent&lt;A, F&gt;&gt;
+    <span class="kw">where
+        </span>A: EventArgs,
+        F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>,
+    {
         impls::TakeSlot {
             slot: <span class="self">self</span>.<span class="number">0</span>.slots.lock().next_slot(),
             rc: <span class="self">self</span>.<span class="number">0</span>.clone(),
@@ -829,7 +831,7 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="doccomment">/// Create a slot node that takes ownership of this node as soon as the node is inited.
     ///
     /// This is equivalent to `self.take_when(true)`.
-    </span><span class="kw">pub fn </span>take_on_init(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TakeSlot&lt;U, <span class="kw">impl </span>TakeOn&gt; {
+    </span><span class="kw">pub fn </span>take_on_init(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; TakeSlot&lt;U, impls::TakeWhenVar&lt;zng_var::LocalVar&lt;bool&gt;&gt;&gt; {
         <span class="self">self</span>.take_when(<span class="bool-val">true</span>)
     }
 
@@ -995,11 +997,11 @@ document.addEventListener('DOMContentLoaded', function () {
     <span class="kw">use crate</span>::{
         event::{Event, EventArgs},
         render::{FrameBuilder, FrameUpdate},
-        update::{EventUpdate, WidgetUpdates, UPDATES},
+        update::{EventUpdate, UPDATES, WidgetUpdates},
         widget::{
+            WIDGET, WidgetHandlesCtx, WidgetUpdateMode,
             info::{WidgetInfoBuilder, WidgetLayout, WidgetMeasure},
             node::{BoxedUiNode, BoxedUiNodeList, UiNode, UiNodeList, UiNodeListObserver},
-            WidgetHandlesCtx, WidgetUpdateMode, WIDGET,
         },
     };
 
@@ -1022,7 +1024,8 @@ document.addEventListener('DOMContentLoaded', function () {
         </span>}
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>TakeWhenVar&lt;V: Var&lt;bool&gt;&gt; {
+    <span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub struct </span>TakeWhenVar&lt;V: Var&lt;bool&gt;&gt; {
         <span class="kw">pub</span>(<span class="kw">super</span>) var: V,
     }
     <span class="kw">impl</span>&lt;V: Var&lt;bool&gt;&gt; TakeOn <span class="kw">for </span>TakeWhenVar&lt;V&gt; {
@@ -1036,7 +1039,8 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>TakeOnEvent&lt;A: EventArgs, F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>&gt; {
+    <span class="attr">#[doc(hidden)]
+    </span><span class="kw">pub struct </span>TakeOnEvent&lt;A: EventArgs, F: FnMut(<span class="kw-2">&amp;</span>A) -&gt; bool + Send + <span class="lifetime">'static</span>&gt; {
         <span class="kw">pub</span>(<span class="kw">super</span>) event: Event&lt;A&gt;,
         <span class="kw">pub</span>(<span class="kw">super</span>) filter: F,
         <span class="kw">pub</span>(<span class="kw">super</span>) take_on_init: bool,
@@ -1184,11 +1188,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         <span class="kw">fn </span>delegate_owned&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, del: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>U) -&gt; R) -&gt; <span class="prelude-ty">Option</span>&lt;R&gt; {
-            <span class="kw">if </span><span class="self">self</span>.is_owner() {
-                <span class="prelude-val">Some</span>(del(<span class="kw-2">&amp;*</span><span class="self">self</span>.rc.item.lock()))
-            } <span class="kw">else </span>{
-                <span class="prelude-val">None
-            </span>}
+            <span class="kw">if </span><span class="self">self</span>.is_owner() { <span class="prelude-val">Some</span>(del(<span class="kw-2">&amp;*</span><span class="self">self</span>.rc.item.lock())) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}
         }
         <span class="kw">fn </span>delegate_owned_mut&lt;R&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, del: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>U) -&gt; R) -&gt; <span class="prelude-ty">Option</span>&lt;R&gt; {
             <span class="kw">if </span><span class="self">self</span>.is_owner() {
