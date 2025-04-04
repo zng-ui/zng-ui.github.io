@@ -1,168 +1,84 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/text.rs`."><title>text.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-46132b98.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.85.1 (4eb161250 2025-03-15)" data-channel="1.85.1" data-search-js="search-75f5ac3e.js" data-settings-js="settings-0f613d39.js" ><script src="../../static.files/storage-59e33391.js"></script><script defer src="../../static.files/src-script-56102188.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5f194d8c.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>text.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap"><div data-nosnippet><pre class="src-line-numbers">
-<a href="#1" id="1">1</a>
-<a href="#2" id="2">2</a>
-<a href="#3" id="3">3</a>
-<a href="#4" id="4">4</a>
-<a href="#5" id="5">5</a>
-<a href="#6" id="6">6</a>
-<a href="#7" id="7">7</a>
-<a href="#8" id="8">8</a>
-<a href="#9" id="9">9</a>
-<a href="#10" id="10">10</a>
-<a href="#11" id="11">11</a>
-<a href="#12" id="12">12</a>
-<a href="#13" id="13">13</a>
-<a href="#14" id="14">14</a>
-<a href="#15" id="15">15</a>
-<a href="#16" id="16">16</a>
-<a href="#17" id="17">17</a>
-<a href="#18" id="18">18</a>
-<a href="#19" id="19">19</a>
-<a href="#20" id="20">20</a>
-<a href="#21" id="21">21</a>
-<a href="#22" id="22">22</a>
-<a href="#23" id="23">23</a>
-<a href="#24" id="24">24</a>
-<a href="#25" id="25">25</a>
-<a href="#26" id="26">26</a>
-<a href="#27" id="27">27</a>
-<a href="#28" id="28">28</a>
-<a href="#29" id="29">29</a>
-<a href="#30" id="30">30</a>
-<a href="#31" id="31">31</a>
-<a href="#32" id="32">32</a>
-<a href="#33" id="33">33</a>
-<a href="#34" id="34">34</a>
-<a href="#35" id="35">35</a>
-<a href="#36" id="36">36</a>
-<a href="#37" id="37">37</a>
-<a href="#38" id="38">38</a>
-<a href="#39" id="39">39</a>
-<a href="#40" id="40">40</a>
-<a href="#41" id="41">41</a>
-<a href="#42" id="42">42</a>
-<a href="#43" id="43">43</a>
-<a href="#44" id="44">44</a>
-<a href="#45" id="45">45</a>
-<a href="#46" id="46">46</a>
-<a href="#47" id="47">47</a>
-<a href="#48" id="48">48</a>
-<a href="#49" id="49">49</a>
-<a href="#50" id="50">50</a>
-<a href="#51" id="51">51</a>
-<a href="#52" id="52">52</a>
-<a href="#53" id="53">53</a>
-<a href="#54" id="54">54</a>
-<a href="#55" id="55">55</a>
-<a href="#56" id="56">56</a>
-<a href="#57" id="57">57</a>
-<a href="#58" id="58">58</a>
-<a href="#59" id="59">59</a>
-<a href="#60" id="60">60</a>
-<a href="#61" id="61">61</a>
-<a href="#62" id="62">62</a>
-<a href="#63" id="63">63</a>
-<a href="#64" id="64">64</a>
-<a href="#65" id="65">65</a>
-<a href="#66" id="66">66</a>
-<a href="#67" id="67">67</a>
-<a href="#68" id="68">68</a>
-<a href="#69" id="69">69</a>
-<a href="#70" id="70">70</a>
-<a href="#71" id="71">71</a>
-<a href="#72" id="72">72</a>
-<a href="#73" id="73">73</a>
-<a href="#74" id="74">74</a>
-<a href="#75" id="75">75</a>
-<a href="#76" id="76">76</a>
-<a href="#77" id="77">77</a>
-<a href="#78" id="78">78</a>
-<a href="#79" id="79">79</a>
-<a href="#80" id="80">80</a>
-<a href="#81" id="81">81</a>
-<a href="#82" id="82">82</a>
-<a href="#83" id="83">83</a></pre></div><pre class="rust"><code><span class="doccomment">//! Text widget, properties and other types.
-//!
-//! The [`Text!`] widget implements text layout and rendering, it is also the base widget for
-//! [`SelectableText!`], [`TextInput!`] and [`label!`]. Text properties are largely contextual,
-//! you can set `text::font_size` in any widget to affect all text inside that widget.
-//!
-//! The `Text!` widget provides *simple* text rendering, that is all text is of the same style and
-//! different fonts are only used as fallback. You can implement *rich* text by combining multiple
-//! `Text!` and `Wrap!` panels, see the [`wrap`] module docs for an example. Some widgets also parse
-//! text and generate the rich text setup automatically, the [`Markdown!`] and [`AnsiText!`] widgets
-//! are examples of this.
-//!
-//! The example below declares two text widgets, one displays a text that requires multiple fonts to render,
-//! the other displays debug information about the first.
-//!
-//! ```
-//! use zng::prelude::*;
-//! # let _scope = APP.defaults();
-//!
-//! let txt = "text テキスト 📋";
-//! let font_use = var(vec![]);
-//! # let _ =
-//! Stack! {
-//!     text::font_family = ["Segoe UI", "Yu Gothic UI", "Segoe Ui Emoji", "sans-serif"];
-//!     children = ui_vec![
-//!         Text! {
-//!             font_size = 1.5.em();
-//!             txt;
-//!             get_font_use = font_use.clone();
-//!         },
-//!         Text! {
-//!             font_size = 0.9.em();
-//!             txt = font_use.map(|u| {
-//!                 let mut r = Txt::from("");
-//!                 for (font, range) in u {
-//!                     use std::fmt::Write as _;
-//!                     writeln!(&amp;mut r, "{} = {:?}", font.face().family_name(), &amp;txt[range.clone()]).unwrap();
-//!                 }
-//!                 r.end_mut();
-//!                 r
-//!             });
-//!         },
-//!     ];
-//!     direction = StackDirection::top_to_bottom();
-//!     spacing = 15;
-//! }
-//! # ;
-//! ```
-//!
-//! Note that the [`font_family`](fn@font_family) is set on the parent widget, both texts have the same
-//! font family value because of this, the [`font_size`](fn@font_size) on the other hand is set for
-//! each text widget and only affects that widget.
-//!
-//! [`Text!`]: struct@Text
-//! [`SelectableText!`]: struct@crate::selectable::SelectableText
-//! [`TextInput!`]: struct@crate::text_input::TextInput
-//! [`label!`]: struct@crate::label::Label
-//! [`Markdown!`]: struct@crate::markdown::Markdown
-//! [`AnsiText!`]: struct@crate::ansi_text::AnsiText
-//! [`wrap`]: crate::wrap
-//!
-//! # Full API
-//!
-//! See [`zng_wgt_text`] for the full widget API.
-
-</span><span class="kw">pub use </span>zng_txt::<span class="kw-2">*</span>;
-
-<span class="kw">pub use </span>zng_wgt_text::{
-    AutoSelection, CaretShape, CaretStatus, ChangeStopArgs, ChangeStopCause, Em, FONT_COLOR_VAR, InteractiveCaretMode, LangMix,
-    LinesWrapCount, ParagraphMix, SelectionToolbarArgs, Strong, Text, TextOverflow, TxtParseValue, UnderlinePosition, UnderlineSkip,
-    accepts_enter, accepts_tab, auto_selection, caret_color, change_stop_delay, cmd, direction, font_aa, font_annotation, font_caps,
-    font_char_variant, font_cn_variant, font_color, font_common_lig, font_contextual_alt, font_discretionary_lig, font_ea_width,
-    font_family, font_features, font_historical_forms, font_historical_lig, font_jp_variant, font_kerning, font_num_fraction,
-    font_num_spacing, font_numeric, font_ornaments, font_palette, font_palette_colors, font_position, font_size, font_stretch, font_style,
-    font_style_set, font_stylistic, font_swash, font_synthesis, font_variations, font_weight, get_caret_index, get_caret_status,
-    get_chars_count, get_lines_len, get_lines_wrap_count, get_overflow, hyphen_char, hyphens, ime_underline, interactive_caret,
-    interactive_caret_visual, is_line_overflown, is_overflown, is_parse_pending, justify_mode, lang, letter_spacing, line_break,
-    line_height, line_spacing, max_chars_count,
-    node::{TEXT, set_interactive_caret_spot},
-    obscure_txt, obscuring_char, on_change_stop, overline, overline_color, paragraph_spacing, selection_color, selection_toolbar,
-    selection_toolbar_anchor, selection_toolbar_fn, strikethrough, strikethrough_color, tab_length, txt_align, txt_editable, txt_overflow,
-    txt_overflow_align, underline, underline_color, underline_skip, white_space, word_break, word_spacing,
-};
-</code></pre></div></section></main></body></html>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/text.rs`."><title>text.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-6c3ea77c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.86.0 (05f9846f8 2025-03-31)" data-channel="1.86.0" data-search-js="search-581efc7a.js" data-settings-js="settings-6dad6058.js" ><script src="../../static.files/storage-3a5871a4.js"></script><script defer src="../../static.files/src-script-b8d3f215.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-4d63596a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>text.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Text widget, properties and other types.
+<a href=#2 id=2 data-nosnippet>2</a>//!
+<a href=#3 id=3 data-nosnippet>3</a>//! The [`Text!`] widget implements text layout and rendering, it is also the base widget for
+<a href=#4 id=4 data-nosnippet>4</a>//! [`SelectableText!`], [`TextInput!`] and [`label!`]. Text properties are largely contextual,
+<a href=#5 id=5 data-nosnippet>5</a>//! you can set `text::font_size` in any widget to affect all text inside that widget.
+<a href=#6 id=6 data-nosnippet>6</a>//!
+<a href=#7 id=7 data-nosnippet>7</a>//! The `Text!` widget provides *simple* text rendering, that is all text is of the same style and
+<a href=#8 id=8 data-nosnippet>8</a>//! different fonts are only used as fallback. You can implement *rich* text by combining multiple
+<a href=#9 id=9 data-nosnippet>9</a>//! `Text!` and `Wrap!` panels, see the [`wrap`] module docs for an example. Some widgets also parse
+<a href=#10 id=10 data-nosnippet>10</a>//! text and generate the rich text setup automatically, the [`Markdown!`] and [`AnsiText!`] widgets
+<a href=#11 id=11 data-nosnippet>11</a>//! are examples of this.
+<a href=#12 id=12 data-nosnippet>12</a>//!
+<a href=#13 id=13 data-nosnippet>13</a>//! The example below declares two text widgets, one displays a text that requires multiple fonts to render,
+<a href=#14 id=14 data-nosnippet>14</a>//! the other displays debug information about the first.
+<a href=#15 id=15 data-nosnippet>15</a>//!
+<a href=#16 id=16 data-nosnippet>16</a>//! ```
+<a href=#17 id=17 data-nosnippet>17</a>//! use zng::prelude::*;
+<a href=#18 id=18 data-nosnippet>18</a>//! # let _scope = APP.defaults();
+<a href=#19 id=19 data-nosnippet>19</a>//!
+<a href=#20 id=20 data-nosnippet>20</a>//! let txt = "text テキスト 📋";
+<a href=#21 id=21 data-nosnippet>21</a>//! let font_use = var(vec![]);
+<a href=#22 id=22 data-nosnippet>22</a>//! # let _ =
+<a href=#23 id=23 data-nosnippet>23</a>//! Stack! {
+<a href=#24 id=24 data-nosnippet>24</a>//!     text::font_family = ["Segoe UI", "Yu Gothic UI", "Segoe Ui Emoji", "sans-serif"];
+<a href=#25 id=25 data-nosnippet>25</a>//!     children = ui_vec![
+<a href=#26 id=26 data-nosnippet>26</a>//!         Text! {
+<a href=#27 id=27 data-nosnippet>27</a>//!             font_size = 1.5.em();
+<a href=#28 id=28 data-nosnippet>28</a>//!             txt;
+<a href=#29 id=29 data-nosnippet>29</a>//!             get_font_use = font_use.clone();
+<a href=#30 id=30 data-nosnippet>30</a>//!         },
+<a href=#31 id=31 data-nosnippet>31</a>//!         Text! {
+<a href=#32 id=32 data-nosnippet>32</a>//!             font_size = 0.9.em();
+<a href=#33 id=33 data-nosnippet>33</a>//!             txt = font_use.map(|u| {
+<a href=#34 id=34 data-nosnippet>34</a>//!                 let mut r = Txt::from("");
+<a href=#35 id=35 data-nosnippet>35</a>//!                 for (font, range) in u {
+<a href=#36 id=36 data-nosnippet>36</a>//!                     use std::fmt::Write as _;
+<a href=#37 id=37 data-nosnippet>37</a>//!                     writeln!(&amp;mut r, "{} = {:?}", font.face().family_name(), &amp;txt[range.clone()]).unwrap();
+<a href=#38 id=38 data-nosnippet>38</a>//!                 }
+<a href=#39 id=39 data-nosnippet>39</a>//!                 r.end_mut();
+<a href=#40 id=40 data-nosnippet>40</a>//!                 r
+<a href=#41 id=41 data-nosnippet>41</a>//!             });
+<a href=#42 id=42 data-nosnippet>42</a>//!         },
+<a href=#43 id=43 data-nosnippet>43</a>//!     ];
+<a href=#44 id=44 data-nosnippet>44</a>//!     direction = StackDirection::top_to_bottom();
+<a href=#45 id=45 data-nosnippet>45</a>//!     spacing = 15;
+<a href=#46 id=46 data-nosnippet>46</a>//! }
+<a href=#47 id=47 data-nosnippet>47</a>//! # ;
+<a href=#48 id=48 data-nosnippet>48</a>//! ```
+<a href=#49 id=49 data-nosnippet>49</a>//!
+<a href=#50 id=50 data-nosnippet>50</a>//! Note that the [`font_family`](fn@font_family) is set on the parent widget, both texts have the same
+<a href=#51 id=51 data-nosnippet>51</a>//! font family value because of this, the [`font_size`](fn@font_size) on the other hand is set for
+<a href=#52 id=52 data-nosnippet>52</a>//! each text widget and only affects that widget.
+<a href=#53 id=53 data-nosnippet>53</a>//!
+<a href=#54 id=54 data-nosnippet>54</a>//! [`Text!`]: struct@Text
+<a href=#55 id=55 data-nosnippet>55</a>//! [`SelectableText!`]: struct@crate::selectable::SelectableText
+<a href=#56 id=56 data-nosnippet>56</a>//! [`TextInput!`]: struct@crate::text_input::TextInput
+<a href=#57 id=57 data-nosnippet>57</a>//! [`label!`]: struct@crate::label::Label
+<a href=#58 id=58 data-nosnippet>58</a>//! [`Markdown!`]: struct@crate::markdown::Markdown
+<a href=#59 id=59 data-nosnippet>59</a>//! [`AnsiText!`]: struct@crate::ansi_text::AnsiText
+<a href=#60 id=60 data-nosnippet>60</a>//! [`wrap`]: crate::wrap
+<a href=#61 id=61 data-nosnippet>61</a>//!
+<a href=#62 id=62 data-nosnippet>62</a>//! # Full API
+<a href=#63 id=63 data-nosnippet>63</a>//!
+<a href=#64 id=64 data-nosnippet>64</a>//! See [`zng_wgt_text`] for the full widget API.
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a></span><span class="kw">pub use </span>zng_txt::<span class="kw-2">*</span>;
+<a href=#67 id=67 data-nosnippet>67</a>
+<a href=#68 id=68 data-nosnippet>68</a><span class="kw">pub use </span>zng_wgt_text::{
+<a href=#69 id=69 data-nosnippet>69</a>    AutoSelection, CaretShape, CaretStatus, ChangeStopArgs, ChangeStopCause, Em, FONT_COLOR_VAR, InteractiveCaretMode, LangMix,
+<a href=#70 id=70 data-nosnippet>70</a>    LinesWrapCount, ParagraphMix, SelectionToolbarArgs, Strong, Text, TextOverflow, TxtParseValue, UnderlinePosition, UnderlineSkip,
+<a href=#71 id=71 data-nosnippet>71</a>    accepts_enter, accepts_tab, auto_selection, caret_color, change_stop_delay, cmd, direction, font_aa, font_annotation, font_caps,
+<a href=#72 id=72 data-nosnippet>72</a>    font_char_variant, font_cn_variant, font_color, font_common_lig, font_contextual_alt, font_discretionary_lig, font_ea_width,
+<a href=#73 id=73 data-nosnippet>73</a>    font_family, font_features, font_historical_forms, font_historical_lig, font_jp_variant, font_kerning, font_num_fraction,
+<a href=#74 id=74 data-nosnippet>74</a>    font_num_spacing, font_numeric, font_ornaments, font_palette, font_palette_colors, font_position, font_size, font_stretch, font_style,
+<a href=#75 id=75 data-nosnippet>75</a>    font_style_set, font_stylistic, font_swash, font_synthesis, font_variations, font_weight, get_caret_index, get_caret_status,
+<a href=#76 id=76 data-nosnippet>76</a>    get_chars_count, get_lines_len, get_lines_wrap_count, get_overflow, hyphen_char, hyphens, ime_underline, interactive_caret,
+<a href=#77 id=77 data-nosnippet>77</a>    interactive_caret_visual, is_line_overflown, is_overflown, is_parse_pending, justify_mode, lang, letter_spacing, line_break,
+<a href=#78 id=78 data-nosnippet>78</a>    line_height, line_spacing, max_chars_count,
+<a href=#79 id=79 data-nosnippet>79</a>    node::{TEXT, set_interactive_caret_spot},
+<a href=#80 id=80 data-nosnippet>80</a>    obscure_txt, obscuring_char, on_change_stop, overline, overline_color, paragraph_spacing, selection_color, selection_toolbar,
+<a href=#81 id=81 data-nosnippet>81</a>    selection_toolbar_anchor, selection_toolbar_fn, strikethrough, strikethrough_color, tab_length, txt_align, txt_editable, txt_overflow,
+<a href=#82 id=82 data-nosnippet>82</a>    txt_overflow_align, underline, underline_color, underline_skip, white_space, word_break, word_spacing,
+<a href=#83 id=83 data-nosnippet>83</a>};</code></pre></div></section></main></body></html>
