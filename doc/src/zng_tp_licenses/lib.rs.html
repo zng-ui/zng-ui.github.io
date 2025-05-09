@@ -243,7 +243,7 @@
 <a href=#243 id=243 data-nosnippet>243</a>/// Panics in case of any error.
 <a href=#244 id=244 data-nosnippet>244</a></span><span class="attr">#[cfg(feature = <span class="string">"build"</span>)]
 <a href=#245 id=245 data-nosnippet>245</a></span><span class="kw">pub fn </span>encode_licenses(licenses: <span class="kw-2">&amp;</span>[LicenseUsed]) -&gt; Vec&lt;u8&gt; {
-<a href=#246 id=246 data-nosnippet>246</a>    deflate::deflate_bytes(<span class="kw-2">&amp;</span>bincode::serialize(licenses).expect(<span class="string">"bincode error"</span>))
+<a href=#246 id=246 data-nosnippet>246</a>    deflate::deflate_bytes(<span class="kw-2">&amp;</span>bincode::serde::encode_to_vec(licenses, bincode::config::legacy()).expect(<span class="string">"bincode error"</span>))
 <a href=#247 id=247 data-nosnippet>247</a>}
 <a href=#248 id=248 data-nosnippet>248</a>
 <a href=#249 id=249 data-nosnippet>249</a><span class="doccomment">/// Encode licenses and write to the output file that is included by [`include_bundle!`].
@@ -274,5 +274,7 @@
 <a href=#274 id=274 data-nosnippet>274</a></span><span class="attr">#[cfg(feature = <span class="string">"bundle"</span>)]
 <a href=#275 id=275 data-nosnippet>275</a></span><span class="kw">pub fn </span>decode_licenses(bin: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;LicenseUsed&gt; {
 <a href=#276 id=276 data-nosnippet>276</a>    <span class="kw">let </span>bin = inflate::inflate_bytes(bin).expect(<span class="string">"invalid bundle deflate binary"</span>);
-<a href=#277 id=277 data-nosnippet>277</a>    bincode::deserialize(<span class="kw-2">&amp;</span>bin).expect(<span class="string">"invalid bundle bincode binary"</span>)
-<a href=#278 id=278 data-nosnippet>278</a>}</code></pre></div></section></main></body></html>
+<a href=#277 id=277 data-nosnippet>277</a>    bincode::serde::decode_from_slice(<span class="kw-2">&amp;</span>bin, bincode::config::legacy())
+<a href=#278 id=278 data-nosnippet>278</a>        .expect(<span class="string">"invalid bundle bincode binary"</span>)
+<a href=#279 id=279 data-nosnippet>279</a>        .<span class="number">0
+<a href=#280 id=280 data-nosnippet>280</a></span>}</code></pre></div></section></main></body></html>

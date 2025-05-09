@@ -5,25 +5,25 @@
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">use </span>std::{fmt, mem::size_of};
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>byteorder::{BigEndian, ReadBytesExt};
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>icu_properties::sets;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>icu_properties::props::{<span class="self">self</span>, BinaryProperty};
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>zng_color::{ColorScheme, Rgba, rgba};
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>zng_var::impl_from_and_into_var;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>zng_view_api::font::GlyphIndex;
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>maybe_emoji(c: char) -&gt; bool {
-<a href=#14 id=14 data-nosnippet>14</a>    sets::emoji().contains(c)
+<a href=#14 id=14 data-nosnippet>14</a>    props::Emoji::for_char(c)
 <a href=#15 id=15 data-nosnippet>15</a>}
 <a href=#16 id=16 data-nosnippet>16</a>
 <a href=#17 id=17 data-nosnippet>17</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>definitely_emoji(c: char) -&gt; bool {
-<a href=#18 id=18 data-nosnippet>18</a>    sets::emoji_presentation().contains(c) || is_modifier(c)
+<a href=#18 id=18 data-nosnippet>18</a>    props::EmojiPresentation::for_char(c) || is_modifier(c)
 <a href=#19 id=19 data-nosnippet>19</a>}
 <a href=#20 id=20 data-nosnippet>20</a>
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>is_modifier(c: char) -&gt; bool {
-<a href=#22 id=22 data-nosnippet>22</a>    sets::emoji_modifier().contains(c)
+<a href=#22 id=22 data-nosnippet>22</a>    props::EmojiModifier::for_char(c)
 <a href=#23 id=23 data-nosnippet>23</a>}
 <a href=#24 id=24 data-nosnippet>24</a>
 <a href=#25 id=25 data-nosnippet>25</a><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>is_component(c: char) -&gt; bool {
-<a href=#26 id=26 data-nosnippet>26</a>    sets::emoji_component().contains(c)
+<a href=#26 id=26 data-nosnippet>26</a>    props::EmojiComponent::for_char(c)
 <a href=#27 id=27 data-nosnippet>27</a>}
 <a href=#28 id=28 data-nosnippet>28</a>
 <a href=#29 id=29 data-nosnippet>29</a><span class="comment">/*

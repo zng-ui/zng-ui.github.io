@@ -569,7 +569,7 @@
 <a href=#569 id=569 data-nosnippet>569</a>        <span class="kw">let </span><span class="kw-2">mut </span>temp_path = actual_path.with_file_name(<span class="macro">format!</span>(<span class="string">"{hidden_name}.{TRANSACTION_GUID}-{n}.tmp"</span>));
 <a href=#570 id=570 data-nosnippet>570</a>        <span class="kw">let </span>temp_file = <span class="kw">loop </span>{
 <a href=#571 id=571 data-nosnippet>571</a>            <span class="kw">if let </span><span class="prelude-val">Ok</span>(f) = fs::OpenOptions::new().write(<span class="bool-val">true</span>).create(<span class="bool-val">true</span>).truncate(<span class="bool-val">true</span>).open(<span class="kw-2">&amp;</span>temp_path) {
-<a href=#572 id=572 data-nosnippet>572</a>                <span class="kw">if </span>f.try_lock_exclusive().is_ok() {
+<a href=#572 id=572 data-nosnippet>572</a>                <span class="kw">if let </span><span class="prelude-val">Ok</span>(<span class="bool-val">true</span>) = f.try_lock_exclusive() {
 <a href=#573 id=573 data-nosnippet>573</a>                    <span class="kw">break </span>f;
 <a href=#574 id=574 data-nosnippet>574</a>                }
 <a href=#575 id=575 data-nosnippet>575</a>            }

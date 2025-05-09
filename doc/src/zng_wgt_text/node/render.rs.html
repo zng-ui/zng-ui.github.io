@@ -177,7 +177,7 @@
 <a href=#177 id=177 data-nosnippet>177</a>        }
 <a href=#178 id=178 data-nosnippet>178</a>        UiNodeOp::Event { update } =&gt; {
 <a href=#179 id=179 data-nosnippet>179</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = FOCUS_CHANGED_EVENT.on(update) {
-<a href=#180 id=180 data-nosnippet>180</a>                <span class="kw">let </span>new_is_focused = args.is_focus_within(WIDGET.id());
+<a href=#180 id=180 data-nosnippet>180</a>                <span class="kw">let </span>new_is_focused = args.is_focus_within(TEXT.try_rich().map(|r| r.root_id).unwrap_or_else(|| WIDGET.id()));
 <a href=#181 id=181 data-nosnippet>181</a>                <span class="kw">if </span>is_focused != new_is_focused {
 <a href=#182 id=182 data-nosnippet>182</a>                    WIDGET.render();
 <a href=#183 id=183 data-nosnippet>183</a>                    is_focused = new_is_focused;
