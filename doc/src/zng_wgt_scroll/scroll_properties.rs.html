@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/scroll_properties.rs`."><title>scroll_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-6c3ea77c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.86.0 (05f9846f8 2025-03-31)" data-channel="1.86.0" data-search-js="search-581efc7a.js" data-settings-js="settings-6dad6058.js" ><script src="../../static.files/storage-3a5871a4.js"></script><script defer src="../../static.files/src-script-b8d3f215.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-4d63596a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>scroll_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::{cmd::ScrollToMode, types::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/scroll_properties.rs`."><title>scroll_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../static.files/storage-82c7156e.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>scroll_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::{cmd::ScrollToMode, types::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>zng_ext_input::{
 <a href=#3 id=3 data-nosnippet>3</a>    mouse::{MOUSE_INPUT_EVENT, MOUSE_MOVE_EVENT},
 <a href=#4 id=4 data-nosnippet>4</a>    pointer_capture::POINTER_CAPTURE,
@@ -544,132 +544,133 @@
 <a href=#544 id=544 data-nosnippet>544</a>
 <a href=#545 id=545 data-nosnippet>545</a><span class="doccomment">/// Arguments for scrollbar widget functions.
 <a href=#546 id=546 data-nosnippet>546</a></span><span class="attr">#[derive(Clone, Debug, PartialEq)]
-<a href=#547 id=547 data-nosnippet>547</a></span><span class="kw">pub struct </span>ScrollBarArgs {
-<a href=#548 id=548 data-nosnippet>548</a>    <span class="doccomment">/// Scrollbar orientation.
-<a href=#549 id=549 data-nosnippet>549</a>    </span><span class="kw">pub </span>orientation: scrollbar::Orientation,
-<a href=#550 id=550 data-nosnippet>550</a>}
-<a href=#551 id=551 data-nosnippet>551</a><span class="kw">impl </span>ScrollBarArgs {
-<a href=#552 id=552 data-nosnippet>552</a>    <span class="doccomment">/// Arguments from scroll context.
-<a href=#553 id=553 data-nosnippet>553</a>    </span><span class="kw">pub fn </span>new(orientation: scrollbar::Orientation) -&gt; <span class="self">Self </span>{
-<a href=#554 id=554 data-nosnippet>554</a>        <span class="self">Self </span>{ orientation }
-<a href=#555 id=555 data-nosnippet>555</a>    }
-<a href=#556 id=556 data-nosnippet>556</a>
-<a href=#557 id=557 data-nosnippet>557</a>    <span class="doccomment">/// Gets the context variable that gets and sets the offset for the orientation.
-<a href=#558 id=558 data-nosnippet>558</a>    ///
-<a href=#559 id=559 data-nosnippet>559</a>    /// See [`SCROLL.vertical_offset`] and [`SCROLL.horizontal_offset`] for more details.
-<a href=#560 id=560 data-nosnippet>560</a>    ///
-<a href=#561 id=561 data-nosnippet>561</a>    /// [`SCROLL.vertical_offset`]: SCROLL::vertical_offset
-<a href=#562 id=562 data-nosnippet>562</a>    /// [`SCROLL.horizontal_offset`]: SCROLL::horizontal_offset
-<a href=#563 id=563 data-nosnippet>563</a>    </span><span class="kw">pub fn </span>offset(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ContextVar&lt;Factor&gt; {
-<a href=#564 id=564 data-nosnippet>564</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
-<a href=#565 id=565 data-nosnippet>565</a>
-<a href=#566 id=566 data-nosnippet>566</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
-<a href=#567 id=567 data-nosnippet>567</a>            Vertical =&gt; SCROLL_VERTICAL_OFFSET_VAR,
-<a href=#568 id=568 data-nosnippet>568</a>            Horizontal =&gt; SCROLL_HORIZONTAL_OFFSET_VAR,
-<a href=#569 id=569 data-nosnippet>569</a>        }
-<a href=#570 id=570 data-nosnippet>570</a>    }
-<a href=#571 id=571 data-nosnippet>571</a>
-<a href=#572 id=572 data-nosnippet>572</a>    <span class="doccomment">/// Gets the context variable that gets the viewport/content ratio for the orientation.
-<a href=#573 id=573 data-nosnippet>573</a>    ///
-<a href=#574 id=574 data-nosnippet>574</a>    /// See [`SCROLL`] for more details.
-<a href=#575 id=575 data-nosnippet>575</a>    </span><span class="kw">pub fn </span>viewport_ratio(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyContextVar&lt;Factor&gt; {
-<a href=#576 id=576 data-nosnippet>576</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
-<a href=#577 id=577 data-nosnippet>577</a>
-<a href=#578 id=578 data-nosnippet>578</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
-<a href=#579 id=579 data-nosnippet>579</a>            Vertical =&gt; SCROLL.vertical_ratio(),
-<a href=#580 id=580 data-nosnippet>580</a>            Horizontal =&gt; SCROLL.horizontal_ratio(),
-<a href=#581 id=581 data-nosnippet>581</a>        }
-<a href=#582 id=582 data-nosnippet>582</a>    }
-<a href=#583 id=583 data-nosnippet>583</a>
-<a href=#584 id=584 data-nosnippet>584</a>    <span class="doccomment">/// Gets the context variable that gets if the scrollbar should be visible.
-<a href=#585 id=585 data-nosnippet>585</a>    ///
-<a href=#586 id=586 data-nosnippet>586</a>    /// See [`SCROLL`] for more details.
-<a href=#587 id=587 data-nosnippet>587</a>    </span><span class="kw">pub fn </span>content_overflows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;bool&gt; {
-<a href=#588 id=588 data-nosnippet>588</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
-<a href=#589 id=589 data-nosnippet>589</a>
-<a href=#590 id=590 data-nosnippet>590</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
-<a href=#591 id=591 data-nosnippet>591</a>            Vertical =&gt; SCROLL.vertical_content_overflows().boxed(),
-<a href=#592 id=592 data-nosnippet>592</a>            Horizontal =&gt; SCROLL.horizontal_content_overflows().boxed(),
-<a href=#593 id=593 data-nosnippet>593</a>        }
-<a href=#594 id=594 data-nosnippet>594</a>    }
-<a href=#595 id=595 data-nosnippet>595</a>}
-<a href=#596 id=596 data-nosnippet>596</a>
-<a href=#597 id=597 data-nosnippet>597</a><span class="doccomment">/// Scroll by grabbing and dragging the content with the mouse primary button.
-<a href=#598 id=598 data-nosnippet>598</a>///
-<a href=#599 id=599 data-nosnippet>599</a>/// This is not enabled by default. Note that couch pan is always enabled, this property implements
-<a href=#600 id=600 data-nosnippet>600</a>/// a similar behavior for the mouse pointer.
-<a href=#601 id=601 data-nosnippet>601</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Scroll))]
-<a href=#602 id=602 data-nosnippet>602</a></span><span class="kw">pub fn </span>mouse_pan(child: <span class="kw">impl </span>UiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#603 id=603 data-nosnippet>603</a>    <span class="kw">let </span>enabled = enabled.into_var();
-<a href=#604 id=604 data-nosnippet>604</a>    <span class="kw">let </span><span class="kw-2">mut </span>mouse_input = EventHandle::dummy();
-<a href=#605 id=605 data-nosnippet>605</a>
-<a href=#606 id=606 data-nosnippet>606</a>    <span class="kw">struct </span>Dragging {
-<a href=#607 id=607 data-nosnippet>607</a>        _mouse_move: EventHandle,
-<a href=#608 id=608 data-nosnippet>608</a>        start: PxPoint,
-<a href=#609 id=609 data-nosnippet>609</a>        applied_offset: PxVector,
-<a href=#610 id=610 data-nosnippet>610</a>        factor: Factor,
-<a href=#611 id=611 data-nosnippet>611</a>    }
-<a href=#612 id=612 data-nosnippet>612</a>    <span class="kw">let </span><span class="kw-2">mut </span>dragging = <span class="prelude-val">None</span>;
-<a href=#613 id=613 data-nosnippet>613</a>
-<a href=#614 id=614 data-nosnippet>614</a>    match_node(child, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
-<a href=#615 id=615 data-nosnippet>615</a>        UiNodeOp::Init =&gt; {
-<a href=#616 id=616 data-nosnippet>616</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>enabled);
-<a href=#617 id=617 data-nosnippet>617</a>            <span class="kw">if </span>enabled.get() {
-<a href=#618 id=618 data-nosnippet>618</a>                mouse_input = MOUSE_INPUT_EVENT.subscribe(WIDGET.id());
-<a href=#619 id=619 data-nosnippet>619</a>            }
-<a href=#620 id=620 data-nosnippet>620</a>        }
-<a href=#621 id=621 data-nosnippet>621</a>        UiNodeOp::Deinit =&gt; {
-<a href=#622 id=622 data-nosnippet>622</a>            mouse_input = EventHandle::dummy();
-<a href=#623 id=623 data-nosnippet>623</a>            dragging = <span class="prelude-val">None</span>;
-<a href=#624 id=624 data-nosnippet>624</a>        }
-<a href=#625 id=625 data-nosnippet>625</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#626 id=626 data-nosnippet>626</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(enabled) = enabled.get_new() {
-<a href=#627 id=627 data-nosnippet>627</a>                <span class="kw">if </span>enabled &amp;&amp; mouse_input.is_dummy() {
-<a href=#628 id=628 data-nosnippet>628</a>                    mouse_input = MOUSE_INPUT_EVENT.subscribe(WIDGET.id());
-<a href=#629 id=629 data-nosnippet>629</a>                } <span class="kw">else </span>{
-<a href=#630 id=630 data-nosnippet>630</a>                    mouse_input = EventHandle::dummy();
-<a href=#631 id=631 data-nosnippet>631</a>                    dragging = <span class="prelude-val">None</span>;
-<a href=#632 id=632 data-nosnippet>632</a>                }
-<a href=#633 id=633 data-nosnippet>633</a>            }
-<a href=#634 id=634 data-nosnippet>634</a>        }
-<a href=#635 id=635 data-nosnippet>635</a>        UiNodeOp::Event { update } =&gt; {
-<a href=#636 id=636 data-nosnippet>636</a>            <span class="kw">if </span>enabled.get() {
-<a href=#637 id=637 data-nosnippet>637</a>                c.event(update);
-<a href=#638 id=638 data-nosnippet>638</a>
-<a href=#639 id=639 data-nosnippet>639</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_INPUT_EVENT.on_unhandled(update) {
-<a href=#640 id=640 data-nosnippet>640</a>                    <span class="kw">if </span>args.is_primary() {
-<a href=#641 id=641 data-nosnippet>641</a>                        <span class="kw">if </span>args.is_mouse_down() {
-<a href=#642 id=642 data-nosnippet>642</a>                            <span class="kw">let </span>id = WIDGET.id();
-<a href=#643 id=643 data-nosnippet>643</a>                            POINTER_CAPTURE.capture_widget(id);
-<a href=#644 id=644 data-nosnippet>644</a>                            <span class="kw">let </span>factor = WINDOW.info().scale_factor();
-<a href=#645 id=645 data-nosnippet>645</a>                            dragging = <span class="prelude-val">Some</span>(Dragging {
-<a href=#646 id=646 data-nosnippet>646</a>                                _mouse_move: MOUSE_MOVE_EVENT.subscribe(id),
-<a href=#647 id=647 data-nosnippet>647</a>                                start: args.position.to_px(factor),
-<a href=#648 id=648 data-nosnippet>648</a>                                applied_offset: PxVector::zero(),
-<a href=#649 id=649 data-nosnippet>649</a>                                factor,
-<a href=#650 id=650 data-nosnippet>650</a>                            });
-<a href=#651 id=651 data-nosnippet>651</a>                        } <span class="kw">else </span>{
-<a href=#652 id=652 data-nosnippet>652</a>                            dragging = <span class="prelude-val">None</span>;
-<a href=#653 id=653 data-nosnippet>653</a>                            SCROLL.clear_vertical_overscroll();
-<a href=#654 id=654 data-nosnippet>654</a>                            SCROLL.clear_horizontal_overscroll();
-<a href=#655 id=655 data-nosnippet>655</a>                        }
-<a href=#656 id=656 data-nosnippet>656</a>                    }
-<a href=#657 id=657 data-nosnippet>657</a>                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(d) = <span class="kw-2">&amp;mut </span>dragging {
-<a href=#658 id=658 data-nosnippet>658</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_MOVE_EVENT.on_unhandled(update) {
-<a href=#659 id=659 data-nosnippet>659</a>                        <span class="kw">let </span>offset = d.start - args.position.to_px(d.factor);
-<a href=#660 id=660 data-nosnippet>660</a>                        <span class="kw">let </span>delta = d.applied_offset - offset;
-<a href=#661 id=661 data-nosnippet>661</a>                        d.applied_offset = offset;
-<a href=#662 id=662 data-nosnippet>662</a>
-<a href=#663 id=663 data-nosnippet>663</a>                        <span class="kw">if </span>delta.y != Px(<span class="number">0</span>) {
-<a href=#664 id=664 data-nosnippet>664</a>                            SCROLL.scroll_vertical_touch(-delta.y);
-<a href=#665 id=665 data-nosnippet>665</a>                        }
-<a href=#666 id=666 data-nosnippet>666</a>                        <span class="kw">if </span>delta.x != Px(<span class="number">0</span>) {
-<a href=#667 id=667 data-nosnippet>667</a>                            SCROLL.scroll_horizontal_touch(-delta.x);
-<a href=#668 id=668 data-nosnippet>668</a>                        }
-<a href=#669 id=669 data-nosnippet>669</a>                    }
-<a href=#670 id=670 data-nosnippet>670</a>                }
-<a href=#671 id=671 data-nosnippet>671</a>            }
-<a href=#672 id=672 data-nosnippet>672</a>        }
-<a href=#673 id=673 data-nosnippet>673</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#674 id=674 data-nosnippet>674</a>    })
-<a href=#675 id=675 data-nosnippet>675</a>}</code></pre></div></section></main></body></html>
+<a href=#547 id=547 data-nosnippet>547</a>#[non_exhaustive]
+<a href=#548 id=548 data-nosnippet>548</a></span><span class="kw">pub struct </span>ScrollBarArgs {
+<a href=#549 id=549 data-nosnippet>549</a>    <span class="doccomment">/// Scrollbar orientation.
+<a href=#550 id=550 data-nosnippet>550</a>    </span><span class="kw">pub </span>orientation: scrollbar::Orientation,
+<a href=#551 id=551 data-nosnippet>551</a>}
+<a href=#552 id=552 data-nosnippet>552</a><span class="kw">impl </span>ScrollBarArgs {
+<a href=#553 id=553 data-nosnippet>553</a>    <span class="doccomment">/// Arguments from scroll context.
+<a href=#554 id=554 data-nosnippet>554</a>    </span><span class="kw">pub fn </span>new(orientation: scrollbar::Orientation) -&gt; <span class="self">Self </span>{
+<a href=#555 id=555 data-nosnippet>555</a>        <span class="self">Self </span>{ orientation }
+<a href=#556 id=556 data-nosnippet>556</a>    }
+<a href=#557 id=557 data-nosnippet>557</a>
+<a href=#558 id=558 data-nosnippet>558</a>    <span class="doccomment">/// Gets the context variable that gets and sets the offset for the orientation.
+<a href=#559 id=559 data-nosnippet>559</a>    ///
+<a href=#560 id=560 data-nosnippet>560</a>    /// See [`SCROLL.vertical_offset`] and [`SCROLL.horizontal_offset`] for more details.
+<a href=#561 id=561 data-nosnippet>561</a>    ///
+<a href=#562 id=562 data-nosnippet>562</a>    /// [`SCROLL.vertical_offset`]: SCROLL::vertical_offset
+<a href=#563 id=563 data-nosnippet>563</a>    /// [`SCROLL.horizontal_offset`]: SCROLL::horizontal_offset
+<a href=#564 id=564 data-nosnippet>564</a>    </span><span class="kw">pub fn </span>offset(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ContextVar&lt;Factor&gt; {
+<a href=#565 id=565 data-nosnippet>565</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
+<a href=#566 id=566 data-nosnippet>566</a>
+<a href=#567 id=567 data-nosnippet>567</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
+<a href=#568 id=568 data-nosnippet>568</a>            Vertical =&gt; SCROLL_VERTICAL_OFFSET_VAR,
+<a href=#569 id=569 data-nosnippet>569</a>            Horizontal =&gt; SCROLL_HORIZONTAL_OFFSET_VAR,
+<a href=#570 id=570 data-nosnippet>570</a>        }
+<a href=#571 id=571 data-nosnippet>571</a>    }
+<a href=#572 id=572 data-nosnippet>572</a>
+<a href=#573 id=573 data-nosnippet>573</a>    <span class="doccomment">/// Gets the context variable that gets the viewport/content ratio for the orientation.
+<a href=#574 id=574 data-nosnippet>574</a>    ///
+<a href=#575 id=575 data-nosnippet>575</a>    /// See [`SCROLL`] for more details.
+<a href=#576 id=576 data-nosnippet>576</a>    </span><span class="kw">pub fn </span>viewport_ratio(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyContextVar&lt;Factor&gt; {
+<a href=#577 id=577 data-nosnippet>577</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
+<a href=#578 id=578 data-nosnippet>578</a>
+<a href=#579 id=579 data-nosnippet>579</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
+<a href=#580 id=580 data-nosnippet>580</a>            Vertical =&gt; SCROLL.vertical_ratio(),
+<a href=#581 id=581 data-nosnippet>581</a>            Horizontal =&gt; SCROLL.horizontal_ratio(),
+<a href=#582 id=582 data-nosnippet>582</a>        }
+<a href=#583 id=583 data-nosnippet>583</a>    }
+<a href=#584 id=584 data-nosnippet>584</a>
+<a href=#585 id=585 data-nosnippet>585</a>    <span class="doccomment">/// Gets the context variable that gets if the scrollbar should be visible.
+<a href=#586 id=586 data-nosnippet>586</a>    ///
+<a href=#587 id=587 data-nosnippet>587</a>    /// See [`SCROLL`] for more details.
+<a href=#588 id=588 data-nosnippet>588</a>    </span><span class="kw">pub fn </span>content_overflows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;bool&gt; {
+<a href=#589 id=589 data-nosnippet>589</a>        <span class="kw">use </span>scrollbar::Orientation::<span class="kw-2">*</span>;
+<a href=#590 id=590 data-nosnippet>590</a>
+<a href=#591 id=591 data-nosnippet>591</a>        <span class="kw">match </span><span class="self">self</span>.orientation {
+<a href=#592 id=592 data-nosnippet>592</a>            Vertical =&gt; SCROLL.vertical_content_overflows().boxed(),
+<a href=#593 id=593 data-nosnippet>593</a>            Horizontal =&gt; SCROLL.horizontal_content_overflows().boxed(),
+<a href=#594 id=594 data-nosnippet>594</a>        }
+<a href=#595 id=595 data-nosnippet>595</a>    }
+<a href=#596 id=596 data-nosnippet>596</a>}
+<a href=#597 id=597 data-nosnippet>597</a>
+<a href=#598 id=598 data-nosnippet>598</a><span class="doccomment">/// Scroll by grabbing and dragging the content with the mouse primary button.
+<a href=#599 id=599 data-nosnippet>599</a>///
+<a href=#600 id=600 data-nosnippet>600</a>/// This is not enabled by default. Note that couch pan is always enabled, this property implements
+<a href=#601 id=601 data-nosnippet>601</a>/// a similar behavior for the mouse pointer.
+<a href=#602 id=602 data-nosnippet>602</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Scroll))]
+<a href=#603 id=603 data-nosnippet>603</a></span><span class="kw">pub fn </span>mouse_pan(child: <span class="kw">impl </span>UiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#604 id=604 data-nosnippet>604</a>    <span class="kw">let </span>enabled = enabled.into_var();
+<a href=#605 id=605 data-nosnippet>605</a>    <span class="kw">let </span><span class="kw-2">mut </span>mouse_input = EventHandle::dummy();
+<a href=#606 id=606 data-nosnippet>606</a>
+<a href=#607 id=607 data-nosnippet>607</a>    <span class="kw">struct </span>Dragging {
+<a href=#608 id=608 data-nosnippet>608</a>        _mouse_move: EventHandle,
+<a href=#609 id=609 data-nosnippet>609</a>        start: PxPoint,
+<a href=#610 id=610 data-nosnippet>610</a>        applied_offset: PxVector,
+<a href=#611 id=611 data-nosnippet>611</a>        factor: Factor,
+<a href=#612 id=612 data-nosnippet>612</a>    }
+<a href=#613 id=613 data-nosnippet>613</a>    <span class="kw">let </span><span class="kw-2">mut </span>dragging = <span class="prelude-val">None</span>;
+<a href=#614 id=614 data-nosnippet>614</a>
+<a href=#615 id=615 data-nosnippet>615</a>    match_node(child, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#616 id=616 data-nosnippet>616</a>        UiNodeOp::Init =&gt; {
+<a href=#617 id=617 data-nosnippet>617</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>enabled);
+<a href=#618 id=618 data-nosnippet>618</a>            <span class="kw">if </span>enabled.get() {
+<a href=#619 id=619 data-nosnippet>619</a>                mouse_input = MOUSE_INPUT_EVENT.subscribe(WIDGET.id());
+<a href=#620 id=620 data-nosnippet>620</a>            }
+<a href=#621 id=621 data-nosnippet>621</a>        }
+<a href=#622 id=622 data-nosnippet>622</a>        UiNodeOp::Deinit =&gt; {
+<a href=#623 id=623 data-nosnippet>623</a>            mouse_input = EventHandle::dummy();
+<a href=#624 id=624 data-nosnippet>624</a>            dragging = <span class="prelude-val">None</span>;
+<a href=#625 id=625 data-nosnippet>625</a>        }
+<a href=#626 id=626 data-nosnippet>626</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#627 id=627 data-nosnippet>627</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(enabled) = enabled.get_new() {
+<a href=#628 id=628 data-nosnippet>628</a>                <span class="kw">if </span>enabled &amp;&amp; mouse_input.is_dummy() {
+<a href=#629 id=629 data-nosnippet>629</a>                    mouse_input = MOUSE_INPUT_EVENT.subscribe(WIDGET.id());
+<a href=#630 id=630 data-nosnippet>630</a>                } <span class="kw">else </span>{
+<a href=#631 id=631 data-nosnippet>631</a>                    mouse_input = EventHandle::dummy();
+<a href=#632 id=632 data-nosnippet>632</a>                    dragging = <span class="prelude-val">None</span>;
+<a href=#633 id=633 data-nosnippet>633</a>                }
+<a href=#634 id=634 data-nosnippet>634</a>            }
+<a href=#635 id=635 data-nosnippet>635</a>        }
+<a href=#636 id=636 data-nosnippet>636</a>        UiNodeOp::Event { update } =&gt; {
+<a href=#637 id=637 data-nosnippet>637</a>            <span class="kw">if </span>enabled.get() {
+<a href=#638 id=638 data-nosnippet>638</a>                c.event(update);
+<a href=#639 id=639 data-nosnippet>639</a>
+<a href=#640 id=640 data-nosnippet>640</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_INPUT_EVENT.on_unhandled(update) {
+<a href=#641 id=641 data-nosnippet>641</a>                    <span class="kw">if </span>args.is_primary() {
+<a href=#642 id=642 data-nosnippet>642</a>                        <span class="kw">if </span>args.is_mouse_down() {
+<a href=#643 id=643 data-nosnippet>643</a>                            <span class="kw">let </span>id = WIDGET.id();
+<a href=#644 id=644 data-nosnippet>644</a>                            POINTER_CAPTURE.capture_widget(id);
+<a href=#645 id=645 data-nosnippet>645</a>                            <span class="kw">let </span>factor = WINDOW.info().scale_factor();
+<a href=#646 id=646 data-nosnippet>646</a>                            dragging = <span class="prelude-val">Some</span>(Dragging {
+<a href=#647 id=647 data-nosnippet>647</a>                                _mouse_move: MOUSE_MOVE_EVENT.subscribe(id),
+<a href=#648 id=648 data-nosnippet>648</a>                                start: args.position.to_px(factor),
+<a href=#649 id=649 data-nosnippet>649</a>                                applied_offset: PxVector::zero(),
+<a href=#650 id=650 data-nosnippet>650</a>                                factor,
+<a href=#651 id=651 data-nosnippet>651</a>                            });
+<a href=#652 id=652 data-nosnippet>652</a>                        } <span class="kw">else </span>{
+<a href=#653 id=653 data-nosnippet>653</a>                            dragging = <span class="prelude-val">None</span>;
+<a href=#654 id=654 data-nosnippet>654</a>                            SCROLL.clear_vertical_overscroll();
+<a href=#655 id=655 data-nosnippet>655</a>                            SCROLL.clear_horizontal_overscroll();
+<a href=#656 id=656 data-nosnippet>656</a>                        }
+<a href=#657 id=657 data-nosnippet>657</a>                    }
+<a href=#658 id=658 data-nosnippet>658</a>                } <span class="kw">else if let </span><span class="prelude-val">Some</span>(d) = <span class="kw-2">&amp;mut </span>dragging {
+<a href=#659 id=659 data-nosnippet>659</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_MOVE_EVENT.on_unhandled(update) {
+<a href=#660 id=660 data-nosnippet>660</a>                        <span class="kw">let </span>offset = d.start - args.position.to_px(d.factor);
+<a href=#661 id=661 data-nosnippet>661</a>                        <span class="kw">let </span>delta = d.applied_offset - offset;
+<a href=#662 id=662 data-nosnippet>662</a>                        d.applied_offset = offset;
+<a href=#663 id=663 data-nosnippet>663</a>
+<a href=#664 id=664 data-nosnippet>664</a>                        <span class="kw">if </span>delta.y != Px(<span class="number">0</span>) {
+<a href=#665 id=665 data-nosnippet>665</a>                            SCROLL.scroll_vertical_touch(-delta.y);
+<a href=#666 id=666 data-nosnippet>666</a>                        }
+<a href=#667 id=667 data-nosnippet>667</a>                        <span class="kw">if </span>delta.x != Px(<span class="number">0</span>) {
+<a href=#668 id=668 data-nosnippet>668</a>                            SCROLL.scroll_horizontal_touch(-delta.x);
+<a href=#669 id=669 data-nosnippet>669</a>                        }
+<a href=#670 id=670 data-nosnippet>670</a>                    }
+<a href=#671 id=671 data-nosnippet>671</a>                }
+<a href=#672 id=672 data-nosnippet>672</a>            }
+<a href=#673 id=673 data-nosnippet>673</a>        }
+<a href=#674 id=674 data-nosnippet>674</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#675 id=675 data-nosnippet>675</a>    })
+<a href=#676 id=676 data-nosnippet>676</a>}</code></pre></div></section></main></body></html>

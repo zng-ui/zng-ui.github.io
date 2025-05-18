@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-color/src/filter.rs`."><title>filter.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-6c3ea77c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_color" data-themes="" data-resource-suffix="" data-rustdoc-version="1.86.0 (05f9846f8 2025-03-31)" data-channel="1.86.0" data-search-js="search-581efc7a.js" data-settings-js="settings-6dad6058.js" ><script src="../../static.files/storage-3a5871a4.js"></script><script defer src="../../static.files/src-script-b8d3f215.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-4d63596a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_color/</div>filter.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Color filter effect.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-color/src/filter.rs`."><title>filter.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_color" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../static.files/storage-82c7156e.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_color/</div>filter.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Color filter effect.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::fmt;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -324,237 +324,240 @@
 <a href=#324 id=324 data-nosnippet>324</a>                    } =&gt; <span class="macro">write!</span>(f, <span class="string">"drop_shadow(({}, {}), {}, {})"</span>, offset.x, offset.y, blur_radius, <span class="kw-2">*</span>color),
 <a href=#325 id=325 data-nosnippet>325</a>                    FilterOp::ColorMatrix(m) =&gt; <span class="macro">write!</span>(f, <span class="string">"color_matrix({:?})"</span>, ColorMatrix(<span class="kw-2">*</span>m)),
 <a href=#326 id=326 data-nosnippet>326</a>                    FilterOp::Flood(c) =&gt; <span class="macro">write!</span>(f, <span class="string">"flood({})"</span>, <span class="kw-2">*</span>c),
-<a href=#327 id=327 data-nosnippet>327</a>                },
-<a href=#328 id=328 data-nosnippet>328</a>                FilterData::Blur(l) =&gt; <span class="macro">write!</span>(f, <span class="string">"blur({l:?})"</span>),
-<a href=#329 id=329 data-nosnippet>329</a>                FilterData::DropShadow {
-<a href=#330 id=330 data-nosnippet>330</a>                    offset,
-<a href=#331 id=331 data-nosnippet>331</a>                    blur_radius,
-<a href=#332 id=332 data-nosnippet>332</a>                    color,
-<a href=#333 id=333 data-nosnippet>333</a>                } =&gt; {
-<a href=#334 id=334 data-nosnippet>334</a>                    <span class="macro">write!</span>(f, <span class="string">"drop_shadow({offset:?}, {blur_radius:?}, {color:?})"</span>)
-<a href=#335 id=335 data-nosnippet>335</a>                }
-<a href=#336 id=336 data-nosnippet>336</a>            }
-<a href=#337 id=337 data-nosnippet>337</a>        }
-<a href=#338 id=338 data-nosnippet>338</a>    }
-<a href=#339 id=339 data-nosnippet>339</a>}
-<a href=#340 id=340 data-nosnippet>340</a>
-<a href=#341 id=341 data-nosnippet>341</a><span class="kw">fn </span>lerp_frame_value&lt;T: Transitionable&gt;(s: FrameValue&lt;T&gt;, to: <span class="kw-2">&amp;</span>FrameValue&lt;T&gt;, step: EasingStep) -&gt; FrameValue&lt;T&gt; {
-<a href=#342 id=342 data-nosnippet>342</a>    <span class="kw">let </span><span class="kw-2">mut </span>bind_data = <span class="prelude-val">None</span>;
-<a href=#343 id=343 data-nosnippet>343</a>    <span class="kw">let </span><span class="kw-2">mut </span>value = <span class="kw">match </span>s {
-<a href=#344 id=344 data-nosnippet>344</a>        FrameValue::Bind { id, value, animating } =&gt; {
-<a href=#345 id=345 data-nosnippet>345</a>            bind_data = <span class="prelude-val">Some</span>((id, animating));
-<a href=#346 id=346 data-nosnippet>346</a>            value
-<a href=#347 id=347 data-nosnippet>347</a>        }
-<a href=#348 id=348 data-nosnippet>348</a>        FrameValue::Value(v) =&gt; v,
-<a href=#349 id=349 data-nosnippet>349</a>    };
-<a href=#350 id=350 data-nosnippet>350</a>
-<a href=#351 id=351 data-nosnippet>351</a>    value = value.lerp(to.value(), step);
+<a href=#327 id=327 data-nosnippet>327</a>                    w =&gt; <span class="macro">write!</span>(f, <span class="string">"{w:?}"</span>),
+<a href=#328 id=328 data-nosnippet>328</a>                },
+<a href=#329 id=329 data-nosnippet>329</a>                FilterData::Blur(l) =&gt; <span class="macro">write!</span>(f, <span class="string">"blur({l:?})"</span>),
+<a href=#330 id=330 data-nosnippet>330</a>                FilterData::DropShadow {
+<a href=#331 id=331 data-nosnippet>331</a>                    offset,
+<a href=#332 id=332 data-nosnippet>332</a>                    blur_radius,
+<a href=#333 id=333 data-nosnippet>333</a>                    color,
+<a href=#334 id=334 data-nosnippet>334</a>                } =&gt; {
+<a href=#335 id=335 data-nosnippet>335</a>                    <span class="macro">write!</span>(f, <span class="string">"drop_shadow({offset:?}, {blur_radius:?}, {color:?})"</span>)
+<a href=#336 id=336 data-nosnippet>336</a>                }
+<a href=#337 id=337 data-nosnippet>337</a>            }
+<a href=#338 id=338 data-nosnippet>338</a>        }
+<a href=#339 id=339 data-nosnippet>339</a>    }
+<a href=#340 id=340 data-nosnippet>340</a>}
+<a href=#341 id=341 data-nosnippet>341</a>
+<a href=#342 id=342 data-nosnippet>342</a><span class="kw">fn </span>lerp_frame_value&lt;T: Transitionable&gt;(s: FrameValue&lt;T&gt;, to: <span class="kw-2">&amp;</span>FrameValue&lt;T&gt;, step: EasingStep) -&gt; FrameValue&lt;T&gt; {
+<a href=#343 id=343 data-nosnippet>343</a>    <span class="kw">let </span><span class="kw-2">mut </span>bind_data = <span class="prelude-val">None</span>;
+<a href=#344 id=344 data-nosnippet>344</a>    <span class="kw">let </span><span class="kw-2">mut </span>value = <span class="kw">match </span>s {
+<a href=#345 id=345 data-nosnippet>345</a>        FrameValue::Bind { id, value, animating } =&gt; {
+<a href=#346 id=346 data-nosnippet>346</a>            bind_data = <span class="prelude-val">Some</span>((id, animating));
+<a href=#347 id=347 data-nosnippet>347</a>            value
+<a href=#348 id=348 data-nosnippet>348</a>        }
+<a href=#349 id=349 data-nosnippet>349</a>        FrameValue::Value(v) =&gt; v,
+<a href=#350 id=350 data-nosnippet>350</a>        <span class="kw">_ </span>=&gt; <span class="kw">return </span>to.clone(),
+<a href=#351 id=351 data-nosnippet>351</a>    };
 <a href=#352 id=352 data-nosnippet>352</a>
-<a href=#353 id=353 data-nosnippet>353</a>    <span class="kw">if </span>step &lt; <span class="number">1</span>.fct() {
-<a href=#354 id=354 data-nosnippet>354</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((id, animating)) = bind_data {
-<a href=#355 id=355 data-nosnippet>355</a>            FrameValue::Bind { id, value, animating }
-<a href=#356 id=356 data-nosnippet>356</a>        } <span class="kw">else </span>{
-<a href=#357 id=357 data-nosnippet>357</a>            FrameValue::Value(value)
-<a href=#358 id=358 data-nosnippet>358</a>        }
-<a href=#359 id=359 data-nosnippet>359</a>    } <span class="kw">else </span>{
-<a href=#360 id=360 data-nosnippet>360</a>        <span class="kw">match </span>to {
-<a href=#361 id=361 data-nosnippet>361</a>            FrameValue::Bind { id, animating, .. } =&gt; FrameValue::Bind {
-<a href=#362 id=362 data-nosnippet>362</a>                id: <span class="kw-2">*</span>id,
-<a href=#363 id=363 data-nosnippet>363</a>                value,
-<a href=#364 id=364 data-nosnippet>364</a>                animating: <span class="kw-2">*</span>animating,
-<a href=#365 id=365 data-nosnippet>365</a>            },
-<a href=#366 id=366 data-nosnippet>366</a>            FrameValue::Value(<span class="kw">_</span>) =&gt; FrameValue::Value(value),
-<a href=#367 id=367 data-nosnippet>367</a>        }
-<a href=#368 id=368 data-nosnippet>368</a>    }
-<a href=#369 id=369 data-nosnippet>369</a>}
-<a href=#370 id=370 data-nosnippet>370</a>
-<a href=#371 id=371 data-nosnippet>371</a><span class="kw">fn </span>lerp_filter_op(<span class="kw-2">mut </span>s: FilterOp, to: <span class="kw-2">&amp;</span>FilterOp, step: EasingStep) -&gt; FilterOp {
-<a href=#372 id=372 data-nosnippet>372</a>    <span class="kw">match </span>(<span class="kw-2">&amp;mut </span>s, to) {
-<a href=#373 id=373 data-nosnippet>373</a>        (FilterOp::Blur(x, y), FilterOp::Blur(xb, yb)) =&gt; {
-<a href=#374 id=374 data-nosnippet>374</a>            <span class="kw-2">*</span>x = x.lerp(xb, step);
-<a href=#375 id=375 data-nosnippet>375</a>            <span class="kw-2">*</span>y = y.lerp(yb, step);
-<a href=#376 id=376 data-nosnippet>376</a>        }
-<a href=#377 id=377 data-nosnippet>377</a>        (FilterOp::Brightness(a), FilterOp::Brightness(b)) =&gt; {
-<a href=#378 id=378 data-nosnippet>378</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
+<a href=#353 id=353 data-nosnippet>353</a>    value = value.lerp(to.value(), step);
+<a href=#354 id=354 data-nosnippet>354</a>
+<a href=#355 id=355 data-nosnippet>355</a>    <span class="kw">if </span>step &lt; <span class="number">1</span>.fct() {
+<a href=#356 id=356 data-nosnippet>356</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((id, animating)) = bind_data {
+<a href=#357 id=357 data-nosnippet>357</a>            FrameValue::Bind { id, value, animating }
+<a href=#358 id=358 data-nosnippet>358</a>        } <span class="kw">else </span>{
+<a href=#359 id=359 data-nosnippet>359</a>            FrameValue::Value(value)
+<a href=#360 id=360 data-nosnippet>360</a>        }
+<a href=#361 id=361 data-nosnippet>361</a>    } <span class="kw">else </span>{
+<a href=#362 id=362 data-nosnippet>362</a>        <span class="kw">match </span>to {
+<a href=#363 id=363 data-nosnippet>363</a>            FrameValue::Bind { id, animating, .. } =&gt; FrameValue::Bind {
+<a href=#364 id=364 data-nosnippet>364</a>                id: <span class="kw-2">*</span>id,
+<a href=#365 id=365 data-nosnippet>365</a>                value,
+<a href=#366 id=366 data-nosnippet>366</a>                animating: <span class="kw-2">*</span>animating,
+<a href=#367 id=367 data-nosnippet>367</a>            },
+<a href=#368 id=368 data-nosnippet>368</a>            FrameValue::Value(<span class="kw">_</span>) =&gt; FrameValue::Value(value),
+<a href=#369 id=369 data-nosnippet>369</a>            <span class="kw">_ </span>=&gt; to.clone(),
+<a href=#370 id=370 data-nosnippet>370</a>        }
+<a href=#371 id=371 data-nosnippet>371</a>    }
+<a href=#372 id=372 data-nosnippet>372</a>}
+<a href=#373 id=373 data-nosnippet>373</a>
+<a href=#374 id=374 data-nosnippet>374</a><span class="kw">fn </span>lerp_filter_op(<span class="kw-2">mut </span>s: FilterOp, to: <span class="kw-2">&amp;</span>FilterOp, step: EasingStep) -&gt; FilterOp {
+<a href=#375 id=375 data-nosnippet>375</a>    <span class="kw">match </span>(<span class="kw-2">&amp;mut </span>s, to) {
+<a href=#376 id=376 data-nosnippet>376</a>        (FilterOp::Blur(x, y), FilterOp::Blur(xb, yb)) =&gt; {
+<a href=#377 id=377 data-nosnippet>377</a>            <span class="kw-2">*</span>x = x.lerp(xb, step);
+<a href=#378 id=378 data-nosnippet>378</a>            <span class="kw-2">*</span>y = y.lerp(yb, step);
 <a href=#379 id=379 data-nosnippet>379</a>        }
-<a href=#380 id=380 data-nosnippet>380</a>        (FilterOp::Contrast(a), FilterOp::Contrast(b)) =&gt; {
+<a href=#380 id=380 data-nosnippet>380</a>        (FilterOp::Brightness(a), FilterOp::Brightness(b)) =&gt; {
 <a href=#381 id=381 data-nosnippet>381</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#382 id=382 data-nosnippet>382</a>        }
-<a href=#383 id=383 data-nosnippet>383</a>        (FilterOp::Grayscale(a), FilterOp::Grayscale(b)) =&gt; {
+<a href=#383 id=383 data-nosnippet>383</a>        (FilterOp::Contrast(a), FilterOp::Contrast(b)) =&gt; {
 <a href=#384 id=384 data-nosnippet>384</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#385 id=385 data-nosnippet>385</a>        }
-<a href=#386 id=386 data-nosnippet>386</a>        (FilterOp::HueRotate(a), FilterOp::HueRotate(b)) =&gt; {
+<a href=#386 id=386 data-nosnippet>386</a>        (FilterOp::Grayscale(a), FilterOp::Grayscale(b)) =&gt; {
 <a href=#387 id=387 data-nosnippet>387</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#388 id=388 data-nosnippet>388</a>        }
-<a href=#389 id=389 data-nosnippet>389</a>        (FilterOp::Invert(a), FilterOp::Invert(b)) =&gt; {
+<a href=#389 id=389 data-nosnippet>389</a>        (FilterOp::HueRotate(a), FilterOp::HueRotate(b)) =&gt; {
 <a href=#390 id=390 data-nosnippet>390</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#391 id=391 data-nosnippet>391</a>        }
-<a href=#392 id=392 data-nosnippet>392</a>        (FilterOp::Opacity(a), FilterOp::Opacity(b)) =&gt; {
-<a href=#393 id=393 data-nosnippet>393</a>            <span class="kw-2">*</span>a = lerp_frame_value(<span class="kw-2">*</span>a, b, step);
+<a href=#392 id=392 data-nosnippet>392</a>        (FilterOp::Invert(a), FilterOp::Invert(b)) =&gt; {
+<a href=#393 id=393 data-nosnippet>393</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#394 id=394 data-nosnippet>394</a>        }
-<a href=#395 id=395 data-nosnippet>395</a>        (FilterOp::Saturate(a), FilterOp::Saturate(b)) =&gt; {
-<a href=#396 id=396 data-nosnippet>396</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
+<a href=#395 id=395 data-nosnippet>395</a>        (FilterOp::Opacity(a), FilterOp::Opacity(b)) =&gt; {
+<a href=#396 id=396 data-nosnippet>396</a>            <span class="kw-2">*</span>a = lerp_frame_value(<span class="kw-2">*</span>a, b, step);
 <a href=#397 id=397 data-nosnippet>397</a>        }
-<a href=#398 id=398 data-nosnippet>398</a>        (FilterOp::Sepia(a), FilterOp::Sepia(b)) =&gt; {
+<a href=#398 id=398 data-nosnippet>398</a>        (FilterOp::Saturate(a), FilterOp::Saturate(b)) =&gt; {
 <a href=#399 id=399 data-nosnippet>399</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
 <a href=#400 id=400 data-nosnippet>400</a>        }
-<a href=#401 id=401 data-nosnippet>401</a>        (
-<a href=#402 id=402 data-nosnippet>402</a>            FilterOp::DropShadow {
-<a href=#403 id=403 data-nosnippet>403</a>                offset,
-<a href=#404 id=404 data-nosnippet>404</a>                color,
-<a href=#405 id=405 data-nosnippet>405</a>                blur_radius,
-<a href=#406 id=406 data-nosnippet>406</a>            },
-<a href=#407 id=407 data-nosnippet>407</a>            FilterOp::DropShadow {
-<a href=#408 id=408 data-nosnippet>408</a>                offset: to_offset,
-<a href=#409 id=409 data-nosnippet>409</a>                color: to_color,
-<a href=#410 id=410 data-nosnippet>410</a>                blur_radius: to_blur,
-<a href=#411 id=411 data-nosnippet>411</a>            },
-<a href=#412 id=412 data-nosnippet>412</a>        ) =&gt; {
-<a href=#413 id=413 data-nosnippet>413</a>            <span class="kw-2">*</span>offset = Transitionable::lerp(<span class="kw-2">*</span>offset, to_offset, step);
-<a href=#414 id=414 data-nosnippet>414</a>            <span class="kw-2">*</span>color = lerp_rgba(<span class="kw-2">*</span>color, <span class="kw-2">*</span>to_color, step);
-<a href=#415 id=415 data-nosnippet>415</a>            <span class="kw-2">*</span>blur_radius = blur_radius.lerp(to_blur, step);
-<a href=#416 id=416 data-nosnippet>416</a>        }
-<a href=#417 id=417 data-nosnippet>417</a>        (FilterOp::ColorMatrix(a), FilterOp::ColorMatrix(b)) =&gt; {
-<a href=#418 id=418 data-nosnippet>418</a>            <span class="kw">for </span>(a, b) <span class="kw">in </span>a.iter_mut().zip(b) {
-<a href=#419 id=419 data-nosnippet>419</a>                <span class="kw-2">*</span>a = a.lerp(b, step);
-<a href=#420 id=420 data-nosnippet>420</a>            }
-<a href=#421 id=421 data-nosnippet>421</a>        }
-<a href=#422 id=422 data-nosnippet>422</a>        (FilterOp::Flood(a), FilterOp::Flood(b)) =&gt; {
-<a href=#423 id=423 data-nosnippet>423</a>            <span class="kw-2">*</span>a = lerp_rgba(<span class="kw-2">*</span>a, <span class="kw-2">*</span>b, step);
+<a href=#401 id=401 data-nosnippet>401</a>        (FilterOp::Sepia(a), FilterOp::Sepia(b)) =&gt; {
+<a href=#402 id=402 data-nosnippet>402</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
+<a href=#403 id=403 data-nosnippet>403</a>        }
+<a href=#404 id=404 data-nosnippet>404</a>        (
+<a href=#405 id=405 data-nosnippet>405</a>            FilterOp::DropShadow {
+<a href=#406 id=406 data-nosnippet>406</a>                offset,
+<a href=#407 id=407 data-nosnippet>407</a>                color,
+<a href=#408 id=408 data-nosnippet>408</a>                blur_radius,
+<a href=#409 id=409 data-nosnippet>409</a>            },
+<a href=#410 id=410 data-nosnippet>410</a>            FilterOp::DropShadow {
+<a href=#411 id=411 data-nosnippet>411</a>                offset: to_offset,
+<a href=#412 id=412 data-nosnippet>412</a>                color: to_color,
+<a href=#413 id=413 data-nosnippet>413</a>                blur_radius: to_blur,
+<a href=#414 id=414 data-nosnippet>414</a>            },
+<a href=#415 id=415 data-nosnippet>415</a>        ) =&gt; {
+<a href=#416 id=416 data-nosnippet>416</a>            <span class="kw-2">*</span>offset = Transitionable::lerp(<span class="kw-2">*</span>offset, to_offset, step);
+<a href=#417 id=417 data-nosnippet>417</a>            <span class="kw-2">*</span>color = lerp_rgba(<span class="kw-2">*</span>color, <span class="kw-2">*</span>to_color, step);
+<a href=#418 id=418 data-nosnippet>418</a>            <span class="kw-2">*</span>blur_radius = blur_radius.lerp(to_blur, step);
+<a href=#419 id=419 data-nosnippet>419</a>        }
+<a href=#420 id=420 data-nosnippet>420</a>        (FilterOp::ColorMatrix(a), FilterOp::ColorMatrix(b)) =&gt; {
+<a href=#421 id=421 data-nosnippet>421</a>            <span class="kw">for </span>(a, b) <span class="kw">in </span>a.iter_mut().zip(b) {
+<a href=#422 id=422 data-nosnippet>422</a>                <span class="kw-2">*</span>a = a.lerp(b, step);
+<a href=#423 id=423 data-nosnippet>423</a>            }
 <a href=#424 id=424 data-nosnippet>424</a>        }
-<a href=#425 id=425 data-nosnippet>425</a>        (a, b) =&gt; {
-<a href=#426 id=426 data-nosnippet>426</a>            <span class="kw">if </span>step &gt;= <span class="number">1</span>.fct() {
-<a href=#427 id=427 data-nosnippet>427</a>                <span class="kw-2">*</span>a = <span class="kw-2">*</span>b
-<a href=#428 id=428 data-nosnippet>428</a>            }
-<a href=#429 id=429 data-nosnippet>429</a>        }
-<a href=#430 id=430 data-nosnippet>430</a>    }
-<a href=#431 id=431 data-nosnippet>431</a>    s
-<a href=#432 id=432 data-nosnippet>432</a>}
-<a href=#433 id=433 data-nosnippet>433</a>
-<a href=#434 id=434 data-nosnippet>434</a><span class="kw">impl </span>Transitionable <span class="kw">for </span>Filter {
-<a href=#435 id=435 data-nosnippet>435</a>    <span class="kw">fn </span>lerp(<span class="kw-2">mut </span><span class="self">self</span>, to: <span class="kw-2">&amp;</span><span class="self">Self</span>, step: EasingStep) -&gt; <span class="self">Self </span>{
-<a href=#436 id=436 data-nosnippet>436</a>        <span class="kw">let </span>end = step &gt;= <span class="number">1</span>.fct();
-<a href=#437 id=437 data-nosnippet>437</a>
-<a href=#438 id=438 data-nosnippet>438</a>        <span class="kw">for </span>z <span class="kw">in </span><span class="self">self</span>.filters.iter_mut().zip(<span class="kw-2">&amp;</span>to.filters) {
-<a href=#439 id=439 data-nosnippet>439</a>            <span class="kw">match </span>z {
-<a href=#440 id=440 data-nosnippet>440</a>                (FilterData::Op(a), FilterData::Op(b)) =&gt; <span class="kw-2">*</span>a = lerp_filter_op(<span class="kw-2">*</span>a, b, step),
-<a href=#441 id=441 data-nosnippet>441</a>                (FilterData::Blur(a), FilterData::Blur(b)) =&gt; {
-<a href=#442 id=442 data-nosnippet>442</a>                    <span class="kw-2">*</span>a = a.clone().lerp(b, step);
-<a href=#443 id=443 data-nosnippet>443</a>                }
-<a href=#444 id=444 data-nosnippet>444</a>                (
-<a href=#445 id=445 data-nosnippet>445</a>                    FilterData::DropShadow {
-<a href=#446 id=446 data-nosnippet>446</a>                        offset,
-<a href=#447 id=447 data-nosnippet>447</a>                        blur_radius,
-<a href=#448 id=448 data-nosnippet>448</a>                        color,
-<a href=#449 id=449 data-nosnippet>449</a>                    },
-<a href=#450 id=450 data-nosnippet>450</a>                    FilterData::DropShadow {
-<a href=#451 id=451 data-nosnippet>451</a>                        offset: offset_b,
-<a href=#452 id=452 data-nosnippet>452</a>                        blur_radius: blur_b,
-<a href=#453 id=453 data-nosnippet>453</a>                        color: color_b,
-<a href=#454 id=454 data-nosnippet>454</a>                    },
-<a href=#455 id=455 data-nosnippet>455</a>                ) =&gt; {
-<a href=#456 id=456 data-nosnippet>456</a>                    <span class="kw-2">*</span>offset = offset.clone().lerp(offset_b, step);
-<a href=#457 id=457 data-nosnippet>457</a>                    <span class="kw-2">*</span>blur_radius = blur_radius.clone().lerp(blur_b, step);
-<a href=#458 id=458 data-nosnippet>458</a>                    <span class="kw-2">*</span>color = color.lerp(color_b, step);
-<a href=#459 id=459 data-nosnippet>459</a>                }
-<a href=#460 id=460 data-nosnippet>460</a>                (a, b) =&gt; {
-<a href=#461 id=461 data-nosnippet>461</a>                    <span class="kw">if </span>end {
-<a href=#462 id=462 data-nosnippet>462</a>                        <span class="kw-2">*</span>a = b.clone();
-<a href=#463 id=463 data-nosnippet>463</a>                    }
-<a href=#464 id=464 data-nosnippet>464</a>                }
-<a href=#465 id=465 data-nosnippet>465</a>            }
-<a href=#466 id=466 data-nosnippet>466</a>        }
-<a href=#467 id=467 data-nosnippet>467</a>
-<a href=#468 id=468 data-nosnippet>468</a>        <span class="kw">if </span>end {
-<a href=#469 id=469 data-nosnippet>469</a>            <span class="kw">match </span><span class="self">self</span>.filters.len().cmp(<span class="kw-2">&amp;</span>to.filters.len()) {
-<a href=#470 id=470 data-nosnippet>470</a>                std::cmp::Ordering::Less =&gt; <span class="self">self</span>.filters.truncate(to.filters.len()),
-<a href=#471 id=471 data-nosnippet>471</a>                std::cmp::Ordering::Greater =&gt; <span class="self">self</span>.filters.extend(to.filters[<span class="self">self</span>.filters.len()..].iter().cloned()),
-<a href=#472 id=472 data-nosnippet>472</a>                std::cmp::Ordering::Equal =&gt; {}
-<a href=#473 id=473 data-nosnippet>473</a>            }
-<a href=#474 id=474 data-nosnippet>474</a>
-<a href=#475 id=475 data-nosnippet>475</a>            <span class="self">self</span>.needs_layout = to.needs_layout;
-<a href=#476 id=476 data-nosnippet>476</a>        }
+<a href=#425 id=425 data-nosnippet>425</a>        (FilterOp::Flood(a), FilterOp::Flood(b)) =&gt; {
+<a href=#426 id=426 data-nosnippet>426</a>            <span class="kw-2">*</span>a = lerp_rgba(<span class="kw-2">*</span>a, <span class="kw-2">*</span>b, step);
+<a href=#427 id=427 data-nosnippet>427</a>        }
+<a href=#428 id=428 data-nosnippet>428</a>        (a, b) =&gt; {
+<a href=#429 id=429 data-nosnippet>429</a>            <span class="kw">if </span>step &gt;= <span class="number">1</span>.fct() {
+<a href=#430 id=430 data-nosnippet>430</a>                <span class="kw-2">*</span>a = <span class="kw-2">*</span>b
+<a href=#431 id=431 data-nosnippet>431</a>            }
+<a href=#432 id=432 data-nosnippet>432</a>        }
+<a href=#433 id=433 data-nosnippet>433</a>    }
+<a href=#434 id=434 data-nosnippet>434</a>    s
+<a href=#435 id=435 data-nosnippet>435</a>}
+<a href=#436 id=436 data-nosnippet>436</a>
+<a href=#437 id=437 data-nosnippet>437</a><span class="kw">impl </span>Transitionable <span class="kw">for </span>Filter {
+<a href=#438 id=438 data-nosnippet>438</a>    <span class="kw">fn </span>lerp(<span class="kw-2">mut </span><span class="self">self</span>, to: <span class="kw-2">&amp;</span><span class="self">Self</span>, step: EasingStep) -&gt; <span class="self">Self </span>{
+<a href=#439 id=439 data-nosnippet>439</a>        <span class="kw">let </span>end = step &gt;= <span class="number">1</span>.fct();
+<a href=#440 id=440 data-nosnippet>440</a>
+<a href=#441 id=441 data-nosnippet>441</a>        <span class="kw">for </span>z <span class="kw">in </span><span class="self">self</span>.filters.iter_mut().zip(<span class="kw-2">&amp;</span>to.filters) {
+<a href=#442 id=442 data-nosnippet>442</a>            <span class="kw">match </span>z {
+<a href=#443 id=443 data-nosnippet>443</a>                (FilterData::Op(a), FilterData::Op(b)) =&gt; <span class="kw-2">*</span>a = lerp_filter_op(<span class="kw-2">*</span>a, b, step),
+<a href=#444 id=444 data-nosnippet>444</a>                (FilterData::Blur(a), FilterData::Blur(b)) =&gt; {
+<a href=#445 id=445 data-nosnippet>445</a>                    <span class="kw-2">*</span>a = a.clone().lerp(b, step);
+<a href=#446 id=446 data-nosnippet>446</a>                }
+<a href=#447 id=447 data-nosnippet>447</a>                (
+<a href=#448 id=448 data-nosnippet>448</a>                    FilterData::DropShadow {
+<a href=#449 id=449 data-nosnippet>449</a>                        offset,
+<a href=#450 id=450 data-nosnippet>450</a>                        blur_radius,
+<a href=#451 id=451 data-nosnippet>451</a>                        color,
+<a href=#452 id=452 data-nosnippet>452</a>                    },
+<a href=#453 id=453 data-nosnippet>453</a>                    FilterData::DropShadow {
+<a href=#454 id=454 data-nosnippet>454</a>                        offset: offset_b,
+<a href=#455 id=455 data-nosnippet>455</a>                        blur_radius: blur_b,
+<a href=#456 id=456 data-nosnippet>456</a>                        color: color_b,
+<a href=#457 id=457 data-nosnippet>457</a>                    },
+<a href=#458 id=458 data-nosnippet>458</a>                ) =&gt; {
+<a href=#459 id=459 data-nosnippet>459</a>                    <span class="kw-2">*</span>offset = offset.clone().lerp(offset_b, step);
+<a href=#460 id=460 data-nosnippet>460</a>                    <span class="kw-2">*</span>blur_radius = blur_radius.clone().lerp(blur_b, step);
+<a href=#461 id=461 data-nosnippet>461</a>                    <span class="kw-2">*</span>color = color.lerp(color_b, step);
+<a href=#462 id=462 data-nosnippet>462</a>                }
+<a href=#463 id=463 data-nosnippet>463</a>                (a, b) =&gt; {
+<a href=#464 id=464 data-nosnippet>464</a>                    <span class="kw">if </span>end {
+<a href=#465 id=465 data-nosnippet>465</a>                        <span class="kw-2">*</span>a = b.clone();
+<a href=#466 id=466 data-nosnippet>466</a>                    }
+<a href=#467 id=467 data-nosnippet>467</a>                }
+<a href=#468 id=468 data-nosnippet>468</a>            }
+<a href=#469 id=469 data-nosnippet>469</a>        }
+<a href=#470 id=470 data-nosnippet>470</a>
+<a href=#471 id=471 data-nosnippet>471</a>        <span class="kw">if </span>end {
+<a href=#472 id=472 data-nosnippet>472</a>            <span class="kw">match </span><span class="self">self</span>.filters.len().cmp(<span class="kw-2">&amp;</span>to.filters.len()) {
+<a href=#473 id=473 data-nosnippet>473</a>                std::cmp::Ordering::Less =&gt; <span class="self">self</span>.filters.truncate(to.filters.len()),
+<a href=#474 id=474 data-nosnippet>474</a>                std::cmp::Ordering::Greater =&gt; <span class="self">self</span>.filters.extend(to.filters[<span class="self">self</span>.filters.len()..].iter().cloned()),
+<a href=#475 id=475 data-nosnippet>475</a>                std::cmp::Ordering::Equal =&gt; {}
+<a href=#476 id=476 data-nosnippet>476</a>            }
 <a href=#477 id=477 data-nosnippet>477</a>
-<a href=#478 id=478 data-nosnippet>478</a>        <span class="self">self
-<a href=#479 id=479 data-nosnippet>479</a>    </span>}
-<a href=#480 id=480 data-nosnippet>480</a>}
-<a href=#481 id=481 data-nosnippet>481</a>
-<a href=#482 id=482 data-nosnippet>482</a><span class="doccomment">/// Represents a custom color filter.
-<a href=#483 id=483 data-nosnippet>483</a>///
-<a href=#484 id=484 data-nosnippet>484</a>/// The color matrix is in the format of SVG color matrix, [0..5] is the first matrix row.
-<a href=#485 id=485 data-nosnippet>485</a></span><span class="attr">#[derive(Clone, Copy)]
-<a href=#486 id=486 data-nosnippet>486</a></span><span class="kw">pub struct </span>ColorMatrix(<span class="kw">pub </span>[f32; <span class="number">20</span>]);
-<a href=#487 id=487 data-nosnippet>487</a><span class="kw">impl </span>ColorMatrix {
-<a href=#488 id=488 data-nosnippet>488</a>    <span class="doccomment">/// Matrix that does not alter any color.
-<a href=#489 id=489 data-nosnippet>489</a>    </span><span class="attr">#[rustfmt::skip]
-<a href=#490 id=490 data-nosnippet>490</a>    </span><span class="kw">pub const fn </span>identity() -&gt; <span class="self">Self </span>{
-<a href=#491 id=491 data-nosnippet>491</a>        ColorMatrix([
-<a href=#492 id=492 data-nosnippet>492</a>            <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
-<a href=#493 id=493 data-nosnippet>493</a>            <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
-<a href=#494 id=494 data-nosnippet>494</a>            <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
-<a href=#495 id=495 data-nosnippet>495</a>            <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>,
-<a href=#496 id=496 data-nosnippet>496</a>        ])
-<a href=#497 id=497 data-nosnippet>497</a>    }
-<a href=#498 id=498 data-nosnippet>498</a>}
-<a href=#499 id=499 data-nosnippet>499</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ColorMatrix {
-<a href=#500 id=500 data-nosnippet>500</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#501 id=501 data-nosnippet>501</a>        <span class="kw">if </span><span class="self">self </span>== <span class="kw-2">&amp;</span>ColorMatrix::identity() {
-<a href=#502 id=502 data-nosnippet>502</a>            <span class="kw">if </span>f.alternate() {
-<a href=#503 id=503 data-nosnippet>503</a>                <span class="macro">write!</span>(f, <span class="string">"ColorMatrix::"</span>)<span class="question-mark">?</span>;
-<a href=#504 id=504 data-nosnippet>504</a>            }
-<a href=#505 id=505 data-nosnippet>505</a>            <span class="kw">return </span><span class="macro">write!</span>(f, <span class="string">"identity()"</span>);
-<a href=#506 id=506 data-nosnippet>506</a>        }
-<a href=#507 id=507 data-nosnippet>507</a>
-<a href=#508 id=508 data-nosnippet>508</a>        <span class="kw">if </span>f.alternate() {
-<a href=#509 id=509 data-nosnippet>509</a>            <span class="macro">write!</span>(f, <span class="string">"ColorMatrix("</span>)<span class="question-mark">?</span>;
-<a href=#510 id=510 data-nosnippet>510</a>        }
-<a href=#511 id=511 data-nosnippet>511</a>        <span class="macro">writeln!</span>(f, <span class="string">"["</span>)<span class="question-mark">?</span>;
-<a href=#512 id=512 data-nosnippet>512</a>        <span class="kw">for </span>row <span class="kw">in </span><span class="number">0</span>..<span class="number">4 </span>{
-<a href=#513 id=513 data-nosnippet>513</a>            <span class="macro">write!</span>(f, <span class="string">"    "</span>)<span class="question-mark">?</span>;
-<a href=#514 id=514 data-nosnippet>514</a>            <span class="kw">for </span>column <span class="kw">in </span><span class="number">0</span>..<span class="number">5 </span>{
-<a href=#515 id=515 data-nosnippet>515</a>                <span class="kw">let </span>v = <span class="self">self</span>.<span class="number">0</span>[row * column];
-<a href=#516 id=516 data-nosnippet>516</a>                <span class="kw">if </span>v &lt; <span class="number">0.0 </span>{
-<a href=#517 id=517 data-nosnippet>517</a>                    <span class="macro">write!</span>(f, <span class="string">"{v:.3}, "</span>)<span class="question-mark">?</span>;
-<a href=#518 id=518 data-nosnippet>518</a>                } <span class="kw">else </span>{
-<a href=#519 id=519 data-nosnippet>519</a>                    <span class="macro">write!</span>(f, <span class="string">" {v:.3}, "</span>)<span class="question-mark">?</span>;
-<a href=#520 id=520 data-nosnippet>520</a>                }
-<a href=#521 id=521 data-nosnippet>521</a>            }
-<a href=#522 id=522 data-nosnippet>522</a>            <span class="macro">writeln!</span>(f)<span class="question-mark">?</span>;
-<a href=#523 id=523 data-nosnippet>523</a>        }
-<a href=#524 id=524 data-nosnippet>524</a>        <span class="macro">write!</span>(f, <span class="string">"]"</span>)<span class="question-mark">?</span>;
-<a href=#525 id=525 data-nosnippet>525</a>        <span class="kw">if </span>f.alternate() {
-<a href=#526 id=526 data-nosnippet>526</a>            <span class="macro">write!</span>(f, <span class="string">")"</span>)<span class="question-mark">?</span>;
-<a href=#527 id=527 data-nosnippet>527</a>        }
-<a href=#528 id=528 data-nosnippet>528</a>        <span class="prelude-val">Ok</span>(())
-<a href=#529 id=529 data-nosnippet>529</a>    }
-<a href=#530 id=530 data-nosnippet>530</a>}
-<a href=#531 id=531 data-nosnippet>531</a><span class="macro">impl_from_and_into_var!</span> {
-<a href=#532 id=532 data-nosnippet>532</a>    <span class="kw">fn </span>from(matrix: [f32; <span class="number">20</span>]) -&gt; ColorMatrix {
-<a href=#533 id=533 data-nosnippet>533</a>        ColorMatrix(matrix)
-<a href=#534 id=534 data-nosnippet>534</a>    }
-<a href=#535 id=535 data-nosnippet>535</a>}
-<a href=#536 id=536 data-nosnippet>536</a><span class="kw">impl </span>Default <span class="kw">for </span>ColorMatrix {
-<a href=#537 id=537 data-nosnippet>537</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#538 id=538 data-nosnippet>538</a>        <span class="self">Self</span>::identity()
-<a href=#539 id=539 data-nosnippet>539</a>    }
-<a href=#540 id=540 data-nosnippet>540</a>}
-<a href=#541 id=541 data-nosnippet>541</a><span class="kw">impl </span>PartialEq <span class="kw">for </span>ColorMatrix {
-<a href=#542 id=542 data-nosnippet>542</a>    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
-<a href=#543 id=543 data-nosnippet>543</a>        <span class="self">self</span>.<span class="number">0</span>.iter().zip(<span class="kw-2">&amp;</span>other.<span class="number">0</span>).all(|(<span class="kw-2">&amp;</span>a, <span class="kw-2">&amp;</span>b)| about_eq(a, b, <span class="number">0.00001</span>))
-<a href=#544 id=544 data-nosnippet>544</a>    }
-<a href=#545 id=545 data-nosnippet>545</a>}
-<a href=#546 id=546 data-nosnippet>546</a><span class="kw">impl </span>std::hash::Hash <span class="kw">for </span>ColorMatrix {
-<a href=#547 id=547 data-nosnippet>547</a>    <span class="kw">fn </span>hash&lt;H: std::hash::Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
-<a href=#548 id=548 data-nosnippet>548</a>        <span class="kw">for </span>f <span class="kw">in </span><span class="self">self</span>.<span class="number">0 </span>{
-<a href=#549 id=549 data-nosnippet>549</a>            about_eq_hash(f, <span class="number">0.00001</span>, state);
-<a href=#550 id=550 data-nosnippet>550</a>        }
-<a href=#551 id=551 data-nosnippet>551</a>    }
-<a href=#552 id=552 data-nosnippet>552</a>}
-<a href=#553 id=553 data-nosnippet>553</a><span class="kw">impl </span>Transitionable <span class="kw">for </span>ColorMatrix {
-<a href=#554 id=554 data-nosnippet>554</a>    <span class="kw">fn </span>lerp(<span class="kw-2">mut </span><span class="self">self</span>, to: <span class="kw-2">&amp;</span><span class="self">Self</span>, step: EasingStep) -&gt; <span class="self">Self </span>{
-<a href=#555 id=555 data-nosnippet>555</a>        <span class="kw">for </span>(a, b) <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter_mut().zip(<span class="kw-2">&amp;</span>to.<span class="number">0</span>) {
-<a href=#556 id=556 data-nosnippet>556</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
-<a href=#557 id=557 data-nosnippet>557</a>        }
-<a href=#558 id=558 data-nosnippet>558</a>        <span class="self">self
-<a href=#559 id=559 data-nosnippet>559</a>    </span>}
-<a href=#560 id=560 data-nosnippet>560</a>}</code></pre></div></section></main></body></html>
+<a href=#478 id=478 data-nosnippet>478</a>            <span class="self">self</span>.needs_layout = to.needs_layout;
+<a href=#479 id=479 data-nosnippet>479</a>        }
+<a href=#480 id=480 data-nosnippet>480</a>
+<a href=#481 id=481 data-nosnippet>481</a>        <span class="self">self
+<a href=#482 id=482 data-nosnippet>482</a>    </span>}
+<a href=#483 id=483 data-nosnippet>483</a>}
+<a href=#484 id=484 data-nosnippet>484</a>
+<a href=#485 id=485 data-nosnippet>485</a><span class="doccomment">/// Represents a custom color filter.
+<a href=#486 id=486 data-nosnippet>486</a>///
+<a href=#487 id=487 data-nosnippet>487</a>/// The color matrix is in the format of SVG color matrix, [0..5] is the first matrix row.
+<a href=#488 id=488 data-nosnippet>488</a></span><span class="attr">#[derive(Clone, Copy)]
+<a href=#489 id=489 data-nosnippet>489</a></span><span class="kw">pub struct </span>ColorMatrix(<span class="kw">pub </span>[f32; <span class="number">20</span>]);
+<a href=#490 id=490 data-nosnippet>490</a><span class="kw">impl </span>ColorMatrix {
+<a href=#491 id=491 data-nosnippet>491</a>    <span class="doccomment">/// Matrix that does not alter any color.
+<a href=#492 id=492 data-nosnippet>492</a>    </span><span class="attr">#[rustfmt::skip]
+<a href=#493 id=493 data-nosnippet>493</a>    </span><span class="kw">pub const fn </span>identity() -&gt; <span class="self">Self </span>{
+<a href=#494 id=494 data-nosnippet>494</a>        ColorMatrix([
+<a href=#495 id=495 data-nosnippet>495</a>            <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
+<a href=#496 id=496 data-nosnippet>496</a>            <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
+<a href=#497 id=497 data-nosnippet>497</a>            <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>,
+<a href=#498 id=498 data-nosnippet>498</a>            <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">0.0</span>, <span class="number">1.0</span>, <span class="number">0.0</span>,
+<a href=#499 id=499 data-nosnippet>499</a>        ])
+<a href=#500 id=500 data-nosnippet>500</a>    }
+<a href=#501 id=501 data-nosnippet>501</a>}
+<a href=#502 id=502 data-nosnippet>502</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ColorMatrix {
+<a href=#503 id=503 data-nosnippet>503</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#504 id=504 data-nosnippet>504</a>        <span class="kw">if </span><span class="self">self </span>== <span class="kw-2">&amp;</span>ColorMatrix::identity() {
+<a href=#505 id=505 data-nosnippet>505</a>            <span class="kw">if </span>f.alternate() {
+<a href=#506 id=506 data-nosnippet>506</a>                <span class="macro">write!</span>(f, <span class="string">"ColorMatrix::"</span>)<span class="question-mark">?</span>;
+<a href=#507 id=507 data-nosnippet>507</a>            }
+<a href=#508 id=508 data-nosnippet>508</a>            <span class="kw">return </span><span class="macro">write!</span>(f, <span class="string">"identity()"</span>);
+<a href=#509 id=509 data-nosnippet>509</a>        }
+<a href=#510 id=510 data-nosnippet>510</a>
+<a href=#511 id=511 data-nosnippet>511</a>        <span class="kw">if </span>f.alternate() {
+<a href=#512 id=512 data-nosnippet>512</a>            <span class="macro">write!</span>(f, <span class="string">"ColorMatrix("</span>)<span class="question-mark">?</span>;
+<a href=#513 id=513 data-nosnippet>513</a>        }
+<a href=#514 id=514 data-nosnippet>514</a>        <span class="macro">writeln!</span>(f, <span class="string">"["</span>)<span class="question-mark">?</span>;
+<a href=#515 id=515 data-nosnippet>515</a>        <span class="kw">for </span>row <span class="kw">in </span><span class="number">0</span>..<span class="number">4 </span>{
+<a href=#516 id=516 data-nosnippet>516</a>            <span class="macro">write!</span>(f, <span class="string">"    "</span>)<span class="question-mark">?</span>;
+<a href=#517 id=517 data-nosnippet>517</a>            <span class="kw">for </span>column <span class="kw">in </span><span class="number">0</span>..<span class="number">5 </span>{
+<a href=#518 id=518 data-nosnippet>518</a>                <span class="kw">let </span>v = <span class="self">self</span>.<span class="number">0</span>[row * column];
+<a href=#519 id=519 data-nosnippet>519</a>                <span class="kw">if </span>v &lt; <span class="number">0.0 </span>{
+<a href=#520 id=520 data-nosnippet>520</a>                    <span class="macro">write!</span>(f, <span class="string">"{v:.3}, "</span>)<span class="question-mark">?</span>;
+<a href=#521 id=521 data-nosnippet>521</a>                } <span class="kw">else </span>{
+<a href=#522 id=522 data-nosnippet>522</a>                    <span class="macro">write!</span>(f, <span class="string">" {v:.3}, "</span>)<span class="question-mark">?</span>;
+<a href=#523 id=523 data-nosnippet>523</a>                }
+<a href=#524 id=524 data-nosnippet>524</a>            }
+<a href=#525 id=525 data-nosnippet>525</a>            <span class="macro">writeln!</span>(f)<span class="question-mark">?</span>;
+<a href=#526 id=526 data-nosnippet>526</a>        }
+<a href=#527 id=527 data-nosnippet>527</a>        <span class="macro">write!</span>(f, <span class="string">"]"</span>)<span class="question-mark">?</span>;
+<a href=#528 id=528 data-nosnippet>528</a>        <span class="kw">if </span>f.alternate() {
+<a href=#529 id=529 data-nosnippet>529</a>            <span class="macro">write!</span>(f, <span class="string">")"</span>)<span class="question-mark">?</span>;
+<a href=#530 id=530 data-nosnippet>530</a>        }
+<a href=#531 id=531 data-nosnippet>531</a>        <span class="prelude-val">Ok</span>(())
+<a href=#532 id=532 data-nosnippet>532</a>    }
+<a href=#533 id=533 data-nosnippet>533</a>}
+<a href=#534 id=534 data-nosnippet>534</a><span class="macro">impl_from_and_into_var!</span> {
+<a href=#535 id=535 data-nosnippet>535</a>    <span class="kw">fn </span>from(matrix: [f32; <span class="number">20</span>]) -&gt; ColorMatrix {
+<a href=#536 id=536 data-nosnippet>536</a>        ColorMatrix(matrix)
+<a href=#537 id=537 data-nosnippet>537</a>    }
+<a href=#538 id=538 data-nosnippet>538</a>}
+<a href=#539 id=539 data-nosnippet>539</a><span class="kw">impl </span>Default <span class="kw">for </span>ColorMatrix {
+<a href=#540 id=540 data-nosnippet>540</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#541 id=541 data-nosnippet>541</a>        <span class="self">Self</span>::identity()
+<a href=#542 id=542 data-nosnippet>542</a>    }
+<a href=#543 id=543 data-nosnippet>543</a>}
+<a href=#544 id=544 data-nosnippet>544</a><span class="kw">impl </span>PartialEq <span class="kw">for </span>ColorMatrix {
+<a href=#545 id=545 data-nosnippet>545</a>    <span class="kw">fn </span>eq(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; bool {
+<a href=#546 id=546 data-nosnippet>546</a>        <span class="self">self</span>.<span class="number">0</span>.iter().zip(<span class="kw-2">&amp;</span>other.<span class="number">0</span>).all(|(<span class="kw-2">&amp;</span>a, <span class="kw-2">&amp;</span>b)| about_eq(a, b, <span class="number">0.00001</span>))
+<a href=#547 id=547 data-nosnippet>547</a>    }
+<a href=#548 id=548 data-nosnippet>548</a>}
+<a href=#549 id=549 data-nosnippet>549</a><span class="kw">impl </span>std::hash::Hash <span class="kw">for </span>ColorMatrix {
+<a href=#550 id=550 data-nosnippet>550</a>    <span class="kw">fn </span>hash&lt;H: std::hash::Hasher&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, state: <span class="kw-2">&amp;mut </span>H) {
+<a href=#551 id=551 data-nosnippet>551</a>        <span class="kw">for </span>f <span class="kw">in </span><span class="self">self</span>.<span class="number">0 </span>{
+<a href=#552 id=552 data-nosnippet>552</a>            about_eq_hash(f, <span class="number">0.00001</span>, state);
+<a href=#553 id=553 data-nosnippet>553</a>        }
+<a href=#554 id=554 data-nosnippet>554</a>    }
+<a href=#555 id=555 data-nosnippet>555</a>}
+<a href=#556 id=556 data-nosnippet>556</a><span class="kw">impl </span>Transitionable <span class="kw">for </span>ColorMatrix {
+<a href=#557 id=557 data-nosnippet>557</a>    <span class="kw">fn </span>lerp(<span class="kw-2">mut </span><span class="self">self</span>, to: <span class="kw-2">&amp;</span><span class="self">Self</span>, step: EasingStep) -&gt; <span class="self">Self </span>{
+<a href=#558 id=558 data-nosnippet>558</a>        <span class="kw">for </span>(a, b) <span class="kw">in </span><span class="self">self</span>.<span class="number">0</span>.iter_mut().zip(<span class="kw-2">&amp;</span>to.<span class="number">0</span>) {
+<a href=#559 id=559 data-nosnippet>559</a>            <span class="kw-2">*</span>a = a.lerp(b, step);
+<a href=#560 id=560 data-nosnippet>560</a>        }
+<a href=#561 id=561 data-nosnippet>561</a>        <span class="self">self
+<a href=#562 id=562 data-nosnippet>562</a>    </span>}
+<a href=#563 id=563 data-nosnippet>563</a>}</code></pre></div></section></main></body></html>

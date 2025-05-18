@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-toggle/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-6c3ea77c.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_toggle" data-themes="" data-resource-suffix="" data-rustdoc-version="1.86.0 (05f9846f8 2025-03-31)" data-channel="1.86.0" data-search-js="search-581efc7a.js" data-settings-js="settings-6dad6058.js" ><script src="../../static.files/storage-3a5871a4.js"></script><script defer src="../../static.files/src-script-b8d3f215.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-4d63596a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_toggle/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-toggle/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_toggle" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../static.files/storage-82c7156e.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_toggle/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Toggle widget, properties and commands.
@@ -863,505 +863,506 @@
 <a href=#863 id=863 data-nosnippet>863</a>
 <a href=#864 id=864 data-nosnippet>864</a><span class="doccomment">/// Error for [`Selector`] operations.
 <a href=#865 id=865 data-nosnippet>865</a></span><span class="attr">#[derive(Debug, Clone)]
-<a href=#866 id=866 data-nosnippet>866</a></span><span class="kw">pub enum </span>SelectorError {
-<a href=#867 id=867 data-nosnippet>867</a>    <span class="doccomment">/// Cannot select item because it is not of type that the selector can handle.
-<a href=#868 id=868 data-nosnippet>868</a>    </span>WrongType,
-<a href=#869 id=869 data-nosnippet>869</a>    <span class="doccomment">/// Cannot (de)select item because the selection is read-only.
-<a href=#870 id=870 data-nosnippet>870</a>    </span>ReadOnly,
-<a href=#871 id=871 data-nosnippet>871</a>    <span class="doccomment">/// Cannot deselect item because the selection cannot be empty.
-<a href=#872 id=872 data-nosnippet>872</a>    </span>CannotClear,
-<a href=#873 id=873 data-nosnippet>873</a>    <span class="doccomment">/// Cannot select item because of a selector specific reason.
-<a href=#874 id=874 data-nosnippet>874</a>    </span>Custom(Arc&lt;<span class="kw">dyn </span>Error + Send + Sync&gt;),
-<a href=#875 id=875 data-nosnippet>875</a>}
-<a href=#876 id=876 data-nosnippet>876</a><span class="kw">impl </span>SelectorError {
-<a href=#877 id=877 data-nosnippet>877</a>    <span class="doccomment">/// New custom error from string.
-<a href=#878 id=878 data-nosnippet>878</a>    </span><span class="kw">pub fn </span>custom_str(str: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; SelectorError {
-<a href=#879 id=879 data-nosnippet>879</a>        <span class="kw">let </span>str = str.into();
-<a href=#880 id=880 data-nosnippet>880</a>        <span class="kw">let </span>e: Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = str.into();
-<a href=#881 id=881 data-nosnippet>881</a>        <span class="kw">let </span>e: Arc&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = e.into();
-<a href=#882 id=882 data-nosnippet>882</a>        SelectorError::Custom(e)
-<a href=#883 id=883 data-nosnippet>883</a>    }
-<a href=#884 id=884 data-nosnippet>884</a>}
-<a href=#885 id=885 data-nosnippet>885</a><span class="kw">impl </span>fmt::Display <span class="kw">for </span>SelectorError {
-<a href=#886 id=886 data-nosnippet>886</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#887 id=887 data-nosnippet>887</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#888 id=888 data-nosnippet>888</a>            SelectorError::WrongType =&gt; <span class="macro">write!</span>(f, <span class="string">"wrong value type for selector"</span>),
-<a href=#889 id=889 data-nosnippet>889</a>            SelectorError::ReadOnly =&gt; <span class="macro">write!</span>(f, <span class="string">"selection is read-only"</span>),
-<a href=#890 id=890 data-nosnippet>890</a>            SelectorError::CannotClear =&gt; <span class="macro">write!</span>(f, <span class="string">"selection cannot be empty"</span>),
-<a href=#891 id=891 data-nosnippet>891</a>            SelectorError::Custom(e) =&gt; fmt::Display::fmt(e, f),
-<a href=#892 id=892 data-nosnippet>892</a>        }
-<a href=#893 id=893 data-nosnippet>893</a>    }
-<a href=#894 id=894 data-nosnippet>894</a>}
-<a href=#895 id=895 data-nosnippet>895</a><span class="kw">impl </span>Error <span class="kw">for </span>SelectorError {
-<a href=#896 id=896 data-nosnippet>896</a>    <span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Error + <span class="lifetime">'static</span>)&gt; {
-<a href=#897 id=897 data-nosnippet>897</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#898 id=898 data-nosnippet>898</a>            SelectorError::WrongType =&gt; <span class="prelude-val">None</span>,
-<a href=#899 id=899 data-nosnippet>899</a>            SelectorError::ReadOnly =&gt; <span class="prelude-val">None</span>,
-<a href=#900 id=900 data-nosnippet>900</a>            SelectorError::CannotClear =&gt; <span class="prelude-val">None</span>,
-<a href=#901 id=901 data-nosnippet>901</a>            SelectorError::Custom(e) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">&amp;**</span>e),
-<a href=#902 id=902 data-nosnippet>902</a>        }
-<a href=#903 id=903 data-nosnippet>903</a>    }
-<a href=#904 id=904 data-nosnippet>904</a>}
-<a href=#905 id=905 data-nosnippet>905</a><span class="kw">impl </span>From&lt;VarIsReadOnlyError&gt; <span class="kw">for </span>SelectorError {
-<a href=#906 id=906 data-nosnippet>906</a>    <span class="kw">fn </span>from(<span class="kw">_</span>: VarIsReadOnlyError) -&gt; <span class="self">Self </span>{
-<a href=#907 id=907 data-nosnippet>907</a>        SelectorError::ReadOnly
-<a href=#908 id=908 data-nosnippet>908</a>    }
-<a href=#909 id=909 data-nosnippet>909</a>}
-<a href=#910 id=910 data-nosnippet>910</a>
-<a href=#911 id=911 data-nosnippet>911</a><span class="doccomment">/// Default toggle style.
-<a href=#912 id=912 data-nosnippet>912</a>///
-<a href=#913 id=913 data-nosnippet>913</a>/// Extends the [`button::DefaultStyle`] to have the *pressed* look when [`is_checked`].
-<a href=#914 id=914 data-nosnippet>914</a>///
-<a href=#915 id=915 data-nosnippet>915</a>/// [`button::DefaultStyle`]: struct@zng_wgt_button::DefaultStyle
-<a href=#916 id=916 data-nosnippet>916</a>/// [`is_checked`]: fn@is_checked
-<a href=#917 id=917 data-nosnippet>917</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
-<a href=#918 id=918 data-nosnippet>918</a></span><span class="kw">pub struct </span>DefaultStyle(zng_wgt_button::DefaultStyle);
-<a href=#919 id=919 data-nosnippet>919</a><span class="kw">impl </span>DefaultStyle {
-<a href=#920 id=920 data-nosnippet>920</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#921 id=921 data-nosnippet>921</a>        <span class="macro">widget_set!</span> {
-<a href=#922 id=922 data-nosnippet>922</a>            <span class="self">self</span>;
-<a href=#923 id=923 data-nosnippet>923</a>            replace = <span class="bool-val">true</span>;
-<a href=#924 id=924 data-nosnippet>924</a>            when <span class="kw-2">*</span>#is_checked {
-<a href=#925 id=925 data-nosnippet>925</a>                background_color = BASE_COLOR_VAR.shade(<span class="number">2</span>);
-<a href=#926 id=926 data-nosnippet>926</a>                border = {
-<a href=#927 id=927 data-nosnippet>927</a>                    widths: <span class="number">1</span>,
-<a href=#928 id=928 data-nosnippet>928</a>                    sides: BASE_COLOR_VAR.shade_into(<span class="number">2</span>),
-<a href=#929 id=929 data-nosnippet>929</a>                };
-<a href=#930 id=930 data-nosnippet>930</a>            }
-<a href=#931 id=931 data-nosnippet>931</a>        }
-<a href=#932 id=932 data-nosnippet>932</a>    }
-<a href=#933 id=933 data-nosnippet>933</a>}
-<a href=#934 id=934 data-nosnippet>934</a>
-<a href=#935 id=935 data-nosnippet>935</a><span class="doccomment">/// Toggle light style.
-<a href=#936 id=936 data-nosnippet>936</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LightStyle</span>)]
-<a href=#937 id=937 data-nosnippet>937</a></span><span class="kw">pub struct </span>LightStyle(zng_wgt_button::LightStyle);
-<a href=#938 id=938 data-nosnippet>938</a><span class="kw">impl </span>LightStyle {
-<a href=#939 id=939 data-nosnippet>939</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#940 id=940 data-nosnippet>940</a>        <span class="macro">widget_set!</span> {
-<a href=#941 id=941 data-nosnippet>941</a>            <span class="self">self</span>;
-<a href=#942 id=942 data-nosnippet>942</a>            when <span class="kw-2">*</span>#is_checked {
-<a href=#943 id=943 data-nosnippet>943</a>                <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#944 id=944 data-nosnippet>944</a>                </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
-<a href=#945 id=945 data-nosnippet>945</a>            }
-<a href=#946 id=946 data-nosnippet>946</a>        }
-<a href=#947 id=947 data-nosnippet>947</a>    }
-<a href=#948 id=948 data-nosnippet>948</a>}
-<a href=#949 id=949 data-nosnippet>949</a>
-<a href=#950 id=950 data-nosnippet>950</a><span class="doccomment">/// Checkmark toggle style.
-<a href=#951 id=951 data-nosnippet>951</a>///
-<a href=#952 id=952 data-nosnippet>952</a>/// Style a [`Toggle!`] widget to look like a *checkbox*.
-<a href=#953 id=953 data-nosnippet>953</a>///
-<a href=#954 id=954 data-nosnippet>954</a>/// [`Toggle!`]: struct@Toggle
-<a href=#955 id=955 data-nosnippet>955</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::CheckStyle</span>)]
-<a href=#956 id=956 data-nosnippet>956</a></span><span class="kw">pub struct </span>CheckStyle(Style);
-<a href=#957 id=957 data-nosnippet>957</a><span class="kw">impl </span>CheckStyle {
-<a href=#958 id=958 data-nosnippet>958</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#959 id=959 data-nosnippet>959</a>        <span class="macro">widget_set!</span> {
-<a href=#960 id=960 data-nosnippet>960</a>            <span class="self">self</span>;
-<a href=#961 id=961 data-nosnippet>961</a>            replace = <span class="bool-val">true</span>;
-<a href=#962 id=962 data-nosnippet>962</a>            child_start = {
-<a href=#963 id=963 data-nosnippet>963</a>                node: {
-<a href=#964 id=964 data-nosnippet>964</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
-<a href=#965 id=965 data-nosnippet>965</a>                    is_hovered(checkmark_visual(parent_hovered.clone()), parent_hovered)
-<a href=#966 id=966 data-nosnippet>966</a>                },
-<a href=#967 id=967 data-nosnippet>967</a>                spacing: CHECK_SPACING_VAR,
-<a href=#968 id=968 data-nosnippet>968</a>            };
-<a href=#969 id=969 data-nosnippet>969</a>            access_role = AccessRole::CheckBox;
-<a href=#970 id=970 data-nosnippet>970</a>        }
-<a href=#971 id=971 data-nosnippet>971</a>    }
-<a href=#972 id=972 data-nosnippet>972</a>}
-<a href=#973 id=973 data-nosnippet>973</a><span class="macro">context_var!</span> {
-<a href=#974 id=974 data-nosnippet>974</a>    <span class="doccomment">/// Spacing between the checkmark and the content.
-<a href=#975 id=975 data-nosnippet>975</a>    </span><span class="kw">pub static </span>CHECK_SPACING_VAR: Length = <span class="number">4</span>;
-<a href=#976 id=976 data-nosnippet>976</a>}
-<a href=#977 id=977 data-nosnippet>977</a>
-<a href=#978 id=978 data-nosnippet>978</a><span class="doccomment">/// Spacing between the checkmark and the content.
-<a href=#979 id=979 data-nosnippet>979</a></span><span class="attr">#[property(CONTEXT, default(CHECK_SPACING_VAR), widget_impl(CheckStyle))]
-<a href=#980 id=980 data-nosnippet>980</a></span><span class="kw">pub fn </span>check_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#981 id=981 data-nosnippet>981</a>    with_context_var(child, CHECK_SPACING_VAR, spacing)
-<a href=#982 id=982 data-nosnippet>982</a>}
-<a href=#983 id=983 data-nosnippet>983</a>
-<a href=#984 id=984 data-nosnippet>984</a><span class="kw">fn </span>checkmark_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#985 id=985 data-nosnippet>985</a>    <span class="kw">let </span>checked = ICONS.get_or([<span class="string">"toggle.checked"</span>, <span class="string">"check"</span>], || {
-<a href=#986 id=986 data-nosnippet>986</a>        <span class="macro">zng_wgt_text::Text!</span> {
-<a href=#987 id=987 data-nosnippet>987</a>            txt = <span class="string">"✓"</span>;
-<a href=#988 id=988 data-nosnippet>988</a>            font_family = FontNames::system_ui(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(und));
-<a href=#989 id=989 data-nosnippet>989</a>            txt_align = Align::CENTER;
-<a href=#990 id=990 data-nosnippet>990</a>        }
-<a href=#991 id=991 data-nosnippet>991</a>    });
-<a href=#992 id=992 data-nosnippet>992</a>    <span class="kw">let </span>indeterminate = ICONS.get_or([<span class="string">"toggle.indeterminate"</span>], || {
-<a href=#993 id=993 data-nosnippet>993</a>        <span class="macro">zng_wgt::Wgt!</span> {
-<a href=#994 id=994 data-nosnippet>994</a>            align = Align::CENTER;
-<a href=#995 id=995 data-nosnippet>995</a>            background_color = zng_wgt_text::FONT_COLOR_VAR;
-<a href=#996 id=996 data-nosnippet>996</a>            size = (<span class="number">6</span>, <span class="number">2</span>);
-<a href=#997 id=997 data-nosnippet>997</a>            corner_radius = <span class="number">0</span>;
-<a href=#998 id=998 data-nosnippet>998</a>        }
-<a href=#999 id=999 data-nosnippet>999</a>    });
-<a href=#1000 id=1000 data-nosnippet>1000</a>    <span class="macro">zng_wgt_container::Container!</span> {
-<a href=#1001 id=1001 data-nosnippet>1001</a>        hit_test_mode = <span class="bool-val">false</span>;
-<a href=#1002 id=1002 data-nosnippet>1002</a>        accessible = <span class="bool-val">false</span>;
-<a href=#1003 id=1003 data-nosnippet>1003</a>        size = <span class="number">1.2</span>.em();
-<a href=#1004 id=1004 data-nosnippet>1004</a>        corner_radius = <span class="number">0.1</span>.em();
-<a href=#1005 id=1005 data-nosnippet>1005</a>        align = Align::CENTER;
-<a href=#1006 id=1006 data-nosnippet>1006</a>
-<a href=#1007 id=1007 data-nosnippet>1007</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
-<a href=#1008 id=1008 data-nosnippet>1008</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
-<a href=#1009 id=1009 data-nosnippet>1009</a>        when <span class="kw-2">*</span>#{parent_hovered} {
-<a href=#1010 id=1010 data-nosnippet>1010</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#1011 id=1011 data-nosnippet>1011</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
-<a href=#1012 id=1012 data-nosnippet>1012</a>        }
-<a href=#1013 id=1013 data-nosnippet>1013</a>
-<a href=#1014 id=1014 data-nosnippet>1014</a>        when #{IS_CHECKED_VAR}.is_none() {
-<a href=#1015 id=1015 data-nosnippet>1015</a>            child = indeterminate;
-<a href=#1016 id=1016 data-nosnippet>1016</a>        }
-<a href=#1017 id=1017 data-nosnippet>1017</a>        when <span class="kw-2">*</span>#{IS_CHECKED_VAR} == <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) {
-<a href=#1018 id=1018 data-nosnippet>1018</a>            child = checked;
-<a href=#1019 id=1019 data-nosnippet>1019</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#1020 id=1020 data-nosnippet>1020</a>            </span>background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
-<a href=#1021 id=1021 data-nosnippet>1021</a>        }
-<a href=#1022 id=1022 data-nosnippet>1022</a>    }
-<a href=#1023 id=1023 data-nosnippet>1023</a>}
-<a href=#1024 id=1024 data-nosnippet>1024</a>
-<a href=#1025 id=1025 data-nosnippet>1025</a><span class="doccomment">/// Popup toggle style.
-<a href=#1026 id=1026 data-nosnippet>1026</a>///
-<a href=#1027 id=1027 data-nosnippet>1027</a>/// Style a [`Toggle!`] widget to look like the popup toggle button in a *combo-box*.
-<a href=#1028 id=1028 data-nosnippet>1028</a>///
-<a href=#1029 id=1029 data-nosnippet>1029</a>/// [`Toggle!`]: struct@Toggle
-<a href=#1030 id=1030 data-nosnippet>1030</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::ComboStyle</span>)]
-<a href=#1031 id=1031 data-nosnippet>1031</a></span><span class="kw">pub struct </span>ComboStyle(DefaultStyle);
-<a href=#1032 id=1032 data-nosnippet>1032</a><span class="kw">impl </span>ComboStyle {
-<a href=#1033 id=1033 data-nosnippet>1033</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1034 id=1034 data-nosnippet>1034</a>        <span class="macro">widget_set!</span> {
-<a href=#1035 id=1035 data-nosnippet>1035</a>            <span class="self">self</span>;
-<a href=#1036 id=1036 data-nosnippet>1036</a>            replace = <span class="bool-val">true</span>;
-<a href=#1037 id=1037 data-nosnippet>1037</a>            access_role = AccessRole::ComboBox;
-<a href=#1038 id=1038 data-nosnippet>1038</a>            child_align = Align::FILL;
-<a href=#1039 id=1039 data-nosnippet>1039</a>            border_over = <span class="bool-val">false</span>;
-<a href=#1040 id=1040 data-nosnippet>1040</a>            border_align = <span class="number">1</span>.fct();
-<a href=#1041 id=1041 data-nosnippet>1041</a>            padding = -<span class="number">1</span>;
-<a href=#1042 id=1042 data-nosnippet>1042</a>            checked = var(<span class="bool-val">false</span>);
-<a href=#1043 id=1043 data-nosnippet>1043</a>            child_end = {
-<a href=#1044 id=1044 data-nosnippet>1044</a>                node: combomark_visual(),
-<a href=#1045 id=1045 data-nosnippet>1045</a>                spacing: COMBO_SPACING_VAR,
-<a href=#1046 id=1046 data-nosnippet>1046</a>            };
-<a href=#1047 id=1047 data-nosnippet>1047</a>
-<a href=#1048 id=1048 data-nosnippet>1048</a>            click_mode = ClickMode::press();
-<a href=#1049 id=1049 data-nosnippet>1049</a>
-<a href=#1050 id=1050 data-nosnippet>1050</a>            zng_wgt_button::style_fn = <span class="macro">Style!</span> {
-<a href=#1051 id=1051 data-nosnippet>1051</a>                <span class="comment">// button in child.
-<a href=#1052 id=1052 data-nosnippet>1052</a>                </span>click_mode = ClickMode::default();
-<a href=#1053 id=1053 data-nosnippet>1053</a>                corner_radius = (<span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">4</span>);
-<a href=#1054 id=1054 data-nosnippet>1054</a>            };
-<a href=#1055 id=1055 data-nosnippet>1055</a>
-<a href=#1056 id=1056 data-nosnippet>1056</a>            zng_wgt_layer::popup::style_fn = <span class="macro">Style!</span> {
-<a href=#1057 id=1057 data-nosnippet>1057</a>                zng_wgt_button::style_fn = <span class="macro">Style!</span> {
-<a href=#1058 id=1058 data-nosnippet>1058</a>                    click_mode = ClickMode::release();
-<a href=#1059 id=1059 data-nosnippet>1059</a>
-<a href=#1060 id=1060 data-nosnippet>1060</a>                    corner_radius = <span class="number">0</span>;
-<a href=#1061 id=1061 data-nosnippet>1061</a>                    padding = <span class="number">2</span>;
-<a href=#1062 id=1062 data-nosnippet>1062</a>                    border = <span class="macro">unset!</span>;
-<a href=#1063 id=1063 data-nosnippet>1063</a>                };
-<a href=#1064 id=1064 data-nosnippet>1064</a>                <span class="kw">crate</span>::style_fn = <span class="macro">Style!</span> {
-<a href=#1065 id=1065 data-nosnippet>1065</a>                    click_mode = ClickMode::release();
-<a href=#1066 id=1066 data-nosnippet>1066</a>
-<a href=#1067 id=1067 data-nosnippet>1067</a>                    corner_radius = <span class="number">0</span>;
-<a href=#1068 id=1068 data-nosnippet>1068</a>                    padding = <span class="number">2</span>;
-<a href=#1069 id=1069 data-nosnippet>1069</a>                    border = <span class="macro">unset!</span>;
-<a href=#1070 id=1070 data-nosnippet>1070</a>                };
-<a href=#1071 id=1071 data-nosnippet>1071</a>
-<a href=#1072 id=1072 data-nosnippet>1072</a>                <span class="comment">// supports gesture of press-and-drag to select.
-<a href=#1073 id=1073 data-nosnippet>1073</a>                //
-<a href=#1074 id=1074 data-nosnippet>1074</a>                // - `Toggle!` inherits `capture_pointer = true` from `Button!`.
-<a href=#1075 id=1075 data-nosnippet>1075</a>                // - `ComboStyle!` sets `click_mode = press`.
-<a href=#1076 id=1076 data-nosnippet>1076</a>                // - `ComboStyle!` sets popup descendant `Button!` to `click_mode = release`.
-<a href=#1077 id=1077 data-nosnippet>1077</a>                //
-<a href=#1078 id=1078 data-nosnippet>1078</a>                // So the user can press to open the drop-down, then drag over an option and release to select it.
-<a href=#1079 id=1079 data-nosnippet>1079</a>                </span>capture_pointer_on_init = CaptureMode::Subtree;
-<a href=#1080 id=1080 data-nosnippet>1080</a>
-<a href=#1081 id=1081 data-nosnippet>1081</a>                <span class="attr">#[easing(<span class="number">100</span>.ms())]
-<a href=#1082 id=1082 data-nosnippet>1082</a>                </span>opacity = <span class="number">0</span>.pct();
-<a href=#1083 id=1083 data-nosnippet>1083</a>                <span class="attr">#[easing(<span class="number">100</span>.ms())]
-<a href=#1084 id=1084 data-nosnippet>1084</a>                </span>y = -<span class="number">10</span>;
-<a href=#1085 id=1085 data-nosnippet>1085</a>
-<a href=#1086 id=1086 data-nosnippet>1086</a>                when <span class="kw-2">*</span>#is_inited {
-<a href=#1087 id=1087 data-nosnippet>1087</a>                    opacity = <span class="number">100</span>.pct();
-<a href=#1088 id=1088 data-nosnippet>1088</a>                    y = <span class="number">0</span>;
-<a href=#1089 id=1089 data-nosnippet>1089</a>                }
-<a href=#1090 id=1090 data-nosnippet>1090</a>
-<a href=#1091 id=1091 data-nosnippet>1091</a>                zng_wgt_layer::popup::close_delay = <span class="number">100</span>.ms();
-<a href=#1092 id=1092 data-nosnippet>1092</a>                when <span class="kw-2">*</span>#zng_wgt_layer::popup::is_close_delaying {
-<a href=#1093 id=1093 data-nosnippet>1093</a>                    opacity = <span class="number">0</span>.pct();
-<a href=#1094 id=1094 data-nosnippet>1094</a>                    y = -<span class="number">10</span>;
-<a href=#1095 id=1095 data-nosnippet>1095</a>                }
-<a href=#1096 id=1096 data-nosnippet>1096</a>            };
-<a href=#1097 id=1097 data-nosnippet>1097</a>        }
-<a href=#1098 id=1098 data-nosnippet>1098</a>    }
-<a href=#1099 id=1099 data-nosnippet>1099</a>}
-<a href=#1100 id=1100 data-nosnippet>1100</a><span class="macro">context_var!</span> {
-<a href=#1101 id=1101 data-nosnippet>1101</a>    <span class="doccomment">/// Spacing between the arrow symbol and the content.
-<a href=#1102 id=1102 data-nosnippet>1102</a>    </span><span class="kw">pub static </span>COMBO_SPACING_VAR: Length = <span class="number">0</span>;
-<a href=#1103 id=1103 data-nosnippet>1103</a>}
-<a href=#1104 id=1104 data-nosnippet>1104</a>
-<a href=#1105 id=1105 data-nosnippet>1105</a><span class="doccomment">/// Spacing between the arrow symbol and the content.
-<a href=#1106 id=1106 data-nosnippet>1106</a></span><span class="attr">#[property(CONTEXT, default(COMBO_SPACING_VAR), widget_impl(ComboStyle))]
-<a href=#1107 id=1107 data-nosnippet>1107</a></span><span class="kw">pub fn </span>combo_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1108 id=1108 data-nosnippet>1108</a>    with_context_var(child, COMBO_SPACING_VAR, spacing)
-<a href=#1109 id=1109 data-nosnippet>1109</a>}
-<a href=#1110 id=1110 data-nosnippet>1110</a>
-<a href=#1111 id=1111 data-nosnippet>1111</a><span class="doccomment">/// Popup open when the toggle button is checked.
-<a href=#1112 id=1112 data-nosnippet>1112</a>///
-<a href=#1113 id=1113 data-nosnippet>1113</a>/// This property can be used together with the [`ComboStyle!`] to implement a *combo-box* flyout widget.
-<a href=#1114 id=1114 data-nosnippet>1114</a>///
-<a href=#1115 id=1115 data-nosnippet>1115</a>/// The `popup` can be any widget, that will be open using [`POPUP`], a [`Popup!`] or derived widget is recommended.
-<a href=#1116 id=1116 data-nosnippet>1116</a>///
-<a href=#1117 id=1117 data-nosnippet>1117</a>/// Note that if the checked property is not set the toggle will never be checked, to implement a drop-down menu
-<a href=#1118 id=1118 data-nosnippet>1118</a>/// set `checked = var(false);`.
-<a href=#1119 id=1119 data-nosnippet>1119</a>///
-<a href=#1120 id=1120 data-nosnippet>1120</a>/// [`ComboStyle!`]: struct@ComboStyle
-<a href=#1121 id=1121 data-nosnippet>1121</a>/// [`Popup!`]: struct@zng_wgt_layer::popup::Popup
-<a href=#1122 id=1122 data-nosnippet>1122</a></span><span class="attr">#[property(CHILD, widget_impl(Toggle))]
-<a href=#1123 id=1123 data-nosnippet>1123</a></span><span class="kw">pub fn </span>checked_popup(child: <span class="kw">impl </span>UiNode, popup: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1124 id=1124 data-nosnippet>1124</a>    <span class="kw">let </span>popup = popup.into_var();
-<a href=#1125 id=1125 data-nosnippet>1125</a>    <span class="kw">let </span><span class="kw-2">mut </span>state = var(PopupState::Closed).read_only();
-<a href=#1126 id=1126 data-nosnippet>1126</a>    <span class="kw">let </span><span class="kw-2">mut </span>_state_handle = VarHandle::dummy();
-<a href=#1127 id=1127 data-nosnippet>1127</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
-<a href=#1128 id=1128 data-nosnippet>1128</a>        <span class="kw">let </span>new = <span class="kw">match </span>op {
-<a href=#1129 id=1129 data-nosnippet>1129</a>            UiNodeOp::Init =&gt; {
-<a href=#1130 id=1130 data-nosnippet>1130</a>                WIDGET.sub_var(<span class="kw-2">&amp;</span>IS_CHECKED_VAR).sub_event(<span class="kw-2">&amp;</span>MOUSE_INPUT_EVENT);
-<a href=#1131 id=1131 data-nosnippet>1131</a>                IS_CHECKED_VAR.get()
-<a href=#1132 id=1132 data-nosnippet>1132</a>            }
-<a href=#1133 id=1133 data-nosnippet>1133</a>            UiNodeOp::Deinit =&gt; {
-<a href=#1134 id=1134 data-nosnippet>1134</a>                _state_handle = VarHandle::dummy();
-<a href=#1135 id=1135 data-nosnippet>1135</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
-<a href=#1136 id=1136 data-nosnippet>1136</a>            }
-<a href=#1137 id=1137 data-nosnippet>1137</a>            UiNodeOp::Event { update } =&gt; {
-<a href=#1138 id=1138 data-nosnippet>1138</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_INPUT_EVENT.on(update) {
-<a href=#1139 id=1139 data-nosnippet>1139</a>                    <span class="comment">// close on mouse down to avoid issue when the popup closes on mouse-down (due to focus loss),
-<a href=#1140 id=1140 data-nosnippet>1140</a>                    // but a click is formed (down+up) on the toggle that immediately opens the popup again.
-<a href=#1141 id=1141 data-nosnippet>1141</a>                    </span><span class="kw">if </span>args.is_mouse_down() &amp;&amp; args.is_primary() &amp;&amp; IS_CHECKED_VAR.get() == <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) {
-<a href=#1142 id=1142 data-nosnippet>1142</a>                        args.propagation().stop();
-<a href=#1143 id=1143 data-nosnippet>1143</a>                        cmd::TOGGLE_CMD.scoped(WIDGET.id()).notify_param(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
-<a href=#1144 id=1144 data-nosnippet>1144</a>                    }
-<a href=#1145 id=1145 data-nosnippet>1145</a>                }
-<a href=#1146 id=1146 data-nosnippet>1146</a>                <span class="prelude-val">None
-<a href=#1147 id=1147 data-nosnippet>1147</a>            </span>}
-<a href=#1148 id=1148 data-nosnippet>1148</a>            UiNodeOp::Update { .. } =&gt; {
-<a href=#1149 id=1149 data-nosnippet>1149</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = state.get_new() {
-<a href=#1150 id=1150 data-nosnippet>1150</a>                    <span class="kw">if </span><span class="macro">matches!</span>(s, PopupState::Closed) {
-<a href=#1151 id=1151 data-nosnippet>1151</a>                        <span class="kw">if </span>IS_CHECKED_VAR.get() != <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) {
-<a href=#1152 id=1152 data-nosnippet>1152</a>                            cmd::TOGGLE_CMD.scoped(WIDGET.id()).notify_param(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
-<a href=#1153 id=1153 data-nosnippet>1153</a>                        }
-<a href=#1154 id=1154 data-nosnippet>1154</a>                        _state_handle = VarHandle::dummy();
-<a href=#1155 id=1155 data-nosnippet>1155</a>                    }
-<a href=#1156 id=1156 data-nosnippet>1156</a>                    <span class="prelude-val">None
-<a href=#1157 id=1157 data-nosnippet>1157</a>                </span>} <span class="kw">else </span>{
-<a href=#1158 id=1158 data-nosnippet>1158</a>                    IS_CHECKED_VAR.get_new().map(|o| o.unwrap_or(<span class="bool-val">false</span>))
-<a href=#1159 id=1159 data-nosnippet>1159</a>                }
-<a href=#1160 id=1160 data-nosnippet>1160</a>            }
-<a href=#1161 id=1161 data-nosnippet>1161</a>            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
-<a href=#1162 id=1162 data-nosnippet>1162</a>        };
-<a href=#1163 id=1163 data-nosnippet>1163</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(open) = new {
-<a href=#1164 id=1164 data-nosnippet>1164</a>            <span class="kw">if </span>open {
-<a href=#1165 id=1165 data-nosnippet>1165</a>                <span class="kw">if </span><span class="macro">matches!</span>(state.get(), PopupState::Closed) {
-<a href=#1166 id=1166 data-nosnippet>1166</a>                    state = POPUP.open(popup.get()(()));
-<a href=#1167 id=1167 data-nosnippet>1167</a>                    _state_handle = state.subscribe(UpdateOp::Update, WIDGET.id());
-<a href=#1168 id=1168 data-nosnippet>1168</a>                }
-<a href=#1169 id=1169 data-nosnippet>1169</a>            } <span class="kw">else if let </span>PopupState::Open(id) = state.get() {
-<a href=#1170 id=1170 data-nosnippet>1170</a>                POPUP.close_id(id);
-<a href=#1171 id=1171 data-nosnippet>1171</a>            }
-<a href=#1172 id=1172 data-nosnippet>1172</a>        }
-<a href=#1173 id=1173 data-nosnippet>1173</a>    })
-<a href=#1174 id=1174 data-nosnippet>1174</a>}
-<a href=#1175 id=1175 data-nosnippet>1175</a>
-<a href=#1176 id=1176 data-nosnippet>1176</a><span class="kw">fn </span>combomark_visual() -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1177 id=1177 data-nosnippet>1177</a>    <span class="kw">let </span>dropdown = ICONS.get_or(
-<a href=#1178 id=1178 data-nosnippet>1178</a>        [<span class="string">"toggle.dropdown"</span>, <span class="string">"material/rounded/keyboard-arrow-down"</span>, <span class="string">"keyboard-arrow-down"</span>],
-<a href=#1179 id=1179 data-nosnippet>1179</a>        combomark_visual_fallback,
-<a href=#1180 id=1180 data-nosnippet>1180</a>    );
-<a href=#1181 id=1181 data-nosnippet>1181</a>    <span class="macro">Wgt!</span> {
-<a href=#1182 id=1182 data-nosnippet>1182</a>        size = <span class="number">12</span>;
-<a href=#1183 id=1183 data-nosnippet>1183</a>        zng_wgt_fill::background = dropdown;
-<a href=#1184 id=1184 data-nosnippet>1184</a>        align = Align::CENTER;
-<a href=#1185 id=1185 data-nosnippet>1185</a>
-<a href=#1186 id=1186 data-nosnippet>1186</a>        zng_wgt_transform::rotate_x = <span class="number">0</span>.deg();
-<a href=#1187 id=1187 data-nosnippet>1187</a>        when #is_checked {
-<a href=#1188 id=1188 data-nosnippet>1188</a>            zng_wgt_transform::rotate_x = <span class="number">180</span>.deg();
-<a href=#1189 id=1189 data-nosnippet>1189</a>        }
-<a href=#1190 id=1190 data-nosnippet>1190</a>    }
-<a href=#1191 id=1191 data-nosnippet>1191</a>}
-<a href=#1192 id=1192 data-nosnippet>1192</a><span class="kw">fn </span>combomark_visual_fallback() -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1193 id=1193 data-nosnippet>1193</a>    <span class="kw">let </span>color_key = FrameValueKey::new_unique();
-<a href=#1194 id=1194 data-nosnippet>1194</a>    <span class="kw">let </span><span class="kw-2">mut </span>size = PxSize::zero();
-<a href=#1195 id=1195 data-nosnippet>1195</a>    <span class="kw">let </span><span class="kw-2">mut </span>bounds = PxBox::zero();
-<a href=#1196 id=1196 data-nosnippet>1196</a>    <span class="kw">let </span><span class="kw-2">mut </span>transform = PxTransform::identity();
-<a href=#1197 id=1197 data-nosnippet>1197</a>
-<a href=#1198 id=1198 data-nosnippet>1198</a>    <span class="comment">// (8x8) at 45º, scaled-x 70%
-<a href=#1199 id=1199 data-nosnippet>1199</a>    </span><span class="kw">fn </span>layout() -&gt; (PxSize, PxTransform, PxBox) {
-<a href=#1200 id=1200 data-nosnippet>1200</a>        <span class="kw">let </span>size = Size::from(<span class="number">8</span>).layout();
-<a href=#1201 id=1201 data-nosnippet>1201</a>        <span class="kw">let </span>center = size.to_vector() * <span class="number">0.5</span>.fct();
-<a href=#1202 id=1202 data-nosnippet>1202</a>        <span class="kw">let </span>transform = Transform::new_translate(-center.x, -center.y)
-<a href=#1203 id=1203 data-nosnippet>1203</a>            .rotate(<span class="number">45</span>.deg())
-<a href=#1204 id=1204 data-nosnippet>1204</a>            .scale_x(<span class="number">0.7</span>)
-<a href=#1205 id=1205 data-nosnippet>1205</a>            .translate(center.x, center.y)
-<a href=#1206 id=1206 data-nosnippet>1206</a>            .translate_x(Length::from(<span class="number">2</span>).layout_x())
-<a href=#1207 id=1207 data-nosnippet>1207</a>            .layout();
-<a href=#1208 id=1208 data-nosnippet>1208</a>        <span class="kw">let </span>bounds = transform.outer_transformed(PxBox::from_size(size)).unwrap_or_default();
-<a href=#1209 id=1209 data-nosnippet>1209</a>        (size, transform, bounds)
-<a href=#1210 id=1210 data-nosnippet>1210</a>    }
-<a href=#1211 id=1211 data-nosnippet>1211</a>
-<a href=#1212 id=1212 data-nosnippet>1212</a>    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
-<a href=#1213 id=1213 data-nosnippet>1213</a>        UiNodeOp::Init =&gt; {
-<a href=#1214 id=1214 data-nosnippet>1214</a>            WIDGET.sub_var_render_update(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR);
-<a href=#1215 id=1215 data-nosnippet>1215</a>        }
-<a href=#1216 id=1216 data-nosnippet>1216</a>        UiNodeOp::Measure { desired_size, .. } =&gt; {
-<a href=#1217 id=1217 data-nosnippet>1217</a>            <span class="kw">let </span>(s, <span class="kw">_</span>, <span class="kw">_</span>) = layout();
-<a href=#1218 id=1218 data-nosnippet>1218</a>            <span class="kw-2">*</span>desired_size = s;
-<a href=#1219 id=1219 data-nosnippet>1219</a>        }
-<a href=#1220 id=1220 data-nosnippet>1220</a>        UiNodeOp::Layout { final_size, .. } =&gt; {
-<a href=#1221 id=1221 data-nosnippet>1221</a>            (size, transform, bounds) = layout();
-<a href=#1222 id=1222 data-nosnippet>1222</a>            <span class="kw-2">*</span>final_size = size;
-<a href=#1223 id=1223 data-nosnippet>1223</a>        }
-<a href=#1224 id=1224 data-nosnippet>1224</a>        UiNodeOp::Render { frame } =&gt; {
-<a href=#1225 id=1225 data-nosnippet>1225</a>            <span class="kw">let </span><span class="kw-2">mut </span>clip = bounds.to_rect();
-<a href=#1226 id=1226 data-nosnippet>1226</a>            clip.size.height <span class="kw-2">*</span>= <span class="number">0.5</span>.fct();
-<a href=#1227 id=1227 data-nosnippet>1227</a>            clip.origin.y += clip.size.height;
-<a href=#1228 id=1228 data-nosnippet>1228</a>
-<a href=#1229 id=1229 data-nosnippet>1229</a>            frame.push_clip_rect(clip, <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#1230 id=1230 data-nosnippet>1230</a>                frame.push_reference_frame((WIDGET.id(), <span class="number">0</span>).into(), transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#1231 id=1231 data-nosnippet>1231</a>                    frame.push_color(PxRect::from_size(size), color_key.bind_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
-<a href=#1232 id=1232 data-nosnippet>1232</a>                })
-<a href=#1233 id=1233 data-nosnippet>1233</a>            });
-<a href=#1234 id=1234 data-nosnippet>1234</a>        }
-<a href=#1235 id=1235 data-nosnippet>1235</a>        UiNodeOp::RenderUpdate { update } =&gt; {
-<a href=#1236 id=1236 data-nosnippet>1236</a>            update.update_color_opt(color_key.update_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
-<a href=#1237 id=1237 data-nosnippet>1237</a>        }
-<a href=#1238 id=1238 data-nosnippet>1238</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#1239 id=1239 data-nosnippet>1239</a>    })
-<a href=#1240 id=1240 data-nosnippet>1240</a>}
-<a href=#1241 id=1241 data-nosnippet>1241</a>
-<a href=#1242 id=1242 data-nosnippet>1242</a><span class="doccomment">/// Switch toggle style.
-<a href=#1243 id=1243 data-nosnippet>1243</a>///
-<a href=#1244 id=1244 data-nosnippet>1244</a>/// Style a [`Toggle!`] widget to look like a *switch*.
-<a href=#1245 id=1245 data-nosnippet>1245</a>///
-<a href=#1246 id=1246 data-nosnippet>1246</a>/// [`Toggle!`]: struct@crate::Toggle
-<a href=#1247 id=1247 data-nosnippet>1247</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::SwitchStyle</span>)]
-<a href=#1248 id=1248 data-nosnippet>1248</a></span><span class="kw">pub struct </span>SwitchStyle(Style);
-<a href=#1249 id=1249 data-nosnippet>1249</a><span class="kw">impl </span>SwitchStyle {
-<a href=#1250 id=1250 data-nosnippet>1250</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1251 id=1251 data-nosnippet>1251</a>        <span class="macro">widget_set!</span> {
-<a href=#1252 id=1252 data-nosnippet>1252</a>            <span class="self">self</span>;
-<a href=#1253 id=1253 data-nosnippet>1253</a>            replace = <span class="bool-val">true</span>;
-<a href=#1254 id=1254 data-nosnippet>1254</a>
-<a href=#1255 id=1255 data-nosnippet>1255</a>            child_start = {
-<a href=#1256 id=1256 data-nosnippet>1256</a>                node: {
-<a href=#1257 id=1257 data-nosnippet>1257</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
-<a href=#1258 id=1258 data-nosnippet>1258</a>                    is_hovered(switch_visual(parent_hovered.clone()), parent_hovered)
-<a href=#1259 id=1259 data-nosnippet>1259</a>                },
-<a href=#1260 id=1260 data-nosnippet>1260</a>                spacing: SWITCH_SPACING_VAR,
-<a href=#1261 id=1261 data-nosnippet>1261</a>            };
-<a href=#1262 id=1262 data-nosnippet>1262</a>        }
-<a href=#1263 id=1263 data-nosnippet>1263</a>    }
-<a href=#1264 id=1264 data-nosnippet>1264</a>}
-<a href=#1265 id=1265 data-nosnippet>1265</a><span class="macro">context_var!</span> {
-<a href=#1266 id=1266 data-nosnippet>1266</a>    <span class="doccomment">/// Spacing between the switch and the content.
-<a href=#1267 id=1267 data-nosnippet>1267</a>    </span><span class="kw">pub static </span>SWITCH_SPACING_VAR: Length = <span class="number">2</span>;
-<a href=#1268 id=1268 data-nosnippet>1268</a>}
-<a href=#1269 id=1269 data-nosnippet>1269</a>
-<a href=#1270 id=1270 data-nosnippet>1270</a><span class="doccomment">/// Spacing between the switch and the content.
-<a href=#1271 id=1271 data-nosnippet>1271</a></span><span class="attr">#[property(CONTEXT, default(SWITCH_SPACING_VAR), widget_impl(SwitchStyle))]
-<a href=#1272 id=1272 data-nosnippet>1272</a></span><span class="kw">pub fn </span>switch_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1273 id=1273 data-nosnippet>1273</a>    with_context_var(child, SWITCH_SPACING_VAR, spacing)
-<a href=#1274 id=1274 data-nosnippet>1274</a>}
-<a href=#1275 id=1275 data-nosnippet>1275</a>
-<a href=#1276 id=1276 data-nosnippet>1276</a><span class="kw">fn </span>switch_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1277 id=1277 data-nosnippet>1277</a>    <span class="macro">zng_wgt_container::Container!</span> {
-<a href=#1278 id=1278 data-nosnippet>1278</a>        hit_test_mode = <span class="bool-val">false</span>;
-<a href=#1279 id=1279 data-nosnippet>1279</a>        size = (<span class="number">2</span>.em(), <span class="number">1</span>.em());
-<a href=#1280 id=1280 data-nosnippet>1280</a>        align = Align::CENTER;
-<a href=#1281 id=1281 data-nosnippet>1281</a>        corner_radius = <span class="number">1</span>.em();
-<a href=#1282 id=1282 data-nosnippet>1282</a>        padding = <span class="number">2</span>;
-<a href=#1283 id=1283 data-nosnippet>1283</a>        child = <span class="macro">Wgt!</span> {
-<a href=#1284 id=1284 data-nosnippet>1284</a>            size = <span class="number">1</span>.em() - Length::from(<span class="number">4</span>);
-<a href=#1285 id=1285 data-nosnippet>1285</a>            align = Align::LEFT;
-<a href=#1286 id=1286 data-nosnippet>1286</a>            background_color = zng_wgt_text::FONT_COLOR_VAR;
-<a href=#1287 id=1287 data-nosnippet>1287</a>
-<a href=#1288 id=1288 data-nosnippet>1288</a>            <span class="attr">#[easing(<span class="number">150</span>.ms())]
-<a href=#1289 id=1289 data-nosnippet>1289</a>            </span>x = <span class="number">0</span>.em();
-<a href=#1290 id=1290 data-nosnippet>1290</a>            when <span class="kw-2">*</span>#is_checked {
-<a href=#1291 id=1291 data-nosnippet>1291</a>                x = <span class="number">1</span>.em();
-<a href=#1292 id=1292 data-nosnippet>1292</a>            }
-<a href=#1293 id=1293 data-nosnippet>1293</a>        };
-<a href=#1294 id=1294 data-nosnippet>1294</a>
-<a href=#1295 id=1295 data-nosnippet>1295</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
-<a href=#1296 id=1296 data-nosnippet>1296</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
-<a href=#1297 id=1297 data-nosnippet>1297</a>        when <span class="kw-2">*</span>#{parent_hovered} {
-<a href=#1298 id=1298 data-nosnippet>1298</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#1299 id=1299 data-nosnippet>1299</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
-<a href=#1300 id=1300 data-nosnippet>1300</a>        }
-<a href=#1301 id=1301 data-nosnippet>1301</a>        when #is_checked {
-<a href=#1302 id=1302 data-nosnippet>1302</a>            background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
-<a href=#1303 id=1303 data-nosnippet>1303</a>        }
-<a href=#1304 id=1304 data-nosnippet>1304</a>    }
-<a href=#1305 id=1305 data-nosnippet>1305</a>}
-<a href=#1306 id=1306 data-nosnippet>1306</a>
-<a href=#1307 id=1307 data-nosnippet>1307</a><span class="doccomment">/// Radio toggle style.
-<a href=#1308 id=1308 data-nosnippet>1308</a>///
-<a href=#1309 id=1309 data-nosnippet>1309</a>/// Style a [`Toggle!`] widget to look like a *radio button*.
-<a href=#1310 id=1310 data-nosnippet>1310</a>///
-<a href=#1311 id=1311 data-nosnippet>1311</a>/// [`Toggle!`]: struct@Toggle
-<a href=#1312 id=1312 data-nosnippet>1312</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::RadioStyle</span>)]
-<a href=#1313 id=1313 data-nosnippet>1313</a></span><span class="kw">pub struct </span>RadioStyle(Style);
-<a href=#1314 id=1314 data-nosnippet>1314</a><span class="kw">impl </span>RadioStyle {
-<a href=#1315 id=1315 data-nosnippet>1315</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1316 id=1316 data-nosnippet>1316</a>        <span class="macro">widget_set!</span> {
-<a href=#1317 id=1317 data-nosnippet>1317</a>            <span class="self">self</span>;
-<a href=#1318 id=1318 data-nosnippet>1318</a>            replace = <span class="bool-val">true</span>;
-<a href=#1319 id=1319 data-nosnippet>1319</a>
-<a href=#1320 id=1320 data-nosnippet>1320</a>            access_role = AccessRole::Radio;
-<a href=#1321 id=1321 data-nosnippet>1321</a>            child_start = {
-<a href=#1322 id=1322 data-nosnippet>1322</a>                node: {
-<a href=#1323 id=1323 data-nosnippet>1323</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
-<a href=#1324 id=1324 data-nosnippet>1324</a>                    is_hovered(radio_visual(parent_hovered.clone()), parent_hovered)
-<a href=#1325 id=1325 data-nosnippet>1325</a>                },
-<a href=#1326 id=1326 data-nosnippet>1326</a>                spacing: RADIO_SPACING_VAR,
-<a href=#1327 id=1327 data-nosnippet>1327</a>            };
-<a href=#1328 id=1328 data-nosnippet>1328</a>        }
-<a href=#1329 id=1329 data-nosnippet>1329</a>    }
-<a href=#1330 id=1330 data-nosnippet>1330</a>}
-<a href=#1331 id=1331 data-nosnippet>1331</a>
-<a href=#1332 id=1332 data-nosnippet>1332</a><span class="macro">context_var!</span> {
-<a href=#1333 id=1333 data-nosnippet>1333</a>    <span class="doccomment">/// Spacing between the radio and the content.
-<a href=#1334 id=1334 data-nosnippet>1334</a>    </span><span class="kw">pub static </span>RADIO_SPACING_VAR: Length = <span class="number">2</span>;
-<a href=#1335 id=1335 data-nosnippet>1335</a>}
-<a href=#1336 id=1336 data-nosnippet>1336</a>
-<a href=#1337 id=1337 data-nosnippet>1337</a><span class="doccomment">/// Spacing between the radio and the content.
-<a href=#1338 id=1338 data-nosnippet>1338</a></span><span class="attr">#[property(CONTEXT, default(RADIO_SPACING_VAR), widget_impl(RadioStyle))]
-<a href=#1339 id=1339 data-nosnippet>1339</a></span><span class="kw">pub fn </span>radio_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1340 id=1340 data-nosnippet>1340</a>    with_context_var(child, RADIO_SPACING_VAR, spacing)
-<a href=#1341 id=1341 data-nosnippet>1341</a>}
-<a href=#1342 id=1342 data-nosnippet>1342</a>
-<a href=#1343 id=1343 data-nosnippet>1343</a><span class="kw">fn </span>radio_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#1344 id=1344 data-nosnippet>1344</a>    <span class="macro">Wgt!</span> {
-<a href=#1345 id=1345 data-nosnippet>1345</a>        hit_test_mode = <span class="bool-val">false</span>;
-<a href=#1346 id=1346 data-nosnippet>1346</a>        size = <span class="number">0.9</span>.em();
-<a href=#1347 id=1347 data-nosnippet>1347</a>        corner_radius = <span class="number">0.9</span>.em();
-<a href=#1348 id=1348 data-nosnippet>1348</a>        align = Align::CENTER;
-<a href=#1349 id=1349 data-nosnippet>1349</a>        border_align = <span class="number">100</span>.pct();
-<a href=#1350 id=1350 data-nosnippet>1350</a>
-<a href=#1351 id=1351 data-nosnippet>1351</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
-<a href=#1352 id=1352 data-nosnippet>1352</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
-<a href=#1353 id=1353 data-nosnippet>1353</a>        when <span class="kw-2">*</span>#{parent_hovered} {
-<a href=#1354 id=1354 data-nosnippet>1354</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#1355 id=1355 data-nosnippet>1355</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
-<a href=#1356 id=1356 data-nosnippet>1356</a>        }
-<a href=#1357 id=1357 data-nosnippet>1357</a>
-<a href=#1358 id=1358 data-nosnippet>1358</a>        when <span class="kw-2">*</span>#is_checked {
-<a href=#1359 id=1359 data-nosnippet>1359</a>            border = {
-<a href=#1360 id=1360 data-nosnippet>1360</a>                widths: <span class="number">2</span>,
-<a href=#1361 id=1361 data-nosnippet>1361</a>                sides: colors::ACCENT_COLOR_VAR.shade_into(-<span class="number">2</span>),
-<a href=#1362 id=1362 data-nosnippet>1362</a>            };
-<a href=#1363 id=1363 data-nosnippet>1363</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
-<a href=#1364 id=1364 data-nosnippet>1364</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR;
-<a href=#1365 id=1365 data-nosnippet>1365</a>        }
-<a href=#1366 id=1366 data-nosnippet>1366</a>    }
-<a href=#1367 id=1367 data-nosnippet>1367</a>}</code></pre></div></section></main></body></html>
+<a href=#866 id=866 data-nosnippet>866</a>#[non_exhaustive]
+<a href=#867 id=867 data-nosnippet>867</a></span><span class="kw">pub enum </span>SelectorError {
+<a href=#868 id=868 data-nosnippet>868</a>    <span class="doccomment">/// Cannot select item because it is not of type that the selector can handle.
+<a href=#869 id=869 data-nosnippet>869</a>    </span>WrongType,
+<a href=#870 id=870 data-nosnippet>870</a>    <span class="doccomment">/// Cannot (de)select item because the selection is read-only.
+<a href=#871 id=871 data-nosnippet>871</a>    </span>ReadOnly,
+<a href=#872 id=872 data-nosnippet>872</a>    <span class="doccomment">/// Cannot deselect item because the selection cannot be empty.
+<a href=#873 id=873 data-nosnippet>873</a>    </span>CannotClear,
+<a href=#874 id=874 data-nosnippet>874</a>    <span class="doccomment">/// Cannot select item because of a selector specific reason.
+<a href=#875 id=875 data-nosnippet>875</a>    </span>Custom(Arc&lt;<span class="kw">dyn </span>Error + Send + Sync&gt;),
+<a href=#876 id=876 data-nosnippet>876</a>}
+<a href=#877 id=877 data-nosnippet>877</a><span class="kw">impl </span>SelectorError {
+<a href=#878 id=878 data-nosnippet>878</a>    <span class="doccomment">/// New custom error from string.
+<a href=#879 id=879 data-nosnippet>879</a>    </span><span class="kw">pub fn </span>custom_str(str: <span class="kw">impl </span>Into&lt;String&gt;) -&gt; SelectorError {
+<a href=#880 id=880 data-nosnippet>880</a>        <span class="kw">let </span>str = str.into();
+<a href=#881 id=881 data-nosnippet>881</a>        <span class="kw">let </span>e: Box&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = str.into();
+<a href=#882 id=882 data-nosnippet>882</a>        <span class="kw">let </span>e: Arc&lt;<span class="kw">dyn </span>Error + Send + Sync&gt; = e.into();
+<a href=#883 id=883 data-nosnippet>883</a>        SelectorError::Custom(e)
+<a href=#884 id=884 data-nosnippet>884</a>    }
+<a href=#885 id=885 data-nosnippet>885</a>}
+<a href=#886 id=886 data-nosnippet>886</a><span class="kw">impl </span>fmt::Display <span class="kw">for </span>SelectorError {
+<a href=#887 id=887 data-nosnippet>887</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#888 id=888 data-nosnippet>888</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#889 id=889 data-nosnippet>889</a>            SelectorError::WrongType =&gt; <span class="macro">write!</span>(f, <span class="string">"wrong value type for selector"</span>),
+<a href=#890 id=890 data-nosnippet>890</a>            SelectorError::ReadOnly =&gt; <span class="macro">write!</span>(f, <span class="string">"selection is read-only"</span>),
+<a href=#891 id=891 data-nosnippet>891</a>            SelectorError::CannotClear =&gt; <span class="macro">write!</span>(f, <span class="string">"selection cannot be empty"</span>),
+<a href=#892 id=892 data-nosnippet>892</a>            SelectorError::Custom(e) =&gt; fmt::Display::fmt(e, f),
+<a href=#893 id=893 data-nosnippet>893</a>        }
+<a href=#894 id=894 data-nosnippet>894</a>    }
+<a href=#895 id=895 data-nosnippet>895</a>}
+<a href=#896 id=896 data-nosnippet>896</a><span class="kw">impl </span>Error <span class="kw">for </span>SelectorError {
+<a href=#897 id=897 data-nosnippet>897</a>    <span class="kw">fn </span>source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Error + <span class="lifetime">'static</span>)&gt; {
+<a href=#898 id=898 data-nosnippet>898</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#899 id=899 data-nosnippet>899</a>            SelectorError::WrongType =&gt; <span class="prelude-val">None</span>,
+<a href=#900 id=900 data-nosnippet>900</a>            SelectorError::ReadOnly =&gt; <span class="prelude-val">None</span>,
+<a href=#901 id=901 data-nosnippet>901</a>            SelectorError::CannotClear =&gt; <span class="prelude-val">None</span>,
+<a href=#902 id=902 data-nosnippet>902</a>            SelectorError::Custom(e) =&gt; <span class="prelude-val">Some</span>(<span class="kw-2">&amp;**</span>e),
+<a href=#903 id=903 data-nosnippet>903</a>        }
+<a href=#904 id=904 data-nosnippet>904</a>    }
+<a href=#905 id=905 data-nosnippet>905</a>}
+<a href=#906 id=906 data-nosnippet>906</a><span class="kw">impl </span>From&lt;VarIsReadOnlyError&gt; <span class="kw">for </span>SelectorError {
+<a href=#907 id=907 data-nosnippet>907</a>    <span class="kw">fn </span>from(<span class="kw">_</span>: VarIsReadOnlyError) -&gt; <span class="self">Self </span>{
+<a href=#908 id=908 data-nosnippet>908</a>        SelectorError::ReadOnly
+<a href=#909 id=909 data-nosnippet>909</a>    }
+<a href=#910 id=910 data-nosnippet>910</a>}
+<a href=#911 id=911 data-nosnippet>911</a>
+<a href=#912 id=912 data-nosnippet>912</a><span class="doccomment">/// Default toggle style.
+<a href=#913 id=913 data-nosnippet>913</a>///
+<a href=#914 id=914 data-nosnippet>914</a>/// Extends the [`button::DefaultStyle`] to have the *pressed* look when [`is_checked`].
+<a href=#915 id=915 data-nosnippet>915</a>///
+<a href=#916 id=916 data-nosnippet>916</a>/// [`button::DefaultStyle`]: struct@zng_wgt_button::DefaultStyle
+<a href=#917 id=917 data-nosnippet>917</a>/// [`is_checked`]: fn@is_checked
+<a href=#918 id=918 data-nosnippet>918</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
+<a href=#919 id=919 data-nosnippet>919</a></span><span class="kw">pub struct </span>DefaultStyle(zng_wgt_button::DefaultStyle);
+<a href=#920 id=920 data-nosnippet>920</a><span class="kw">impl </span>DefaultStyle {
+<a href=#921 id=921 data-nosnippet>921</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#922 id=922 data-nosnippet>922</a>        <span class="macro">widget_set!</span> {
+<a href=#923 id=923 data-nosnippet>923</a>            <span class="self">self</span>;
+<a href=#924 id=924 data-nosnippet>924</a>            replace = <span class="bool-val">true</span>;
+<a href=#925 id=925 data-nosnippet>925</a>            when <span class="kw-2">*</span>#is_checked {
+<a href=#926 id=926 data-nosnippet>926</a>                background_color = BASE_COLOR_VAR.shade(<span class="number">2</span>);
+<a href=#927 id=927 data-nosnippet>927</a>                border = {
+<a href=#928 id=928 data-nosnippet>928</a>                    widths: <span class="number">1</span>,
+<a href=#929 id=929 data-nosnippet>929</a>                    sides: BASE_COLOR_VAR.shade_into(<span class="number">2</span>),
+<a href=#930 id=930 data-nosnippet>930</a>                };
+<a href=#931 id=931 data-nosnippet>931</a>            }
+<a href=#932 id=932 data-nosnippet>932</a>        }
+<a href=#933 id=933 data-nosnippet>933</a>    }
+<a href=#934 id=934 data-nosnippet>934</a>}
+<a href=#935 id=935 data-nosnippet>935</a>
+<a href=#936 id=936 data-nosnippet>936</a><span class="doccomment">/// Toggle light style.
+<a href=#937 id=937 data-nosnippet>937</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::LightStyle</span>)]
+<a href=#938 id=938 data-nosnippet>938</a></span><span class="kw">pub struct </span>LightStyle(zng_wgt_button::LightStyle);
+<a href=#939 id=939 data-nosnippet>939</a><span class="kw">impl </span>LightStyle {
+<a href=#940 id=940 data-nosnippet>940</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#941 id=941 data-nosnippet>941</a>        <span class="macro">widget_set!</span> {
+<a href=#942 id=942 data-nosnippet>942</a>            <span class="self">self</span>;
+<a href=#943 id=943 data-nosnippet>943</a>            when <span class="kw-2">*</span>#is_checked {
+<a href=#944 id=944 data-nosnippet>944</a>                <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#945 id=945 data-nosnippet>945</a>                </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+<a href=#946 id=946 data-nosnippet>946</a>            }
+<a href=#947 id=947 data-nosnippet>947</a>        }
+<a href=#948 id=948 data-nosnippet>948</a>    }
+<a href=#949 id=949 data-nosnippet>949</a>}
+<a href=#950 id=950 data-nosnippet>950</a>
+<a href=#951 id=951 data-nosnippet>951</a><span class="doccomment">/// Checkmark toggle style.
+<a href=#952 id=952 data-nosnippet>952</a>///
+<a href=#953 id=953 data-nosnippet>953</a>/// Style a [`Toggle!`] widget to look like a *checkbox*.
+<a href=#954 id=954 data-nosnippet>954</a>///
+<a href=#955 id=955 data-nosnippet>955</a>/// [`Toggle!`]: struct@Toggle
+<a href=#956 id=956 data-nosnippet>956</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::CheckStyle</span>)]
+<a href=#957 id=957 data-nosnippet>957</a></span><span class="kw">pub struct </span>CheckStyle(Style);
+<a href=#958 id=958 data-nosnippet>958</a><span class="kw">impl </span>CheckStyle {
+<a href=#959 id=959 data-nosnippet>959</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#960 id=960 data-nosnippet>960</a>        <span class="macro">widget_set!</span> {
+<a href=#961 id=961 data-nosnippet>961</a>            <span class="self">self</span>;
+<a href=#962 id=962 data-nosnippet>962</a>            replace = <span class="bool-val">true</span>;
+<a href=#963 id=963 data-nosnippet>963</a>            child_start = {
+<a href=#964 id=964 data-nosnippet>964</a>                node: {
+<a href=#965 id=965 data-nosnippet>965</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
+<a href=#966 id=966 data-nosnippet>966</a>                    is_hovered(checkmark_visual(parent_hovered.clone()), parent_hovered)
+<a href=#967 id=967 data-nosnippet>967</a>                },
+<a href=#968 id=968 data-nosnippet>968</a>                spacing: CHECK_SPACING_VAR,
+<a href=#969 id=969 data-nosnippet>969</a>            };
+<a href=#970 id=970 data-nosnippet>970</a>            access_role = AccessRole::CheckBox;
+<a href=#971 id=971 data-nosnippet>971</a>        }
+<a href=#972 id=972 data-nosnippet>972</a>    }
+<a href=#973 id=973 data-nosnippet>973</a>}
+<a href=#974 id=974 data-nosnippet>974</a><span class="macro">context_var!</span> {
+<a href=#975 id=975 data-nosnippet>975</a>    <span class="doccomment">/// Spacing between the checkmark and the content.
+<a href=#976 id=976 data-nosnippet>976</a>    </span><span class="kw">pub static </span>CHECK_SPACING_VAR: Length = <span class="number">4</span>;
+<a href=#977 id=977 data-nosnippet>977</a>}
+<a href=#978 id=978 data-nosnippet>978</a>
+<a href=#979 id=979 data-nosnippet>979</a><span class="doccomment">/// Spacing between the checkmark and the content.
+<a href=#980 id=980 data-nosnippet>980</a></span><span class="attr">#[property(CONTEXT, default(CHECK_SPACING_VAR), widget_impl(CheckStyle))]
+<a href=#981 id=981 data-nosnippet>981</a></span><span class="kw">pub fn </span>check_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#982 id=982 data-nosnippet>982</a>    with_context_var(child, CHECK_SPACING_VAR, spacing)
+<a href=#983 id=983 data-nosnippet>983</a>}
+<a href=#984 id=984 data-nosnippet>984</a>
+<a href=#985 id=985 data-nosnippet>985</a><span class="kw">fn </span>checkmark_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#986 id=986 data-nosnippet>986</a>    <span class="kw">let </span>checked = ICONS.get_or([<span class="string">"toggle.checked"</span>, <span class="string">"check"</span>], || {
+<a href=#987 id=987 data-nosnippet>987</a>        <span class="macro">zng_wgt_text::Text!</span> {
+<a href=#988 id=988 data-nosnippet>988</a>            txt = <span class="string">"✓"</span>;
+<a href=#989 id=989 data-nosnippet>989</a>            font_family = FontNames::system_ui(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(und));
+<a href=#990 id=990 data-nosnippet>990</a>            txt_align = Align::CENTER;
+<a href=#991 id=991 data-nosnippet>991</a>        }
+<a href=#992 id=992 data-nosnippet>992</a>    });
+<a href=#993 id=993 data-nosnippet>993</a>    <span class="kw">let </span>indeterminate = ICONS.get_or([<span class="string">"toggle.indeterminate"</span>], || {
+<a href=#994 id=994 data-nosnippet>994</a>        <span class="macro">zng_wgt::Wgt!</span> {
+<a href=#995 id=995 data-nosnippet>995</a>            align = Align::CENTER;
+<a href=#996 id=996 data-nosnippet>996</a>            background_color = zng_wgt_text::FONT_COLOR_VAR;
+<a href=#997 id=997 data-nosnippet>997</a>            size = (<span class="number">6</span>, <span class="number">2</span>);
+<a href=#998 id=998 data-nosnippet>998</a>            corner_radius = <span class="number">0</span>;
+<a href=#999 id=999 data-nosnippet>999</a>        }
+<a href=#1000 id=1000 data-nosnippet>1000</a>    });
+<a href=#1001 id=1001 data-nosnippet>1001</a>    <span class="macro">zng_wgt_container::Container!</span> {
+<a href=#1002 id=1002 data-nosnippet>1002</a>        hit_test_mode = <span class="bool-val">false</span>;
+<a href=#1003 id=1003 data-nosnippet>1003</a>        accessible = <span class="bool-val">false</span>;
+<a href=#1004 id=1004 data-nosnippet>1004</a>        size = <span class="number">1.2</span>.em();
+<a href=#1005 id=1005 data-nosnippet>1005</a>        corner_radius = <span class="number">0.1</span>.em();
+<a href=#1006 id=1006 data-nosnippet>1006</a>        align = Align::CENTER;
+<a href=#1007 id=1007 data-nosnippet>1007</a>
+<a href=#1008 id=1008 data-nosnippet>1008</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
+<a href=#1009 id=1009 data-nosnippet>1009</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
+<a href=#1010 id=1010 data-nosnippet>1010</a>        when <span class="kw-2">*</span>#{parent_hovered} {
+<a href=#1011 id=1011 data-nosnippet>1011</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#1012 id=1012 data-nosnippet>1012</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+<a href=#1013 id=1013 data-nosnippet>1013</a>        }
+<a href=#1014 id=1014 data-nosnippet>1014</a>
+<a href=#1015 id=1015 data-nosnippet>1015</a>        when #{IS_CHECKED_VAR}.is_none() {
+<a href=#1016 id=1016 data-nosnippet>1016</a>            child = indeterminate;
+<a href=#1017 id=1017 data-nosnippet>1017</a>        }
+<a href=#1018 id=1018 data-nosnippet>1018</a>        when <span class="kw-2">*</span>#{IS_CHECKED_VAR} == <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) {
+<a href=#1019 id=1019 data-nosnippet>1019</a>            child = checked;
+<a href=#1020 id=1020 data-nosnippet>1020</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#1021 id=1021 data-nosnippet>1021</a>            </span>background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
+<a href=#1022 id=1022 data-nosnippet>1022</a>        }
+<a href=#1023 id=1023 data-nosnippet>1023</a>    }
+<a href=#1024 id=1024 data-nosnippet>1024</a>}
+<a href=#1025 id=1025 data-nosnippet>1025</a>
+<a href=#1026 id=1026 data-nosnippet>1026</a><span class="doccomment">/// Popup toggle style.
+<a href=#1027 id=1027 data-nosnippet>1027</a>///
+<a href=#1028 id=1028 data-nosnippet>1028</a>/// Style a [`Toggle!`] widget to look like the popup toggle button in a *combo-box*.
+<a href=#1029 id=1029 data-nosnippet>1029</a>///
+<a href=#1030 id=1030 data-nosnippet>1030</a>/// [`Toggle!`]: struct@Toggle
+<a href=#1031 id=1031 data-nosnippet>1031</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::ComboStyle</span>)]
+<a href=#1032 id=1032 data-nosnippet>1032</a></span><span class="kw">pub struct </span>ComboStyle(DefaultStyle);
+<a href=#1033 id=1033 data-nosnippet>1033</a><span class="kw">impl </span>ComboStyle {
+<a href=#1034 id=1034 data-nosnippet>1034</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1035 id=1035 data-nosnippet>1035</a>        <span class="macro">widget_set!</span> {
+<a href=#1036 id=1036 data-nosnippet>1036</a>            <span class="self">self</span>;
+<a href=#1037 id=1037 data-nosnippet>1037</a>            replace = <span class="bool-val">true</span>;
+<a href=#1038 id=1038 data-nosnippet>1038</a>            access_role = AccessRole::ComboBox;
+<a href=#1039 id=1039 data-nosnippet>1039</a>            child_align = Align::FILL;
+<a href=#1040 id=1040 data-nosnippet>1040</a>            border_over = <span class="bool-val">false</span>;
+<a href=#1041 id=1041 data-nosnippet>1041</a>            border_align = <span class="number">1</span>.fct();
+<a href=#1042 id=1042 data-nosnippet>1042</a>            padding = -<span class="number">1</span>;
+<a href=#1043 id=1043 data-nosnippet>1043</a>            checked = var(<span class="bool-val">false</span>);
+<a href=#1044 id=1044 data-nosnippet>1044</a>            child_end = {
+<a href=#1045 id=1045 data-nosnippet>1045</a>                node: combomark_visual(),
+<a href=#1046 id=1046 data-nosnippet>1046</a>                spacing: COMBO_SPACING_VAR,
+<a href=#1047 id=1047 data-nosnippet>1047</a>            };
+<a href=#1048 id=1048 data-nosnippet>1048</a>
+<a href=#1049 id=1049 data-nosnippet>1049</a>            click_mode = ClickMode::press();
+<a href=#1050 id=1050 data-nosnippet>1050</a>
+<a href=#1051 id=1051 data-nosnippet>1051</a>            zng_wgt_button::style_fn = <span class="macro">Style!</span> {
+<a href=#1052 id=1052 data-nosnippet>1052</a>                <span class="comment">// button in child.
+<a href=#1053 id=1053 data-nosnippet>1053</a>                </span>click_mode = ClickMode::default();
+<a href=#1054 id=1054 data-nosnippet>1054</a>                corner_radius = (<span class="number">4</span>, <span class="number">0</span>, <span class="number">0</span>, <span class="number">4</span>);
+<a href=#1055 id=1055 data-nosnippet>1055</a>            };
+<a href=#1056 id=1056 data-nosnippet>1056</a>
+<a href=#1057 id=1057 data-nosnippet>1057</a>            zng_wgt_layer::popup::style_fn = <span class="macro">Style!</span> {
+<a href=#1058 id=1058 data-nosnippet>1058</a>                zng_wgt_button::style_fn = <span class="macro">Style!</span> {
+<a href=#1059 id=1059 data-nosnippet>1059</a>                    click_mode = ClickMode::release();
+<a href=#1060 id=1060 data-nosnippet>1060</a>
+<a href=#1061 id=1061 data-nosnippet>1061</a>                    corner_radius = <span class="number">0</span>;
+<a href=#1062 id=1062 data-nosnippet>1062</a>                    padding = <span class="number">2</span>;
+<a href=#1063 id=1063 data-nosnippet>1063</a>                    border = <span class="macro">unset!</span>;
+<a href=#1064 id=1064 data-nosnippet>1064</a>                };
+<a href=#1065 id=1065 data-nosnippet>1065</a>                <span class="kw">crate</span>::style_fn = <span class="macro">Style!</span> {
+<a href=#1066 id=1066 data-nosnippet>1066</a>                    click_mode = ClickMode::release();
+<a href=#1067 id=1067 data-nosnippet>1067</a>
+<a href=#1068 id=1068 data-nosnippet>1068</a>                    corner_radius = <span class="number">0</span>;
+<a href=#1069 id=1069 data-nosnippet>1069</a>                    padding = <span class="number">2</span>;
+<a href=#1070 id=1070 data-nosnippet>1070</a>                    border = <span class="macro">unset!</span>;
+<a href=#1071 id=1071 data-nosnippet>1071</a>                };
+<a href=#1072 id=1072 data-nosnippet>1072</a>
+<a href=#1073 id=1073 data-nosnippet>1073</a>                <span class="comment">// supports gesture of press-and-drag to select.
+<a href=#1074 id=1074 data-nosnippet>1074</a>                //
+<a href=#1075 id=1075 data-nosnippet>1075</a>                // - `Toggle!` inherits `capture_pointer = true` from `Button!`.
+<a href=#1076 id=1076 data-nosnippet>1076</a>                // - `ComboStyle!` sets `click_mode = press`.
+<a href=#1077 id=1077 data-nosnippet>1077</a>                // - `ComboStyle!` sets popup descendant `Button!` to `click_mode = release`.
+<a href=#1078 id=1078 data-nosnippet>1078</a>                //
+<a href=#1079 id=1079 data-nosnippet>1079</a>                // So the user can press to open the drop-down, then drag over an option and release to select it.
+<a href=#1080 id=1080 data-nosnippet>1080</a>                </span>capture_pointer_on_init = CaptureMode::Subtree;
+<a href=#1081 id=1081 data-nosnippet>1081</a>
+<a href=#1082 id=1082 data-nosnippet>1082</a>                <span class="attr">#[easing(<span class="number">100</span>.ms())]
+<a href=#1083 id=1083 data-nosnippet>1083</a>                </span>opacity = <span class="number">0</span>.pct();
+<a href=#1084 id=1084 data-nosnippet>1084</a>                <span class="attr">#[easing(<span class="number">100</span>.ms())]
+<a href=#1085 id=1085 data-nosnippet>1085</a>                </span>y = -<span class="number">10</span>;
+<a href=#1086 id=1086 data-nosnippet>1086</a>
+<a href=#1087 id=1087 data-nosnippet>1087</a>                when <span class="kw-2">*</span>#is_inited {
+<a href=#1088 id=1088 data-nosnippet>1088</a>                    opacity = <span class="number">100</span>.pct();
+<a href=#1089 id=1089 data-nosnippet>1089</a>                    y = <span class="number">0</span>;
+<a href=#1090 id=1090 data-nosnippet>1090</a>                }
+<a href=#1091 id=1091 data-nosnippet>1091</a>
+<a href=#1092 id=1092 data-nosnippet>1092</a>                zng_wgt_layer::popup::close_delay = <span class="number">100</span>.ms();
+<a href=#1093 id=1093 data-nosnippet>1093</a>                when <span class="kw-2">*</span>#zng_wgt_layer::popup::is_close_delaying {
+<a href=#1094 id=1094 data-nosnippet>1094</a>                    opacity = <span class="number">0</span>.pct();
+<a href=#1095 id=1095 data-nosnippet>1095</a>                    y = -<span class="number">10</span>;
+<a href=#1096 id=1096 data-nosnippet>1096</a>                }
+<a href=#1097 id=1097 data-nosnippet>1097</a>            };
+<a href=#1098 id=1098 data-nosnippet>1098</a>        }
+<a href=#1099 id=1099 data-nosnippet>1099</a>    }
+<a href=#1100 id=1100 data-nosnippet>1100</a>}
+<a href=#1101 id=1101 data-nosnippet>1101</a><span class="macro">context_var!</span> {
+<a href=#1102 id=1102 data-nosnippet>1102</a>    <span class="doccomment">/// Spacing between the arrow symbol and the content.
+<a href=#1103 id=1103 data-nosnippet>1103</a>    </span><span class="kw">pub static </span>COMBO_SPACING_VAR: Length = <span class="number">0</span>;
+<a href=#1104 id=1104 data-nosnippet>1104</a>}
+<a href=#1105 id=1105 data-nosnippet>1105</a>
+<a href=#1106 id=1106 data-nosnippet>1106</a><span class="doccomment">/// Spacing between the arrow symbol and the content.
+<a href=#1107 id=1107 data-nosnippet>1107</a></span><span class="attr">#[property(CONTEXT, default(COMBO_SPACING_VAR), widget_impl(ComboStyle))]
+<a href=#1108 id=1108 data-nosnippet>1108</a></span><span class="kw">pub fn </span>combo_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1109 id=1109 data-nosnippet>1109</a>    with_context_var(child, COMBO_SPACING_VAR, spacing)
+<a href=#1110 id=1110 data-nosnippet>1110</a>}
+<a href=#1111 id=1111 data-nosnippet>1111</a>
+<a href=#1112 id=1112 data-nosnippet>1112</a><span class="doccomment">/// Popup open when the toggle button is checked.
+<a href=#1113 id=1113 data-nosnippet>1113</a>///
+<a href=#1114 id=1114 data-nosnippet>1114</a>/// This property can be used together with the [`ComboStyle!`] to implement a *combo-box* flyout widget.
+<a href=#1115 id=1115 data-nosnippet>1115</a>///
+<a href=#1116 id=1116 data-nosnippet>1116</a>/// The `popup` can be any widget, that will be open using [`POPUP`], a [`Popup!`] or derived widget is recommended.
+<a href=#1117 id=1117 data-nosnippet>1117</a>///
+<a href=#1118 id=1118 data-nosnippet>1118</a>/// Note that if the checked property is not set the toggle will never be checked, to implement a drop-down menu
+<a href=#1119 id=1119 data-nosnippet>1119</a>/// set `checked = var(false);`.
+<a href=#1120 id=1120 data-nosnippet>1120</a>///
+<a href=#1121 id=1121 data-nosnippet>1121</a>/// [`ComboStyle!`]: struct@ComboStyle
+<a href=#1122 id=1122 data-nosnippet>1122</a>/// [`Popup!`]: struct@zng_wgt_layer::popup::Popup
+<a href=#1123 id=1123 data-nosnippet>1123</a></span><span class="attr">#[property(CHILD, widget_impl(Toggle))]
+<a href=#1124 id=1124 data-nosnippet>1124</a></span><span class="kw">pub fn </span>checked_popup(child: <span class="kw">impl </span>UiNode, popup: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1125 id=1125 data-nosnippet>1125</a>    <span class="kw">let </span>popup = popup.into_var();
+<a href=#1126 id=1126 data-nosnippet>1126</a>    <span class="kw">let </span><span class="kw-2">mut </span>state = var(PopupState::Closed).read_only();
+<a href=#1127 id=1127 data-nosnippet>1127</a>    <span class="kw">let </span><span class="kw-2">mut </span>_state_handle = VarHandle::dummy();
+<a href=#1128 id=1128 data-nosnippet>1128</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
+<a href=#1129 id=1129 data-nosnippet>1129</a>        <span class="kw">let </span>new = <span class="kw">match </span>op {
+<a href=#1130 id=1130 data-nosnippet>1130</a>            UiNodeOp::Init =&gt; {
+<a href=#1131 id=1131 data-nosnippet>1131</a>                WIDGET.sub_var(<span class="kw-2">&amp;</span>IS_CHECKED_VAR).sub_event(<span class="kw-2">&amp;</span>MOUSE_INPUT_EVENT);
+<a href=#1132 id=1132 data-nosnippet>1132</a>                IS_CHECKED_VAR.get()
+<a href=#1133 id=1133 data-nosnippet>1133</a>            }
+<a href=#1134 id=1134 data-nosnippet>1134</a>            UiNodeOp::Deinit =&gt; {
+<a href=#1135 id=1135 data-nosnippet>1135</a>                _state_handle = VarHandle::dummy();
+<a href=#1136 id=1136 data-nosnippet>1136</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
+<a href=#1137 id=1137 data-nosnippet>1137</a>            }
+<a href=#1138 id=1138 data-nosnippet>1138</a>            UiNodeOp::Event { update } =&gt; {
+<a href=#1139 id=1139 data-nosnippet>1139</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = MOUSE_INPUT_EVENT.on(update) {
+<a href=#1140 id=1140 data-nosnippet>1140</a>                    <span class="comment">// close on mouse down to avoid issue when the popup closes on mouse-down (due to focus loss),
+<a href=#1141 id=1141 data-nosnippet>1141</a>                    // but a click is formed (down+up) on the toggle that immediately opens the popup again.
+<a href=#1142 id=1142 data-nosnippet>1142</a>                    </span><span class="kw">if </span>args.is_mouse_down() &amp;&amp; args.is_primary() &amp;&amp; IS_CHECKED_VAR.get() == <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) {
+<a href=#1143 id=1143 data-nosnippet>1143</a>                        args.propagation().stop();
+<a href=#1144 id=1144 data-nosnippet>1144</a>                        cmd::TOGGLE_CMD.scoped(WIDGET.id()).notify_param(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
+<a href=#1145 id=1145 data-nosnippet>1145</a>                    }
+<a href=#1146 id=1146 data-nosnippet>1146</a>                }
+<a href=#1147 id=1147 data-nosnippet>1147</a>                <span class="prelude-val">None
+<a href=#1148 id=1148 data-nosnippet>1148</a>            </span>}
+<a href=#1149 id=1149 data-nosnippet>1149</a>            UiNodeOp::Update { .. } =&gt; {
+<a href=#1150 id=1150 data-nosnippet>1150</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = state.get_new() {
+<a href=#1151 id=1151 data-nosnippet>1151</a>                    <span class="kw">if </span><span class="macro">matches!</span>(s, PopupState::Closed) {
+<a href=#1152 id=1152 data-nosnippet>1152</a>                        <span class="kw">if </span>IS_CHECKED_VAR.get() != <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) {
+<a href=#1153 id=1153 data-nosnippet>1153</a>                            cmd::TOGGLE_CMD.scoped(WIDGET.id()).notify_param(<span class="prelude-val">Some</span>(<span class="bool-val">false</span>));
+<a href=#1154 id=1154 data-nosnippet>1154</a>                        }
+<a href=#1155 id=1155 data-nosnippet>1155</a>                        _state_handle = VarHandle::dummy();
+<a href=#1156 id=1156 data-nosnippet>1156</a>                    }
+<a href=#1157 id=1157 data-nosnippet>1157</a>                    <span class="prelude-val">None
+<a href=#1158 id=1158 data-nosnippet>1158</a>                </span>} <span class="kw">else </span>{
+<a href=#1159 id=1159 data-nosnippet>1159</a>                    IS_CHECKED_VAR.get_new().map(|o| o.unwrap_or(<span class="bool-val">false</span>))
+<a href=#1160 id=1160 data-nosnippet>1160</a>                }
+<a href=#1161 id=1161 data-nosnippet>1161</a>            }
+<a href=#1162 id=1162 data-nosnippet>1162</a>            <span class="kw">_ </span>=&gt; <span class="prelude-val">None</span>,
+<a href=#1163 id=1163 data-nosnippet>1163</a>        };
+<a href=#1164 id=1164 data-nosnippet>1164</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(open) = new {
+<a href=#1165 id=1165 data-nosnippet>1165</a>            <span class="kw">if </span>open {
+<a href=#1166 id=1166 data-nosnippet>1166</a>                <span class="kw">if </span><span class="macro">matches!</span>(state.get(), PopupState::Closed) {
+<a href=#1167 id=1167 data-nosnippet>1167</a>                    state = POPUP.open(popup.get()(()));
+<a href=#1168 id=1168 data-nosnippet>1168</a>                    _state_handle = state.subscribe(UpdateOp::Update, WIDGET.id());
+<a href=#1169 id=1169 data-nosnippet>1169</a>                }
+<a href=#1170 id=1170 data-nosnippet>1170</a>            } <span class="kw">else if let </span>PopupState::Open(id) = state.get() {
+<a href=#1171 id=1171 data-nosnippet>1171</a>                POPUP.close_id(id);
+<a href=#1172 id=1172 data-nosnippet>1172</a>            }
+<a href=#1173 id=1173 data-nosnippet>1173</a>        }
+<a href=#1174 id=1174 data-nosnippet>1174</a>    })
+<a href=#1175 id=1175 data-nosnippet>1175</a>}
+<a href=#1176 id=1176 data-nosnippet>1176</a>
+<a href=#1177 id=1177 data-nosnippet>1177</a><span class="kw">fn </span>combomark_visual() -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1178 id=1178 data-nosnippet>1178</a>    <span class="kw">let </span>dropdown = ICONS.get_or(
+<a href=#1179 id=1179 data-nosnippet>1179</a>        [<span class="string">"toggle.dropdown"</span>, <span class="string">"material/rounded/keyboard-arrow-down"</span>, <span class="string">"keyboard-arrow-down"</span>],
+<a href=#1180 id=1180 data-nosnippet>1180</a>        combomark_visual_fallback,
+<a href=#1181 id=1181 data-nosnippet>1181</a>    );
+<a href=#1182 id=1182 data-nosnippet>1182</a>    <span class="macro">Wgt!</span> {
+<a href=#1183 id=1183 data-nosnippet>1183</a>        size = <span class="number">12</span>;
+<a href=#1184 id=1184 data-nosnippet>1184</a>        zng_wgt_fill::background = dropdown;
+<a href=#1185 id=1185 data-nosnippet>1185</a>        align = Align::CENTER;
+<a href=#1186 id=1186 data-nosnippet>1186</a>
+<a href=#1187 id=1187 data-nosnippet>1187</a>        zng_wgt_transform::rotate_x = <span class="number">0</span>.deg();
+<a href=#1188 id=1188 data-nosnippet>1188</a>        when #is_checked {
+<a href=#1189 id=1189 data-nosnippet>1189</a>            zng_wgt_transform::rotate_x = <span class="number">180</span>.deg();
+<a href=#1190 id=1190 data-nosnippet>1190</a>        }
+<a href=#1191 id=1191 data-nosnippet>1191</a>    }
+<a href=#1192 id=1192 data-nosnippet>1192</a>}
+<a href=#1193 id=1193 data-nosnippet>1193</a><span class="kw">fn </span>combomark_visual_fallback() -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1194 id=1194 data-nosnippet>1194</a>    <span class="kw">let </span>color_key = FrameValueKey::new_unique();
+<a href=#1195 id=1195 data-nosnippet>1195</a>    <span class="kw">let </span><span class="kw-2">mut </span>size = PxSize::zero();
+<a href=#1196 id=1196 data-nosnippet>1196</a>    <span class="kw">let </span><span class="kw-2">mut </span>bounds = PxBox::zero();
+<a href=#1197 id=1197 data-nosnippet>1197</a>    <span class="kw">let </span><span class="kw-2">mut </span>transform = PxTransform::identity();
+<a href=#1198 id=1198 data-nosnippet>1198</a>
+<a href=#1199 id=1199 data-nosnippet>1199</a>    <span class="comment">// (8x8) at 45º, scaled-x 70%
+<a href=#1200 id=1200 data-nosnippet>1200</a>    </span><span class="kw">fn </span>layout() -&gt; (PxSize, PxTransform, PxBox) {
+<a href=#1201 id=1201 data-nosnippet>1201</a>        <span class="kw">let </span>size = Size::from(<span class="number">8</span>).layout();
+<a href=#1202 id=1202 data-nosnippet>1202</a>        <span class="kw">let </span>center = size.to_vector() * <span class="number">0.5</span>.fct();
+<a href=#1203 id=1203 data-nosnippet>1203</a>        <span class="kw">let </span>transform = Transform::new_translate(-center.x, -center.y)
+<a href=#1204 id=1204 data-nosnippet>1204</a>            .rotate(<span class="number">45</span>.deg())
+<a href=#1205 id=1205 data-nosnippet>1205</a>            .scale_x(<span class="number">0.7</span>)
+<a href=#1206 id=1206 data-nosnippet>1206</a>            .translate(center.x, center.y)
+<a href=#1207 id=1207 data-nosnippet>1207</a>            .translate_x(Length::from(<span class="number">2</span>).layout_x())
+<a href=#1208 id=1208 data-nosnippet>1208</a>            .layout();
+<a href=#1209 id=1209 data-nosnippet>1209</a>        <span class="kw">let </span>bounds = transform.outer_transformed(PxBox::from_size(size)).unwrap_or_default();
+<a href=#1210 id=1210 data-nosnippet>1210</a>        (size, transform, bounds)
+<a href=#1211 id=1211 data-nosnippet>1211</a>    }
+<a href=#1212 id=1212 data-nosnippet>1212</a>
+<a href=#1213 id=1213 data-nosnippet>1213</a>    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
+<a href=#1214 id=1214 data-nosnippet>1214</a>        UiNodeOp::Init =&gt; {
+<a href=#1215 id=1215 data-nosnippet>1215</a>            WIDGET.sub_var_render_update(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR);
+<a href=#1216 id=1216 data-nosnippet>1216</a>        }
+<a href=#1217 id=1217 data-nosnippet>1217</a>        UiNodeOp::Measure { desired_size, .. } =&gt; {
+<a href=#1218 id=1218 data-nosnippet>1218</a>            <span class="kw">let </span>(s, <span class="kw">_</span>, <span class="kw">_</span>) = layout();
+<a href=#1219 id=1219 data-nosnippet>1219</a>            <span class="kw-2">*</span>desired_size = s;
+<a href=#1220 id=1220 data-nosnippet>1220</a>        }
+<a href=#1221 id=1221 data-nosnippet>1221</a>        UiNodeOp::Layout { final_size, .. } =&gt; {
+<a href=#1222 id=1222 data-nosnippet>1222</a>            (size, transform, bounds) = layout();
+<a href=#1223 id=1223 data-nosnippet>1223</a>            <span class="kw-2">*</span>final_size = size;
+<a href=#1224 id=1224 data-nosnippet>1224</a>        }
+<a href=#1225 id=1225 data-nosnippet>1225</a>        UiNodeOp::Render { frame } =&gt; {
+<a href=#1226 id=1226 data-nosnippet>1226</a>            <span class="kw">let </span><span class="kw-2">mut </span>clip = bounds.to_rect();
+<a href=#1227 id=1227 data-nosnippet>1227</a>            clip.size.height <span class="kw-2">*</span>= <span class="number">0.5</span>.fct();
+<a href=#1228 id=1228 data-nosnippet>1228</a>            clip.origin.y += clip.size.height;
+<a href=#1229 id=1229 data-nosnippet>1229</a>
+<a href=#1230 id=1230 data-nosnippet>1230</a>            frame.push_clip_rect(clip, <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#1231 id=1231 data-nosnippet>1231</a>                frame.push_reference_frame((WIDGET.id(), <span class="number">0</span>).into(), transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#1232 id=1232 data-nosnippet>1232</a>                    frame.push_color(PxRect::from_size(size), color_key.bind_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
+<a href=#1233 id=1233 data-nosnippet>1233</a>                })
+<a href=#1234 id=1234 data-nosnippet>1234</a>            });
+<a href=#1235 id=1235 data-nosnippet>1235</a>        }
+<a href=#1236 id=1236 data-nosnippet>1236</a>        UiNodeOp::RenderUpdate { update } =&gt; {
+<a href=#1237 id=1237 data-nosnippet>1237</a>            update.update_color_opt(color_key.update_var(<span class="kw-2">&amp;</span>zng_wgt_text::FONT_COLOR_VAR, |<span class="kw-2">&amp;</span>c| c));
+<a href=#1238 id=1238 data-nosnippet>1238</a>        }
+<a href=#1239 id=1239 data-nosnippet>1239</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#1240 id=1240 data-nosnippet>1240</a>    })
+<a href=#1241 id=1241 data-nosnippet>1241</a>}
+<a href=#1242 id=1242 data-nosnippet>1242</a>
+<a href=#1243 id=1243 data-nosnippet>1243</a><span class="doccomment">/// Switch toggle style.
+<a href=#1244 id=1244 data-nosnippet>1244</a>///
+<a href=#1245 id=1245 data-nosnippet>1245</a>/// Style a [`Toggle!`] widget to look like a *switch*.
+<a href=#1246 id=1246 data-nosnippet>1246</a>///
+<a href=#1247 id=1247 data-nosnippet>1247</a>/// [`Toggle!`]: struct@crate::Toggle
+<a href=#1248 id=1248 data-nosnippet>1248</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::SwitchStyle</span>)]
+<a href=#1249 id=1249 data-nosnippet>1249</a></span><span class="kw">pub struct </span>SwitchStyle(Style);
+<a href=#1250 id=1250 data-nosnippet>1250</a><span class="kw">impl </span>SwitchStyle {
+<a href=#1251 id=1251 data-nosnippet>1251</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1252 id=1252 data-nosnippet>1252</a>        <span class="macro">widget_set!</span> {
+<a href=#1253 id=1253 data-nosnippet>1253</a>            <span class="self">self</span>;
+<a href=#1254 id=1254 data-nosnippet>1254</a>            replace = <span class="bool-val">true</span>;
+<a href=#1255 id=1255 data-nosnippet>1255</a>
+<a href=#1256 id=1256 data-nosnippet>1256</a>            child_start = {
+<a href=#1257 id=1257 data-nosnippet>1257</a>                node: {
+<a href=#1258 id=1258 data-nosnippet>1258</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
+<a href=#1259 id=1259 data-nosnippet>1259</a>                    is_hovered(switch_visual(parent_hovered.clone()), parent_hovered)
+<a href=#1260 id=1260 data-nosnippet>1260</a>                },
+<a href=#1261 id=1261 data-nosnippet>1261</a>                spacing: SWITCH_SPACING_VAR,
+<a href=#1262 id=1262 data-nosnippet>1262</a>            };
+<a href=#1263 id=1263 data-nosnippet>1263</a>        }
+<a href=#1264 id=1264 data-nosnippet>1264</a>    }
+<a href=#1265 id=1265 data-nosnippet>1265</a>}
+<a href=#1266 id=1266 data-nosnippet>1266</a><span class="macro">context_var!</span> {
+<a href=#1267 id=1267 data-nosnippet>1267</a>    <span class="doccomment">/// Spacing between the switch and the content.
+<a href=#1268 id=1268 data-nosnippet>1268</a>    </span><span class="kw">pub static </span>SWITCH_SPACING_VAR: Length = <span class="number">2</span>;
+<a href=#1269 id=1269 data-nosnippet>1269</a>}
+<a href=#1270 id=1270 data-nosnippet>1270</a>
+<a href=#1271 id=1271 data-nosnippet>1271</a><span class="doccomment">/// Spacing between the switch and the content.
+<a href=#1272 id=1272 data-nosnippet>1272</a></span><span class="attr">#[property(CONTEXT, default(SWITCH_SPACING_VAR), widget_impl(SwitchStyle))]
+<a href=#1273 id=1273 data-nosnippet>1273</a></span><span class="kw">pub fn </span>switch_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1274 id=1274 data-nosnippet>1274</a>    with_context_var(child, SWITCH_SPACING_VAR, spacing)
+<a href=#1275 id=1275 data-nosnippet>1275</a>}
+<a href=#1276 id=1276 data-nosnippet>1276</a>
+<a href=#1277 id=1277 data-nosnippet>1277</a><span class="kw">fn </span>switch_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1278 id=1278 data-nosnippet>1278</a>    <span class="macro">zng_wgt_container::Container!</span> {
+<a href=#1279 id=1279 data-nosnippet>1279</a>        hit_test_mode = <span class="bool-val">false</span>;
+<a href=#1280 id=1280 data-nosnippet>1280</a>        size = (<span class="number">2</span>.em(), <span class="number">1</span>.em());
+<a href=#1281 id=1281 data-nosnippet>1281</a>        align = Align::CENTER;
+<a href=#1282 id=1282 data-nosnippet>1282</a>        corner_radius = <span class="number">1</span>.em();
+<a href=#1283 id=1283 data-nosnippet>1283</a>        padding = <span class="number">2</span>;
+<a href=#1284 id=1284 data-nosnippet>1284</a>        child = <span class="macro">Wgt!</span> {
+<a href=#1285 id=1285 data-nosnippet>1285</a>            size = <span class="number">1</span>.em() - Length::from(<span class="number">4</span>);
+<a href=#1286 id=1286 data-nosnippet>1286</a>            align = Align::LEFT;
+<a href=#1287 id=1287 data-nosnippet>1287</a>            background_color = zng_wgt_text::FONT_COLOR_VAR;
+<a href=#1288 id=1288 data-nosnippet>1288</a>
+<a href=#1289 id=1289 data-nosnippet>1289</a>            <span class="attr">#[easing(<span class="number">150</span>.ms())]
+<a href=#1290 id=1290 data-nosnippet>1290</a>            </span>x = <span class="number">0</span>.em();
+<a href=#1291 id=1291 data-nosnippet>1291</a>            when <span class="kw-2">*</span>#is_checked {
+<a href=#1292 id=1292 data-nosnippet>1292</a>                x = <span class="number">1</span>.em();
+<a href=#1293 id=1293 data-nosnippet>1293</a>            }
+<a href=#1294 id=1294 data-nosnippet>1294</a>        };
+<a href=#1295 id=1295 data-nosnippet>1295</a>
+<a href=#1296 id=1296 data-nosnippet>1296</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
+<a href=#1297 id=1297 data-nosnippet>1297</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
+<a href=#1298 id=1298 data-nosnippet>1298</a>        when <span class="kw-2">*</span>#{parent_hovered} {
+<a href=#1299 id=1299 data-nosnippet>1299</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#1300 id=1300 data-nosnippet>1300</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+<a href=#1301 id=1301 data-nosnippet>1301</a>        }
+<a href=#1302 id=1302 data-nosnippet>1302</a>        when #is_checked {
+<a href=#1303 id=1303 data-nosnippet>1303</a>            background_color = colors::ACCENT_COLOR_VAR.shade(-<span class="number">1</span>);
+<a href=#1304 id=1304 data-nosnippet>1304</a>        }
+<a href=#1305 id=1305 data-nosnippet>1305</a>    }
+<a href=#1306 id=1306 data-nosnippet>1306</a>}
+<a href=#1307 id=1307 data-nosnippet>1307</a>
+<a href=#1308 id=1308 data-nosnippet>1308</a><span class="doccomment">/// Radio toggle style.
+<a href=#1309 id=1309 data-nosnippet>1309</a>///
+<a href=#1310 id=1310 data-nosnippet>1310</a>/// Style a [`Toggle!`] widget to look like a *radio button*.
+<a href=#1311 id=1311 data-nosnippet>1311</a>///
+<a href=#1312 id=1312 data-nosnippet>1312</a>/// [`Toggle!`]: struct@Toggle
+<a href=#1313 id=1313 data-nosnippet>1313</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::RadioStyle</span>)]
+<a href=#1314 id=1314 data-nosnippet>1314</a></span><span class="kw">pub struct </span>RadioStyle(Style);
+<a href=#1315 id=1315 data-nosnippet>1315</a><span class="kw">impl </span>RadioStyle {
+<a href=#1316 id=1316 data-nosnippet>1316</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1317 id=1317 data-nosnippet>1317</a>        <span class="macro">widget_set!</span> {
+<a href=#1318 id=1318 data-nosnippet>1318</a>            <span class="self">self</span>;
+<a href=#1319 id=1319 data-nosnippet>1319</a>            replace = <span class="bool-val">true</span>;
+<a href=#1320 id=1320 data-nosnippet>1320</a>
+<a href=#1321 id=1321 data-nosnippet>1321</a>            access_role = AccessRole::Radio;
+<a href=#1322 id=1322 data-nosnippet>1322</a>            child_start = {
+<a href=#1323 id=1323 data-nosnippet>1323</a>                node: {
+<a href=#1324 id=1324 data-nosnippet>1324</a>                    <span class="kw">let </span>parent_hovered = var(<span class="bool-val">false</span>);
+<a href=#1325 id=1325 data-nosnippet>1325</a>                    is_hovered(radio_visual(parent_hovered.clone()), parent_hovered)
+<a href=#1326 id=1326 data-nosnippet>1326</a>                },
+<a href=#1327 id=1327 data-nosnippet>1327</a>                spacing: RADIO_SPACING_VAR,
+<a href=#1328 id=1328 data-nosnippet>1328</a>            };
+<a href=#1329 id=1329 data-nosnippet>1329</a>        }
+<a href=#1330 id=1330 data-nosnippet>1330</a>    }
+<a href=#1331 id=1331 data-nosnippet>1331</a>}
+<a href=#1332 id=1332 data-nosnippet>1332</a>
+<a href=#1333 id=1333 data-nosnippet>1333</a><span class="macro">context_var!</span> {
+<a href=#1334 id=1334 data-nosnippet>1334</a>    <span class="doccomment">/// Spacing between the radio and the content.
+<a href=#1335 id=1335 data-nosnippet>1335</a>    </span><span class="kw">pub static </span>RADIO_SPACING_VAR: Length = <span class="number">2</span>;
+<a href=#1336 id=1336 data-nosnippet>1336</a>}
+<a href=#1337 id=1337 data-nosnippet>1337</a>
+<a href=#1338 id=1338 data-nosnippet>1338</a><span class="doccomment">/// Spacing between the radio and the content.
+<a href=#1339 id=1339 data-nosnippet>1339</a></span><span class="attr">#[property(CONTEXT, default(RADIO_SPACING_VAR), widget_impl(RadioStyle))]
+<a href=#1340 id=1340 data-nosnippet>1340</a></span><span class="kw">pub fn </span>radio_spacing(child: <span class="kw">impl </span>UiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Length&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1341 id=1341 data-nosnippet>1341</a>    with_context_var(child, RADIO_SPACING_VAR, spacing)
+<a href=#1342 id=1342 data-nosnippet>1342</a>}
+<a href=#1343 id=1343 data-nosnippet>1343</a>
+<a href=#1344 id=1344 data-nosnippet>1344</a><span class="kw">fn </span>radio_visual(parent_hovered: <span class="kw">impl </span>Var&lt;bool&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#1345 id=1345 data-nosnippet>1345</a>    <span class="macro">Wgt!</span> {
+<a href=#1346 id=1346 data-nosnippet>1346</a>        hit_test_mode = <span class="bool-val">false</span>;
+<a href=#1347 id=1347 data-nosnippet>1347</a>        size = <span class="number">0.9</span>.em();
+<a href=#1348 id=1348 data-nosnippet>1348</a>        corner_radius = <span class="number">0.9</span>.em();
+<a href=#1349 id=1349 data-nosnippet>1349</a>        align = Align::CENTER;
+<a href=#1350 id=1350 data-nosnippet>1350</a>        border_align = <span class="number">100</span>.pct();
+<a href=#1351 id=1351 data-nosnippet>1351</a>
+<a href=#1352 id=1352 data-nosnippet>1352</a>        <span class="attr">#[easing(<span class="number">150</span>.ms())]
+<a href=#1353 id=1353 data-nosnippet>1353</a>        </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">10</span>.pct()));
+<a href=#1354 id=1354 data-nosnippet>1354</a>        when <span class="kw-2">*</span>#{parent_hovered} {
+<a href=#1355 id=1355 data-nosnippet>1355</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#1356 id=1356 data-nosnippet>1356</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR.map(|c| c.with_alpha(<span class="number">20</span>.pct()));
+<a href=#1357 id=1357 data-nosnippet>1357</a>        }
+<a href=#1358 id=1358 data-nosnippet>1358</a>
+<a href=#1359 id=1359 data-nosnippet>1359</a>        when <span class="kw-2">*</span>#is_checked {
+<a href=#1360 id=1360 data-nosnippet>1360</a>            border = {
+<a href=#1361 id=1361 data-nosnippet>1361</a>                widths: <span class="number">2</span>,
+<a href=#1362 id=1362 data-nosnippet>1362</a>                sides: colors::ACCENT_COLOR_VAR.shade_into(-<span class="number">2</span>),
+<a href=#1363 id=1363 data-nosnippet>1363</a>            };
+<a href=#1364 id=1364 data-nosnippet>1364</a>            <span class="attr">#[easing(<span class="number">0</span>.ms())]
+<a href=#1365 id=1365 data-nosnippet>1365</a>            </span>background_color = zng_wgt_text::FONT_COLOR_VAR;
+<a href=#1366 id=1366 data-nosnippet>1366</a>        }
+<a href=#1367 id=1367 data-nosnippet>1367</a>    }
+<a href=#1368 id=1368 data-nosnippet>1368</a>}</code></pre></div></section></main></body></html>
