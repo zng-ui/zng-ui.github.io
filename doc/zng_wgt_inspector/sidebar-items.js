@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["inspector","live_inspector"],"mod":["crash_handler","debug"],"static":["INSPECT_CMD"]};
+window.SIDEBAR_ITEMS = {"fn":["inspector","live_inspector"],"mod":["crash_handler","debug"],"static":["INSPECT_CMD"],"struct":["INSPECTOR","InspectedInfo","InspectedTree","InspectedWidget","InspectorWatcherBuilder","WeakInspectedTree"]};

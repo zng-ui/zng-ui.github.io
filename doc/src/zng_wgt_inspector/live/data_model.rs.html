@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/live/data_model.rs`."><title>data_model.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../../static.files/storage-82c7156e.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_inspector/live/</div>data_model.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{fmt, ops, sync::Arc};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-inspector/src/live/data_model.rs`."><title>data_model.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_wgt_inspector" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../../static.files/storage-82c7156e.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_inspector/live/</div>data_model.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{collections::HashMap, fmt, ops, sync::Arc};
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>parking_lot::Mutex;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>zng_app::widget::{
@@ -11,7 +11,7 @@
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="attr">#[derive(Default)]
-<a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">pub struct </span>InspectedTreeData {
+<a href=#14 id=14 data-nosnippet>14</a></span><span class="kw">struct </span>InspectedTreeData {
 <a href=#15 id=15 data-nosnippet>15</a>    widgets: IdMap&lt;WidgetId, InspectedWidget&gt;,
 <a href=#16 id=16 data-nosnippet>16</a>    latest_frame: <span class="prelude-ty">Option</span>&lt;ArcVar&lt;FrameId&gt;&gt;,
 <a href=#17 id=17 data-nosnippet>17</a>}
@@ -205,15 +205,15 @@
 <a href=#205 id=205 data-nosnippet>205</a>        }
 <a href=#206 id=206 data-nosnippet>206</a>    }
 <a href=#207 id=207 data-nosnippet>207</a>
-<a href=#208 id=208 data-nosnippet>208</a>    <span class="comment">// /// If this widget inspector is permanently disconnected and will not update.
-<a href=#209 id=209 data-nosnippet>209</a>    // ///
-<a href=#210 id=210 data-nosnippet>210</a>    // /// This is set to `true` when an inspected widget is not found after an update, when `true`
-<a href=#211 id=211 data-nosnippet>211</a>    // /// this inspector will not update even if the same widget ID is re-inserted in another update.
-<a href=#212 id=212 data-nosnippet>212</a>    // pub fn removed(&amp;self) -&gt; impl Var&lt;bool&gt; {
-<a href=#213 id=213 data-nosnippet>213</a>    //     self.removed.read_only()
-<a href=#214 id=214 data-nosnippet>214</a>    // }
+<a href=#208 id=208 data-nosnippet>208</a>    <span class="doccomment">/// If this widget inspector is permanently disconnected and will not update.
+<a href=#209 id=209 data-nosnippet>209</a>    ///
+<a href=#210 id=210 data-nosnippet>210</a>    /// This is set to `true` when an inspected widget is not found after an update, when `true`
+<a href=#211 id=211 data-nosnippet>211</a>    /// this inspector will not update even if the same widget ID is re-inserted in another update.
+<a href=#212 id=212 data-nosnippet>212</a>    </span><span class="kw">pub fn </span>removed(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;bool&gt; {
+<a href=#213 id=213 data-nosnippet>213</a>        <span class="self">self</span>.removed.read_only()
+<a href=#214 id=214 data-nosnippet>214</a>    }
 <a href=#215 id=215 data-nosnippet>215</a>
-<a href=#216 id=216 data-nosnippet>216</a>    </span><span class="doccomment">/// Latest info.
+<a href=#216 id=216 data-nosnippet>216</a>    <span class="doccomment">/// Latest info.
 <a href=#217 id=217 data-nosnippet>217</a>    </span><span class="kw">pub fn </span>info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;WidgetInfo&gt; {
 <a href=#218 id=218 data-nosnippet>218</a>        <span class="self">self</span>.info.read_only()
 <a href=#219 id=219 data-nosnippet>219</a>    }
@@ -223,12 +223,12 @@
 <a href=#223 id=223 data-nosnippet>223</a>        <span class="self">self</span>.info.with(|i| i.id())
 <a href=#224 id=224 data-nosnippet>224</a>    }
 <a href=#225 id=225 data-nosnippet>225</a>
-<a href=#226 id=226 data-nosnippet>226</a>    <span class="comment">// /// Count of ancestor widgets.
-<a href=#227 id=227 data-nosnippet>227</a>    // pub fn depth(&amp;self) -&gt; impl Var&lt;usize&gt; {
-<a href=#228 id=228 data-nosnippet>228</a>    //     self.info.map(|w| w.depth()).actual_var()
-<a href=#229 id=229 data-nosnippet>229</a>    // }
+<a href=#226 id=226 data-nosnippet>226</a>    <span class="doccomment">/// Count of ancestor widgets.
+<a href=#227 id=227 data-nosnippet>227</a>    </span><span class="kw">pub fn </span>depth(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;usize&gt; {
+<a href=#228 id=228 data-nosnippet>228</a>        <span class="self">self</span>.info.map(|w| w.depth()).actual_var()
+<a href=#229 id=229 data-nosnippet>229</a>    }
 <a href=#230 id=230 data-nosnippet>230</a>
-<a href=#231 id=231 data-nosnippet>231</a>    </span><span class="doccomment">/// Count of descendant widgets.
+<a href=#231 id=231 data-nosnippet>231</a>    <span class="doccomment">/// Count of descendant widgets.
 <a href=#232 id=232 data-nosnippet>232</a>    </span><span class="kw">pub fn </span>descendants_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Var&lt;usize&gt; {
 <a href=#233 id=233 data-nosnippet>233</a>        <span class="self">self</span>.info.map(|w| w.descendants_len()).actual_var()
 <a href=#234 id=234 data-nosnippet>234</a>    }
@@ -330,4 +330,63 @@
 <a href=#330 id=330 data-nosnippet>330</a>    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
 <a href=#331 id=331 data-nosnippet>331</a>        <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0
 <a href=#332 id=332 data-nosnippet>332</a>    </span>}
-<a href=#333 id=333 data-nosnippet>333</a>}</code></pre></div></section></main></body></html>
+<a href=#333 id=333 data-nosnippet>333</a>}
+<a href=#334 id=334 data-nosnippet>334</a>
+<a href=#335 id=335 data-nosnippet>335</a><span class="doccomment">/// Builder for [`INSPECTOR.register_watcher`].
+<a href=#336 id=336 data-nosnippet>336</a>///
+<a href=#337 id=337 data-nosnippet>337</a>/// [`INSPECTOR.register_watcher`]: INSPECTOR::register_watcher
+<a href=#338 id=338 data-nosnippet>338</a></span><span class="attr">#[non_exhaustive]
+<a href=#339 id=339 data-nosnippet>339</a></span><span class="kw">pub struct </span>InspectorWatcherBuilder {
+<a href=#340 id=340 data-nosnippet>340</a>    watchers: HashMap&lt;Txt, BoxedVar&lt;Txt&gt;&gt;,
+<a href=#341 id=341 data-nosnippet>341</a>}
+<a href=#342 id=342 data-nosnippet>342</a><span class="kw">impl </span>InspectorWatcherBuilder {
+<a href=#343 id=343 data-nosnippet>343</a>    <span class="doccomment">/// Insert a watcher variable.
+<a href=#344 id=344 data-nosnippet>344</a>    </span><span class="kw">pub fn </span>insert(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: <span class="kw">impl </span>Into&lt;Txt&gt;, value: <span class="kw">impl </span>IntoVar&lt;Txt&gt;) {
+<a href=#345 id=345 data-nosnippet>345</a>        <span class="self">self</span>.insert_impl(name.into(), value.into_var().boxed());
+<a href=#346 id=346 data-nosnippet>346</a>    }
+<a href=#347 id=347 data-nosnippet>347</a>    <span class="kw">fn </span>insert_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, name: Txt, value: BoxedVar&lt;Txt&gt;) {
+<a href=#348 id=348 data-nosnippet>348</a>        <span class="self">self</span>.watchers.insert(name, value);
+<a href=#349 id=349 data-nosnippet>349</a>    }
+<a href=#350 id=350 data-nosnippet>350</a>}
+<a href=#351 id=351 data-nosnippet>351</a>
+<a href=#352 id=352 data-nosnippet>352</a><span class="macro">app_local!</span> {
+<a href=#353 id=353 data-nosnippet>353</a>    <span class="attr">#[allow(clippy::type_complexity)]
+<a href=#354 id=354 data-nosnippet>354</a>    </span><span class="kw">static </span>INSPECTOR_SV: Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;</span>InspectedWidget, <span class="kw-2">&amp;mut </span>InspectorWatcherBuilder) + Send + Sync + <span class="lifetime">'static</span>&gt;&gt; = <span class="macro">vec!</span>[];
+<a href=#355 id=355 data-nosnippet>355</a>}
+<a href=#356 id=356 data-nosnippet>356</a>
+<a href=#357 id=357 data-nosnippet>357</a><span class="doccomment">/// Service that configures the live inspector.
+<a href=#358 id=358 data-nosnippet>358</a></span><span class="kw">pub struct </span>INSPECTOR;
+<a href=#359 id=359 data-nosnippet>359</a><span class="kw">impl </span>INSPECTOR {
+<a href=#360 id=360 data-nosnippet>360</a>    <span class="doccomment">/// Register a `watcher` that provides custom live state variables.
+<a href=#361 id=361 data-nosnippet>361</a>    ///
+<a href=#362 id=362 data-nosnippet>362</a>    /// In the default live inspector the `watcher` closure is called for the selected widget and the watcher values are presented
+<a href=#363 id=363 data-nosnippet>363</a>    /// in the `/* INFO */` section of the properties panel.
+<a href=#364 id=364 data-nosnippet>364</a>    ///
+<a href=#365 id=365 data-nosnippet>365</a>    /// Note that newly registered watchers only apply for subsequent inspections, it does not refresh current views.
+<a href=#366 id=366 data-nosnippet>366</a>    </span><span class="kw">pub fn </span>register_watcher(<span class="kw-2">&amp;</span><span class="self">self</span>, watcher: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>InspectedWidget, <span class="kw-2">&amp;mut </span>InspectorWatcherBuilder) + Send + Sync + <span class="lifetime">'static</span>) {
+<a href=#367 id=367 data-nosnippet>367</a>        INSPECTOR_SV.write().push(Box::new(watcher));
+<a href=#368 id=368 data-nosnippet>368</a>    }
+<a href=#369 id=369 data-nosnippet>369</a>
+<a href=#370 id=370 data-nosnippet>370</a>    <span class="doccomment">/// Call all registered watchers on the `target`.
+<a href=#371 id=371 data-nosnippet>371</a>    ///
+<a href=#372 id=372 data-nosnippet>372</a>    /// Returns a vector of unique name and watcher variable, sorted  by name.
+<a href=#373 id=373 data-nosnippet>373</a>    </span><span class="kw">pub fn </span>build_watchers(<span class="kw-2">&amp;</span><span class="self">self</span>, target: <span class="kw-2">&amp;</span>InspectedWidget) -&gt; Vec&lt;(Txt, BoxedVar&lt;Txt&gt;)&gt; {
+<a href=#374 id=374 data-nosnippet>374</a>        <span class="kw">let </span><span class="kw-2">mut </span>builder = InspectorWatcherBuilder { watchers: HashMap::new() };
+<a href=#375 id=375 data-nosnippet>375</a>        <span class="self">self</span>.default_watchers(target, <span class="kw-2">&amp;mut </span>builder);
+<a href=#376 id=376 data-nosnippet>376</a>        <span class="kw">for </span>w <span class="kw">in </span>INSPECTOR_SV.write().iter_mut() {
+<a href=#377 id=377 data-nosnippet>377</a>            w(target, <span class="kw-2">&amp;mut </span>builder);
+<a href=#378 id=378 data-nosnippet>378</a>        }
+<a href=#379 id=379 data-nosnippet>379</a>        <span class="kw">let </span><span class="kw-2">mut </span>watchers: Vec&lt;<span class="kw">_</span>&gt; = builder.watchers.into_iter().collect();
+<a href=#380 id=380 data-nosnippet>380</a>        watchers.sort_by(|a, b| a.<span class="number">0</span>.cmp(<span class="kw-2">&amp;</span>b.<span class="number">0</span>));
+<a href=#381 id=381 data-nosnippet>381</a>        watchers
+<a href=#382 id=382 data-nosnippet>382</a>    }
+<a href=#383 id=383 data-nosnippet>383</a>
+<a href=#384 id=384 data-nosnippet>384</a>    <span class="kw">fn </span>default_watchers(<span class="kw-2">&amp;</span><span class="self">self</span>, target: <span class="kw-2">&amp;</span>InspectedWidget, builder: <span class="kw-2">&amp;mut </span>InspectorWatcherBuilder) {
+<a href=#385 id=385 data-nosnippet>385</a>        builder.insert(<span class="string">"interactivity"</span>, target.info().map(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.interactivity())));
+<a href=#386 id=386 data-nosnippet>386</a>        builder.insert(<span class="string">"visibility"</span>, target.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.visibility())));
+<a href=#387 id=387 data-nosnippet>387</a>        builder.insert(
+<a href=#388 id=388 data-nosnippet>388</a>            <span class="string">"inner_bounds"</span>,
+<a href=#389 id=389 data-nosnippet>389</a>            target.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.bounds_info().inner_bounds())),
+<a href=#390 id=390 data-nosnippet>390</a>        );
+<a href=#391 id=391 data-nosnippet>391</a>    }
+<a href=#392 id=392 data-nosnippet>392</a>}</code></pre></div></section></main></body></html>

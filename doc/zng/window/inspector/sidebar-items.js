@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["InspectMode"],"fn":["show_bounds","show_center_points","show_directional_query","show_hit_test","show_rows"]};
+window.SIDEBAR_ITEMS = {"enum":["InspectMode"],"fn":["show_bounds","show_center_points","show_directional_query","show_hit_test","show_rows"],"struct":["INSPECTOR","InspectedInfo","InspectedTree","InspectedWidget","InspectorWatcherBuilder"]};
