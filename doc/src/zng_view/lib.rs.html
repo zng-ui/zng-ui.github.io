@@ -11,8 +11,8 @@
 <a href=#11 id=11 data-nosnippet>11</a>//!
 <a href=#12 id=12 data-nosnippet>12</a>//! ```toml
 <a href=#13 id=13 data-nosnippet>13</a>//! [dependencies]
-<a href=#14 id=14 data-nosnippet>14</a>//! zng = "0.15.3"
-<a href=#15 id=15 data-nosnippet>15</a>//! zng-view = "0.9.1"
+<a href=#14 id=14 data-nosnippet>14</a>//! zng = "0.15.4"
+<a href=#15 id=15 data-nosnippet>15</a>//! zng-view = "0.10.0"
 <a href=#16 id=16 data-nosnippet>16</a>//! ```
 <a href=#17 id=17 data-nosnippet>17</a>//!
 <a href=#18 id=18 data-nosnippet>18</a>//! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -2395,11 +2395,14 @@
 <a href=#2395 id=2395 data-nosnippet>2395</a>
 <a href=#2396 id=2396 data-nosnippet>2396</a>    <span class="kw">fn </span>wake_up(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: bool) {}
 <a href=#2397 id=2397 data-nosnippet>2397</a>
-<a href=#2398 id=2398 data-nosnippet>2398</a>    <span class="kw">fn </span>new_frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, _document_id: DocumentId, _scrolled: bool, composite_needed: bool, <span class="kw">_</span>: FramePublishId) {
-<a href=#2399 id=2399 data-nosnippet>2399</a>        <span class="kw">let </span>msg = FrameReadyMsg { composite_needed };
-<a href=#2400 id=2400 data-nosnippet>2400</a>        <span class="kw">let _ </span>= <span class="self">self</span>.sender.frame_ready(<span class="self">self</span>.id, msg);
-<a href=#2401 id=2401 data-nosnippet>2401</a>    }
-<a href=#2402 id=2402 data-nosnippet>2402</a>}
-<a href=#2403 id=2403 data-nosnippet>2403</a>
-<a href=#2404 id=2404 data-nosnippet>2404</a><span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
-<a href=#2405 id=2405 data-nosnippet>2405</a></span><span class="macro">compile_error!</span>(<span class="string">"zng-view does not support Wasm"</span>);</code></pre></div></section></main></body></html>
+<a href=#2398 id=2398 data-nosnippet>2398</a>    <span class="kw">fn </span>new_frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: DocumentId, <span class="kw">_</span>: FramePublishId, params: <span class="kw-2">&amp;</span>FrameReadyParams) {
+<a href=#2399 id=2399 data-nosnippet>2399</a>        <span class="comment">// render is composite_needed (https://github.com/servo/webrender/commit/82860cfd6ebb012a009d639629eeb29078e2974f)
+<a href=#2400 id=2400 data-nosnippet>2400</a>        </span><span class="kw">let </span>msg = FrameReadyMsg {
+<a href=#2401 id=2401 data-nosnippet>2401</a>            composite_needed: params.render,
+<a href=#2402 id=2402 data-nosnippet>2402</a>        };
+<a href=#2403 id=2403 data-nosnippet>2403</a>        <span class="kw">let _ </span>= <span class="self">self</span>.sender.frame_ready(<span class="self">self</span>.id, msg);
+<a href=#2404 id=2404 data-nosnippet>2404</a>    }
+<a href=#2405 id=2405 data-nosnippet>2405</a>}
+<a href=#2406 id=2406 data-nosnippet>2406</a>
+<a href=#2407 id=2407 data-nosnippet>2407</a><span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+<a href=#2408 id=2408 data-nosnippet>2408</a></span><span class="macro">compile_error!</span>(<span class="string">"zng-view does not support Wasm"</span>);</code></pre></div></section></main></body></html>
