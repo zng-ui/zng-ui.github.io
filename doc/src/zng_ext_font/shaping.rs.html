@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../static.files/storage-82c7156e.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    cmp, fmt,
 <a href=#3 id=3 data-nosnippet>3</a>    hash::{BuildHasher, Hash},
 <a href=#4 id=4 data-nosnippet>4</a>    mem, ops,
@@ -435,7 +435,7 @@
 <a href=#435 id=435 data-nosnippet>435</a>    }
 <a href=#436 id=436 data-nosnippet>436</a>
 <a href=#437 id=437 data-nosnippet>437</a>    <span class="doccomment">/// Glyphs by font and palette color.
-<a href=#438 id=438 data-nosnippet>438</a>    </span><span class="kw">pub fn </span>colored_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedColoredGlyphs)&gt; {
+<a href=#438 id=438 data-nosnippet>438</a>    </span><span class="kw">pub fn </span>colored_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedColoredGlyphs&lt;<span class="lifetime">'_</span>&gt;)&gt; {
 <a href=#439 id=439 data-nosnippet>439</a>        ColoredGlyphsIter {
 <a href=#440 id=440 data-nosnippet>440</a>            glyphs: <span class="self">self</span>.glyphs(),
 <a href=#441 id=441 data-nosnippet>441</a>            maybe_colored: <span class="prelude-val">None</span>,
@@ -443,7 +443,7 @@
 <a href=#443 id=443 data-nosnippet>443</a>    }
 <a href=#444 id=444 data-nosnippet>444</a>
 <a href=#445 id=445 data-nosnippet>445</a>    <span class="doccomment">/// Glyphs in a range by font and palette color.
-<a href=#446 id=446 data-nosnippet>446</a>    </span><span class="kw">pub fn </span>colored_glyphs_slice(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedColoredGlyphs)&gt; {
+<a href=#446 id=446 data-nosnippet>446</a>    </span><span class="kw">pub fn </span>colored_glyphs_slice(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedColoredGlyphs&lt;<span class="lifetime">'_</span>&gt;)&gt; {
 <a href=#447 id=447 data-nosnippet>447</a>        ColoredGlyphsIter {
 <a href=#448 id=448 data-nosnippet>448</a>            glyphs: <span class="self">self</span>.glyphs_slice_impl(IndexRange::from_bounds(range)),
 <a href=#449 id=449 data-nosnippet>449</a>            maybe_colored: <span class="prelude-val">None</span>,
@@ -451,7 +451,7 @@
 <a href=#451 id=451 data-nosnippet>451</a>    }
 <a href=#452 id=452 data-nosnippet>452</a>
 <a href=#453 id=453 data-nosnippet>453</a>    <span class="doccomment">/// Glyphs by font and associated image.
-<a href=#454 id=454 data-nosnippet>454</a>    </span><span class="kw">pub fn </span>image_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs)&gt; {
+<a href=#454 id=454 data-nosnippet>454</a>    </span><span class="kw">pub fn </span>image_glyphs(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs&lt;<span class="lifetime">'_</span>&gt;)&gt; {
 <a href=#455 id=455 data-nosnippet>455</a>        ImageGlyphsIter {
 <a href=#456 id=456 data-nosnippet>456</a>            glyphs: <span class="self">self</span>.glyphs(),
 <a href=#457 id=457 data-nosnippet>457</a>            glyphs_i: <span class="number">0</span>,
@@ -461,7 +461,7 @@
 <a href=#461 id=461 data-nosnippet>461</a>    }
 <a href=#462 id=462 data-nosnippet>462</a>
 <a href=#463 id=463 data-nosnippet>463</a>    <span class="doccomment">/// Glyphs in a range by font and associated image.
-<a href=#464 id=464 data-nosnippet>464</a>    </span><span class="kw">pub fn </span>image_glyphs_slice(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs)&gt; {
+<a href=#464 id=464 data-nosnippet>464</a>    </span><span class="kw">pub fn </span>image_glyphs_slice(<span class="kw-2">&amp;</span><span class="self">self</span>, range: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="kw">impl </span>Iterator&lt;Item = (<span class="kw-2">&amp;</span>Font, ShapedImageGlyphs&lt;<span class="lifetime">'_</span>&gt;)&gt; {
 <a href=#465 id=465 data-nosnippet>465</a>        <span class="kw">let </span>range = IndexRange::from_bounds(range);
 <a href=#466 id=466 data-nosnippet>466</a>        ImageGlyphsIter {
 <a href=#467 id=467 data-nosnippet>467</a>            glyphs_i: range.start() <span class="kw">as _</span>,
@@ -586,7 +586,7 @@
 <a href=#586 id=586 data-nosnippet>586</a>
 <a href=#587 id=587 data-nosnippet>587</a>    <span class="doccomment">/// Gets the first line that overflows the `max_height`. A line overflows when the line `PxRect::max_y`
 <a href=#588 id=588 data-nosnippet>588</a>    /// is greater than `max_height`.
-<a href=#589 id=589 data-nosnippet>589</a>    </span><span class="kw">pub fn </span>overflow_line(<span class="kw-2">&amp;</span><span class="self">self</span>, max_height: Px) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&gt; {
+<a href=#589 id=589 data-nosnippet>589</a>    </span><span class="kw">pub fn </span>overflow_line(<span class="kw-2">&amp;</span><span class="self">self</span>, max_height: Px) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&lt;<span class="lifetime">'_</span>&gt;&gt; {
 <a href=#590 id=590 data-nosnippet>590</a>        <span class="kw">let </span><span class="kw-2">mut </span>y = <span class="self">self</span>.first_line.max_y();
 <a href=#591 id=591 data-nosnippet>591</a>        <span class="kw">if </span>y &gt; max_height {
 <a href=#592 id=592 data-nosnippet>592</a>            <span class="self">self</span>.line(<span class="number">0</span>)
@@ -1317,7 +1317,7 @@
 <a href=#1317 id=1317 data-nosnippet>1317</a>    <span class="doccomment">/// Iterate over [`ShapedLine`] selections split by [`LineBreak`] or wrap.
 <a href=#1318 id=1318 data-nosnippet>1318</a>    ///
 <a href=#1319 id=1319 data-nosnippet>1319</a>    /// [`LineBreak`]: TextSegmentKind::LineBreak
-<a href=#1320 id=1320 data-nosnippet>1320</a>    </span><span class="kw">pub fn </span>lines(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = ShapedLine&gt; {
+<a href=#1320 id=1320 data-nosnippet>1320</a>    </span><span class="kw">pub fn </span>lines(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw">impl </span>Iterator&lt;Item = ShapedLine&lt;<span class="lifetime">'_</span>&gt;&gt; {
 <a href=#1321 id=1321 data-nosnippet>1321</a>        <span class="kw">let </span>just_width = <span class="self">self</span>.justify_mode().map(|<span class="kw">_</span>| <span class="self">self</span>.align_size.width);
 <a href=#1322 id=1322 data-nosnippet>1322</a>        <span class="self">self</span>.lines.iter_segs().enumerate().map(<span class="kw">move </span>|(i, (w, r))| ShapedLine {
 <a href=#1323 id=1323 data-nosnippet>1323</a>            text: <span class="self">self</span>,
@@ -1338,7 +1338,7 @@
 <a href=#1338 id=1338 data-nosnippet>1338</a>    }
 <a href=#1339 id=1339 data-nosnippet>1339</a>
 <a href=#1340 id=1340 data-nosnippet>1340</a>    <span class="doccomment">/// Gets the line by index.
-<a href=#1341 id=1341 data-nosnippet>1341</a>    </span><span class="kw">pub fn </span>line(<span class="kw-2">&amp;</span><span class="self">self</span>, line_idx: usize) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&gt; {
+<a href=#1341 id=1341 data-nosnippet>1341</a>    </span><span class="kw">pub fn </span>line(<span class="kw-2">&amp;</span><span class="self">self</span>, line_idx: usize) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&lt;<span class="lifetime">'_</span>&gt;&gt; {
 <a href=#1342 id=1342 data-nosnippet>1342</a>        <span class="kw">if </span>line_idx &gt;= <span class="self">self</span>.lines.<span class="number">0</span>.len() {
 <a href=#1343 id=1343 data-nosnippet>1343</a>            <span class="prelude-val">None
 <a href=#1344 id=1344 data-nosnippet>1344</a>        </span>} <span class="kw">else </span>{
@@ -1628,7 +1628,7 @@
 <a href=#1628 id=1628 data-nosnippet>1628</a>    }
 <a href=#1629 id=1629 data-nosnippet>1629</a>
 <a href=#1630 id=1630 data-nosnippet>1630</a>    <span class="doccomment">/// Gets the line that contains the `y` offset or is nearest to it.
-<a href=#1631 id=1631 data-nosnippet>1631</a>    </span><span class="kw">pub fn </span>nearest_line(<span class="kw-2">&amp;</span><span class="self">self</span>, y: Px) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&gt; {
+<a href=#1631 id=1631 data-nosnippet>1631</a>    </span><span class="kw">pub fn </span>nearest_line(<span class="kw-2">&amp;</span><span class="self">self</span>, y: Px) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedLine&lt;<span class="lifetime">'_</span>&gt;&gt; {
 <a href=#1632 id=1632 data-nosnippet>1632</a>        <span class="kw">let </span>first_line_max_y = <span class="self">self</span>.first_line.max_y();
 <a href=#1633 id=1633 data-nosnippet>1633</a>        <span class="kw">if </span>first_line_max_y &gt;= y {
 <a href=#1634 id=1634 data-nosnippet>1634</a>            <span class="self">self</span>.line(<span class="number">0</span>)
@@ -3400,7 +3400,7 @@
 <a href=#3400 id=3400 data-nosnippet>3400</a>    <span class="doccomment">/// Get the segment by index.
 <a href=#3401 id=3401 data-nosnippet>3401</a>    ///
 <a href=#3402 id=3402 data-nosnippet>3402</a>    /// The first segment of the line is `0`.
-<a href=#3403 id=3403 data-nosnippet>3403</a>    </span><span class="kw">pub fn </span>seg(<span class="kw-2">&amp;</span><span class="self">self</span>, seg_idx: usize) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedSegment&gt; {
+<a href=#3403 id=3403 data-nosnippet>3403</a>    </span><span class="kw">pub fn </span>seg(<span class="kw-2">&amp;</span><span class="self">self</span>, seg_idx: usize) -&gt; <span class="prelude-ty">Option</span>&lt;ShapedSegment&lt;<span class="lifetime">'_</span>&gt;&gt; {
 <a href=#3404 id=3404 data-nosnippet>3404</a>        <span class="kw">if </span><span class="self">self</span>.seg_range.len() &gt; seg_idx {
 <a href=#3405 id=3405 data-nosnippet>3405</a>            <span class="prelude-val">Some</span>(ShapedSegment {
 <a href=#3406 id=3406 data-nosnippet>3406</a>                text: <span class="self">self</span>.text,

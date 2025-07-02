@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info.rs`."><title>info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../../static.files/storage-82c7156e.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info.rs`."><title>info.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#186 id=186 data-nosnippet>186</a>    <span class="doccomment">/// Custom metadata associated with the tree during info build.
 <a href=#187 id=187 data-nosnippet>187</a>    ///
 <a href=#188 id=188 data-nosnippet>188</a>    /// Any widget (that was not reused) can have inserted metadata.
-<a href=#189 id=189 data-nosnippet>189</a>    </span><span class="kw">pub fn </span>build_meta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; StateMapRef&lt;WidgetInfoMeta&gt; {
+<a href=#189 id=189 data-nosnippet>189</a>    </span><span class="kw">pub fn </span>build_meta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; StateMapRef&lt;<span class="lifetime">'_</span>, WidgetInfoMeta&gt; {
 <a href=#190 id=190 data-nosnippet>190</a>        <span class="self">self</span>.<span class="number">0</span>.build_meta.borrow()
 <a href=#191 id=191 data-nosnippet>191</a>    }
 <a href=#192 id=192 data-nosnippet>192</a>
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#569 id=569 data-nosnippet>569</a>    <span class="doccomment">/// Exclusive read the latest inline layout info.
 <a href=#570 id=570 data-nosnippet>570</a>    ///
 <a href=#571 id=571 data-nosnippet>571</a>    /// Returns `None` if the latest widget layout was not in an inlining context.
-<a href=#572 id=572 data-nosnippet>572</a>    </span><span class="kw">pub fn </span>inline(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;MappedMutexGuard&lt;WidgetInlineInfo&gt;&gt; {
+<a href=#572 id=572 data-nosnippet>572</a>    </span><span class="kw">pub fn </span>inline(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;MappedMutexGuard&lt;<span class="lifetime">'_</span>, WidgetInlineInfo&gt;&gt; {
 <a href=#573 id=573 data-nosnippet>573</a>        <span class="kw">let </span>me = <span class="self">self</span>.<span class="number">0</span>.lock();
 <a href=#574 id=574 data-nosnippet>574</a>        <span class="kw">if </span>me.inline.is_some() {
 <a href=#575 id=575 data-nosnippet>575</a>            <span class="prelude-val">Some</span>(MutexGuard::map(me, |m| m.inline.as_mut().unwrap()))
@@ -1093,7 +1093,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1057 id=1057 data-nosnippet>1057</a>        <span class="self">Self </span>{ tree, node_id }
 <a href=#1058 id=1058 data-nosnippet>1058</a>    }
 <a href=#1059 id=1059 data-nosnippet>1059</a>
-<a href=#1060 id=1060 data-nosnippet>1060</a>    <span class="kw">fn </span>node(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; tree::NodeRef&lt;WidgetInfoData&gt; {
+<a href=#1060 id=1060 data-nosnippet>1060</a>    <span class="kw">fn </span>node(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; tree::NodeRef&lt;<span class="lifetime">'_</span>, WidgetInfoData&gt; {
 <a href=#1061 id=1061 data-nosnippet>1061</a>        <span class="self">self</span>.tree.<span class="number">0</span>.tree.index(<span class="self">self</span>.node_id)
 <a href=#1062 id=1062 data-nosnippet>1062</a>    }
 <a href=#1063 id=1063 data-nosnippet>1063</a>
@@ -1444,7 +1444,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1408 id=1408 data-nosnippet>1408</a>    }
 <a href=#1409 id=1409 data-nosnippet>1409</a>
 <a href=#1410 id=1410 data-nosnippet>1410</a>    <span class="doccomment">/// Custom metadata associated with the widget during info build.
-<a href=#1411 id=1411 data-nosnippet>1411</a>    </span><span class="kw">pub fn </span>meta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; StateMapRef&lt;WidgetInfoMeta&gt; {
+<a href=#1411 id=1411 data-nosnippet>1411</a>    </span><span class="kw">pub fn </span>meta(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; StateMapRef&lt;<span class="lifetime">'_</span>, WidgetInfoMeta&gt; {
 <a href=#1412 id=1412 data-nosnippet>1412</a>        <span class="self">self</span>.info().meta.borrow()
 <a href=#1413 id=1413 data-nosnippet>1413</a>    }
 <a href=#1414 id=1414 data-nosnippet>1414</a>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info/path.rs`."><title>path.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-916cea96.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.87.0 (17067e9ac 2025-05-09)" data-channel="1.87.0" data-search-js="search-e7298875.js" data-settings-js="settings-d72f25bb.js" ><script src="../../../../static.files/storage-82c7156e.js"></script><script defer src="../../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-fb8c74a8.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info/path.rs`."><title>path.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../../static.files/storage-4e99c027.js"></script><script defer src="../../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#85 id=85 data-nosnippet>85</a>    }
 <a href=#86 id=86 data-nosnippet>86</a>
 <a href=#87 id=87 data-nosnippet>87</a>    <span class="doccomment">/// Make a path to an ancestor id that is contained in the current path.
-<a href=#88 id=88 data-nosnippet>88</a>    </span><span class="kw">pub fn </span>ancestor_path(<span class="kw-2">&amp;</span><span class="self">self</span>, ancestor_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;WidgetPath&gt;&gt; {
+<a href=#88 id=88 data-nosnippet>88</a>    </span><span class="kw">pub fn </span>ancestor_path(<span class="kw-2">&amp;</span><span class="self">self</span>, ancestor_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">'_</span>, WidgetPath&gt;&gt; {
 <a href=#89 id=89 data-nosnippet>89</a>        <span class="self">self</span>.path.iter().position(|<span class="kw-2">&amp;</span>id| id == ancestor_id).map(|i| {
 <a href=#90 id=90 data-nosnippet>90</a>            <span class="kw">if </span>i == <span class="self">self</span>.path.len() - <span class="number">1 </span>{
 <a href=#91 id=91 data-nosnippet>91</a>                Cow::Borrowed(<span class="self">self</span>)
@@ -158,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#122 id=122 data-nosnippet>122</a>    }
 <a href=#123 id=123 data-nosnippet>123</a>
 <a href=#124 id=124 data-nosnippet>124</a>    <span class="doccomment">/// Gets a path to the root widget of this path.
-<a href=#125 id=125 data-nosnippet>125</a>    </span><span class="kw">pub fn </span>root_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Cow&lt;WidgetPath&gt; {
+<a href=#125 id=125 data-nosnippet>125</a>    </span><span class="kw">pub fn </span>root_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Cow&lt;<span class="lifetime">'_</span>, WidgetPath&gt; {
 <a href=#126 id=126 data-nosnippet>126</a>        <span class="kw">if </span><span class="self">self</span>.path.len() == <span class="number">1 </span>{
 <a href=#127 id=127 data-nosnippet>127</a>            Cow::Borrowed(<span class="self">self</span>)
 <a href=#128 id=128 data-nosnippet>128</a>        } <span class="kw">else </span>{
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#134 id=134 data-nosnippet>134</a>    }
 <a href=#135 id=135 data-nosnippet>135</a>
 <a href=#136 id=136 data-nosnippet>136</a>    <span class="doccomment">/// Gets a path to the `widget_id` of this path.
-<a href=#137 id=137 data-nosnippet>137</a>    </span><span class="kw">pub fn </span>sub_path(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;WidgetPath&gt;&gt; {
+<a href=#137 id=137 data-nosnippet>137</a>    </span><span class="kw">pub fn </span>sub_path(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">'_</span>, WidgetPath&gt;&gt; {
 <a href=#138 id=138 data-nosnippet>138</a>        <span class="kw">if </span><span class="self">self</span>.widget_id() == widget_id {
 <a href=#139 id=139 data-nosnippet>139</a>            <span class="prelude-val">Some</span>(Cow::Borrowed(<span class="self">self</span>))
 <a href=#140 id=140 data-nosnippet>140</a>        } <span class="kw">else </span>{
@@ -415,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#379 id=379 data-nosnippet>379</a>    }
 <a href=#380 id=380 data-nosnippet>380</a>
 <a href=#381 id=381 data-nosnippet>381</a>    <span class="doccomment">/// Make a path to an ancestor id that is contained in the current path.
-<a href=#382 id=382 data-nosnippet>382</a>    </span><span class="kw">pub fn </span>ancestor_path(<span class="kw-2">&amp;</span><span class="self">self</span>, ancestor_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;InteractionPath&gt;&gt; {
+<a href=#382 id=382 data-nosnippet>382</a>    </span><span class="kw">pub fn </span>ancestor_path(<span class="kw-2">&amp;</span><span class="self">self</span>, ancestor_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">'_</span>, InteractionPath&gt;&gt; {
 <a href=#383 id=383 data-nosnippet>383</a>        <span class="self">self</span>.widgets_path().iter().position(|<span class="kw-2">&amp;</span>id| id == ancestor_id).map(|i| {
 <a href=#384 id=384 data-nosnippet>384</a>            <span class="kw">if </span>i == <span class="self">self</span>.path.path.len() - <span class="number">1 </span>{
 <a href=#385 id=385 data-nosnippet>385</a>                Cow::Borrowed(<span class="self">self</span>)
@@ -460,7 +460,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#424 id=424 data-nosnippet>424</a>    }
 <a href=#425 id=425 data-nosnippet>425</a>
 <a href=#426 id=426 data-nosnippet>426</a>    <span class="doccomment">/// Gets a path to the root widget of this path.
-<a href=#427 id=427 data-nosnippet>427</a>    </span><span class="kw">pub fn </span>root_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Cow&lt;InteractionPath&gt; {
+<a href=#427 id=427 data-nosnippet>427</a>    </span><span class="kw">pub fn </span>root_path(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Cow&lt;<span class="lifetime">'_</span>, InteractionPath&gt; {
 <a href=#428 id=428 data-nosnippet>428</a>        <span class="kw">if </span><span class="self">self</span>.path.path.len() == <span class="number">1 </span>{
 <a href=#429 id=429 data-nosnippet>429</a>            Cow::Borrowed(<span class="self">self</span>)
 <a href=#430 id=430 data-nosnippet>430</a>        } <span class="kw">else </span>{
@@ -476,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#440 id=440 data-nosnippet>440</a>    }
 <a href=#441 id=441 data-nosnippet>441</a>
 <a href=#442 id=442 data-nosnippet>442</a>    <span class="doccomment">/// Gets a sub-path up to `widget_id` (inclusive), or `None` if the widget is not in the path.
-<a href=#443 id=443 data-nosnippet>443</a>    </span><span class="kw">pub fn </span>sub_path(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;InteractionPath&gt;&gt; {
+<a href=#443 id=443 data-nosnippet>443</a>    </span><span class="kw">pub fn </span>sub_path(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; <span class="prelude-ty">Option</span>&lt;Cow&lt;<span class="lifetime">'_</span>, InteractionPath&gt;&gt; {
 <a href=#444 id=444 data-nosnippet>444</a>        <span class="kw">if </span>widget_id == <span class="self">self</span>.widget_id() {
 <a href=#445 id=445 data-nosnippet>445</a>            <span class="prelude-val">Some</span>(Cow::Borrowed(<span class="self">self</span>))
 <a href=#446 id=446 data-nosnippet>446</a>        } <span class="kw">else </span>{
