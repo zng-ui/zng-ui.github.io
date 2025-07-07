@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["CargoCli","Command"],"fn":["main"],"mod":["fmt","l10n","new","res","res_tool_util","util"],"struct":["Zng"]};
+window.SIDEBAR_ITEMS = {"enum":["CargoCli","Command"],"fn":["main"],"mod":["fmt","l10n","new","res","res_tool_util","trace","util"],"struct":["Zng"]};
