@@ -175,11 +175,11 @@
 <a href=#175 id=175 data-nosnippet>175</a>    with_context_var(child, IMAGE_SCALE_VAR, scale)
 <a href=#176 id=176 data-nosnippet>176</a>}
 <a href=#177 id=177 data-nosnippet>177</a>
-<a href=#178 id=178 data-nosnippet>178</a><span class="doccomment">/// If the image desired size is scaled by the screen scale factor.
+<a href=#178 id=178 data-nosnippet>178</a><span class="doccomment">/// Sets if the image desired size is scaled by the screen scale factor.
 <a href=#179 id=179 data-nosnippet>179</a>///
 <a href=#180 id=180 data-nosnippet>180</a>/// The image desired size is its original size after [`img_crop`], it is a pixel value, but widgets are layout using
 <a href=#181 id=181 data-nosnippet>181</a>/// device independent pixels that automatically scale in higher definition displays, when this property is enabled
-<a href=#182 id=182 data-nosnippet>182</a>/// the image size is also scaled so that the image will take the same screen space in all devices, the image can end
+<a href=#182 id=182 data-nosnippet>182</a>/// the image size is also scaled so that the image will take the same screen space in all devices.
 <a href=#183 id=183 data-nosnippet>183</a>///
 <a href=#184 id=184 data-nosnippet>184</a>/// This is enabled by default.
 <a href=#185 id=185 data-nosnippet>185</a>///
@@ -196,7 +196,7 @@
 <a href=#196 id=196 data-nosnippet>196</a>/// The image desired size is its original size, after [`img_crop`], and it can be in pixels or scaled considering
 <a href=#197 id=197 data-nosnippet>197</a>/// the image PPI, monitor PPI and scale factor.
 <a href=#198 id=198 data-nosnippet>198</a>///
-<a href=#199 id=199 data-nosnippet>199</a>/// By default this is `false`, if `true` the image is scaled in a attempt to recreate the original physical dimensions, but it
+<a href=#199 id=199 data-nosnippet>199</a>/// By default this is `false`, if `true` the image is scaled in a attempt to recreate the original physical dimensions, this
 <a href=#200 id=200 data-nosnippet>200</a>/// only works if the image and monitor PPI are set correctly. The monitor PPI can be set using the [`MONITORS`] service.
 <a href=#201 id=201 data-nosnippet>201</a>///
 <a href=#202 id=202 data-nosnippet>202</a>/// [`img_crop`]: fn@img_crop
@@ -222,8 +222,8 @@
 <a href=#222 id=222 data-nosnippet>222</a>/// [`img_align`]: fn@crate::img_align
 <a href=#223 id=223 data-nosnippet>223</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ALIGN_VAR), widget_impl(Image))]
 <a href=#224 id=224 data-nosnippet>224</a></span><span class="kw">pub fn </span>img_align(child: <span class="kw">impl </span>UiNode, fit: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#225 id=225 data-nosnippet>225</a>    with_context_var(child, IMAGE_ALIGN_VAR, fit)
-<a href=#226 id=226 data-nosnippet>226</a>}
+<a href=#225 id=225 data-nosnippet>225</a>    with_context_var(child, IMAGE_ALIGN_VAR, fit) <span class="comment">// TODO(breaking) rename fit to align
+<a href=#226 id=226 data-nosnippet>226</a></span>}
 <a href=#227 id=227 data-nosnippet>227</a>
 <a href=#228 id=228 data-nosnippet>228</a><span class="doccomment">/// Sets a [`Point`] that is an offset applied to all inner images within each image widget area.
 <a href=#229 id=229 data-nosnippet>229</a>///

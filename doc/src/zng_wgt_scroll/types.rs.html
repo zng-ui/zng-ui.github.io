@@ -421,7 +421,7 @@
 <a href=#421 id=421 data-nosnippet>421</a>        <span class="self">self</span>.scroll_touch(<span class="bool-val">false</span>, SCROLL_HORIZONTAL_OFFSET_VAR, OVERSCROLL_HORIZONTAL_OFFSET_VAR, delta)
 <a href=#422 id=422 data-nosnippet>422</a>    }
 <a href=#423 id=423 data-nosnippet>423</a>
-<a href=#424 id=424 data-nosnippet>424</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(0.16) - remove this allow
+<a href=#424 id=424 data-nosnippet>424</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking) - remove this allow
 <a href=#425 id=425 data-nosnippet>425</a>    </span><span class="kw">fn </span>scroll_touch(<span class="kw-2">&amp;</span><span class="self">self</span>, vertical: bool, scroll_offset_var: ContextVar&lt;Factor&gt;, overscroll_offset_var: ContextVar&lt;Factor&gt;, delta: Px) {
 <a href=#426 id=426 data-nosnippet>426</a>        <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get().to_array()[vertical <span class="kw">as </span>usize];
 <a href=#427 id=427 data-nosnippet>427</a>        <span class="kw">let </span>content = SCROLL_CONTENT_SIZE_VAR.get().to_array()[vertical <span class="kw">as </span>usize];
@@ -472,7 +472,7 @@
 <a href=#472 id=472 data-nosnippet>472</a>        }
 <a href=#473 id=473 data-nosnippet>473</a>        <span class="kw">let </span><span class="kw-2">mut </span>state = State::Increment;
 <a href=#474 id=474 data-nosnippet>474</a>        overscroll.animate(<span class="kw">move </span>|a, o| <span class="kw">match </span><span class="kw-2">&amp;mut </span>state {
-<a href=#475 id=475 data-nosnippet>475</a>            <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(0.16) - remove this allow
+<a href=#475 id=475 data-nosnippet>475</a>            <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking) - remove this allow
 <a href=#476 id=476 data-nosnippet>476</a>            </span>State::Increment =&gt; {
 <a href=#477 id=477 data-nosnippet>477</a>                <span class="comment">// set the increment and start delay to animation.
 <a href=#478 id=478 data-nosnippet>478</a>                </span><span class="kw-2">*</span>o.to_mut() += delta;
@@ -529,7 +529,7 @@
 <a href=#529 id=529 data-nosnippet>529</a>        )
 <a href=#530 id=530 data-nosnippet>530</a>    }
 <a href=#531 id=531 data-nosnippet>531</a>
-<a href=#532 id=532 data-nosnippet>532</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(0.16) - remove this allow
+<a href=#532 id=532 data-nosnippet>532</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking) - remove this allow
 <a href=#533 id=533 data-nosnippet>533</a>    </span><span class="kw">fn </span>scroll_touch_inertia(
 <a href=#534 id=534 data-nosnippet>534</a>        <span class="kw-2">&amp;</span><span class="self">self</span>,
 <a href=#535 id=535 data-nosnippet>535</a>        vertical: bool,
@@ -654,7 +654,7 @@
 <a href=#654 id=654 data-nosnippet>654</a>        </span><span class="kw">let </span>modify_scale: Box&lt;<span class="kw">dyn </span>FnOnce(Factor) -&gt; Factor&gt; = Box::new(modify_scale);
 <a href=#655 id=655 data-nosnippet>655</a>        <span class="self">self</span>.chase_zoom_impl(modify_scale);
 <a href=#656 id=656 data-nosnippet>656</a>    }
-<a href=#657 id=657 data-nosnippet>657</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(0.16) - remove this allow
+<a href=#657 id=657 data-nosnippet>657</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking) - remove this allow
 <a href=#658 id=658 data-nosnippet>658</a>    </span><span class="kw">fn </span>chase_zoom_impl(<span class="kw-2">&amp;</span><span class="self">self</span>, modify_scale: <span class="kw">impl </span>FnOnce(Factor) -&gt; Factor) {
 <a href=#659 id=659 data-nosnippet>659</a>        <span class="kw">if </span>!SCROLL_MODE_VAR.get().contains(ScrollMode::ZOOM) {
 <a href=#660 id=660 data-nosnippet>660</a>            <span class="kw">return</span>;
@@ -734,7 +734,7 @@
 <a href=#734 id=734 data-nosnippet>734</a>    }
 <a href=#735 id=735 data-nosnippet>735</a>
 <a href=#736 id=736 data-nosnippet>736</a>    <span class="doccomment">/// Applies the `scale` to the current zoom scale without smooth scrolling and centered on the touch point.
-<a href=#737 id=737 data-nosnippet>737</a>    </span><span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(0.16) - remove this allow
+<a href=#737 id=737 data-nosnippet>737</a>    </span><span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking) - remove this allow
 <a href=#738 id=738 data-nosnippet>738</a>    </span><span class="kw">pub fn </span>zoom_touch(<span class="kw-2">&amp;</span><span class="self">self</span>, phase: TouchPhase, scale: Factor, center_in_viewport: euclid::Point2D&lt;f32, Px&gt;) {
 <a href=#739 id=739 data-nosnippet>739</a>        <span class="kw">if </span>!SCROLL_MODE_VAR.get().contains(ScrollMode::ZOOM) {
 <a href=#740 id=740 data-nosnippet>740</a>            <span class="kw">return</span>;

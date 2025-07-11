@@ -888,7 +888,7 @@
 <a href=#888 id=888 data-nosnippet>888</a>
 <a href=#889 id=889 data-nosnippet>889</a>        <span class="kw">if </span><span class="self">self</span>.file != search.file {
 <a href=#890 id=890 data-nosnippet>890</a>            <span class="kw">let </span>file_a = <span class="self">self</span>.file.rsplit_once(<span class="string">'.'</span>).map(|t| t.<span class="number">0</span>).unwrap_or(<span class="self">self</span>.file.as_str());
-<a href=#891 id=891 data-nosnippet>891</a>            <span class="kw">let </span>file_b = search.file.rsplit_once(<span class="string">'.'</span>).map(|t| t.<span class="number">0</span>).unwrap_or(<span class="self">self</span>.file.as_str());
+<a href=#891 id=891 data-nosnippet>891</a>            <span class="kw">let </span>file_b = search.file.rsplit_once(<span class="string">'.'</span>).map(|t| t.<span class="number">0</span>).unwrap_or(search.file.as_str());
 <a href=#892 id=892 data-nosnippet>892</a>            <span class="kw">if </span>file_a != file_b {
 <a href=#893 id=893 data-nosnippet>893</a>                <span class="kw">let </span>is_empty_a = file_a == <span class="string">"_" </span>|| file_a.is_empty();
 <a href=#894 id=894 data-nosnippet>894</a>                <span class="kw">let </span>is_empty_b = file_b == <span class="string">"_" </span>|| file_b.is_empty();
@@ -968,4 +968,12 @@
 <a href=#968 id=968 data-nosnippet>968</a>        check(<span class="string">"1.0.0"</span>, <span class="string">"2.0.0"</span>, <span class="string">"3.0.0"</span>);
 <a href=#969 id=969 data-nosnippet>969</a>        check(<span class="string">"1.0.0"</span>, <span class="string">"1.1.0"</span>, <span class="string">"2.0.0"</span>);
 <a href=#970 id=970 data-nosnippet>970</a>    }
-<a href=#971 id=971 data-nosnippet>971</a>}</code></pre></div></section></main></body></html>
+<a href=#971 id=971 data-nosnippet>971</a>
+<a href=#972 id=972 data-nosnippet>972</a>    <span class="attr">#[test]
+<a href=#973 id=973 data-nosnippet>973</a>    </span><span class="kw">fn </span>file_name_mismatches() {
+<a href=#974 id=974 data-nosnippet>974</a>        <span class="kw">let </span>ap = LangFilePath::new(<span class="string">"name"</span>, <span class="string">"1.0.0"</span>.parse().unwrap(), <span class="string">"file-a"</span>);
+<a href=#975 id=975 data-nosnippet>975</a>        <span class="kw">let </span>bp = LangFilePath::new(<span class="string">"name"</span>, <span class="string">"1.0.0"</span>.parse().unwrap(), <span class="string">"file-b"</span>);
+<a href=#976 id=976 data-nosnippet>976</a>
+<a href=#977 id=977 data-nosnippet>977</a>        <span class="macro">assert!</span>(ap.matches(<span class="kw-2">&amp;</span>bp).is_none());
+<a href=#978 id=978 data-nosnippet>978</a>    }
+<a href=#979 id=979 data-nosnippet>979</a>}</code></pre></div></section></main></body></html>
