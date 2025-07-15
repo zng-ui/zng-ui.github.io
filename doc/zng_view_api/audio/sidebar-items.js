@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BufferSize"],"struct":["AudioDeviceCapability","AudioDeviceId","AudioDeviceInfo","AudioStreamMode","SampleRate"]};

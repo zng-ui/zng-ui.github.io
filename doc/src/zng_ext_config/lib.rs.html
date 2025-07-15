@@ -165,8 +165,8 @@
 <a href=#165 id=165 data-nosnippet>165</a>
 <a href=#166 id=166 data-nosnippet>166</a><span class="doccomment">/// Represents any entry type in a config.
 <a href=#167 id=167 data-nosnippet>167</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
-<a href=#168 id=168 data-nosnippet>168</a></span><span class="kw">pub struct </span>RawConfigValue(<span class="kw">pub </span>serde_json::Value);
-<a href=#169 id=169 data-nosnippet>169</a><span class="kw">impl </span>RawConfigValue {
+<a href=#168 id=168 data-nosnippet>168</a></span><span class="kw">pub struct </span>RawConfigValue(<span class="kw">pub </span>serde_json::Value); <span class="comment">// TODO(breaking) replace with something that can represent binary data, perhaps `rmpv`?
+<a href=#169 id=169 data-nosnippet>169</a></span><span class="kw">impl </span>RawConfigValue {
 <a href=#170 id=170 data-nosnippet>170</a>    <span class="doccomment">/// Serialize to the raw config format.
 <a href=#171 id=171 data-nosnippet>171</a>    </span><span class="kw">pub fn </span>serialize&lt;T: serde::Serialize&gt;(value: T) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, serde_json::Error&gt; {
 <a href=#172 id=172 data-nosnippet>172</a>        serde_json::to_value(value).map(<span class="self">Self</span>)

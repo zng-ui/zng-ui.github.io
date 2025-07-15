@@ -16,7 +16,7 @@
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>colors::{ACCENT_COLOR_VAR, BASE_COLOR_VAR};
 <a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>zng_app::event::CommandParam;
 <a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>zng_var::ReadOnlyContextVar;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>zng_wgt::{base_color, border, corner_radius, is_disabled, prelude::<span class="kw-2">*</span>};
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>zng_wgt::{base_color, border, corner_radius, is_disabled, node::VarPresent <span class="kw">as _</span>, prelude::<span class="kw-2">*</span>};
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>zng_wgt_access::{AccessRole, access_role, labelled_by_child};
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_wgt_container::{Container, child_align, padding};
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_wgt_fill::background_color;
@@ -60,7 +60,7 @@
 <a href=#60 id=60 data-nosnippet>60</a>        <span class="self">self</span>.widget_builder().push_build_action(|wgt| {
 <a href=#61 id=61 data-nosnippet>61</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(cmd) = wgt.capture_var::&lt;Command&gt;(<span class="macro">property_id!</span>(<span class="self">Self</span>::cmd)) {
 <a href=#62 id=62 data-nosnippet>62</a>                <span class="kw">if </span>wgt.property(<span class="macro">property_id!</span>(<span class="self">Self</span>::child)).is_none() {
-<a href=#63 id=63 data-nosnippet>63</a>                    wgt.set_child(presenter(cmd.clone(), CMD_CHILD_FN_VAR));
+<a href=#63 id=63 data-nosnippet>63</a>                    wgt.set_child(cmd.present(CMD_CHILD_FN_VAR));
 <a href=#64 id=64 data-nosnippet>64</a>                }
 <a href=#65 id=65 data-nosnippet>65</a>
 <a href=#66 id=66 data-nosnippet>66</a>                <span class="kw">let </span>enabled = wgt.property(<span class="macro">property_id!</span>(zng_wgt::enabled)).is_none();

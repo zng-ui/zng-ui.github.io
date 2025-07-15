@@ -11,7 +11,7 @@
 <a href=#11 id=11 data-nosnippet>11</a>    update::EventUpdate,
 <a href=#12 id=12 data-nosnippet>12</a>    view_process::{
 <a href=#13 id=13 data-nosnippet>13</a>        VIEW_PROCESS_INITED_EVENT,
-<a href=#14 id=14 data-nosnippet>14</a>        raw_device_events::DeviceId,
+<a href=#14 id=14 data-nosnippet>14</a>        raw_device_events::InputDeviceId,
 <a href=#15 id=15 data-nosnippet>15</a>        raw_events::{RAW_FRAME_RENDERED_EVENT, RAW_MOUSE_LEFT_EVENT, RAW_TOUCH_CONFIG_CHANGED_EVENT, RAW_TOUCH_EVENT, RawTouchArgs},
 <a href=#16 id=16 data-nosnippet>16</a>    },
 <a href=#17 id=17 data-nosnippet>17</a>    widget::{
@@ -67,7 +67,7 @@
 <a href=#67 id=67 data-nosnippet>67</a><span class="kw">struct </span>PressedInfo {
 <a href=#68 id=68 data-nosnippet>68</a>    touch_propagation: EventPropagationHandle,
 <a href=#69 id=69 data-nosnippet>69</a>    target: InteractionPath,
-<a href=#70 id=70 data-nosnippet>70</a>    device_id: DeviceId,
+<a href=#70 id=70 data-nosnippet>70</a>    device_id: InputDeviceId,
 <a href=#71 id=71 data-nosnippet>71</a>    position: DipPoint,
 <a href=#72 id=72 data-nosnippet>72</a>    force: <span class="prelude-ty">Option</span>&lt;TouchForce&gt;,
 <a href=#73 id=73 data-nosnippet>73</a>    hits: HitTestInfo,
@@ -260,7 +260,7 @@
 <a href=#260 id=260 data-nosnippet>260</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#261 id=261 data-nosnippet>261</a>
 <a href=#262 id=262 data-nosnippet>262</a>        <span class="doccomment">/// Id of device that generated all touches in this event.
-<a href=#263 id=263 data-nosnippet>263</a>        </span><span class="kw">pub </span>device_id: DeviceId,
+<a href=#263 id=263 data-nosnippet>263</a>        </span><span class="kw">pub </span>device_id: InputDeviceId,
 <a href=#264 id=264 data-nosnippet>264</a>
 <a href=#265 id=265 data-nosnippet>265</a>        <span class="doccomment">/// All touch contacts that moved since last event.
 <a href=#266 id=266 data-nosnippet>266</a>        ///
@@ -295,7 +295,7 @@
 <a href=#295 id=295 data-nosnippet>295</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#296 id=296 data-nosnippet>296</a>
 <a href=#297 id=297 data-nosnippet>297</a>        <span class="doccomment">/// Id of device that generated the event.
-<a href=#298 id=298 data-nosnippet>298</a>        </span><span class="kw">pub </span>device_id: DeviceId,
+<a href=#298 id=298 data-nosnippet>298</a>        </span><span class="kw">pub </span>device_id: InputDeviceId,
 <a href=#299 id=299 data-nosnippet>299</a>
 <a href=#300 id=300 data-nosnippet>300</a>        <span class="doccomment">/// Identify the touch contact or *finger*.
 <a href=#301 id=301 data-nosnippet>301</a>        ///
@@ -373,7 +373,7 @@
 <a href=#373 id=373 data-nosnippet>373</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#374 id=374 data-nosnippet>374</a>
 <a href=#375 id=375 data-nosnippet>375</a>        <span class="doccomment">/// Id of device that generated the event.
-<a href=#376 id=376 data-nosnippet>376</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;DeviceId&gt;,
+<a href=#376 id=376 data-nosnippet>376</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;InputDeviceId&gt;,
 <a href=#377 id=377 data-nosnippet>377</a>
 <a href=#378 id=378 data-nosnippet>378</a>        <span class="doccomment">/// Identify the touch contact or *finger*.
 <a href=#379 id=379 data-nosnippet>379</a>        ///
@@ -437,7 +437,7 @@
 <a href=#437 id=437 data-nosnippet>437</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#438 id=438 data-nosnippet>438</a>
 <a href=#439 id=439 data-nosnippet>439</a>        <span class="doccomment">/// Id of device that generated the event.
-<a href=#440 id=440 data-nosnippet>440</a>        </span><span class="kw">pub </span>device_id: DeviceId,
+<a href=#440 id=440 data-nosnippet>440</a>        </span><span class="kw">pub </span>device_id: InputDeviceId,
 <a href=#441 id=441 data-nosnippet>441</a>
 <a href=#442 id=442 data-nosnippet>442</a>        <span class="doccomment">/// Identify the touch contact or *finger*.
 <a href=#443 id=443 data-nosnippet>443</a>        ///
@@ -477,7 +477,7 @@
 <a href=#477 id=477 data-nosnippet>477</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#478 id=478 data-nosnippet>478</a>
 <a href=#479 id=479 data-nosnippet>479</a>        <span class="doccomment">/// Id of device that generated the event.
-<a href=#480 id=480 data-nosnippet>480</a>        </span><span class="kw">pub </span>device_id: DeviceId,
+<a href=#480 id=480 data-nosnippet>480</a>        </span><span class="kw">pub </span>device_id: InputDeviceId,
 <a href=#481 id=481 data-nosnippet>481</a>
 <a href=#482 id=482 data-nosnippet>482</a>        <span class="doccomment">/// Identify the touch contact or *finger*.
 <a href=#483 id=483 data-nosnippet>483</a>        ///
@@ -517,7 +517,7 @@
 <a href=#517 id=517 data-nosnippet>517</a>        </span><span class="kw">pub </span>window_id: WindowId,
 <a href=#518 id=518 data-nosnippet>518</a>
 <a href=#519 id=519 data-nosnippet>519</a>        <span class="doccomment">/// Id of the device that generated the touch events.
-<a href=#520 id=520 data-nosnippet>520</a>        </span><span class="kw">pub </span>device_id: DeviceId,
+<a href=#520 id=520 data-nosnippet>520</a>        </span><span class="kw">pub </span>device_id: InputDeviceId,
 <a href=#521 id=521 data-nosnippet>521</a>
 <a href=#522 id=522 data-nosnippet>522</a>        <span class="doccomment">/// Info collected when the second touch point started.
 <a href=#523 id=523 data-nosnippet>523</a>        </span><span class="kw">pub </span>first_info: TouchTransformInfo,
@@ -1203,7 +1203,7 @@
 <a href=#1203 id=1203 data-nosnippet>1203</a>
 <a href=#1204 id=1204 data-nosnippet>1204</a>                    RAW_TOUCH_EVENT.notify(RawTouchArgs::now(
 <a href=#1205 id=1205 data-nosnippet>1205</a>                        args.window_id,
-<a href=#1206 id=1206 data-nosnippet>1206</a>                        args.device_id.unwrap_or(DeviceId::new_unique()),
+<a href=#1206 id=1206 data-nosnippet>1206</a>                        args.device_id.unwrap_or(InputDeviceId::new_unique()),
 <a href=#1207 id=1207 data-nosnippet>1207</a>                        <span class="macro">vec!</span>[TouchUpdate::new(TouchId(u64::MAX), phase, args.position, <span class="prelude-val">None</span>)],
 <a href=#1208 id=1208 data-nosnippet>1208</a>                    ));
 <a href=#1209 id=1209 data-nosnippet>1209</a>                }
@@ -1628,14 +1628,14 @@
 <a href=#1628 id=1628 data-nosnippet>1628</a>
 <a href=#1629 id=1629 data-nosnippet>1629</a><span class="kw">struct </span>PendingDoubleTap {
 <a href=#1630 id=1630 data-nosnippet>1630</a>    window_id: WindowId,
-<a href=#1631 id=1631 data-nosnippet>1631</a>    device_id: DeviceId,
+<a href=#1631 id=1631 data-nosnippet>1631</a>    device_id: InputDeviceId,
 <a href=#1632 id=1632 data-nosnippet>1632</a>    target: WidgetId,
 <a href=#1633 id=1633 data-nosnippet>1633</a>    count: NonZeroU32,
 <a href=#1634 id=1634 data-nosnippet>1634</a>    timestamp: DInstant,
 <a href=#1635 id=1635 data-nosnippet>1635</a>}
 <a href=#1636 id=1636 data-nosnippet>1636</a><span class="kw">struct </span>PendingTap {
 <a href=#1637 id=1637 data-nosnippet>1637</a>    window_id: WindowId,
-<a href=#1638 id=1638 data-nosnippet>1638</a>    device_id: DeviceId,
+<a href=#1638 id=1638 data-nosnippet>1638</a>    device_id: InputDeviceId,
 <a href=#1639 id=1639 data-nosnippet>1639</a>    touch: TouchId,
 <a href=#1640 id=1640 data-nosnippet>1640</a>    target: WidgetId,
 <a href=#1641 id=1641 data-nosnippet>1641</a>
@@ -1645,7 +1645,7 @@
 <a href=#1645 id=1645 data-nosnippet>1645</a>    <span class="doccomment">/// Check if the tap is still possible after a touch move..
 <a href=#1646 id=1646 data-nosnippet>1646</a>    ///
 <a href=#1647 id=1647 data-nosnippet>1647</a>    /// Returns `true` if it is.
-<a href=#1648 id=1648 data-nosnippet>1648</a>    </span><span class="kw">fn </span>retain(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: WindowId, device_id: DeviceId, touch: TouchId) -&gt; bool {
+<a href=#1648 id=1648 data-nosnippet>1648</a>    </span><span class="kw">fn </span>retain(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: WindowId, device_id: InputDeviceId, touch: TouchId) -&gt; bool {
 <a href=#1649 id=1649 data-nosnippet>1649</a>        <span class="kw">if </span><span class="self">self</span>.propagation.is_stopped() {
 <a href=#1650 id=1650 data-nosnippet>1650</a>            <span class="comment">// cancel, gesture opportunity handled.
 <a href=#1651 id=1651 data-nosnippet>1651</a>            </span><span class="kw">return </span><span class="bool-val">false</span>;
@@ -1668,7 +1668,7 @@
 <a href=#1668 id=1668 data-nosnippet>1668</a>
 <a href=#1669 id=1669 data-nosnippet>1669</a><span class="kw">struct </span>PendingLongPress {
 <a href=#1670 id=1670 data-nosnippet>1670</a>    window_id: WindowId,
-<a href=#1671 id=1671 data-nosnippet>1671</a>    device_id: DeviceId,
+<a href=#1671 id=1671 data-nosnippet>1671</a>    device_id: InputDeviceId,
 <a href=#1672 id=1672 data-nosnippet>1672</a>    touch: TouchId,
 <a href=#1673 id=1673 data-nosnippet>1673</a>    target: WidgetId,
 <a href=#1674 id=1674 data-nosnippet>1674</a>    position: DipPoint,
@@ -2123,14 +2123,14 @@
 <a href=#2123 id=2123 data-nosnippet>2123</a>
 <a href=#2124 id=2124 data-nosnippet>2124</a>    NotStartedOne {
 <a href=#2125 id=2125 data-nosnippet>2125</a>        window_id: WindowId,
-<a href=#2126 id=2126 data-nosnippet>2126</a>        device_id: DeviceId,
+<a href=#2126 id=2126 data-nosnippet>2126</a>        device_id: InputDeviceId,
 <a href=#2127 id=2127 data-nosnippet>2127</a>        start_position: DipPoint,
 <a href=#2128 id=2128 data-nosnippet>2128</a>        position: DipPoint,
 <a href=#2129 id=2129 data-nosnippet>2129</a>        handle: EventPropagationHandle,
 <a href=#2130 id=2130 data-nosnippet>2130</a>    },
 <a href=#2131 id=2131 data-nosnippet>2131</a>    NotStartedTwo {
 <a href=#2132 id=2132 data-nosnippet>2132</a>        window_id: WindowId,
-<a href=#2133 id=2133 data-nosnippet>2133</a>        device_id: DeviceId,
+<a href=#2133 id=2133 data-nosnippet>2133</a>        device_id: InputDeviceId,
 <a href=#2134 id=2134 data-nosnippet>2134</a>        start_position: [DipPoint; <span class="number">2</span>],
 <a href=#2135 id=2135 data-nosnippet>2135</a>        position: [DipPoint; <span class="number">2</span>],
 <a href=#2136 id=2136 data-nosnippet>2136</a>        handle: [EventPropagationHandle; <span class="number">2</span>],
@@ -2139,7 +2139,7 @@
 <a href=#2139 id=2139 data-nosnippet>2139</a>
 <a href=#2140 id=2140 data-nosnippet>2140</a>    StartedOne {
 <a href=#2141 id=2141 data-nosnippet>2141</a>        window_id: WindowId,
-<a href=#2142 id=2142 data-nosnippet>2142</a>        device_id: DeviceId,
+<a href=#2142 id=2142 data-nosnippet>2142</a>        device_id: InputDeviceId,
 <a href=#2143 id=2143 data-nosnippet>2143</a>        position: DipPoint,
 <a href=#2144 id=2144 data-nosnippet>2144</a>        velocity: DipVector,
 <a href=#2145 id=2145 data-nosnippet>2145</a>        scale_factor: Factor,
@@ -2150,7 +2150,7 @@
 <a href=#2150 id=2150 data-nosnippet>2150</a>    },
 <a href=#2151 id=2151 data-nosnippet>2151</a>    StartedTwo {
 <a href=#2152 id=2152 data-nosnippet>2152</a>        window_id: WindowId,
-<a href=#2153 id=2153 data-nosnippet>2153</a>        device_id: DeviceId,
+<a href=#2153 id=2153 data-nosnippet>2153</a>        device_id: InputDeviceId,
 <a href=#2154 id=2154 data-nosnippet>2154</a>        position: [DipPoint; <span class="number">2</span>],
 <a href=#2155 id=2155 data-nosnippet>2155</a>        velocity: [DipVector; <span class="number">2</span>],
 <a href=#2156 id=2156 data-nosnippet>2156</a>        scale_factor: Factor,

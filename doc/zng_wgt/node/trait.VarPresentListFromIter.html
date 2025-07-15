@@ -1,0 +1,48 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Extension method fo convert a variable to a node list."><title>VarPresentListFromIter in zng_wgt::node - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+// Hides tagged `macro_rules!` macros from crate root.
+
+document.addEventListener('DOMContentLoaded', function () {
+    let is_front_pg = false;
+    document.querySelectorAll('h1').forEach(function (h) {
+        if (h.innerText.trimStart().startsWith("Crate ")) {
+            is_front_pg = true;
+        }
+    });
+
+    if (is_front_pg) {
+        // remove tagged macros.
+        let removes = document.querySelectorAll('span[data-del-macro-root]');
+        for (let remove of removes) {
+            let div = remove.parentElement.parentElement;
+            if (div.previousElementSibling != null) {
+                div.previousElementSibling.remove();
+            }
+            div.remove();
+        }
+    }
+
+    // remove empty macros section.
+    let title = document.getElementById('macros');
+    if (title != null && title.nextElementSibling.querySelector('a') == null) {
+        title.nextElementSibling.remove();
+        title.remove();
+
+        let side_anchor = document.querySelector('a[href="#macros"]');
+        if (side_anchor != null) {
+            side_anchor.parentElement.remove();
+        }
+    }
+})
+</script>
+</head><body class="rustdoc trait"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_wgt/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng_wgt/index.html">zng_wgt</a><span class="version">0.8.8</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">VarPresent<wbr>List<wbr>From<wbr>Iter</a></h2><h3><a href="#provided-methods">Provided Methods</a></h3><ul class="block"><li><a href="#method.present_list_from_iter" title="present_list_from_iter">present_list_from_iter</a></li></ul><h3><a href="#dyn-compatibility">Dyn Compatibility</a></h3><h3><a href="#implementors">Implementors</a></h3></section><div id="rustdoc-modnav"><h2><a href="index.html">In zng_<wbr>wgt::<wbr>node</a></h2></div></div></nav><div class="sidebar-resizer"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng_wgt</a>::<wbr><a href="index.html">node</a></div><h1>Trait <span class="trait">VarPresentListFromIter</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng_wgt/node.rs.html#2513-2518">Source</a> </span></div><pre class="rust item-decl"><code>pub trait VarPresentListFromIter&lt;D: <a class="trait" href="../../zng_var/trait.VarValue.html" title="trait zng_var::VarValue">VarValue</a>, L: <a class="trait" href="https://doc.rust-lang.org/1.88.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = D&gt; + <a class="trait" href="../../zng_var/trait.VarValue.html" title="trait zng_var::VarValue">VarValue</a>&gt;: <a class="trait" href="../../zng_var/trait.Var.html" title="trait zng_var::Var">Var</a>&lt;L&gt; {
+    // Provided method
+    fn <a href="#method.present_list_from_iter" class="fn">present_list_from_iter</a>(
+        &amp;self,
+        wgt_fn: impl <a class="trait" href="../../zng_var/trait.IntoVar.html" title="trait zng_var::IntoVar">IntoVar</a>&lt;<a class="struct" href="../struct.WidgetFn.html" title="struct zng_wgt::WidgetFn">WidgetFn</a>&lt;D&gt;&gt;,
+    ) -&gt; impl <a class="trait" href="../../zng_app/widget/node/trait.UiNodeList.html" title="trait zng_app::widget::node::UiNodeList">UiNodeList</a> { ... }
+}</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Extension method fo <em>convert</em> a variable to a node list.</p>
+</div></details><h2 id="provided-methods" class="section-header">Provided Methods<a href="#provided-methods" class="anchor">§</a></h2><div class="methods"><details class="toggle method-toggle" open><summary><section id="method.present_list_from_iter" class="method"><a class="src rightside" href="../../src/zng_wgt/node.rs.html#2515-2517">Source</a><h4 class="code-header">fn <a href="#method.present_list_from_iter" class="fn">present_list_from_iter</a>(
+    &amp;self,
+    wgt_fn: impl <a class="trait" href="../../zng_var/trait.IntoVar.html" title="trait zng_var::IntoVar">IntoVar</a>&lt;<a class="struct" href="../struct.WidgetFn.html" title="struct zng_wgt::WidgetFn">WidgetFn</a>&lt;D&gt;&gt;,
+) -&gt; impl <a class="trait" href="../../zng_app/widget/node/trait.UiNodeList.html" title="trait zng_app::widget::node::UiNodeList">UiNodeList</a></h4></section></summary><div class="docblock"><p>Present the variable data using a <a href="fn.list_presenter_from_iter.html" title="fn zng_wgt::node::list_presenter_from_iter"><code>list_presenter_from_iter</code></a> node list.</p>
+</div></details></div><h2 id="dyn-compatibility" class="section-header">Dyn Compatibility<a href="#dyn-compatibility" class="anchor">§</a></h2><div class="dyn-compatibility-info"><p>This trait is <b>not</b> <a href="https://doc.rust-lang.org/1.88.0/reference/items/traits.html#dyn-compatibility">dyn compatible</a>.</p><p><i>In older versions of Rust, dyn compatibility was called "object safety", so this trait is not object safe.</i></p></div><h2 id="implementors" class="section-header">Implementors<a href="#implementors" class="anchor">§</a></h2><div id="implementors-list"><section id="impl-VarPresentListFromIter%3CD,+L%3E-for-V" class="impl"><a class="src rightside" href="../../src/zng_wgt/node.rs.html#2519">Source</a><a href="#impl-VarPresentListFromIter%3CD,+L%3E-for-V" class="anchor">§</a><h3 class="code-header">impl&lt;D: <a class="trait" href="../../zng_var/trait.VarValue.html" title="trait zng_var::VarValue">VarValue</a>, L: <a class="trait" href="https://doc.rust-lang.org/1.88.0/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = D&gt; + <a class="trait" href="../../zng_var/trait.VarValue.html" title="trait zng_var::VarValue">VarValue</a>, V: <a class="trait" href="../../zng_var/trait.Var.html" title="trait zng_var::Var">Var</a>&lt;L&gt;&gt; <a class="trait" href="trait.VarPresentListFromIter.html" title="trait zng_wgt::node::VarPresentListFromIter">VarPresentListFromIter</a>&lt;D, L&gt; for V</h3></section></div><script src="../../trait.impl/zng_wgt/node/trait.VarPresentListFromIter.js" async></script></section></div></main></body></html>

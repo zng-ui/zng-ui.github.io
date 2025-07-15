@@ -19,7 +19,7 @@
 <a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>zng_ext_window::{WINDOW_CLOSE_REQUESTED_EVENT, WINDOWS, WindowCloseRequestedArgs};
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>zng_var::{ContextInitHandle, animation::easing};
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_view_api::dialog <span class="kw">as </span>native_api;
-<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_wgt::{prelude::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
+<a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_wgt::{node::VarPresent <span class="kw">as _</span>, prelude::<span class="kw-2">*</span>, <span class="kw-2">*</span>};
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>zng_wgt_container::Container;
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>zng_wgt_fill::background_color;
 <a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span>zng_wgt_filter::drop_shadow;
@@ -190,13 +190,13 @@
 <a href=#190 id=190 data-nosnippet>190</a>            zng_wgt_container::child_out_top = <span class="macro">Container!</span> {
 <a href=#191 id=191 data-nosnippet>191</a>                corner_radius = <span class="number">0</span>;
 <a href=#192 id=192 data-nosnippet>192</a>                background_color = light_dark(rgb(<span class="number">0.85</span>, <span class="number">0.85</span>, <span class="number">0.85</span>), rgb(<span class="number">0.15</span>, <span class="number">0.15</span>, <span class="number">0.15</span>));
-<a href=#193 id=193 data-nosnippet>193</a>                child = presenter((), TITLE_VAR);
+<a href=#193 id=193 data-nosnippet>193</a>                child = TITLE_VAR.present_data(());
 <a href=#194 id=194 data-nosnippet>194</a>                child_align = Align::START;
 <a href=#195 id=195 data-nosnippet>195</a>                padding = (<span class="number">4</span>, <span class="number">8</span>);
 <a href=#196 id=196 data-nosnippet>196</a>                zng_wgt_text::font_weight = zng_ext_font::FontWeight::BOLD;
 <a href=#197 id=197 data-nosnippet>197</a>            }, <span class="number">0</span>;
 <a href=#198 id=198 data-nosnippet>198</a>
-<a href=#199 id=199 data-nosnippet>199</a>            zng_wgt_container::child_out_bottom = presenter(RESPONSES_VAR, <span class="macro">wgt_fn!</span>(|responses: Responses| {
+<a href=#199 id=199 data-nosnippet>199</a>            zng_wgt_container::child_out_bottom = RESPONSES_VAR.present(<span class="macro">wgt_fn!</span>(|responses: Responses| {
 <a href=#200 id=200 data-nosnippet>200</a>                <span class="macro">Wrap!</span> {
 <a href=#201 id=201 data-nosnippet>201</a>                    corner_radius = <span class="number">0</span>;
 <a href=#202 id=202 data-nosnippet>202</a>                    background_color = light_dark(rgb(<span class="number">0.85</span>, <span class="number">0.85</span>, <span class="number">0.85</span>), rgb(<span class="number">0.15</span>, <span class="number">0.15</span>, <span class="number">0.15</span>));
@@ -218,11 +218,11 @@
 <a href=#218 id=218 data-nosnippet>218</a>            })), <span class="number">0</span>;
 <a href=#219 id=219 data-nosnippet>219</a>
 <a href=#220 id=220 data-nosnippet>220</a>            zng_wgt_container::child_out_left = <span class="macro">Container!</span> {
-<a href=#221 id=221 data-nosnippet>221</a>                child = presenter((), ICON_VAR);
+<a href=#221 id=221 data-nosnippet>221</a>                child = ICON_VAR.present_data(());
 <a href=#222 id=222 data-nosnippet>222</a>                child_align = Align::TOP;
 <a href=#223 id=223 data-nosnippet>223</a>            }, <span class="number">0</span>;
 <a href=#224 id=224 data-nosnippet>224</a>
-<a href=#225 id=225 data-nosnippet>225</a>            zng_wgt_container::child = presenter((), CONTENT_VAR);
+<a href=#225 id=225 data-nosnippet>225</a>            zng_wgt_container::child = CONTENT_VAR.present_data(());
 <a href=#226 id=226 data-nosnippet>226</a>
 <a href=#227 id=227 data-nosnippet>227</a>            <span class="attr">#[easing(<span class="number">250</span>.ms())]
 <a href=#228 id=228 data-nosnippet>228</a>            </span>zng_wgt_filter::opacity = <span class="number">30</span>.pct();

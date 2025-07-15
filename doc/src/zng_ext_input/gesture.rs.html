@@ -17,7 +17,7 @@
 <a href=#17 id=17 data-nosnippet>17</a>        shortcut,
 <a href=#18 id=18 data-nosnippet>18</a>    },
 <a href=#19 id=19 data-nosnippet>19</a>    update::EventUpdate,
-<a href=#20 id=20 data-nosnippet>20</a>    view_process::raw_device_events::DeviceId,
+<a href=#20 id=20 data-nosnippet>20</a>    view_process::raw_device_events::InputDeviceId,
 <a href=#21 id=21 data-nosnippet>21</a>    widget::{
 <a href=#22 id=22 data-nosnippet>22</a>        WidgetId,
 <a href=#23 id=23 data-nosnippet>23</a>        info::{HitTestInfo, InteractionPath, WidgetPath},
@@ -107,7 +107,7 @@
 <a href=#107 id=107 data-nosnippet>107</a>        <span class="doccomment">/// Id of device that generated the event.
 <a href=#108 id=108 data-nosnippet>108</a>        ///
 <a href=#109 id=109 data-nosnippet>109</a>        /// Is `None` if the event was generated programmatically.
-<a href=#110 id=110 data-nosnippet>110</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;DeviceId&gt;,
+<a href=#110 id=110 data-nosnippet>110</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;InputDeviceId&gt;,
 <a href=#111 id=111 data-nosnippet>111</a>
 <a href=#112 id=112 data-nosnippet>112</a>        <span class="doccomment">/// Specific info from the source of this event.
 <a href=#113 id=113 data-nosnippet>113</a>        </span><span class="kw">pub </span>source: ClickArgsSource,
@@ -144,7 +144,7 @@
 <a href=#144 id=144 data-nosnippet>144</a>        <span class="doccomment">/// Id of device that generated the event.
 <a href=#145 id=145 data-nosnippet>145</a>        ///
 <a href=#146 id=146 data-nosnippet>146</a>        /// Is `None` if the event was generated programmatically.
-<a href=#147 id=147 data-nosnippet>147</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;DeviceId&gt;,
+<a href=#147 id=147 data-nosnippet>147</a>        </span><span class="kw">pub </span>device_id: <span class="prelude-ty">Option</span>&lt;InputDeviceId&gt;,
 <a href=#148 id=148 data-nosnippet>148</a>
 <a href=#149 id=149 data-nosnippet>149</a>        <span class="doccomment">/// The shortcut.
 <a href=#150 id=150 data-nosnippet>150</a>        </span><span class="kw">pub </span>shortcut: Shortcut,
@@ -974,7 +974,7 @@
 <a href=#974 id=974 data-nosnippet>974</a>    }
 <a href=#975 id=975 data-nosnippet>975</a>
 <a href=#976 id=976 data-nosnippet>976</a>    <span class="doccomment">/// Send all events and focus request.
-<a href=#977 id=977 data-nosnippet>977</a>    </span><span class="kw">fn </span>run(<span class="kw-2">&amp;</span><span class="self">self</span>, timestamp: DInstant, propagation: <span class="kw-2">&amp;</span>EventPropagationHandle, device_id: <span class="prelude-ty">Option</span>&lt;DeviceId&gt;, repeat_count: u32) {
+<a href=#977 id=977 data-nosnippet>977</a>    </span><span class="kw">fn </span>run(<span class="kw-2">&amp;</span><span class="self">self</span>, timestamp: DInstant, propagation: <span class="kw-2">&amp;</span>EventPropagationHandle, device_id: <span class="prelude-ty">Option</span>&lt;InputDeviceId&gt;, repeat_count: u32) {
 <a href=#978 id=978 data-nosnippet>978</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(target) = <span class="self">self</span>.focus() {
 <a href=#979 id=979 data-nosnippet>979</a>            FOCUS.focus(FocusRequest::new(target, <span class="bool-val">true</span>));
 <a href=#980 id=980 data-nosnippet>980</a>        }

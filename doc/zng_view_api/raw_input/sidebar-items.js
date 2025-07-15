@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InputDeviceEvent"],"struct":["InputDeviceCapability","InputDeviceId","InputDeviceInfo"]};

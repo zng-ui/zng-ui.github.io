@@ -130,9 +130,9 @@
 <a href=#130 id=130 data-nosnippet>130</a>///
 <a href=#131 id=131 data-nosnippet>131</a>/// The image widget adds this node around the [`image_presenter`] node.
 <a href=#132 id=132 data-nosnippet>132</a></span><span class="kw">pub fn </span>image_error_presenter(child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">let </span>view = presenter_opt(
-<a href=#134 id=134 data-nosnippet>134</a>        CONTEXT_IMAGE_VAR.map(|i| i.error().map(|e| ImgErrorArgs { error: e })),
-<a href=#135 id=135 data-nosnippet>135</a>        IMAGE_ERROR_FN_VAR.map(|f| {
+<a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">let </span>view = CONTEXT_IMAGE_VAR
+<a href=#134 id=134 data-nosnippet>134</a>        .map(|i| i.error().map(|e| ImgErrorArgs { error: e }))
+<a href=#135 id=135 data-nosnippet>135</a>        .present_opt(IMAGE_ERROR_FN_VAR.map(|f| {
 <a href=#136 id=136 data-nosnippet>136</a>            <span class="macro">wgt_fn!</span>(f, |e| {
 <a href=#137 id=137 data-nosnippet>137</a>                <span class="kw">if </span>IN_ERROR_VIEW.get_clone() {
 <a href=#138 id=138 data-nosnippet>138</a>                    NilUiNode.boxed()
@@ -140,311 +140,309 @@
 <a href=#140 id=140 data-nosnippet>140</a>                    with_context_local(f(e), <span class="kw-2">&amp;</span>IN_ERROR_VIEW, <span class="bool-val">true</span>).boxed()
 <a href=#141 id=141 data-nosnippet>141</a>                }
 <a href=#142 id=142 data-nosnippet>142</a>            })
-<a href=#143 id=143 data-nosnippet>143</a>        }),
-<a href=#144 id=144 data-nosnippet>144</a>    );
-<a href=#145 id=145 data-nosnippet>145</a>
-<a href=#146 id=146 data-nosnippet>146</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
-<a href=#147 id=147 data-nosnippet>147</a>        <span class="kw">if </span>img_size == PxSize::zero() {
-<a href=#148 id=148 data-nosnippet>148</a>            constraints
-<a href=#149 id=149 data-nosnippet>149</a>        } <span class="kw">else </span>{
-<a href=#150 id=150 data-nosnippet>150</a>            PxConstraints2d::new_fill_size(img_size)
-<a href=#151 id=151 data-nosnippet>151</a>        }
-<a href=#152 id=152 data-nosnippet>152</a>    })
-<a href=#153 id=153 data-nosnippet>153</a>}
-<a href=#154 id=154 data-nosnippet>154</a>
-<a href=#155 id=155 data-nosnippet>155</a><span class="doccomment">/// Presents the contextual [`IMAGE_LOADING_FN_VAR`] if the [`CONTEXT_IMAGE_VAR`] is loading.
-<a href=#156 id=156 data-nosnippet>156</a>///
-<a href=#157 id=157 data-nosnippet>157</a>/// The loading view is rendered under the `child`.
-<a href=#158 id=158 data-nosnippet>158</a>///
-<a href=#159 id=159 data-nosnippet>159</a>/// The image widget adds this node around the [`image_error_presenter`] node.
-<a href=#160 id=160 data-nosnippet>160</a></span><span class="kw">pub fn </span>image_loading_presenter(child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
-<a href=#161 id=161 data-nosnippet>161</a>    <span class="kw">let </span>view = presenter_opt(
-<a href=#162 id=162 data-nosnippet>162</a>        CONTEXT_IMAGE_VAR.map(|i| <span class="kw">if </span>i.is_loading() { <span class="prelude-val">Some</span>(ImgLoadingArgs {}) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}),
-<a href=#163 id=163 data-nosnippet>163</a>        IMAGE_LOADING_FN_VAR.map(|f| {
-<a href=#164 id=164 data-nosnippet>164</a>            <span class="macro">wgt_fn!</span>(f, |a| {
-<a href=#165 id=165 data-nosnippet>165</a>                <span class="kw">if </span>IN_LOADING_VIEW.get_clone() {
-<a href=#166 id=166 data-nosnippet>166</a>                    NilUiNode.boxed()
-<a href=#167 id=167 data-nosnippet>167</a>                } <span class="kw">else </span>{
-<a href=#168 id=168 data-nosnippet>168</a>                    with_context_local(f(a), <span class="kw-2">&amp;</span>IN_LOADING_VIEW, <span class="bool-val">true</span>).boxed()
-<a href=#169 id=169 data-nosnippet>169</a>                }
-<a href=#170 id=170 data-nosnippet>170</a>            })
-<a href=#171 id=171 data-nosnippet>171</a>        }),
-<a href=#172 id=172 data-nosnippet>172</a>    );
-<a href=#173 id=173 data-nosnippet>173</a>
-<a href=#174 id=174 data-nosnippet>174</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
-<a href=#175 id=175 data-nosnippet>175</a>        <span class="kw">if </span>img_size == PxSize::zero() {
-<a href=#176 id=176 data-nosnippet>176</a>            constraints
-<a href=#177 id=177 data-nosnippet>177</a>        } <span class="kw">else </span>{
-<a href=#178 id=178 data-nosnippet>178</a>            PxConstraints2d::new_fill_size(img_size)
-<a href=#179 id=179 data-nosnippet>179</a>        }
-<a href=#180 id=180 data-nosnippet>180</a>    })
-<a href=#181 id=181 data-nosnippet>181</a>}
-<a href=#182 id=182 data-nosnippet>182</a>
-<a href=#183 id=183 data-nosnippet>183</a><span class="doccomment">/// Renders the [`CONTEXT_IMAGE_VAR`] if set.
+<a href=#143 id=143 data-nosnippet>143</a>        }));
+<a href=#144 id=144 data-nosnippet>144</a>
+<a href=#145 id=145 data-nosnippet>145</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
+<a href=#146 id=146 data-nosnippet>146</a>        <span class="kw">if </span>img_size == PxSize::zero() {
+<a href=#147 id=147 data-nosnippet>147</a>            constraints
+<a href=#148 id=148 data-nosnippet>148</a>        } <span class="kw">else </span>{
+<a href=#149 id=149 data-nosnippet>149</a>            PxConstraints2d::new_fill_size(img_size)
+<a href=#150 id=150 data-nosnippet>150</a>        }
+<a href=#151 id=151 data-nosnippet>151</a>    })
+<a href=#152 id=152 data-nosnippet>152</a>}
+<a href=#153 id=153 data-nosnippet>153</a>
+<a href=#154 id=154 data-nosnippet>154</a><span class="doccomment">/// Presents the contextual [`IMAGE_LOADING_FN_VAR`] if the [`CONTEXT_IMAGE_VAR`] is loading.
+<a href=#155 id=155 data-nosnippet>155</a>///
+<a href=#156 id=156 data-nosnippet>156</a>/// The loading view is rendered under the `child`.
+<a href=#157 id=157 data-nosnippet>157</a>///
+<a href=#158 id=158 data-nosnippet>158</a>/// The image widget adds this node around the [`image_error_presenter`] node.
+<a href=#159 id=159 data-nosnippet>159</a></span><span class="kw">pub fn </span>image_loading_presenter(child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#160 id=160 data-nosnippet>160</a>    <span class="kw">let </span>view = CONTEXT_IMAGE_VAR
+<a href=#161 id=161 data-nosnippet>161</a>        .map(|i| <span class="kw">if </span>i.is_loading() { <span class="prelude-val">Some</span>(ImgLoadingArgs {}) } <span class="kw">else </span>{ <span class="prelude-val">None </span>})
+<a href=#162 id=162 data-nosnippet>162</a>        .present_opt(IMAGE_LOADING_FN_VAR.map(|f| {
+<a href=#163 id=163 data-nosnippet>163</a>            <span class="macro">wgt_fn!</span>(f, |a| {
+<a href=#164 id=164 data-nosnippet>164</a>                <span class="kw">if </span>IN_LOADING_VIEW.get_clone() {
+<a href=#165 id=165 data-nosnippet>165</a>                    NilUiNode.boxed()
+<a href=#166 id=166 data-nosnippet>166</a>                } <span class="kw">else </span>{
+<a href=#167 id=167 data-nosnippet>167</a>                    with_context_local(f(a), <span class="kw-2">&amp;</span>IN_LOADING_VIEW, <span class="bool-val">true</span>).boxed()
+<a href=#168 id=168 data-nosnippet>168</a>                }
+<a href=#169 id=169 data-nosnippet>169</a>            })
+<a href=#170 id=170 data-nosnippet>170</a>        }));
+<a href=#171 id=171 data-nosnippet>171</a>
+<a href=#172 id=172 data-nosnippet>172</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
+<a href=#173 id=173 data-nosnippet>173</a>        <span class="kw">if </span>img_size == PxSize::zero() {
+<a href=#174 id=174 data-nosnippet>174</a>            constraints
+<a href=#175 id=175 data-nosnippet>175</a>        } <span class="kw">else </span>{
+<a href=#176 id=176 data-nosnippet>176</a>            PxConstraints2d::new_fill_size(img_size)
+<a href=#177 id=177 data-nosnippet>177</a>        }
+<a href=#178 id=178 data-nosnippet>178</a>    })
+<a href=#179 id=179 data-nosnippet>179</a>}
+<a href=#180 id=180 data-nosnippet>180</a>
+<a href=#181 id=181 data-nosnippet>181</a><span class="doccomment">/// Renders the [`CONTEXT_IMAGE_VAR`] if set.
+<a href=#182 id=182 data-nosnippet>182</a>///
+<a href=#183 id=183 data-nosnippet>183</a>/// This is the inner-most node of an image widget, it is fully configured by context variables:
 <a href=#184 id=184 data-nosnippet>184</a>///
-<a href=#185 id=185 data-nosnippet>185</a>/// This is the inner-most node of an image widget, it is fully configured by context variables:
-<a href=#186 id=186 data-nosnippet>186</a>///
-<a href=#187 id=187 data-nosnippet>187</a>/// * [`CONTEXT_IMAGE_VAR`]: Defines the image to render.
-<a href=#188 id=188 data-nosnippet>188</a>/// * [`IMAGE_CROP_VAR`]: Clip the image before layout.
-<a href=#189 id=189 data-nosnippet>189</a>/// * [`IMAGE_SCALE_PPI_VAR`]: If the image desired size is scaled by PPI.
-<a href=#190 id=190 data-nosnippet>190</a>/// * [`IMAGE_SCALE_FACTOR_VAR`]: If the image desired size is scaled by the screen scale factor.
-<a href=#191 id=191 data-nosnippet>191</a>/// * [`IMAGE_SCALE_VAR`]: Custom scale applied to the desired size.
-<a href=#192 id=192 data-nosnippet>192</a>/// * [`IMAGE_FIT_VAR`]: Defines the image final size.
-<a href=#193 id=193 data-nosnippet>193</a>/// * [`IMAGE_ALIGN_VAR`]: Defines the image alignment in the presenter final size.
-<a href=#194 id=194 data-nosnippet>194</a>/// * [`IMAGE_RENDERING_VAR`]: Defines the image resize algorithm used in the GPU.
-<a href=#195 id=195 data-nosnippet>195</a>/// * [`IMAGE_OFFSET_VAR`]: Defines an offset applied to the image after all measure and arrange.
-<a href=#196 id=196 data-nosnippet>196</a></span><span class="kw">pub fn </span>image_presenter() -&gt; <span class="kw">impl </span>UiNode {
-<a href=#197 id=197 data-nosnippet>197</a>    <span class="kw">let </span><span class="kw-2">mut </span>img_size = PxSize::zero();
-<a href=#198 id=198 data-nosnippet>198</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_clip = PxRect::zero();
-<a href=#199 id=199 data-nosnippet>199</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_img_size = PxSize::zero();
-<a href=#200 id=200 data-nosnippet>200</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_tile_size = PxSize::zero();
-<a href=#201 id=201 data-nosnippet>201</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_tile_spacing = PxSize::zero();
-<a href=#202 id=202 data-nosnippet>202</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_offset = PxVector::zero();
-<a href=#203 id=203 data-nosnippet>203</a>    <span class="kw">let </span>spatial_id = SpatialFrameId::new_unique();
-<a href=#204 id=204 data-nosnippet>204</a>
-<a href=#205 id=205 data-nosnippet>205</a>    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
-<a href=#206 id=206 data-nosnippet>206</a>        UiNodeOp::Init =&gt; {
-<a href=#207 id=207 data-nosnippet>207</a>            WIDGET
-<a href=#208 id=208 data-nosnippet>208</a>                .sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR)
-<a href=#209 id=209 data-nosnippet>209</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_CROP_VAR)
-<a href=#210 id=210 data-nosnippet>210</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_PPI_VAR)
-<a href=#211 id=211 data-nosnippet>211</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_FACTOR_VAR)
-<a href=#212 id=212 data-nosnippet>212</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_VAR)
-<a href=#213 id=213 data-nosnippet>213</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_FIT_VAR)
-<a href=#214 id=214 data-nosnippet>214</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_ALIGN_VAR)
-<a href=#215 id=215 data-nosnippet>215</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_OFFSET_VAR)
-<a href=#216 id=216 data-nosnippet>216</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_REPEAT_VAR)
-<a href=#217 id=217 data-nosnippet>217</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_REPEAT_SPACING_VAR)
-<a href=#218 id=218 data-nosnippet>218</a>                .sub_var_render(<span class="kw-2">&amp;</span>IMAGE_RENDERING_VAR);
-<a href=#219 id=219 data-nosnippet>219</a>
-<a href=#220 id=220 data-nosnippet>220</a>            img_size = CONTEXT_IMAGE_VAR.with(Img::size);
-<a href=#221 id=221 data-nosnippet>221</a>        }
-<a href=#222 id=222 data-nosnippet>222</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#223 id=223 data-nosnippet>223</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(img) = CONTEXT_IMAGE_VAR.get_new() {
-<a href=#224 id=224 data-nosnippet>224</a>                <span class="kw">let </span>ig_size = img.size();
-<a href=#225 id=225 data-nosnippet>225</a>                <span class="kw">if </span>img_size != ig_size {
-<a href=#226 id=226 data-nosnippet>226</a>                    img_size = ig_size;
-<a href=#227 id=227 data-nosnippet>227</a>                    WIDGET.layout();
-<a href=#228 id=228 data-nosnippet>228</a>                } <span class="kw">else if </span>img.is_loaded() {
-<a href=#229 id=229 data-nosnippet>229</a>                    WIDGET.render();
-<a href=#230 id=230 data-nosnippet>230</a>                }
-<a href=#231 id=231 data-nosnippet>231</a>            }
-<a href=#232 id=232 data-nosnippet>232</a>        }
-<a href=#233 id=233 data-nosnippet>233</a>        UiNodeOp::Measure { desired_size, .. } =&gt; {
-<a href=#234 id=234 data-nosnippet>234</a>            <span class="comment">// Similar to `layout` Part 1.
+<a href=#185 id=185 data-nosnippet>185</a>/// * [`CONTEXT_IMAGE_VAR`]: Defines the image to render.
+<a href=#186 id=186 data-nosnippet>186</a>/// * [`IMAGE_CROP_VAR`]: Clip the image before layout.
+<a href=#187 id=187 data-nosnippet>187</a>/// * [`IMAGE_SCALE_PPI_VAR`]: If the image desired size is scaled by PPI.
+<a href=#188 id=188 data-nosnippet>188</a>/// * [`IMAGE_SCALE_FACTOR_VAR`]: If the image desired size is scaled by the screen scale factor.
+<a href=#189 id=189 data-nosnippet>189</a>/// * [`IMAGE_SCALE_VAR`]: Custom scale applied to the desired size.
+<a href=#190 id=190 data-nosnippet>190</a>/// * [`IMAGE_FIT_VAR`]: Defines the image final size.
+<a href=#191 id=191 data-nosnippet>191</a>/// * [`IMAGE_ALIGN_VAR`]: Defines the image alignment in the presenter final size.
+<a href=#192 id=192 data-nosnippet>192</a>/// * [`IMAGE_RENDERING_VAR`]: Defines the image resize algorithm used in the GPU.
+<a href=#193 id=193 data-nosnippet>193</a>/// * [`IMAGE_OFFSET_VAR`]: Defines an offset applied to the image after all measure and arrange.
+<a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub fn </span>image_presenter() -&gt; <span class="kw">impl </span>UiNode {
+<a href=#195 id=195 data-nosnippet>195</a>    <span class="kw">let </span><span class="kw-2">mut </span>img_size = PxSize::zero();
+<a href=#196 id=196 data-nosnippet>196</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_clip = PxRect::zero();
+<a href=#197 id=197 data-nosnippet>197</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_img_size = PxSize::zero();
+<a href=#198 id=198 data-nosnippet>198</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_tile_size = PxSize::zero();
+<a href=#199 id=199 data-nosnippet>199</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_tile_spacing = PxSize::zero();
+<a href=#200 id=200 data-nosnippet>200</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_offset = PxVector::zero();
+<a href=#201 id=201 data-nosnippet>201</a>    <span class="kw">let </span>spatial_id = SpatialFrameId::new_unique();
+<a href=#202 id=202 data-nosnippet>202</a>
+<a href=#203 id=203 data-nosnippet>203</a>    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
+<a href=#204 id=204 data-nosnippet>204</a>        UiNodeOp::Init =&gt; {
+<a href=#205 id=205 data-nosnippet>205</a>            WIDGET
+<a href=#206 id=206 data-nosnippet>206</a>                .sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR)
+<a href=#207 id=207 data-nosnippet>207</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_CROP_VAR)
+<a href=#208 id=208 data-nosnippet>208</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_PPI_VAR)
+<a href=#209 id=209 data-nosnippet>209</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_FACTOR_VAR)
+<a href=#210 id=210 data-nosnippet>210</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_SCALE_VAR)
+<a href=#211 id=211 data-nosnippet>211</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_FIT_VAR)
+<a href=#212 id=212 data-nosnippet>212</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_ALIGN_VAR)
+<a href=#213 id=213 data-nosnippet>213</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_OFFSET_VAR)
+<a href=#214 id=214 data-nosnippet>214</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_REPEAT_VAR)
+<a href=#215 id=215 data-nosnippet>215</a>                .sub_var_layout(<span class="kw-2">&amp;</span>IMAGE_REPEAT_SPACING_VAR)
+<a href=#216 id=216 data-nosnippet>216</a>                .sub_var_render(<span class="kw-2">&amp;</span>IMAGE_RENDERING_VAR);
+<a href=#217 id=217 data-nosnippet>217</a>
+<a href=#218 id=218 data-nosnippet>218</a>            img_size = CONTEXT_IMAGE_VAR.with(Img::size);
+<a href=#219 id=219 data-nosnippet>219</a>        }
+<a href=#220 id=220 data-nosnippet>220</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#221 id=221 data-nosnippet>221</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(img) = CONTEXT_IMAGE_VAR.get_new() {
+<a href=#222 id=222 data-nosnippet>222</a>                <span class="kw">let </span>ig_size = img.size();
+<a href=#223 id=223 data-nosnippet>223</a>                <span class="kw">if </span>img_size != ig_size {
+<a href=#224 id=224 data-nosnippet>224</a>                    img_size = ig_size;
+<a href=#225 id=225 data-nosnippet>225</a>                    WIDGET.layout();
+<a href=#226 id=226 data-nosnippet>226</a>                } <span class="kw">else if </span>img.is_loaded() {
+<a href=#227 id=227 data-nosnippet>227</a>                    WIDGET.render();
+<a href=#228 id=228 data-nosnippet>228</a>                }
+<a href=#229 id=229 data-nosnippet>229</a>            }
+<a href=#230 id=230 data-nosnippet>230</a>        }
+<a href=#231 id=231 data-nosnippet>231</a>        UiNodeOp::Measure { desired_size, .. } =&gt; {
+<a href=#232 id=232 data-nosnippet>232</a>            <span class="comment">// Similar to `layout` Part 1.
+<a href=#233 id=233 data-nosnippet>233</a>
+<a href=#234 id=234 data-nosnippet>234</a>            </span><span class="kw">let </span>metrics = LAYOUT.metrics();
 <a href=#235 id=235 data-nosnippet>235</a>
-<a href=#236 id=236 data-nosnippet>236</a>            </span><span class="kw">let </span>metrics = LAYOUT.metrics();
-<a href=#237 id=237 data-nosnippet>237</a>
-<a href=#238 id=238 data-nosnippet>238</a>            <span class="kw">let </span><span class="kw-2">mut </span>scale = IMAGE_SCALE_VAR.get();
-<a href=#239 id=239 data-nosnippet>239</a>            <span class="kw">if </span>IMAGE_SCALE_PPI_VAR.get() {
-<a href=#240 id=240 data-nosnippet>240</a>                <span class="kw">let </span>sppi = metrics.screen_ppi();
-<a href=#241 id=241 data-nosnippet>241</a>                <span class="kw">let </span>ippi = CONTEXT_IMAGE_VAR.with(Img::ppi).unwrap_or(ImagePpi::splat(sppi.<span class="number">0</span>));
-<a href=#242 id=242 data-nosnippet>242</a>                scale <span class="kw-2">*</span>= Factor2d::new(sppi.<span class="number">0 </span>/ ippi.x, sppi.<span class="number">0 </span>/ ippi.y);
-<a href=#243 id=243 data-nosnippet>243</a>            }
-<a href=#244 id=244 data-nosnippet>244</a>            <span class="kw">if </span>IMAGE_SCALE_FACTOR_VAR.get() {
-<a href=#245 id=245 data-nosnippet>245</a>                scale <span class="kw-2">*</span>= metrics.scale_factor();
-<a href=#246 id=246 data-nosnippet>246</a>            }
-<a href=#247 id=247 data-nosnippet>247</a>
-<a href=#248 id=248 data-nosnippet>248</a>            <span class="kw">let </span>img_rect = PxRect::from_size(img_size);
-<a href=#249 id=249 data-nosnippet>249</a>            <span class="kw">let </span>crop = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(img_size), || {
-<a href=#250 id=250 data-nosnippet>250</a>                <span class="kw">let </span><span class="kw-2">mut </span>r = IMAGE_CROP_VAR.get();
-<a href=#251 id=251 data-nosnippet>251</a>                r.replace_default(<span class="kw-2">&amp;</span>img_rect.into());
-<a href=#252 id=252 data-nosnippet>252</a>                r.layout()
-<a href=#253 id=253 data-nosnippet>253</a>            });
-<a href=#254 id=254 data-nosnippet>254</a>            <span class="kw">let </span>render_clip = img_rect.intersection(<span class="kw-2">&amp;</span>crop).unwrap_or_default() * scale;
-<a href=#255 id=255 data-nosnippet>255</a>
-<a href=#256 id=256 data-nosnippet>256</a>            <span class="kw">let </span>min_size = metrics.constraints().clamp_size(render_clip.size);
-<a href=#257 id=257 data-nosnippet>257</a>            <span class="kw">let </span>wgt_ratio = metrics.constraints().with_min_size(min_size).fill_ratio(render_clip.size);
-<a href=#258 id=258 data-nosnippet>258</a>
-<a href=#259 id=259 data-nosnippet>259</a>            <span class="kw-2">*</span>desired_size = metrics.constraints().fill_size_or(wgt_ratio);
-<a href=#260 id=260 data-nosnippet>260</a>        }
-<a href=#261 id=261 data-nosnippet>261</a>        UiNodeOp::Layout { final_size, .. } =&gt; {
-<a href=#262 id=262 data-nosnippet>262</a>            <span class="comment">// Part 1 - Scale &amp; Crop
-<a href=#263 id=263 data-nosnippet>263</a>            // - Starting from the image pixel size, apply scaling then crop.
+<a href=#236 id=236 data-nosnippet>236</a>            <span class="kw">let </span><span class="kw-2">mut </span>scale = IMAGE_SCALE_VAR.get();
+<a href=#237 id=237 data-nosnippet>237</a>            <span class="kw">if </span>IMAGE_SCALE_PPI_VAR.get() {
+<a href=#238 id=238 data-nosnippet>238</a>                <span class="kw">let </span>sppi = metrics.screen_ppi();
+<a href=#239 id=239 data-nosnippet>239</a>                <span class="kw">let </span>ippi = CONTEXT_IMAGE_VAR.with(Img::ppi).unwrap_or(ImagePpi::splat(sppi.<span class="number">0</span>));
+<a href=#240 id=240 data-nosnippet>240</a>                scale <span class="kw-2">*</span>= Factor2d::new(sppi.<span class="number">0 </span>/ ippi.x, sppi.<span class="number">0 </span>/ ippi.y);
+<a href=#241 id=241 data-nosnippet>241</a>            }
+<a href=#242 id=242 data-nosnippet>242</a>            <span class="kw">if </span>IMAGE_SCALE_FACTOR_VAR.get() {
+<a href=#243 id=243 data-nosnippet>243</a>                scale <span class="kw-2">*</span>= metrics.scale_factor();
+<a href=#244 id=244 data-nosnippet>244</a>            }
+<a href=#245 id=245 data-nosnippet>245</a>
+<a href=#246 id=246 data-nosnippet>246</a>            <span class="kw">let </span>img_rect = PxRect::from_size(img_size);
+<a href=#247 id=247 data-nosnippet>247</a>            <span class="kw">let </span>crop = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(img_size), || {
+<a href=#248 id=248 data-nosnippet>248</a>                <span class="kw">let </span><span class="kw-2">mut </span>r = IMAGE_CROP_VAR.get();
+<a href=#249 id=249 data-nosnippet>249</a>                r.replace_default(<span class="kw-2">&amp;</span>img_rect.into());
+<a href=#250 id=250 data-nosnippet>250</a>                r.layout()
+<a href=#251 id=251 data-nosnippet>251</a>            });
+<a href=#252 id=252 data-nosnippet>252</a>            <span class="kw">let </span>render_clip = img_rect.intersection(<span class="kw-2">&amp;</span>crop).unwrap_or_default() * scale;
+<a href=#253 id=253 data-nosnippet>253</a>
+<a href=#254 id=254 data-nosnippet>254</a>            <span class="kw">let </span>min_size = metrics.constraints().clamp_size(render_clip.size);
+<a href=#255 id=255 data-nosnippet>255</a>            <span class="kw">let </span>wgt_ratio = metrics.constraints().with_min_size(min_size).fill_ratio(render_clip.size);
+<a href=#256 id=256 data-nosnippet>256</a>
+<a href=#257 id=257 data-nosnippet>257</a>            <span class="kw-2">*</span>desired_size = metrics.constraints().fill_size_or(wgt_ratio);
+<a href=#258 id=258 data-nosnippet>258</a>        }
+<a href=#259 id=259 data-nosnippet>259</a>        UiNodeOp::Layout { final_size, .. } =&gt; {
+<a href=#260 id=260 data-nosnippet>260</a>            <span class="comment">// Part 1 - Scale &amp; Crop
+<a href=#261 id=261 data-nosnippet>261</a>            // - Starting from the image pixel size, apply scaling then crop.
+<a href=#262 id=262 data-nosnippet>262</a>
+<a href=#263 id=263 data-nosnippet>263</a>            </span><span class="kw">let </span>metrics = LAYOUT.metrics();
 <a href=#264 id=264 data-nosnippet>264</a>
-<a href=#265 id=265 data-nosnippet>265</a>            </span><span class="kw">let </span>metrics = LAYOUT.metrics();
-<a href=#266 id=266 data-nosnippet>266</a>
-<a href=#267 id=267 data-nosnippet>267</a>            <span class="kw">let </span><span class="kw-2">mut </span>scale = IMAGE_SCALE_VAR.get();
-<a href=#268 id=268 data-nosnippet>268</a>            <span class="kw">if </span>IMAGE_SCALE_PPI_VAR.get() {
-<a href=#269 id=269 data-nosnippet>269</a>                <span class="kw">let </span>sppi = metrics.screen_ppi();
-<a href=#270 id=270 data-nosnippet>270</a>                <span class="kw">let </span>ippi = CONTEXT_IMAGE_VAR.with(Img::ppi).unwrap_or(ImagePpi::splat(sppi.<span class="number">0</span>));
-<a href=#271 id=271 data-nosnippet>271</a>                scale <span class="kw-2">*</span>= Factor2d::new(sppi.<span class="number">0 </span>/ ippi.x, sppi.<span class="number">0 </span>/ ippi.y);
-<a href=#272 id=272 data-nosnippet>272</a>            }
-<a href=#273 id=273 data-nosnippet>273</a>            <span class="kw">if </span>IMAGE_SCALE_FACTOR_VAR.get() {
-<a href=#274 id=274 data-nosnippet>274</a>                scale <span class="kw-2">*</span>= metrics.scale_factor();
-<a href=#275 id=275 data-nosnippet>275</a>            }
-<a href=#276 id=276 data-nosnippet>276</a>
-<a href=#277 id=277 data-nosnippet>277</a>            <span class="comment">// webrender needs the full image size, we offset and clip it to render the final image.
-<a href=#278 id=278 data-nosnippet>278</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>r_img_size = img_size * scale;
-<a href=#279 id=279 data-nosnippet>279</a>
-<a href=#280 id=280 data-nosnippet>280</a>            <span class="comment">// crop is relative to the unscaled pixel size, then applied scaled as the clip.
-<a href=#281 id=281 data-nosnippet>281</a>            </span><span class="kw">let </span>img_rect = PxRect::from_size(img_size);
-<a href=#282 id=282 data-nosnippet>282</a>            <span class="kw">let </span>crop = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(img_size), || {
-<a href=#283 id=283 data-nosnippet>283</a>                <span class="kw">let </span><span class="kw-2">mut </span>r = IMAGE_CROP_VAR.get();
-<a href=#284 id=284 data-nosnippet>284</a>                r.replace_default(<span class="kw-2">&amp;</span>img_rect.into());
-<a href=#285 id=285 data-nosnippet>285</a>                r.layout()
-<a href=#286 id=286 data-nosnippet>286</a>            });
-<a href=#287 id=287 data-nosnippet>287</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_clip = img_rect.intersection(<span class="kw-2">&amp;</span>crop).unwrap_or_default() * scale;
-<a href=#288 id=288 data-nosnippet>288</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_offset = -r_clip.origin.to_vector();
-<a href=#289 id=289 data-nosnippet>289</a>
-<a href=#290 id=290 data-nosnippet>290</a>            <span class="comment">// Part 2 - Fit, Align &amp; Clip
-<a href=#291 id=291 data-nosnippet>291</a>            // - Fit the cropped and scaled image to the constraints, add a bounds clip to the crop clip.
+<a href=#265 id=265 data-nosnippet>265</a>            <span class="kw">let </span><span class="kw-2">mut </span>scale = IMAGE_SCALE_VAR.get();
+<a href=#266 id=266 data-nosnippet>266</a>            <span class="kw">if </span>IMAGE_SCALE_PPI_VAR.get() {
+<a href=#267 id=267 data-nosnippet>267</a>                <span class="kw">let </span>sppi = metrics.screen_ppi();
+<a href=#268 id=268 data-nosnippet>268</a>                <span class="kw">let </span>ippi = CONTEXT_IMAGE_VAR.with(Img::ppi).unwrap_or(ImagePpi::splat(sppi.<span class="number">0</span>));
+<a href=#269 id=269 data-nosnippet>269</a>                scale <span class="kw-2">*</span>= Factor2d::new(sppi.<span class="number">0 </span>/ ippi.x, sppi.<span class="number">0 </span>/ ippi.y);
+<a href=#270 id=270 data-nosnippet>270</a>            }
+<a href=#271 id=271 data-nosnippet>271</a>            <span class="kw">if </span>IMAGE_SCALE_FACTOR_VAR.get() {
+<a href=#272 id=272 data-nosnippet>272</a>                scale <span class="kw-2">*</span>= metrics.scale_factor();
+<a href=#273 id=273 data-nosnippet>273</a>            }
+<a href=#274 id=274 data-nosnippet>274</a>
+<a href=#275 id=275 data-nosnippet>275</a>            <span class="comment">// webrender needs the full image size, we offset and clip it to render the final image.
+<a href=#276 id=276 data-nosnippet>276</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>r_img_size = img_size * scale;
+<a href=#277 id=277 data-nosnippet>277</a>
+<a href=#278 id=278 data-nosnippet>278</a>            <span class="comment">// crop is relative to the unscaled pixel size, then applied scaled as the clip.
+<a href=#279 id=279 data-nosnippet>279</a>            </span><span class="kw">let </span>img_rect = PxRect::from_size(img_size);
+<a href=#280 id=280 data-nosnippet>280</a>            <span class="kw">let </span>crop = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(img_size), || {
+<a href=#281 id=281 data-nosnippet>281</a>                <span class="kw">let </span><span class="kw-2">mut </span>r = IMAGE_CROP_VAR.get();
+<a href=#282 id=282 data-nosnippet>282</a>                r.replace_default(<span class="kw-2">&amp;</span>img_rect.into());
+<a href=#283 id=283 data-nosnippet>283</a>                r.layout()
+<a href=#284 id=284 data-nosnippet>284</a>            });
+<a href=#285 id=285 data-nosnippet>285</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_clip = img_rect.intersection(<span class="kw-2">&amp;</span>crop).unwrap_or_default() * scale;
+<a href=#286 id=286 data-nosnippet>286</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_offset = -r_clip.origin.to_vector();
+<a href=#287 id=287 data-nosnippet>287</a>
+<a href=#288 id=288 data-nosnippet>288</a>            <span class="comment">// Part 2 - Fit, Align &amp; Clip
+<a href=#289 id=289 data-nosnippet>289</a>            // - Fit the cropped and scaled image to the constraints, add a bounds clip to the crop clip.
+<a href=#290 id=290 data-nosnippet>290</a>
+<a href=#291 id=291 data-nosnippet>291</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>align = IMAGE_ALIGN_VAR.get();
 <a href=#292 id=292 data-nosnippet>292</a>
-<a href=#293 id=293 data-nosnippet>293</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>align = IMAGE_ALIGN_VAR.get();
-<a href=#294 id=294 data-nosnippet>294</a>
-<a href=#295 id=295 data-nosnippet>295</a>            <span class="kw">let </span>min_size = metrics.constraints().clamp_size(r_clip.size);
-<a href=#296 id=296 data-nosnippet>296</a>            <span class="kw">let </span>wgt_ratio = metrics.constraints().with_min_size(min_size).fill_ratio(r_clip.size);
-<a href=#297 id=297 data-nosnippet>297</a>            <span class="kw">let </span>wgt_size = metrics.constraints().fill_size_or(wgt_ratio);
-<a href=#298 id=298 data-nosnippet>298</a>
-<a href=#299 id=299 data-nosnippet>299</a>            <span class="kw">let </span><span class="kw-2">mut </span>fit = IMAGE_FIT_VAR.get();
-<a href=#300 id=300 data-nosnippet>300</a>            <span class="kw">if let </span>ImageFit::ScaleDown = fit {
-<a href=#301 id=301 data-nosnippet>301</a>                <span class="kw">if </span>r_clip.size.width &lt; wgt_size.width &amp;&amp; r_clip.size.height &lt; wgt_size.height {
-<a href=#302 id=302 data-nosnippet>302</a>                    fit = ImageFit::None;
-<a href=#303 id=303 data-nosnippet>303</a>                } <span class="kw">else </span>{
-<a href=#304 id=304 data-nosnippet>304</a>                    fit = ImageFit::Contain;
-<a href=#305 id=305 data-nosnippet>305</a>                }
-<a href=#306 id=306 data-nosnippet>306</a>            }
-<a href=#307 id=307 data-nosnippet>307</a>            <span class="kw">match </span>fit {
-<a href=#308 id=308 data-nosnippet>308</a>                ImageFit::Fill =&gt; {
-<a href=#309 id=309 data-nosnippet>309</a>                    align = Align::FILL;
-<a href=#310 id=310 data-nosnippet>310</a>                }
-<a href=#311 id=311 data-nosnippet>311</a>                ImageFit::Contain =&gt; {
-<a href=#312 id=312 data-nosnippet>312</a>                    <span class="kw">let </span>container = wgt_size.to_f32();
-<a href=#313 id=313 data-nosnippet>313</a>                    <span class="kw">let </span>content = r_clip.size.to_f32();
-<a href=#314 id=314 data-nosnippet>314</a>                    <span class="kw">let </span>scale = (container.width / content.width).min(container.height / content.height).fct();
-<a href=#315 id=315 data-nosnippet>315</a>                    r_clip <span class="kw-2">*</span>= scale;
-<a href=#316 id=316 data-nosnippet>316</a>                    r_img_size <span class="kw-2">*</span>= scale;
-<a href=#317 id=317 data-nosnippet>317</a>                    r_offset <span class="kw-2">*</span>= scale;
-<a href=#318 id=318 data-nosnippet>318</a>                }
-<a href=#319 id=319 data-nosnippet>319</a>                ImageFit::Cover =&gt; {
-<a href=#320 id=320 data-nosnippet>320</a>                    <span class="kw">let </span>container = wgt_size.to_f32();
-<a href=#321 id=321 data-nosnippet>321</a>                    <span class="kw">let </span>content = r_clip.size.to_f32();
-<a href=#322 id=322 data-nosnippet>322</a>                    <span class="kw">let </span>scale = (container.width / content.width).max(container.height / content.height).fct();
-<a href=#323 id=323 data-nosnippet>323</a>                    r_clip <span class="kw-2">*</span>= scale;
-<a href=#324 id=324 data-nosnippet>324</a>                    r_img_size <span class="kw-2">*</span>= scale;
-<a href=#325 id=325 data-nosnippet>325</a>                    r_offset <span class="kw-2">*</span>= scale;
-<a href=#326 id=326 data-nosnippet>326</a>                }
-<a href=#327 id=327 data-nosnippet>327</a>                ImageFit::None =&gt; {}
-<a href=#328 id=328 data-nosnippet>328</a>                ImageFit::ScaleDown =&gt; <span class="macro">unreachable!</span>(),
-<a href=#329 id=329 data-nosnippet>329</a>            }
-<a href=#330 id=330 data-nosnippet>330</a>
-<a href=#331 id=331 data-nosnippet>331</a>            <span class="kw">if </span>align.is_fill_x() {
-<a href=#332 id=332 data-nosnippet>332</a>                <span class="kw">let </span>factor = wgt_size.width.<span class="number">0 </span><span class="kw">as </span>f32 / r_clip.size.width.<span class="number">0 </span><span class="kw">as </span>f32;
-<a href=#333 id=333 data-nosnippet>333</a>                r_clip.size.width = wgt_size.width;
-<a href=#334 id=334 data-nosnippet>334</a>                r_clip.origin.x <span class="kw-2">*</span>= factor;
-<a href=#335 id=335 data-nosnippet>335</a>                r_img_size.width <span class="kw-2">*</span>= factor;
-<a href=#336 id=336 data-nosnippet>336</a>                r_offset.x = -r_clip.origin.x;
-<a href=#337 id=337 data-nosnippet>337</a>            } <span class="kw">else </span>{
-<a href=#338 id=338 data-nosnippet>338</a>                <span class="kw">let </span>diff = wgt_size.width - r_clip.size.width;
-<a href=#339 id=339 data-nosnippet>339</a>                <span class="kw">let </span>offset = diff * align.x(metrics.direction());
-<a href=#340 id=340 data-nosnippet>340</a>                r_offset.x += offset;
-<a href=#341 id=341 data-nosnippet>341</a>                <span class="kw">if </span>diff &lt; Px(<span class="number">0</span>) {
-<a href=#342 id=342 data-nosnippet>342</a>                    r_clip.origin.x -= offset;
-<a href=#343 id=343 data-nosnippet>343</a>                    r_clip.size.width += diff;
-<a href=#344 id=344 data-nosnippet>344</a>                }
-<a href=#345 id=345 data-nosnippet>345</a>            }
-<a href=#346 id=346 data-nosnippet>346</a>            <span class="kw">if </span>align.is_fill_y() {
-<a href=#347 id=347 data-nosnippet>347</a>                <span class="kw">let </span>factor = wgt_size.height.<span class="number">0 </span><span class="kw">as </span>f32 / r_clip.size.height.<span class="number">0 </span><span class="kw">as </span>f32;
-<a href=#348 id=348 data-nosnippet>348</a>                r_clip.size.height = wgt_size.height;
-<a href=#349 id=349 data-nosnippet>349</a>                r_clip.origin.y <span class="kw-2">*</span>= factor;
-<a href=#350 id=350 data-nosnippet>350</a>                r_img_size.height <span class="kw-2">*</span>= factor;
-<a href=#351 id=351 data-nosnippet>351</a>                r_offset.y = -r_clip.origin.y;
-<a href=#352 id=352 data-nosnippet>352</a>            } <span class="kw">else </span>{
-<a href=#353 id=353 data-nosnippet>353</a>                <span class="kw">let </span>diff = wgt_size.height - r_clip.size.height;
-<a href=#354 id=354 data-nosnippet>354</a>                <span class="kw">let </span>offset = diff * align.y();
-<a href=#355 id=355 data-nosnippet>355</a>                r_offset.y += offset;
-<a href=#356 id=356 data-nosnippet>356</a>                <span class="kw">if </span>diff &lt; Px(<span class="number">0</span>) {
-<a href=#357 id=357 data-nosnippet>357</a>                    r_clip.origin.y -= offset;
-<a href=#358 id=358 data-nosnippet>358</a>                    r_clip.size.height += diff;
-<a href=#359 id=359 data-nosnippet>359</a>                }
-<a href=#360 id=360 data-nosnippet>360</a>            }
-<a href=#361 id=361 data-nosnippet>361</a>
-<a href=#362 id=362 data-nosnippet>362</a>            <span class="comment">// Part 3 - Custom Offset and Update
-<a href=#363 id=363 data-nosnippet>363</a>            </span><span class="kw">let </span>offset = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(wgt_size), || IMAGE_OFFSET_VAR.layout());
-<a href=#364 id=364 data-nosnippet>364</a>            <span class="kw">if </span>offset != PxVector::zero() {
-<a href=#365 id=365 data-nosnippet>365</a>                r_offset += offset;
-<a href=#366 id=366 data-nosnippet>366</a>
-<a href=#367 id=367 data-nosnippet>367</a>                <span class="kw">let </span>screen_clip = PxRect::new(-r_offset.to_point(), wgt_size);
-<a href=#368 id=368 data-nosnippet>368</a>                r_clip.origin -= offset;
-<a href=#369 id=369 data-nosnippet>369</a>                r_clip = r_clip.intersection(<span class="kw-2">&amp;</span>screen_clip).unwrap_or_default();
-<a href=#370 id=370 data-nosnippet>370</a>            }
-<a href=#371 id=371 data-nosnippet>371</a>
-<a href=#372 id=372 data-nosnippet>372</a>            <span class="comment">// Part 4 - Repeat
-<a href=#373 id=373 data-nosnippet>373</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>r_tile_size = r_img_size;
-<a href=#374 id=374 data-nosnippet>374</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_tile_spacing = PxSize::zero();
-<a href=#375 id=375 data-nosnippet>375</a>            <span class="kw">if </span><span class="macro">matches!</span>(IMAGE_REPEAT_VAR.get(), ImageRepeat::Repeat) {
-<a href=#376 id=376 data-nosnippet>376</a>                r_clip = PxRect::from_size(wgt_size);
-<a href=#377 id=377 data-nosnippet>377</a>                r_tile_size = r_img_size;
-<a href=#378 id=378 data-nosnippet>378</a>                r_img_size = wgt_size;
-<a href=#379 id=379 data-nosnippet>379</a>                r_offset = PxVector::zero();
-<a href=#380 id=380 data-nosnippet>380</a>
-<a href=#381 id=381 data-nosnippet>381</a>                <span class="kw">let </span>leftover = tile_leftover(r_tile_size, wgt_size);
-<a href=#382 id=382 data-nosnippet>382</a>                r_tile_spacing = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(r_tile_size), || {
-<a href=#383 id=383 data-nosnippet>383</a>                    LAYOUT.with_leftover(<span class="prelude-val">Some</span>(leftover.width), <span class="prelude-val">Some</span>(leftover.height), || IMAGE_REPEAT_SPACING_VAR.layout())
-<a href=#384 id=384 data-nosnippet>384</a>                });
-<a href=#385 id=385 data-nosnippet>385</a>            }
-<a href=#386 id=386 data-nosnippet>386</a>
-<a href=#387 id=387 data-nosnippet>387</a>            <span class="kw">if </span>render_clip != r_clip
-<a href=#388 id=388 data-nosnippet>388</a>                || render_img_size != r_img_size
-<a href=#389 id=389 data-nosnippet>389</a>                || render_offset != r_offset
-<a href=#390 id=390 data-nosnippet>390</a>                || render_tile_size != r_tile_size
-<a href=#391 id=391 data-nosnippet>391</a>                || render_tile_spacing != r_tile_spacing
-<a href=#392 id=392 data-nosnippet>392</a>            {
-<a href=#393 id=393 data-nosnippet>393</a>                render_clip = r_clip;
-<a href=#394 id=394 data-nosnippet>394</a>                render_img_size = r_img_size;
-<a href=#395 id=395 data-nosnippet>395</a>                render_offset = r_offset;
-<a href=#396 id=396 data-nosnippet>396</a>                render_tile_size = r_tile_size;
-<a href=#397 id=397 data-nosnippet>397</a>                render_tile_spacing = r_tile_spacing;
-<a href=#398 id=398 data-nosnippet>398</a>                WIDGET.render();
-<a href=#399 id=399 data-nosnippet>399</a>            }
-<a href=#400 id=400 data-nosnippet>400</a>
-<a href=#401 id=401 data-nosnippet>401</a>            <span class="kw-2">*</span>final_size = wgt_size;
-<a href=#402 id=402 data-nosnippet>402</a>        }
-<a href=#403 id=403 data-nosnippet>403</a>        UiNodeOp::Render { frame } =&gt; {
-<a href=#404 id=404 data-nosnippet>404</a>            CONTEXT_IMAGE_VAR.with(|img| {
-<a href=#405 id=405 data-nosnippet>405</a>                <span class="kw">if </span>img.is_loaded() &amp;&amp; !img_size.is_empty() &amp;&amp; !render_clip.is_empty() {
-<a href=#406 id=406 data-nosnippet>406</a>                    <span class="kw">if </span>render_offset != PxVector::zero() {
-<a href=#407 id=407 data-nosnippet>407</a>                        <span class="kw">let </span>transform = PxTransform::from(render_offset);
-<a href=#408 id=408 data-nosnippet>408</a>                        frame.push_reference_frame(spatial_id.into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#409 id=409 data-nosnippet>409</a>                            frame.push_image(
-<a href=#410 id=410 data-nosnippet>410</a>                                render_clip,
-<a href=#411 id=411 data-nosnippet>411</a>                                render_img_size,
-<a href=#412 id=412 data-nosnippet>412</a>                                render_tile_size,
-<a href=#413 id=413 data-nosnippet>413</a>                                render_tile_spacing,
-<a href=#414 id=414 data-nosnippet>414</a>                                img,
-<a href=#415 id=415 data-nosnippet>415</a>                                IMAGE_RENDERING_VAR.get(),
-<a href=#416 id=416 data-nosnippet>416</a>                            )
-<a href=#417 id=417 data-nosnippet>417</a>                        });
-<a href=#418 id=418 data-nosnippet>418</a>                    } <span class="kw">else </span>{
-<a href=#419 id=419 data-nosnippet>419</a>                        frame.push_image(
-<a href=#420 id=420 data-nosnippet>420</a>                            render_clip,
-<a href=#421 id=421 data-nosnippet>421</a>                            render_img_size,
-<a href=#422 id=422 data-nosnippet>422</a>                            render_tile_size,
-<a href=#423 id=423 data-nosnippet>423</a>                            render_tile_spacing,
-<a href=#424 id=424 data-nosnippet>424</a>                            img,
-<a href=#425 id=425 data-nosnippet>425</a>                            IMAGE_RENDERING_VAR.get(),
-<a href=#426 id=426 data-nosnippet>426</a>                        );
-<a href=#427 id=427 data-nosnippet>427</a>                    }
-<a href=#428 id=428 data-nosnippet>428</a>                }
-<a href=#429 id=429 data-nosnippet>429</a>            });
-<a href=#430 id=430 data-nosnippet>430</a>        }
-<a href=#431 id=431 data-nosnippet>431</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#432 id=432 data-nosnippet>432</a>    })
-<a href=#433 id=433 data-nosnippet>433</a>}
-<a href=#434 id=434 data-nosnippet>434</a>
-<a href=#435 id=435 data-nosnippet>435</a><span class="kw">fn </span>tile_leftover(tile_size: PxSize, wgt_size: PxSize) -&gt; PxSize {
-<a href=#436 id=436 data-nosnippet>436</a>    <span class="kw">if </span>tile_size.is_empty() || wgt_size.is_empty() {
-<a href=#437 id=437 data-nosnippet>437</a>        <span class="kw">return </span>PxSize::zero();
-<a href=#438 id=438 data-nosnippet>438</a>    }
-<a href=#439 id=439 data-nosnippet>439</a>
-<a href=#440 id=440 data-nosnippet>440</a>    <span class="kw">let </span>full_leftover_x = wgt_size.width % tile_size.width;
-<a href=#441 id=441 data-nosnippet>441</a>    <span class="kw">let </span>full_leftover_y = wgt_size.height % tile_size.height;
-<a href=#442 id=442 data-nosnippet>442</a>    <span class="kw">let </span>full_tiles_x = wgt_size.width / tile_size.width;
-<a href=#443 id=443 data-nosnippet>443</a>    <span class="kw">let </span>full_tiles_y = wgt_size.height / tile_size.height;
-<a href=#444 id=444 data-nosnippet>444</a>    <span class="kw">let </span>spaces_x = full_tiles_x - Px(<span class="number">1</span>);
-<a href=#445 id=445 data-nosnippet>445</a>    <span class="kw">let </span>spaces_y = full_tiles_y - Px(<span class="number">1</span>);
-<a href=#446 id=446 data-nosnippet>446</a>    PxSize::new(
-<a href=#447 id=447 data-nosnippet>447</a>        <span class="kw">if </span>spaces_x &gt; Px(<span class="number">0</span>) { full_leftover_x / spaces_x } <span class="kw">else </span>{ Px(<span class="number">0</span>) },
-<a href=#448 id=448 data-nosnippet>448</a>        <span class="kw">if </span>spaces_y &gt; Px(<span class="number">0</span>) { full_leftover_y / spaces_y } <span class="kw">else </span>{ Px(<span class="number">0</span>) },
-<a href=#449 id=449 data-nosnippet>449</a>    )
-<a href=#450 id=450 data-nosnippet>450</a>}</code></pre></div></section></main></body></html>
+<a href=#293 id=293 data-nosnippet>293</a>            <span class="kw">let </span>min_size = metrics.constraints().clamp_size(r_clip.size);
+<a href=#294 id=294 data-nosnippet>294</a>            <span class="kw">let </span>wgt_ratio = metrics.constraints().with_min_size(min_size).fill_ratio(r_clip.size);
+<a href=#295 id=295 data-nosnippet>295</a>            <span class="kw">let </span>wgt_size = metrics.constraints().fill_size_or(wgt_ratio);
+<a href=#296 id=296 data-nosnippet>296</a>
+<a href=#297 id=297 data-nosnippet>297</a>            <span class="kw">let </span><span class="kw-2">mut </span>fit = IMAGE_FIT_VAR.get();
+<a href=#298 id=298 data-nosnippet>298</a>            <span class="kw">if let </span>ImageFit::ScaleDown = fit {
+<a href=#299 id=299 data-nosnippet>299</a>                <span class="kw">if </span>r_clip.size.width &lt; wgt_size.width &amp;&amp; r_clip.size.height &lt; wgt_size.height {
+<a href=#300 id=300 data-nosnippet>300</a>                    fit = ImageFit::None;
+<a href=#301 id=301 data-nosnippet>301</a>                } <span class="kw">else </span>{
+<a href=#302 id=302 data-nosnippet>302</a>                    fit = ImageFit::Contain;
+<a href=#303 id=303 data-nosnippet>303</a>                }
+<a href=#304 id=304 data-nosnippet>304</a>            }
+<a href=#305 id=305 data-nosnippet>305</a>            <span class="kw">match </span>fit {
+<a href=#306 id=306 data-nosnippet>306</a>                ImageFit::Fill =&gt; {
+<a href=#307 id=307 data-nosnippet>307</a>                    align = Align::FILL;
+<a href=#308 id=308 data-nosnippet>308</a>                }
+<a href=#309 id=309 data-nosnippet>309</a>                ImageFit::Contain =&gt; {
+<a href=#310 id=310 data-nosnippet>310</a>                    <span class="kw">let </span>container = wgt_size.to_f32();
+<a href=#311 id=311 data-nosnippet>311</a>                    <span class="kw">let </span>content = r_clip.size.to_f32();
+<a href=#312 id=312 data-nosnippet>312</a>                    <span class="kw">let </span>scale = (container.width / content.width).min(container.height / content.height).fct();
+<a href=#313 id=313 data-nosnippet>313</a>                    r_clip <span class="kw-2">*</span>= scale;
+<a href=#314 id=314 data-nosnippet>314</a>                    r_img_size <span class="kw-2">*</span>= scale;
+<a href=#315 id=315 data-nosnippet>315</a>                    r_offset <span class="kw-2">*</span>= scale;
+<a href=#316 id=316 data-nosnippet>316</a>                }
+<a href=#317 id=317 data-nosnippet>317</a>                ImageFit::Cover =&gt; {
+<a href=#318 id=318 data-nosnippet>318</a>                    <span class="kw">let </span>container = wgt_size.to_f32();
+<a href=#319 id=319 data-nosnippet>319</a>                    <span class="kw">let </span>content = r_clip.size.to_f32();
+<a href=#320 id=320 data-nosnippet>320</a>                    <span class="kw">let </span>scale = (container.width / content.width).max(container.height / content.height).fct();
+<a href=#321 id=321 data-nosnippet>321</a>                    r_clip <span class="kw-2">*</span>= scale;
+<a href=#322 id=322 data-nosnippet>322</a>                    r_img_size <span class="kw-2">*</span>= scale;
+<a href=#323 id=323 data-nosnippet>323</a>                    r_offset <span class="kw-2">*</span>= scale;
+<a href=#324 id=324 data-nosnippet>324</a>                }
+<a href=#325 id=325 data-nosnippet>325</a>                ImageFit::None =&gt; {}
+<a href=#326 id=326 data-nosnippet>326</a>                ImageFit::ScaleDown =&gt; <span class="macro">unreachable!</span>(),
+<a href=#327 id=327 data-nosnippet>327</a>            }
+<a href=#328 id=328 data-nosnippet>328</a>
+<a href=#329 id=329 data-nosnippet>329</a>            <span class="kw">if </span>align.is_fill_x() {
+<a href=#330 id=330 data-nosnippet>330</a>                <span class="kw">let </span>factor = wgt_size.width.<span class="number">0 </span><span class="kw">as </span>f32 / r_clip.size.width.<span class="number">0 </span><span class="kw">as </span>f32;
+<a href=#331 id=331 data-nosnippet>331</a>                r_clip.size.width = wgt_size.width;
+<a href=#332 id=332 data-nosnippet>332</a>                r_clip.origin.x <span class="kw-2">*</span>= factor;
+<a href=#333 id=333 data-nosnippet>333</a>                r_img_size.width <span class="kw-2">*</span>= factor;
+<a href=#334 id=334 data-nosnippet>334</a>                r_offset.x = -r_clip.origin.x;
+<a href=#335 id=335 data-nosnippet>335</a>            } <span class="kw">else </span>{
+<a href=#336 id=336 data-nosnippet>336</a>                <span class="kw">let </span>diff = wgt_size.width - r_clip.size.width;
+<a href=#337 id=337 data-nosnippet>337</a>                <span class="kw">let </span>offset = diff * align.x(metrics.direction());
+<a href=#338 id=338 data-nosnippet>338</a>                r_offset.x += offset;
+<a href=#339 id=339 data-nosnippet>339</a>                <span class="kw">if </span>diff &lt; Px(<span class="number">0</span>) {
+<a href=#340 id=340 data-nosnippet>340</a>                    r_clip.origin.x -= offset;
+<a href=#341 id=341 data-nosnippet>341</a>                    r_clip.size.width += diff;
+<a href=#342 id=342 data-nosnippet>342</a>                }
+<a href=#343 id=343 data-nosnippet>343</a>            }
+<a href=#344 id=344 data-nosnippet>344</a>            <span class="kw">if </span>align.is_fill_y() {
+<a href=#345 id=345 data-nosnippet>345</a>                <span class="kw">let </span>factor = wgt_size.height.<span class="number">0 </span><span class="kw">as </span>f32 / r_clip.size.height.<span class="number">0 </span><span class="kw">as </span>f32;
+<a href=#346 id=346 data-nosnippet>346</a>                r_clip.size.height = wgt_size.height;
+<a href=#347 id=347 data-nosnippet>347</a>                r_clip.origin.y <span class="kw-2">*</span>= factor;
+<a href=#348 id=348 data-nosnippet>348</a>                r_img_size.height <span class="kw-2">*</span>= factor;
+<a href=#349 id=349 data-nosnippet>349</a>                r_offset.y = -r_clip.origin.y;
+<a href=#350 id=350 data-nosnippet>350</a>            } <span class="kw">else </span>{
+<a href=#351 id=351 data-nosnippet>351</a>                <span class="kw">let </span>diff = wgt_size.height - r_clip.size.height;
+<a href=#352 id=352 data-nosnippet>352</a>                <span class="kw">let </span>offset = diff * align.y();
+<a href=#353 id=353 data-nosnippet>353</a>                r_offset.y += offset;
+<a href=#354 id=354 data-nosnippet>354</a>                <span class="kw">if </span>diff &lt; Px(<span class="number">0</span>) {
+<a href=#355 id=355 data-nosnippet>355</a>                    r_clip.origin.y -= offset;
+<a href=#356 id=356 data-nosnippet>356</a>                    r_clip.size.height += diff;
+<a href=#357 id=357 data-nosnippet>357</a>                }
+<a href=#358 id=358 data-nosnippet>358</a>            }
+<a href=#359 id=359 data-nosnippet>359</a>
+<a href=#360 id=360 data-nosnippet>360</a>            <span class="comment">// Part 3 - Custom Offset and Update
+<a href=#361 id=361 data-nosnippet>361</a>            </span><span class="kw">let </span>offset = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(wgt_size), || IMAGE_OFFSET_VAR.layout());
+<a href=#362 id=362 data-nosnippet>362</a>            <span class="kw">if </span>offset != PxVector::zero() {
+<a href=#363 id=363 data-nosnippet>363</a>                r_offset += offset;
+<a href=#364 id=364 data-nosnippet>364</a>
+<a href=#365 id=365 data-nosnippet>365</a>                <span class="kw">let </span>screen_clip = PxRect::new(-r_offset.to_point(), wgt_size);
+<a href=#366 id=366 data-nosnippet>366</a>                r_clip.origin -= offset;
+<a href=#367 id=367 data-nosnippet>367</a>                r_clip = r_clip.intersection(<span class="kw-2">&amp;</span>screen_clip).unwrap_or_default();
+<a href=#368 id=368 data-nosnippet>368</a>            }
+<a href=#369 id=369 data-nosnippet>369</a>
+<a href=#370 id=370 data-nosnippet>370</a>            <span class="comment">// Part 4 - Repeat
+<a href=#371 id=371 data-nosnippet>371</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>r_tile_size = r_img_size;
+<a href=#372 id=372 data-nosnippet>372</a>            <span class="kw">let </span><span class="kw-2">mut </span>r_tile_spacing = PxSize::zero();
+<a href=#373 id=373 data-nosnippet>373</a>            <span class="kw">if </span><span class="macro">matches!</span>(IMAGE_REPEAT_VAR.get(), ImageRepeat::Repeat) {
+<a href=#374 id=374 data-nosnippet>374</a>                r_clip = PxRect::from_size(wgt_size);
+<a href=#375 id=375 data-nosnippet>375</a>                r_tile_size = r_img_size;
+<a href=#376 id=376 data-nosnippet>376</a>                r_img_size = wgt_size;
+<a href=#377 id=377 data-nosnippet>377</a>                r_offset = PxVector::zero();
+<a href=#378 id=378 data-nosnippet>378</a>
+<a href=#379 id=379 data-nosnippet>379</a>                <span class="kw">let </span>leftover = tile_leftover(r_tile_size, wgt_size);
+<a href=#380 id=380 data-nosnippet>380</a>                r_tile_spacing = LAYOUT.with_constraints(PxConstraints2d::new_fill_size(r_tile_size), || {
+<a href=#381 id=381 data-nosnippet>381</a>                    LAYOUT.with_leftover(<span class="prelude-val">Some</span>(leftover.width), <span class="prelude-val">Some</span>(leftover.height), || IMAGE_REPEAT_SPACING_VAR.layout())
+<a href=#382 id=382 data-nosnippet>382</a>                });
+<a href=#383 id=383 data-nosnippet>383</a>            }
+<a href=#384 id=384 data-nosnippet>384</a>
+<a href=#385 id=385 data-nosnippet>385</a>            <span class="kw">if </span>render_clip != r_clip
+<a href=#386 id=386 data-nosnippet>386</a>                || render_img_size != r_img_size
+<a href=#387 id=387 data-nosnippet>387</a>                || render_offset != r_offset
+<a href=#388 id=388 data-nosnippet>388</a>                || render_tile_size != r_tile_size
+<a href=#389 id=389 data-nosnippet>389</a>                || render_tile_spacing != r_tile_spacing
+<a href=#390 id=390 data-nosnippet>390</a>            {
+<a href=#391 id=391 data-nosnippet>391</a>                render_clip = r_clip;
+<a href=#392 id=392 data-nosnippet>392</a>                render_img_size = r_img_size;
+<a href=#393 id=393 data-nosnippet>393</a>                render_offset = r_offset;
+<a href=#394 id=394 data-nosnippet>394</a>                render_tile_size = r_tile_size;
+<a href=#395 id=395 data-nosnippet>395</a>                render_tile_spacing = r_tile_spacing;
+<a href=#396 id=396 data-nosnippet>396</a>                WIDGET.render();
+<a href=#397 id=397 data-nosnippet>397</a>            }
+<a href=#398 id=398 data-nosnippet>398</a>
+<a href=#399 id=399 data-nosnippet>399</a>            <span class="kw-2">*</span>final_size = wgt_size;
+<a href=#400 id=400 data-nosnippet>400</a>        }
+<a href=#401 id=401 data-nosnippet>401</a>        UiNodeOp::Render { frame } =&gt; {
+<a href=#402 id=402 data-nosnippet>402</a>            CONTEXT_IMAGE_VAR.with(|img| {
+<a href=#403 id=403 data-nosnippet>403</a>                <span class="kw">if </span>img.is_loaded() &amp;&amp; !img_size.is_empty() &amp;&amp; !render_clip.is_empty() {
+<a href=#404 id=404 data-nosnippet>404</a>                    <span class="kw">if </span>render_offset != PxVector::zero() {
+<a href=#405 id=405 data-nosnippet>405</a>                        <span class="kw">let </span>transform = PxTransform::from(render_offset);
+<a href=#406 id=406 data-nosnippet>406</a>                        frame.push_reference_frame(spatial_id.into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#407 id=407 data-nosnippet>407</a>                            frame.push_image(
+<a href=#408 id=408 data-nosnippet>408</a>                                render_clip,
+<a href=#409 id=409 data-nosnippet>409</a>                                render_img_size,
+<a href=#410 id=410 data-nosnippet>410</a>                                render_tile_size,
+<a href=#411 id=411 data-nosnippet>411</a>                                render_tile_spacing,
+<a href=#412 id=412 data-nosnippet>412</a>                                img,
+<a href=#413 id=413 data-nosnippet>413</a>                                IMAGE_RENDERING_VAR.get(),
+<a href=#414 id=414 data-nosnippet>414</a>                            )
+<a href=#415 id=415 data-nosnippet>415</a>                        });
+<a href=#416 id=416 data-nosnippet>416</a>                    } <span class="kw">else </span>{
+<a href=#417 id=417 data-nosnippet>417</a>                        frame.push_image(
+<a href=#418 id=418 data-nosnippet>418</a>                            render_clip,
+<a href=#419 id=419 data-nosnippet>419</a>                            render_img_size,
+<a href=#420 id=420 data-nosnippet>420</a>                            render_tile_size,
+<a href=#421 id=421 data-nosnippet>421</a>                            render_tile_spacing,
+<a href=#422 id=422 data-nosnippet>422</a>                            img,
+<a href=#423 id=423 data-nosnippet>423</a>                            IMAGE_RENDERING_VAR.get(),
+<a href=#424 id=424 data-nosnippet>424</a>                        );
+<a href=#425 id=425 data-nosnippet>425</a>                    }
+<a href=#426 id=426 data-nosnippet>426</a>                }
+<a href=#427 id=427 data-nosnippet>427</a>            });
+<a href=#428 id=428 data-nosnippet>428</a>        }
+<a href=#429 id=429 data-nosnippet>429</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#430 id=430 data-nosnippet>430</a>    })
+<a href=#431 id=431 data-nosnippet>431</a>}
+<a href=#432 id=432 data-nosnippet>432</a>
+<a href=#433 id=433 data-nosnippet>433</a><span class="kw">fn </span>tile_leftover(tile_size: PxSize, wgt_size: PxSize) -&gt; PxSize {
+<a href=#434 id=434 data-nosnippet>434</a>    <span class="kw">if </span>tile_size.is_empty() || wgt_size.is_empty() {
+<a href=#435 id=435 data-nosnippet>435</a>        <span class="kw">return </span>PxSize::zero();
+<a href=#436 id=436 data-nosnippet>436</a>    }
+<a href=#437 id=437 data-nosnippet>437</a>
+<a href=#438 id=438 data-nosnippet>438</a>    <span class="kw">let </span>full_leftover_x = wgt_size.width % tile_size.width;
+<a href=#439 id=439 data-nosnippet>439</a>    <span class="kw">let </span>full_leftover_y = wgt_size.height % tile_size.height;
+<a href=#440 id=440 data-nosnippet>440</a>    <span class="kw">let </span>full_tiles_x = wgt_size.width / tile_size.width;
+<a href=#441 id=441 data-nosnippet>441</a>    <span class="kw">let </span>full_tiles_y = wgt_size.height / tile_size.height;
+<a href=#442 id=442 data-nosnippet>442</a>    <span class="kw">let </span>spaces_x = full_tiles_x - Px(<span class="number">1</span>);
+<a href=#443 id=443 data-nosnippet>443</a>    <span class="kw">let </span>spaces_y = full_tiles_y - Px(<span class="number">1</span>);
+<a href=#444 id=444 data-nosnippet>444</a>    PxSize::new(
+<a href=#445 id=445 data-nosnippet>445</a>        <span class="kw">if </span>spaces_x &gt; Px(<span class="number">0</span>) { full_leftover_x / spaces_x } <span class="kw">else </span>{ Px(<span class="number">0</span>) },
+<a href=#446 id=446 data-nosnippet>446</a>        <span class="kw">if </span>spaces_y &gt; Px(<span class="number">0</span>) { full_leftover_y / spaces_y } <span class="kw">else </span>{ Px(<span class="number">0</span>) },
+<a href=#447 id=447 data-nosnippet>447</a>    )
+<a href=#448 id=448 data-nosnippet>448</a>}</code></pre></div></section></main></body></html>
