@@ -611,200 +611,194 @@
 <a href=#611 id=611 data-nosnippet>611</a>}
 <a href=#612 id=612 data-nosnippet>612</a>
 <a href=#613 id=613 data-nosnippet>613</a><span class="kw">impl </span>DropArgs {
-<a href=#614 id=614 data-nosnippet>614</a>    <span class="doccomment">/// If the `widget_id` is in the [`target`] is enabled.
-<a href=#615 id=615 data-nosnippet>615</a>    ///
-<a href=#616 id=616 data-nosnippet>616</a>    /// [`target`]: Self::target
-<a href=#617 id=617 data-nosnippet>617</a>    </span><span class="kw">pub fn </span>is_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#618 id=618 data-nosnippet>618</a>        <span class="self">self</span>.target.interactivity_of(widget_id).map(|i| i.is_enabled()).unwrap_or(<span class="bool-val">false</span>)
-<a href=#619 id=619 data-nosnippet>619</a>    }
-<a href=#620 id=620 data-nosnippet>620</a>
-<a href=#621 id=621 data-nosnippet>621</a>    <span class="doccomment">/// If the `widget_id` is in the [`target`] is disabled.
-<a href=#622 id=622 data-nosnippet>622</a>    ///
-<a href=#623 id=623 data-nosnippet>623</a>    /// [`target`]: Self::target
-<a href=#624 id=624 data-nosnippet>624</a>    </span><span class="kw">pub fn </span>is_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#625 id=625 data-nosnippet>625</a>        <span class="self">self</span>.target.interactivity_of(widget_id).map(|i| i.is_disabled()).unwrap_or(<span class="bool-val">false</span>)
-<a href=#626 id=626 data-nosnippet>626</a>    }
-<a href=#627 id=627 data-nosnippet>627</a>
-<a href=#628 id=628 data-nosnippet>628</a>    <span class="doccomment">/// Stop propagation and set the `effect` that was applied to the data.
+<a href=#614 id=614 data-nosnippet>614</a>    <span class="doccomment">/// Deprecated
+<a href=#615 id=615 data-nosnippet>615</a>    </span><span class="attr">#[deprecated = <span class="string">"use `target.contains_enabled`"</span>]
+<a href=#616 id=616 data-nosnippet>616</a>    </span><span class="kw">pub fn </span>is_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#617 id=617 data-nosnippet>617</a>        <span class="self">self</span>.target.contains_enabled(widget_id)
+<a href=#618 id=618 data-nosnippet>618</a>    }
+<a href=#619 id=619 data-nosnippet>619</a>
+<a href=#620 id=620 data-nosnippet>620</a>    <span class="doccomment">/// Deprecated
+<a href=#621 id=621 data-nosnippet>621</a>    </span><span class="attr">#[deprecated = <span class="string">"use `target.contains_disabled`"</span>]
+<a href=#622 id=622 data-nosnippet>622</a>    </span><span class="kw">pub fn </span>is_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#623 id=623 data-nosnippet>623</a>        <span class="self">self</span>.target.contains_disabled(widget_id)
+<a href=#624 id=624 data-nosnippet>624</a>    }
+<a href=#625 id=625 data-nosnippet>625</a>
+<a href=#626 id=626 data-nosnippet>626</a>    <span class="doccomment">/// Stop propagation and set the `effect` that was applied to the data.
+<a href=#627 id=627 data-nosnippet>627</a>    ///
+<a href=#628 id=628 data-nosnippet>628</a>    /// Logs an error if propagation is already stopped.
 <a href=#629 id=629 data-nosnippet>629</a>    ///
-<a href=#630 id=630 data-nosnippet>630</a>    /// Logs an error if propagation is already stopped.
+<a href=#630 id=630 data-nosnippet>630</a>    /// # Panics
 <a href=#631 id=631 data-nosnippet>631</a>    ///
-<a href=#632 id=632 data-nosnippet>632</a>    /// # Panics
+<a href=#632 id=632 data-nosnippet>632</a>    /// Panics if `effect` sets more then one flag or is not [`allowed`].
 <a href=#633 id=633 data-nosnippet>633</a>    ///
-<a href=#634 id=634 data-nosnippet>634</a>    /// Panics if `effect` sets more then one flag or is not [`allowed`].
-<a href=#635 id=635 data-nosnippet>635</a>    ///
-<a href=#636 id=636 data-nosnippet>636</a>    /// [`allowed`]: Self::allowed
-<a href=#637 id=637 data-nosnippet>637</a>    </span><span class="kw">pub fn </span>applied(<span class="kw-2">&amp;</span><span class="self">self</span>, effect: DragDropEffect) {
-<a href=#638 id=638 data-nosnippet>638</a>        <span class="macro">assert!</span>(effect.len() &gt; <span class="number">1</span>, <span class="string">"can only apply one effect"</span>);
-<a href=#639 id=639 data-nosnippet>639</a>        <span class="macro">assert!</span>(<span class="self">self</span>.allowed.contains(effect), <span class="string">"source does not allow this effect"</span>);
-<a href=#640 id=640 data-nosnippet>640</a>
-<a href=#641 id=641 data-nosnippet>641</a>        <span class="kw">let </span><span class="kw-2">mut </span>e = <span class="self">self</span>.applied.lock();
-<a href=#642 id=642 data-nosnippet>642</a>        <span class="kw">if </span>!<span class="self">self</span>.propagation().is_stopped() {
-<a href=#643 id=643 data-nosnippet>643</a>            <span class="self">self</span>.propagation().stop();
-<a href=#644 id=644 data-nosnippet>644</a>            <span class="kw-2">*</span>e = effect;
-<a href=#645 id=645 data-nosnippet>645</a>        } <span class="kw">else </span>{
-<a href=#646 id=646 data-nosnippet>646</a>            <span class="macro">tracing::error!</span>(<span class="string">"drop already handled"</span>);
-<a href=#647 id=647 data-nosnippet>647</a>        }
-<a href=#648 id=648 data-nosnippet>648</a>    }
-<a href=#649 id=649 data-nosnippet>649</a>}
-<a href=#650 id=650 data-nosnippet>650</a>
-<a href=#651 id=651 data-nosnippet>651</a><span class="kw">impl </span>DragHoveredArgs {
-<a href=#652 id=652 data-nosnippet>652</a>    <span class="doccomment">/// Gets the [`DRAG_DROP.dragging_data`].
-<a href=#653 id=653 data-nosnippet>653</a>    ///
-<a href=#654 id=654 data-nosnippet>654</a>    /// [`DRAG_DROP.dragging_data`]: DRAG_DROP::dragging_data
-<a href=#655 id=655 data-nosnippet>655</a>    </span><span class="kw">pub fn </span>data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;Vec&lt;DragDropData&gt;&gt; {
-<a href=#656 id=656 data-nosnippet>656</a>        DRAG_DROP.dragging_data()
-<a href=#657 id=657 data-nosnippet>657</a>    }
-<a href=#658 id=658 data-nosnippet>658</a>
-<a href=#659 id=659 data-nosnippet>659</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered, but now is.
-<a href=#660 id=660 data-nosnippet>660</a>    ///
-<a href=#661 id=661 data-nosnippet>661</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#662 id=662 data-nosnippet>662</a>    </span><span class="kw">pub fn </span>is_drag_enter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#663 id=663 data-nosnippet>663</a>        !<span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.is_over()
-<a href=#664 id=664 data-nosnippet>664</a>    }
-<a href=#665 id=665 data-nosnippet>665</a>
-<a href=#666 id=666 data-nosnippet>666</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered, but now isn't.
-<a href=#667 id=667 data-nosnippet>667</a>    ///
-<a href=#668 id=668 data-nosnippet>668</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#669 id=669 data-nosnippet>669</a>    </span><span class="kw">pub fn </span>is_drag_leave(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#670 id=670 data-nosnippet>670</a>        <span class="self">self</span>.was_over() &amp;&amp; !<span class="self">self</span>.is_over()
-<a href=#671 id=671 data-nosnippet>671</a>    }
-<a href=#672 id=672 data-nosnippet>672</a>
-<a href=#673 id=673 data-nosnippet>673</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] is in [`prev_target`].
-<a href=#674 id=674 data-nosnippet>674</a>    ///
-<a href=#675 id=675 data-nosnippet>675</a>    /// [`prev_target`]: Self::prev_target
-<a href=#676 id=676 data-nosnippet>676</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#677 id=677 data-nosnippet>677</a>    </span><span class="kw">pub fn </span>was_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#678 id=678 data-nosnippet>678</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_target {
-<a href=#679 id=679 data-nosnippet>679</a>            <span class="kw">return </span>t.contains(WIDGET.id());
-<a href=#680 id=680 data-nosnippet>680</a>        }
-<a href=#681 id=681 data-nosnippet>681</a>
-<a href=#682 id=682 data-nosnippet>682</a>        <span class="bool-val">false
-<a href=#683 id=683 data-nosnippet>683</a>    </span>}
-<a href=#684 id=684 data-nosnippet>684</a>
-<a href=#685 id=685 data-nosnippet>685</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] is in [`target`].
-<a href=#686 id=686 data-nosnippet>686</a>    ///
-<a href=#687 id=687 data-nosnippet>687</a>    /// [`target`]: Self::target
-<a href=#688 id=688 data-nosnippet>688</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#689 id=689 data-nosnippet>689</a>    </span><span class="kw">pub fn </span>is_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#690 id=690 data-nosnippet>690</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.target {
-<a href=#691 id=691 data-nosnippet>691</a>            <span class="kw">return </span>t.contains(WIDGET.id());
-<a href=#692 id=692 data-nosnippet>692</a>        }
-<a href=#693 id=693 data-nosnippet>693</a>
-<a href=#694 id=694 data-nosnippet>694</a>        <span class="bool-val">false
-<a href=#695 id=695 data-nosnippet>695</a>    </span>}
-<a href=#696 id=696 data-nosnippet>696</a>
-<a href=#697 id=697 data-nosnippet>697</a>    <span class="doccomment">/// Returns `true` if the widget was enabled in [`prev_target`].
-<a href=#698 id=698 data-nosnippet>698</a>    ///
-<a href=#699 id=699 data-nosnippet>699</a>    /// [`prev_target`]: Self::prev_target
-<a href=#700 id=700 data-nosnippet>700</a>    </span><span class="kw">pub fn </span>was_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#701 id=701 data-nosnippet>701</a>        <span class="self">self</span>.prev_target
-<a href=#702 id=702 data-nosnippet>702</a>            .as_ref()
-<a href=#703 id=703 data-nosnippet>703</a>            .and_then(|t| t.interactivity_of(widget_id))
-<a href=#704 id=704 data-nosnippet>704</a>            .map(|itr| itr.is_enabled())
-<a href=#705 id=705 data-nosnippet>705</a>            .unwrap_or(<span class="bool-val">false</span>)
-<a href=#706 id=706 data-nosnippet>706</a>    }
-<a href=#707 id=707 data-nosnippet>707</a>
-<a href=#708 id=708 data-nosnippet>708</a>    <span class="doccomment">/// Returns `true` if the widget was disabled in [`prev_target`].
-<a href=#709 id=709 data-nosnippet>709</a>    ///
-<a href=#710 id=710 data-nosnippet>710</a>    /// [`prev_target`]: Self::prev_target
-<a href=#711 id=711 data-nosnippet>711</a>    </span><span class="kw">pub fn </span>was_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#712 id=712 data-nosnippet>712</a>        <span class="self">self</span>.prev_target
-<a href=#713 id=713 data-nosnippet>713</a>            .as_ref()
-<a href=#714 id=714 data-nosnippet>714</a>            .and_then(|t| t.interactivity_of(widget_id))
-<a href=#715 id=715 data-nosnippet>715</a>            .map(|itr| itr.is_disabled())
-<a href=#716 id=716 data-nosnippet>716</a>            .unwrap_or(<span class="bool-val">false</span>)
-<a href=#717 id=717 data-nosnippet>717</a>    }
-<a href=#718 id=718 data-nosnippet>718</a>
-<a href=#719 id=719 data-nosnippet>719</a>    <span class="doccomment">/// Returns `true` if the widget is enabled in [`target`].
-<a href=#720 id=720 data-nosnippet>720</a>    ///
-<a href=#721 id=721 data-nosnippet>721</a>    /// [`target`]: Self::target
-<a href=#722 id=722 data-nosnippet>722</a>    </span><span class="kw">pub fn </span>is_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#723 id=723 data-nosnippet>723</a>        <span class="self">self</span>.target
-<a href=#724 id=724 data-nosnippet>724</a>            .as_ref()
-<a href=#725 id=725 data-nosnippet>725</a>            .and_then(|t| t.interactivity_of(widget_id))
-<a href=#726 id=726 data-nosnippet>726</a>            .map(|itr| itr.is_enabled())
-<a href=#727 id=727 data-nosnippet>727</a>            .unwrap_or(<span class="bool-val">false</span>)
-<a href=#728 id=728 data-nosnippet>728</a>    }
-<a href=#729 id=729 data-nosnippet>729</a>
-<a href=#730 id=730 data-nosnippet>730</a>    <span class="doccomment">/// Returns `true` if the widget is disabled in [`target`].
-<a href=#731 id=731 data-nosnippet>731</a>    ///
-<a href=#732 id=732 data-nosnippet>732</a>    /// [`target`]: Self::target
-<a href=#733 id=733 data-nosnippet>733</a>    </span><span class="kw">pub fn </span>is_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#734 id=734 data-nosnippet>734</a>        <span class="self">self</span>.target
-<a href=#735 id=735 data-nosnippet>735</a>            .as_ref()
-<a href=#736 id=736 data-nosnippet>736</a>            .and_then(|t| t.interactivity_of(widget_id))
-<a href=#737 id=737 data-nosnippet>737</a>            .map(|itr| itr.is_disabled())
-<a href=#738 id=738 data-nosnippet>738</a>            .unwrap_or(<span class="bool-val">false</span>)
-<a href=#739 id=739 data-nosnippet>739</a>    }
-<a href=#740 id=740 data-nosnippet>740</a>
-<a href=#741 id=741 data-nosnippet>741</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was disabled, but now is hovered and enabled.
-<a href=#742 id=742 data-nosnippet>742</a>    ///
-<a href=#743 id=743 data-nosnippet>743</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#744 id=744 data-nosnippet>744</a>    </span><span class="kw">pub fn </span>is_drag_enter_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#745 id=745 data-nosnippet>745</a>        (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_disabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_enabled(WIDGET.id())
-<a href=#746 id=746 data-nosnippet>746</a>    }
-<a href=#747 id=747 data-nosnippet>747</a>
-<a href=#748 id=748 data-nosnippet>748</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and enabled, but now is not hovered or is disabled.
-<a href=#749 id=749 data-nosnippet>749</a>    ///
-<a href=#750 id=750 data-nosnippet>750</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#751 id=751 data-nosnippet>751</a>    </span><span class="kw">pub fn </span>is_drag_leave_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#752 id=752 data-nosnippet>752</a>        <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_enabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_disabled(WIDGET.id()))
-<a href=#753 id=753 data-nosnippet>753</a>    }
-<a href=#754 id=754 data-nosnippet>754</a>
-<a href=#755 id=755 data-nosnippet>755</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was enabled, but now is hovered and disabled.
-<a href=#756 id=756 data-nosnippet>756</a>    ///
-<a href=#757 id=757 data-nosnippet>757</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#758 id=758 data-nosnippet>758</a>    </span><span class="kw">pub fn </span>is_drag_enter_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#759 id=759 data-nosnippet>759</a>        (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_enabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_disabled(WIDGET.id())
-<a href=#760 id=760 data-nosnippet>760</a>    }
-<a href=#761 id=761 data-nosnippet>761</a>
-<a href=#762 id=762 data-nosnippet>762</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and disabled, but now is not hovered or is enabled.
-<a href=#763 id=763 data-nosnippet>763</a>    ///
-<a href=#764 id=764 data-nosnippet>764</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#765 id=765 data-nosnippet>765</a>    </span><span class="kw">pub fn </span>is_drag_leave_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#766 id=766 data-nosnippet>766</a>        <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_disabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_enabled(WIDGET.id()))
-<a href=#767 id=767 data-nosnippet>767</a>    }
-<a href=#768 id=768 data-nosnippet>768</a>}
+<a href=#634 id=634 data-nosnippet>634</a>    /// [`allowed`]: Self::allowed
+<a href=#635 id=635 data-nosnippet>635</a>    </span><span class="kw">pub fn </span>applied(<span class="kw-2">&amp;</span><span class="self">self</span>, effect: DragDropEffect) {
+<a href=#636 id=636 data-nosnippet>636</a>        <span class="macro">assert!</span>(effect.len() &gt; <span class="number">1</span>, <span class="string">"can only apply one effect"</span>);
+<a href=#637 id=637 data-nosnippet>637</a>        <span class="macro">assert!</span>(<span class="self">self</span>.allowed.contains(effect), <span class="string">"source does not allow this effect"</span>);
+<a href=#638 id=638 data-nosnippet>638</a>
+<a href=#639 id=639 data-nosnippet>639</a>        <span class="kw">let </span><span class="kw-2">mut </span>e = <span class="self">self</span>.applied.lock();
+<a href=#640 id=640 data-nosnippet>640</a>        <span class="kw">if </span>!<span class="self">self</span>.propagation().is_stopped() {
+<a href=#641 id=641 data-nosnippet>641</a>            <span class="self">self</span>.propagation().stop();
+<a href=#642 id=642 data-nosnippet>642</a>            <span class="kw-2">*</span>e = effect;
+<a href=#643 id=643 data-nosnippet>643</a>        } <span class="kw">else </span>{
+<a href=#644 id=644 data-nosnippet>644</a>            <span class="macro">tracing::error!</span>(<span class="string">"drop already handled"</span>);
+<a href=#645 id=645 data-nosnippet>645</a>        }
+<a href=#646 id=646 data-nosnippet>646</a>    }
+<a href=#647 id=647 data-nosnippet>647</a>}
+<a href=#648 id=648 data-nosnippet>648</a>
+<a href=#649 id=649 data-nosnippet>649</a><span class="kw">impl </span>DragHoveredArgs {
+<a href=#650 id=650 data-nosnippet>650</a>    <span class="doccomment">/// Gets the [`DRAG_DROP.dragging_data`].
+<a href=#651 id=651 data-nosnippet>651</a>    ///
+<a href=#652 id=652 data-nosnippet>652</a>    /// [`DRAG_DROP.dragging_data`]: DRAG_DROP::dragging_data
+<a href=#653 id=653 data-nosnippet>653</a>    </span><span class="kw">pub fn </span>data(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;Vec&lt;DragDropData&gt;&gt; {
+<a href=#654 id=654 data-nosnippet>654</a>        DRAG_DROP.dragging_data()
+<a href=#655 id=655 data-nosnippet>655</a>    }
+<a href=#656 id=656 data-nosnippet>656</a>
+<a href=#657 id=657 data-nosnippet>657</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered, but now is.
+<a href=#658 id=658 data-nosnippet>658</a>    ///
+<a href=#659 id=659 data-nosnippet>659</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#660 id=660 data-nosnippet>660</a>    </span><span class="kw">pub fn </span>is_drag_enter(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#661 id=661 data-nosnippet>661</a>        !<span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.is_over()
+<a href=#662 id=662 data-nosnippet>662</a>    }
+<a href=#663 id=663 data-nosnippet>663</a>
+<a href=#664 id=664 data-nosnippet>664</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered, but now isn't.
+<a href=#665 id=665 data-nosnippet>665</a>    ///
+<a href=#666 id=666 data-nosnippet>666</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#667 id=667 data-nosnippet>667</a>    </span><span class="kw">pub fn </span>is_drag_leave(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#668 id=668 data-nosnippet>668</a>        <span class="self">self</span>.was_over() &amp;&amp; !<span class="self">self</span>.is_over()
+<a href=#669 id=669 data-nosnippet>669</a>    }
+<a href=#670 id=670 data-nosnippet>670</a>
+<a href=#671 id=671 data-nosnippet>671</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] is in [`prev_target`].
+<a href=#672 id=672 data-nosnippet>672</a>    ///
+<a href=#673 id=673 data-nosnippet>673</a>    /// [`prev_target`]: Self::prev_target
+<a href=#674 id=674 data-nosnippet>674</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#675 id=675 data-nosnippet>675</a>    </span><span class="kw">pub fn </span>was_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#676 id=676 data-nosnippet>676</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_target {
+<a href=#677 id=677 data-nosnippet>677</a>            <span class="kw">return </span>t.contains(WIDGET.id());
+<a href=#678 id=678 data-nosnippet>678</a>        }
+<a href=#679 id=679 data-nosnippet>679</a>
+<a href=#680 id=680 data-nosnippet>680</a>        <span class="bool-val">false
+<a href=#681 id=681 data-nosnippet>681</a>    </span>}
+<a href=#682 id=682 data-nosnippet>682</a>
+<a href=#683 id=683 data-nosnippet>683</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] is in [`target`].
+<a href=#684 id=684 data-nosnippet>684</a>    ///
+<a href=#685 id=685 data-nosnippet>685</a>    /// [`target`]: Self::target
+<a href=#686 id=686 data-nosnippet>686</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#687 id=687 data-nosnippet>687</a>    </span><span class="kw">pub fn </span>is_over(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#688 id=688 data-nosnippet>688</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.target {
+<a href=#689 id=689 data-nosnippet>689</a>            <span class="kw">return </span>t.contains(WIDGET.id());
+<a href=#690 id=690 data-nosnippet>690</a>        }
+<a href=#691 id=691 data-nosnippet>691</a>
+<a href=#692 id=692 data-nosnippet>692</a>        <span class="bool-val">false
+<a href=#693 id=693 data-nosnippet>693</a>    </span>}
+<a href=#694 id=694 data-nosnippet>694</a>
+<a href=#695 id=695 data-nosnippet>695</a>    <span class="doccomment">/// Returns `true` if the widget was enabled in [`prev_target`].
+<a href=#696 id=696 data-nosnippet>696</a>    ///
+<a href=#697 id=697 data-nosnippet>697</a>    /// [`prev_target`]: Self::prev_target
+<a href=#698 id=698 data-nosnippet>698</a>    </span><span class="kw">pub fn </span>was_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#699 id=699 data-nosnippet>699</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.prev_target {
+<a href=#700 id=700 data-nosnippet>700</a>            <span class="prelude-val">Some</span>(t) =&gt; t.contains_enabled(widget_id),
+<a href=#701 id=701 data-nosnippet>701</a>            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+<a href=#702 id=702 data-nosnippet>702</a>        }
+<a href=#703 id=703 data-nosnippet>703</a>    }
+<a href=#704 id=704 data-nosnippet>704</a>
+<a href=#705 id=705 data-nosnippet>705</a>    <span class="doccomment">/// Returns `true` if the widget was disabled in [`prev_target`].
+<a href=#706 id=706 data-nosnippet>706</a>    ///
+<a href=#707 id=707 data-nosnippet>707</a>    /// [`prev_target`]: Self::prev_target
+<a href=#708 id=708 data-nosnippet>708</a>    </span><span class="kw">pub fn </span>was_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#709 id=709 data-nosnippet>709</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.prev_target {
+<a href=#710 id=710 data-nosnippet>710</a>            <span class="prelude-val">Some</span>(t) =&gt; t.contains_disabled(widget_id),
+<a href=#711 id=711 data-nosnippet>711</a>            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+<a href=#712 id=712 data-nosnippet>712</a>        }
+<a href=#713 id=713 data-nosnippet>713</a>    }
+<a href=#714 id=714 data-nosnippet>714</a>
+<a href=#715 id=715 data-nosnippet>715</a>    <span class="doccomment">/// Returns `true` if the widget is enabled in [`target`].
+<a href=#716 id=716 data-nosnippet>716</a>    ///
+<a href=#717 id=717 data-nosnippet>717</a>    /// [`target`]: Self::target
+<a href=#718 id=718 data-nosnippet>718</a>    </span><span class="kw">pub fn </span>is_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#719 id=719 data-nosnippet>719</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.target {
+<a href=#720 id=720 data-nosnippet>720</a>            <span class="prelude-val">Some</span>(t) =&gt; t.contains_enabled(widget_id),
+<a href=#721 id=721 data-nosnippet>721</a>            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+<a href=#722 id=722 data-nosnippet>722</a>        }
+<a href=#723 id=723 data-nosnippet>723</a>    }
+<a href=#724 id=724 data-nosnippet>724</a>
+<a href=#725 id=725 data-nosnippet>725</a>    <span class="doccomment">/// Returns `true` if the widget is disabled in [`target`].
+<a href=#726 id=726 data-nosnippet>726</a>    ///
+<a href=#727 id=727 data-nosnippet>727</a>    /// [`target`]: Self::target
+<a href=#728 id=728 data-nosnippet>728</a>    </span><span class="kw">pub fn </span>is_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#729 id=729 data-nosnippet>729</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.target {
+<a href=#730 id=730 data-nosnippet>730</a>            <span class="prelude-val">Some</span>(t) =&gt; t.contains_disabled(widget_id),
+<a href=#731 id=731 data-nosnippet>731</a>            <span class="prelude-val">None </span>=&gt; <span class="bool-val">false</span>,
+<a href=#732 id=732 data-nosnippet>732</a>        }
+<a href=#733 id=733 data-nosnippet>733</a>    }
+<a href=#734 id=734 data-nosnippet>734</a>
+<a href=#735 id=735 data-nosnippet>735</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was disabled, but now is hovered and enabled.
+<a href=#736 id=736 data-nosnippet>736</a>    ///
+<a href=#737 id=737 data-nosnippet>737</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#738 id=738 data-nosnippet>738</a>    </span><span class="kw">pub fn </span>is_drag_enter_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#739 id=739 data-nosnippet>739</a>        (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_disabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_enabled(WIDGET.id())
+<a href=#740 id=740 data-nosnippet>740</a>    }
+<a href=#741 id=741 data-nosnippet>741</a>
+<a href=#742 id=742 data-nosnippet>742</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and enabled, but now is not hovered or is disabled.
+<a href=#743 id=743 data-nosnippet>743</a>    ///
+<a href=#744 id=744 data-nosnippet>744</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#745 id=745 data-nosnippet>745</a>    </span><span class="kw">pub fn </span>is_drag_leave_enabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#746 id=746 data-nosnippet>746</a>        <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_enabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_disabled(WIDGET.id()))
+<a href=#747 id=747 data-nosnippet>747</a>    }
+<a href=#748 id=748 data-nosnippet>748</a>
+<a href=#749 id=749 data-nosnippet>749</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was not hovered or was enabled, but now is hovered and disabled.
+<a href=#750 id=750 data-nosnippet>750</a>    ///
+<a href=#751 id=751 data-nosnippet>751</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#752 id=752 data-nosnippet>752</a>    </span><span class="kw">pub fn </span>is_drag_enter_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#753 id=753 data-nosnippet>753</a>        (!<span class="self">self</span>.was_over() || <span class="self">self</span>.was_enabled(WIDGET.id())) &amp;&amp; <span class="self">self</span>.is_over() &amp;&amp; <span class="self">self</span>.is_disabled(WIDGET.id())
+<a href=#754 id=754 data-nosnippet>754</a>    }
+<a href=#755 id=755 data-nosnippet>755</a>
+<a href=#756 id=756 data-nosnippet>756</a>    <span class="doccomment">/// Returns `true` if the [`WIDGET`] was hovered and disabled, but now is not hovered or is enabled.
+<a href=#757 id=757 data-nosnippet>757</a>    ///
+<a href=#758 id=758 data-nosnippet>758</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#759 id=759 data-nosnippet>759</a>    </span><span class="kw">pub fn </span>is_drag_leave_disabled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#760 id=760 data-nosnippet>760</a>        <span class="self">self</span>.was_over() &amp;&amp; <span class="self">self</span>.was_disabled(WIDGET.id()) &amp;&amp; (!<span class="self">self</span>.is_over() || <span class="self">self</span>.is_enabled(WIDGET.id()))
+<a href=#761 id=761 data-nosnippet>761</a>    }
+<a href=#762 id=762 data-nosnippet>762</a>}
+<a href=#763 id=763 data-nosnippet>763</a>
+<a href=#764 id=764 data-nosnippet>764</a><span class="kw">impl </span>DragEndArgs {
+<a href=#765 id=765 data-nosnippet>765</a>    <span class="doccomment">/// Data was dropped on a valid target.
+<a href=#766 id=766 data-nosnippet>766</a>    </span><span class="kw">pub fn </span>was_dropped(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#767 id=767 data-nosnippet>767</a>        !<span class="self">self</span>.applied.is_empty()
+<a href=#768 id=768 data-nosnippet>768</a>    }
 <a href=#769 id=769 data-nosnippet>769</a>
-<a href=#770 id=770 data-nosnippet>770</a><span class="kw">impl </span>DragEndArgs {
-<a href=#771 id=771 data-nosnippet>771</a>    <span class="doccomment">/// Data was dropped on a valid target.
-<a href=#772 id=772 data-nosnippet>772</a>    </span><span class="kw">pub fn </span>was_dropped(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#773 id=773 data-nosnippet>773</a>        !<span class="self">self</span>.applied.is_empty()
-<a href=#774 id=774 data-nosnippet>774</a>    }
+<a href=#770 id=770 data-nosnippet>770</a>    <span class="doccomment">/// Stopped dragging without dropping on a valid drop target.
+<a href=#771 id=771 data-nosnippet>771</a>    </span><span class="kw">pub fn </span>was_canceled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#772 id=772 data-nosnippet>772</a>        <span class="self">self</span>.applied.is_empty()
+<a href=#773 id=773 data-nosnippet>773</a>    }
+<a href=#774 id=774 data-nosnippet>774</a>}
 <a href=#775 id=775 data-nosnippet>775</a>
-<a href=#776 id=776 data-nosnippet>776</a>    <span class="doccomment">/// Stopped dragging without dropping on a valid drop target.
-<a href=#777 id=777 data-nosnippet>777</a>    </span><span class="kw">pub fn </span>was_canceled(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#778 id=778 data-nosnippet>778</a>        <span class="self">self</span>.applied.is_empty()
-<a href=#779 id=779 data-nosnippet>779</a>    }
-<a href=#780 id=780 data-nosnippet>780</a>}
-<a href=#781 id=781 data-nosnippet>781</a>
-<a href=#782 id=782 data-nosnippet>782</a><span class="doccomment">/// Encode an widget ID for drag&amp;drop data.
-<a href=#783 id=783 data-nosnippet>783</a></span><span class="kw">pub fn </span>encode_widget_id(id: WidgetId) -&gt; DragDropData {
-<a href=#784 id=784 data-nosnippet>784</a>    DragDropData::Text {
-<a href=#785 id=785 data-nosnippet>785</a>        format: <span class="macro">formatx!</span>(<span class="string">"zng/{}"</span>, APP_GUID.read().simple()),
-<a href=#786 id=786 data-nosnippet>786</a>        data: <span class="macro">formatx!</span>(<span class="string">"wgt-{}"</span>, id.get()),
-<a href=#787 id=787 data-nosnippet>787</a>    }
-<a href=#788 id=788 data-nosnippet>788</a>}
-<a href=#789 id=789 data-nosnippet>789</a>
-<a href=#790 id=790 data-nosnippet>790</a><span class="doccomment">/// Decode an widget ID from drag&amp;drop data.
-<a href=#791 id=791 data-nosnippet>791</a>///
-<a href=#792 id=792 data-nosnippet>792</a>/// The ID will only decode if it was encoded by the same app instance.
-<a href=#793 id=793 data-nosnippet>793</a></span><span class="kw">pub fn </span>decode_widget_id(data: <span class="kw-2">&amp;</span>DragDropData) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetId&gt; {
-<a href=#794 id=794 data-nosnippet>794</a>    <span class="kw">if let </span>DragDropData::Text { format, data } = data {
-<a href=#795 id=795 data-nosnippet>795</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(guid) = format.strip_prefix(<span class="string">"zng/"</span>) {
-<a href=#796 id=796 data-nosnippet>796</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = data.strip_prefix(<span class="string">"wgt-"</span>) {
-<a href=#797 id=797 data-nosnippet>797</a>                <span class="kw">if </span>guid == APP_GUID.read().simple().to_string() {
-<a href=#798 id=798 data-nosnippet>798</a>                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(id) = id.parse::&lt;u64&gt;() {
-<a href=#799 id=799 data-nosnippet>799</a>                        <span class="kw">return </span><span class="prelude-val">Some</span>(WidgetId::from_raw(id));
-<a href=#800 id=800 data-nosnippet>800</a>                    }
-<a href=#801 id=801 data-nosnippet>801</a>                }
-<a href=#802 id=802 data-nosnippet>802</a>            }
-<a href=#803 id=803 data-nosnippet>803</a>        }
-<a href=#804 id=804 data-nosnippet>804</a>    }
-<a href=#805 id=805 data-nosnippet>805</a>    <span class="prelude-val">None
-<a href=#806 id=806 data-nosnippet>806</a></span>}
-<a href=#807 id=807 data-nosnippet>807</a>
-<a href=#808 id=808 data-nosnippet>808</a><span class="macro">app_local!</span> {
-<a href=#809 id=809 data-nosnippet>809</a>    <span class="kw">static </span>APP_GUID: uuid::Uuid = uuid::Uuid::new_v4();
-<a href=#810 id=810 data-nosnippet>810</a>}</code></pre></div></section></main></body></html>
+<a href=#776 id=776 data-nosnippet>776</a><span class="doccomment">/// Encode an widget ID for drag&amp;drop data.
+<a href=#777 id=777 data-nosnippet>777</a></span><span class="kw">pub fn </span>encode_widget_id(id: WidgetId) -&gt; DragDropData {
+<a href=#778 id=778 data-nosnippet>778</a>    DragDropData::Text {
+<a href=#779 id=779 data-nosnippet>779</a>        format: <span class="macro">formatx!</span>(<span class="string">"zng/{}"</span>, APP_GUID.read().simple()),
+<a href=#780 id=780 data-nosnippet>780</a>        data: <span class="macro">formatx!</span>(<span class="string">"wgt-{}"</span>, id.get()),
+<a href=#781 id=781 data-nosnippet>781</a>    }
+<a href=#782 id=782 data-nosnippet>782</a>}
+<a href=#783 id=783 data-nosnippet>783</a>
+<a href=#784 id=784 data-nosnippet>784</a><span class="doccomment">/// Decode an widget ID from drag&amp;drop data.
+<a href=#785 id=785 data-nosnippet>785</a>///
+<a href=#786 id=786 data-nosnippet>786</a>/// The ID will only decode if it was encoded by the same app instance.
+<a href=#787 id=787 data-nosnippet>787</a></span><span class="kw">pub fn </span>decode_widget_id(data: <span class="kw-2">&amp;</span>DragDropData) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetId&gt; {
+<a href=#788 id=788 data-nosnippet>788</a>    <span class="kw">if let </span>DragDropData::Text { format, data } = data {
+<a href=#789 id=789 data-nosnippet>789</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(guid) = format.strip_prefix(<span class="string">"zng/"</span>) {
+<a href=#790 id=790 data-nosnippet>790</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = data.strip_prefix(<span class="string">"wgt-"</span>) {
+<a href=#791 id=791 data-nosnippet>791</a>                <span class="kw">if </span>guid == APP_GUID.read().simple().to_string() {
+<a href=#792 id=792 data-nosnippet>792</a>                    <span class="kw">if let </span><span class="prelude-val">Ok</span>(id) = id.parse::&lt;u64&gt;() {
+<a href=#793 id=793 data-nosnippet>793</a>                        <span class="kw">return </span><span class="prelude-val">Some</span>(WidgetId::from_raw(id));
+<a href=#794 id=794 data-nosnippet>794</a>                    }
+<a href=#795 id=795 data-nosnippet>795</a>                }
+<a href=#796 id=796 data-nosnippet>796</a>            }
+<a href=#797 id=797 data-nosnippet>797</a>        }
+<a href=#798 id=798 data-nosnippet>798</a>    }
+<a href=#799 id=799 data-nosnippet>799</a>    <span class="prelude-val">None
+<a href=#800 id=800 data-nosnippet>800</a></span>}
+<a href=#801 id=801 data-nosnippet>801</a>
+<a href=#802 id=802 data-nosnippet>802</a><span class="macro">app_local!</span> {
+<a href=#803 id=803 data-nosnippet>803</a>    <span class="kw">static </span>APP_GUID: uuid::Uuid = uuid::Uuid::new_v4();
+<a href=#804 id=804 data-nosnippet>804</a>}</code></pre></div></section></main></body></html>

@@ -36,7 +36,7 @@
 <a href=#36 id=36 data-nosnippet>36</a>    </span><span class="kw">pub fn </span>key_input {
 <a href=#37 id=37 data-nosnippet>37</a>        event: KEY_INPUT_EVENT,
 <a href=#38 id=38 data-nosnippet>38</a>        args: KeyInputArgs,
-<a href=#39 id=39 data-nosnippet>39</a>        filter: |args| args.is_enabled(WIDGET.id()),
+<a href=#39 id=39 data-nosnippet>39</a>        filter: |args| args.target.contains_enabled(WIDGET.id()),
 <a href=#40 id=40 data-nosnippet>40</a>    }
 <a href=#41 id=41 data-nosnippet>41</a>
 <a href=#42 id=42 data-nosnippet>42</a>    <span class="doccomment">/// Event fired when a keyboard key is pressed or released and the widget is disabled.
@@ -67,7 +67,7 @@
 <a href=#67 id=67 data-nosnippet>67</a>    </span><span class="kw">pub fn </span>disabled_key_input {
 <a href=#68 id=68 data-nosnippet>68</a>        event: KEY_INPUT_EVENT,
 <a href=#69 id=69 data-nosnippet>69</a>        args: KeyInputArgs,
-<a href=#70 id=70 data-nosnippet>70</a>        filter: |args| args.is_disabled(WIDGET.id()),
+<a href=#70 id=70 data-nosnippet>70</a>        filter: |args| args.target.contains_disabled(WIDGET.id()),
 <a href=#71 id=71 data-nosnippet>71</a>    }
 <a href=#72 id=72 data-nosnippet>72</a>
 <a href=#73 id=73 data-nosnippet>73</a>    <span class="doccomment">/// Event fired when a keyboard key is pressed and the widget is enabled.
@@ -98,7 +98,7 @@
 <a href=#98 id=98 data-nosnippet>98</a>    </span><span class="kw">pub fn </span>key_down {
 <a href=#99 id=99 data-nosnippet>99</a>        event: KEY_INPUT_EVENT,
 <a href=#100 id=100 data-nosnippet>100</a>        args: KeyInputArgs,
-<a href=#101 id=101 data-nosnippet>101</a>        filter: |args| args.state == KeyState::Pressed &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#101 id=101 data-nosnippet>101</a>        filter: |args| args.state == KeyState::Pressed &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#102 id=102 data-nosnippet>102</a>    }
 <a href=#103 id=103 data-nosnippet>103</a>
 <a href=#104 id=104 data-nosnippet>104</a>    <span class="doccomment">/// Event fired when a keyboard key is released and the widget is enabled.
@@ -128,6 +128,6 @@
 <a href=#128 id=128 data-nosnippet>128</a>    </span><span class="kw">pub fn </span>key_up {
 <a href=#129 id=129 data-nosnippet>129</a>        event: KEY_INPUT_EVENT,
 <a href=#130 id=130 data-nosnippet>130</a>        args: KeyInputArgs,
-<a href=#131 id=131 data-nosnippet>131</a>        filter: |args| args.state == KeyState::Released &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#131 id=131 data-nosnippet>131</a>        filter: |args| args.state == KeyState::Released &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#132 id=132 data-nosnippet>132</a>    }
 <a href=#133 id=133 data-nosnippet>133</a>}</code></pre></div></section></main></body></html>

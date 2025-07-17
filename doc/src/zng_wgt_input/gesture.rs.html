@@ -21,7 +21,7 @@
 <a href=#21 id=21 data-nosnippet>21</a>    </span><span class="kw">pub fn </span>any_click {
 <a href=#22 id=22 data-nosnippet>22</a>        event: CLICK_EVENT,
 <a href=#23 id=23 data-nosnippet>23</a>        args: ClickArgs,
-<a href=#24 id=24 data-nosnippet>24</a>        filter: |args| args.is_enabled(WIDGET.id()),
+<a href=#24 id=24 data-nosnippet>24</a>        filter: |args| args.target.contains_enabled(WIDGET.id()),
 <a href=#25 id=25 data-nosnippet>25</a>        with: access_click,
 <a href=#26 id=26 data-nosnippet>26</a>    }
 <a href=#27 id=27 data-nosnippet>27</a>
@@ -29,7 +29,7 @@
 <a href=#29 id=29 data-nosnippet>29</a>    </span><span class="kw">pub fn </span>disabled_click {
 <a href=#30 id=30 data-nosnippet>30</a>        event: CLICK_EVENT,
 <a href=#31 id=31 data-nosnippet>31</a>        args: ClickArgs,
-<a href=#32 id=32 data-nosnippet>32</a>        filter: |args| args.is_disabled(WIDGET.id()),
+<a href=#32 id=32 data-nosnippet>32</a>        filter: |args| args.target.contains_disabled(WIDGET.id()),
 <a href=#33 id=33 data-nosnippet>33</a>        with: access_click,
 <a href=#34 id=34 data-nosnippet>34</a>    }
 <a href=#35 id=35 data-nosnippet>35</a>
@@ -42,7 +42,7 @@
 <a href=#42 id=42 data-nosnippet>42</a>    </span><span class="kw">pub fn </span>any_single_click {
 <a href=#43 id=43 data-nosnippet>43</a>        event: CLICK_EVENT,
 <a href=#44 id=44 data-nosnippet>44</a>        args: ClickArgs,
-<a href=#45 id=45 data-nosnippet>45</a>        filter: |args| args.is_single() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#45 id=45 data-nosnippet>45</a>        filter: |args| args.is_single() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#46 id=46 data-nosnippet>46</a>        with: access_click,
 <a href=#47 id=47 data-nosnippet>47</a>    }
 <a href=#48 id=48 data-nosnippet>48</a>
@@ -55,7 +55,7 @@
 <a href=#55 id=55 data-nosnippet>55</a>    </span><span class="kw">pub fn </span>any_double_click {
 <a href=#56 id=56 data-nosnippet>56</a>        event: CLICK_EVENT,
 <a href=#57 id=57 data-nosnippet>57</a>        args: ClickArgs,
-<a href=#58 id=58 data-nosnippet>58</a>        filter: |args| args.is_double() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#58 id=58 data-nosnippet>58</a>        filter: |args| args.is_double() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#59 id=59 data-nosnippet>59</a>    }
 <a href=#60 id=60 data-nosnippet>60</a>
 <a href=#61 id=61 data-nosnippet>61</a>    <span class="doccomment">/// On widget triple click from any source and the widget is enabled.
@@ -67,7 +67,7 @@
 <a href=#67 id=67 data-nosnippet>67</a>    </span><span class="kw">pub fn </span>any_triple_click {
 <a href=#68 id=68 data-nosnippet>68</a>        event: CLICK_EVENT,
 <a href=#69 id=69 data-nosnippet>69</a>        args: ClickArgs,
-<a href=#70 id=70 data-nosnippet>70</a>        filter: |args| args.is_triple() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#70 id=70 data-nosnippet>70</a>        filter: |args| args.is_triple() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#71 id=71 data-nosnippet>71</a>    }
 <a href=#72 id=72 data-nosnippet>72</a>
 <a href=#73 id=73 data-nosnippet>73</a>    <span class="doccomment">/// On widget click with the primary button and any click count and the widget is enabled.
@@ -78,7 +78,7 @@
 <a href=#78 id=78 data-nosnippet>78</a>    </span><span class="kw">pub fn </span>click {
 <a href=#79 id=79 data-nosnippet>79</a>        event: CLICK_EVENT,
 <a href=#80 id=80 data-nosnippet>80</a>        args: ClickArgs,
-<a href=#81 id=81 data-nosnippet>81</a>        filter: |args| args.is_primary() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#81 id=81 data-nosnippet>81</a>        filter: |args| args.is_primary() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#82 id=82 data-nosnippet>82</a>        with: access_click,
 <a href=#83 id=83 data-nosnippet>83</a>    }
 <a href=#84 id=84 data-nosnippet>84</a>
@@ -89,7 +89,7 @@
 <a href=#89 id=89 data-nosnippet>89</a>    </span><span class="kw">pub fn </span>single_click {
 <a href=#90 id=90 data-nosnippet>90</a>        event: CLICK_EVENT,
 <a href=#91 id=91 data-nosnippet>91</a>        args: ClickArgs,
-<a href=#92 id=92 data-nosnippet>92</a>        filter: |args| args.is_primary() &amp;&amp; args.is_single() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#92 id=92 data-nosnippet>92</a>        filter: |args| args.is_primary() &amp;&amp; args.is_single() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#93 id=93 data-nosnippet>93</a>        with: access_click,
 <a href=#94 id=94 data-nosnippet>94</a>    }
 <a href=#95 id=95 data-nosnippet>95</a>
@@ -100,7 +100,7 @@
 <a href=#100 id=100 data-nosnippet>100</a>    </span><span class="kw">pub fn </span>double_click {
 <a href=#101 id=101 data-nosnippet>101</a>        event: CLICK_EVENT,
 <a href=#102 id=102 data-nosnippet>102</a>        args: ClickArgs,
-<a href=#103 id=103 data-nosnippet>103</a>        filter: |args| args.is_primary() &amp;&amp; args.is_double() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#103 id=103 data-nosnippet>103</a>        filter: |args| args.is_primary() &amp;&amp; args.is_double() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#104 id=104 data-nosnippet>104</a>    }
 <a href=#105 id=105 data-nosnippet>105</a>
 <a href=#106 id=106 data-nosnippet>106</a>    <span class="doccomment">/// On widget triple click with the primary button and the widget is enabled.
@@ -110,7 +110,7 @@
 <a href=#110 id=110 data-nosnippet>110</a>    </span><span class="kw">pub fn </span>triple_click {
 <a href=#111 id=111 data-nosnippet>111</a>        event: CLICK_EVENT,
 <a href=#112 id=112 data-nosnippet>112</a>        args: ClickArgs,
-<a href=#113 id=113 data-nosnippet>113</a>        filter: |args| args.is_primary() &amp;&amp; args.is_triple() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#113 id=113 data-nosnippet>113</a>        filter: |args| args.is_primary() &amp;&amp; args.is_triple() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#114 id=114 data-nosnippet>114</a>    }
 <a href=#115 id=115 data-nosnippet>115</a>
 <a href=#116 id=116 data-nosnippet>116</a>    <span class="doccomment">/// On widget click with the secondary/context button and the widget is enabled.
@@ -119,7 +119,7 @@
 <a href=#119 id=119 data-nosnippet>119</a>    </span><span class="kw">pub fn </span>context_click {
 <a href=#120 id=120 data-nosnippet>120</a>        event: CLICK_EVENT,
 <a href=#121 id=121 data-nosnippet>121</a>        args: ClickArgs,
-<a href=#122 id=122 data-nosnippet>122</a>        filter: |args| args.is_context() &amp;&amp; args.is_enabled(WIDGET.id()),
+<a href=#122 id=122 data-nosnippet>122</a>        filter: |args| args.is_context() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#123 id=123 data-nosnippet>123</a>        with: access_click,
 <a href=#124 id=124 data-nosnippet>124</a>    }
 <a href=#125 id=125 data-nosnippet>125</a>}

@@ -121,7 +121,7 @@
 <a href=#121 id=121 data-nosnippet>121</a>                <span class="kw">match </span>input_args.state {
 <a href=#122 id=122 data-nosnippet>122</a>                    ButtonState::Pressed =&gt; {
 <a href=#123 id=123 data-nosnippet>123</a>                        <span class="kw">if </span>input_args.capture_allows() {
-<a href=#124 id=124 data-nosnippet>124</a>                            <span class="kw">return </span><span class="prelude-val">Some</span>(input_args.is_enabled(WIDGET.id()));
+<a href=#124 id=124 data-nosnippet>124</a>                            <span class="kw">return </span><span class="prelude-val">Some</span>(input_args.target.contains_enabled(WIDGET.id()));
 <a href=#125 id=125 data-nosnippet>125</a>                        }
 <a href=#126 id=126 data-nosnippet>126</a>                    }
 <a href=#127 id=127 data-nosnippet>127</a>                    ButtonState::Released =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
@@ -178,7 +178,7 @@
 <a href=#178 id=178 data-nosnippet>178</a>                <span class="kw">match </span>input_args.state {
 <a href=#179 id=179 data-nosnippet>179</a>                    ButtonState::Pressed =&gt; {
 <a href=#180 id=180 data-nosnippet>180</a>                        <span class="kw">if </span>input_args.capture_allows() {
-<a href=#181 id=181 data-nosnippet>181</a>                            <span class="kw">return </span><span class="prelude-val">Some</span>(input_args.is_enabled(WIDGET.id()));
+<a href=#181 id=181 data-nosnippet>181</a>                            <span class="kw">return </span><span class="prelude-val">Some</span>(input_args.target.contains_enabled(WIDGET.id()));
 <a href=#182 id=182 data-nosnippet>182</a>                        }
 <a href=#183 id=183 data-nosnippet>183</a>                    }
 <a href=#184 id=184 data-nosnippet>184</a>                    ButtonState::Released =&gt; <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="bool-val">false</span>),
@@ -219,7 +219,7 @@
 <a href=#219 id=219 data-nosnippet>219</a>        }
 <a href=#220 id=220 data-nosnippet>220</a>        UiNodeOp::Event { update } =&gt; {
 <a href=#221 id=221 data-nosnippet>221</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = CLICK_EVENT.on(update) {
-<a href=#222 id=222 data-nosnippet>222</a>                <span class="kw">if </span>(args.is_from_keyboard() || args.is_from_access()) &amp;&amp; args.is_enabled(WIDGET.id()) {
+<a href=#222 id=222 data-nosnippet>222</a>                <span class="kw">if </span>(args.is_from_keyboard() || args.is_from_access()) &amp;&amp; args.target.contains_enabled(WIDGET.id()) {
 <a href=#223 id=223 data-nosnippet>223</a>                    <span class="comment">// if a shortcut click happened, we show pressed for the duration of `shortcut_pressed_duration`
 <a href=#224 id=224 data-nosnippet>224</a>                    // unless we where already doing that, then we just stop showing pressed, this causes
 <a href=#225 id=225 data-nosnippet>225</a>                    // a flickering effect when rapid clicks are happening.
