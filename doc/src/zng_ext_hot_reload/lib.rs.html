@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-hot-reload/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_hot_reload" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_hot_reload/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-hot-reload/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_hot_reload" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_hot_reload/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Hot reload service.
@@ -36,7 +36,7 @@
 <a href=#36 id=36 data-nosnippet>36</a><span class="kw">use </span>zng_txt::Txt;
 <a href=#37 id=37 data-nosnippet>37</a><span class="kw">use </span>zng_unique_id::hot_reload::HOT_STATICS;
 <a href=#38 id=38 data-nosnippet>38</a><span class="kw">use </span>zng_unit::TimeUnits <span class="kw">as _</span>;
-<a href=#39 id=39 data-nosnippet>39</a><span class="kw">use </span>zng_var::{ArcVar, ReadOnlyArcVar, ResponseVar, Var <span class="kw">as _</span>};
+<a href=#39 id=39 data-nosnippet>39</a><span class="kw">use </span>zng_var::{ResponseVar, Var};
 <a href=#40 id=40 data-nosnippet>40</a>
 <a href=#41 id=41 data-nosnippet>41</a><span class="attr">#[doc(inline)]
 <a href=#42 id=42 data-nosnippet>42</a></span><span class="kw">pub use </span>zng_unique_id::{hot_static, hot_static_ref, lazy_static};
@@ -54,7 +54,7 @@
 <a href=#54 id=54 data-nosnippet>54</a>        <span class="attr">#[doc(hidden)] </span><span class="comment">// used by proc-macro
 <a href=#55 id=55 data-nosnippet>55</a>        </span><span class="kw">pub use </span><span class="macro-nonterminal">$crate::zng_hot_entry</span>;
 <a href=#56 id=56 data-nosnippet>56</a>
-<a href=#57 id=57 data-nosnippet>57</a>        <span class="attr">#[<span class="kw">unsafe</span>(no_mangle)] </span><span class="comment">// SAFETY: docs struct users to call the macro only once, name is unlikely to have collisions.
+<a href=#57 id=57 data-nosnippet>57</a>        <span class="attr">#[<span class="kw">unsafe</span>(no_mangle)] </span><span class="comment">// SAFETY: docs instruct users to call the macro only once, name is unlikely to have collisions.
 <a href=#58 id=58 data-nosnippet>58</a>        </span><span class="attr">#[doc(hidden)] </span><span class="comment">// used by lib loader
 <a href=#59 id=59 data-nosnippet>59</a>        </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>zng_hot_entry(
 <a href=#60 id=60 data-nosnippet>60</a>            manifest_dir: &amp;&amp;str,
@@ -65,7 +65,7 @@
 <a href=#65 id=65 data-nosnippet>65</a>            <span class="macro-nonterminal">$crate::zng_hot_entry::entry</span>(manifest_dir, node_name, ctx, exchange)
 <a href=#66 id=66 data-nosnippet>66</a>        }
 <a href=#67 id=67 data-nosnippet>67</a>
-<a href=#68 id=68 data-nosnippet>68</a>        <span class="attr">#[<span class="kw">unsafe</span>(no_mangle)] </span><span class="comment">// SAFETY: docs struct users to call the macro only once, name is unlikely to have collisions.
+<a href=#68 id=68 data-nosnippet>68</a>        <span class="attr">#[<span class="kw">unsafe</span>(no_mangle)] </span><span class="comment">// SAFETY: docs instruct users to call the macro only once, name is unlikely to have collisions.
 <a href=#69 id=69 data-nosnippet>69</a>        </span><span class="attr">#[doc(hidden)]
 <a href=#70 id=70 data-nosnippet>70</a>        </span><span class="kw">pub extern </span><span class="string">"C" </span><span class="kw">fn </span>zng_hot_entry_init(patch: <span class="kw-2">&amp;</span><span class="macro-nonterminal">$crate::StaticPatch</span>) {
 <a href=#71 id=71 data-nosnippet>71</a>            <span class="macro-nonterminal">$crate::zng_hot_entry::init</span>(patch)
@@ -250,43 +250,43 @@
 <a href=#250 id=250 data-nosnippet>250</a>
 <a href=#251 id=251 data-nosnippet>251</a>    <span class="kw">fn </span>update_preview(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
 <a href=#252 id=252 data-nosnippet>252</a>        <span class="kw">for </span>(manifest_dir, watched) <span class="kw">in </span><span class="self">self</span>.libs.iter_mut() {
-<a href=#253 id=253 data-nosnippet>253</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span>watched.building {
-<a href=#254 id=254 data-nosnippet>254</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = b.rebuild_load.rsp() {
-<a href=#255 id=255 data-nosnippet>255</a>                    <span class="kw">let </span>build_time = b.start_time.elapsed();
-<a href=#256 id=256 data-nosnippet>256</a>                    <span class="kw">let </span><span class="kw-2">mut </span>lib = <span class="prelude-val">None</span>;
-<a href=#257 id=257 data-nosnippet>257</a>                    <span class="kw">let </span>status_r = <span class="kw">match </span>r {
-<a href=#258 id=258 data-nosnippet>258</a>                        <span class="prelude-val">Ok</span>(l) =&gt; {
-<a href=#259 id=259 data-nosnippet>259</a>                            lib = <span class="prelude-val">Some</span>(l);
-<a href=#260 id=260 data-nosnippet>260</a>                            <span class="prelude-val">Ok</span>(build_time)
-<a href=#261 id=261 data-nosnippet>261</a>                        }
-<a href=#262 id=262 data-nosnippet>262</a>                        <span class="prelude-val">Err</span>(e) =&gt; {
-<a href=#263 id=263 data-nosnippet>263</a>                            <span class="kw">if </span><span class="macro">matches!</span>(<span class="kw-2">&amp;</span>e, BuildError::Cancelled) {
-<a href=#264 id=264 data-nosnippet>264</a>                                <span class="macro">tracing::warn!</span>(<span class="string">"cancelled rebuild `{manifest_dir}`"</span>);
-<a href=#265 id=265 data-nosnippet>265</a>                            } <span class="kw">else </span>{
-<a href=#266 id=266 data-nosnippet>266</a>                                <span class="macro">tracing::error!</span>(<span class="string">"failed rebuild `{manifest_dir}`, {e}"</span>);
-<a href=#267 id=267 data-nosnippet>267</a>                            }
-<a href=#268 id=268 data-nosnippet>268</a>                            <span class="prelude-val">Err</span>(e)
-<a href=#269 id=269 data-nosnippet>269</a>                        }
-<a href=#270 id=270 data-nosnippet>270</a>                    };
-<a href=#271 id=271 data-nosnippet>271</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(lib) = lib {
-<a href=#272 id=272 data-nosnippet>272</a>                        <span class="macro">tracing::info!</span>(<span class="string">"rebuilt and reloaded `{manifest_dir}` in {build_time:?}"</span>);
-<a href=#273 id=273 data-nosnippet>273</a>                        HOT_RELOAD.set(lib.clone());
-<a href=#274 id=274 data-nosnippet>274</a>                        HOT_RELOAD_EVENT.notify(HotReloadArgs::now(lib));
-<a href=#275 id=275 data-nosnippet>275</a>                    }
-<a href=#276 id=276 data-nosnippet>276</a>
-<a href=#277 id=277 data-nosnippet>277</a>                    watched.building = <span class="prelude-val">None</span>;
-<a href=#278 id=278 data-nosnippet>278</a>
-<a href=#279 id=279 data-nosnippet>279</a>                    <span class="kw">let </span>manifest_dir = <span class="kw-2">*</span>manifest_dir;
-<a href=#280 id=280 data-nosnippet>280</a>                    HOT_RELOAD_SV.read().status.modify(<span class="kw">move </span>|s| {
-<a href=#281 id=281 data-nosnippet>281</a>                        <span class="kw">let </span>s = s.to_mut().iter_mut().find(|s| s.manifest_dir == manifest_dir).unwrap();
-<a href=#282 id=282 data-nosnippet>282</a>                        s.building = <span class="prelude-val">None</span>;
-<a href=#283 id=283 data-nosnippet>283</a>                        s.last_build = status_r;
-<a href=#284 id=284 data-nosnippet>284</a>                        s.rebuild_count += <span class="number">1</span>;
-<a href=#285 id=285 data-nosnippet>285</a>                    });
-<a href=#286 id=286 data-nosnippet>286</a>
-<a href=#287 id=287 data-nosnippet>287</a>                    <span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>watched.rebuild_again) {
-<a href=#288 id=288 data-nosnippet>288</a>                        HOT_RELOAD_SV.write().rebuild_requests.push(manifest_dir.into());
-<a href=#289 id=289 data-nosnippet>289</a>                    }
+<a href=#253 id=253 data-nosnippet>253</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span>watched.building
+<a href=#254 id=254 data-nosnippet>254</a>                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(r) = b.rebuild_load.rsp()
+<a href=#255 id=255 data-nosnippet>255</a>            {
+<a href=#256 id=256 data-nosnippet>256</a>                <span class="kw">let </span>build_time = b.start_time.elapsed();
+<a href=#257 id=257 data-nosnippet>257</a>                <span class="kw">let </span><span class="kw-2">mut </span>lib = <span class="prelude-val">None</span>;
+<a href=#258 id=258 data-nosnippet>258</a>                <span class="kw">let </span>status_r = <span class="kw">match </span>r {
+<a href=#259 id=259 data-nosnippet>259</a>                    <span class="prelude-val">Ok</span>(l) =&gt; {
+<a href=#260 id=260 data-nosnippet>260</a>                        lib = <span class="prelude-val">Some</span>(l);
+<a href=#261 id=261 data-nosnippet>261</a>                        <span class="prelude-val">Ok</span>(build_time)
+<a href=#262 id=262 data-nosnippet>262</a>                    }
+<a href=#263 id=263 data-nosnippet>263</a>                    <span class="prelude-val">Err</span>(e) =&gt; {
+<a href=#264 id=264 data-nosnippet>264</a>                        <span class="kw">if </span><span class="macro">matches!</span>(<span class="kw-2">&amp;</span>e, BuildError::Cancelled) {
+<a href=#265 id=265 data-nosnippet>265</a>                            <span class="macro">tracing::warn!</span>(<span class="string">"cancelled rebuild `{manifest_dir}`"</span>);
+<a href=#266 id=266 data-nosnippet>266</a>                        } <span class="kw">else </span>{
+<a href=#267 id=267 data-nosnippet>267</a>                            <span class="macro">tracing::error!</span>(<span class="string">"failed rebuild `{manifest_dir}`, {e}"</span>);
+<a href=#268 id=268 data-nosnippet>268</a>                        }
+<a href=#269 id=269 data-nosnippet>269</a>                        <span class="prelude-val">Err</span>(e)
+<a href=#270 id=270 data-nosnippet>270</a>                    }
+<a href=#271 id=271 data-nosnippet>271</a>                };
+<a href=#272 id=272 data-nosnippet>272</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(lib) = lib {
+<a href=#273 id=273 data-nosnippet>273</a>                    <span class="macro">tracing::info!</span>(<span class="string">"rebuilt and reloaded `{manifest_dir}` in {build_time:?}"</span>);
+<a href=#274 id=274 data-nosnippet>274</a>                    HOT_RELOAD.set(lib.clone());
+<a href=#275 id=275 data-nosnippet>275</a>                    HOT_RELOAD_EVENT.notify(HotReloadArgs::now(lib));
+<a href=#276 id=276 data-nosnippet>276</a>                }
+<a href=#277 id=277 data-nosnippet>277</a>
+<a href=#278 id=278 data-nosnippet>278</a>                watched.building = <span class="prelude-val">None</span>;
+<a href=#279 id=279 data-nosnippet>279</a>
+<a href=#280 id=280 data-nosnippet>280</a>                <span class="kw">let </span>manifest_dir = <span class="kw-2">*</span>manifest_dir;
+<a href=#281 id=281 data-nosnippet>281</a>                HOT_RELOAD_SV.read().status.modify(<span class="kw">move </span>|s| {
+<a href=#282 id=282 data-nosnippet>282</a>                    <span class="kw">let </span>s = s.iter_mut().find(|s| s.manifest_dir == manifest_dir).unwrap();
+<a href=#283 id=283 data-nosnippet>283</a>                    s.building = <span class="prelude-val">None</span>;
+<a href=#284 id=284 data-nosnippet>284</a>                    s.last_build = status_r;
+<a href=#285 id=285 data-nosnippet>285</a>                    s.rebuild_count += <span class="number">1</span>;
+<a href=#286 id=286 data-nosnippet>286</a>                });
+<a href=#287 id=287 data-nosnippet>287</a>
+<a href=#288 id=288 data-nosnippet>288</a>                <span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>watched.rebuild_again) {
+<a href=#289 id=289 data-nosnippet>289</a>                    HOT_RELOAD_SV.write().rebuild_requests.push(manifest_dir.into());
 <a href=#290 id=290 data-nosnippet>290</a>                }
 <a href=#291 id=291 data-nosnippet>291</a>            }
 <a href=#292 id=292 data-nosnippet>292</a>        }
@@ -294,10 +294,10 @@
 <a href=#294 id=294 data-nosnippet>294</a>        <span class="kw">let </span><span class="kw-2">mut </span>sv = HOT_RELOAD_SV.write();
 <a href=#295 id=295 data-nosnippet>295</a>        <span class="kw">let </span>requests: HashSet&lt;Txt&gt; = sv.cancel_requests.drain(..).collect();
 <a href=#296 id=296 data-nosnippet>296</a>        <span class="kw">for </span>r <span class="kw">in </span>requests {
-<a href=#297 id=297 data-nosnippet>297</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(watched) = <span class="self">self</span>.libs.get_mut(r.as_str()) {
-<a href=#298 id=298 data-nosnippet>298</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span>watched.building {
-<a href=#299 id=299 data-nosnippet>299</a>                    b.cancel_build.set();
-<a href=#300 id=300 data-nosnippet>300</a>                }
+<a href=#297 id=297 data-nosnippet>297</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(watched) = <span class="self">self</span>.libs.get_mut(r.as_str())
+<a href=#298 id=298 data-nosnippet>298</a>                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(b) = <span class="kw-2">&amp;</span>watched.building
+<a href=#299 id=299 data-nosnippet>299</a>            {
+<a href=#300 id=300 data-nosnippet>300</a>                b.cancel_build.set();
 <a href=#301 id=301 data-nosnippet>301</a>            }
 <a href=#302 id=302 data-nosnippet>302</a>        }
 <a href=#303 id=303 data-nosnippet>303</a>
@@ -445,7 +445,7 @@
 <a href=#445 id=445 data-nosnippet>445</a></span><span class="kw">pub struct </span>HOT_RELOAD;
 <a href=#446 id=446 data-nosnippet>446</a><span class="kw">impl </span>HOT_RELOAD {
 <a href=#447 id=447 data-nosnippet>447</a>    <span class="doccomment">/// Hot reload status, libs that are rebuilding, errors.
-<a href=#448 id=448 data-nosnippet>448</a>    </span><span class="kw">pub fn </span>status(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ReadOnlyArcVar&lt;Vec&lt;HotStatus&gt;&gt; {
+<a href=#448 id=448 data-nosnippet>448</a>    </span><span class="kw">pub fn </span>status(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Var&lt;Vec&lt;HotStatus&gt;&gt; {
 <a href=#449 id=449 data-nosnippet>449</a>        HOT_RELOAD_SV.read().status.read_only()
 <a href=#450 id=450 data-nosnippet>450</a>    }
 <a href=#451 id=451 data-nosnippet>451</a>
@@ -510,7 +510,7 @@
 <a href=#510 id=510 data-nosnippet>510</a>    </span><span class="attr">#[expect(clippy::type_complexity)]
 <a href=#511 id=511 data-nosnippet>511</a>    </span>rebuilders: Mutex&lt;Vec&lt;Box&lt;<span class="kw">dyn </span>FnMut(BuildArgs) -&gt; <span class="prelude-ty">Option</span>&lt;RebuildVar&gt; + Send + <span class="lifetime">'static</span>&gt;&gt;&gt;,
 <a href=#512 id=512 data-nosnippet>512</a>
-<a href=#513 id=513 data-nosnippet>513</a>    status: ArcVar&lt;Vec&lt;HotStatus&gt;&gt;,
+<a href=#513 id=513 data-nosnippet>513</a>    status: Var&lt;Vec&lt;HotStatus&gt;&gt;,
 <a href=#514 id=514 data-nosnippet>514</a>    rebuild_requests: Vec&lt;Txt&gt;,
 <a href=#515 id=515 data-nosnippet>515</a>    cancel_requests: Vec&lt;Txt&gt;,
 <a href=#516 id=516 data-nosnippet>516</a>}
@@ -518,7 +518,7 @@
 <a href=#518 id=518 data-nosnippet>518</a>    <span class="kw">fn </span>rebuild_reload(<span class="kw-2">&amp;mut </span><span class="self">self</span>, manifest_dir: Txt, static_patch: <span class="kw-2">&amp;</span>StaticPatch) -&gt; (RebuildLoadVar, SignalOnce) {
 <a href=#519 id=519 data-nosnippet>519</a>        <span class="kw">let </span>(rebuild, cancel) = <span class="self">self</span>.rebuild(manifest_dir.clone());
 <a href=#520 id=520 data-nosnippet>520</a>        <span class="kw">let </span>rebuild_load = zng_task::respond(<span class="macro">async_clmv!</span>(static_patch, {
-<a href=#521 id=521 data-nosnippet>521</a>            <span class="kw">let </span>build_path = rebuild.wait_into_rsp().<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#521 id=521 data-nosnippet>521</a>            <span class="kw">let </span>build_path = rebuild.wait_rsp().<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#522 id=522 data-nosnippet>522</a>
 <a href=#523 id=523 data-nosnippet>523</a>            <span class="comment">// copy dylib to not block the next rebuild
 <a href=#524 id=524 data-nosnippet>524</a>            </span><span class="kw">let </span>file_name = <span class="kw">match </span>build_path.file_name() {
@@ -543,11 +543,11 @@
 <a href=#543 id=543 data-nosnippet>543</a>            std::fs::copy(<span class="kw-2">&amp;</span>build_path, <span class="kw-2">&amp;</span>unique_path)<span class="question-mark">?</span>;
 <a href=#544 id=544 data-nosnippet>544</a>
 <a href=#545 id=545 data-nosnippet>545</a>            <span class="kw">let </span>dylib = zng_task::wait(<span class="kw">move </span>|| HotLib::new(<span class="kw-2">&amp;</span>static_patch, manifest_dir, unique_path));
-<a href=#546 id=546 data-nosnippet>546</a>            <span class="kw">match </span>zng_task::with_deadline(dylib, <span class="number">2</span>.secs()).<span class="kw">await </span>{
+<a href=#546 id=546 data-nosnippet>546</a>            <span class="kw">match </span>zng_task::with_deadline(dylib, <span class="number">10</span>.secs()).<span class="kw">await </span>{
 <a href=#547 id=547 data-nosnippet>547</a>                <span class="prelude-val">Ok</span>(r) =&gt; r.map_err(Into::into),
 <a href=#548 id=548 data-nosnippet>548</a>                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(BuildError::Io(Arc::new(io::Error::new(
 <a href=#549 id=549 data-nosnippet>549</a>                    io::ErrorKind::TimedOut,
-<a href=#550 id=550 data-nosnippet>550</a>                    <span class="string">"hot dylib did not init after 2s"</span>,
+<a href=#550 id=550 data-nosnippet>550</a>                    <span class="string">"hot dylib did not init after 10s"</span>,
 <a href=#551 id=551 data-nosnippet>551</a>                )))),
 <a href=#552 id=552 data-nosnippet>552</a>            }
 <a href=#553 id=553 data-nosnippet>553</a>        }));
@@ -633,7 +633,7 @@
 <a href=#633 id=633 data-nosnippet>633</a>            });
 <a href=#634 id=634 data-nosnippet>634</a>
 <a href=#635 id=635 data-nosnippet>635</a>            sv.status.modify(<span class="kw">move </span>|s| {
-<a href=#636 id=636 data-nosnippet>636</a>                s.to_mut().iter_mut().find(|s| s.manifest_dir == manifest_dir).unwrap().building = <span class="prelude-val">Some</span>(start_time);
+<a href=#636 id=636 data-nosnippet>636</a>                s.iter_mut().find(|s| s.manifest_dir == manifest_dir).unwrap().building = <span class="prelude-val">Some</span>(start_time);
 <a href=#637 id=637 data-nosnippet>637</a>            });
 <a href=#638 id=638 data-nosnippet>638</a>        }
 <a href=#639 id=639 data-nosnippet>639</a>    }
@@ -674,7 +674,7 @@
 <a href=#674 id=674 data-nosnippet>674</a><span class="kw">impl </span>HotLib {
 <a href=#675 id=675 data-nosnippet>675</a>    <span class="kw">pub fn </span>new(patch: <span class="kw-2">&amp;</span>StaticPatch, manifest_dir: Txt, lib: <span class="kw">impl </span>AsRef&lt;std::ffi::OsStr&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, libloading::Error&gt; {
 <a href=#676 id=676 data-nosnippet>676</a>        <span class="kw">unsafe </span>{
-<a href=#677 id=677 data-nosnippet>677</a>            <span class="comment">// SAFETY: assuming the hot lib was setup as the documented, this works,
+<a href=#677 id=677 data-nosnippet>677</a>            <span class="comment">// SAFETY: assuming the hot lib was setup as the docs instruct, this works,
 <a href=#678 id=678 data-nosnippet>678</a>            // even the `linkme` stuff does not require any special care.
 <a href=#679 id=679 data-nosnippet>679</a>            //
 <a href=#680 id=680 data-nosnippet>680</a>            // If the hot lib developer add some "ctor/dtor" stuff and that fails they will probably

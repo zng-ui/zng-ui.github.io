@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>node.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! UI nodes used for building the image widget.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>node.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! UI nodes used for building the image widget.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::mem;
 <a href=#4 id=4 data-nosnippet>4</a>
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>zng_ext_image::{IMAGES, ImageCacheMode, ImagePpi, ImageRenderArgs};
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>zng_wgt_stack::stack_nodes_layout_by;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>zng_wgt_stack::stack_nodes;
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span><span class="kw">super</span>::image_properties::{
 <a href=#9 id=9 data-nosnippet>9</a>    IMAGE_ALIGN_VAR, IMAGE_CACHE_VAR, IMAGE_CROP_VAR, IMAGE_DOWNSCALE_VAR, IMAGE_ERROR_FN_VAR, IMAGE_FIT_VAR, IMAGE_LIMITS_VAR,
@@ -33,7 +33,7 @@
 <a href=#33 id=33 data-nosnippet>33</a>///
 <a href=#34 id=34 data-nosnippet>34</a>/// [`img_cache`]: fn@crate::img_cache
 <a href=#35 id=35 data-nosnippet>35</a>/// [`IMAGES`]: zng_ext_image::IMAGES
-<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">pub fn </span>image_source(child: <span class="kw">impl </span>UiNode, source: <span class="kw">impl </span>IntoVar&lt;ImageSource&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">pub fn </span>image_source(child: <span class="kw">impl </span>IntoUiNode, source: <span class="kw">impl </span>IntoVar&lt;ImageSource&gt;) -&gt; UiNode {
 <a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">let </span>source = source.into_var();
 <a href=#38 id=38 data-nosnippet>38</a>    <span class="kw">let </span>ctx_img = var(Img::dummy(<span class="prelude-val">None</span>));
 <a href=#39 id=39 data-nosnippet>39</a>    <span class="kw">let </span>child = with_context_var(child, CONTEXT_IMAGE_VAR, ctx_img.read_only());
@@ -129,20 +129,20 @@
 <a href=#129 id=129 data-nosnippet>129</a>/// The error view is rendered under the `child`.
 <a href=#130 id=130 data-nosnippet>130</a>///
 <a href=#131 id=131 data-nosnippet>131</a>/// The image widget adds this node around the [`image_presenter`] node.
-<a href=#132 id=132 data-nosnippet>132</a></span><span class="kw">pub fn </span>image_error_presenter(child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#132 id=132 data-nosnippet>132</a></span><span class="kw">pub fn </span>image_error_presenter(child: <span class="kw">impl </span>IntoUiNode) -&gt; UiNode {
 <a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">let </span>view = CONTEXT_IMAGE_VAR
 <a href=#134 id=134 data-nosnippet>134</a>        .map(|i| i.error().map(|e| ImgErrorArgs { error: e }))
 <a href=#135 id=135 data-nosnippet>135</a>        .present_opt(IMAGE_ERROR_FN_VAR.map(|f| {
 <a href=#136 id=136 data-nosnippet>136</a>            <span class="macro">wgt_fn!</span>(f, |e| {
 <a href=#137 id=137 data-nosnippet>137</a>                <span class="kw">if </span>IN_ERROR_VIEW.get_clone() {
-<a href=#138 id=138 data-nosnippet>138</a>                    NilUiNode.boxed()
+<a href=#138 id=138 data-nosnippet>138</a>                    UiNode::nil()
 <a href=#139 id=139 data-nosnippet>139</a>                } <span class="kw">else </span>{
-<a href=#140 id=140 data-nosnippet>140</a>                    with_context_local(f(e), <span class="kw-2">&amp;</span>IN_ERROR_VIEW, <span class="bool-val">true</span>).boxed()
+<a href=#140 id=140 data-nosnippet>140</a>                    with_context_local(f(e), <span class="kw-2">&amp;</span>IN_ERROR_VIEW, <span class="bool-val">true</span>)
 <a href=#141 id=141 data-nosnippet>141</a>                }
 <a href=#142 id=142 data-nosnippet>142</a>            })
 <a href=#143 id=143 data-nosnippet>143</a>        }));
 <a href=#144 id=144 data-nosnippet>144</a>
-<a href=#145 id=145 data-nosnippet>145</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
+<a href=#145 id=145 data-nosnippet>145</a>    stack_nodes(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
 <a href=#146 id=146 data-nosnippet>146</a>        <span class="kw">if </span>img_size == PxSize::zero() {
 <a href=#147 id=147 data-nosnippet>147</a>            constraints
 <a href=#148 id=148 data-nosnippet>148</a>        } <span class="kw">else </span>{
@@ -156,20 +156,20 @@
 <a href=#156 id=156 data-nosnippet>156</a>/// The loading view is rendered under the `child`.
 <a href=#157 id=157 data-nosnippet>157</a>///
 <a href=#158 id=158 data-nosnippet>158</a>/// The image widget adds this node around the [`image_error_presenter`] node.
-<a href=#159 id=159 data-nosnippet>159</a></span><span class="kw">pub fn </span>image_loading_presenter(child: <span class="kw">impl </span>UiNode) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#159 id=159 data-nosnippet>159</a></span><span class="kw">pub fn </span>image_loading_presenter(child: <span class="kw">impl </span>IntoUiNode) -&gt; UiNode {
 <a href=#160 id=160 data-nosnippet>160</a>    <span class="kw">let </span>view = CONTEXT_IMAGE_VAR
 <a href=#161 id=161 data-nosnippet>161</a>        .map(|i| <span class="kw">if </span>i.is_loading() { <span class="prelude-val">Some</span>(ImgLoadingArgs {}) } <span class="kw">else </span>{ <span class="prelude-val">None </span>})
 <a href=#162 id=162 data-nosnippet>162</a>        .present_opt(IMAGE_LOADING_FN_VAR.map(|f| {
 <a href=#163 id=163 data-nosnippet>163</a>            <span class="macro">wgt_fn!</span>(f, |a| {
 <a href=#164 id=164 data-nosnippet>164</a>                <span class="kw">if </span>IN_LOADING_VIEW.get_clone() {
-<a href=#165 id=165 data-nosnippet>165</a>                    NilUiNode.boxed()
+<a href=#165 id=165 data-nosnippet>165</a>                    UiNode::nil()
 <a href=#166 id=166 data-nosnippet>166</a>                } <span class="kw">else </span>{
-<a href=#167 id=167 data-nosnippet>167</a>                    with_context_local(f(a), <span class="kw-2">&amp;</span>IN_LOADING_VIEW, <span class="bool-val">true</span>).boxed()
+<a href=#167 id=167 data-nosnippet>167</a>                    with_context_local(f(a), <span class="kw-2">&amp;</span>IN_LOADING_VIEW, <span class="bool-val">true</span>)
 <a href=#168 id=168 data-nosnippet>168</a>                }
 <a href=#169 id=169 data-nosnippet>169</a>            })
 <a href=#170 id=170 data-nosnippet>170</a>        }));
 <a href=#171 id=171 data-nosnippet>171</a>
-<a href=#172 id=172 data-nosnippet>172</a>    stack_nodes_layout_by(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
+<a href=#172 id=172 data-nosnippet>172</a>    stack_nodes(<span class="macro">ui_vec!</span>[view, child], <span class="number">1</span>, |constraints, <span class="kw">_</span>, img_size| {
 <a href=#173 id=173 data-nosnippet>173</a>        <span class="kw">if </span>img_size == PxSize::zero() {
 <a href=#174 id=174 data-nosnippet>174</a>            constraints
 <a href=#175 id=175 data-nosnippet>175</a>        } <span class="kw">else </span>{
@@ -191,7 +191,7 @@
 <a href=#191 id=191 data-nosnippet>191</a>/// * [`IMAGE_ALIGN_VAR`]: Defines the image alignment in the presenter final size.
 <a href=#192 id=192 data-nosnippet>192</a>/// * [`IMAGE_RENDERING_VAR`]: Defines the image resize algorithm used in the GPU.
 <a href=#193 id=193 data-nosnippet>193</a>/// * [`IMAGE_OFFSET_VAR`]: Defines an offset applied to the image after all measure and arrange.
-<a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub fn </span>image_presenter() -&gt; <span class="kw">impl </span>UiNode {
+<a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub fn </span>image_presenter() -&gt; UiNode {
 <a href=#195 id=195 data-nosnippet>195</a>    <span class="kw">let </span><span class="kw-2">mut </span>img_size = PxSize::zero();
 <a href=#196 id=196 data-nosnippet>196</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_clip = PxRect::zero();
 <a href=#197 id=197 data-nosnippet>197</a>    <span class="kw">let </span><span class="kw-2">mut </span>render_img_size = PxSize::zero();

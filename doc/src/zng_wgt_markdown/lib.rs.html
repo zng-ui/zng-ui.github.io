@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-markdown/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_markdown" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_markdown/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-markdown/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_markdown" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_markdown/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Markdown widget, properties and nodes.
@@ -68,7 +68,7 @@
 <a href=#68 id=68 data-nosnippet>68</a>        <span class="self">self</span>.widget_builder().push_build_action(|wgt| {
 <a href=#69 id=69 data-nosnippet>69</a>            <span class="kw">let </span>md = wgt.capture_var_or_default(<span class="macro">property_id!</span>(text::txt));
 <a href=#70 id=70 data-nosnippet>70</a>            <span class="kw">let </span>child = markdown_node(md);
-<a href=#71 id=71 data-nosnippet>71</a>            wgt.set_child(child.boxed());
+<a href=#71 id=71 data-nosnippet>71</a>            wgt.set_child(child);
 <a href=#72 id=72 data-nosnippet>72</a>        });
 <a href=#73 id=73 data-nosnippet>73</a>    }
 <a href=#74 id=74 data-nosnippet>74</a>
@@ -84,9 +84,9 @@
 <a href=#84 id=84 data-nosnippet>84</a>}
 <a href=#85 id=85 data-nosnippet>85</a>
 <a href=#86 id=86 data-nosnippet>86</a><span class="doccomment">/// Implements the markdown parsing and view generation, configured by contextual properties.
-<a href=#87 id=87 data-nosnippet>87</a></span><span class="kw">pub fn </span>markdown_node(md: <span class="kw">impl </span>IntoVar&lt;Txt&gt;) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#87 id=87 data-nosnippet>87</a></span><span class="kw">pub fn </span>markdown_node(md: <span class="kw">impl </span>IntoVar&lt;Txt&gt;) -&gt; UiNode {
 <a href=#88 id=88 data-nosnippet>88</a>    <span class="kw">let </span>md = md.into_var();
-<a href=#89 id=89 data-nosnippet>89</a>    match_node(NilUiNode.boxed(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#89 id=89 data-nosnippet>89</a>    match_node(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
 <a href=#90 id=90 data-nosnippet>90</a>        UiNodeOp::Init =&gt; {
 <a href=#91 id=91 data-nosnippet>91</a>            WIDGET
 <a href=#92 id=92 data-nosnippet>92</a>                .sub_var(<span class="kw-2">&amp;</span>md)
@@ -108,11 +108,11 @@
 <a href=#108 id=108 data-nosnippet>108</a>                .sub_var(<span class="kw-2">&amp;</span>IMAGE_RESOLVER_VAR)
 <a href=#109 id=109 data-nosnippet>109</a>                .sub_var(<span class="kw-2">&amp;</span>LINK_RESOLVER_VAR);
 <a href=#110 id=110 data-nosnippet>110</a>
-<a href=#111 id=111 data-nosnippet>111</a>            <span class="kw-2">*</span>c.child() = md.with(|md| markdown_view_fn(md.as_str())).boxed();
+<a href=#111 id=111 data-nosnippet>111</a>            <span class="kw-2">*</span>c.node() = md.with(|md| markdown_view_fn(md.as_str()));
 <a href=#112 id=112 data-nosnippet>112</a>        }
 <a href=#113 id=113 data-nosnippet>113</a>        UiNodeOp::Deinit =&gt; {
 <a href=#114 id=114 data-nosnippet>114</a>            c.deinit();
-<a href=#115 id=115 data-nosnippet>115</a>            <span class="kw-2">*</span>c.child() = NilUiNode.boxed();
+<a href=#115 id=115 data-nosnippet>115</a>            <span class="kw-2">*</span>c.node() = UiNode::nil();
 <a href=#116 id=116 data-nosnippet>116</a>        }
 <a href=#117 id=117 data-nosnippet>117</a>        UiNodeOp::Info { info } =&gt; {
 <a href=#118 id=118 data-nosnippet>118</a>            info.flag_meta(<span class="kw-2">*</span>MARKDOWN_INFO_ID);
@@ -141,9 +141,9 @@
 <a href=#141 id=141 data-nosnippet>141</a>                || LINK_RESOLVER_VAR.is_new()
 <a href=#142 id=142 data-nosnippet>142</a>            {
 <a href=#143 id=143 data-nosnippet>143</a>                c.delegated();
-<a href=#144 id=144 data-nosnippet>144</a>                c.child().deinit();
-<a href=#145 id=145 data-nosnippet>145</a>                <span class="kw-2">*</span>c.child() = md.with(|md| markdown_view_fn(md.as_str())).boxed();
-<a href=#146 id=146 data-nosnippet>146</a>                c.child().init();
+<a href=#144 id=144 data-nosnippet>144</a>                c.node().deinit();
+<a href=#145 id=145 data-nosnippet>145</a>                <span class="kw-2">*</span>c.node() = md.with(|md| markdown_view_fn(md.as_str()));
+<a href=#146 id=146 data-nosnippet>146</a>                c.node().init();
 <a href=#147 id=147 data-nosnippet>147</a>                WIDGET.update_info().layout().render();
 <a href=#148 id=148 data-nosnippet>148</a>            }
 <a href=#149 id=149 data-nosnippet>149</a>        }
@@ -151,7 +151,7 @@
 <a href=#151 id=151 data-nosnippet>151</a>    })
 <a href=#152 id=152 data-nosnippet>152</a>}
 <a href=#153 id=153 data-nosnippet>153</a>
-<a href=#154 id=154 data-nosnippet>154</a><span class="kw">fn </span>markdown_view_fn&lt;<span class="lifetime">'a</span>&gt;(md: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str) -&gt; <span class="kw">impl </span>UiNode + <span class="kw">use</span>&lt;&gt; {
+<a href=#154 id=154 data-nosnippet>154</a><span class="kw">fn </span>markdown_view_fn&lt;<span class="lifetime">'a</span>&gt;(md: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str) -&gt; UiNode {
 <a href=#155 id=155 data-nosnippet>155</a>    <span class="kw">use </span>pulldown_cmark::<span class="kw-2">*</span>;
 <a href=#156 id=156 data-nosnippet>156</a>    <span class="kw">use </span>resolvers::<span class="kw-2">*</span>;
 <a href=#157 id=157 data-nosnippet>157</a>    <span class="kw">use </span>view_fn::<span class="kw-2">*</span>;
@@ -581,13 +581,13 @@
 <a href=#581 id=581 data-nosnippet>581</a>                    strikethrough: strikethrough &gt; <span class="number">0</span>,
 <a href=#582 id=582 data-nosnippet>582</a>                };
 <a href=#583 id=583 data-nosnippet>583</a>
-<a href=#584 id=584 data-nosnippet>584</a>                <span class="kw">if </span>last_txt_end.is_whitespace() {
-<a href=#585 id=585 data-nosnippet>585</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(txt) = text_view.call_checked(TextFnArgs {
+<a href=#584 id=584 data-nosnippet>584</a>                <span class="kw">if </span>last_txt_end.is_whitespace()
+<a href=#585 id=585 data-nosnippet>585</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(txt) = text_view.call_checked(TextFnArgs {
 <a href=#586 id=586 data-nosnippet>586</a>                        txt: <span class="string">' '</span>.into(),
 <a href=#587 id=587 data-nosnippet>587</a>                        style: style.clone(),
-<a href=#588 id=588 data-nosnippet>588</a>                    }) {
-<a href=#589 id=589 data-nosnippet>589</a>                        inlines.push(txt);
-<a href=#590 id=590 data-nosnippet>590</a>                    }
+<a href=#588 id=588 data-nosnippet>588</a>                    })
+<a href=#589 id=589 data-nosnippet>589</a>                {
+<a href=#590 id=590 data-nosnippet>590</a>                    inlines.push(txt);
 <a href=#591 id=591 data-nosnippet>591</a>                }
 <a href=#592 id=592 data-nosnippet>592</a>
 <a href=#593 id=593 data-nosnippet>593</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(txt) = code_inline_view.call_checked(CodeInlineFnArgs { txt: txt.to_txt(), style }) {

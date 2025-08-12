@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"static":["BUTTON_EVENT","MOUSE_MOTION_EVENT","MOUSE_WHEEL_EVENT","POINTER_MOTION_EVENT","SCROLL_MOTION_EVENT"],"struct":["ButtonArgs","PointerMotionArgs","ScrollMotionArgs"],"type":["MouseMotionArgs","MouseWheelArgs"]};
+window.SIDEBAR_ITEMS = {"static":["BUTTON_EVENT","POINTER_MOTION_EVENT","SCROLL_MOTION_EVENT"],"struct":["ButtonArgs","PointerMotionArgs","ScrollMotionArgs"]};

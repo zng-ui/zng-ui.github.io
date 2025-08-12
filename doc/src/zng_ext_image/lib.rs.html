@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-image/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_image/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-image/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_image/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Image loading and cache.
@@ -43,7 +43,7 @@
 <a href=#43 id=43 data-nosnippet>43</a><span class="kw">use </span>zng_task::UiTask;
 <a href=#44 id=44 data-nosnippet>44</a><span class="kw">use </span>zng_txt::{ToTxt, Txt, formatx};
 <a href=#45 id=45 data-nosnippet>45</a><span class="kw">use </span>zng_unique_id::{IdEntry, IdMap};
-<a href=#46 id=46 data-nosnippet>46</a><span class="kw">use </span>zng_var::{AnyVar, AnyWeakVar, ArcVar, Var, WeakVar, types::WeakArcVar, var};
+<a href=#46 id=46 data-nosnippet>46</a><span class="kw">use </span>zng_var::{Var, WeakVar, var};
 <a href=#47 id=47 data-nosnippet>47</a><span class="kw">use </span>zng_view_api::{image::ImageRequest, ipc::IpcBytes};
 <a href=#48 id=48 data-nosnippet>48</a>
 <a href=#49 id=49 data-nosnippet>49</a><span class="doccomment">/// Application extension that provides an image cache.
@@ -102,10 +102,10 @@
 <a href=#102 id=102 data-nosnippet>102</a>                image.with(|img| {
 <a href=#103 id=103 data-nosnippet>103</a>                    img.done_signal.set();
 <a href=#104 id=104 data-nosnippet>104</a>
-<a href=#105 id=105 data-nosnippet>105</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(k) = <span class="kw-2">&amp;</span>img.cache_key {
-<a href=#106 id=106 data-nosnippet>106</a>                        <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = images.cache.get(k) {
-<a href=#107 id=107 data-nosnippet>107</a>                            e.error.store(<span class="bool-val">true</span>, Ordering::Relaxed);
-<a href=#108 id=108 data-nosnippet>108</a>                        }
+<a href=#105 id=105 data-nosnippet>105</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(k) = <span class="kw-2">&amp;</span>img.cache_key
+<a href=#106 id=106 data-nosnippet>106</a>                        &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(e) = images.cache.get(k)
+<a href=#107 id=107 data-nosnippet>107</a>                    {
+<a href=#108 id=108 data-nosnippet>108</a>                        e.error.store(<span class="bool-val">true</span>, Ordering::Relaxed);
 <a href=#109 id=109 data-nosnippet>109</a>                    }
 <a href=#110 id=110 data-nosnippet>110</a>
 <a href=#111 id=111 data-nosnippet>111</a>                    <span class="macro">tracing::error!</span>(<span class="string">"decode error: {:?}"</span>, img.error().unwrap());
@@ -220,12 +220,12 @@
 <a href=#220 id=220 data-nosnippet>220</a>                        <span class="prelude-val">Ok</span>(data) =&gt; {
 <a href=#221 id=221 data-nosnippet>221</a>                            <span class="kw">if let </span><span class="prelude-val">Some</span>((key, mode)) = <span class="kw-2">&amp;</span>t.is_data_proxy_source {
 <a href=#222 id=222 data-nosnippet>222</a>                                <span class="kw">for </span>proxy <span class="kw">in </span><span class="kw-2">&amp;mut </span>proxies {
-<a href=#223 id=223 data-nosnippet>223</a>                                    <span class="kw">if </span>proxy.is_data_proxy() {
-<a href=#224 id=224 data-nosnippet>224</a>                                        <span class="kw">if let </span><span class="prelude-val">Some</span>(replaced) = proxy.data(key, <span class="kw-2">&amp;</span>data, <span class="kw-2">&amp;</span>d.format, <span class="kw-2">*</span>mode, t.downscale, t.mask, <span class="bool-val">true</span>) {
-<a href=#225 id=225 data-nosnippet>225</a>                                            replaced.set_bind(<span class="kw-2">&amp;</span>t.image).perm();
-<a href=#226 id=226 data-nosnippet>226</a>                                            t.image.hold(replaced).perm();
-<a href=#227 id=227 data-nosnippet>227</a>                                            <span class="kw">continue </span><span class="lifetime">'loading_tasks</span>;
-<a href=#228 id=228 data-nosnippet>228</a>                                        }
+<a href=#223 id=223 data-nosnippet>223</a>                                    <span class="kw">if </span>proxy.is_data_proxy()
+<a href=#224 id=224 data-nosnippet>224</a>                                        &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(replaced) = proxy.data(key, <span class="kw-2">&amp;</span>data, <span class="kw-2">&amp;</span>d.format, <span class="kw-2">*</span>mode, t.downscale, t.mask, <span class="bool-val">true</span>)
+<a href=#225 id=225 data-nosnippet>225</a>                                    {
+<a href=#226 id=226 data-nosnippet>226</a>                                        replaced.set_bind(<span class="kw-2">&amp;</span>t.image).perm();
+<a href=#227 id=227 data-nosnippet>227</a>                                        t.image.hold(replaced).perm();
+<a href=#228 id=228 data-nosnippet>228</a>                                        <span class="kw">continue </span><span class="lifetime">'loading_tasks</span>;
 <a href=#229 id=229 data-nosnippet>229</a>                                    }
 <a href=#230 id=230 data-nosnippet>230</a>                                }
 <a href=#231 id=231 data-nosnippet>231</a>                            }
@@ -244,7 +244,7 @@
 <a href=#244 id=244 data-nosnippet>244</a>                                        // `RawImageLoadedEvent` or `RawImageLoadErrorEvent` event
 <a href=#245 id=245 data-nosnippet>245</a>                                        // when done.
 <a href=#246 id=246 data-nosnippet>246</a>                                        </span>t.image.modify(<span class="kw">move </span>|v| {
-<a href=#247 id=247 data-nosnippet>247</a>                                            v.to_mut().view.set(img).unwrap();
+<a href=#247 id=247 data-nosnippet>247</a>                                            v.value_mut().view.set(img).unwrap();
 <a href=#248 id=248 data-nosnippet>248</a>                                        });
 <a href=#249 id=249 data-nosnippet>249</a>                                    }
 <a href=#250 id=250 data-nosnippet>250</a>                                    <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; {
@@ -260,7 +260,7 @@
 <a href=#260 id=260 data-nosnippet>260</a>                                <span class="comment">// success, but we are only doing `load_in_headless` validation.
 <a href=#261 id=261 data-nosnippet>261</a>                                </span><span class="kw">let </span>img = ViewImage::dummy(<span class="prelude-val">None</span>);
 <a href=#262 id=262 data-nosnippet>262</a>                                t.image.modify(<span class="kw">move </span>|v| {
-<a href=#263 id=263 data-nosnippet>263</a>                                    <span class="kw">let </span>v = v.to_mut();
+<a href=#263 id=263 data-nosnippet>263</a>                                    <span class="kw">let </span>v = v.value_mut();
 <a href=#264 id=264 data-nosnippet>264</a>                                    v.view.set(img).unwrap();
 <a href=#265 id=265 data-nosnippet>265</a>                                    v.done_signal.set();
 <a href=#266 id=266 data-nosnippet>266</a>                                });
@@ -271,16 +271,16 @@
 <a href=#271 id=271 data-nosnippet>271</a>                            <span class="comment">// load error.
 <a href=#272 id=272 data-nosnippet>272</a>                            </span><span class="kw">let </span>img = ViewImage::dummy(<span class="prelude-val">Some</span>(e));
 <a href=#273 id=273 data-nosnippet>273</a>                            t.image.modify(<span class="kw">move </span>|v| {
-<a href=#274 id=274 data-nosnippet>274</a>                                <span class="kw">let </span>v = v.to_mut();
+<a href=#274 id=274 data-nosnippet>274</a>                                <span class="kw">let </span>v = v.value_mut();
 <a href=#275 id=275 data-nosnippet>275</a>                                v.view.set(img).unwrap();
 <a href=#276 id=276 data-nosnippet>276</a>                                v.done_signal.set();
 <a href=#277 id=277 data-nosnippet>277</a>                            });
 <a href=#278 id=278 data-nosnippet>278</a>
 <a href=#279 id=279 data-nosnippet>279</a>                            <span class="comment">// flag error for user retry
-<a href=#280 id=280 data-nosnippet>280</a>                            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(k) = <span class="kw-2">&amp;</span>t.image.with(|img| img.cache_key) {
-<a href=#281 id=281 data-nosnippet>281</a>                                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = IMAGES_SV.read().cache.get(k) {
-<a href=#282 id=282 data-nosnippet>282</a>                                    e.error.store(<span class="bool-val">true</span>, Ordering::Relaxed);
-<a href=#283 id=283 data-nosnippet>283</a>                                }
+<a href=#280 id=280 data-nosnippet>280</a>                            </span><span class="kw">if let </span><span class="prelude-val">Some</span>(k) = <span class="kw-2">&amp;</span>t.image.with(|img| img.cache_key)
+<a href=#281 id=281 data-nosnippet>281</a>                                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(e) = IMAGES_SV.read().cache.get(k)
+<a href=#282 id=282 data-nosnippet>282</a>                            {
+<a href=#283 id=283 data-nosnippet>283</a>                                e.error.store(<span class="bool-val">true</span>, Ordering::Relaxed);
 <a href=#284 id=284 data-nosnippet>284</a>                            }
 <a href=#285 id=285 data-nosnippet>285</a>                        }
 <a href=#286 id=286 data-nosnippet>286</a>                    }
@@ -313,7 +313,7 @@
 <a href=#313 id=313 data-nosnippet>313</a>
 <a href=#314 id=314 data-nosnippet>314</a><span class="kw">struct </span>ImageLoadingTask {
 <a href=#315 id=315 data-nosnippet>315</a>    task: Mutex&lt;UiTask&lt;ImageData&gt;&gt;,
-<a href=#316 id=316 data-nosnippet>316</a>    image: ArcVar&lt;Img&gt;,
+<a href=#316 id=316 data-nosnippet>316</a>    image: Var&lt;Img&gt;,
 <a href=#317 id=317 data-nosnippet>317</a>    max_decoded_len: ByteLength,
 <a href=#318 id=318 data-nosnippet>318</a>    downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
 <a href=#319 id=319 data-nosnippet>319</a>    mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
@@ -323,11 +323,11 @@
 <a href=#323 id=323 data-nosnippet>323</a><span class="kw">struct </span>ImageDecodingTask {
 <a href=#324 id=324 data-nosnippet>324</a>    format: ImageDataFormat,
 <a href=#325 id=325 data-nosnippet>325</a>    data: IpcBytes,
-<a href=#326 id=326 data-nosnippet>326</a>    image: ArcVar&lt;Img&gt;,
+<a href=#326 id=326 data-nosnippet>326</a>    image: Var&lt;Img&gt;,
 <a href=#327 id=327 data-nosnippet>327</a>}
 <a href=#328 id=328 data-nosnippet>328</a>
 <a href=#329 id=329 data-nosnippet>329</a><span class="kw">struct </span>CacheEntry {
-<a href=#330 id=330 data-nosnippet>330</a>    image: ArcVar&lt;Img&gt;,
+<a href=#330 id=330 data-nosnippet>330</a>    image: Var&lt;Img&gt;,
 <a href=#331 id=331 data-nosnippet>331</a>    error: AtomicBool,
 <a href=#332 id=332 data-nosnippet>332</a>    max_decoded_len: ByteLength,
 <a href=#333 id=333 data-nosnippet>333</a>    downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
@@ -335,15 +335,15 @@
 <a href=#335 id=335 data-nosnippet>335</a>}
 <a href=#336 id=336 data-nosnippet>336</a>
 <a href=#337 id=337 data-nosnippet>337</a><span class="kw">struct </span>NotCachedEntry {
-<a href=#338 id=338 data-nosnippet>338</a>    image: WeakArcVar&lt;Img&gt;,
+<a href=#338 id=338 data-nosnippet>338</a>    image: WeakVar&lt;Img&gt;,
 <a href=#339 id=339 data-nosnippet>339</a>    max_decoded_len: ByteLength,
 <a href=#340 id=340 data-nosnippet>340</a>    downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
 <a href=#341 id=341 data-nosnippet>341</a>    mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
 <a href=#342 id=342 data-nosnippet>342</a>}
 <a href=#343 id=343 data-nosnippet>343</a>
 <a href=#344 id=344 data-nosnippet>344</a><span class="kw">struct </span>ImagesService {
-<a href=#345 id=345 data-nosnippet>345</a>    load_in_headless: ArcVar&lt;bool&gt;,
-<a href=#346 id=346 data-nosnippet>346</a>    limits: ArcVar&lt;ImageLimits&gt;,
+<a href=#345 id=345 data-nosnippet>345</a>    load_in_headless: Var&lt;bool&gt;,
+<a href=#346 id=346 data-nosnippet>346</a>    limits: Var&lt;ImageLimits&gt;,
 <a href=#347 id=347 data-nosnippet>347</a>
 <a href=#348 id=348 data-nosnippet>348</a>    download_accept: Txt,
 <a href=#349 id=349 data-nosnippet>349</a>    proxies: Vec&lt;Box&lt;<span class="kw">dyn </span>ImageCacheProxy&gt;&gt;,
@@ -440,7 +440,7 @@
 <a href=#440 id=440 data-nosnippet>440</a>            }
 <a href=#441 id=441 data-nosnippet>441</a>
 <a href=#442 id=442 data-nosnippet>442</a>            <span class="comment">// remove `cache_key` from image, this clones the `Img` only-if is still in cache.
-<a href=#443 id=443 data-nosnippet>443</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>img = image.into_value();
+<a href=#443 id=443 data-nosnippet>443</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>img = image.get();
 <a href=#444 id=444 data-nosnippet>444</a>            img.cache_key = <span class="prelude-val">None</span>;
 <a href=#445 id=445 data-nosnippet>445</a>            <span class="kw">let </span>img = var(img);
 <a href=#446 id=446 data-nosnippet>446</a>            <span class="self">self</span>.not_cached.push(NotCachedEntry {
@@ -562,10 +562,10 @@
 <a href=#562 id=562 data-nosnippet>562</a>                }
 <a href=#563 id=563 data-nosnippet>563</a>            }
 <a href=#564 id=564 data-nosnippet>564</a>            ImageCacheMode::Retry =&gt; {
-<a href=#565 id=565 data-nosnippet>565</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = <span class="self">self</span>.cache.get(<span class="kw-2">&amp;</span>key) {
-<a href=#566 id=566 data-nosnippet>566</a>                    <span class="kw">if </span>!e.error.load(Ordering::Relaxed) {
-<a href=#567 id=567 data-nosnippet>567</a>                        <span class="kw">return </span>e.image.read_only();
-<a href=#568 id=568 data-nosnippet>568</a>                    }
+<a href=#565 id=565 data-nosnippet>565</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = <span class="self">self</span>.cache.get(<span class="kw-2">&amp;</span>key)
+<a href=#566 id=566 data-nosnippet>566</a>                    &amp;&amp; !e.error.load(Ordering::Relaxed)
+<a href=#567 id=567 data-nosnippet>567</a>                {
+<a href=#568 id=568 data-nosnippet>568</a>                    <span class="kw">return </span>e.image.read_only();
 <a href=#569 id=569 data-nosnippet>569</a>                }
 <a href=#570 id=570 data-nosnippet>570</a>            }
 <a href=#571 id=571 data-nosnippet>571</a>            ImageCacheMode::Ignore | ImageCacheMode::Reload =&gt; {}
@@ -745,7 +745,7 @@
 <a href=#745 id=745 data-nosnippet>745</a>        max_decoded_len: ByteLength,
 <a href=#746 id=746 data-nosnippet>746</a>        downscale: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;,
 <a href=#747 id=747 data-nosnippet>747</a>        mask: <span class="prelude-ty">Option</span>&lt;ImageMaskMode&gt;,
-<a href=#748 id=748 data-nosnippet>748</a>    ) -&gt; ArcVar&lt;Img&gt; {
+<a href=#748 id=748 data-nosnippet>748</a>    ) -&gt; Var&lt;Img&gt; {
 <a href=#749 id=749 data-nosnippet>749</a>        <span class="self">self</span>.cleanup_not_cached(<span class="bool-val">false</span>);
 <a href=#750 id=750 data-nosnippet>750</a>
 <a href=#751 id=751 data-nosnippet>751</a>        <span class="kw">if let </span>ImageCacheMode::Reload = mode {
@@ -833,12 +833,12 @@
 <a href=#833 id=833 data-nosnippet>833</a>    ///
 <a href=#834 id=834 data-nosnippet>834</a>    /// [`dummy`]: IMAGES::dummy
 <a href=#835 id=835 data-nosnippet>835</a>    /// [`VIEW_PROCESS`]: zng_app::view_process::VIEW_PROCESS
-<a href=#836 id=836 data-nosnippet>836</a>    </span><span class="kw">pub fn </span>load_in_headless(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;bool&gt; {
+<a href=#836 id=836 data-nosnippet>836</a>    </span><span class="kw">pub fn </span>load_in_headless(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Var&lt;bool&gt; {
 <a href=#837 id=837 data-nosnippet>837</a>        IMAGES_SV.read().load_in_headless.clone()
 <a href=#838 id=838 data-nosnippet>838</a>    }
 <a href=#839 id=839 data-nosnippet>839</a>
 <a href=#840 id=840 data-nosnippet>840</a>    <span class="doccomment">/// Default loading and decoding limits for each image.
-<a href=#841 id=841 data-nosnippet>841</a>    </span><span class="kw">pub fn </span>limits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ArcVar&lt;ImageLimits&gt; {
+<a href=#841 id=841 data-nosnippet>841</a>    </span><span class="kw">pub fn </span>limits(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Var&lt;ImageLimits&gt; {
 <a href=#842 id=842 data-nosnippet>842</a>        IMAGES_SV.read().limits.clone()
 <a href=#843 id=843 data-nosnippet>843</a>    }
 <a href=#844 id=844 data-nosnippet>844</a>
@@ -958,10 +958,10 @@
 <a href=#958 id=958 data-nosnippet>958</a>                    }
 <a href=#959 id=959 data-nosnippet>959</a>                }
 <a href=#960 id=960 data-nosnippet>960</a>                ImageCacheMode::Retry =&gt; {
-<a href=#961 id=961 data-nosnippet>961</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = IMAGES_SV.read().cache.get(<span class="kw-2">&amp;</span>key) {
-<a href=#962 id=962 data-nosnippet>962</a>                        <span class="kw">if </span>!e.error.load(Ordering::Relaxed) {
-<a href=#963 id=963 data-nosnippet>963</a>                            <span class="kw">return </span>e.image.read_only();
-<a href=#964 id=964 data-nosnippet>964</a>                        }
+<a href=#961 id=961 data-nosnippet>961</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = IMAGES_SV.read().cache.get(<span class="kw-2">&amp;</span>key)
+<a href=#962 id=962 data-nosnippet>962</a>                        &amp;&amp; !e.error.load(Ordering::Relaxed)
+<a href=#963 id=963 data-nosnippet>963</a>                    {
+<a href=#964 id=964 data-nosnippet>964</a>                        <span class="kw">return </span>e.image.read_only();
 <a href=#965 id=965 data-nosnippet>965</a>                    }
 <a href=#966 id=966 data-nosnippet>966</a>                }
 <a href=#967 id=967 data-nosnippet>967</a>                ImageCacheMode::Ignore | ImageCacheMode::Reload =&gt; {}
@@ -1010,10 +1010,10 @@
 <a href=#1010 id=1010 data-nosnippet>1010</a>
 <a href=#1011 id=1011 data-nosnippet>1011</a>    <span class="doccomment">/// Gets the cache key of an image.
 <a href=#1012 id=1012 data-nosnippet>1012</a>    </span><span class="kw">pub fn </span>cache_key(<span class="kw-2">&amp;</span><span class="self">self</span>, image: <span class="kw-2">&amp;</span>Img) -&gt; <span class="prelude-ty">Option</span>&lt;ImageHash&gt; {
-<a href=#1013 id=1013 data-nosnippet>1013</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = <span class="kw-2">&amp;</span>image.cache_key {
-<a href=#1014 id=1014 data-nosnippet>1014</a>            <span class="kw">if </span>IMAGES_SV.read().cache.contains_key(key) {
-<a href=#1015 id=1015 data-nosnippet>1015</a>                <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="kw-2">*</span>key);
-<a href=#1016 id=1016 data-nosnippet>1016</a>            }
+<a href=#1013 id=1013 data-nosnippet>1013</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = <span class="kw-2">&amp;</span>image.cache_key
+<a href=#1014 id=1014 data-nosnippet>1014</a>            &amp;&amp; IMAGES_SV.read().cache.contains_key(key)
+<a href=#1015 id=1015 data-nosnippet>1015</a>        {
+<a href=#1016 id=1016 data-nosnippet>1016</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(<span class="kw-2">*</span>key);
 <a href=#1017 id=1017 data-nosnippet>1017</a>        }
 <a href=#1018 id=1018 data-nosnippet>1018</a>        <span class="prelude-val">None
 <a href=#1019 id=1019 data-nosnippet>1019</a>    </span>}
@@ -1063,64 +1063,63 @@
 <a href=#1063 id=1063 data-nosnippet>1063</a>    ///
 <a href=#1064 id=1064 data-nosnippet>1064</a>    /// Each text is the lower-case file extension, without the dot.
 <a href=#1065 id=1065 data-nosnippet>1065</a>    </span><span class="kw">pub fn </span>available_decoders(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Txt&gt; {
-<a href=#1066 id=1066 data-nosnippet>1066</a>        <span class="comment">// TODO(breaking) HashSet
-<a href=#1067 id=1067 data-nosnippet>1067</a>        </span>VIEW_PROCESS.image_decoders().unwrap_or_default()
-<a href=#1068 id=1068 data-nosnippet>1068</a>    }
-<a href=#1069 id=1069 data-nosnippet>1069</a>
-<a href=#1070 id=1070 data-nosnippet>1070</a>    <span class="doccomment">/// Image format encoders implemented by the current view-process.
-<a href=#1071 id=1071 data-nosnippet>1071</a>    ///
-<a href=#1072 id=1072 data-nosnippet>1072</a>    /// Each text is the lower-case file extension, without the dot.
-<a href=#1073 id=1073 data-nosnippet>1073</a>    </span><span class="kw">pub fn </span>available_encoders(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Txt&gt; {
-<a href=#1074 id=1074 data-nosnippet>1074</a>        VIEW_PROCESS.image_encoders().unwrap_or_default()
-<a href=#1075 id=1075 data-nosnippet>1075</a>    }
-<a href=#1076 id=1076 data-nosnippet>1076</a>}
-<a href=#1077 id=1077 data-nosnippet>1077</a><span class="kw">struct </span>ImageData {
-<a href=#1078 id=1078 data-nosnippet>1078</a>    format: ImageDataFormat,
-<a href=#1079 id=1079 data-nosnippet>1079</a>    r: std::result::Result&lt;IpcBytes, Txt&gt;,
-<a href=#1080 id=1080 data-nosnippet>1080</a>}
-<a href=#1081 id=1081 data-nosnippet>1081</a>
-<a href=#1082 id=1082 data-nosnippet>1082</a><span class="kw">fn </span>absolute_path(path: <span class="kw-2">&amp;</span>Path, base: <span class="kw">impl </span>FnOnce() -&gt; PathBuf, allow_escape: bool) -&gt; PathBuf {
-<a href=#1083 id=1083 data-nosnippet>1083</a>    <span class="kw">if </span>path.is_absolute() {
-<a href=#1084 id=1084 data-nosnippet>1084</a>        normalize_path(path)
-<a href=#1085 id=1085 data-nosnippet>1085</a>    } <span class="kw">else </span>{
-<a href=#1086 id=1086 data-nosnippet>1086</a>        <span class="kw">let </span><span class="kw-2">mut </span>dir = base();
-<a href=#1087 id=1087 data-nosnippet>1087</a>        <span class="kw">if </span>allow_escape {
-<a href=#1088 id=1088 data-nosnippet>1088</a>            dir.push(path);
-<a href=#1089 id=1089 data-nosnippet>1089</a>            normalize_path(<span class="kw-2">&amp;</span>dir)
-<a href=#1090 id=1090 data-nosnippet>1090</a>        } <span class="kw">else </span>{
-<a href=#1091 id=1091 data-nosnippet>1091</a>            dir.push(normalize_path(path));
-<a href=#1092 id=1092 data-nosnippet>1092</a>            dir
-<a href=#1093 id=1093 data-nosnippet>1093</a>        }
-<a href=#1094 id=1094 data-nosnippet>1094</a>    }
-<a href=#1095 id=1095 data-nosnippet>1095</a>}
-<a href=#1096 id=1096 data-nosnippet>1096</a><span class="doccomment">/// Resolves `..` components, without any system request.
-<a href=#1097 id=1097 data-nosnippet>1097</a>///
-<a href=#1098 id=1098 data-nosnippet>1098</a>/// Source: https://github.com/rust-lang/cargo/blob/fede83ccf973457de319ba6fa0e36ead454d2e20/src/cargo/util/paths.rs#L61
-<a href=#1099 id=1099 data-nosnippet>1099</a></span><span class="kw">fn </span>normalize_path(path: <span class="kw-2">&amp;</span>Path) -&gt; PathBuf {
-<a href=#1100 id=1100 data-nosnippet>1100</a>    <span class="kw">use </span>std::path::Component;
-<a href=#1101 id=1101 data-nosnippet>1101</a>
-<a href=#1102 id=1102 data-nosnippet>1102</a>    <span class="kw">let </span><span class="kw-2">mut </span>components = path.components().peekable();
-<a href=#1103 id=1103 data-nosnippet>1103</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="kw">if let </span><span class="prelude-val">Some</span>(c @ Component::Prefix(..)) = components.peek().cloned() {
-<a href=#1104 id=1104 data-nosnippet>1104</a>        components.next();
-<a href=#1105 id=1105 data-nosnippet>1105</a>        PathBuf::from(c.as_os_str())
-<a href=#1106 id=1106 data-nosnippet>1106</a>    } <span class="kw">else </span>{
-<a href=#1107 id=1107 data-nosnippet>1107</a>        PathBuf::new()
-<a href=#1108 id=1108 data-nosnippet>1108</a>    };
-<a href=#1109 id=1109 data-nosnippet>1109</a>
-<a href=#1110 id=1110 data-nosnippet>1110</a>    <span class="kw">for </span>component <span class="kw">in </span>components {
-<a href=#1111 id=1111 data-nosnippet>1111</a>        <span class="kw">match </span>component {
-<a href=#1112 id=1112 data-nosnippet>1112</a>            Component::Prefix(..) =&gt; <span class="macro">unreachable!</span>(),
-<a href=#1113 id=1113 data-nosnippet>1113</a>            Component::RootDir =&gt; {
-<a href=#1114 id=1114 data-nosnippet>1114</a>                ret.push(component.as_os_str());
-<a href=#1115 id=1115 data-nosnippet>1115</a>            }
-<a href=#1116 id=1116 data-nosnippet>1116</a>            Component::CurDir =&gt; {}
-<a href=#1117 id=1117 data-nosnippet>1117</a>            Component::ParentDir =&gt; {
-<a href=#1118 id=1118 data-nosnippet>1118</a>                ret.pop();
-<a href=#1119 id=1119 data-nosnippet>1119</a>            }
-<a href=#1120 id=1120 data-nosnippet>1120</a>            Component::Normal(c) =&gt; {
-<a href=#1121 id=1121 data-nosnippet>1121</a>                ret.push(c);
-<a href=#1122 id=1122 data-nosnippet>1122</a>            }
-<a href=#1123 id=1123 data-nosnippet>1123</a>        }
-<a href=#1124 id=1124 data-nosnippet>1124</a>    }
-<a href=#1125 id=1125 data-nosnippet>1125</a>    ret
-<a href=#1126 id=1126 data-nosnippet>1126</a>}</code></pre></div></section></main></body></html>
+<a href=#1066 id=1066 data-nosnippet>1066</a>        VIEW_PROCESS.image_decoders().unwrap_or_default()
+<a href=#1067 id=1067 data-nosnippet>1067</a>    }
+<a href=#1068 id=1068 data-nosnippet>1068</a>
+<a href=#1069 id=1069 data-nosnippet>1069</a>    <span class="doccomment">/// Image format encoders implemented by the current view-process.
+<a href=#1070 id=1070 data-nosnippet>1070</a>    ///
+<a href=#1071 id=1071 data-nosnippet>1071</a>    /// Each text is the lower-case file extension, without the dot.
+<a href=#1072 id=1072 data-nosnippet>1072</a>    </span><span class="kw">pub fn </span>available_encoders(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;Txt&gt; {
+<a href=#1073 id=1073 data-nosnippet>1073</a>        VIEW_PROCESS.image_encoders().unwrap_or_default()
+<a href=#1074 id=1074 data-nosnippet>1074</a>    }
+<a href=#1075 id=1075 data-nosnippet>1075</a>}
+<a href=#1076 id=1076 data-nosnippet>1076</a><span class="kw">struct </span>ImageData {
+<a href=#1077 id=1077 data-nosnippet>1077</a>    format: ImageDataFormat,
+<a href=#1078 id=1078 data-nosnippet>1078</a>    r: std::result::Result&lt;IpcBytes, Txt&gt;,
+<a href=#1079 id=1079 data-nosnippet>1079</a>}
+<a href=#1080 id=1080 data-nosnippet>1080</a>
+<a href=#1081 id=1081 data-nosnippet>1081</a><span class="kw">fn </span>absolute_path(path: <span class="kw-2">&amp;</span>Path, base: <span class="kw">impl </span>FnOnce() -&gt; PathBuf, allow_escape: bool) -&gt; PathBuf {
+<a href=#1082 id=1082 data-nosnippet>1082</a>    <span class="kw">if </span>path.is_absolute() {
+<a href=#1083 id=1083 data-nosnippet>1083</a>        normalize_path(path)
+<a href=#1084 id=1084 data-nosnippet>1084</a>    } <span class="kw">else </span>{
+<a href=#1085 id=1085 data-nosnippet>1085</a>        <span class="kw">let </span><span class="kw-2">mut </span>dir = base();
+<a href=#1086 id=1086 data-nosnippet>1086</a>        <span class="kw">if </span>allow_escape {
+<a href=#1087 id=1087 data-nosnippet>1087</a>            dir.push(path);
+<a href=#1088 id=1088 data-nosnippet>1088</a>            normalize_path(<span class="kw-2">&amp;</span>dir)
+<a href=#1089 id=1089 data-nosnippet>1089</a>        } <span class="kw">else </span>{
+<a href=#1090 id=1090 data-nosnippet>1090</a>            dir.push(normalize_path(path));
+<a href=#1091 id=1091 data-nosnippet>1091</a>            dir
+<a href=#1092 id=1092 data-nosnippet>1092</a>        }
+<a href=#1093 id=1093 data-nosnippet>1093</a>    }
+<a href=#1094 id=1094 data-nosnippet>1094</a>}
+<a href=#1095 id=1095 data-nosnippet>1095</a><span class="doccomment">/// Resolves `..` components, without any system request.
+<a href=#1096 id=1096 data-nosnippet>1096</a>///
+<a href=#1097 id=1097 data-nosnippet>1097</a>/// Source: https://github.com/rust-lang/cargo/blob/fede83ccf973457de319ba6fa0e36ead454d2e20/src/cargo/util/paths.rs#L61
+<a href=#1098 id=1098 data-nosnippet>1098</a></span><span class="kw">fn </span>normalize_path(path: <span class="kw-2">&amp;</span>Path) -&gt; PathBuf {
+<a href=#1099 id=1099 data-nosnippet>1099</a>    <span class="kw">use </span>std::path::Component;
+<a href=#1100 id=1100 data-nosnippet>1100</a>
+<a href=#1101 id=1101 data-nosnippet>1101</a>    <span class="kw">let </span><span class="kw-2">mut </span>components = path.components().peekable();
+<a href=#1102 id=1102 data-nosnippet>1102</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="kw">if let </span><span class="prelude-val">Some</span>(c @ Component::Prefix(..)) = components.peek().cloned() {
+<a href=#1103 id=1103 data-nosnippet>1103</a>        components.next();
+<a href=#1104 id=1104 data-nosnippet>1104</a>        PathBuf::from(c.as_os_str())
+<a href=#1105 id=1105 data-nosnippet>1105</a>    } <span class="kw">else </span>{
+<a href=#1106 id=1106 data-nosnippet>1106</a>        PathBuf::new()
+<a href=#1107 id=1107 data-nosnippet>1107</a>    };
+<a href=#1108 id=1108 data-nosnippet>1108</a>
+<a href=#1109 id=1109 data-nosnippet>1109</a>    <span class="kw">for </span>component <span class="kw">in </span>components {
+<a href=#1110 id=1110 data-nosnippet>1110</a>        <span class="kw">match </span>component {
+<a href=#1111 id=1111 data-nosnippet>1111</a>            Component::Prefix(..) =&gt; <span class="macro">unreachable!</span>(),
+<a href=#1112 id=1112 data-nosnippet>1112</a>            Component::RootDir =&gt; {
+<a href=#1113 id=1113 data-nosnippet>1113</a>                ret.push(component.as_os_str());
+<a href=#1114 id=1114 data-nosnippet>1114</a>            }
+<a href=#1115 id=1115 data-nosnippet>1115</a>            Component::CurDir =&gt; {}
+<a href=#1116 id=1116 data-nosnippet>1116</a>            Component::ParentDir =&gt; {
+<a href=#1117 id=1117 data-nosnippet>1117</a>                ret.pop();
+<a href=#1118 id=1118 data-nosnippet>1118</a>            }
+<a href=#1119 id=1119 data-nosnippet>1119</a>            Component::Normal(c) =&gt; {
+<a href=#1120 id=1120 data-nosnippet>1120</a>                ret.push(c);
+<a href=#1121 id=1121 data-nosnippet>1121</a>            }
+<a href=#1122 id=1122 data-nosnippet>1122</a>        }
+<a href=#1123 id=1123 data-nosnippet>1123</a>    }
+<a href=#1124 id=1124 data-nosnippet>1124</a>    ret
+<a href=#1125 id=1125 data-nosnippet>1125</a>}</code></pre></div></section></main></body></html>

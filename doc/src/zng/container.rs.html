@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/container.rs`."><title>container.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>container.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Container widget.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/container.rs`."><title>container.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>container.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Container widget.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Base widget for all widgets that are designed around a single child widget or a primary child widget surrounded by secondary widgets.
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -32,9 +32,9 @@
 <a href=#31 id=31 data-nosnippet>31</a>//! ```
 <a href=#32 id=32 data-nosnippet>32</a>//! # use zng::prelude::*;
 <a href=#33 id=33 data-nosnippet>33</a>//! # let _scope = APP.defaults();
-<a href=#34 id=34 data-nosnippet>34</a>//! # fn tools() -&gt; impl UiNode { widget::node::NilUiNode }
-<a href=#35 id=35 data-nosnippet>35</a>//! # fn content() -&gt; impl UiNode { widget::node::NilUiNode }
-<a href=#36 id=36 data-nosnippet>36</a>//! # fn status() -&gt; impl UiNode { widget::node::NilUiNode }
+<a href=#34 id=34 data-nosnippet>34</a>//! # fn tools() -&gt; UiNode { widget::node::UiNode::nil() }
+<a href=#35 id=35 data-nosnippet>35</a>//! # fn content() -&gt; UiNode { widget::node::UiNode::nil() }
+<a href=#36 id=36 data-nosnippet>36</a>//! # fn status() -&gt; UiNode { widget::node::UiNode::nil() }
 <a href=#37 id=37 data-nosnippet>37</a>//! # let _ =
 <a href=#38 id=38 data-nosnippet>38</a>//! Window! {
 <a href=#39 id=39 data-nosnippet>39</a>//!     child_top = tools(), 0;
@@ -52,7 +52,7 @@
 <a href=#51 id=51 data-nosnippet>51</a>//!
 <a href=#52 id=52 data-nosnippet>52</a>//! # Child Nodes
 <a href=#53 id=53 data-nosnippet>53</a>//!
-<a href=#54 id=54 data-nosnippet>54</a>//! The child can by any [`UiNode`] type, not just widgets, you can use this to plug nodes directly on the UI.
+<a href=#54 id=54 data-nosnippet>54</a>//! The child can by any [`IntoUiNode`] type, not just widgets, you can use this to plug nodes directly on the UI.
 <a href=#55 id=55 data-nosnippet>55</a>//!
 <a href=#56 id=56 data-nosnippet>56</a>//! ```
 <a href=#57 id=57 data-nosnippet>57</a>//! use zng::{prelude::*, prelude_wgt::*};
@@ -82,7 +82,7 @@
 <a href=#81 id=81 data-nosnippet>81</a>//! # ;
 <a href=#82 id=82 data-nosnippet>82</a>//! ```
 <a href=#83 id=83 data-nosnippet>83</a>//!
-<a href=#84 id=84 data-nosnippet>84</a>//! [`UiNode`]: crate::widget::node::UiNode
+<a href=#84 id=84 data-nosnippet>84</a>//! [`IntoUiNode`]: crate::widget::node::IntoUiNode
 <a href=#85 id=85 data-nosnippet>85</a>//!
 <a href=#86 id=86 data-nosnippet>86</a>//! # Full API
 <a href=#87 id=87 data-nosnippet>87</a>//!

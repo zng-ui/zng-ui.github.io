@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/http/cache.rs`."><title>cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../../../static.files/src-script-63605ae7.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/http/</div>cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/http/cache.rs`."><title>cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../../static.files/storage-4e99c027.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/http/</div>cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    fmt,
 <a href=#3 id=3 data-nosnippet>3</a>    time::{Duration, SystemTime},
 <a href=#4 id=4 data-nosnippet>4</a>};
@@ -358,62 +358,62 @@
 <a href=#358 id=358 data-nosnippet>358</a>                <span class="kw">if let </span><span class="prelude-val">Ok</span>(entries) = std::fs::read_dir(dir) {
 <a href=#359 id=359 data-nosnippet>359</a>                    <span class="kw">for </span>entry <span class="kw">in </span>entries.flatten() {
 <a href=#360 id=360 data-nosnippet>360</a>                        <span class="kw">let </span>entry = entry.path();
-<a href=#361 id=361 data-nosnippet>361</a>                        <span class="kw">if </span>entry.is_dir() {
-<a href=#362 id=362 data-nosnippet>362</a>                            <span class="kw">if let </span><span class="prelude-val">Ok</span>(lock) = File::open(entry.join(CacheEntry::LOCK)) {
-<a href=#363 id=363 data-nosnippet>363</a>                                <span class="kw">if </span>FileExt::try_lock_shared(<span class="kw-2">&amp;</span>lock).is_ok() {
-<a href=#364 id=364 data-nosnippet>364</a>                                    CacheEntry::try_delete_locked_dir(<span class="kw-2">&amp;</span>entry, <span class="kw-2">&amp;</span>lock);
-<a href=#365 id=365 data-nosnippet>365</a>                                }
-<a href=#366 id=366 data-nosnippet>366</a>                            }
-<a href=#367 id=367 data-nosnippet>367</a>                        }
-<a href=#368 id=368 data-nosnippet>368</a>                    }
-<a href=#369 id=369 data-nosnippet>369</a>                }
-<a href=#370 id=370 data-nosnippet>370</a>            })
-<a href=#371 id=371 data-nosnippet>371</a>            .<span class="kw">await
-<a href=#372 id=372 data-nosnippet>372</a>        </span>}
-<a href=#373 id=373 data-nosnippet>373</a>
-<a href=#374 id=374 data-nosnippet>374</a>        <span class="kw">async fn </span>prune(<span class="kw-2">&amp;</span><span class="self">self</span>) {
-<a href=#375 id=375 data-nosnippet>375</a>            <span class="kw">let </span>dir = <span class="self">self</span>.dir.clone();
-<a href=#376 id=376 data-nosnippet>376</a>            task::wait(<span class="kw">move </span>|| {
-<a href=#377 id=377 data-nosnippet>377</a>                <span class="kw">if let </span><span class="prelude-val">Ok</span>(entries) = std::fs::read_dir(dir) {
-<a href=#378 id=378 data-nosnippet>378</a>                    <span class="kw">let </span>now = SystemTime::now();
-<a href=#379 id=379 data-nosnippet>379</a>                    <span class="kw">let </span>old = (<span class="number">24 </span>* <span class="number">3</span>).hours();
-<a href=#380 id=380 data-nosnippet>380</a>
-<a href=#381 id=381 data-nosnippet>381</a>                    <span class="kw">for </span>entry <span class="kw">in </span>entries.flatten() {
-<a href=#382 id=382 data-nosnippet>382</a>                        <span class="kw">let </span>entry = entry.path();
-<a href=#383 id=383 data-nosnippet>383</a>                        <span class="kw">if </span>entry.is_dir() {
-<a href=#384 id=384 data-nosnippet>384</a>                            <span class="kw">if let </span><span class="prelude-val">Some</span>(entry) = CacheEntry::open(entry, <span class="bool-val">false</span>) {
-<a href=#385 id=385 data-nosnippet>385</a>                                <span class="kw">let </span>policy = entry.policy.as_ref().unwrap();
-<a href=#386 id=386 data-nosnippet>386</a>                                <span class="kw">if </span>policy.is_stale(now) &amp;&amp; policy.age(now) &gt; old {
-<a href=#387 id=387 data-nosnippet>387</a>                                    CacheEntry::try_delete_locked_dir(<span class="kw-2">&amp;</span>entry.dir, <span class="kw-2">&amp;</span>entry.lock);
-<a href=#388 id=388 data-nosnippet>388</a>                                }
-<a href=#389 id=389 data-nosnippet>389</a>                            }
-<a href=#390 id=390 data-nosnippet>390</a>                        }
-<a href=#391 id=391 data-nosnippet>391</a>                    }
-<a href=#392 id=392 data-nosnippet>392</a>                }
-<a href=#393 id=393 data-nosnippet>393</a>            })
-<a href=#394 id=394 data-nosnippet>394</a>            .<span class="kw">await
-<a href=#395 id=395 data-nosnippet>395</a>        </span>}
-<a href=#396 id=396 data-nosnippet>396</a>    }
-<a href=#397 id=397 data-nosnippet>397</a>
-<a href=#398 id=398 data-nosnippet>398</a>    <span class="kw">struct </span>CacheEntry {
-<a href=#399 id=399 data-nosnippet>399</a>        dir: PathBuf,
-<a href=#400 id=400 data-nosnippet>400</a>        lock: File,
-<a href=#401 id=401 data-nosnippet>401</a>
-<a href=#402 id=402 data-nosnippet>402</a>        policy: <span class="prelude-ty">Option</span>&lt;CachePolicy&gt;,
-<a href=#403 id=403 data-nosnippet>403</a>    }
-<a href=#404 id=404 data-nosnippet>404</a>    <span class="kw">impl </span>CacheEntry {
-<a href=#405 id=405 data-nosnippet>405</a>        <span class="kw">const </span>LOCK: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".lock"</span>;
-<a href=#406 id=406 data-nosnippet>406</a>        <span class="kw">const </span>WRITING: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".w"</span>;
-<a href=#407 id=407 data-nosnippet>407</a>        <span class="kw">const </span>POLICY: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".policy"</span>;
-<a href=#408 id=408 data-nosnippet>408</a>        <span class="kw">const </span>BODY: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".body"</span>;
-<a href=#409 id=409 data-nosnippet>409</a>
-<a href=#410 id=410 data-nosnippet>410</a>        <span class="doccomment">/// Open or create an entry.
-<a href=#411 id=411 data-nosnippet>411</a>        </span><span class="kw">fn </span>open(dir: PathBuf, write: bool) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
-<a href=#412 id=412 data-nosnippet>412</a>            <span class="kw">if </span>write &amp;&amp; !dir.exists() {
-<a href=#413 id=413 data-nosnippet>413</a>                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = fs::create_dir_all(<span class="kw-2">&amp;</span>dir) {
-<a href=#414 id=414 data-nosnippet>414</a>                    <span class="macro">tracing::error!</span>(<span class="string">"cache dir error, {e:?}"</span>);
-<a href=#415 id=415 data-nosnippet>415</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#416 id=416 data-nosnippet>416</a>                }
+<a href=#361 id=361 data-nosnippet>361</a>                        <span class="kw">if </span>entry.is_dir()
+<a href=#362 id=362 data-nosnippet>362</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Ok</span>(lock) = File::open(entry.join(CacheEntry::LOCK))
+<a href=#363 id=363 data-nosnippet>363</a>                            &amp;&amp; FileExt::try_lock_shared(<span class="kw-2">&amp;</span>lock).is_ok()
+<a href=#364 id=364 data-nosnippet>364</a>                        {
+<a href=#365 id=365 data-nosnippet>365</a>                            CacheEntry::try_delete_locked_dir(<span class="kw-2">&amp;</span>entry, <span class="kw-2">&amp;</span>lock);
+<a href=#366 id=366 data-nosnippet>366</a>                        }
+<a href=#367 id=367 data-nosnippet>367</a>                    }
+<a href=#368 id=368 data-nosnippet>368</a>                }
+<a href=#369 id=369 data-nosnippet>369</a>            })
+<a href=#370 id=370 data-nosnippet>370</a>            .<span class="kw">await
+<a href=#371 id=371 data-nosnippet>371</a>        </span>}
+<a href=#372 id=372 data-nosnippet>372</a>
+<a href=#373 id=373 data-nosnippet>373</a>        <span class="kw">async fn </span>prune(<span class="kw-2">&amp;</span><span class="self">self</span>) {
+<a href=#374 id=374 data-nosnippet>374</a>            <span class="kw">let </span>dir = <span class="self">self</span>.dir.clone();
+<a href=#375 id=375 data-nosnippet>375</a>            task::wait(<span class="kw">move </span>|| {
+<a href=#376 id=376 data-nosnippet>376</a>                <span class="kw">if let </span><span class="prelude-val">Ok</span>(entries) = std::fs::read_dir(dir) {
+<a href=#377 id=377 data-nosnippet>377</a>                    <span class="kw">let </span>now = SystemTime::now();
+<a href=#378 id=378 data-nosnippet>378</a>                    <span class="kw">let </span>old = (<span class="number">24 </span>* <span class="number">3</span>).hours();
+<a href=#379 id=379 data-nosnippet>379</a>
+<a href=#380 id=380 data-nosnippet>380</a>                    <span class="kw">for </span>entry <span class="kw">in </span>entries.flatten() {
+<a href=#381 id=381 data-nosnippet>381</a>                        <span class="kw">let </span>entry = entry.path();
+<a href=#382 id=382 data-nosnippet>382</a>                        <span class="kw">if </span>entry.is_dir()
+<a href=#383 id=383 data-nosnippet>383</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(entry) = CacheEntry::open(entry, <span class="bool-val">false</span>)
+<a href=#384 id=384 data-nosnippet>384</a>                        {
+<a href=#385 id=385 data-nosnippet>385</a>                            <span class="kw">let </span>policy = entry.policy.as_ref().unwrap();
+<a href=#386 id=386 data-nosnippet>386</a>                            <span class="kw">if </span>policy.is_stale(now) &amp;&amp; policy.age(now) &gt; old {
+<a href=#387 id=387 data-nosnippet>387</a>                                CacheEntry::try_delete_locked_dir(<span class="kw-2">&amp;</span>entry.dir, <span class="kw-2">&amp;</span>entry.lock);
+<a href=#388 id=388 data-nosnippet>388</a>                            }
+<a href=#389 id=389 data-nosnippet>389</a>                        }
+<a href=#390 id=390 data-nosnippet>390</a>                    }
+<a href=#391 id=391 data-nosnippet>391</a>                }
+<a href=#392 id=392 data-nosnippet>392</a>            })
+<a href=#393 id=393 data-nosnippet>393</a>            .<span class="kw">await
+<a href=#394 id=394 data-nosnippet>394</a>        </span>}
+<a href=#395 id=395 data-nosnippet>395</a>    }
+<a href=#396 id=396 data-nosnippet>396</a>
+<a href=#397 id=397 data-nosnippet>397</a>    <span class="kw">struct </span>CacheEntry {
+<a href=#398 id=398 data-nosnippet>398</a>        dir: PathBuf,
+<a href=#399 id=399 data-nosnippet>399</a>        lock: File,
+<a href=#400 id=400 data-nosnippet>400</a>
+<a href=#401 id=401 data-nosnippet>401</a>        policy: <span class="prelude-ty">Option</span>&lt;CachePolicy&gt;,
+<a href=#402 id=402 data-nosnippet>402</a>    }
+<a href=#403 id=403 data-nosnippet>403</a>    <span class="kw">impl </span>CacheEntry {
+<a href=#404 id=404 data-nosnippet>404</a>        <span class="kw">const </span>LOCK: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".lock"</span>;
+<a href=#405 id=405 data-nosnippet>405</a>        <span class="kw">const </span>WRITING: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".w"</span>;
+<a href=#406 id=406 data-nosnippet>406</a>        <span class="kw">const </span>POLICY: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".policy"</span>;
+<a href=#407 id=407 data-nosnippet>407</a>        <span class="kw">const </span>BODY: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str = <span class="string">".body"</span>;
+<a href=#408 id=408 data-nosnippet>408</a>
+<a href=#409 id=409 data-nosnippet>409</a>        <span class="doccomment">/// Open or create an entry.
+<a href=#410 id=410 data-nosnippet>410</a>        </span><span class="kw">fn </span>open(dir: PathBuf, write: bool) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>&gt; {
+<a href=#411 id=411 data-nosnippet>411</a>            <span class="kw">if </span>write
+<a href=#412 id=412 data-nosnippet>412</a>                &amp;&amp; !dir.exists()
+<a href=#413 id=413 data-nosnippet>413</a>                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Err</span>(e) = fs::create_dir_all(<span class="kw-2">&amp;</span>dir)
+<a href=#414 id=414 data-nosnippet>414</a>            {
+<a href=#415 id=415 data-nosnippet>415</a>                <span class="macro">tracing::error!</span>(<span class="string">"cache dir error, {e:?}"</span>);
+<a href=#416 id=416 data-nosnippet>416</a>                <span class="kw">return </span><span class="prelude-val">None</span>;
 <a href=#417 id=417 data-nosnippet>417</a>            }
 <a href=#418 id=418 data-nosnippet>418</a>
 <a href=#419 id=419 data-nosnippet>419</a>            <span class="kw">let </span>lock = dir.join(<span class="self">Self</span>::LOCK);

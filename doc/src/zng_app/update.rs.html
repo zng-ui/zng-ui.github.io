@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/update.rs`."><title>update.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/update.rs`."><title>update.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 </script>
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app/</div>update.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! App updates API.
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app/</div>update.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! App updates API.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::{
 <a href=#4 id=4 data-nosnippet>4</a>    collections::{HashMap, hash_map},
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#21 id=21 data-nosnippet>21</a>    widget::{
 <a href=#22 id=22 data-nosnippet>22</a>        WIDGET, WidgetId,
 <a href=#23 id=23 data-nosnippet>23</a>        info::{InteractionPath, WidgetInfo, WidgetInfoTree, WidgetPath},
-<a href=#24 id=24 data-nosnippet>24</a>        node::{BoxedUiNode, UiNode},
+<a href=#24 id=24 data-nosnippet>24</a>        node::UiNode,
 <a href=#25 id=25 data-nosnippet>25</a>    },
 <a href=#26 id=26 data-nosnippet>26</a>    window::{WINDOW, WindowId},
 <a href=#27 id=27 data-nosnippet>27</a>};
@@ -581,14 +581,14 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#545 id=545 data-nosnippet>545</a><span class="doccomment">/// Extension methods for infinite loop diagnostics.
 <a href=#546 id=546 data-nosnippet>546</a>///
 <a href=#547 id=547 data-nosnippet>547</a>/// You can also use [`updates_trace_span`] and [`updates_trace_event`] to define custom scopes and entries.
-<a href=#548 id=548 data-nosnippet>548</a></span><span class="kw">pub trait </span>UpdatesTraceUiNodeExt: UiNode {
+<a href=#548 id=548 data-nosnippet>548</a></span><span class="kw">pub trait </span>UpdatesTraceUiNodeExt {
 <a href=#549 id=549 data-nosnippet>549</a>    <span class="doccomment">/// Defines a custom span.
-<a href=#550 id=550 data-nosnippet>550</a>    </span><span class="kw">fn </span>instrument&lt;S: Into&lt;String&gt;&gt;(<span class="self">self</span>, tag: S) -&gt; BoxedUiNode
+<a href=#550 id=550 data-nosnippet>550</a>    </span><span class="kw">fn </span>instrument&lt;S: Into&lt;String&gt;&gt;(<span class="self">self</span>, tag: S) -&gt; UiNode
 <a href=#551 id=551 data-nosnippet>551</a>    <span class="kw">where
 <a href=#552 id=552 data-nosnippet>552</a>        </span><span class="self">Self</span>: Sized;
 <a href=#553 id=553 data-nosnippet>553</a>}
-<a href=#554 id=554 data-nosnippet>554</a><span class="kw">impl</span>&lt;U: UiNode&gt; UpdatesTraceUiNodeExt <span class="kw">for </span>U {
-<a href=#555 id=555 data-nosnippet>555</a>    <span class="kw">fn </span>instrument&lt;S: Into&lt;String&gt;&gt;(<span class="self">self</span>, tag: S) -&gt; BoxedUiNode {
+<a href=#554 id=554 data-nosnippet>554</a><span class="kw">impl </span>UpdatesTraceUiNodeExt <span class="kw">for </span>UiNode {
+<a href=#555 id=555 data-nosnippet>555</a>    <span class="kw">fn </span>instrument&lt;S: Into&lt;String&gt;&gt;(<span class="self">self</span>, tag: S) -&gt; UiNode {
 <a href=#556 id=556 data-nosnippet>556</a>        <span class="kw">let </span>tag = tag.into();
 <a href=#557 id=557 data-nosnippet>557</a>        <span class="self">self</span>.trace(<span class="kw">move </span>|op| UpdatesTrace::custom_span(<span class="kw-2">&amp;</span>tag, op.mtd_name()))
 <a href=#558 id=558 data-nosnippet>558</a>    }
@@ -958,15 +958,15 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#922 id=922 data-nosnippet>922</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((id, name)) = <span class="kw-2">&amp;</span><span class="self">self</span>.widget {
 <a href=#923 id=923 data-nosnippet>923</a>            <span class="macro">write!</span>(f, <span class="string">"/../{name}#{id}"</span>)<span class="question-mark">?</span>;
 <a href=#924 id=924 data-nosnippet>924</a>        }
-<a href=#925 id=925 data-nosnippet>925</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.node_parent {
-<a href=#926 id=926 data-nosnippet>926</a>            <span class="kw">if </span>!p.is_empty() {
-<a href=#927 id=927 data-nosnippet>927</a>                <span class="macro">write!</span>(f, <span class="string">"//{p}"</span>)<span class="question-mark">?</span>;
-<a href=#928 id=928 data-nosnippet>928</a>            }
+<a href=#925 id=925 data-nosnippet>925</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.node_parent
+<a href=#926 id=926 data-nosnippet>926</a>            &amp;&amp; !p.is_empty()
+<a href=#927 id=927 data-nosnippet>927</a>        {
+<a href=#928 id=928 data-nosnippet>928</a>            <span class="macro">write!</span>(f, <span class="string">"//{p}"</span>)<span class="question-mark">?</span>;
 <a href=#929 id=929 data-nosnippet>929</a>        }
-<a href=#930 id=930 data-nosnippet>930</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.tag {
-<a href=#931 id=931 data-nosnippet>931</a>            <span class="kw">if </span>!t.is_empty() {
-<a href=#932 id=932 data-nosnippet>932</a>                <span class="macro">write!</span>(f, <span class="string">"//{t}"</span>)<span class="question-mark">?</span>;
-<a href=#933 id=933 data-nosnippet>933</a>            }
+<a href=#930 id=930 data-nosnippet>930</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = <span class="kw-2">&amp;</span><span class="self">self</span>.tag
+<a href=#931 id=931 data-nosnippet>931</a>            &amp;&amp; !t.is_empty()
+<a href=#932 id=932 data-nosnippet>932</a>        {
+<a href=#933 id=933 data-nosnippet>933</a>            <span class="macro">write!</span>(f, <span class="string">"//{t}"</span>)<span class="question-mark">?</span>;
 <a href=#934 id=934 data-nosnippet>934</a>        }
 <a href=#935 id=935 data-nosnippet>935</a>        <span class="prelude-val">Ok</span>(())
 <a href=#936 id=936 data-nosnippet>936</a>    }

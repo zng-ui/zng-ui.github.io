@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-undo/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_undo" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_undo/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-undo/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_undo" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_undo/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Undo-redo app extension, service and commands.
@@ -40,7 +40,7 @@
 <a href=#40 id=40 data-nosnippet>40</a><span class="kw">use </span>zng_ext_input::{focus::cmd::CommandFocusExt, keyboard::KEYBOARD};
 <a href=#41 id=41 data-nosnippet>41</a><span class="kw">use </span>zng_state_map::{StateId, StateMapRef, static_id};
 <a href=#42 id=42 data-nosnippet>42</a><span class="kw">use </span>zng_txt::Txt;
-<a href=#43 id=43 data-nosnippet>43</a><span class="kw">use </span>zng_var::{BoxedVar, Var, VarHandle, VarValue, WeakVar, context_var, var};
+<a href=#43 id=43 data-nosnippet>43</a><span class="kw">use </span>zng_var::{Var, VarHandle, VarValue, context_var, var};
 <a href=#44 id=44 data-nosnippet>44</a><span class="kw">use </span>zng_wgt::{CommandIconExt <span class="kw">as _</span>, ICONS, wgt_fn};
 <a href=#45 id=45 data-nosnippet>45</a>
 <a href=#46 id=46 data-nosnippet>46</a><span class="kw">mod </span>private {
@@ -112,7 +112,7 @@
 <a href=#112 id=112 data-nosnippet>112</a>    ///
 <a href=#113 id=113 data-nosnippet>113</a>    /// Note that undo scopes get the max undo from [`UNDO_LIMIT_VAR`] in context, the context var is
 <a href=#114 id=114 data-nosnippet>114</a>    /// set to this var by default.
-<a href=#115 id=115 data-nosnippet>115</a>    </span><span class="kw">pub fn </span>undo_limit(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;u32&gt; {
+<a href=#115 id=115 data-nosnippet>115</a>    </span><span class="kw">pub fn </span>undo_limit(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Var&lt;u32&gt; {
 <a href=#116 id=116 data-nosnippet>116</a>        UNDO_SV.read().undo_limit.clone()
 <a href=#117 id=117 data-nosnippet>117</a>    }
 <a href=#118 id=118 data-nosnippet>118</a>
@@ -129,7 +129,7 @@
 <a href=#129 id=129 data-nosnippet>129</a>    /// [`undo`]: Self::undo
 <a href=#130 id=130 data-nosnippet>130</a>    /// [`redo`]: Self::redo
 <a href=#131 id=131 data-nosnippet>131</a>    /// [keyboard repeat start delay + interval]: zng_ext_input::keyboard::KEYBOARD::repeat_config
-<a href=#132 id=132 data-nosnippet>132</a>    </span><span class="kw">pub fn </span>undo_interval(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; BoxedVar&lt;Duration&gt; {
+<a href=#132 id=132 data-nosnippet>132</a>    </span><span class="kw">pub fn </span>undo_interval(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Var&lt;Duration&gt; {
 <a href=#133 id=133 data-nosnippet>133</a>        UNDO_SV.read().undo_interval.clone()
 <a href=#134 id=134 data-nosnippet>134</a>    }
 <a href=#135 id=135 data-nosnippet>135</a>
@@ -338,11 +338,11 @@
 <a href=#338 id=338 data-nosnippet>338</a>    /// entries for it, they will still try to assign the variable, failing silently if the variable is dropped too.
 <a href=#339 id=339 data-nosnippet>339</a>    ///
 <a href=#340 id=340 data-nosnippet>340</a>    /// Var updates caused by undo and redo are tagged with [`UndoVarModifyTag`].
-<a href=#341 id=341 data-nosnippet>341</a>    </span><span class="kw">pub fn </span>watch_var&lt;T: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, info: <span class="kw">impl </span>UndoInfo, var: <span class="kw">impl </span>Var&lt;T&gt;) -&gt; VarHandle {
+<a href=#341 id=341 data-nosnippet>341</a>    </span><span class="kw">pub fn </span>watch_var&lt;T: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, info: <span class="kw">impl </span>UndoInfo, var: Var&lt;T&gt;) -&gt; VarHandle {
 <a href=#342 id=342 data-nosnippet>342</a>        <span class="kw">if </span>var.capabilities().is_always_read_only() {
 <a href=#343 id=343 data-nosnippet>343</a>            <span class="kw">return </span>VarHandle::dummy();
 <a href=#344 id=344 data-nosnippet>344</a>        }
-<a href=#345 id=345 data-nosnippet>345</a>        <span class="kw">let </span>var = var.actual_var();
+<a href=#345 id=345 data-nosnippet>345</a>        <span class="kw">let </span>var = var.current_context();
 <a href=#346 id=346 data-nosnippet>346</a>        <span class="kw">let </span>wk_var = var.downgrade();
 <a href=#347 id=347 data-nosnippet>347</a>
 <a href=#348 id=348 data-nosnippet>348</a>        <span class="kw">let </span><span class="kw-2">mut </span>prev_value = <span class="prelude-val">Some</span>(var.get());
@@ -361,7 +361,7 @@
 <a href=#361 id=361 data-nosnippet>361</a>                UNDO.register_op(
 <a href=#362 id=362 data-nosnippet>362</a>                    info.clone(),
 <a href=#363 id=363 data-nosnippet>363</a>                    <span class="macro">clmv!</span>(wk_var, new, |op| <span class="kw">if let </span><span class="prelude-val">Some</span>(var) = wk_var.upgrade() {
-<a href=#364 id=364 data-nosnippet>364</a>                        <span class="kw">let _ </span>= <span class="kw">match </span>op {
+<a href=#364 id=364 data-nosnippet>364</a>                        <span class="kw">match </span>op {
 <a href=#365 id=365 data-nosnippet>365</a>                            UndoOp::Undo =&gt; var.modify(<span class="macro">clmv!</span>(prev, |args| {
 <a href=#366 id=366 data-nosnippet>366</a>                                args.set(prev);
 <a href=#367 id=367 data-nosnippet>367</a>                                args.push_tag(UndoVarModifyTag);
@@ -548,7 +548,7 @@
 <a href=#548 id=548 data-nosnippet>548</a>        <span class="self">self</span>.clone()
 <a href=#549 id=549 data-nosnippet>549</a>    }
 <a href=#550 id=550 data-nosnippet>550</a>}
-<a href=#551 id=551 data-nosnippet>551</a><span class="kw">impl </span>UndoInfo <span class="kw">for </span>BoxedVar&lt;Txt&gt; {
+<a href=#551 id=551 data-nosnippet>551</a><span class="kw">impl </span>UndoInfo <span class="kw">for </span>Var&lt;Txt&gt; {
 <a href=#552 id=552 data-nosnippet>552</a>    <span class="kw">fn </span>description(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Txt {
 <a href=#553 id=553 data-nosnippet>553</a>        <span class="self">self</span>.get()
 <a href=#554 id=554 data-nosnippet>554</a>    }
@@ -840,7 +840,7 @@
 <a href=#840 id=840 data-nosnippet>840</a>
 <a href=#841 id=841 data-nosnippet>841</a>        <span class="kw">let </span>scope = Arc::new(scope);
 <a href=#842 id=842 data-nosnippet>842</a>        <span class="kw">let </span>wk_scope = Arc::downgrade(<span class="kw-2">&amp;</span>scope);
-<a href=#843 id=843 data-nosnippet>843</a>        <span class="kw">let </span>interval = UNDO_INTERVAL_VAR.actual_var();
+<a href=#843 id=843 data-nosnippet>843</a>        <span class="kw">let </span>interval = UNDO_INTERVAL_VAR.current_context();
 <a href=#844 id=844 data-nosnippet>844</a>
 <a href=#845 id=845 data-nosnippet>845</a>        UNDO_CMD
 <a href=#846 id=846 data-nosnippet>846</a>            .scoped(id)
@@ -1163,15 +1163,15 @@
 <a href=#1163 id=1163 data-nosnippet>1163</a>}
 <a href=#1164 id=1164 data-nosnippet>1164</a>
 <a href=#1165 id=1165 data-nosnippet>1165</a><span class="kw">struct </span>UndoService {
-<a href=#1166 id=1166 data-nosnippet>1166</a>    undo_limit: BoxedVar&lt;u32&gt;,
-<a href=#1167 id=1167 data-nosnippet>1167</a>    undo_interval: BoxedVar&lt;Duration&gt;,
+<a href=#1166 id=1166 data-nosnippet>1166</a>    undo_limit: Var&lt;u32&gt;,
+<a href=#1167 id=1167 data-nosnippet>1167</a>    undo_interval: Var&lt;Duration&gt;,
 <a href=#1168 id=1168 data-nosnippet>1168</a>}
 <a href=#1169 id=1169 data-nosnippet>1169</a>
 <a href=#1170 id=1170 data-nosnippet>1170</a><span class="kw">impl </span>Default <span class="kw">for </span>UndoService {
 <a href=#1171 id=1171 data-nosnippet>1171</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
 <a href=#1172 id=1172 data-nosnippet>1172</a>        <span class="self">Self </span>{
-<a href=#1173 id=1173 data-nosnippet>1173</a>            undo_limit: var(u32::MAX).boxed(),
-<a href=#1174 id=1174 data-nosnippet>1174</a>            undo_interval: KEYBOARD.repeat_config().map(|c| c.start_delay + c.interval).cow().boxed(),
+<a href=#1173 id=1173 data-nosnippet>1173</a>            undo_limit: var(u32::MAX),
+<a href=#1174 id=1174 data-nosnippet>1174</a>            undo_interval: KEYBOARD.repeat_config().map(|c| c.start_delay + c.interval).cow(),
 <a href=#1175 id=1175 data-nosnippet>1175</a>        }
 <a href=#1176 id=1176 data-nosnippet>1176</a>    }
 <a href=#1177 id=1177 data-nosnippet>1177</a>}
@@ -1209,7 +1209,7 @@
 <a href=#1209 id=1209 data-nosnippet>1209</a></span><span class="kw">pub trait </span>CommandUndoExt {
 <a href=#1210 id=1210 data-nosnippet>1210</a>    <span class="doccomment">/// Gets the command scoped in the undo scope widget that is or contains the focused widget, or
 <a href=#1211 id=1211 data-nosnippet>1211</a>    /// scoped on the app if there is no focused undo scope.
-<a href=#1212 id=1212 data-nosnippet>1212</a>    </span><span class="kw">fn </span>undo_scoped(<span class="self">self</span>) -&gt; BoxedVar&lt;Command&gt;;
+<a href=#1212 id=1212 data-nosnippet>1212</a>    </span><span class="kw">fn </span>undo_scoped(<span class="self">self</span>) -&gt; Var&lt;Command&gt;;
 <a href=#1213 id=1213 data-nosnippet>1213</a>
 <a href=#1214 id=1214 data-nosnippet>1214</a>    <span class="doccomment">/// Latest undo stack for the given scope, same as calling [`UNDO::undo_stack`] inside the scope.
 <a href=#1215 id=1215 data-nosnippet>1215</a>    </span><span class="kw">fn </span>undo_stack(<span class="self">self</span>) -&gt; UndoStackInfo;
@@ -1217,7 +1217,7 @@
 <a href=#1217 id=1217 data-nosnippet>1217</a>    </span><span class="kw">fn </span>redo_stack(<span class="self">self</span>) -&gt; UndoStackInfo;
 <a href=#1218 id=1218 data-nosnippet>1218</a>}
 <a href=#1219 id=1219 data-nosnippet>1219</a><span class="kw">impl </span>CommandUndoExt <span class="kw">for </span>Command {
-<a href=#1220 id=1220 data-nosnippet>1220</a>    <span class="kw">fn </span>undo_scoped(<span class="self">self</span>) -&gt; BoxedVar&lt;Command&gt; {
+<a href=#1220 id=1220 data-nosnippet>1220</a>    <span class="kw">fn </span>undo_scoped(<span class="self">self</span>) -&gt; Var&lt;Command&gt; {
 <a href=#1221 id=1221 data-nosnippet>1221</a>        <span class="self">self</span>.focus_scoped_with(|w| <span class="kw">match </span>w {
 <a href=#1222 id=1222 data-nosnippet>1222</a>            <span class="prelude-val">Some</span>(w) =&gt; {
 <a href=#1223 id=1223 data-nosnippet>1223</a>                <span class="kw">if </span>w.is_undo_scope() {
@@ -1234,10 +1234,10 @@
 <a href=#1234 id=1234 data-nosnippet>1234</a>
 <a href=#1235 id=1235 data-nosnippet>1235</a>    <span class="kw">fn </span>undo_stack(<span class="self">self</span>) -&gt; UndoStackInfo {
 <a href=#1236 id=1236 data-nosnippet>1236</a>        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID));
-<a href=#1237 id=1237 data-nosnippet>1237</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope {
-<a href=#1238 id=1238 data-nosnippet>1238</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade() {
-<a href=#1239 id=1239 data-nosnippet>1239</a>                <span class="kw">return </span>UndoStackInfo::undo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
-<a href=#1240 id=1240 data-nosnippet>1240</a>            }
+<a href=#1237 id=1237 data-nosnippet>1237</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope
+<a href=#1238 id=1238 data-nosnippet>1238</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade()
+<a href=#1239 id=1239 data-nosnippet>1239</a>        {
+<a href=#1240 id=1240 data-nosnippet>1240</a>            <span class="kw">return </span>UndoStackInfo::undo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
 <a href=#1241 id=1241 data-nosnippet>1241</a>        }
 <a href=#1242 id=1242 data-nosnippet>1242</a>
 <a href=#1243 id=1243 data-nosnippet>1243</a>        <span class="kw">if let </span>CommandScope::App = <span class="self">self</span>.scope() {
@@ -1254,10 +1254,10 @@
 <a href=#1254 id=1254 data-nosnippet>1254</a>
 <a href=#1255 id=1255 data-nosnippet>1255</a>    <span class="kw">fn </span>redo_stack(<span class="self">self</span>) -&gt; UndoStackInfo {
 <a href=#1256 id=1256 data-nosnippet>1256</a>        <span class="kw">let </span>scope = <span class="self">self</span>.with_meta(|m| m.get(<span class="kw-2">*</span>WEAK_UNDO_SCOPE_ID));
-<a href=#1257 id=1257 data-nosnippet>1257</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope {
-<a href=#1258 id=1258 data-nosnippet>1258</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade() {
-<a href=#1259 id=1259 data-nosnippet>1259</a>                <span class="kw">return </span>UndoStackInfo::redo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
-<a href=#1260 id=1260 data-nosnippet>1260</a>            }
+<a href=#1257 id=1257 data-nosnippet>1257</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(scope) = scope
+<a href=#1258 id=1258 data-nosnippet>1258</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(s) = scope.<span class="number">0</span>.upgrade()
+<a href=#1259 id=1259 data-nosnippet>1259</a>        {
+<a href=#1260 id=1260 data-nosnippet>1260</a>            <span class="kw">return </span>UndoStackInfo::redo(<span class="kw-2">&amp;</span>s, scope.<span class="number">1</span>.get());
 <a href=#1261 id=1261 data-nosnippet>1261</a>        }
 <a href=#1262 id=1262 data-nosnippet>1262</a>
 <a href=#1263 id=1263 data-nosnippet>1263</a>        <span class="kw">if let </span>CommandScope::App = <span class="self">self</span>.scope() {
@@ -1274,7 +1274,7 @@
 <a href=#1274 id=1274 data-nosnippet>1274</a>}
 <a href=#1275 id=1275 data-nosnippet>1275</a>
 <a href=#1276 id=1276 data-nosnippet>1276</a><span class="macro">static_id!</span> {
-<a href=#1277 id=1277 data-nosnippet>1277</a>    <span class="kw">static </span><span class="kw-2">ref </span>WEAK_UNDO_SCOPE_ID: StateId&lt;(std::sync::Weak&lt;UndoScope&gt;, BoxedVar&lt;Duration&gt;)&gt;;
+<a href=#1277 id=1277 data-nosnippet>1277</a>    <span class="kw">static </span><span class="kw-2">ref </span>WEAK_UNDO_SCOPE_ID: StateId&lt;(std::sync::Weak&lt;UndoScope&gt;, Var&lt;Duration&gt;)&gt;;
 <a href=#1278 id=1278 data-nosnippet>1278</a>}
 <a href=#1279 id=1279 data-nosnippet>1279</a>
 <a href=#1280 id=1280 data-nosnippet>1280</a><span class="doccomment">/// Represents a type that can select actions for undo or redo once.

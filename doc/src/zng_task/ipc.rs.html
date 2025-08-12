@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/ipc.rs`."><title>ipc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>ipc.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(ipc)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/ipc.rs`."><title>ipc.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>ipc.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(ipc)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//! IPC tasks.
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -324,28 +324,28 @@
 <a href=#324 id=324 data-nosnippet>324</a>    ///
 <a href=#325 id=325 data-nosnippet>325</a>    /// The worker cannot be used if this is set, run requests will immediately disconnect.
 <a href=#326 id=326 data-nosnippet>326</a>    </span><span class="kw">pub fn </span>crash_error(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>WorkerCrashError&gt; {
-<a href=#327 id=327 data-nosnippet>327</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((t, <span class="kw">_</span>)) = <span class="kw-2">&amp;</span><span class="self">self</span>.running {
-<a href=#328 id=328 data-nosnippet>328</a>            <span class="kw">if </span>t.is_finished() {
-<a href=#329 id=329 data-nosnippet>329</a>                <span class="kw">let </span>(t, p) = <span class="self">self</span>.running.take().unwrap();
-<a href=#330 id=330 data-nosnippet>330</a>
-<a href=#331 id=331 data-nosnippet>331</a>                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = t.join() {
-<a href=#332 id=332 data-nosnippet>332</a>                    <span class="macro">tracing::error!</span>(<span class="string">"panic in worker receiver thread, {}"</span>, <span class="kw">crate</span>::crate_util::panic_str(<span class="kw-2">&amp;</span>e));
-<a href=#333 id=333 data-nosnippet>333</a>                }
-<a href=#334 id=334 data-nosnippet>334</a>
-<a href=#335 id=335 data-nosnippet>335</a>                <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = p.kill() {
-<a href=#336 id=336 data-nosnippet>336</a>                    <span class="macro">tracing::error!</span>(<span class="string">"error killing worker process after receiver exit, {e}"</span>);
-<a href=#337 id=337 data-nosnippet>337</a>                }
-<a href=#338 id=338 data-nosnippet>338</a>
-<a href=#339 id=339 data-nosnippet>339</a>                <span class="kw">match </span>p.into_output() {
-<a href=#340 id=340 data-nosnippet>340</a>                    <span class="prelude-val">Ok</span>(o) =&gt; {
-<a href=#341 id=341 data-nosnippet>341</a>                        <span class="self">self</span>.crash = <span class="prelude-val">Some</span>(WorkerCrashError {
-<a href=#342 id=342 data-nosnippet>342</a>                            status: o.status,
-<a href=#343 id=343 data-nosnippet>343</a>                            stdout: String::from_utf8_lossy(<span class="kw-2">&amp;</span>o.stdout[..]).as_ref().to_txt(),
-<a href=#344 id=344 data-nosnippet>344</a>                            stderr: String::from_utf8_lossy(<span class="kw-2">&amp;</span>o.stderr[..]).as_ref().to_txt(),
-<a href=#345 id=345 data-nosnippet>345</a>                        });
-<a href=#346 id=346 data-nosnippet>346</a>                    }
-<a href=#347 id=347 data-nosnippet>347</a>                    <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">tracing::error!</span>(<span class="string">"error reading crashed worker output, {e}"</span>),
-<a href=#348 id=348 data-nosnippet>348</a>                }
+<a href=#327 id=327 data-nosnippet>327</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((t, <span class="kw">_</span>)) = <span class="kw-2">&amp;</span><span class="self">self</span>.running
+<a href=#328 id=328 data-nosnippet>328</a>            &amp;&amp; t.is_finished()
+<a href=#329 id=329 data-nosnippet>329</a>        {
+<a href=#330 id=330 data-nosnippet>330</a>            <span class="kw">let </span>(t, p) = <span class="self">self</span>.running.take().unwrap();
+<a href=#331 id=331 data-nosnippet>331</a>
+<a href=#332 id=332 data-nosnippet>332</a>            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = t.join() {
+<a href=#333 id=333 data-nosnippet>333</a>                <span class="macro">tracing::error!</span>(<span class="string">"panic in worker receiver thread, {}"</span>, <span class="kw">crate</span>::crate_util::panic_str(<span class="kw-2">&amp;</span>e));
+<a href=#334 id=334 data-nosnippet>334</a>            }
+<a href=#335 id=335 data-nosnippet>335</a>
+<a href=#336 id=336 data-nosnippet>336</a>            <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = p.kill() {
+<a href=#337 id=337 data-nosnippet>337</a>                <span class="macro">tracing::error!</span>(<span class="string">"error killing worker process after receiver exit, {e}"</span>);
+<a href=#338 id=338 data-nosnippet>338</a>            }
+<a href=#339 id=339 data-nosnippet>339</a>
+<a href=#340 id=340 data-nosnippet>340</a>            <span class="kw">match </span>p.into_output() {
+<a href=#341 id=341 data-nosnippet>341</a>                <span class="prelude-val">Ok</span>(o) =&gt; {
+<a href=#342 id=342 data-nosnippet>342</a>                    <span class="self">self</span>.crash = <span class="prelude-val">Some</span>(WorkerCrashError {
+<a href=#343 id=343 data-nosnippet>343</a>                        status: o.status,
+<a href=#344 id=344 data-nosnippet>344</a>                        stdout: String::from_utf8_lossy(<span class="kw-2">&amp;</span>o.stdout[..]).as_ref().to_txt(),
+<a href=#345 id=345 data-nosnippet>345</a>                        stderr: String::from_utf8_lossy(<span class="kw-2">&amp;</span>o.stderr[..]).as_ref().to_txt(),
+<a href=#346 id=346 data-nosnippet>346</a>                    });
+<a href=#347 id=347 data-nosnippet>347</a>                }
+<a href=#348 id=348 data-nosnippet>348</a>                <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">tracing::error!</span>(<span class="string">"error reading crashed worker output, {e}"</span>),
 <a href=#349 id=349 data-nosnippet>349</a>            }
 <a href=#350 id=350 data-nosnippet>350</a>        }
 <a href=#351 id=351 data-nosnippet>351</a>

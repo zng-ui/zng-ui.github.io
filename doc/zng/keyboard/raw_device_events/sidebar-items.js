@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"static":["KEY_EVENT","TEXT_EVENT"],"struct":["KeyArgs","TextArgs"]};
+window.SIDEBAR_ITEMS = {"static":["KEY_EVENT"],"struct":["KeyArgs"]};

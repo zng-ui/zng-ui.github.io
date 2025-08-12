@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/config.rs`."><title>config.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>config.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"config"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/config.rs`."><title>config.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>config.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"config"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//! Config service, sources and other types.
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -16,11 +16,11 @@
 <a href=#15 id=15 data-nosnippet>15</a>//! ```
 <a href=#16 id=16 data-nosnippet>16</a>//! use zng::prelude::*;
 <a href=#17 id=17 data-nosnippet>17</a>//!
-<a href=#18 id=18 data-nosnippet>18</a>//! fn txt_input() -&gt; impl UiNode {
+<a href=#18 id=18 data-nosnippet>18</a>//! fn txt_input() -&gt; UiNode {
 <a href=#19 id=19 data-nosnippet>19</a>//!     TextInput!(CONFIG.get("example-txt", Txt::from("")))
 <a href=#20 id=20 data-nosnippet>20</a>//! }
 <a href=#21 id=21 data-nosnippet>21</a>//!
-<a href=#22 id=22 data-nosnippet>22</a>//! fn txt_display() -&gt; impl UiNode {
+<a href=#22 id=22 data-nosnippet>22</a>//! fn txt_display() -&gt; UiNode {
 <a href=#23 id=23 data-nosnippet>23</a>//!     Text!(CONFIG.get("example-txt", Txt::from("")))
 <a href=#24 id=24 data-nosnippet>24</a>//! }
 <a href=#25 id=25 data-nosnippet>25</a>//!
@@ -53,80 +53,82 @@
 <a href=#52 id=52 data-nosnippet>52</a>//!
 <a href=#53 id=53 data-nosnippet>53</a>//! ## Other Sources
 <a href=#54 id=54 data-nosnippet>54</a>//!
-<a href=#55 id=55 data-nosnippet>55</a>//! The JSON format is available by default, TOML, YAML and RON are also available behind a feature flags, you can
-<a href=#56 id=56 data-nosnippet>56</a>//! also implement your own source.
-<a href=#57 id=57 data-nosnippet>57</a>//!
-<a href=#58 id=58 data-nosnippet>58</a>//! Some *meta* sources are also provided, they enables composite sources,
-<a href=#59 id=59 data-nosnippet>59</a>//! such as having two sources, *default config* and *user config* where the user config file only records the non-default values.
-<a href=#60 id=60 data-nosnippet>60</a>//!
-<a href=#61 id=61 data-nosnippet>61</a>//! The next example demonstrates a more complex setup:
-<a href=#62 id=62 data-nosnippet>62</a>//!
-<a href=#63 id=63 data-nosnippet>63</a>//! ```
-<a href=#64 id=64 data-nosnippet>64</a>//! use zng::config::*;
-<a href=#65 id=65 data-nosnippet>65</a>//!
-<a href=#66 id=66 data-nosnippet>66</a>//! fn load_config() -&gt; Box&lt;dyn FallbackConfigReset&gt; {
-<a href=#67 id=67 data-nosnippet>67</a>//!     // config file for the app, keys with prefix "main." are saved here.
-<a href=#68 id=68 data-nosnippet>68</a>//!     let user_cfg = JsonConfig::sync("target/tmp/example.config.json");
-<a href=#69 id=69 data-nosnippet>69</a>//!     // entries not found in `user_cfg` bind to this file first before going to embedded fallback.
-<a href=#70 id=70 data-nosnippet>70</a>//!     let default_cfg = ReadOnlyConfig::new(JsonConfig::sync("examples/config/res/defaults.json"));
-<a href=#71 id=71 data-nosnippet>71</a>//!
-<a href=#72 id=72 data-nosnippet>72</a>//!     // the app settings.
-<a href=#73 id=73 data-nosnippet>73</a>//!     let main_cfg = FallbackConfig::new(user_cfg, default_cfg);
-<a href=#74 id=74 data-nosnippet>74</a>//!
-<a href=#75 id=75 data-nosnippet>75</a>//!     // Clone a ref that can be used to reset specific entries.
-<a href=#76 id=76 data-nosnippet>76</a>//!     let main_ref = main_cfg.clone_boxed();
-<a href=#77 id=77 data-nosnippet>77</a>//!
-<a href=#78 id=78 data-nosnippet>78</a>//!     // any other configs (Window::save_state for example)
-<a href=#79 id=79 data-nosnippet>79</a>//!     let other_cfg = JsonConfig::sync("target/tmp/example.config.other.json");
-<a href=#80 id=80 data-nosnippet>80</a>//!
-<a href=#81 id=81 data-nosnippet>81</a>//!     CONFIG.load(SwitchConfig::new().with_prefix("main.", main_cfg).with_prefix("", other_cfg));
-<a href=#82 id=82 data-nosnippet>82</a>//!
-<a href=#83 id=83 data-nosnippet>83</a>//!     main_ref
-<a href=#84 id=84 data-nosnippet>84</a>//! }
-<a href=#85 id=85 data-nosnippet>85</a>//! ```
-<a href=#86 id=86 data-nosnippet>86</a>//!
-<a href=#87 id=87 data-nosnippet>87</a>//! # Full API
-<a href=#88 id=88 data-nosnippet>88</a>//!
-<a href=#89 id=89 data-nosnippet>89</a>//! See [`zng_ext_config`] for the full config API.
-<a href=#90 id=90 data-nosnippet>90</a>
-<a href=#91 id=91 data-nosnippet>91</a></span><span class="kw">pub use </span>zng_ext_config::{
-<a href=#92 id=92 data-nosnippet>92</a>    AnyConfig, CONFIG, Config, ConfigKey, ConfigStatus, ConfigValue, FallbackConfig, FallbackConfigReset, JsonConfig, MemoryConfig,
-<a href=#93 id=93 data-nosnippet>93</a>    RawConfigValue, ReadOnlyConfig, SwapConfig, SwitchConfig,
-<a href=#94 id=94 data-nosnippet>94</a>};
-<a href=#95 id=95 data-nosnippet>95</a>
-<a href=#96 id=96 data-nosnippet>96</a><span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
-<a href=#97 id=97 data-nosnippet>97</a></span><span class="kw">pub use </span>zng_wgt_window::{SaveState, save_state_node};
-<a href=#98 id=98 data-nosnippet>98</a>
-<a href=#99 id=99 data-nosnippet>99</a><span class="attr">#[cfg(feature = <span class="string">"config_ron"</span>)]
-<a href=#100 id=100 data-nosnippet>100</a></span><span class="kw">pub use </span>zng_ext_config::RonConfig;
-<a href=#101 id=101 data-nosnippet>101</a>
-<a href=#102 id=102 data-nosnippet>102</a><span class="attr">#[cfg(feature = <span class="string">"config_toml"</span>)]
-<a href=#103 id=103 data-nosnippet>103</a></span><span class="kw">pub use </span>zng_ext_config::TomlConfig;
-<a href=#104 id=104 data-nosnippet>104</a>
-<a href=#105 id=105 data-nosnippet>105</a><span class="attr">#[cfg(feature = <span class="string">"config_yaml"</span>)]
-<a href=#106 id=106 data-nosnippet>106</a></span><span class="kw">pub use </span>zng_ext_config::YamlConfig;
-<a href=#107 id=107 data-nosnippet>107</a>
-<a href=#108 id=108 data-nosnippet>108</a><span class="doccomment">/// Settings are the config the user can directly edit, this module implements a basic settings data model.
-<a href=#109 id=109 data-nosnippet>109</a>///
-<a href=#110 id=110 data-nosnippet>110</a>/// # Full API
+<a href=#55 id=55 data-nosnippet>55</a>//! The JSON, TOML, YAML and RON are available behind a feature flags, you can also implement your own source.
+<a href=#56 id=56 data-nosnippet>56</a>//!
+<a href=#57 id=57 data-nosnippet>57</a>//! Some *meta* sources are also provided, they enables composite sources, such as having two sources,
+<a href=#58 id=58 data-nosnippet>58</a>//! *default config* and *user config* where the user config file only records the non-default values.
+<a href=#59 id=59 data-nosnippet>59</a>//!
+<a href=#60 id=60 data-nosnippet>60</a>//! The next example demonstrates a more complex setup:
+<a href=#61 id=61 data-nosnippet>61</a>//!
+<a href=#62 id=62 data-nosnippet>62</a>//! ```
+<a href=#63 id=63 data-nosnippet>63</a>//! use zng::config::*;
+<a href=#64 id=64 data-nosnippet>64</a>//!
+<a href=#65 id=65 data-nosnippet>65</a>//! fn load_config() -&gt; Box&lt;dyn FallbackConfigReset&gt; {
+<a href=#66 id=66 data-nosnippet>66</a>//!     // config file for the app, keys with prefix "main." are saved here.
+<a href=#67 id=67 data-nosnippet>67</a>//!     let user_cfg = JsonConfig::sync("target/tmp/example.config.json");
+<a href=#68 id=68 data-nosnippet>68</a>//!     // entries not found in `user_cfg` bind to this file first before going to embedded fallback.
+<a href=#69 id=69 data-nosnippet>69</a>//!     let default_cfg = ReadOnlyConfig::new(JsonConfig::sync("examples/config/res/defaults.json"));
+<a href=#70 id=70 data-nosnippet>70</a>//!
+<a href=#71 id=71 data-nosnippet>71</a>//!     // the app settings.
+<a href=#72 id=72 data-nosnippet>72</a>//!     let main_cfg = FallbackConfig::new(user_cfg, default_cfg);
+<a href=#73 id=73 data-nosnippet>73</a>//!
+<a href=#74 id=74 data-nosnippet>74</a>//!     // Clone a ref that can be used to reset specific entries.
+<a href=#75 id=75 data-nosnippet>75</a>//!     let main_ref = main_cfg.clone_boxed();
+<a href=#76 id=76 data-nosnippet>76</a>//!
+<a href=#77 id=77 data-nosnippet>77</a>//!     // any other configs (Window::save_state for example)
+<a href=#78 id=78 data-nosnippet>78</a>//!     let other_cfg = JsonConfig::sync("target/tmp/example.config.other.json");
+<a href=#79 id=79 data-nosnippet>79</a>//!
+<a href=#80 id=80 data-nosnippet>80</a>//!     CONFIG.load(SwitchConfig::new().with_prefix("main.", main_cfg).with_prefix("", other_cfg));
+<a href=#81 id=81 data-nosnippet>81</a>//!
+<a href=#82 id=82 data-nosnippet>82</a>//!     main_ref
+<a href=#83 id=83 data-nosnippet>83</a>//! }
+<a href=#84 id=84 data-nosnippet>84</a>//! ```
+<a href=#85 id=85 data-nosnippet>85</a>//!
+<a href=#86 id=86 data-nosnippet>86</a>//! # Full API
+<a href=#87 id=87 data-nosnippet>87</a>//!
+<a href=#88 id=88 data-nosnippet>88</a>//! See [`zng_ext_config`] for the full config API.
+<a href=#89 id=89 data-nosnippet>89</a>
+<a href=#90 id=90 data-nosnippet>90</a></span><span class="kw">pub use </span>zng_ext_config::{
+<a href=#91 id=91 data-nosnippet>91</a>    AnyConfig, CONFIG, Config, ConfigKey, ConfigStatus, ConfigValue, FallbackConfig, FallbackConfigReset, MemoryConfig, RawConfigValue,
+<a href=#92 id=92 data-nosnippet>92</a>    ReadOnlyConfig, SwapConfig, SwitchConfig,
+<a href=#93 id=93 data-nosnippet>93</a>};
+<a href=#94 id=94 data-nosnippet>94</a>
+<a href=#95 id=95 data-nosnippet>95</a><span class="attr">#[cfg(feature = <span class="string">"window"</span>)]
+<a href=#96 id=96 data-nosnippet>96</a></span><span class="kw">pub use </span>zng_wgt_window::{SaveState, save_state_node};
+<a href=#97 id=97 data-nosnippet>97</a>
+<a href=#98 id=98 data-nosnippet>98</a><span class="attr">#[cfg(feature = <span class="string">"config_json"</span>)]
+<a href=#99 id=99 data-nosnippet>99</a></span><span class="kw">pub use </span>zng_ext_config::JsonConfig;
+<a href=#100 id=100 data-nosnippet>100</a>
+<a href=#101 id=101 data-nosnippet>101</a><span class="attr">#[cfg(feature = <span class="string">"config_ron"</span>)]
+<a href=#102 id=102 data-nosnippet>102</a></span><span class="kw">pub use </span>zng_ext_config::RonConfig;
+<a href=#103 id=103 data-nosnippet>103</a>
+<a href=#104 id=104 data-nosnippet>104</a><span class="attr">#[cfg(feature = <span class="string">"config_toml"</span>)]
+<a href=#105 id=105 data-nosnippet>105</a></span><span class="kw">pub use </span>zng_ext_config::TomlConfig;
+<a href=#106 id=106 data-nosnippet>106</a>
+<a href=#107 id=107 data-nosnippet>107</a><span class="attr">#[cfg(feature = <span class="string">"config_yaml"</span>)]
+<a href=#108 id=108 data-nosnippet>108</a></span><span class="kw">pub use </span>zng_ext_config::YamlConfig;
+<a href=#109 id=109 data-nosnippet>109</a>
+<a href=#110 id=110 data-nosnippet>110</a><span class="doccomment">/// Settings are the config the user can directly edit, this module implements a basic settings data model.
 <a href=#111 id=111 data-nosnippet>111</a>///
-<a href=#112 id=112 data-nosnippet>112</a>/// See [`zng_ext_config::settings`] for the full settings API.
-<a href=#113 id=113 data-nosnippet>113</a></span><span class="kw">pub mod </span>settings {
-<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">pub use </span>zng_ext_config::settings::{
-<a href=#115 id=115 data-nosnippet>115</a>        CategoriesBuilder, Category, CategoryBuilder, CategoryId, SETTINGS, Setting, SettingBuilder, SettingsBuilder,
-<a href=#116 id=116 data-nosnippet>116</a>    };
-<a href=#117 id=117 data-nosnippet>117</a>    <span class="kw">pub use </span>zng_wgt_input::cmd::{SETTINGS_CMD, on_pre_settings, on_settings};
-<a href=#118 id=118 data-nosnippet>118</a>
-<a href=#119 id=119 data-nosnippet>119</a>    <span class="doccomment">/// Settings editor widget.
-<a href=#120 id=120 data-nosnippet>120</a>    ///
-<a href=#121 id=121 data-nosnippet>121</a>    /// # Full API
+<a href=#112 id=112 data-nosnippet>112</a>/// # Full API
+<a href=#113 id=113 data-nosnippet>113</a>///
+<a href=#114 id=114 data-nosnippet>114</a>/// See [`zng_ext_config::settings`] for the full settings API.
+<a href=#115 id=115 data-nosnippet>115</a></span><span class="kw">pub mod </span>settings {
+<a href=#116 id=116 data-nosnippet>116</a>    <span class="kw">pub use </span>zng_ext_config::settings::{
+<a href=#117 id=117 data-nosnippet>117</a>        CategoriesBuilder, Category, CategoryBuilder, CategoryId, SETTINGS, Setting, SettingBuilder, SettingsBuilder,
+<a href=#118 id=118 data-nosnippet>118</a>    };
+<a href=#119 id=119 data-nosnippet>119</a>    <span class="kw">pub use </span>zng_wgt_input::cmd::{SETTINGS_CMD, can_settings, on_pre_settings, on_settings};
+<a href=#120 id=120 data-nosnippet>120</a>
+<a href=#121 id=121 data-nosnippet>121</a>    <span class="doccomment">/// Settings editor widget.
 <a href=#122 id=122 data-nosnippet>122</a>    ///
-<a href=#123 id=123 data-nosnippet>123</a>    /// See [`zng_wgt_settings`] for the full settings editor API.
-<a href=#124 id=124 data-nosnippet>124</a>    </span><span class="attr">#[cfg(feature = <span class="string">"settings_editor"</span>)]
-<a href=#125 id=125 data-nosnippet>125</a>    </span><span class="kw">pub mod </span>editor {
-<a href=#126 id=126 data-nosnippet>126</a>        <span class="kw">pub use </span>zng_wgt_settings::{
-<a href=#127 id=127 data-nosnippet>127</a>            CategoriesListArgs, CategoryHeaderArgs, CategoryItemArgs, SettingArgs, SettingBuilderEditorExt, SettingsArgs, SettingsCtxExt,
-<a href=#128 id=128 data-nosnippet>128</a>            SettingsEditor, categories_list_fn, category_header_fn, category_item_fn, setting_fn, settings_fn,
-<a href=#129 id=129 data-nosnippet>129</a>        };
-<a href=#130 id=130 data-nosnippet>130</a>    }
-<a href=#131 id=131 data-nosnippet>131</a>}</code></pre></div></section></main></body></html>
+<a href=#123 id=123 data-nosnippet>123</a>    /// # Full API
+<a href=#124 id=124 data-nosnippet>124</a>    ///
+<a href=#125 id=125 data-nosnippet>125</a>    /// See [`zng_wgt_settings`] for the full settings editor API.
+<a href=#126 id=126 data-nosnippet>126</a>    </span><span class="attr">#[cfg(feature = <span class="string">"settings_editor"</span>)]
+<a href=#127 id=127 data-nosnippet>127</a>    </span><span class="kw">pub mod </span>editor {
+<a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">pub use </span>zng_wgt_settings::{
+<a href=#129 id=129 data-nosnippet>129</a>            CategoriesListArgs, CategoryHeaderArgs, CategoryItemArgs, SettingArgs, SettingBuilderEditorExt, SettingsArgs, SettingsCtxExt,
+<a href=#130 id=130 data-nosnippet>130</a>            SettingsEditor, categories_list_fn, category_header_fn, category_item_fn, setting_fn, settings_fn,
+<a href=#131 id=131 data-nosnippet>131</a>        };
+<a href=#132 id=132 data-nosnippet>132</a>    }
+<a href=#133 id=133 data-nosnippet>133</a>}</code></pre></div></section></main></body></html>

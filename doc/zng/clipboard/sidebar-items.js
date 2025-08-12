@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ClipboardError"],"fn":["on_copy","on_cut","on_paste","on_pre_copy","on_pre_cut","on_pre_paste"],"static":["COPY_CMD","CUT_CMD","PASTE_CMD"],"struct":["CLIPBOARD"]};
+window.SIDEBAR_ITEMS = {"enum":["ClipboardError"],"fn":["can_copy","can_cut","can_paste","on_copy","on_cut","on_paste","on_pre_copy","on_pre_cut","on_pre_paste"],"static":["COPY_CMD","CUT_CMD","PASTE_CMD"],"struct":["CLIPBOARD"]};

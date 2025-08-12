@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["BufferSize"],"struct":["AudioDeviceCapability","AudioDeviceId","AudioDeviceInfo","AudioStreamMode","SampleRate"]};
+window.SIDEBAR_ITEMS = {"enum":["BufferSize"],"struct":["AudioDeviceCapability","AudioDeviceId","AudioDeviceInfo","AudioId","AudioRequest","AudioStreamMode","PlaybackId","PlaybackRequest","PlaybackUpdateRequest","SampleRate"]};

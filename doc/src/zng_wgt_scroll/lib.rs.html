@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Scroll widgets, properties and nodes.
@@ -154,7 +154,7 @@
 <a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span>child = with_context_var(child, SCROLL_VERTICAL_CONTENT_OVERFLOWS_VAR, var(<span class="bool-val">false</span>));
 <a href=#155 id=155 data-nosnippet>155</a>        <span class="kw">let </span>child = with_context_var(child, SCROLL_HORIZONTAL_CONTENT_OVERFLOWS_VAR, var(<span class="bool-val">false</span>));
 <a href=#156 id=156 data-nosnippet>156</a>
-<a href=#157 id=157 data-nosnippet>157</a>        <span class="kw">let </span>child = SCROLL.config_node(child).boxed();
+<a href=#157 id=157 data-nosnippet>157</a>        <span class="kw">let </span>child = SCROLL.config_node(child);
 <a href=#158 id=158 data-nosnippet>158</a>
 <a href=#159 id=159 data-nosnippet>159</a>        <span class="kw">let </span>child = with_context_var(child, SCROLL_VERTICAL_OFFSET_VAR, var(<span class="number">0</span>.fct()));
 <a href=#160 id=160 data-nosnippet>160</a>        <span class="kw">let </span>child = with_context_var(child, SCROLL_HORIZONTAL_OFFSET_VAR, var(<span class="number">0</span>.fct()));
@@ -169,11 +169,11 @@
 <a href=#169 id=169 data-nosnippet>169</a>}
 <a href=#170 id=170 data-nosnippet>170</a>
 <a href=#171 id=171 data-nosnippet>171</a><span class="kw">fn </span>scroll_node(
-<a href=#172 id=172 data-nosnippet>172</a>    child: <span class="kw">impl </span>UiNode,
+<a href=#172 id=172 data-nosnippet>172</a>    child: <span class="kw">impl </span>IntoUiNode,
 <a href=#173 id=173 data-nosnippet>173</a>    mode: <span class="kw">impl </span>IntoVar&lt;ScrollMode&gt;,
 <a href=#174 id=174 data-nosnippet>174</a>    child_align: <span class="kw">impl </span>IntoVar&lt;Align&gt;,
 <a href=#175 id=175 data-nosnippet>175</a>    clip_to_viewport: <span class="kw">impl </span>IntoVar&lt;bool&gt;,
-<a href=#176 id=176 data-nosnippet>176</a>) -&gt; <span class="kw">impl </span>UiNode {
+<a href=#176 id=176 data-nosnippet>176</a>) -&gt; UiNode {
 <a href=#177 id=177 data-nosnippet>177</a>    <span class="comment">// # Layout
 <a href=#178 id=178 data-nosnippet>178</a>    //
 <a href=#179 id=179 data-nosnippet>179</a>    // +-----------------+---+
@@ -199,114 +199,119 @@
 <a href=#199 id=199 data-nosnippet>199</a>    <span class="kw">let </span><span class="kw-2">mut </span>joiner = PxSize::zero();
 <a href=#200 id=200 data-nosnippet>200</a>    <span class="kw">let </span>spatial_id = SpatialFrameId::new_unique();
 <a href=#201 id=201 data-nosnippet>201</a>
-<a href=#202 id=202 data-nosnippet>202</a>    match_node_list(children, <span class="kw">move </span>|children, op| <span class="kw">match </span>op {
+<a href=#202 id=202 data-nosnippet>202</a>    match_node(children, <span class="kw">move </span>|cs, op| <span class="kw">match </span>op {
 <a href=#203 id=203 data-nosnippet>203</a>        UiNodeOp::Info { info } =&gt; {
 <a href=#204 id=204 data-nosnippet>204</a>            info.set_meta(<span class="kw-2">*</span>SCROLL_INFO_ID, scroll_info.clone());
 <a href=#205 id=205 data-nosnippet>205</a>        }
 <a href=#206 id=206 data-nosnippet>206</a>        UiNodeOp::Measure { wm, desired_size } =&gt; {
-<a href=#207 id=207 data-nosnippet>207</a>            <span class="kw">let </span>constraints = LAYOUT.constraints();
-<a href=#208 id=208 data-nosnippet>208</a>            <span class="kw-2">*</span>desired_size = <span class="kw">if </span>constraints.is_fill_max().all() {
-<a href=#209 id=209 data-nosnippet>209</a>                children.delegated();
+<a href=#207 id=207 data-nosnippet>207</a>            cs.delegated();
+<a href=#208 id=208 data-nosnippet>208</a>            <span class="kw">let </span>constraints = LAYOUT.constraints();
+<a href=#209 id=209 data-nosnippet>209</a>            <span class="kw-2">*</span>desired_size = <span class="kw">if </span>constraints.is_fill_max().all() {
 <a href=#210 id=210 data-nosnippet>210</a>                constraints.fill_size()
 <a href=#211 id=211 data-nosnippet>211</a>            } <span class="kw">else </span>{
-<a href=#212 id=212 data-nosnippet>212</a>                <span class="kw">let </span>size = children.with_node(<span class="number">0</span>, |n| n.measure(wm));
+<a href=#212 id=212 data-nosnippet>212</a>                <span class="kw">let </span>size = cs.node().with_child(<span class="number">0</span>, |n| n.measure(wm));
 <a href=#213 id=213 data-nosnippet>213</a>                constraints.clamp_size(size)
 <a href=#214 id=214 data-nosnippet>214</a>            };
 <a href=#215 id=215 data-nosnippet>215</a>        }
 <a href=#216 id=216 data-nosnippet>216</a>        UiNodeOp::Layout { wl, final_size } =&gt; {
-<a href=#217 id=217 data-nosnippet>217</a>            <span class="kw">let </span>constraints = LAYOUT.constraints();
-<a href=#218 id=218 data-nosnippet>218</a>
-<a href=#219 id=219 data-nosnippet>219</a>            <span class="comment">// scrollbars
-<a href=#220 id=220 data-nosnippet>220</a>            </span><span class="kw">let </span>c = constraints.with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>));
-<a href=#221 id=221 data-nosnippet>221</a>            {
-<a href=#222 id=222 data-nosnippet>222</a>                joiner.width = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">false</span>, <span class="bool-val">true</span>), || {
-<a href=#223 id=223 data-nosnippet>223</a>                    children.with_node(<span class="number">1</span>, |n| n.measure(<span class="kw-2">&amp;mut </span>wl.to_measure(<span class="prelude-val">None</span>))).width
-<a href=#224 id=224 data-nosnippet>224</a>                });
-<a href=#225 id=225 data-nosnippet>225</a>                joiner.height = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">true</span>, <span class="bool-val">false</span>), || {
-<a href=#226 id=226 data-nosnippet>226</a>                    children.with_node(<span class="number">2</span>, |n| n.measure(<span class="kw-2">&amp;mut </span>wl.to_measure(<span class="prelude-val">None</span>))).height
-<a href=#227 id=227 data-nosnippet>227</a>                });
-<a href=#228 id=228 data-nosnippet>228</a>            }
-<a href=#229 id=229 data-nosnippet>229</a>            joiner.width = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">false</span>, <span class="bool-val">true</span>).with_less_y(joiner.height), || {
-<a href=#230 id=230 data-nosnippet>230</a>                children.with_node(<span class="number">1</span>, |n| n.layout(wl)).width
-<a href=#231 id=231 data-nosnippet>231</a>            });
-<a href=#232 id=232 data-nosnippet>232</a>            joiner.height = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">true</span>, <span class="bool-val">false</span>).with_less_x(joiner.width), || {
-<a href=#233 id=233 data-nosnippet>233</a>                children.with_node(<span class="number">2</span>, |n| n.layout(wl)).height
-<a href=#234 id=234 data-nosnippet>234</a>            });
-<a href=#235 id=235 data-nosnippet>235</a>
-<a href=#236 id=236 data-nosnippet>236</a>            <span class="comment">// joiner
-<a href=#237 id=237 data-nosnippet>237</a>            </span><span class="kw">let _ </span>= LAYOUT.with_constraints(PxConstraints2d::new_fill_size(joiner), || children.with_node(<span class="number">3</span>, |n| n.layout(wl)));
-<a href=#238 id=238 data-nosnippet>238</a>
-<a href=#239 id=239 data-nosnippet>239</a>            scroll_info.set_joiner_size(joiner);
-<a href=#240 id=240 data-nosnippet>240</a>
-<a href=#241 id=241 data-nosnippet>241</a>            <span class="comment">// viewport
-<a href=#242 id=242 data-nosnippet>242</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>vp = LAYOUT.with_constraints(constraints.with_less_size(joiner), || children.with_node(<span class="number">0</span>, |n| n.layout(wl)));
-<a href=#243 id=243 data-nosnippet>243</a>
-<a href=#244 id=244 data-nosnippet>244</a>            <span class="comment">// collapse scrollbars if they take more the 1/3 of the total area.
-<a href=#245 id=245 data-nosnippet>245</a>            </span><span class="kw">if </span>vp.width &lt; joiner.width * <span class="number">3.0</span>.fct() {
-<a href=#246 id=246 data-nosnippet>246</a>                vp.width += joiner.width;
-<a href=#247 id=247 data-nosnippet>247</a>                joiner.width = Px(<span class="number">0</span>);
-<a href=#248 id=248 data-nosnippet>248</a>            }
-<a href=#249 id=249 data-nosnippet>249</a>            <span class="kw">if </span>vp.height &lt; joiner.height * <span class="number">3.0</span>.fct() {
-<a href=#250 id=250 data-nosnippet>250</a>                vp.height += joiner.height;
-<a href=#251 id=251 data-nosnippet>251</a>                joiner.height = Px(<span class="number">0</span>);
-<a href=#252 id=252 data-nosnippet>252</a>            }
-<a href=#253 id=253 data-nosnippet>253</a>
-<a href=#254 id=254 data-nosnippet>254</a>            <span class="kw">if </span>vp != viewport {
-<a href=#255 id=255 data-nosnippet>255</a>                viewport = vp;
-<a href=#256 id=256 data-nosnippet>256</a>                WIDGET.render();
-<a href=#257 id=257 data-nosnippet>257</a>            }
-<a href=#258 id=258 data-nosnippet>258</a>
-<a href=#259 id=259 data-nosnippet>259</a>            <span class="kw-2">*</span>final_size = viewport + joiner;
-<a href=#260 id=260 data-nosnippet>260</a>        }
-<a href=#261 id=261 data-nosnippet>261</a>
-<a href=#262 id=262 data-nosnippet>262</a>        UiNodeOp::Render { frame } =&gt; {
-<a href=#263 id=263 data-nosnippet>263</a>            children.with_node(<span class="number">0</span>, |n| n.render(frame));
-<a href=#264 id=264 data-nosnippet>264</a>
-<a href=#265 id=265 data-nosnippet>265</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) {
-<a href=#266 id=266 data-nosnippet>266</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(viewport.width, Px(<span class="number">0</span>)));
-<a href=#267 id=267 data-nosnippet>267</a>                frame.push_reference_frame((spatial_id, <span class="number">1</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#268 id=268 data-nosnippet>268</a>                    children.with_node(<span class="number">1</span>, |n| n.render(frame));
-<a href=#269 id=269 data-nosnippet>269</a>                });
-<a href=#270 id=270 data-nosnippet>270</a>            }
-<a href=#271 id=271 data-nosnippet>271</a>
-<a href=#272 id=272 data-nosnippet>272</a>            <span class="kw">if </span>joiner.height &gt; Px(<span class="number">0</span>) {
-<a href=#273 id=273 data-nosnippet>273</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(Px(<span class="number">0</span>), viewport.height));
-<a href=#274 id=274 data-nosnippet>274</a>                frame.push_reference_frame((spatial_id, <span class="number">2</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#275 id=275 data-nosnippet>275</a>                    children.with_node(<span class="number">2</span>, |n| n.render(frame));
-<a href=#276 id=276 data-nosnippet>276</a>                });
-<a href=#277 id=277 data-nosnippet>277</a>            }
-<a href=#278 id=278 data-nosnippet>278</a>
-<a href=#279 id=279 data-nosnippet>279</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) &amp;&amp; joiner.height &gt; Px(<span class="number">0</span>) {
-<a href=#280 id=280 data-nosnippet>280</a>                <span class="kw">let </span>transform = PxTransform::from(viewport.to_vector());
-<a href=#281 id=281 data-nosnippet>281</a>                frame.push_reference_frame((spatial_id, <span class="number">3</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#282 id=282 data-nosnippet>282</a>                    children.with_node(<span class="number">3</span>, |n| n.render(frame));
-<a href=#283 id=283 data-nosnippet>283</a>                });
-<a href=#284 id=284 data-nosnippet>284</a>            }
-<a href=#285 id=285 data-nosnippet>285</a>        }
-<a href=#286 id=286 data-nosnippet>286</a>        UiNodeOp::RenderUpdate { update } =&gt; {
-<a href=#287 id=287 data-nosnippet>287</a>            children.with_node(<span class="number">0</span>, |n| n.render_update(update));
-<a href=#288 id=288 data-nosnippet>288</a>
-<a href=#289 id=289 data-nosnippet>289</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) {
-<a href=#290 id=290 data-nosnippet>290</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(viewport.width, Px(<span class="number">0</span>)));
-<a href=#291 id=291 data-nosnippet>291</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
-<a href=#292 id=292 data-nosnippet>292</a>                    children.with_node(<span class="number">1</span>, |n| n.render_update(update));
-<a href=#293 id=293 data-nosnippet>293</a>                });
-<a href=#294 id=294 data-nosnippet>294</a>            }
-<a href=#295 id=295 data-nosnippet>295</a>
-<a href=#296 id=296 data-nosnippet>296</a>            <span class="kw">if </span>joiner.height &gt; Px(<span class="number">0</span>) {
-<a href=#297 id=297 data-nosnippet>297</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(Px(<span class="number">0</span>), viewport.height));
-<a href=#298 id=298 data-nosnippet>298</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
-<a href=#299 id=299 data-nosnippet>299</a>                    children.with_node(<span class="number">2</span>, |n| n.render_update(update));
-<a href=#300 id=300 data-nosnippet>300</a>                });
-<a href=#301 id=301 data-nosnippet>301</a>            }
-<a href=#302 id=302 data-nosnippet>302</a>
-<a href=#303 id=303 data-nosnippet>303</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) &amp;&amp; joiner.height &gt; Px(<span class="number">0</span>) {
-<a href=#304 id=304 data-nosnippet>304</a>                <span class="kw">let </span>transform = PxTransform::from(viewport.to_vector());
-<a href=#305 id=305 data-nosnippet>305</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
-<a href=#306 id=306 data-nosnippet>306</a>                    children.with_node(<span class="number">3</span>, |n| n.render_update(update));
-<a href=#307 id=307 data-nosnippet>307</a>                });
-<a href=#308 id=308 data-nosnippet>308</a>            }
-<a href=#309 id=309 data-nosnippet>309</a>        }
-<a href=#310 id=310 data-nosnippet>310</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#311 id=311 data-nosnippet>311</a>    })
-<a href=#312 id=312 data-nosnippet>312</a>}</code></pre></div></section></main></body></html>
+<a href=#217 id=217 data-nosnippet>217</a>            cs.delegated();
+<a href=#218 id=218 data-nosnippet>218</a>            <span class="kw">let </span>constraints = LAYOUT.constraints();
+<a href=#219 id=219 data-nosnippet>219</a>
+<a href=#220 id=220 data-nosnippet>220</a>            <span class="comment">// scrollbars
+<a href=#221 id=221 data-nosnippet>221</a>            </span><span class="kw">let </span>c = constraints.with_new_min(Px(<span class="number">0</span>), Px(<span class="number">0</span>));
+<a href=#222 id=222 data-nosnippet>222</a>            {
+<a href=#223 id=223 data-nosnippet>223</a>                joiner.width = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">false</span>, <span class="bool-val">true</span>), || {
+<a href=#224 id=224 data-nosnippet>224</a>                    cs.node().with_child(<span class="number">1</span>, |n| n.measure(<span class="kw-2">&amp;mut </span>wl.to_measure(<span class="prelude-val">None</span>))).width
+<a href=#225 id=225 data-nosnippet>225</a>                });
+<a href=#226 id=226 data-nosnippet>226</a>                joiner.height = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">true</span>, <span class="bool-val">false</span>), || {
+<a href=#227 id=227 data-nosnippet>227</a>                    cs.node().with_child(<span class="number">2</span>, |n| n.measure(<span class="kw-2">&amp;mut </span>wl.to_measure(<span class="prelude-val">None</span>))).height
+<a href=#228 id=228 data-nosnippet>228</a>                });
+<a href=#229 id=229 data-nosnippet>229</a>            }
+<a href=#230 id=230 data-nosnippet>230</a>            joiner.width = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">false</span>, <span class="bool-val">true</span>).with_less_y(joiner.height), || {
+<a href=#231 id=231 data-nosnippet>231</a>                cs.node().with_child(<span class="number">1</span>, |n| n.layout(wl)).width
+<a href=#232 id=232 data-nosnippet>232</a>            });
+<a href=#233 id=233 data-nosnippet>233</a>            joiner.height = LAYOUT.with_constraints(c.with_fill(<span class="bool-val">true</span>, <span class="bool-val">false</span>).with_less_x(joiner.width), || {
+<a href=#234 id=234 data-nosnippet>234</a>                cs.node().with_child(<span class="number">2</span>, |n| n.layout(wl)).height
+<a href=#235 id=235 data-nosnippet>235</a>            });
+<a href=#236 id=236 data-nosnippet>236</a>
+<a href=#237 id=237 data-nosnippet>237</a>            <span class="comment">// joiner
+<a href=#238 id=238 data-nosnippet>238</a>            </span><span class="kw">let _ </span>= LAYOUT.with_constraints(PxConstraints2d::new_fill_size(joiner), || cs.node().with_child(<span class="number">3</span>, |n| n.layout(wl)));
+<a href=#239 id=239 data-nosnippet>239</a>
+<a href=#240 id=240 data-nosnippet>240</a>            scroll_info.set_joiner_size(joiner);
+<a href=#241 id=241 data-nosnippet>241</a>
+<a href=#242 id=242 data-nosnippet>242</a>            <span class="comment">// viewport
+<a href=#243 id=243 data-nosnippet>243</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>vp = LAYOUT.with_constraints(constraints.with_less_size(joiner), || cs.node().with_child(<span class="number">0</span>, |n| n.layout(wl)));
+<a href=#244 id=244 data-nosnippet>244</a>
+<a href=#245 id=245 data-nosnippet>245</a>            <span class="comment">// collapse scrollbars if they take more the 1/3 of the total area.
+<a href=#246 id=246 data-nosnippet>246</a>            </span><span class="kw">if </span>vp.width &lt; joiner.width * <span class="number">3.0</span>.fct() {
+<a href=#247 id=247 data-nosnippet>247</a>                vp.width += joiner.width;
+<a href=#248 id=248 data-nosnippet>248</a>                joiner.width = Px(<span class="number">0</span>);
+<a href=#249 id=249 data-nosnippet>249</a>            }
+<a href=#250 id=250 data-nosnippet>250</a>            <span class="kw">if </span>vp.height &lt; joiner.height * <span class="number">3.0</span>.fct() {
+<a href=#251 id=251 data-nosnippet>251</a>                vp.height += joiner.height;
+<a href=#252 id=252 data-nosnippet>252</a>                joiner.height = Px(<span class="number">0</span>);
+<a href=#253 id=253 data-nosnippet>253</a>            }
+<a href=#254 id=254 data-nosnippet>254</a>
+<a href=#255 id=255 data-nosnippet>255</a>            <span class="kw">if </span>vp != viewport {
+<a href=#256 id=256 data-nosnippet>256</a>                viewport = vp;
+<a href=#257 id=257 data-nosnippet>257</a>                WIDGET.render();
+<a href=#258 id=258 data-nosnippet>258</a>            }
+<a href=#259 id=259 data-nosnippet>259</a>
+<a href=#260 id=260 data-nosnippet>260</a>            <span class="kw-2">*</span>final_size = viewport + joiner;
+<a href=#261 id=261 data-nosnippet>261</a>        }
+<a href=#262 id=262 data-nosnippet>262</a>
+<a href=#263 id=263 data-nosnippet>263</a>        UiNodeOp::Render { frame } =&gt; {
+<a href=#264 id=264 data-nosnippet>264</a>            cs.delegated();
+<a href=#265 id=265 data-nosnippet>265</a>
+<a href=#266 id=266 data-nosnippet>266</a>            cs.node().with_child(<span class="number">0</span>, |n| n.render(frame));
+<a href=#267 id=267 data-nosnippet>267</a>
+<a href=#268 id=268 data-nosnippet>268</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) {
+<a href=#269 id=269 data-nosnippet>269</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(viewport.width, Px(<span class="number">0</span>)));
+<a href=#270 id=270 data-nosnippet>270</a>                frame.push_reference_frame((spatial_id, <span class="number">1</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#271 id=271 data-nosnippet>271</a>                    cs.node().with_child(<span class="number">1</span>, |n| n.render(frame));
+<a href=#272 id=272 data-nosnippet>272</a>                });
+<a href=#273 id=273 data-nosnippet>273</a>            }
+<a href=#274 id=274 data-nosnippet>274</a>
+<a href=#275 id=275 data-nosnippet>275</a>            <span class="kw">if </span>joiner.height &gt; Px(<span class="number">0</span>) {
+<a href=#276 id=276 data-nosnippet>276</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(Px(<span class="number">0</span>), viewport.height));
+<a href=#277 id=277 data-nosnippet>277</a>                frame.push_reference_frame((spatial_id, <span class="number">2</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#278 id=278 data-nosnippet>278</a>                    cs.node().with_child(<span class="number">2</span>, |n| n.render(frame));
+<a href=#279 id=279 data-nosnippet>279</a>                });
+<a href=#280 id=280 data-nosnippet>280</a>            }
+<a href=#281 id=281 data-nosnippet>281</a>
+<a href=#282 id=282 data-nosnippet>282</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) &amp;&amp; joiner.height &gt; Px(<span class="number">0</span>) {
+<a href=#283 id=283 data-nosnippet>283</a>                <span class="kw">let </span>transform = PxTransform::from(viewport.to_vector());
+<a href=#284 id=284 data-nosnippet>284</a>                frame.push_reference_frame((spatial_id, <span class="number">3</span>).into(), FrameValue::Value(transform), <span class="bool-val">true</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#285 id=285 data-nosnippet>285</a>                    cs.node().with_child(<span class="number">3</span>, |n| n.render(frame));
+<a href=#286 id=286 data-nosnippet>286</a>                });
+<a href=#287 id=287 data-nosnippet>287</a>            }
+<a href=#288 id=288 data-nosnippet>288</a>        }
+<a href=#289 id=289 data-nosnippet>289</a>        UiNodeOp::RenderUpdate { update } =&gt; {
+<a href=#290 id=290 data-nosnippet>290</a>            cs.delegated();
+<a href=#291 id=291 data-nosnippet>291</a>
+<a href=#292 id=292 data-nosnippet>292</a>            cs.node().with_child(<span class="number">0</span>, |n| n.render_update(update));
+<a href=#293 id=293 data-nosnippet>293</a>
+<a href=#294 id=294 data-nosnippet>294</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) {
+<a href=#295 id=295 data-nosnippet>295</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(viewport.width, Px(<span class="number">0</span>)));
+<a href=#296 id=296 data-nosnippet>296</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
+<a href=#297 id=297 data-nosnippet>297</a>                    cs.node().with_child(<span class="number">1</span>, |n| n.render_update(update));
+<a href=#298 id=298 data-nosnippet>298</a>                });
+<a href=#299 id=299 data-nosnippet>299</a>            }
+<a href=#300 id=300 data-nosnippet>300</a>
+<a href=#301 id=301 data-nosnippet>301</a>            <span class="kw">if </span>joiner.height &gt; Px(<span class="number">0</span>) {
+<a href=#302 id=302 data-nosnippet>302</a>                <span class="kw">let </span>transform = PxTransform::from(PxVector::new(Px(<span class="number">0</span>), viewport.height));
+<a href=#303 id=303 data-nosnippet>303</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
+<a href=#304 id=304 data-nosnippet>304</a>                    cs.node().with_child(<span class="number">2</span>, |n| n.render_update(update));
+<a href=#305 id=305 data-nosnippet>305</a>                });
+<a href=#306 id=306 data-nosnippet>306</a>            }
+<a href=#307 id=307 data-nosnippet>307</a>
+<a href=#308 id=308 data-nosnippet>308</a>            <span class="kw">if </span>joiner.width &gt; Px(<span class="number">0</span>) &amp;&amp; joiner.height &gt; Px(<span class="number">0</span>) {
+<a href=#309 id=309 data-nosnippet>309</a>                <span class="kw">let </span>transform = PxTransform::from(viewport.to_vector());
+<a href=#310 id=310 data-nosnippet>310</a>                update.with_transform_value(<span class="kw-2">&amp;</span>transform, |update| {
+<a href=#311 id=311 data-nosnippet>311</a>                    cs.node().with_child(<span class="number">3</span>, |n| n.render_update(update));
+<a href=#312 id=312 data-nosnippet>312</a>                });
+<a href=#313 id=313 data-nosnippet>313</a>            }
+<a href=#314 id=314 data-nosnippet>314</a>        }
+<a href=#315 id=315 data-nosnippet>315</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#316 id=316 data-nosnippet>316</a>    })
+<a href=#317 id=317 data-nosnippet>317</a>}</code></pre></div></section></main></body></html>

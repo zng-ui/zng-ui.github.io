@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/event.rs`."><title>event.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>event.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Event and command API.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/event.rs`."><title>event.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>event.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Event and command API.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Events are represented by a static instance of [`Event&lt;A&gt;`] with name suffix `_EVENT`. Events have
 <a href=#4 id=4 data-nosnippet>4</a>//! custom argument types that implement [`EventArgs`], this means that all event arg types have a timestamp, propagation
@@ -79,7 +79,7 @@
 <a href=#78 id=78 data-nosnippet>78</a>//! use zng::prelude_wgt::*;
 <a href=#79 id=79 data-nosnippet>79</a>//!
 <a href=#80 id=80 data-nosnippet>80</a>//! #[property(EVENT)]
-<a href=#81 id=81 data-nosnippet>81</a>//! pub fn print_click(child: impl UiNode, preview: impl IntoVar&lt;bool&gt;) -&gt; impl UiNode {
+<a href=#81 id=81 data-nosnippet>81</a>//! pub fn print_click(child: impl IntoUiNode, preview: impl IntoVar&lt;bool&gt;) -&gt; UiNode {
 <a href=#82 id=82 data-nosnippet>82</a>//!     let preview = preview.into_var();
 <a href=#83 id=83 data-nosnippet>83</a>//!     match_node(child, move |child, op| match op {
 <a href=#84 id=84 data-nosnippet>84</a>//!         UiNodeOp::Init =&gt; {
@@ -183,7 +183,7 @@
 <a href=#182 id=182 data-nosnippet>182</a>//!     }
 <a href=#183 id=183 data-nosnippet>183</a>//! }
 <a href=#184 id=184 data-nosnippet>184</a>//!
-<a href=#185 id=185 data-nosnippet>185</a>//! # fn usage() -&gt; impl UiNode {
+<a href=#185 id=185 data-nosnippet>185</a>//! # fn usage() -&gt; UiNode {
 <a href=#186 id=186 data-nosnippet>186</a>//! zng::widget::Wgt! {
 <a href=#187 id=187 data-nosnippet>187</a>//!     zng::widget::on_info_init = hn!(|_| {
 <a href=#188 id=188 data-nosnippet>188</a>//!         let this_wgt = WIDGET.info().path();
@@ -233,7 +233,7 @@
 <a href=#232 id=232 data-nosnippet>232</a>//!     }
 <a href=#233 id=233 data-nosnippet>233</a>//! }
 <a href=#234 id=234 data-nosnippet>234</a>//!
-<a href=#235 id=235 data-nosnippet>235</a>//! # fn usage() -&gt; impl UiNode {
+<a href=#235 id=235 data-nosnippet>235</a>//! # fn usage() -&gt; UiNode {
 <a href=#236 id=236 data-nosnippet>236</a>//! zng::widget::Wgt! {
 <a href=#237 id=237 data-nosnippet>237</a>//!     zng::widget::on_info_init = hn!(|_| {
 <a href=#238 id=238 data-nosnippet>238</a>//!         FOO_CMD.scoped(WIDGET.id()).notify();
@@ -249,7 +249,7 @@
 <a href=#248 id=248 data-nosnippet>248</a>//! # }
 <a href=#249 id=249 data-nosnippet>249</a>//! ```
 <a href=#250 id=250 data-nosnippet>250</a>//!
-<a href=#251 id=251 data-nosnippet>251</a>//! The example above declares `FOO_CMD`, `on_pre_foo` and `on_foo`. The example then declares
+<a href=#251 id=251 data-nosnippet>251</a>//! The example above declares `FOO_CMD`, `on_pre_foo`, `on_foo`, `can_foo` and `CAN_FOO_VAR`. The example then declares
 <a href=#252 id=252 data-nosnippet>252</a>//! a widget that sends the `FOO_CMD` to itself on init and receives it using the event properties.
 <a href=#253 id=253 data-nosnippet>253</a>//!
 <a href=#254 id=254 data-nosnippet>254</a>//! ## Metadata
@@ -289,8 +289,8 @@
 <a href=#288 id=288 data-nosnippet>288</a>//!
 <a href=#289 id=289 data-nosnippet>289</a>//!             widget::on_init = hn!(|_| {
 <a href=#290 id=290 data-nosnippet>290</a>//!                 let cmd = clipboard::COPY_CMD.scoped(WIDGET.id());
-<a href=#291 id=291 data-nosnippet>291</a>//!                 cmd.name().set(r#"Print "copy!""#).unwrap();
-<a href=#292 id=292 data-nosnippet>292</a>//!                 cmd.info().set("").unwrap();
+<a href=#291 id=291 data-nosnippet>291</a>//!                 cmd.name().set(r#"Print "copy!""#);
+<a href=#292 id=292 data-nosnippet>292</a>//!                 cmd.info().set("");
 <a href=#293 id=293 data-nosnippet>293</a>//!             });
 <a href=#294 id=294 data-nosnippet>294</a>//!             clipboard::on_pre_copy = hn!(|args: &amp;CommandArgs| {
 <a href=#295 id=295 data-nosnippet>295</a>//!                 args.propagation().stop();

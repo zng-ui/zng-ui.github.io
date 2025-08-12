@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1a91846b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.88.0 (6b00bc388 2025-06-23)" data-channel="1.88.0" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-893ab5e7.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>app.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! App extensions, context, events and commands API.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/app.rs`."><title>app.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>app.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! App extensions, context, events and commands API.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! # Runtime
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -24,7 +24,7 @@
 <a href=#23 id=23 data-nosnippet>23</a>//!
 <a href=#24 id=24 data-nosnippet>24</a>//! ```toml
 <a href=#25 id=25 data-nosnippet>25</a>//! [dependencies]
-<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.15.11", features = ["view_prebuilt"] }
+<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.16.0", features = ["view_prebuilt"] }
 <a href=#27 id=27 data-nosnippet>27</a>//! ```
 <a href=#28 id=28 data-nosnippet>28</a>//!
 <a href=#29 id=29 data-nosnippet>29</a>//! ```no_run
@@ -150,7 +150,7 @@
 <a href=#149 id=149 data-nosnippet>149</a>//! #[expect(non_camel_case_types)]
 <a href=#150 id=150 data-nosnippet>150</a>//! pub struct SCREAMING_CASE;
 <a href=#151 id=151 data-nosnippet>151</a>//! impl SCREAMING_CASE {
-<a href=#152 id=152 data-nosnippet>152</a>//!     pub fn state(&amp;self) -&gt; impl Var&lt;bool&gt; {
+<a href=#152 id=152 data-nosnippet>152</a>//!     pub fn state(&amp;self) -&gt; Var&lt;bool&gt; {
 <a href=#153 id=153 data-nosnippet>153</a>//! #       var(true)
 <a href=#154 id=154 data-nosnippet>154</a>//!     }
 <a href=#155 id=155 data-nosnippet>155</a>//! }
@@ -206,7 +206,7 @@
 <a href=#205 id=205 data-nosnippet>205</a>//!
 <a href=#206 id=206 data-nosnippet>206</a>//! impl FOO {
 <a href=#207 id=207 data-nosnippet>207</a>//!     /// Foo read-write var.
-<a href=#208 id=208 data-nosnippet>208</a>//!     pub fn config(&amp;self) -&gt; impl Var&lt;bool&gt; {
+<a href=#208 id=208 data-nosnippet>208</a>//!     pub fn config(&amp;self) -&gt; Var&lt;bool&gt; {
 <a href=#209 id=209 data-nosnippet>209</a>//!         FOO_SV.read().config.clone()
 <a href=#210 id=210 data-nosnippet>210</a>//!     }
 <a href=#211 id=211 data-nosnippet>211</a>//!
@@ -222,7 +222,7 @@
 <a href=#221 id=221 data-nosnippet>221</a>//! }
 <a href=#222 id=222 data-nosnippet>222</a>//!
 <a href=#223 id=223 data-nosnippet>223</a>//! struct FooService {
-<a href=#224 id=224 data-nosnippet>224</a>//!     config: ArcVar&lt;bool&gt;,
+<a href=#224 id=224 data-nosnippet>224</a>//!     config: Var&lt;bool&gt;,
 <a href=#225 id=225 data-nosnippet>225</a>//!     requests: Vec&lt;(char, ResponderVar&lt;char&gt;)&gt;,
 <a href=#226 id=226 data-nosnippet>226</a>//! }
 <a href=#227 id=227 data-nosnippet>227</a>//!
@@ -267,154 +267,154 @@
 <a href=#266 id=266 data-nosnippet>266</a>//! A headed app initializes in this sequence:
 <a href=#267 id=267 data-nosnippet>267</a>//!
 <a href=#268 id=268 data-nosnippet>268</a>//! 1. [`AppExtension::register`] is called.
-<a href=#269 id=269 data-nosnippet>269</a>//! 2. [`AppExtension::enable_device_events`] is queried.
-<a href=#270 id=270 data-nosnippet>270</a>//! 3. Spawn view-process.
-<a href=#271 id=271 data-nosnippet>271</a>//! 4. [`AppExtension::init`] is called.
-<a href=#272 id=272 data-nosnippet>272</a>//! 5. Schedule the app run future to run in the first preview update.
-<a href=#273 id=273 data-nosnippet>273</a>//! 6. Does [updates loop](#updates-loop).
-<a href=#274 id=274 data-nosnippet>274</a>//! 7. Does [update events loop](#update-events-loop).
-<a href=#275 id=275 data-nosnippet>275</a>//! 6. Does [main loop](#main-loop).
-<a href=#276 id=276 data-nosnippet>276</a>//!
-<a href=#277 id=277 data-nosnippet>277</a>//! #### Main Loop
-<a href=#278 id=278 data-nosnippet>278</a>//!
-<a href=#279 id=279 data-nosnippet>279</a>//! The main loop coordinates view-process events, timers, app events and updates. There is no scheduler, update and event requests
-<a href=#280 id=280 data-nosnippet>280</a>//! are captured and coalesced to various buffers that are drained in known sequential order. App extensions update one at a time
-<a href=#281 id=281 data-nosnippet>281</a>//! in the order they are registered. Windows and widgets update in parallel by default, this is controlled by [`WINDOWS.parallel`] and [`parallel`].
-<a href=#282 id=282 data-nosnippet>282</a>//!
-<a href=#283 id=283 data-nosnippet>283</a>//! 1. Sleep if there are not pending events or updates.
-<a href=#284 id=284 data-nosnippet>284</a>//!    * If the view-process is busy blocks until it sends a message, this is a mechanism to stop the app-process
-<a href=#285 id=285 data-nosnippet>285</a>//!      from overwhelming the view-process.
-<a href=#286 id=286 data-nosnippet>286</a>//!    * Block until a message is received, from the view-process or from other app threads.
-<a href=#287 id=287 data-nosnippet>287</a>//!    * If there are [`TIMERS`] or [`VARS`] animations the message block has a deadline to the nearest timer or animation frame.
-<a href=#288 id=288 data-nosnippet>288</a>//!        * Animations have a fixed frame-rate defined in [`VARS.frame_duration`], it is 60 frames-per-second by default.
-<a href=#289 id=289 data-nosnippet>289</a>//! 2. Calls elapsed timer handlers.
-<a href=#290 id=290 data-nosnippet>290</a>//! 3. Calls elapsed animation handlers.
-<a href=#291 id=291 data-nosnippet>291</a>//!     * These handlers mostly just request var updates are applied in the updates loop.
-<a href=#292 id=292 data-nosnippet>292</a>//! 4. Does a [view events loop](#view-events-loop).
-<a href=#293 id=293 data-nosnippet>293</a>//! 4. Does an [updates loop](#updates-loop).
-<a href=#294 id=294 data-nosnippet>294</a>//! 5. Does an [update events loop](#update-events-loop).
-<a href=#295 id=295 data-nosnippet>295</a>//! 6. If the view-process is not busy does a [layout loop and render](#layout-loop-and-render).
-<a href=#296 id=296 data-nosnippet>296</a>//! 7. If exit was requested and not cancelled breaks the loop.
-<a href=#297 id=297 data-nosnippet>297</a>//!     * Exit is requested automatically when the last open window closes, this is controlled by [`WINDOWS.exit_on_last_close`].
-<a href=#298 id=298 data-nosnippet>298</a>//!     * Exit can also be requested using [`APP.exit`].
-<a href=#299 id=299 data-nosnippet>299</a>//!
-<a href=#300 id=300 data-nosnippet>300</a>//! #### View Events Loop
-<a href=#301 id=301 data-nosnippet>301</a>//!
-<a href=#302 id=302 data-nosnippet>302</a>//! All pending events send by the view-process are coalesced and notify sequentially.
-<a href=#303 id=303 data-nosnippet>303</a>//!
-<a href=#304 id=304 data-nosnippet>304</a>//! 1. For each event in the received order (FIFO) that converts to a RAW event.
-<a href=#305 id=305 data-nosnippet>305</a>//!     1. Calls [`AppExtension::event_preview`].
-<a href=#306 id=306 data-nosnippet>306</a>//!     2. Calls [`Event::on_pre_event`] handlers.
-<a href=#307 id=307 data-nosnippet>307</a>//!     3. Calls [`AppExtension::event_ui`].
-<a href=#308 id=308 data-nosnippet>308</a>//!         * Raw events don't target any widget, but widgets can subscribe, subscribers receive the event in parallel by default.
-<a href=#309 id=309 data-nosnippet>309</a>//!     4. Calls [`AppExtension::event`].
-<a href=#310 id=310 data-nosnippet>310</a>//!     5. Calls [`Event::on_event`] handlers.
-<a href=#311 id=311 data-nosnippet>311</a>//!     6. Does an [updates loop](#updates-loop).
-<a href=#312 id=312 data-nosnippet>312</a>//! 2. Frame rendered raw event.
-<a href=#313 id=313 data-nosnippet>313</a>//!     * Same notification sequence as other view-events, just delayed.
-<a href=#314 id=314 data-nosnippet>314</a>//!
-<a href=#315 id=315 data-nosnippet>315</a>//! #### Updates Loop
-<a href=#316 id=316 data-nosnippet>316</a>//!
-<a href=#317 id=317 data-nosnippet>317</a>//! The updates loop rebuilds info trees if needed , applies pending variable updates and hooks and collects event updates
-<a href=#318 id=318 data-nosnippet>318</a>//! requested by the app.
-<a href=#319 id=319 data-nosnippet>319</a>//!
-<a href=#320 id=320 data-nosnippet>320</a>//! 1. Takes info rebuild request flag.
-<a href=#321 id=321 data-nosnippet>321</a>//!     * Calls [`AppExtension::info`] if needed.
-<a href=#322 id=322 data-nosnippet>322</a>//!     * Windows and widgets that requested info (re)build are called.
-<a href=#323 id=323 data-nosnippet>323</a>//!     * Info rebuild happens in parallel by default.
-<a href=#324 id=324 data-nosnippet>324</a>//! 2. Takes events and updates requests.
-<a href=#325 id=325 data-nosnippet>325</a>//!     1. Event hooks are called for new event requests.
-<a href=#326 id=326 data-nosnippet>326</a>//!         * Full event notification is delayed to after the updates loop.
-<a href=#327 id=327 data-nosnippet>327</a>//!     2. [var updates loop](#var-updates-loop)
-<a href=#328 id=328 data-nosnippet>328</a>//!     3. Calls [`AppExtension::update_preview`] if any update was requested.
-<a href=#329 id=329 data-nosnippet>329</a>//!     4. Calls [`UPDATES.on_pre_update`] handlers if needed.
-<a href=#330 id=330 data-nosnippet>330</a>//!     5. Calls [`AppExtension::update_ui`] if any update was requested.
-<a href=#331 id=331 data-nosnippet>331</a>//!         * Windows and widgets that requested update receive it here.
-<a href=#332 id=332 data-nosnippet>332</a>//!         * All the pending updates are processed in one pass, all targeted widgets are visited once, in parallel by default.
-<a href=#333 id=333 data-nosnippet>333</a>//!     6. Calls [`AppExtension::update`] if any update was requested.
-<a href=#334 id=334 data-nosnippet>334</a>//!     7. Calls [`UPDATES.on_update`] handlers if needed.
-<a href=#335 id=335 data-nosnippet>335</a>//! 3. The loop repeats immediately if any info rebuild or update was requested by update callbacks.
-<a href=#336 id=336 data-nosnippet>336</a>//!     * The loops breaks if it repeats over 1000 times.
-<a href=#337 id=337 data-nosnippet>337</a>//!     * An error is logged with a trace the most frequent sources of update requests.
-<a href=#338 id=338 data-nosnippet>338</a>//!
-<a href=#339 id=339 data-nosnippet>339</a>//! #### Var Updates Loop
-<a href=#340 id=340 data-nosnippet>340</a>//!
-<a href=#341 id=341 data-nosnippet>341</a>//! The variable updates loop applies pending modifications, calls hooks to update variable and bindings.
-<a href=#342 id=342 data-nosnippet>342</a>//!
-<a href=#343 id=343 data-nosnippet>343</a>//! 1. Pending variable modifications are applied.
-<a href=#344 id=344 data-nosnippet>344</a>//! 2. Var hooks are called.
-<a href=#345 id=345 data-nosnippet>345</a>//!     * The mapping and binding mechanism is implemented using hooks.
-<a href=#346 id=346 data-nosnippet>346</a>//! 3. The loop repeats until hooks have stopped modifying variables.
-<a href=#347 id=347 data-nosnippet>347</a>//!     * The loop breaks if it repeats over 1000 times.
-<a href=#348 id=348 data-nosnippet>348</a>//!     * An error is logged if this happens.
-<a href=#349 id=349 data-nosnippet>349</a>//!
-<a href=#350 id=350 data-nosnippet>350</a>//! #### Update Events Loop
-<a href=#351 id=351 data-nosnippet>351</a>//!
-<a href=#352 id=352 data-nosnippet>352</a>//! The update events loop notifies each event raised by the app code during previous updates.
-<a href=#353 id=353 data-nosnippet>353</a>//!
-<a href=#354 id=354 data-nosnippet>354</a>//! 1. For each event in the request order (FIFO).
-<a href=#355 id=355 data-nosnippet>355</a>//!     1. Calls [`AppExtension::event_preview`].
-<a href=#356 id=356 data-nosnippet>356</a>//!     2. Calls [`Event::on_pre_event`] handlers.
-<a href=#357 id=357 data-nosnippet>357</a>//!     3. Calls [`AppExtension::event_ui`].
-<a href=#358 id=358 data-nosnippet>358</a>//!         * Windows and widgets targeted by the event update receive it here.
-<a href=#359 id=359 data-nosnippet>359</a>//!         * If the event targets multiple widgets they receive it in parallel by default.
-<a href=#360 id=360 data-nosnippet>360</a>//!     4. Calls [`AppExtension::event`].
-<a href=#361 id=361 data-nosnippet>361</a>//!     5. Calls [`Event::on_event`] handlers.
-<a href=#362 id=362 data-nosnippet>362</a>//!     6. Does an [updates loop](#updates-loop).
-<a href=#363 id=363 data-nosnippet>363</a>//!
-<a href=#364 id=364 data-nosnippet>364</a>//! #### Layout Loop and Render
-<a href=#365 id=365 data-nosnippet>365</a>//!
-<a href=#366 id=366 data-nosnippet>366</a>//! Layout and render requests are coalesced, multiple layout requests for the same widget update it once, multiple
-<a href=#367 id=367 data-nosnippet>367</a>//! render requests become one frame, and if both render and render_update are requested for a window it will fully render.
-<a href=#368 id=368 data-nosnippet>368</a>//!
-<a href=#369 id=369 data-nosnippet>369</a>//! 1. Take layout and render requests.
-<a href=#370 id=370 data-nosnippet>370</a>//! 2. Layout loop.
-<a href=#371 id=371 data-nosnippet>371</a>//!     1. Calls [`AppExtension::layout`].
-<a href=#372 id=372 data-nosnippet>372</a>//!         * Windows and widgets that requested layout update in parallel by default.
-<a href=#373 id=373 data-nosnippet>373</a>//!     2. Does an [updates loop](#updates-loop).
-<a href=#374 id=374 data-nosnippet>374</a>//!     3. Take layout and render requests, the loop repeats immediately if layout was requested again.
-<a href=#375 id=375 data-nosnippet>375</a>//!         * The loop breaks if it repeats over 1000 times.
-<a href=#376 id=376 data-nosnippet>376</a>//!         * An error is logged with a trace the most frequent sources of update requests.
-<a href=#377 id=377 data-nosnippet>377</a>//! 3. If render was requested, calls [`AppExtension::render`].
-<a href=#378 id=378 data-nosnippet>378</a>//!     * Windows and widgets that requested render (or render_update) do know in parallel by default.
-<a href=#379 id=379 data-nosnippet>379</a>//!     * The render pass updates widget transforms and hit-test, generates a display list and sends it to the view-process.
-<a href=#380 id=380 data-nosnippet>380</a>//!
-<a href=#381 id=381 data-nosnippet>381</a>//! [`APP.defaults()`]: crate::APP::defaults
-<a href=#382 id=382 data-nosnippet>382</a>//! [`UPDATES.update`]: crate::update::UPDATES::update
-<a href=#383 id=383 data-nosnippet>383</a>//! [`task`]: crate::task
-<a href=#384 id=384 data-nosnippet>384</a>//! [`ResponseVar&lt;R&gt;`]: crate::var::ResponseVar
-<a href=#385 id=385 data-nosnippet>385</a>//! [`TIMERS`]: crate::timer::TIMERS
-<a href=#386 id=386 data-nosnippet>386</a>//! [`VARS`]: crate::var::VARS
-<a href=#387 id=387 data-nosnippet>387</a>//! [`VARS.frame_duration`]: crate::var::VARS::frame_duration
-<a href=#388 id=388 data-nosnippet>388</a>//! [`WINDOWS.parallel`]: crate::window::WINDOWS::parallel
-<a href=#389 id=389 data-nosnippet>389</a>//! [`parallel`]: fn@crate::widget::parallel
-<a href=#390 id=390 data-nosnippet>390</a>//! [`UPDATES.on_pre_update`]: crate::update::UPDATES::on_pre_update
-<a href=#391 id=391 data-nosnippet>391</a>//! [`UPDATES.on_update`]: crate::update::UPDATES::on_update
-<a href=#392 id=392 data-nosnippet>392</a>//! [`Event::on_pre_event`]: crate::event::Event::on_pre_event
-<a href=#393 id=393 data-nosnippet>393</a>//! [`Event::on_event`]: crate::event::Event::on_event
-<a href=#394 id=394 data-nosnippet>394</a>//! [`WINDOWS.exit_on_last_close`]: crate::window::WINDOWS::exit_on_last_close
-<a href=#395 id=395 data-nosnippet>395</a>//! [`APP.exit`]: crate::APP#method.exit
-<a href=#396 id=396 data-nosnippet>396</a>//!
-<a href=#397 id=397 data-nosnippet>397</a>//! # Full API
-<a href=#398 id=398 data-nosnippet>398</a>//!
-<a href=#399 id=399 data-nosnippet>399</a>//! This module provides most of the app API needed to make and extend apps, some more advanced or experimental API
-<a href=#400 id=400 data-nosnippet>400</a>//! may be available at the [`zng_app`], [`zng_app_context`] and [`zng_ext_single_instance`] base crates.
-<a href=#401 id=401 data-nosnippet>401</a>
-<a href=#402 id=402 data-nosnippet>402</a></span><span class="kw">pub use </span>zng_app::{
-<a href=#403 id=403 data-nosnippet>403</a>    AppControlFlow, AppEventObserver, AppExtended, AppExtension, AppExtensionBoxed, AppExtensionInfo, AppStartArgs, DInstant, Deadline,
-<a href=#404 id=404 data-nosnippet>404</a>    EXIT_CMD, EXIT_REQUESTED_EVENT, ExitRequestedArgs, HeadlessApp, INSTANT, InstantMode, on_app_start, print_tracing,
-<a href=#405 id=405 data-nosnippet>405</a>    print_tracing_filter,
-<a href=#406 id=406 data-nosnippet>406</a>};
-<a href=#407 id=407 data-nosnippet>407</a>
-<a href=#408 id=408 data-nosnippet>408</a><span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
-<a href=#409 id=409 data-nosnippet>409</a></span><span class="kw">pub use </span>zng_app::test_log;
-<a href=#410 id=410 data-nosnippet>410</a>
-<a href=#411 id=411 data-nosnippet>411</a><span class="kw">pub use </span>zng_app_context::{
-<a href=#412 id=412 data-nosnippet>412</a>    AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, MappedRwLockReadGuardOwned,
-<a href=#413 id=413 data-nosnippet>413</a>    MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned, app_local, context_local,
-<a href=#414 id=414 data-nosnippet>414</a>};
-<a href=#415 id=415 data-nosnippet>415</a><span class="kw">pub use </span>zng_wgt_input::cmd::{
-<a href=#416 id=416 data-nosnippet>416</a>    NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD, on_new, on_open, on_pre_new, on_pre_open, on_pre_save, on_pre_save_as, on_save, on_save_as,
+<a href=#269 id=269 data-nosnippet>269</a>//! 2. Spawn view-process.
+<a href=#270 id=270 data-nosnippet>270</a>//! 3. [`AppExtension::init`] is called.
+<a href=#271 id=271 data-nosnippet>271</a>//! 4. Schedule the app run future to run in the first preview update.
+<a href=#272 id=272 data-nosnippet>272</a>//! 5. Does [updates loop](#updates-loop).
+<a href=#273 id=273 data-nosnippet>273</a>//! 6. Does [update events loop](#update-events-loop).
+<a href=#274 id=274 data-nosnippet>274</a>//! 7. Does [main loop](#main-loop).
+<a href=#275 id=275 data-nosnippet>275</a>//!
+<a href=#276 id=276 data-nosnippet>276</a>//! #### Main Loop
+<a href=#277 id=277 data-nosnippet>277</a>//!
+<a href=#278 id=278 data-nosnippet>278</a>//! The main loop coordinates view-process events, timers, app events and updates. There is no scheduler, update and event requests
+<a href=#279 id=279 data-nosnippet>279</a>//! are captured and coalesced to various buffers that are drained in known sequential order. App extensions update one at a time
+<a href=#280 id=280 data-nosnippet>280</a>//! in the order they are registered. Windows and widgets update in parallel by default, this is controlled by [`WINDOWS.parallel`] and [`parallel`].
+<a href=#281 id=281 data-nosnippet>281</a>//!
+<a href=#282 id=282 data-nosnippet>282</a>//! 1. Sleep if there are not pending events or updates.
+<a href=#283 id=283 data-nosnippet>283</a>//!    * If the view-process is busy blocks until it sends a message, this is a mechanism to stop the app-process
+<a href=#284 id=284 data-nosnippet>284</a>//!      from overwhelming the view-process.
+<a href=#285 id=285 data-nosnippet>285</a>//!    * Block until a message is received, from the view-process or from other app threads.
+<a href=#286 id=286 data-nosnippet>286</a>//!    * If there are [`TIMERS`] or [`VARS`] animations the message block has a deadline to the nearest timer or animation frame.
+<a href=#287 id=287 data-nosnippet>287</a>//!        * Animations have a fixed frame-rate defined in [`VARS.frame_duration`], it is 60 frames-per-second by default.
+<a href=#288 id=288 data-nosnippet>288</a>//! 2. Calls elapsed timer handlers.
+<a href=#289 id=289 data-nosnippet>289</a>//! 3. Calls elapsed animation handlers.
+<a href=#290 id=290 data-nosnippet>290</a>//!     * These handlers mostly just request var updates are applied in the updates loop.
+<a href=#291 id=291 data-nosnippet>291</a>//! 4. Does a [view events loop](#view-events-loop).
+<a href=#292 id=292 data-nosnippet>292</a>//! 4. Does an [updates loop](#updates-loop).
+<a href=#293 id=293 data-nosnippet>293</a>//! 5. Does an [update events loop](#update-events-loop).
+<a href=#294 id=294 data-nosnippet>294</a>//! 6. If the view-process is not busy does a [layout loop and render](#layout-loop-and-render).
+<a href=#295 id=295 data-nosnippet>295</a>//! 7. If exit was requested and not cancelled breaks the loop.
+<a href=#296 id=296 data-nosnippet>296</a>//!     * Exit is requested automatically when the last open window closes, this is controlled by [`WINDOWS.exit_on_last_close`].
+<a href=#297 id=297 data-nosnippet>297</a>//!     * Exit can also be requested using [`APP.exit`].
+<a href=#298 id=298 data-nosnippet>298</a>//!
+<a href=#299 id=299 data-nosnippet>299</a>//! #### View Events Loop
+<a href=#300 id=300 data-nosnippet>300</a>//!
+<a href=#301 id=301 data-nosnippet>301</a>//! All pending events send by the view-process are coalesced and notify sequentially.
+<a href=#302 id=302 data-nosnippet>302</a>//!
+<a href=#303 id=303 data-nosnippet>303</a>//! 1. For each event in the received order (FIFO) that converts to a RAW event.
+<a href=#304 id=304 data-nosnippet>304</a>//!     1. Calls [`AppExtension::event_preview`].
+<a href=#305 id=305 data-nosnippet>305</a>//!     2. Calls [`Event::on_pre_event`] handlers.
+<a href=#306 id=306 data-nosnippet>306</a>//!     3. Calls [`AppExtension::event_ui`].
+<a href=#307 id=307 data-nosnippet>307</a>//!         * Raw events don't target any widget, but widgets can subscribe, subscribers receive the event in parallel by default.
+<a href=#308 id=308 data-nosnippet>308</a>//!     4. Calls [`AppExtension::event`].
+<a href=#309 id=309 data-nosnippet>309</a>//!     5. Calls [`Event::on_event`] handlers.
+<a href=#310 id=310 data-nosnippet>310</a>//!     6. Does an [updates loop](#updates-loop).
+<a href=#311 id=311 data-nosnippet>311</a>//! 2. Frame rendered raw event.
+<a href=#312 id=312 data-nosnippet>312</a>//!     * Same notification sequence as other view-events, just delayed.
+<a href=#313 id=313 data-nosnippet>313</a>//!
+<a href=#314 id=314 data-nosnippet>314</a>//! #### Updates Loop
+<a href=#315 id=315 data-nosnippet>315</a>//!
+<a href=#316 id=316 data-nosnippet>316</a>//! The updates loop rebuilds info trees if needed , applies pending variable updates and hooks and collects event updates
+<a href=#317 id=317 data-nosnippet>317</a>//! requested by the app.
+<a href=#318 id=318 data-nosnippet>318</a>//!
+<a href=#319 id=319 data-nosnippet>319</a>//! 1. Takes info rebuild request flag.
+<a href=#320 id=320 data-nosnippet>320</a>//!     * Calls [`AppExtension::info`] if needed.
+<a href=#321 id=321 data-nosnippet>321</a>//!     * Windows and widgets that requested info (re)build are called.
+<a href=#322 id=322 data-nosnippet>322</a>//!     * Info rebuild happens in parallel by default.
+<a href=#323 id=323 data-nosnippet>323</a>//! 2. Takes events and updates requests.
+<a href=#324 id=324 data-nosnippet>324</a>//!     1. Event hooks are called for new event requests.
+<a href=#325 id=325 data-nosnippet>325</a>//!         * Full event notification is delayed to after the updates loop.
+<a href=#326 id=326 data-nosnippet>326</a>//!     2. [var updates loop](#var-updates-loop)
+<a href=#327 id=327 data-nosnippet>327</a>//!     3. Calls [`AppExtension::update_preview`] if any update was requested.
+<a href=#328 id=328 data-nosnippet>328</a>//!     4. Calls [`UPDATES.on_pre_update`] handlers if needed.
+<a href=#329 id=329 data-nosnippet>329</a>//!     5. Calls [`AppExtension::update_ui`] if any update was requested.
+<a href=#330 id=330 data-nosnippet>330</a>//!         * Windows and widgets that requested update receive it here.
+<a href=#331 id=331 data-nosnippet>331</a>//!         * All the pending updates are processed in one pass, all targeted widgets are visited once, in parallel by default.
+<a href=#332 id=332 data-nosnippet>332</a>//!     6. Calls [`AppExtension::update`] if any update was requested.
+<a href=#333 id=333 data-nosnippet>333</a>//!     7. Calls [`UPDATES.on_update`] handlers if needed.
+<a href=#334 id=334 data-nosnippet>334</a>//! 3. The loop repeats immediately if any info rebuild or update was requested by update callbacks.
+<a href=#335 id=335 data-nosnippet>335</a>//!     * The loops breaks if it repeats over 1000 times.
+<a href=#336 id=336 data-nosnippet>336</a>//!     * An error is logged with a trace the most frequent sources of update requests.
+<a href=#337 id=337 data-nosnippet>337</a>//!
+<a href=#338 id=338 data-nosnippet>338</a>//! #### Var Updates Loop
+<a href=#339 id=339 data-nosnippet>339</a>//!
+<a href=#340 id=340 data-nosnippet>340</a>//! The variable updates loop applies pending modifications, calls hooks to update variable and bindings.
+<a href=#341 id=341 data-nosnippet>341</a>//!
+<a href=#342 id=342 data-nosnippet>342</a>//! 1. Pending variable modifications are applied.
+<a href=#343 id=343 data-nosnippet>343</a>//! 2. Var hooks are called.
+<a href=#344 id=344 data-nosnippet>344</a>//!     * The mapping and binding mechanism is implemented using hooks.
+<a href=#345 id=345 data-nosnippet>345</a>//! 3. The loop repeats until hooks have stopped modifying variables.
+<a href=#346 id=346 data-nosnippet>346</a>//!     * The loop breaks if it repeats over 1000 times.
+<a href=#347 id=347 data-nosnippet>347</a>//!     * An error is logged if this happens.
+<a href=#348 id=348 data-nosnippet>348</a>//!
+<a href=#349 id=349 data-nosnippet>349</a>//! #### Update Events Loop
+<a href=#350 id=350 data-nosnippet>350</a>//!
+<a href=#351 id=351 data-nosnippet>351</a>//! The update events loop notifies each event raised by the app code during previous updates.
+<a href=#352 id=352 data-nosnippet>352</a>//!
+<a href=#353 id=353 data-nosnippet>353</a>//! 1. For each event in the request order (FIFO).
+<a href=#354 id=354 data-nosnippet>354</a>//!     1. Calls [`AppExtension::event_preview`].
+<a href=#355 id=355 data-nosnippet>355</a>//!     2. Calls [`Event::on_pre_event`] handlers.
+<a href=#356 id=356 data-nosnippet>356</a>//!     3. Calls [`AppExtension::event_ui`].
+<a href=#357 id=357 data-nosnippet>357</a>//!         * Windows and widgets targeted by the event update receive it here.
+<a href=#358 id=358 data-nosnippet>358</a>//!         * If the event targets multiple widgets they receive it in parallel by default.
+<a href=#359 id=359 data-nosnippet>359</a>//!     4. Calls [`AppExtension::event`].
+<a href=#360 id=360 data-nosnippet>360</a>//!     5. Calls [`Event::on_event`] handlers.
+<a href=#361 id=361 data-nosnippet>361</a>//!     6. Does an [updates loop](#updates-loop).
+<a href=#362 id=362 data-nosnippet>362</a>//!
+<a href=#363 id=363 data-nosnippet>363</a>//! #### Layout Loop and Render
+<a href=#364 id=364 data-nosnippet>364</a>//!
+<a href=#365 id=365 data-nosnippet>365</a>//! Layout and render requests are coalesced, multiple layout requests for the same widget update it once, multiple
+<a href=#366 id=366 data-nosnippet>366</a>//! render requests become one frame, and if both render and render_update are requested for a window it will fully render.
+<a href=#367 id=367 data-nosnippet>367</a>//!
+<a href=#368 id=368 data-nosnippet>368</a>//! 1. Take layout and render requests.
+<a href=#369 id=369 data-nosnippet>369</a>//! 2. Layout loop.
+<a href=#370 id=370 data-nosnippet>370</a>//!     1. Calls [`AppExtension::layout`].
+<a href=#371 id=371 data-nosnippet>371</a>//!         * Windows and widgets that requested layout update in parallel by default.
+<a href=#372 id=372 data-nosnippet>372</a>//!     2. Does an [updates loop](#updates-loop).
+<a href=#373 id=373 data-nosnippet>373</a>//!     3. Take layout and render requests, the loop repeats immediately if layout was requested again.
+<a href=#374 id=374 data-nosnippet>374</a>//!         * The loop breaks if it repeats over 1000 times.
+<a href=#375 id=375 data-nosnippet>375</a>//!         * An error is logged with a trace the most frequent sources of update requests.
+<a href=#376 id=376 data-nosnippet>376</a>//! 3. If render was requested, calls [`AppExtension::render`].
+<a href=#377 id=377 data-nosnippet>377</a>//!     * Windows and widgets that requested render (or render_update) do know in parallel by default.
+<a href=#378 id=378 data-nosnippet>378</a>//!     * The render pass updates widget transforms and hit-test, generates a display list and sends it to the view-process.
+<a href=#379 id=379 data-nosnippet>379</a>//!
+<a href=#380 id=380 data-nosnippet>380</a>//! [`APP.defaults()`]: crate::APP::defaults
+<a href=#381 id=381 data-nosnippet>381</a>//! [`UPDATES.update`]: crate::update::UPDATES::update
+<a href=#382 id=382 data-nosnippet>382</a>//! [`task`]: crate::task
+<a href=#383 id=383 data-nosnippet>383</a>//! [`ResponseVar&lt;R&gt;`]: crate::var::ResponseVar
+<a href=#384 id=384 data-nosnippet>384</a>//! [`TIMERS`]: crate::timer::TIMERS
+<a href=#385 id=385 data-nosnippet>385</a>//! [`VARS`]: crate::var::VARS
+<a href=#386 id=386 data-nosnippet>386</a>//! [`VARS.frame_duration`]: crate::var::VARS::frame_duration
+<a href=#387 id=387 data-nosnippet>387</a>//! [`WINDOWS.parallel`]: crate::window::WINDOWS::parallel
+<a href=#388 id=388 data-nosnippet>388</a>//! [`parallel`]: fn@crate::widget::parallel
+<a href=#389 id=389 data-nosnippet>389</a>//! [`UPDATES.on_pre_update`]: crate::update::UPDATES::on_pre_update
+<a href=#390 id=390 data-nosnippet>390</a>//! [`UPDATES.on_update`]: crate::update::UPDATES::on_update
+<a href=#391 id=391 data-nosnippet>391</a>//! [`Event::on_pre_event`]: crate::event::Event::on_pre_event
+<a href=#392 id=392 data-nosnippet>392</a>//! [`Event::on_event`]: crate::event::Event::on_event
+<a href=#393 id=393 data-nosnippet>393</a>//! [`WINDOWS.exit_on_last_close`]: crate::window::WINDOWS::exit_on_last_close
+<a href=#394 id=394 data-nosnippet>394</a>//! [`APP.exit`]: crate::APP#method.exit
+<a href=#395 id=395 data-nosnippet>395</a>//!
+<a href=#396 id=396 data-nosnippet>396</a>//! # Full API
+<a href=#397 id=397 data-nosnippet>397</a>//!
+<a href=#398 id=398 data-nosnippet>398</a>//! This module provides most of the app API needed to make and extend apps, some more advanced or experimental API
+<a href=#399 id=399 data-nosnippet>399</a>//! may be available at the [`zng_app`], [`zng_app_context`] and [`zng_ext_single_instance`] base crates.
+<a href=#400 id=400 data-nosnippet>400</a>
+<a href=#401 id=401 data-nosnippet>401</a></span><span class="kw">pub use </span>zng_app::{
+<a href=#402 id=402 data-nosnippet>402</a>    AppControlFlow, AppEventObserver, AppExtended, AppExtension, AppExtensionBoxed, AppExtensionInfo, AppStartArgs, DInstant, Deadline,
+<a href=#403 id=403 data-nosnippet>403</a>    EXIT_CMD, EXIT_REQUESTED_EVENT, ExitRequestedArgs, HeadlessApp, INSTANT, InstantMode, on_app_start, print_tracing,
+<a href=#404 id=404 data-nosnippet>404</a>    print_tracing_filter,
+<a href=#405 id=405 data-nosnippet>405</a>};
+<a href=#406 id=406 data-nosnippet>406</a>
+<a href=#407 id=407 data-nosnippet>407</a><span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
+<a href=#408 id=408 data-nosnippet>408</a></span><span class="kw">pub use </span>zng_app::test_log;
+<a href=#409 id=409 data-nosnippet>409</a>
+<a href=#410 id=410 data-nosnippet>410</a><span class="kw">pub use </span>zng_app_context::{
+<a href=#411 id=411 data-nosnippet>411</a>    AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, MappedRwLockReadGuardOwned,
+<a href=#412 id=412 data-nosnippet>412</a>    MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned, app_local, context_local,
+<a href=#413 id=413 data-nosnippet>413</a>};
+<a href=#414 id=414 data-nosnippet>414</a><span class="kw">pub use </span>zng_wgt_input::cmd::{
+<a href=#415 id=415 data-nosnippet>415</a>    NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD, can_new, can_open, can_save, can_save_as, on_new, on_open, on_pre_new, on_pre_open,
+<a href=#416 id=416 data-nosnippet>416</a>    on_pre_save, on_pre_save_as, on_save, on_save_as,
 <a href=#417 id=417 data-nosnippet>417</a>};
 <a href=#418 id=418 data-nosnippet>418</a>
 <a href=#419 id=419 data-nosnippet>419</a><span class="kw">pub use </span>zng_app::view_process::raw_events::{LOW_MEMORY_EVENT, LowMemoryArgs};
@@ -429,235 +429,230 @@
 <a href=#428 id=428 data-nosnippet>428</a>        AXIS_MOTION_EVENT, AxisId, AxisMotionArgs, INPUT_DEVICES, INPUT_DEVICES_CHANGED_EVENT, InputDeviceCapability, InputDeviceId,
 <a href=#429 id=429 data-nosnippet>429</a>        InputDeviceInfo, InputDevicesChangedArgs,
 <a href=#430 id=430 data-nosnippet>430</a>    };
-<a href=#431 id=431 data-nosnippet>431</a>
-<a href=#432 id=432 data-nosnippet>432</a>    <span class="attr">#[allow(deprecated)] </span><span class="comment">// TODO(breaking)
-<a href=#433 id=433 data-nosnippet>433</a>    </span><span class="kw">pub use </span>zng_app::view_process::raw_device_events::{
-<a href=#434 id=434 data-nosnippet>434</a>        DEVICE_ADDED_EVENT, DEVICE_REMOVED_EVENT, DeviceArgs, DeviceId, MOTION_EVENT, MotionArgs,
-<a href=#435 id=435 data-nosnippet>435</a>    };
-<a href=#436 id=436 data-nosnippet>436</a>}
-<a href=#437 id=437 data-nosnippet>437</a>
-<a href=#438 id=438 data-nosnippet>438</a><span class="attr">#[cfg(single_instance)]
-<a href=#439 id=439 data-nosnippet>439</a></span><span class="kw">pub use </span>zng_ext_single_instance::{APP_INSTANCE_EVENT, AppInstanceArgs};
-<a href=#440 id=440 data-nosnippet>440</a>
-<a href=#441 id=441 data-nosnippet>441</a><span class="doccomment">/// App-process crash handler.
-<a href=#442 id=442 data-nosnippet>442</a>///
-<a href=#443 id=443 data-nosnippet>443</a>/// In builds with `"crash_handler"` feature the crash handler takes over the first "app-process" turning it into
-<a href=#444 id=444 data-nosnippet>444</a>/// the monitor-process, it spawns another process that is the monitored app-process. If the app-process crashes
-<a href=#445 id=445 data-nosnippet>445</a>/// the monitor-process spawns a dialog-process that calls the dialog handler to show an error message, upload crash reports, etc.
-<a href=#446 id=446 data-nosnippet>446</a>///
-<a href=#447 id=447 data-nosnippet>447</a>/// The dialog handler can be set using [`crash_handler_config!`].
-<a href=#448 id=448 data-nosnippet>448</a>///
-<a href=#449 id=449 data-nosnippet>449</a>/// [`crash_handler_config!`]: crate::app::crash_handler::crash_handler_config
-<a href=#450 id=450 data-nosnippet>450</a>///
-<a href=#451 id=451 data-nosnippet>451</a>/// # Examples
+<a href=#431 id=431 data-nosnippet>431</a>}
+<a href=#432 id=432 data-nosnippet>432</a>
+<a href=#433 id=433 data-nosnippet>433</a><span class="attr">#[cfg(single_instance)]
+<a href=#434 id=434 data-nosnippet>434</a></span><span class="kw">pub use </span>zng_ext_single_instance::{APP_INSTANCE_EVENT, AppInstanceArgs};
+<a href=#435 id=435 data-nosnippet>435</a>
+<a href=#436 id=436 data-nosnippet>436</a><span class="doccomment">/// App-process crash handler.
+<a href=#437 id=437 data-nosnippet>437</a>///
+<a href=#438 id=438 data-nosnippet>438</a>/// In builds with `"crash_handler"` feature the crash handler takes over the first "app-process" turning it into
+<a href=#439 id=439 data-nosnippet>439</a>/// the monitor-process, it spawns another process that is the monitored app-process. If the app-process crashes
+<a href=#440 id=440 data-nosnippet>440</a>/// the monitor-process spawns a dialog-process that calls the dialog handler to show an error message, upload crash reports, etc.
+<a href=#441 id=441 data-nosnippet>441</a>///
+<a href=#442 id=442 data-nosnippet>442</a>/// The dialog handler can be set using [`crash_handler_config!`].
+<a href=#443 id=443 data-nosnippet>443</a>///
+<a href=#444 id=444 data-nosnippet>444</a>/// [`crash_handler_config!`]: crate::app::crash_handler::crash_handler_config
+<a href=#445 id=445 data-nosnippet>445</a>///
+<a href=#446 id=446 data-nosnippet>446</a>/// # Examples
+<a href=#447 id=447 data-nosnippet>447</a>///
+<a href=#448 id=448 data-nosnippet>448</a>/// The example below demonstrates an app setup to show a custom crash dialog.
+<a href=#449 id=449 data-nosnippet>449</a>///
+<a href=#450 id=450 data-nosnippet>450</a>/// ```no_run
+<a href=#451 id=451 data-nosnippet>451</a>/// use zng::prelude::*;
 <a href=#452 id=452 data-nosnippet>452</a>///
-<a href=#453 id=453 data-nosnippet>453</a>/// The example below demonstrates an app setup to show a custom crash dialog.
-<a href=#454 id=454 data-nosnippet>454</a>///
-<a href=#455 id=455 data-nosnippet>455</a>/// ```no_run
-<a href=#456 id=456 data-nosnippet>456</a>/// use zng::prelude::*;
-<a href=#457 id=457 data-nosnippet>457</a>///
-<a href=#458 id=458 data-nosnippet>458</a>/// fn main() {
-<a href=#459 id=459 data-nosnippet>459</a>///     // tracing applied to all processes.
-<a href=#460 id=460 data-nosnippet>460</a>///     zng::app::print_tracing(tracing::Level::INFO);
-<a href=#461 id=461 data-nosnippet>461</a>///
-<a href=#462 id=462 data-nosnippet>462</a>///     // monitor-process spawns app-process and if needed dialog-process here.
-<a href=#463 id=463 data-nosnippet>463</a>///     zng::env::init!();
-<a href=#464 id=464 data-nosnippet>464</a>///
-<a href=#465 id=465 data-nosnippet>465</a>///     // app-process:
-<a href=#466 id=466 data-nosnippet>466</a>///     app_main();
-<a href=#467 id=467 data-nosnippet>467</a>/// }
-<a href=#468 id=468 data-nosnippet>468</a>///
-<a href=#469 id=469 data-nosnippet>469</a>/// fn app_main() {
-<a href=#470 id=470 data-nosnippet>470</a>///     APP.defaults().run_window(async {
-<a href=#471 id=471 data-nosnippet>471</a>///         Window! {
-<a href=#472 id=472 data-nosnippet>472</a>///             child_align = Align::CENTER;
-<a href=#473 id=473 data-nosnippet>473</a>///             child = Stack! {
-<a href=#474 id=474 data-nosnippet>474</a>///                 direction = StackDirection::top_to_bottom();
-<a href=#475 id=475 data-nosnippet>475</a>///                 spacing = 5;
-<a href=#476 id=476 data-nosnippet>476</a>///                 children = ui_vec![
-<a href=#477 id=477 data-nosnippet>477</a>///                     Button! {
-<a href=#478 id=478 data-nosnippet>478</a>///                         child = Text!("Crash (panic)");
-<a href=#479 id=479 data-nosnippet>479</a>///                         on_click = hn_once!(|_| {
-<a href=#480 id=480 data-nosnippet>480</a>///                             panic!("Test panic!");
-<a href=#481 id=481 data-nosnippet>481</a>///                         });
-<a href=#482 id=482 data-nosnippet>482</a>///                     },
-<a href=#483 id=483 data-nosnippet>483</a>///                     Button! {
-<a href=#484 id=484 data-nosnippet>484</a>///                         child = Text!("Crash (access violation)");
-<a href=#485 id=485 data-nosnippet>485</a>///                         on_click = hn_once!(|_| {
-<a href=#486 id=486 data-nosnippet>486</a>///                             // SAFETY: deliberate access violation
-<a href=#487 id=487 data-nosnippet>487</a>///                             #[expect(deref_nullptr)]
-<a href=#488 id=488 data-nosnippet>488</a>///                             unsafe {
-<a href=#489 id=489 data-nosnippet>489</a>///                                 *std::ptr::null_mut() = true;
-<a href=#490 id=490 data-nosnippet>490</a>///                             }
-<a href=#491 id=491 data-nosnippet>491</a>///                         });
-<a href=#492 id=492 data-nosnippet>492</a>///                     }
-<a href=#493 id=493 data-nosnippet>493</a>///                 ]
-<a href=#494 id=494 data-nosnippet>494</a>///             };
-<a href=#495 id=495 data-nosnippet>495</a>///         }
-<a href=#496 id=496 data-nosnippet>496</a>///     });
-<a href=#497 id=497 data-nosnippet>497</a>/// }
-<a href=#498 id=498 data-nosnippet>498</a>///
-<a href=#499 id=499 data-nosnippet>499</a>/// zng::app::crash_handler::crash_handler_config!(|cfg| {
-<a href=#500 id=500 data-nosnippet>500</a>///     // monitor-process and dialog-process
-<a href=#501 id=501 data-nosnippet>501</a>///
-<a href=#502 id=502 data-nosnippet>502</a>///     cfg.dialog(|args| {
-<a href=#503 id=503 data-nosnippet>503</a>///         // dialog-process
-<a href=#504 id=504 data-nosnippet>504</a>///         APP.defaults().run_window(async move {
-<a href=#505 id=505 data-nosnippet>505</a>///             Window! {
-<a href=#506 id=506 data-nosnippet>506</a>///                 title = "App Crashed!";
-<a href=#507 id=507 data-nosnippet>507</a>///                 auto_size = true;
-<a href=#508 id=508 data-nosnippet>508</a>///                 min_size = (300, 100);
-<a href=#509 id=509 data-nosnippet>509</a>///                 start_position = window::StartPosition::CenterMonitor;
-<a href=#510 id=510 data-nosnippet>510</a>///                 on_load = hn_once!(|_| WINDOW.bring_to_top());
-<a href=#511 id=511 data-nosnippet>511</a>///                 padding = 10;
-<a href=#512 id=512 data-nosnippet>512</a>///                 child = Text!(args.latest().message());
-<a href=#513 id=513 data-nosnippet>513</a>///                 child_bottom = Stack! {
-<a href=#514 id=514 data-nosnippet>514</a>///                     direction = StackDirection::start_to_end();
-<a href=#515 id=515 data-nosnippet>515</a>///                     layout::align = Align::BOTTOM_END;
-<a href=#516 id=516 data-nosnippet>516</a>///                     spacing = 5;
-<a href=#517 id=517 data-nosnippet>517</a>///                     children = ui_vec![
-<a href=#518 id=518 data-nosnippet>518</a>///                         Button! {
-<a href=#519 id=519 data-nosnippet>519</a>///                             child = Text!("Restart App");
-<a href=#520 id=520 data-nosnippet>520</a>///                             on_click = hn_once!(args, |_| {
-<a href=#521 id=521 data-nosnippet>521</a>///                                 args.restart();
-<a href=#522 id=522 data-nosnippet>522</a>///                             });
-<a href=#523 id=523 data-nosnippet>523</a>///                         },
-<a href=#524 id=524 data-nosnippet>524</a>///                         Button! {
-<a href=#525 id=525 data-nosnippet>525</a>///                             child = Text!("Exit App");
-<a href=#526 id=526 data-nosnippet>526</a>///                             on_click = hn_once!(|_| {
-<a href=#527 id=527 data-nosnippet>527</a>///                                 args.exit(0);
-<a href=#528 id=528 data-nosnippet>528</a>///                             });
-<a href=#529 id=529 data-nosnippet>529</a>///                         },
-<a href=#530 id=530 data-nosnippet>530</a>///                     ]
-<a href=#531 id=531 data-nosnippet>531</a>///                 }, 10;
-<a href=#532 id=532 data-nosnippet>532</a>///             }
-<a href=#533 id=533 data-nosnippet>533</a>///         });
-<a href=#534 id=534 data-nosnippet>534</a>///     });
-<a href=#535 id=535 data-nosnippet>535</a>/// });
-<a href=#536 id=536 data-nosnippet>536</a>///
-<a href=#537 id=537 data-nosnippet>537</a>/// ```
-<a href=#538 id=538 data-nosnippet>538</a>///
-<a href=#539 id=539 data-nosnippet>539</a>/// # Debugger
-<a href=#540 id=540 data-nosnippet>540</a>///
-<a href=#541 id=541 data-nosnippet>541</a>/// Note that because the crash handler spawns a different process for the app debuggers will not
-<a href=#542 id=542 data-nosnippet>542</a>/// stop at break points in the app code. You can configure your debugger to set the `NO_ZNG_CRASH_HANDLER` environment
-<a href=#543 id=543 data-nosnippet>543</a>/// variable to not use a crash handler in debug runs.
-<a href=#544 id=544 data-nosnippet>544</a>///
-<a href=#545 id=545 data-nosnippet>545</a>/// On VS Code with the CodeLLDB extension you can add this workspace configuration:
-<a href=#546 id=546 data-nosnippet>546</a>///
-<a href=#547 id=547 data-nosnippet>547</a>/// ```json
-<a href=#548 id=548 data-nosnippet>548</a>/// "lldb.launch.env": {
-<a href=#549 id=549 data-nosnippet>549</a>///    "ZNG_NO_CRASH_HANDLER": ""
-<a href=#550 id=550 data-nosnippet>550</a>/// }
-<a href=#551 id=551 data-nosnippet>551</a>/// ```
-<a href=#552 id=552 data-nosnippet>552</a>///
-<a href=#553 id=553 data-nosnippet>553</a>/// # Full API
-<a href=#554 id=554 data-nosnippet>554</a>///
-<a href=#555 id=555 data-nosnippet>555</a>/// See [`zng_app::crash_handler`] and [`zng_wgt_inspector::crash_handler`] for the full API.
-<a href=#556 id=556 data-nosnippet>556</a></span><span class="attr">#[cfg(crash_handler)]
-<a href=#557 id=557 data-nosnippet>557</a></span><span class="kw">pub mod </span>crash_handler {
-<a href=#558 id=558 data-nosnippet>558</a>    <span class="kw">pub use </span>zng_app::crash_handler::{BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic, crash_handler_config};
-<a href=#559 id=559 data-nosnippet>559</a>
-<a href=#560 id=560 data-nosnippet>560</a>    <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
-<a href=#561 id=561 data-nosnippet>561</a>    </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
-<a href=#562 id=562 data-nosnippet>562</a>
-<a href=#563 id=563 data-nosnippet>563</a>    <span class="macro">crash_handler_config!</span>(|cfg| {
-<a href=#564 id=564 data-nosnippet>564</a>        cfg.default_dialog(|args| {
-<a href=#565 id=565 data-nosnippet>565</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;</span>args.dialog_crash {
-<a href=#566 id=566 data-nosnippet>566</a>                <span class="macro">eprintln!</span>(<span class="string">"DEBUG CRASH DIALOG ALSO CRASHED"</span>);
-<a href=#567 id=567 data-nosnippet>567</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, c.message());
-<a href=#568 id=568 data-nosnippet>568</a>                <span class="macro">eprintln!</span>(<span class="string">"ORIGINAL APP CRASH"</span>);
-<a href=#569 id=569 data-nosnippet>569</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, args.latest().message());
-<a href=#570 id=570 data-nosnippet>570</a>                args.exit(<span class="number">0xBADC0DE</span>)
-<a href=#571 id=571 data-nosnippet>571</a>            } <span class="kw">else </span>{
-<a href=#572 id=572 data-nosnippet>572</a>                <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
-<a href=#573 id=573 data-nosnippet>573</a>                </span>{
-<a href=#574 id=574 data-nosnippet>574</a>                    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
-<a href=#575 id=575 data-nosnippet>575</a>                    APP.defaults()
-<a href=#576 id=576 data-nosnippet>576</a>                        .run_window(<span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }));
-<a href=#577 id=577 data-nosnippet>577</a>                }
-<a href=#578 id=578 data-nosnippet>578</a>
-<a href=#579 id=579 data-nosnippet>579</a>                <span class="attr">#[cfg(not(feature = <span class="string">"crash_handler_debug"</span>))]
-<a href=#580 id=580 data-nosnippet>580</a>                </span>{
-<a href=#581 id=581 data-nosnippet>581</a>                    <span class="macro">eprintln!</span>(
-<a href=#582 id=582 data-nosnippet>582</a>                        <span class="string">"app crashed {}\n\nbuild with feature = \"crash_handler_debug\" to se the debug crash dialog"</span>,
-<a href=#583 id=583 data-nosnippet>583</a>                        args.latest().message()
-<a href=#584 id=584 data-nosnippet>584</a>                    );
-<a href=#585 id=585 data-nosnippet>585</a>                }
-<a href=#586 id=586 data-nosnippet>586</a>            }
-<a href=#587 id=587 data-nosnippet>587</a>            args.exit(<span class="number">0</span>)
-<a href=#588 id=588 data-nosnippet>588</a>        });
-<a href=#589 id=589 data-nosnippet>589</a>    });
-<a href=#590 id=590 data-nosnippet>590</a>}
-<a href=#591 id=591 data-nosnippet>591</a>
-<a href=#592 id=592 data-nosnippet>592</a><span class="doccomment">/// Trace recording and data model.
+<a href=#453 id=453 data-nosnippet>453</a>/// fn main() {
+<a href=#454 id=454 data-nosnippet>454</a>///     // tracing applied to all processes.
+<a href=#455 id=455 data-nosnippet>455</a>///     zng::app::print_tracing(tracing::Level::INFO);
+<a href=#456 id=456 data-nosnippet>456</a>///
+<a href=#457 id=457 data-nosnippet>457</a>///     // monitor-process spawns app-process and if needed dialog-process here.
+<a href=#458 id=458 data-nosnippet>458</a>///     zng::env::init!();
+<a href=#459 id=459 data-nosnippet>459</a>///
+<a href=#460 id=460 data-nosnippet>460</a>///     // app-process:
+<a href=#461 id=461 data-nosnippet>461</a>///     app_main();
+<a href=#462 id=462 data-nosnippet>462</a>/// }
+<a href=#463 id=463 data-nosnippet>463</a>///
+<a href=#464 id=464 data-nosnippet>464</a>/// fn app_main() {
+<a href=#465 id=465 data-nosnippet>465</a>///     APP.defaults().run_window(async {
+<a href=#466 id=466 data-nosnippet>466</a>///         Window! {
+<a href=#467 id=467 data-nosnippet>467</a>///             child_align = Align::CENTER;
+<a href=#468 id=468 data-nosnippet>468</a>///             child = Stack! {
+<a href=#469 id=469 data-nosnippet>469</a>///                 direction = StackDirection::top_to_bottom();
+<a href=#470 id=470 data-nosnippet>470</a>///                 spacing = 5;
+<a href=#471 id=471 data-nosnippet>471</a>///                 children = ui_vec![
+<a href=#472 id=472 data-nosnippet>472</a>///                     Button! {
+<a href=#473 id=473 data-nosnippet>473</a>///                         child = Text!("Crash (panic)");
+<a href=#474 id=474 data-nosnippet>474</a>///                         on_click = hn_once!(|_| {
+<a href=#475 id=475 data-nosnippet>475</a>///                             panic!("Test panic!");
+<a href=#476 id=476 data-nosnippet>476</a>///                         });
+<a href=#477 id=477 data-nosnippet>477</a>///                     },
+<a href=#478 id=478 data-nosnippet>478</a>///                     Button! {
+<a href=#479 id=479 data-nosnippet>479</a>///                         child = Text!("Crash (access violation)");
+<a href=#480 id=480 data-nosnippet>480</a>///                         on_click = hn_once!(|_| {
+<a href=#481 id=481 data-nosnippet>481</a>///                             // SAFETY: deliberate access violation
+<a href=#482 id=482 data-nosnippet>482</a>///                             #[expect(deref_nullptr)]
+<a href=#483 id=483 data-nosnippet>483</a>///                             unsafe {
+<a href=#484 id=484 data-nosnippet>484</a>///                                 *std::ptr::null_mut() = true;
+<a href=#485 id=485 data-nosnippet>485</a>///                             }
+<a href=#486 id=486 data-nosnippet>486</a>///                         });
+<a href=#487 id=487 data-nosnippet>487</a>///                     }
+<a href=#488 id=488 data-nosnippet>488</a>///                 ]
+<a href=#489 id=489 data-nosnippet>489</a>///             };
+<a href=#490 id=490 data-nosnippet>490</a>///         }
+<a href=#491 id=491 data-nosnippet>491</a>///     });
+<a href=#492 id=492 data-nosnippet>492</a>/// }
+<a href=#493 id=493 data-nosnippet>493</a>///
+<a href=#494 id=494 data-nosnippet>494</a>/// zng::app::crash_handler::crash_handler_config!(|cfg| {
+<a href=#495 id=495 data-nosnippet>495</a>///     // monitor-process and dialog-process
+<a href=#496 id=496 data-nosnippet>496</a>///
+<a href=#497 id=497 data-nosnippet>497</a>///     cfg.dialog(|args| {
+<a href=#498 id=498 data-nosnippet>498</a>///         // dialog-process
+<a href=#499 id=499 data-nosnippet>499</a>///         APP.defaults().run_window(async move {
+<a href=#500 id=500 data-nosnippet>500</a>///             Window! {
+<a href=#501 id=501 data-nosnippet>501</a>///                 title = "App Crashed!";
+<a href=#502 id=502 data-nosnippet>502</a>///                 auto_size = true;
+<a href=#503 id=503 data-nosnippet>503</a>///                 min_size = (300, 100);
+<a href=#504 id=504 data-nosnippet>504</a>///                 start_position = window::StartPosition::CenterMonitor;
+<a href=#505 id=505 data-nosnippet>505</a>///                 on_load = hn_once!(|_| WINDOW.bring_to_top());
+<a href=#506 id=506 data-nosnippet>506</a>///                 padding = 10;
+<a href=#507 id=507 data-nosnippet>507</a>///                 child = Text!(args.latest().message());
+<a href=#508 id=508 data-nosnippet>508</a>///                 child_bottom = Stack! {
+<a href=#509 id=509 data-nosnippet>509</a>///                     direction = StackDirection::start_to_end();
+<a href=#510 id=510 data-nosnippet>510</a>///                     layout::align = Align::BOTTOM_END;
+<a href=#511 id=511 data-nosnippet>511</a>///                     spacing = 5;
+<a href=#512 id=512 data-nosnippet>512</a>///                     children = ui_vec![
+<a href=#513 id=513 data-nosnippet>513</a>///                         Button! {
+<a href=#514 id=514 data-nosnippet>514</a>///                             child = Text!("Restart App");
+<a href=#515 id=515 data-nosnippet>515</a>///                             on_click = hn_once!(args, |_| {
+<a href=#516 id=516 data-nosnippet>516</a>///                                 args.restart();
+<a href=#517 id=517 data-nosnippet>517</a>///                             });
+<a href=#518 id=518 data-nosnippet>518</a>///                         },
+<a href=#519 id=519 data-nosnippet>519</a>///                         Button! {
+<a href=#520 id=520 data-nosnippet>520</a>///                             child = Text!("Exit App");
+<a href=#521 id=521 data-nosnippet>521</a>///                             on_click = hn_once!(|_| {
+<a href=#522 id=522 data-nosnippet>522</a>///                                 args.exit(0);
+<a href=#523 id=523 data-nosnippet>523</a>///                             });
+<a href=#524 id=524 data-nosnippet>524</a>///                         },
+<a href=#525 id=525 data-nosnippet>525</a>///                     ]
+<a href=#526 id=526 data-nosnippet>526</a>///                 }, 10;
+<a href=#527 id=527 data-nosnippet>527</a>///             }
+<a href=#528 id=528 data-nosnippet>528</a>///         });
+<a href=#529 id=529 data-nosnippet>529</a>///     });
+<a href=#530 id=530 data-nosnippet>530</a>/// });
+<a href=#531 id=531 data-nosnippet>531</a>///
+<a href=#532 id=532 data-nosnippet>532</a>/// ```
+<a href=#533 id=533 data-nosnippet>533</a>///
+<a href=#534 id=534 data-nosnippet>534</a>/// # Debugger
+<a href=#535 id=535 data-nosnippet>535</a>///
+<a href=#536 id=536 data-nosnippet>536</a>/// Note that because the crash handler spawns a different process for the app debuggers will not
+<a href=#537 id=537 data-nosnippet>537</a>/// stop at break points in the app code. You can configure your debugger to set the `NO_ZNG_CRASH_HANDLER` environment
+<a href=#538 id=538 data-nosnippet>538</a>/// variable to not use a crash handler in debug runs.
+<a href=#539 id=539 data-nosnippet>539</a>///
+<a href=#540 id=540 data-nosnippet>540</a>/// On VS Code with the CodeLLDB extension you can add this workspace configuration:
+<a href=#541 id=541 data-nosnippet>541</a>///
+<a href=#542 id=542 data-nosnippet>542</a>/// ```json
+<a href=#543 id=543 data-nosnippet>543</a>/// "lldb.launch.env": {
+<a href=#544 id=544 data-nosnippet>544</a>///    "ZNG_NO_CRASH_HANDLER": ""
+<a href=#545 id=545 data-nosnippet>545</a>/// }
+<a href=#546 id=546 data-nosnippet>546</a>/// ```
+<a href=#547 id=547 data-nosnippet>547</a>///
+<a href=#548 id=548 data-nosnippet>548</a>/// # Full API
+<a href=#549 id=549 data-nosnippet>549</a>///
+<a href=#550 id=550 data-nosnippet>550</a>/// See [`zng_app::crash_handler`] and [`zng_wgt_inspector::crash_handler`] for the full API.
+<a href=#551 id=551 data-nosnippet>551</a></span><span class="attr">#[cfg(crash_handler)]
+<a href=#552 id=552 data-nosnippet>552</a></span><span class="kw">pub mod </span>crash_handler {
+<a href=#553 id=553 data-nosnippet>553</a>    <span class="kw">pub use </span>zng_app::crash_handler::{BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic, crash_handler_config};
+<a href=#554 id=554 data-nosnippet>554</a>
+<a href=#555 id=555 data-nosnippet>555</a>    <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+<a href=#556 id=556 data-nosnippet>556</a>    </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
+<a href=#557 id=557 data-nosnippet>557</a>
+<a href=#558 id=558 data-nosnippet>558</a>    <span class="macro">crash_handler_config!</span>(|cfg| {
+<a href=#559 id=559 data-nosnippet>559</a>        cfg.default_dialog(|args| {
+<a href=#560 id=560 data-nosnippet>560</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;</span>args.dialog_crash {
+<a href=#561 id=561 data-nosnippet>561</a>                <span class="macro">eprintln!</span>(<span class="string">"DEBUG CRASH DIALOG ALSO CRASHED"</span>);
+<a href=#562 id=562 data-nosnippet>562</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, c.message());
+<a href=#563 id=563 data-nosnippet>563</a>                <span class="macro">eprintln!</span>(<span class="string">"ORIGINAL APP CRASH"</span>);
+<a href=#564 id=564 data-nosnippet>564</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, args.latest().message());
+<a href=#565 id=565 data-nosnippet>565</a>                args.exit(<span class="number">0xBADC0DE</span>)
+<a href=#566 id=566 data-nosnippet>566</a>            } <span class="kw">else </span>{
+<a href=#567 id=567 data-nosnippet>567</a>                <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+<a href=#568 id=568 data-nosnippet>568</a>                </span>{
+<a href=#569 id=569 data-nosnippet>569</a>                    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+<a href=#570 id=570 data-nosnippet>570</a>                    APP.defaults()
+<a href=#571 id=571 data-nosnippet>571</a>                        .run_window(<span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }));
+<a href=#572 id=572 data-nosnippet>572</a>                }
+<a href=#573 id=573 data-nosnippet>573</a>
+<a href=#574 id=574 data-nosnippet>574</a>                <span class="attr">#[cfg(not(feature = <span class="string">"crash_handler_debug"</span>))]
+<a href=#575 id=575 data-nosnippet>575</a>                </span>{
+<a href=#576 id=576 data-nosnippet>576</a>                    <span class="macro">eprintln!</span>(
+<a href=#577 id=577 data-nosnippet>577</a>                        <span class="string">"app crashed {}\n\nbuild with feature = \"crash_handler_debug\" to se the debug crash dialog"</span>,
+<a href=#578 id=578 data-nosnippet>578</a>                        args.latest().message()
+<a href=#579 id=579 data-nosnippet>579</a>                    );
+<a href=#580 id=580 data-nosnippet>580</a>                }
+<a href=#581 id=581 data-nosnippet>581</a>            }
+<a href=#582 id=582 data-nosnippet>582</a>            args.exit(<span class="number">0</span>)
+<a href=#583 id=583 data-nosnippet>583</a>        });
+<a href=#584 id=584 data-nosnippet>584</a>    });
+<a href=#585 id=585 data-nosnippet>585</a>}
+<a href=#586 id=586 data-nosnippet>586</a>
+<a href=#587 id=587 data-nosnippet>587</a><span class="doccomment">/// Trace recording and data model.
+<a href=#588 id=588 data-nosnippet>588</a>///
+<a href=#589 id=589 data-nosnippet>589</a>/// All tracing instrumentation in Zng projects is done using the `tracing` crate, trace recording is done using the `tracing-chrome` crate.
+<a href=#590 id=590 data-nosnippet>590</a>/// The recorded traces can be viewed in `chrome://tracing` or `ui.perfetto.dev` and can be parsed by the [`Trace`] data model.
+<a href=#591 id=591 data-nosnippet>591</a>///
+<a href=#592 id=592 data-nosnippet>592</a>/// Run the app with the `"ZNG_RECORD_TRACE"` env var set to record the app-process and all other processes spawned by the app.
 <a href=#593 id=593 data-nosnippet>593</a>///
-<a href=#594 id=594 data-nosnippet>594</a>/// All tracing instrumentation in Zng projects is done using the `tracing` crate, trace recording is done using the `tracing-chrome` crate.
-<a href=#595 id=595 data-nosnippet>595</a>/// The recorded traces can be viewed in `chrome://tracing` or `ui.perfetto.dev` and can be parsed by the [`Trace`] data model.
+<a href=#594 id=594 data-nosnippet>594</a>/// ```no_run
+<a href=#595 id=595 data-nosnippet>595</a>/// use zng::prelude::*;
 <a href=#596 id=596 data-nosnippet>596</a>///
-<a href=#597 id=597 data-nosnippet>597</a>/// Run the app with the `"ZNG_RECORD_TRACE"` env var set to record the app-process and all other processes spawned by the app.
-<a href=#598 id=598 data-nosnippet>598</a>///
-<a href=#599 id=599 data-nosnippet>599</a>/// ```no_run
-<a href=#600 id=600 data-nosnippet>600</a>/// use zng::prelude::*;
-<a href=#601 id=601 data-nosnippet>601</a>///
-<a href=#602 id=602 data-nosnippet>602</a>/// fn main() {
-<a href=#603 id=603 data-nosnippet>603</a>///     unsafe { std::env::set_var("ZNG_RECORD_TRACE", ""); }
-<a href=#604 id=604 data-nosnippet>604</a>///     unsafe { std::env::set_var("ZNG_RECORD_TRACE_FILTER", "debug"); }
-<a href=#605 id=605 data-nosnippet>605</a>///
-<a href=#606 id=606 data-nosnippet>606</a>///     // recording start here for all app processes when ZNG_RECORD_TRACE is set.
-<a href=#607 id=607 data-nosnippet>607</a>///     zng::env::init!();
-<a href=#608 id=608 data-nosnippet>608</a>///
-<a href=#609 id=609 data-nosnippet>609</a>///     // .. app
-<a href=#610 id=610 data-nosnippet>610</a>/// }
-<a href=#611 id=611 data-nosnippet>611</a>/// ```
+<a href=#597 id=597 data-nosnippet>597</a>/// fn main() {
+<a href=#598 id=598 data-nosnippet>598</a>///     unsafe { std::env::set_var("ZNG_RECORD_TRACE", ""); }
+<a href=#599 id=599 data-nosnippet>599</a>///     unsafe { std::env::set_var("ZNG_RECORD_TRACE_FILTER", "debug"); }
+<a href=#600 id=600 data-nosnippet>600</a>///
+<a href=#601 id=601 data-nosnippet>601</a>///     // recording start here for all app processes when ZNG_RECORD_TRACE is set.
+<a href=#602 id=602 data-nosnippet>602</a>///     zng::env::init!();
+<a href=#603 id=603 data-nosnippet>603</a>///
+<a href=#604 id=604 data-nosnippet>604</a>///     // .. app
+<a href=#605 id=605 data-nosnippet>605</a>/// }
+<a href=#606 id=606 data-nosnippet>606</a>/// ```
+<a href=#607 id=607 data-nosnippet>607</a>///
+<a href=#608 id=608 data-nosnippet>608</a>/// The example above hardcodes trace recording for all app processes by setting the `"ZNG_RECORD_TRACE"` environment
+<a href=#609 id=609 data-nosnippet>609</a>/// variable before the `init!()` call. It also sets `"ZNG_RECORD_TRACE_FILTER"` to a slightly less verbose level.
+<a href=#610 id=610 data-nosnippet>610</a>///
+<a href=#611 id=611 data-nosnippet>611</a>/// # Config
 <a href=#612 id=612 data-nosnippet>612</a>///
-<a href=#613 id=613 data-nosnippet>613</a>/// The example above hardcodes trace recording for all app processes by setting the `"ZNG_RECORD_TRACE"` environment
-<a href=#614 id=614 data-nosnippet>614</a>/// variable before the `init!()` call. It also sets `"ZNG_RECORD_TRACE_FILTER"` to a slightly less verbose level.
+<a href=#613 id=613 data-nosnippet>613</a>/// The `"ZNG_RECORD_TRACE_DIR"` variable can be set to define a custom `output-dir` directory path, relative to the current dir.
+<a href=#614 id=614 data-nosnippet>614</a>/// The default dir is `"./zng-trace/"`.
 <a href=#615 id=615 data-nosnippet>615</a>///
-<a href=#616 id=616 data-nosnippet>616</a>/// # Config
-<a href=#617 id=617 data-nosnippet>617</a>///
-<a href=#618 id=618 data-nosnippet>618</a>/// The `"ZNG_RECORD_TRACE_DIR"` variable can be set to define a custom `output-dir` directory path, relative to the current dir.
-<a href=#619 id=619 data-nosnippet>619</a>/// The default dir is `"./zng-trace/"`.
+<a href=#616 id=616 data-nosnippet>616</a>/// The `"ZNG_RECORD_TRACE_FILTER"` or `"RUST_LOG"` variables can be used to set custom tracing filters, see the [filter syntax] for details.
+<a href=#617 id=617 data-nosnippet>617</a>/// The default filter is `"trace"` that records all spans and events.
+<a href=#618 id=618 data-nosnippet>618</a>///
+<a href=#619 id=619 data-nosnippet>619</a>/// # Output
 <a href=#620 id=620 data-nosnippet>620</a>///
-<a href=#621 id=621 data-nosnippet>621</a>/// The `"ZNG_RECORD_TRACE_FILTER"` or `"RUST_LOG"` variables can be used to set custom tracing filters, see the [filter syntax] for details.
-<a href=#622 id=622 data-nosnippet>622</a>/// The default filter is `"trace"` that records all spans and events.
+<a href=#621 id=621 data-nosnippet>621</a>/// Raw trace files are saved to `"{--output-dir}/{timestamp}/{pid}.json"`. If the `--output-dir` is not provided
+<a href=#622 id=622 data-nosnippet>622</a>/// it is `"{current_dir}/zng-trace/"`.
 <a href=#623 id=623 data-nosnippet>623</a>///
-<a href=#624 id=624 data-nosnippet>624</a>/// # Output
+<a href=#624 id=624 data-nosnippet>624</a>/// The dir timestamp is in microseconds from Unix epoch and is defined by the first process that runs.
 <a href=#625 id=625 data-nosnippet>625</a>///
-<a href=#626 id=626 data-nosnippet>626</a>/// Raw trace files are saved to `"{--output-dir}/{timestamp}/{pid}.json"`. If the `--output-dir` is not provided
-<a href=#627 id=627 data-nosnippet>627</a>/// it is `"{current_dir}/zng-trace/"`.
-<a href=#628 id=628 data-nosnippet>628</a>///
-<a href=#629 id=629 data-nosnippet>629</a>/// The dir timestamp is in microseconds from Unix epoch and is defined by the first process that runs.
+<a href=#626 id=626 data-nosnippet>626</a>/// The process name is defined by an event INFO message that reads `"pid: {pid}, name: {name}"`. See [`zng::env::process_name`] for more details.
+<a href=#627 id=627 data-nosnippet>627</a>///
+<a href=#628 id=628 data-nosnippet>628</a>/// The process record start timestamp is defined by an event INFO message that reads `"zng-record-start: {timestamp}"`. This timestamp is also
+<a href=#629 id=629 data-nosnippet>629</a>/// in microseconds from Unix epoch.
 <a href=#630 id=630 data-nosnippet>630</a>///
-<a href=#631 id=631 data-nosnippet>631</a>/// The process name is defined by an event INFO message that reads `"pid: {pid}, name: {name}"`. See [`zng::env::process_name`] for more details.
+<a href=#631 id=631 data-nosnippet>631</a>/// # Cargo Zng
 <a href=#632 id=632 data-nosnippet>632</a>///
-<a href=#633 id=633 data-nosnippet>633</a>/// The process record start timestamp is defined by an event INFO message that reads `"zng-record-start: {timestamp}"`. This timestamp is also
-<a href=#634 id=634 data-nosnippet>634</a>/// in microseconds from Unix epoch.
+<a href=#633 id=633 data-nosnippet>633</a>/// You can also use the `cargo zng trace` subcommand to record traces, it handles setting the env variables, merges the multi
+<a href=#634 id=634 data-nosnippet>634</a>/// process traces into a single file and properly names the processes for better compatibility with trace viewers.
 <a href=#635 id=635 data-nosnippet>635</a>///
-<a href=#636 id=636 data-nosnippet>636</a>/// # Cargo Zng
-<a href=#637 id=637 data-nosnippet>637</a>///
-<a href=#638 id=638 data-nosnippet>638</a>/// You can also use the `cargo zng trace` subcommand to record traces, it handles setting the env variables, merges the multi
-<a href=#639 id=639 data-nosnippet>639</a>/// process traces into a single file and properly names the processes for better compatibility with trace viewers.
-<a href=#640 id=640 data-nosnippet>640</a>///
-<a href=#641 id=641 data-nosnippet>641</a>/// ```console
-<a href=#642 id=642 data-nosnippet>642</a>/// cargo zng trace --filter debug "path/my-exe"
-<a href=#643 id=643 data-nosnippet>643</a>/// ```
-<a href=#644 id=644 data-nosnippet>644</a>///
-<a href=#645 id=645 data-nosnippet>645</a>/// You can also run using custom commands after `--`:
-<a href=#646 id=646 data-nosnippet>646</a>///
-<a href=#647 id=647 data-nosnippet>647</a>/// ```console
-<a href=#648 id=648 data-nosnippet>648</a>/// cargo zng trace -- cargo run my-exe
-<a href=#649 id=649 data-nosnippet>649</a>/// ```
-<a href=#650 id=650 data-nosnippet>650</a>///
-<a href=#651 id=651 data-nosnippet>651</a>/// Call `cargo zng trace --help` for more details.
-<a href=#652 id=652 data-nosnippet>652</a>///
-<a href=#653 id=653 data-nosnippet>653</a>/// # Full API
-<a href=#654 id=654 data-nosnippet>654</a>///
-<a href=#655 id=655 data-nosnippet>655</a>/// See [`zng_app::trace_recorder`] for the full API.
-<a href=#656 id=656 data-nosnippet>656</a>///
-<a href=#657 id=657 data-nosnippet>657</a>/// [`Trace`]: zng::app::trace_recorder::Trace
-<a href=#658 id=658 data-nosnippet>658</a>/// [filter syntax]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables
-<a href=#659 id=659 data-nosnippet>659</a></span><span class="attr">#[cfg(trace_recorder)]
-<a href=#660 id=660 data-nosnippet>660</a></span><span class="kw">pub mod </span>trace_recorder {
-<a href=#661 id=661 data-nosnippet>661</a>    <span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, stop_recording};
-<a href=#662 id=662 data-nosnippet>662</a>}</code></pre></div></section></main></body></html>
+<a href=#636 id=636 data-nosnippet>636</a>/// ```console
+<a href=#637 id=637 data-nosnippet>637</a>/// cargo zng trace --filter debug "path/my-exe"
+<a href=#638 id=638 data-nosnippet>638</a>/// ```
+<a href=#639 id=639 data-nosnippet>639</a>///
+<a href=#640 id=640 data-nosnippet>640</a>/// You can also run using custom commands after `--`:
+<a href=#641 id=641 data-nosnippet>641</a>///
+<a href=#642 id=642 data-nosnippet>642</a>/// ```console
+<a href=#643 id=643 data-nosnippet>643</a>/// cargo zng trace -- cargo run my-exe
+<a href=#644 id=644 data-nosnippet>644</a>/// ```
+<a href=#645 id=645 data-nosnippet>645</a>///
+<a href=#646 id=646 data-nosnippet>646</a>/// Call `cargo zng trace --help` for more details.
+<a href=#647 id=647 data-nosnippet>647</a>///
+<a href=#648 id=648 data-nosnippet>648</a>/// # Full API
+<a href=#649 id=649 data-nosnippet>649</a>///
+<a href=#650 id=650 data-nosnippet>650</a>/// See [`zng_app::trace_recorder`] for the full API.
+<a href=#651 id=651 data-nosnippet>651</a>///
+<a href=#652 id=652 data-nosnippet>652</a>/// [`Trace`]: zng::app::trace_recorder::Trace
+<a href=#653 id=653 data-nosnippet>653</a>/// [filter syntax]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables
+<a href=#654 id=654 data-nosnippet>654</a></span><span class="attr">#[cfg(trace_recorder)]
+<a href=#655 id=655 data-nosnippet>655</a></span><span class="kw">pub mod </span>trace_recorder {
+<a href=#656 id=656 data-nosnippet>656</a>    <span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, stop_recording};
+<a href=#657 id=657 data-nosnippet>657</a>}</code></pre></div></section></main></body></html>
