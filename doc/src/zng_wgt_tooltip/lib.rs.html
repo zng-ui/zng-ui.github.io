@@ -533,54 +533,50 @@
 <a href=#533 id=533 data-nosnippet>533</a>/// Can be set on the [`tooltip`] property.
 <a href=#534 id=534 data-nosnippet>534</a>///
 <a href=#535 id=535 data-nosnippet>535</a>/// [`tooltip`]: fn@tooltip
-<a href=#536 id=536 data-nosnippet>536</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::Tip </span>{
-<a href=#537 id=537 data-nosnippet>537</a>    (<span class="macro-nonterminal">$child</span>:expr) =&gt; {
-<a href=#538 id=538 data-nosnippet>538</a>        child = <span class="macro-nonterminal">$child</span>;
-<a href=#539 id=539 data-nosnippet>539</a>    };
-<a href=#540 id=540 data-nosnippet>540</a>})]
-<a href=#541 id=541 data-nosnippet>541</a></span><span class="kw">pub struct </span>Tip(Popup);
-<a href=#542 id=542 data-nosnippet>542</a><span class="kw">impl </span>Tip {
-<a href=#543 id=543 data-nosnippet>543</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#544 id=544 data-nosnippet>544</a>        <span class="self">self</span>.style_intrinsic(STYLE_FN_VAR, <span class="macro">property_id!</span>(<span class="self">self</span>::style_fn));
-<a href=#545 id=545 data-nosnippet>545</a>        <span class="macro">widget_set!</span> {
-<a href=#546 id=546 data-nosnippet>546</a>            <span class="self">self</span>;
-<a href=#547 id=547 data-nosnippet>547</a>            hit_test_mode = <span class="bool-val">false</span>;
-<a href=#548 id=548 data-nosnippet>548</a>
-<a href=#549 id=549 data-nosnippet>549</a>            access_role = AccessRole::ToolTip;
-<a href=#550 id=550 data-nosnippet>550</a>
-<a href=#551 id=551 data-nosnippet>551</a>            focusable = <span class="bool-val">false</span>;
-<a href=#552 id=552 data-nosnippet>552</a>            focus_on_init = <span class="macro">unset!</span>;
+<a href=#536 id=536 data-nosnippet>536</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::Tip </span>{ (<span class="macro-nonterminal">$child</span>:expr) =&gt; { child = <span class="macro-nonterminal">$child</span>; }; })]
+<a href=#537 id=537 data-nosnippet>537</a></span><span class="kw">pub struct </span>Tip(Popup);
+<a href=#538 id=538 data-nosnippet>538</a><span class="kw">impl </span>Tip {
+<a href=#539 id=539 data-nosnippet>539</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#540 id=540 data-nosnippet>540</a>        <span class="self">self</span>.style_intrinsic(STYLE_FN_VAR, <span class="macro">property_id!</span>(<span class="self">self</span>::style_fn));
+<a href=#541 id=541 data-nosnippet>541</a>        <span class="macro">widget_set!</span> {
+<a href=#542 id=542 data-nosnippet>542</a>            <span class="self">self</span>;
+<a href=#543 id=543 data-nosnippet>543</a>            hit_test_mode = <span class="bool-val">false</span>;
+<a href=#544 id=544 data-nosnippet>544</a>
+<a href=#545 id=545 data-nosnippet>545</a>            access_role = AccessRole::ToolTip;
+<a href=#546 id=546 data-nosnippet>546</a>
+<a href=#547 id=547 data-nosnippet>547</a>            focusable = <span class="bool-val">false</span>;
+<a href=#548 id=548 data-nosnippet>548</a>            focus_on_init = <span class="macro">unset!</span>;
+<a href=#549 id=549 data-nosnippet>549</a>
+<a href=#550 id=550 data-nosnippet>550</a>            style_base_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">DefaultStyle!</span>());
+<a href=#551 id=551 data-nosnippet>551</a>        }
+<a href=#552 id=552 data-nosnippet>552</a>    }
 <a href=#553 id=553 data-nosnippet>553</a>
-<a href=#554 id=554 data-nosnippet>554</a>            style_base_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">DefaultStyle!</span>());
-<a href=#555 id=555 data-nosnippet>555</a>        }
-<a href=#556 id=556 data-nosnippet>556</a>    }
-<a href=#557 id=557 data-nosnippet>557</a>
-<a href=#558 id=558 data-nosnippet>558</a>    <span class="macro">widget_impl!</span> {
-<a href=#559 id=559 data-nosnippet>559</a>        <span class="doccomment">/// If the tooltip can be interacted with the mouse.
-<a href=#560 id=560 data-nosnippet>560</a>        ///
-<a href=#561 id=561 data-nosnippet>561</a>        /// This is disabled by default.
-<a href=#562 id=562 data-nosnippet>562</a>        </span><span class="kw">pub </span>hit_test_mode(mode: <span class="kw">impl </span>IntoVar&lt;HitTestMode&gt;);
-<a href=#563 id=563 data-nosnippet>563</a>    }
-<a href=#564 id=564 data-nosnippet>564</a>}
-<a href=#565 id=565 data-nosnippet>565</a><span class="macro">impl_style_fn!</span>(Tip);
-<a href=#566 id=566 data-nosnippet>566</a>
-<a href=#567 id=567 data-nosnippet>567</a><span class="doccomment">/// Tip default style.
-<a href=#568 id=568 data-nosnippet>568</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
-<a href=#569 id=569 data-nosnippet>569</a></span><span class="kw">pub struct </span>DefaultStyle(Style);
-<a href=#570 id=570 data-nosnippet>570</a><span class="kw">impl </span>DefaultStyle {
-<a href=#571 id=571 data-nosnippet>571</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#572 id=572 data-nosnippet>572</a>        <span class="macro">widget_set!</span> {
-<a href=#573 id=573 data-nosnippet>573</a>            <span class="self">self</span>;
-<a href=#574 id=574 data-nosnippet>574</a>            replace = <span class="bool-val">true</span>;
-<a href=#575 id=575 data-nosnippet>575</a>            padding = (<span class="number">4</span>, <span class="number">6</span>);
-<a href=#576 id=576 data-nosnippet>576</a>            corner_radius = <span class="number">3</span>;
-<a href=#577 id=577 data-nosnippet>577</a>            base_color = light_dark(rgb(<span class="number">235</span>, <span class="number">235</span>, <span class="number">235</span>), rgb(<span class="number">20</span>, <span class="number">20</span>, <span class="number">20</span>));
-<a href=#578 id=578 data-nosnippet>578</a>            background_color = colors::BASE_COLOR_VAR.rgba();
-<a href=#579 id=579 data-nosnippet>579</a>            zng_wgt_text::font_size = <span class="number">10</span>.pt();
-<a href=#580 id=580 data-nosnippet>580</a>            border = {
-<a href=#581 id=581 data-nosnippet>581</a>                widths: <span class="number">1</span>.px(),
-<a href=#582 id=582 data-nosnippet>582</a>                sides: colors::BASE_COLOR_VAR.shade_into(<span class="number">1</span>),
-<a href=#583 id=583 data-nosnippet>583</a>            };
-<a href=#584 id=584 data-nosnippet>584</a>        }
-<a href=#585 id=585 data-nosnippet>585</a>    }
-<a href=#586 id=586 data-nosnippet>586</a>}</code></pre></div></section></main></body></html>
+<a href=#554 id=554 data-nosnippet>554</a>    <span class="macro">widget_impl!</span> {
+<a href=#555 id=555 data-nosnippet>555</a>        <span class="doccomment">/// If the tooltip can be interacted with the mouse.
+<a href=#556 id=556 data-nosnippet>556</a>        ///
+<a href=#557 id=557 data-nosnippet>557</a>        /// This is disabled by default.
+<a href=#558 id=558 data-nosnippet>558</a>        </span><span class="kw">pub </span>hit_test_mode(mode: <span class="kw">impl </span>IntoVar&lt;HitTestMode&gt;);
+<a href=#559 id=559 data-nosnippet>559</a>    }
+<a href=#560 id=560 data-nosnippet>560</a>}
+<a href=#561 id=561 data-nosnippet>561</a><span class="macro">impl_style_fn!</span>(Tip);
+<a href=#562 id=562 data-nosnippet>562</a>
+<a href=#563 id=563 data-nosnippet>563</a><span class="doccomment">/// Tip default style.
+<a href=#564 id=564 data-nosnippet>564</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::DefaultStyle</span>)]
+<a href=#565 id=565 data-nosnippet>565</a></span><span class="kw">pub struct </span>DefaultStyle(Style);
+<a href=#566 id=566 data-nosnippet>566</a><span class="kw">impl </span>DefaultStyle {
+<a href=#567 id=567 data-nosnippet>567</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#568 id=568 data-nosnippet>568</a>        <span class="macro">widget_set!</span> {
+<a href=#569 id=569 data-nosnippet>569</a>            <span class="self">self</span>;
+<a href=#570 id=570 data-nosnippet>570</a>            replace = <span class="bool-val">true</span>;
+<a href=#571 id=571 data-nosnippet>571</a>            padding = (<span class="number">4</span>, <span class="number">6</span>);
+<a href=#572 id=572 data-nosnippet>572</a>            corner_radius = <span class="number">3</span>;
+<a href=#573 id=573 data-nosnippet>573</a>            base_color = light_dark(rgb(<span class="number">235</span>, <span class="number">235</span>, <span class="number">235</span>), rgb(<span class="number">20</span>, <span class="number">20</span>, <span class="number">20</span>));
+<a href=#574 id=574 data-nosnippet>574</a>            background_color = colors::BASE_COLOR_VAR.rgba();
+<a href=#575 id=575 data-nosnippet>575</a>            zng_wgt_text::font_size = <span class="number">10</span>.pt();
+<a href=#576 id=576 data-nosnippet>576</a>            border = {
+<a href=#577 id=577 data-nosnippet>577</a>                widths: <span class="number">1</span>.px(),
+<a href=#578 id=578 data-nosnippet>578</a>                sides: colors::BASE_COLOR_VAR.shade_into(<span class="number">1</span>),
+<a href=#579 id=579 data-nosnippet>579</a>            };
+<a href=#580 id=580 data-nosnippet>580</a>        }
+<a href=#581 id=581 data-nosnippet>581</a>    }
+<a href=#582 id=582 data-nosnippet>582</a>}</code></pre></div></section></main></body></html>

@@ -69,69 +69,78 @@
 <a href=#68 id=68 data-nosnippet>68</a>//!     text::rich_text = true;
 <a href=#69 id=69 data-nosnippet>69</a>//!     text::txt_selectable = true;
 <a href=#70 id=70 data-nosnippet>70</a>//!     children = ui_vec![
-<a href=#71 id=71 data-nosnippet>71</a>//!         Text! { txt = "red text"; font_color = colors::RED; },
-<a href=#72 id=72 data-nosnippet>72</a>//!         Text! { txt = " green text"; font_color = colors::GREEN; },
-<a href=#73 id=73 data-nosnippet>73</a>//!         Text! { txt = " blue text"; font_color = colors::BLUE; },
-<a href=#74 id=74 data-nosnippet>74</a>//!     ];
-<a href=#75 id=75 data-nosnippet>75</a>//! }
-<a href=#76 id=76 data-nosnippet>76</a>//! # ;
-<a href=#77 id=77 data-nosnippet>77</a>//! ```
-<a href=#78 id=78 data-nosnippet>78</a>//!
-<a href=#79 id=79 data-nosnippet>79</a>//! The example above declares a rich text with three different *text runs*, by enabling [`rich_text`] the wrap panel becomes
-<a href=#80 id=80 data-nosnippet>80</a>//! a rich text context that all descendant texts will use to coordinate text operations. In this case the [`txt_selectable`]
-<a href=#81 id=81 data-nosnippet>81</a>//! property enables text selection (and copy) for all descendants, without `rich_text` the descendant texts would allow
-<a href=#82 id=82 data-nosnippet>82</a>//! selection only within each text.
-<a href=#83 id=83 data-nosnippet>83</a>//!
-<a href=#84 id=84 data-nosnippet>84</a>//! The [`rich_text`] property together with [`txt_editable`] is the base for rich text editor widgets, out of the box the descendant texts
-<a href=#85 id=85 data-nosnippet>85</a>//! will coordinate the caret position and the focused text is edited by typing. A rich text editor needs to implement many other features,
-<a href=#86 id=86 data-nosnippet>86</a>//! such as removing empty text widgets, inserting new styled texts, encoding all these texts into an unified representation for saving.
+<a href=#71 id=71 data-nosnippet>71</a>//!         Text! {
+<a href=#72 id=72 data-nosnippet>72</a>//!             txt = "red text";
+<a href=#73 id=73 data-nosnippet>73</a>//!             font_color = colors::RED;
+<a href=#74 id=74 data-nosnippet>74</a>//!         },
+<a href=#75 id=75 data-nosnippet>75</a>//!         Text! {
+<a href=#76 id=76 data-nosnippet>76</a>//!             txt = " green text";
+<a href=#77 id=77 data-nosnippet>77</a>//!             font_color = colors::GREEN;
+<a href=#78 id=78 data-nosnippet>78</a>//!         },
+<a href=#79 id=79 data-nosnippet>79</a>//!         Text! {
+<a href=#80 id=80 data-nosnippet>80</a>//!             txt = " blue text";
+<a href=#81 id=81 data-nosnippet>81</a>//!             font_color = colors::BLUE;
+<a href=#82 id=82 data-nosnippet>82</a>//!         },
+<a href=#83 id=83 data-nosnippet>83</a>//!     ];
+<a href=#84 id=84 data-nosnippet>84</a>//! }
+<a href=#85 id=85 data-nosnippet>85</a>//! # ;
+<a href=#86 id=86 data-nosnippet>86</a>//! ```
 <a href=#87 id=87 data-nosnippet>87</a>//!
-<a href=#88 id=88 data-nosnippet>88</a>//! To suppress the default behavior of component texts you can handle keyboard events in the preview track and stop propagation,
-<a href=#89 id=89 data-nosnippet>89</a>//! same for mouse/touch events. The full text API crate provides the [`zng_wgt_text::cmd`] module that can be used to programmatically
-<a href=#90 id=90 data-nosnippet>90</a>//! control the texts. The *active* component text is just the focused widget, that can be controlled using the [`zng::focus`] module.
-<a href=#91 id=91 data-nosnippet>91</a>//!
-<a href=#92 id=92 data-nosnippet>92</a>//! [`Text!`]: struct@Text
-<a href=#93 id=93 data-nosnippet>93</a>//! [`SelectableText!`]: struct@crate::selectable::SelectableText
-<a href=#94 id=94 data-nosnippet>94</a>//! [`TextInput!`]: struct@crate::text_input::TextInput
-<a href=#95 id=95 data-nosnippet>95</a>//! [`label!`]: struct@crate::label::Label
-<a href=#96 id=96 data-nosnippet>96</a>//! [`Markdown!`]: struct@crate::markdown::Markdown
-<a href=#97 id=97 data-nosnippet>97</a>//! [`AnsiText!`]: struct@crate::ansi_text::AnsiText
-<a href=#98 id=98 data-nosnippet>98</a>//! [`wrap`]: crate::wrap
-<a href=#99 id=99 data-nosnippet>99</a>//! [`rich_text`]: fn@rich_text
-<a href=#100 id=100 data-nosnippet>100</a>//! [`txt_selectable`]: fn@txt_selectable
-<a href=#101 id=101 data-nosnippet>101</a>//! [`txt_editable`]: fn@txt_editable
-<a href=#102 id=102 data-nosnippet>102</a>//!
-<a href=#103 id=103 data-nosnippet>103</a>//! # Full API
-<a href=#104 id=104 data-nosnippet>104</a>//!
-<a href=#105 id=105 data-nosnippet>105</a>//! See [`zng_wgt_text`] for the full widget API.
-<a href=#106 id=106 data-nosnippet>106</a>
-<a href=#107 id=107 data-nosnippet>107</a></span><span class="kw">pub use </span>zng_txt::<span class="kw-2">*</span>;
-<a href=#108 id=108 data-nosnippet>108</a>
-<a href=#109 id=109 data-nosnippet>109</a><span class="kw">pub use </span>zng_wgt_text::{
-<a href=#110 id=110 data-nosnippet>110</a>    AutoSelection, CaretShape, CaretStatus, ChangeStopArgs, ChangeStopCause, Em, FONT_COLOR_VAR, InteractiveCaretMode, LangMix,
-<a href=#111 id=111 data-nosnippet>111</a>    LinesWrapCount, ParagraphMix, SelectionToolbarArgs, Strong, Text, TextOverflow, TxtParseValue, UnderlinePosition, UnderlineSkip,
-<a href=#112 id=112 data-nosnippet>112</a>    accepts_enter, accepts_tab, auto_selection, caret_color, change_stop_delay, direction, font_aa, font_annotation, font_caps,
-<a href=#113 id=113 data-nosnippet>113</a>    font_char_variant, font_cn_variant, font_color, font_common_lig, font_contextual_alt, font_discretionary_lig, font_ea_width,
-<a href=#114 id=114 data-nosnippet>114</a>    font_family, font_features, font_historical_forms, font_historical_lig, font_jp_variant, font_kerning, font_num_fraction,
-<a href=#115 id=115 data-nosnippet>115</a>    font_num_spacing, font_numeric, font_ornaments, font_palette, font_palette_colors, font_position, font_size, font_stretch, font_style,
-<a href=#116 id=116 data-nosnippet>116</a>    font_style_set, font_stylistic, font_swash, font_synthesis, font_variations, font_weight, get_caret_index, get_caret_status,
-<a href=#117 id=117 data-nosnippet>117</a>    get_chars_count, get_lines_len, get_lines_wrap_count, get_overflow, has_selection, hyphen_char, hyphens, ime_underline,
-<a href=#118 id=118 data-nosnippet>118</a>    interactive_caret, interactive_caret_visual, is_line_overflown, is_overflown, is_parse_pending, justify_mode, lang, letter_spacing,
-<a href=#119 id=119 data-nosnippet>119</a>    line_break, line_height, line_spacing, max_chars_count,
-<a href=#120 id=120 data-nosnippet>120</a>    node::{TEXT, set_interactive_caret_spot},
-<a href=#121 id=121 data-nosnippet>121</a>    obscure_txt, obscuring_char, on_change_stop, overline, overline_color, paragraph_spacing, rich_text, selection_color,
-<a href=#122 id=122 data-nosnippet>122</a>    selection_toolbar, selection_toolbar_anchor, selection_toolbar_fn, strikethrough, strikethrough_color, tab_length, txt_align,
-<a href=#123 id=123 data-nosnippet>123</a>    txt_editable, txt_overflow, txt_overflow_align, txt_selectable, txt_selectable_alt_only, underline, underline_color, underline_skip,
-<a href=#124 id=124 data-nosnippet>124</a>    white_space, word_break, word_spacing,
-<a href=#125 id=125 data-nosnippet>125</a>};
-<a href=#126 id=126 data-nosnippet>126</a>
-<a href=#127 id=127 data-nosnippet>127</a><span class="doccomment">/// Commands that controls the editable/selectable text.
-<a href=#128 id=128 data-nosnippet>128</a>///
-<a href=#129 id=129 data-nosnippet>129</a>/// Most of the normal text editing is controlled by keyboard events, these commands.
-<a href=#130 id=130 data-nosnippet>130</a>///
-<a href=#131 id=131 data-nosnippet>131</a>/// # Full API
-<a href=#132 id=132 data-nosnippet>132</a>///
-<a href=#133 id=133 data-nosnippet>133</a>/// See [`zng_wgt_text::cmd`] for the full API.
-<a href=#134 id=134 data-nosnippet>134</a></span><span class="kw">pub mod </span>cmd {
-<a href=#135 id=135 data-nosnippet>135</a>    <span class="kw">pub use </span>zng_wgt_text::cmd::{EDIT_CMD, PARSE_CMD, SELECT_ALL_CMD, SELECT_CMD, TextEditOp, TextSelectOp};
-<a href=#136 id=136 data-nosnippet>136</a>}</code></pre></div></section></main></body></html>
+<a href=#88 id=88 data-nosnippet>88</a>//! The example above declares a rich text with three different *text runs*, by enabling [`rich_text`] the wrap panel becomes
+<a href=#89 id=89 data-nosnippet>89</a>//! a rich text context that all descendant texts will use to coordinate text operations. In this case the [`txt_selectable`]
+<a href=#90 id=90 data-nosnippet>90</a>//! property enables text selection (and copy) for all descendants, without `rich_text` the descendant texts would allow
+<a href=#91 id=91 data-nosnippet>91</a>//! selection only within each text.
+<a href=#92 id=92 data-nosnippet>92</a>//!
+<a href=#93 id=93 data-nosnippet>93</a>//! The [`rich_text`] property together with [`txt_editable`] is the base for rich text editor widgets, out of the box the descendant texts
+<a href=#94 id=94 data-nosnippet>94</a>//! will coordinate the caret position and the focused text is edited by typing. A rich text editor needs to implement many other features,
+<a href=#95 id=95 data-nosnippet>95</a>//! such as removing empty text widgets, inserting new styled texts, encoding all these texts into an unified representation for saving.
+<a href=#96 id=96 data-nosnippet>96</a>//!
+<a href=#97 id=97 data-nosnippet>97</a>//! To suppress the default behavior of component texts you can handle keyboard events in the preview track and stop propagation,
+<a href=#98 id=98 data-nosnippet>98</a>//! same for mouse/touch events. The full text API crate provides the [`zng_wgt_text::cmd`] module that can be used to programmatically
+<a href=#99 id=99 data-nosnippet>99</a>//! control the texts. The *active* component text is just the focused widget, that can be controlled using the [`zng::focus`] module.
+<a href=#100 id=100 data-nosnippet>100</a>//!
+<a href=#101 id=101 data-nosnippet>101</a>//! [`Text!`]: struct@Text
+<a href=#102 id=102 data-nosnippet>102</a>//! [`SelectableText!`]: struct@crate::selectable::SelectableText
+<a href=#103 id=103 data-nosnippet>103</a>//! [`TextInput!`]: struct@crate::text_input::TextInput
+<a href=#104 id=104 data-nosnippet>104</a>//! [`label!`]: struct@crate::label::Label
+<a href=#105 id=105 data-nosnippet>105</a>//! [`Markdown!`]: struct@crate::markdown::Markdown
+<a href=#106 id=106 data-nosnippet>106</a>//! [`AnsiText!`]: struct@crate::ansi_text::AnsiText
+<a href=#107 id=107 data-nosnippet>107</a>//! [`wrap`]: crate::wrap
+<a href=#108 id=108 data-nosnippet>108</a>//! [`rich_text`]: fn@rich_text
+<a href=#109 id=109 data-nosnippet>109</a>//! [`txt_selectable`]: fn@txt_selectable
+<a href=#110 id=110 data-nosnippet>110</a>//! [`txt_editable`]: fn@txt_editable
+<a href=#111 id=111 data-nosnippet>111</a>//!
+<a href=#112 id=112 data-nosnippet>112</a>//! # Full API
+<a href=#113 id=113 data-nosnippet>113</a>//!
+<a href=#114 id=114 data-nosnippet>114</a>//! See [`zng_wgt_text`] for the full widget API.
+<a href=#115 id=115 data-nosnippet>115</a>
+<a href=#116 id=116 data-nosnippet>116</a></span><span class="kw">pub use </span>zng_txt::<span class="kw-2">*</span>;
+<a href=#117 id=117 data-nosnippet>117</a>
+<a href=#118 id=118 data-nosnippet>118</a><span class="kw">pub use </span>zng_wgt_text::{
+<a href=#119 id=119 data-nosnippet>119</a>    AutoSelection, CaretShape, CaretStatus, ChangeStopArgs, ChangeStopCause, Em, FONT_COLOR_VAR, InteractiveCaretMode, LangMix,
+<a href=#120 id=120 data-nosnippet>120</a>    LinesWrapCount, ParagraphMix, SelectionToolbarArgs, Strong, Text, TextOverflow, TxtParseValue, UnderlinePosition, UnderlineSkip,
+<a href=#121 id=121 data-nosnippet>121</a>    accepts_enter, accepts_tab, auto_selection, caret_color, change_stop_delay, direction, font_aa, font_annotation, font_caps,
+<a href=#122 id=122 data-nosnippet>122</a>    font_char_variant, font_cn_variant, font_color, font_common_lig, font_contextual_alt, font_discretionary_lig, font_ea_width,
+<a href=#123 id=123 data-nosnippet>123</a>    font_family, font_features, font_historical_forms, font_historical_lig, font_jp_variant, font_kerning, font_num_fraction,
+<a href=#124 id=124 data-nosnippet>124</a>    font_num_spacing, font_numeric, font_ornaments, font_palette, font_palette_colors, font_position, font_size, font_stretch, font_style,
+<a href=#125 id=125 data-nosnippet>125</a>    font_style_set, font_stylistic, font_swash, font_synthesis, font_variations, font_weight, get_caret_index, get_caret_status,
+<a href=#126 id=126 data-nosnippet>126</a>    get_chars_count, get_lines_len, get_lines_wrap_count, get_overflow, has_selection, hyphen_char, hyphens, ime_underline,
+<a href=#127 id=127 data-nosnippet>127</a>    interactive_caret, interactive_caret_visual, is_line_overflown, is_overflown, is_parse_pending, justify_mode, lang, letter_spacing,
+<a href=#128 id=128 data-nosnippet>128</a>    line_break, line_height, line_spacing, max_chars_count,
+<a href=#129 id=129 data-nosnippet>129</a>    node::{TEXT, set_interactive_caret_spot},
+<a href=#130 id=130 data-nosnippet>130</a>    obscure_txt, obscuring_char, on_change_stop, overline, overline_color, paragraph_spacing, rich_text, selection_color,
+<a href=#131 id=131 data-nosnippet>131</a>    selection_toolbar, selection_toolbar_anchor, selection_toolbar_fn, strikethrough, strikethrough_color, tab_length, txt_align,
+<a href=#132 id=132 data-nosnippet>132</a>    txt_editable, txt_overflow, txt_overflow_align, txt_selectable, txt_selectable_alt_only, underline, underline_color, underline_skip,
+<a href=#133 id=133 data-nosnippet>133</a>    white_space, word_break, word_spacing,
+<a href=#134 id=134 data-nosnippet>134</a>};
+<a href=#135 id=135 data-nosnippet>135</a>
+<a href=#136 id=136 data-nosnippet>136</a><span class="doccomment">/// Commands that controls the editable/selectable text.
+<a href=#137 id=137 data-nosnippet>137</a>///
+<a href=#138 id=138 data-nosnippet>138</a>/// Most of the normal text editing is controlled by keyboard events, these commands.
+<a href=#139 id=139 data-nosnippet>139</a>///
+<a href=#140 id=140 data-nosnippet>140</a>/// # Full API
+<a href=#141 id=141 data-nosnippet>141</a>///
+<a href=#142 id=142 data-nosnippet>142</a>/// See [`zng_wgt_text::cmd`] for the full API.
+<a href=#143 id=143 data-nosnippet>143</a></span><span class="kw">pub mod </span>cmd {
+<a href=#144 id=144 data-nosnippet>144</a>    <span class="kw">pub use </span>zng_wgt_text::cmd::{EDIT_CMD, PARSE_CMD, SELECT_ALL_CMD, SELECT_CMD, TextEditOp, TextSelectOp};
+<a href=#145 id=145 data-nosnippet>145</a>}</code></pre></div></section></main></body></html>

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 </script>
-</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_app/index.html">zng_app</a><span class="version">0.17.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">command</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#conventions" title="Conventions">Conventions</a></li><li><a href="#shortcuts" title="Shortcuts">Shortcuts</a></li><li><a href="#properties" title="Properties">Properties</a></li><li><a href="#examples" title="Examples">Examples</a></li><li><a href="#localization" title="Localization">Localization</a><ul><li><a href="#limitations" title="Limitations">Limitations</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate zng_<wbr>app</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">zng_app</a></div><h1>Macro <span class="macro">command</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/zng_app/event/command.rs.html#137-151">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! command {
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_app/index.html">zng_app</a><span class="version">0.17.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">command</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#conventions" title="Conventions">Conventions</a></li><li><a href="#shortcuts" title="Shortcuts">Shortcuts</a></li><li><a href="#properties" title="Properties">Properties</a></li><li><a href="#examples" title="Examples">Examples</a></li><li><a href="#localization" title="Localization">Localization</a><ul><li><a href="#limitations" title="Limitations">Limitations</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate zng_<wbr>app</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">zng_app</a></div><h1>Macro <span class="macro">command</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/zng_app/event/command.rs.html#143-157">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! command {
     ($(
         $(#[$attr:meta])*
         $vis:vis static $COMMAND:ident $(=&gt; |$cmd:ident|$custom_meta_init:expr ;)? $(= { $($meta_ident:ident $(!)? : $meta_init:expr),* $(,)? };)? $(;)?
@@ -65,20 +65,26 @@ for the command.</p>
 }</code></pre></div>
 <p>You can also initialize metadata:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{
+    event::{CommandInfoExt, CommandNameExt, command},
+    shortcut::{CommandShortcutExt, shortcut},
+};
 
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represents the **foo** action.
     </span><span class="kw">pub static </span>FOO_CMD = {
         name: <span class="string">"Foo!"</span>,
         info: <span class="string">"Does the foo thing"</span>,
-        shortcut: <span class="macro">shortcut!</span>[CTRL+<span class="string">'F'</span>],
+        shortcut: <span class="macro">shortcut!</span>[CTRL + <span class="string">'F'</span>],
     };
 }</code></pre></div>
 <p>The initialization uses the <a href="event/struct.Command.html#extensions" title="struct zng_app::event::Command">command extensions</a> pattern and runs once for each app.</p>
 <p>Or you can use a custom closure to initialize the command:</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng_app::{
+    event::{CommandInfoExt, CommandNameExt, command},
+    shortcut::{CommandShortcutExt, shortcut},
+};
 
 <span class="macro">command!</span> {
     <span class="doccomment">/// Represents the **foo** action.

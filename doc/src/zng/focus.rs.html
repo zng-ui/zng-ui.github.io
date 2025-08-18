@@ -12,48 +12,48 @@
 <a href=#11 id=11 data-nosnippet>11</a>//! [`on_focus_changed`](fn@on_focus_changed) and other properties on this module.
 <a href=#12 id=12 data-nosnippet>12</a>//!
 <a href=#13 id=13 data-nosnippet>13</a>//! ```
-<a href=#14 id=14 data-nosnippet>14</a>//! use zng::{prelude::*, focus};
+<a href=#14 id=14 data-nosnippet>14</a>//! use zng::{focus, prelude::*};
 <a href=#15 id=15 data-nosnippet>15</a>//!
 <a href=#16 id=16 data-nosnippet>16</a>//! # let _scope = APP.defaults();
 <a href=#17 id=17 data-nosnippet>17</a>//!
 <a href=#18 id=18 data-nosnippet>18</a>//! focus::FOCUS_CHANGED_EVENT
-<a href=#19 id=19 data-nosnippet>19</a>//! .on_pre_event(app_hn!(|args: &amp;focus::FocusChangedArgs, _| {
-<a href=#20 id=20 data-nosnippet>20</a>//!     println!("new_focus: {:?}", args.new_focus);
-<a href=#21 id=21 data-nosnippet>21</a>//! }))
-<a href=#22 id=22 data-nosnippet>22</a>//! .perm();
+<a href=#19 id=19 data-nosnippet>19</a>//!     .on_pre_event(app_hn!(|args: &amp;focus::FocusChangedArgs, _| {
+<a href=#20 id=20 data-nosnippet>20</a>//!         println!("new_focus: {:?}", args.new_focus);
+<a href=#21 id=21 data-nosnippet>21</a>//!     }))
+<a href=#22 id=22 data-nosnippet>22</a>//!     .perm();
 <a href=#23 id=23 data-nosnippet>23</a>//!
 <a href=#24 id=24 data-nosnippet>24</a>//! # let _ =
 <a href=#25 id=25 data-nosnippet>25</a>//! Stack!(
-<a href=#26 id=26 data-nosnippet>26</a>//! top_to_bottom,
-<a href=#27 id=27 data-nosnippet>27</a>//! 5,
-<a href=#28 id=28 data-nosnippet>28</a>//! ui_vec![
-<a href=#29 id=29 data-nosnippet>29</a>//!     Wgt! {
-<a href=#30 id=30 data-nosnippet>30</a>//!         id = "subject";
-<a href=#31 id=31 data-nosnippet>31</a>//!         focus::focusable = true;
+<a href=#26 id=26 data-nosnippet>26</a>//!     top_to_bottom,
+<a href=#27 id=27 data-nosnippet>27</a>//!     5,
+<a href=#28 id=28 data-nosnippet>28</a>//!     ui_vec![
+<a href=#29 id=29 data-nosnippet>29</a>//!         Wgt! {
+<a href=#30 id=30 data-nosnippet>30</a>//!             id = "subject";
+<a href=#31 id=31 data-nosnippet>31</a>//!             focus::focusable = true;
 <a href=#32 id=32 data-nosnippet>32</a>//!
-<a href=#33 id=33 data-nosnippet>33</a>//!         layout::size = (100, 30);
-<a href=#34 id=34 data-nosnippet>34</a>//!         widget::background_color = colors::RED;
-<a href=#35 id=35 data-nosnippet>35</a>//!         when *#focus::is_focused {
-<a href=#36 id=36 data-nosnippet>36</a>//!             widget::background_color = colors::GREEN;
-<a href=#37 id=37 data-nosnippet>37</a>//!         }
+<a href=#33 id=33 data-nosnippet>33</a>//!             layout::size = (100, 30);
+<a href=#34 id=34 data-nosnippet>34</a>//!             widget::background_color = colors::RED;
+<a href=#35 id=35 data-nosnippet>35</a>//!             when *#focus::is_focused {
+<a href=#36 id=36 data-nosnippet>36</a>//!                 widget::background_color = colors::GREEN;
+<a href=#37 id=37 data-nosnippet>37</a>//!             }
 <a href=#38 id=38 data-nosnippet>38</a>//!
-<a href=#39 id=39 data-nosnippet>39</a>//!         focus::on_focus = hn!(|_| {
-<a href=#40 id=40 data-nosnippet>40</a>//!             println!("subject on_focus");
-<a href=#41 id=41 data-nosnippet>41</a>//!         });
-<a href=#42 id=42 data-nosnippet>42</a>//!         focus::on_blur = hn!(|_| {
-<a href=#43 id=43 data-nosnippet>43</a>//!             println!("subject on_blur");
-<a href=#44 id=44 data-nosnippet>44</a>//!         });
-<a href=#45 id=45 data-nosnippet>45</a>//!     },
-<a href=#46 id=46 data-nosnippet>46</a>//!     Button! {
-<a href=#47 id=47 data-nosnippet>47</a>//!         child = Text!("Focus subject");
-<a href=#48 id=48 data-nosnippet>48</a>//!         on_click = hn!(|_| {
-<a href=#49 id=49 data-nosnippet>49</a>//!             FOCUS.focus_widget("subject", /*highlight: */ false);
-<a href=#50 id=50 data-nosnippet>50</a>//!         })
-<a href=#51 id=51 data-nosnippet>51</a>//!     },
-<a href=#52 id=52 data-nosnippet>52</a>//!     Text! {
-<a href=#53 id=53 data-nosnippet>53</a>//!         txt = FOCUS.focused().map(|f| formatx!("focused {f:?}"));
-<a href=#54 id=54 data-nosnippet>54</a>//!     }
-<a href=#55 id=55 data-nosnippet>55</a>//! ]
+<a href=#39 id=39 data-nosnippet>39</a>//!             focus::on_focus = hn!(|_| {
+<a href=#40 id=40 data-nosnippet>40</a>//!                 println!("subject on_focus");
+<a href=#41 id=41 data-nosnippet>41</a>//!             });
+<a href=#42 id=42 data-nosnippet>42</a>//!             focus::on_blur = hn!(|_| {
+<a href=#43 id=43 data-nosnippet>43</a>//!                 println!("subject on_blur");
+<a href=#44 id=44 data-nosnippet>44</a>//!             });
+<a href=#45 id=45 data-nosnippet>45</a>//!         },
+<a href=#46 id=46 data-nosnippet>46</a>//!         Button! {
+<a href=#47 id=47 data-nosnippet>47</a>//!             child = Text!("Focus subject");
+<a href=#48 id=48 data-nosnippet>48</a>//!             on_click = hn!(|_| {
+<a href=#49 id=49 data-nosnippet>49</a>//!                 FOCUS.focus_widget("subject", /*highlight: */ false);
+<a href=#50 id=50 data-nosnippet>50</a>//!             });
+<a href=#51 id=51 data-nosnippet>51</a>//!         },
+<a href=#52 id=52 data-nosnippet>52</a>//!         Text! {
+<a href=#53 id=53 data-nosnippet>53</a>//!             txt = FOCUS.focused().map(|f| formatx!("focused {f:?}"));
+<a href=#54 id=54 data-nosnippet>54</a>//!         }
+<a href=#55 id=55 data-nosnippet>55</a>//!     ]
 <a href=#56 id=56 data-nosnippet>56</a>//! )
 <a href=#57 id=57 data-nosnippet>57</a>//! # ;
 <a href=#58 id=58 data-nosnippet>58</a>//! ```

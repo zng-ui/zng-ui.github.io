@@ -9,39 +9,38 @@
 <a href=#8 id=8 data-nosnippet>8</a>//! use zng::prelude::*;
 <a href=#9 id=9 data-nosnippet>9</a>//! # let _scope = APP.defaults();
 <a href=#10 id=10 data-nosnippet>10</a>//!
-<a href=#11 id=11 data-nosnippet>11</a>//!
-<a href=#12 id=12 data-nosnippet>12</a>//! let mut popup = None;
-<a href=#13 id=13 data-nosnippet>13</a>//! let is_closed = var(true);
-<a href=#14 id=14 data-nosnippet>14</a>//! # let _ =
-<a href=#15 id=15 data-nosnippet>15</a>//! Button! {
-<a href=#16 id=16 data-nosnippet>16</a>//!     layout::align = layout::Align::CENTER;
-<a href=#17 id=17 data-nosnippet>17</a>//!     child = Text!(is_closed.map(|&amp;b| if b { "Open Popup" } else { "Close Popup" }.into()));
-<a href=#18 id=18 data-nosnippet>18</a>//!     on_click = hn!(|_| {
-<a href=#19 id=19 data-nosnippet>19</a>//!         if is_closed.get() {
-<a href=#20 id=20 data-nosnippet>20</a>//!             let p = POPUP.open(zng::popup::Popup! {
-<a href=#21 id=21 data-nosnippet>21</a>//!                 child = Text!("Popup content!");
-<a href=#22 id=22 data-nosnippet>22</a>//!             });
-<a href=#23 id=23 data-nosnippet>23</a>//!             p.bind_map(&amp;is_closed, |s| matches!(s, zng::popup::PopupState::Closed)).perm();
-<a href=#24 id=24 data-nosnippet>24</a>//!             popup = Some(p);
-<a href=#25 id=25 data-nosnippet>25</a>//!         } else if let Some(p) = popup.take() {
-<a href=#26 id=26 data-nosnippet>26</a>//!             POPUP.close(&amp;p);
-<a href=#27 id=27 data-nosnippet>27</a>//!         }
-<a href=#28 id=28 data-nosnippet>28</a>//!     })
-<a href=#29 id=29 data-nosnippet>29</a>//! }
-<a href=#30 id=30 data-nosnippet>30</a>//! # ;
-<a href=#31 id=31 data-nosnippet>31</a>//! ```
-<a href=#32 id=32 data-nosnippet>32</a>//!
-<a href=#33 id=33 data-nosnippet>33</a>//! The example above declares a button that opens and closes a popup
-<a href=#34 id=34 data-nosnippet>34</a>//!
-<a href=#35 id=35 data-nosnippet>35</a>//! Note that the toggle widget provides a [combo](crate::toggle#Combo) style and the [`checked_popup`](struct@crate::toggle::Toggle#checked_popup)
-<a href=#36 id=36 data-nosnippet>36</a>//! property that implements a similar behavior.
-<a href=#37 id=37 data-nosnippet>37</a>//!
-<a href=#38 id=38 data-nosnippet>38</a>//! # Full API
-<a href=#39 id=39 data-nosnippet>39</a>//!
-<a href=#40 id=40 data-nosnippet>40</a>//! See [`zng_wgt_layer::popup`] for the full widget API.
-<a href=#41 id=41 data-nosnippet>41</a>
-<a href=#42 id=42 data-nosnippet>42</a></span><span class="kw">pub use </span>zng_wgt_layer::popup::{
-<a href=#43 id=43 data-nosnippet>43</a>    ContextCapture, DefaultStyle, POPUP, POPUP_CLOSE_CMD, POPUP_CLOSE_REQUESTED_EVENT, Popup, PopupCloseMode, PopupCloseRequestedArgs,
-<a href=#44 id=44 data-nosnippet>44</a>    PopupState, anchor_mode, close_delay, close_on_focus_leave, context_capture, is_close_delaying, on_popup_close_requested,
-<a href=#45 id=45 data-nosnippet>45</a>    on_pre_popup_close_requested, style_fn,
-<a href=#46 id=46 data-nosnippet>46</a>};</code></pre></div></section></main></body></html>
+<a href=#11 id=11 data-nosnippet>11</a>//! let mut popup = None;
+<a href=#12 id=12 data-nosnippet>12</a>//! let is_closed = var(true);
+<a href=#13 id=13 data-nosnippet>13</a>//! # let _ =
+<a href=#14 id=14 data-nosnippet>14</a>//! Button! {
+<a href=#15 id=15 data-nosnippet>15</a>//!     layout::align = layout::Align::CENTER;
+<a href=#16 id=16 data-nosnippet>16</a>//!     child = Text!(is_closed.map(|&amp;b| if b { "Open Popup" } else { "Close Popup" }.into()));
+<a href=#17 id=17 data-nosnippet>17</a>//!     on_click = hn!(|_| {
+<a href=#18 id=18 data-nosnippet>18</a>//!         if is_closed.get() {
+<a href=#19 id=19 data-nosnippet>19</a>//!             let p = POPUP.open(zng::popup::Popup! {
+<a href=#20 id=20 data-nosnippet>20</a>//!                 child = Text!("Popup content!");
+<a href=#21 id=21 data-nosnippet>21</a>//!             });
+<a href=#22 id=22 data-nosnippet>22</a>//!             p.bind_map(&amp;is_closed, |s| matches!(s, zng::popup::PopupState::Closed)).perm();
+<a href=#23 id=23 data-nosnippet>23</a>//!             popup = Some(p);
+<a href=#24 id=24 data-nosnippet>24</a>//!         } else if let Some(p) = popup.take() {
+<a href=#25 id=25 data-nosnippet>25</a>//!             POPUP.close(&amp;p);
+<a href=#26 id=26 data-nosnippet>26</a>//!         }
+<a href=#27 id=27 data-nosnippet>27</a>//!     });
+<a href=#28 id=28 data-nosnippet>28</a>//! }
+<a href=#29 id=29 data-nosnippet>29</a>//! # ;
+<a href=#30 id=30 data-nosnippet>30</a>//! ```
+<a href=#31 id=31 data-nosnippet>31</a>//!
+<a href=#32 id=32 data-nosnippet>32</a>//! The example above declares a button that opens and closes a popup
+<a href=#33 id=33 data-nosnippet>33</a>//!
+<a href=#34 id=34 data-nosnippet>34</a>//! Note that the toggle widget provides a [combo](crate::toggle#Combo) style and the [`checked_popup`](struct@crate::toggle::Toggle#checked_popup)
+<a href=#35 id=35 data-nosnippet>35</a>//! property that implements a similar behavior.
+<a href=#36 id=36 data-nosnippet>36</a>//!
+<a href=#37 id=37 data-nosnippet>37</a>//! # Full API
+<a href=#38 id=38 data-nosnippet>38</a>//!
+<a href=#39 id=39 data-nosnippet>39</a>//! See [`zng_wgt_layer::popup`] for the full widget API.
+<a href=#40 id=40 data-nosnippet>40</a>
+<a href=#41 id=41 data-nosnippet>41</a></span><span class="kw">pub use </span>zng_wgt_layer::popup::{
+<a href=#42 id=42 data-nosnippet>42</a>    ContextCapture, DefaultStyle, POPUP, POPUP_CLOSE_CMD, POPUP_CLOSE_REQUESTED_EVENT, Popup, PopupCloseMode, PopupCloseRequestedArgs,
+<a href=#43 id=43 data-nosnippet>43</a>    PopupState, anchor_mode, close_delay, close_on_focus_leave, context_capture, is_close_delaying, on_popup_close_requested,
+<a href=#44 id=44 data-nosnippet>44</a>    on_pre_popup_close_requested, style_fn,
+<a href=#45 id=45 data-nosnippet>45</a>};</code></pre></div></section></main></body></html>

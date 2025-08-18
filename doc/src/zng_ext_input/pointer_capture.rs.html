@@ -362,136 +362,132 @@
 <a href=#362 id=362 data-nosnippet>362</a><span class="macro">impl_from_and_into_var!</span> {
 <a href=#363 id=363 data-nosnippet>363</a>    <span class="doccomment">/// Convert `true` to [`CaptureMode::Widget`] and `false` to [`CaptureMode::Window`].
 <a href=#364 id=364 data-nosnippet>364</a>    </span><span class="kw">fn </span>from(widget: bool) -&gt; CaptureMode {
-<a href=#365 id=365 data-nosnippet>365</a>        <span class="kw">if </span>widget {
-<a href=#366 id=366 data-nosnippet>366</a>            CaptureMode::Widget
-<a href=#367 id=367 data-nosnippet>367</a>        } <span class="kw">else </span>{
-<a href=#368 id=368 data-nosnippet>368</a>            CaptureMode::Window
-<a href=#369 id=369 data-nosnippet>369</a>        }
-<a href=#370 id=370 data-nosnippet>370</a>    }
-<a href=#371 id=371 data-nosnippet>371</a>}
-<a href=#372 id=372 data-nosnippet>372</a>
-<a href=#373 id=373 data-nosnippet>373</a><span class="doccomment">/// Information about mouse and touch capture in a mouse or touch event argument.
-<a href=#374 id=374 data-nosnippet>374</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq)]
-<a href=#375 id=375 data-nosnippet>375</a></span><span class="kw">pub struct </span>CaptureInfo {
-<a href=#376 id=376 data-nosnippet>376</a>    <span class="doccomment">/// Widget that is capturing all mouse and touch events. The widget and all ancestors are [`ENABLED`].
-<a href=#377 id=377 data-nosnippet>377</a>    ///
-<a href=#378 id=378 data-nosnippet>378</a>    /// This is the window root widget for capture mode `Window`.
-<a href=#379 id=379 data-nosnippet>379</a>    ///
-<a href=#380 id=380 data-nosnippet>380</a>    /// [`ENABLED`]: zng_app::widget::info::Interactivity::ENABLED
-<a href=#381 id=381 data-nosnippet>381</a>    </span><span class="kw">pub </span>target: WidgetPath,
-<a href=#382 id=382 data-nosnippet>382</a>    <span class="doccomment">/// Capture mode, see [`allows`](Self::allows) for more details.
-<a href=#383 id=383 data-nosnippet>383</a>    </span><span class="kw">pub </span>mode: CaptureMode,
-<a href=#384 id=384 data-nosnippet>384</a>}
-<a href=#385 id=385 data-nosnippet>385</a><span class="kw">impl </span>CaptureInfo {
-<a href=#386 id=386 data-nosnippet>386</a>    <span class="doccomment">/// If the widget is allowed by the current capture.
-<a href=#387 id=387 data-nosnippet>387</a>    ///
-<a href=#388 id=388 data-nosnippet>388</a>    /// This method uses [`WINDOW`] and [`WIDGET`] to identify the widget context.
-<a href=#389 id=389 data-nosnippet>389</a>    ///
-<a href=#390 id=390 data-nosnippet>390</a>    /// | Mode           | Allows                                             |
-<a href=#391 id=391 data-nosnippet>391</a>    /// |----------------|----------------------------------------------------|
-<a href=#392 id=392 data-nosnippet>392</a>    /// | `Window`       | All widgets in the same window.                    |
-<a href=#393 id=393 data-nosnippet>393</a>    /// | `Subtree`      | All widgets that have the `target` in their path.  |
-<a href=#394 id=394 data-nosnippet>394</a>    /// | `Widget`       | Only the `target` widget.                          |
-<a href=#395 id=395 data-nosnippet>395</a>    ///
-<a href=#396 id=396 data-nosnippet>396</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
-<a href=#397 id=397 data-nosnippet>397</a>    /// [`WINDOW`]: zng_app::window::WINDOW
-<a href=#398 id=398 data-nosnippet>398</a>    </span><span class="kw">pub fn </span>allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#399 id=399 data-nosnippet>399</a>        <span class="kw">match </span><span class="self">self</span>.mode {
-<a href=#400 id=400 data-nosnippet>400</a>            CaptureMode::Window =&gt; <span class="self">self</span>.target.window_id() == WINDOW.id(),
-<a href=#401 id=401 data-nosnippet>401</a>            CaptureMode::Widget =&gt; <span class="self">self</span>.target.widget_id() == WIDGET.id(),
-<a href=#402 id=402 data-nosnippet>402</a>            CaptureMode::Subtree =&gt; {
-<a href=#403 id=403 data-nosnippet>403</a>                <span class="kw">let </span>tree = WINDOW.info();
-<a href=#404 id=404 data-nosnippet>404</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = tree.get(WIDGET.id()) {
-<a href=#405 id=405 data-nosnippet>405</a>                    <span class="kw">for </span>wgt <span class="kw">in </span>wgt.self_and_ancestors() {
-<a href=#406 id=406 data-nosnippet>406</a>                        <span class="kw">if </span>wgt.id() == <span class="self">self</span>.target.widget_id() {
-<a href=#407 id=407 data-nosnippet>407</a>                            <span class="kw">return </span><span class="bool-val">true</span>;
-<a href=#408 id=408 data-nosnippet>408</a>                        }
-<a href=#409 id=409 data-nosnippet>409</a>                    }
-<a href=#410 id=410 data-nosnippet>410</a>                }
-<a href=#411 id=411 data-nosnippet>411</a>                <span class="bool-val">false
-<a href=#412 id=412 data-nosnippet>412</a>            </span>}
-<a href=#413 id=413 data-nosnippet>413</a>        }
-<a href=#414 id=414 data-nosnippet>414</a>    }
-<a href=#415 id=415 data-nosnippet>415</a>}
-<a href=#416 id=416 data-nosnippet>416</a>
-<a href=#417 id=417 data-nosnippet>417</a><span class="macro">app_local!</span> {
-<a href=#418 id=418 data-nosnippet>418</a>    <span class="kw">static </span>POINTER_CAPTURE_SV: PointerCaptureService = PointerCaptureService {
-<a href=#419 id=419 data-nosnippet>419</a>        capture_value: <span class="prelude-val">None</span>,
-<a href=#420 id=420 data-nosnippet>420</a>        capture: var(<span class="prelude-val">None</span>),
-<a href=#421 id=421 data-nosnippet>421</a>        capture_request: <span class="prelude-val">None</span>,
-<a href=#422 id=422 data-nosnippet>422</a>        release_requested: <span class="bool-val">false</span>,
-<a href=#423 id=423 data-nosnippet>423</a>    };
-<a href=#424 id=424 data-nosnippet>424</a>}
-<a href=#425 id=425 data-nosnippet>425</a>
-<a href=#426 id=426 data-nosnippet>426</a><span class="kw">struct </span>PointerCaptureService {
-<a href=#427 id=427 data-nosnippet>427</a>    capture_value: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
-<a href=#428 id=428 data-nosnippet>428</a>    capture: Var&lt;<span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;&gt;,
-<a href=#429 id=429 data-nosnippet>429</a>    capture_request: <span class="prelude-ty">Option</span>&lt;(WidgetId, CaptureMode)&gt;,
-<a href=#430 id=430 data-nosnippet>430</a>    release_requested: bool,
-<a href=#431 id=431 data-nosnippet>431</a>}
-<a href=#432 id=432 data-nosnippet>432</a>
-<a href=#433 id=433 data-nosnippet>433</a><span class="macro">event!</span> {
-<a href=#434 id=434 data-nosnippet>434</a>    <span class="doccomment">/// Mouse and touch capture changed event.
-<a href=#435 id=435 data-nosnippet>435</a>    </span><span class="kw">pub static </span>POINTER_CAPTURE_EVENT: PointerCaptureArgs;
-<a href=#436 id=436 data-nosnippet>436</a>}
-<a href=#437 id=437 data-nosnippet>437</a>
-<a href=#438 id=438 data-nosnippet>438</a><span class="macro">event_args!</span> {
-<a href=#439 id=439 data-nosnippet>439</a>    <span class="doccomment">/// [`POINTER_CAPTURE_EVENT`] arguments.
-<a href=#440 id=440 data-nosnippet>440</a>    </span><span class="kw">pub struct </span>PointerCaptureArgs {
-<a href=#441 id=441 data-nosnippet>441</a>        <span class="doccomment">/// Previous mouse and touch capture target and mode.
-<a href=#442 id=442 data-nosnippet>442</a>        </span><span class="kw">pub </span>prev_capture: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
-<a href=#443 id=443 data-nosnippet>443</a>        <span class="doccomment">/// new mouse and capture target and mode.
-<a href=#444 id=444 data-nosnippet>444</a>        </span><span class="kw">pub </span>new_capture: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
-<a href=#445 id=445 data-nosnippet>445</a>
-<a href=#446 id=446 data-nosnippet>446</a>        ..
-<a href=#447 id=447 data-nosnippet>447</a>
-<a href=#448 id=448 data-nosnippet>448</a>        <span class="doccomment">/// The [`prev_capture`] and [`new_capture`] paths start with the current path.
-<a href=#449 id=449 data-nosnippet>449</a>        ///
-<a href=#450 id=450 data-nosnippet>450</a>        /// [`prev_capture`]: Self::prev_capture
-<a href=#451 id=451 data-nosnippet>451</a>        /// [`new_capture`]: Self::new_capture
-<a href=#452 id=452 data-nosnippet>452</a>        </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
-<a href=#453 id=453 data-nosnippet>453</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture {
-<a href=#454 id=454 data-nosnippet>454</a>                list.insert_wgt(<span class="kw-2">&amp;</span>p.target);
-<a href=#455 id=455 data-nosnippet>455</a>            }
-<a href=#456 id=456 data-nosnippet>456</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture {
-<a href=#457 id=457 data-nosnippet>457</a>                list.insert_wgt(<span class="kw-2">&amp;</span>p.target);
-<a href=#458 id=458 data-nosnippet>458</a>            }
-<a href=#459 id=459 data-nosnippet>459</a>        }
-<a href=#460 id=460 data-nosnippet>460</a>    }
-<a href=#461 id=461 data-nosnippet>461</a>}
-<a href=#462 id=462 data-nosnippet>462</a>
-<a href=#463 id=463 data-nosnippet>463</a><span class="kw">impl </span>PointerCaptureArgs {
-<a href=#464 id=464 data-nosnippet>464</a>    <span class="doccomment">/// If the same widget has pointer capture, but the widget path changed.
-<a href=#465 id=465 data-nosnippet>465</a>    </span><span class="kw">pub fn </span>is_widget_move(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#466 id=466 data-nosnippet>466</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
-<a href=#467 id=467 data-nosnippet>467</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == new.target.widget_id() &amp;&amp; prev.target != new.target,
-<a href=#468 id=468 data-nosnippet>468</a>            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
-<a href=#469 id=469 data-nosnippet>469</a>        }
-<a href=#470 id=470 data-nosnippet>470</a>    }
-<a href=#471 id=471 data-nosnippet>471</a>
-<a href=#472 id=472 data-nosnippet>472</a>    <span class="doccomment">/// If the same widget has pointer capture, but the capture mode changed.
-<a href=#473 id=473 data-nosnippet>473</a>    </span><span class="kw">pub fn </span>is_mode_change(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#474 id=474 data-nosnippet>474</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
-<a href=#475 id=475 data-nosnippet>475</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == new.target.widget_id() &amp;&amp; prev.mode != new.mode,
-<a href=#476 id=476 data-nosnippet>476</a>            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
-<a href=#477 id=477 data-nosnippet>477</a>        }
-<a href=#478 id=478 data-nosnippet>478</a>    }
-<a href=#479 id=479 data-nosnippet>479</a>
-<a href=#480 id=480 data-nosnippet>480</a>    <span class="doccomment">/// If the `widget_id` lost pointer capture with this update.
-<a href=#481 id=481 data-nosnippet>481</a>    </span><span class="kw">pub fn </span>is_lost(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#482 id=482 data-nosnippet>482</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
-<a href=#483 id=483 data-nosnippet>483</a>            (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-<a href=#484 id=484 data-nosnippet>484</a>            (<span class="prelude-val">Some</span>(p), <span class="prelude-val">None</span>) =&gt; p.target.widget_id() == widget_id,
-<a href=#485 id=485 data-nosnippet>485</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == widget_id &amp;&amp; new.target.widget_id() != widget_id,
-<a href=#486 id=486 data-nosnippet>486</a>        }
-<a href=#487 id=487 data-nosnippet>487</a>    }
-<a href=#488 id=488 data-nosnippet>488</a>
-<a href=#489 id=489 data-nosnippet>489</a>    <span class="doccomment">/// If the `widget_id` got pointer capture with this update.
-<a href=#490 id=490 data-nosnippet>490</a>    </span><span class="kw">pub fn </span>is_got(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
-<a href=#491 id=491 data-nosnippet>491</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
-<a href=#492 id=492 data-nosnippet>492</a>            (<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; <span class="bool-val">false</span>,
-<a href=#493 id=493 data-nosnippet>493</a>            (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(p)) =&gt; p.target.widget_id() == widget_id,
-<a href=#494 id=494 data-nosnippet>494</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() != widget_id &amp;&amp; new.target.widget_id() == widget_id,
-<a href=#495 id=495 data-nosnippet>495</a>        }
-<a href=#496 id=496 data-nosnippet>496</a>    }
-<a href=#497 id=497 data-nosnippet>497</a>}</code></pre></div></section></main></body></html>
+<a href=#365 id=365 data-nosnippet>365</a>        <span class="kw">if </span>widget { CaptureMode::Widget } <span class="kw">else </span>{ CaptureMode::Window }
+<a href=#366 id=366 data-nosnippet>366</a>    }
+<a href=#367 id=367 data-nosnippet>367</a>}
+<a href=#368 id=368 data-nosnippet>368</a>
+<a href=#369 id=369 data-nosnippet>369</a><span class="doccomment">/// Information about mouse and touch capture in a mouse or touch event argument.
+<a href=#370 id=370 data-nosnippet>370</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq)]
+<a href=#371 id=371 data-nosnippet>371</a></span><span class="kw">pub struct </span>CaptureInfo {
+<a href=#372 id=372 data-nosnippet>372</a>    <span class="doccomment">/// Widget that is capturing all mouse and touch events. The widget and all ancestors are [`ENABLED`].
+<a href=#373 id=373 data-nosnippet>373</a>    ///
+<a href=#374 id=374 data-nosnippet>374</a>    /// This is the window root widget for capture mode `Window`.
+<a href=#375 id=375 data-nosnippet>375</a>    ///
+<a href=#376 id=376 data-nosnippet>376</a>    /// [`ENABLED`]: zng_app::widget::info::Interactivity::ENABLED
+<a href=#377 id=377 data-nosnippet>377</a>    </span><span class="kw">pub </span>target: WidgetPath,
+<a href=#378 id=378 data-nosnippet>378</a>    <span class="doccomment">/// Capture mode, see [`allows`](Self::allows) for more details.
+<a href=#379 id=379 data-nosnippet>379</a>    </span><span class="kw">pub </span>mode: CaptureMode,
+<a href=#380 id=380 data-nosnippet>380</a>}
+<a href=#381 id=381 data-nosnippet>381</a><span class="kw">impl </span>CaptureInfo {
+<a href=#382 id=382 data-nosnippet>382</a>    <span class="doccomment">/// If the widget is allowed by the current capture.
+<a href=#383 id=383 data-nosnippet>383</a>    ///
+<a href=#384 id=384 data-nosnippet>384</a>    /// This method uses [`WINDOW`] and [`WIDGET`] to identify the widget context.
+<a href=#385 id=385 data-nosnippet>385</a>    ///
+<a href=#386 id=386 data-nosnippet>386</a>    /// | Mode           | Allows                                             |
+<a href=#387 id=387 data-nosnippet>387</a>    /// |----------------|----------------------------------------------------|
+<a href=#388 id=388 data-nosnippet>388</a>    /// | `Window`       | All widgets in the same window.                    |
+<a href=#389 id=389 data-nosnippet>389</a>    /// | `Subtree`      | All widgets that have the `target` in their path.  |
+<a href=#390 id=390 data-nosnippet>390</a>    /// | `Widget`       | Only the `target` widget.                          |
+<a href=#391 id=391 data-nosnippet>391</a>    ///
+<a href=#392 id=392 data-nosnippet>392</a>    /// [`WIDGET`]: zng_app::widget::WIDGET
+<a href=#393 id=393 data-nosnippet>393</a>    /// [`WINDOW`]: zng_app::window::WINDOW
+<a href=#394 id=394 data-nosnippet>394</a>    </span><span class="kw">pub fn </span>allows(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#395 id=395 data-nosnippet>395</a>        <span class="kw">match </span><span class="self">self</span>.mode {
+<a href=#396 id=396 data-nosnippet>396</a>            CaptureMode::Window =&gt; <span class="self">self</span>.target.window_id() == WINDOW.id(),
+<a href=#397 id=397 data-nosnippet>397</a>            CaptureMode::Widget =&gt; <span class="self">self</span>.target.widget_id() == WIDGET.id(),
+<a href=#398 id=398 data-nosnippet>398</a>            CaptureMode::Subtree =&gt; {
+<a href=#399 id=399 data-nosnippet>399</a>                <span class="kw">let </span>tree = WINDOW.info();
+<a href=#400 id=400 data-nosnippet>400</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(wgt) = tree.get(WIDGET.id()) {
+<a href=#401 id=401 data-nosnippet>401</a>                    <span class="kw">for </span>wgt <span class="kw">in </span>wgt.self_and_ancestors() {
+<a href=#402 id=402 data-nosnippet>402</a>                        <span class="kw">if </span>wgt.id() == <span class="self">self</span>.target.widget_id() {
+<a href=#403 id=403 data-nosnippet>403</a>                            <span class="kw">return </span><span class="bool-val">true</span>;
+<a href=#404 id=404 data-nosnippet>404</a>                        }
+<a href=#405 id=405 data-nosnippet>405</a>                    }
+<a href=#406 id=406 data-nosnippet>406</a>                }
+<a href=#407 id=407 data-nosnippet>407</a>                <span class="bool-val">false
+<a href=#408 id=408 data-nosnippet>408</a>            </span>}
+<a href=#409 id=409 data-nosnippet>409</a>        }
+<a href=#410 id=410 data-nosnippet>410</a>    }
+<a href=#411 id=411 data-nosnippet>411</a>}
+<a href=#412 id=412 data-nosnippet>412</a>
+<a href=#413 id=413 data-nosnippet>413</a><span class="macro">app_local!</span> {
+<a href=#414 id=414 data-nosnippet>414</a>    <span class="kw">static </span>POINTER_CAPTURE_SV: PointerCaptureService = PointerCaptureService {
+<a href=#415 id=415 data-nosnippet>415</a>        capture_value: <span class="prelude-val">None</span>,
+<a href=#416 id=416 data-nosnippet>416</a>        capture: var(<span class="prelude-val">None</span>),
+<a href=#417 id=417 data-nosnippet>417</a>        capture_request: <span class="prelude-val">None</span>,
+<a href=#418 id=418 data-nosnippet>418</a>        release_requested: <span class="bool-val">false</span>,
+<a href=#419 id=419 data-nosnippet>419</a>    };
+<a href=#420 id=420 data-nosnippet>420</a>}
+<a href=#421 id=421 data-nosnippet>421</a>
+<a href=#422 id=422 data-nosnippet>422</a><span class="kw">struct </span>PointerCaptureService {
+<a href=#423 id=423 data-nosnippet>423</a>    capture_value: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
+<a href=#424 id=424 data-nosnippet>424</a>    capture: Var&lt;<span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;&gt;,
+<a href=#425 id=425 data-nosnippet>425</a>    capture_request: <span class="prelude-ty">Option</span>&lt;(WidgetId, CaptureMode)&gt;,
+<a href=#426 id=426 data-nosnippet>426</a>    release_requested: bool,
+<a href=#427 id=427 data-nosnippet>427</a>}
+<a href=#428 id=428 data-nosnippet>428</a>
+<a href=#429 id=429 data-nosnippet>429</a><span class="macro">event!</span> {
+<a href=#430 id=430 data-nosnippet>430</a>    <span class="doccomment">/// Mouse and touch capture changed event.
+<a href=#431 id=431 data-nosnippet>431</a>    </span><span class="kw">pub static </span>POINTER_CAPTURE_EVENT: PointerCaptureArgs;
+<a href=#432 id=432 data-nosnippet>432</a>}
+<a href=#433 id=433 data-nosnippet>433</a>
+<a href=#434 id=434 data-nosnippet>434</a><span class="macro">event_args!</span> {
+<a href=#435 id=435 data-nosnippet>435</a>    <span class="doccomment">/// [`POINTER_CAPTURE_EVENT`] arguments.
+<a href=#436 id=436 data-nosnippet>436</a>    </span><span class="kw">pub struct </span>PointerCaptureArgs {
+<a href=#437 id=437 data-nosnippet>437</a>        <span class="doccomment">/// Previous mouse and touch capture target and mode.
+<a href=#438 id=438 data-nosnippet>438</a>        </span><span class="kw">pub </span>prev_capture: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
+<a href=#439 id=439 data-nosnippet>439</a>        <span class="doccomment">/// new mouse and capture target and mode.
+<a href=#440 id=440 data-nosnippet>440</a>        </span><span class="kw">pub </span>new_capture: <span class="prelude-ty">Option</span>&lt;CaptureInfo&gt;,
+<a href=#441 id=441 data-nosnippet>441</a>
+<a href=#442 id=442 data-nosnippet>442</a>        ..
+<a href=#443 id=443 data-nosnippet>443</a>
+<a href=#444 id=444 data-nosnippet>444</a>        <span class="doccomment">/// The [`prev_capture`] and [`new_capture`] paths start with the current path.
+<a href=#445 id=445 data-nosnippet>445</a>        ///
+<a href=#446 id=446 data-nosnippet>446</a>        /// [`prev_capture`]: Self::prev_capture
+<a href=#447 id=447 data-nosnippet>447</a>        /// [`new_capture`]: Self::new_capture
+<a href=#448 id=448 data-nosnippet>448</a>        </span><span class="kw">fn </span>delivery_list(<span class="kw-2">&amp;</span><span class="self">self</span>, list: <span class="kw-2">&amp;mut </span>UpdateDeliveryList) {
+<a href=#449 id=449 data-nosnippet>449</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture {
+<a href=#450 id=450 data-nosnippet>450</a>                list.insert_wgt(<span class="kw-2">&amp;</span>p.target);
+<a href=#451 id=451 data-nosnippet>451</a>            }
+<a href=#452 id=452 data-nosnippet>452</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture {
+<a href=#453 id=453 data-nosnippet>453</a>                list.insert_wgt(<span class="kw-2">&amp;</span>p.target);
+<a href=#454 id=454 data-nosnippet>454</a>            }
+<a href=#455 id=455 data-nosnippet>455</a>        }
+<a href=#456 id=456 data-nosnippet>456</a>    }
+<a href=#457 id=457 data-nosnippet>457</a>}
+<a href=#458 id=458 data-nosnippet>458</a>
+<a href=#459 id=459 data-nosnippet>459</a><span class="kw">impl </span>PointerCaptureArgs {
+<a href=#460 id=460 data-nosnippet>460</a>    <span class="doccomment">/// If the same widget has pointer capture, but the widget path changed.
+<a href=#461 id=461 data-nosnippet>461</a>    </span><span class="kw">pub fn </span>is_widget_move(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#462 id=462 data-nosnippet>462</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
+<a href=#463 id=463 data-nosnippet>463</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == new.target.widget_id() &amp;&amp; prev.target != new.target,
+<a href=#464 id=464 data-nosnippet>464</a>            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+<a href=#465 id=465 data-nosnippet>465</a>        }
+<a href=#466 id=466 data-nosnippet>466</a>    }
+<a href=#467 id=467 data-nosnippet>467</a>
+<a href=#468 id=468 data-nosnippet>468</a>    <span class="doccomment">/// If the same widget has pointer capture, but the capture mode changed.
+<a href=#469 id=469 data-nosnippet>469</a>    </span><span class="kw">pub fn </span>is_mode_change(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#470 id=470 data-nosnippet>470</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
+<a href=#471 id=471 data-nosnippet>471</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == new.target.widget_id() &amp;&amp; prev.mode != new.mode,
+<a href=#472 id=472 data-nosnippet>472</a>            <span class="kw">_ </span>=&gt; <span class="bool-val">false</span>,
+<a href=#473 id=473 data-nosnippet>473</a>        }
+<a href=#474 id=474 data-nosnippet>474</a>    }
+<a href=#475 id=475 data-nosnippet>475</a>
+<a href=#476 id=476 data-nosnippet>476</a>    <span class="doccomment">/// If the `widget_id` lost pointer capture with this update.
+<a href=#477 id=477 data-nosnippet>477</a>    </span><span class="kw">pub fn </span>is_lost(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#478 id=478 data-nosnippet>478</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
+<a href=#479 id=479 data-nosnippet>479</a>            (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
+<a href=#480 id=480 data-nosnippet>480</a>            (<span class="prelude-val">Some</span>(p), <span class="prelude-val">None</span>) =&gt; p.target.widget_id() == widget_id,
+<a href=#481 id=481 data-nosnippet>481</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() == widget_id &amp;&amp; new.target.widget_id() != widget_id,
+<a href=#482 id=482 data-nosnippet>482</a>        }
+<a href=#483 id=483 data-nosnippet>483</a>    }
+<a href=#484 id=484 data-nosnippet>484</a>
+<a href=#485 id=485 data-nosnippet>485</a>    <span class="doccomment">/// If the `widget_id` got pointer capture with this update.
+<a href=#486 id=486 data-nosnippet>486</a>    </span><span class="kw">pub fn </span>is_got(<span class="kw-2">&amp;</span><span class="self">self</span>, widget_id: WidgetId) -&gt; bool {
+<a href=#487 id=487 data-nosnippet>487</a>        <span class="kw">match </span>(<span class="kw-2">&amp;</span><span class="self">self</span>.prev_capture, <span class="kw-2">&amp;</span><span class="self">self</span>.new_capture) {
+<a href=#488 id=488 data-nosnippet>488</a>            (<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; <span class="bool-val">false</span>,
+<a href=#489 id=489 data-nosnippet>489</a>            (<span class="prelude-val">None</span>, <span class="prelude-val">Some</span>(p)) =&gt; p.target.widget_id() == widget_id,
+<a href=#490 id=490 data-nosnippet>490</a>            (<span class="prelude-val">Some</span>(prev), <span class="prelude-val">Some</span>(new)) =&gt; prev.target.widget_id() != widget_id &amp;&amp; new.target.widget_id() == widget_id,
+<a href=#491 id=491 data-nosnippet>491</a>        }
+<a href=#492 id=492 data-nosnippet>492</a>    }
+<a href=#493 id=493 data-nosnippet>493</a>}</code></pre></div></section></main></body></html>

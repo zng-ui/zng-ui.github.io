@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Layout service, units and other types."><title>zng::layout - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0 (29483883e 2025-08-04)" data-channel="1.89.0" data-search-js="search-92309212.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.16.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module layout</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#widget-intrinsics" title="Widget Intrinsics">Widget Intrinsics</a><ul><li><a href="#widget-properties" title="Widget Properties">Widget Properties</a></li></ul></li><li><a href="#layout-properties" title="Layout Properties">Layout Properties</a></li><li><a href="#transform-properties" title="Transform Properties">Transform Properties</a></li><li><a href="#layout-units" title="Layout Units">Layout Units</a><ul><li><a href="#length--factor-units" title="Length &#38; Factor Units">Length &amp; Factor Units</a></li></ul></li><li><a href="#measure--layout" title="Measure &#38; Layout">Measure &amp; Layout</a><ul><li><a href="#outer--inner-bounds" title="Outer &#38; Inner Bounds">Outer &amp; Inner Bounds</a></li><li><a href="#inline" title="Inline">Inline</a></li></ul></li><li><a href="#full-api" title="Full API">Full API</a></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#statics" title="Statics">Statics</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#functions" title="Functions">Functions</a></li><li><a href="#types" title="Type Aliases">Type Aliases</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate zng</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng</a></div><h1>Module <span>layout</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng/layout.rs.html#1-382">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Layout service, units and other types.</p>
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.16.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module layout</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#widget-intrinsics" title="Widget Intrinsics">Widget Intrinsics</a><ul><li><a href="#widget-properties" title="Widget Properties">Widget Properties</a></li></ul></li><li><a href="#layout-properties" title="Layout Properties">Layout Properties</a></li><li><a href="#transform-properties" title="Transform Properties">Transform Properties</a></li><li><a href="#layout-units" title="Layout Units">Layout Units</a><ul><li><a href="#length--factor-units" title="Length &#38; Factor Units">Length &amp; Factor Units</a></li></ul></li><li><a href="#measure--layout" title="Measure &#38; Layout">Measure &amp; Layout</a><ul><li><a href="#outer--inner-bounds" title="Outer &#38; Inner Bounds">Outer &amp; Inner Bounds</a></li><li><a href="#inline" title="Inline">Inline</a></li></ul></li><li><a href="#full-api" title="Full API">Full API</a></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#statics" title="Statics">Statics</a></li><li><a href="#traits" title="Traits">Traits</a></li><li><a href="#functions" title="Functions">Functions</a></li><li><a href="#types" title="Type Aliases">Type Aliases</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate zng</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng</a></div><h1>Module <span>layout</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng/layout.rs.html#1-378">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Layout service, units and other types.</p>
 <p>A widget final size and position is influenced by the widget and all ancestor widgets, the properties
 and nodes that influence the size and position can be grouped into <a href="#widget-intrinsics">widget intrinsics</a>,
 <a href="#widget-properties">widget properties</a>, <a href="#layout-properties">layout properties</a> and <a href="#transform-properties">transform properties</a>.</p>
@@ -89,33 +89,33 @@ every <a href="trait.LengthUnits.html" title="trait zng::layout::LengthUnits"><c
             direction = StackDirection::top_to_bottom();
             spacing = <span class="number">2</span>;
             children = <span class="macro">ui_vec!</span>[
-                <span class="macro">width!</span>(<span class="number">100</span>), <span class="comment">// 100 device independent pixels
-                </span><span class="macro">width!</span>(<span class="number">100</span>.dip()), <span class="comment">// 100 device independent pixels
-                </span><span class="macro">width!</span>(<span class="number">100</span>.px()), <span class="comment">// 100 device pixels
-                </span><span class="macro">width!</span>(<span class="number">100</span>.pct()), <span class="comment">// 100% of the available width
-                </span><span class="macro">width!</span>(<span class="number">100</span>.pct_l()), <span class="comment">// 100% of the available width
-                </span><span class="macro">width!</span>(<span class="number">50</span>.pct()), <span class="comment">// 50% of the available width
-                </span><span class="macro">width!</span>(<span class="number">1</span>.fct()), <span class="comment">// 1 times the available width
-                </span><span class="macro">width!</span>(<span class="number">1</span>.fct_l()), <span class="comment">// 1 times the available width
-                </span><span class="macro">width!</span>(<span class="number">0.5</span>.fct()), <span class="comment">// 0.5 times the available width
-                </span><span class="macro">width!</span>(<span class="number">100</span>.pt()), <span class="comment">// 100 font points
-                </span><span class="macro">width!</span>(<span class="number">8</span>.em()), <span class="comment">// 8 times the font size
-                </span><span class="macro">width!</span>(<span class="number">800</span>.em_pct()), <span class="comment">// 800% of the font size
-                </span><span class="macro">width!</span>(<span class="number">8</span>.rem()), <span class="comment">// 8 times the root font size
-                </span><span class="macro">width!</span>(<span class="number">800</span>.rem_pct()), <span class="comment">// 800% of the root font size
-                </span><span class="macro">width!</span>(<span class="number">1</span>.vw()), <span class="comment">// 1 times the viewport width
-                </span><span class="macro">width!</span>(<span class="number">100</span>.vw_pct()), <span class="comment">// 100% of the viewport width
-                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vw()), <span class="comment">// 0.5 times the viewport width
-                </span><span class="macro">width!</span>(<span class="number">1</span>.vh()), <span class="comment">// 1 times the viewport height
-                </span><span class="macro">width!</span>(<span class="number">100</span>.vh_pct()), <span class="comment">// 100% of the viewport height
-                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vh()), <span class="comment">// 0.5 times the viewport height
-                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vmin()), <span class="comment">// 0.5 times the viewport min(width, height)
-                </span><span class="macro">width!</span>(<span class="number">50</span>.vmin_pct()), <span class="comment">// 50% of the viewport min(width, height)
-                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vmax()), <span class="comment">// 0.5 times the viewport max(width, height)
-                </span><span class="macro">width!</span>(<span class="number">50</span>.vmax_pct()), <span class="comment">// 50% of the viewport max(width, height)
+                <span class="macro">width!</span>(<span class="number">100</span>),                  <span class="comment">// 100 device independent pixels
+                </span><span class="macro">width!</span>(<span class="number">100</span>.dip()),            <span class="comment">// 100 device independent pixels
+                </span><span class="macro">width!</span>(<span class="number">100</span>.px()),             <span class="comment">// 100 device pixels
+                </span><span class="macro">width!</span>(<span class="number">100</span>.pct()),            <span class="comment">// 100% of the available width
+                </span><span class="macro">width!</span>(<span class="number">100</span>.pct_l()),          <span class="comment">// 100% of the available width
+                </span><span class="macro">width!</span>(<span class="number">50</span>.pct()),             <span class="comment">// 50% of the available width
+                </span><span class="macro">width!</span>(<span class="number">1</span>.fct()),              <span class="comment">// 1 times the available width
+                </span><span class="macro">width!</span>(<span class="number">1</span>.fct_l()),            <span class="comment">// 1 times the available width
+                </span><span class="macro">width!</span>(<span class="number">0.5</span>.fct()),            <span class="comment">// 0.5 times the available width
+                </span><span class="macro">width!</span>(<span class="number">100</span>.pt()),             <span class="comment">// 100 font points
+                </span><span class="macro">width!</span>(<span class="number">8</span>.em()),               <span class="comment">// 8 times the font size
+                </span><span class="macro">width!</span>(<span class="number">800</span>.em_pct()),         <span class="comment">// 800% of the font size
+                </span><span class="macro">width!</span>(<span class="number">8</span>.rem()),              <span class="comment">// 8 times the root font size
+                </span><span class="macro">width!</span>(<span class="number">800</span>.rem_pct()),        <span class="comment">// 800% of the root font size
+                </span><span class="macro">width!</span>(<span class="number">1</span>.vw()),               <span class="comment">// 1 times the viewport width
+                </span><span class="macro">width!</span>(<span class="number">100</span>.vw_pct()),         <span class="comment">// 100% of the viewport width
+                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vw()),             <span class="comment">// 0.5 times the viewport width
+                </span><span class="macro">width!</span>(<span class="number">1</span>.vh()),               <span class="comment">// 1 times the viewport height
+                </span><span class="macro">width!</span>(<span class="number">100</span>.vh_pct()),         <span class="comment">// 100% of the viewport height
+                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vh()),             <span class="comment">// 0.5 times the viewport height
+                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vmin()),           <span class="comment">// 0.5 times the viewport min(width, height)
+                </span><span class="macro">width!</span>(<span class="number">50</span>.vmin_pct()),        <span class="comment">// 50% of the viewport min(width, height)
+                </span><span class="macro">width!</span>(<span class="number">0.5</span>.vmax()),           <span class="comment">// 0.5 times the viewport max(width, height)
+                </span><span class="macro">width!</span>(<span class="number">50</span>.vmax_pct()),        <span class="comment">// 50% of the viewport max(width, height)
                 </span><span class="macro">width!</span>(<span class="number">100</span>.dip() + <span class="number">50</span>.pct()), <span class="comment">// expression, 100dip + 50%.
-                </span><span class="macro">width!</span>(<span class="number">1</span>.lft()), <span class="comment">//1 parcel of the leftover space.
-                </span><span class="macro">width!</span>(Length::Default), <span class="comment">// default value
+                </span><span class="macro">width!</span>(<span class="number">1</span>.lft()),              <span class="comment">//1 parcel of the leftover space.
+                </span><span class="macro">width!</span>(Length::Default),      <span class="comment">// default value
             </span>];
             widget::border = <span class="number">1</span>, colors::RED.desaturate(<span class="number">50</span>.pct());
         };
@@ -151,11 +151,7 @@ the unit behaves like a factor.</p>
 
 <span class="macro">Window!</span> {
     child = <span class="macro">Grid!</span> {
-        columns = <span class="macro">ui_vec!</span>[
-            <span class="macro">grid::Column!</span>(<span class="number">1</span>.lft()),
-            <span class="macro">grid::Column!</span>(<span class="number">100</span>.dip()),
-            <span class="macro">grid::Column!</span>(<span class="number">2</span>.lft()),
-        ];
+        columns = <span class="macro">ui_vec!</span>[<span class="macro">grid::Column!</span>(<span class="number">1</span>.lft()), <span class="macro">grid::Column!</span>(<span class="number">100</span>.dip()), <span class="macro">grid::Column!</span>(<span class="number">2</span>.lft()),];
         rows = <span class="macro">ui_vec!</span>[<span class="macro">grid::Row!</span>(<span class="number">100</span>.pct())];
         cells = <span class="macro">ui_vec!</span>[
             <span class="macro">Wgt!</span> {
@@ -171,7 +167,7 @@ the unit behaves like a factor.</p>
                 widget::background_color = colors::BLUE;
             },
         ];
-    }
+    };
 }</code></pre></div>
 <p>The example above declares a grid with 3 columns, on layout the grid computes the width of the middle column first (<code>100.dip()</code>),
 the leftover available width is divided between the other 2 columns proportional to the leftover value. Note that value range
@@ -247,7 +243,7 @@ is that the green text will be reshaped as two rectangles, one after the red tex
             widget::background_color = colors::BLUE.with_alpha(<span class="number">40</span>.pct());
             txt = <span class="string">"BLUE"</span>;
         },
-    ]
+    ];
 }</code></pre></div>
 <p>Inline layout is modeled to support complex text layout interactions, like bidirectional text reordering, inlined widgets don’t need
 to be text however, the <code>Wrap!</code> widget itself can be nested.</p>

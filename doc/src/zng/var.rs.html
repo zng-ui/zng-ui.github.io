@@ -48,289 +48,288 @@
 <a href=#47 id=47 data-nosnippet>47</a>//! # let _ =
 <a href=#48 id=48 data-nosnippet>48</a>//! Button! {
 <a href=#49 id=49 data-nosnippet>49</a>//!     child = Text!("Taller!");
-<a href=#50 id=50 data-nosnippet>50</a>//!     on_click = hn!(height, |_| { // clone `height` reference for the handler.
-<a href=#51 id=51 data-nosnippet>51</a>//!         height.set(height.get() + 10); // request an update to a new value.
-<a href=#52 id=52 data-nosnippet>52</a>//!     });
-<a href=#53 id=53 data-nosnippet>53</a>//!     layout::align = layout::Align::CENTER;
-<a href=#54 id=54 data-nosnippet>54</a>//!     layout::height; // set the height (shorthand, variable is same name as property)
-<a href=#55 id=55 data-nosnippet>55</a>//! }
-<a href=#56 id=56 data-nosnippet>56</a>//! # ;
-<a href=#57 id=57 data-nosnippet>57</a>//! ```
-<a href=#58 id=58 data-nosnippet>58</a>//!
-<a href=#59 id=59 data-nosnippet>59</a>//! Note that variable updates don't happen immediately, in the handler above the variable is still the previous value after the [`set`](Var::set) call,
-<a href=#60 id=60 data-nosnippet>60</a>//! this is done so that all widgets in a single update react to the same value. The variable values is updated at the end of the current update.
-<a href=#61 id=61 data-nosnippet>61</a>//!
-<a href=#62 id=62 data-nosnippet>62</a>//! ```
-<a href=#63 id=63 data-nosnippet>63</a>//! use zng::prelude::*;
-<a href=#64 id=64 data-nosnippet>64</a>//! # let _scope = APP.defaults();
-<a href=#65 id=65 data-nosnippet>65</a>//!
-<a href=#66 id=66 data-nosnippet>66</a>//! let number = var(0u8);
-<a href=#67 id=67 data-nosnippet>67</a>//! # let _ =
-<a href=#68 id=68 data-nosnippet>68</a>//! Button! {
-<a href=#69 id=69 data-nosnippet>69</a>//!     child = Text!("Test");
-<a href=#70 id=70 data-nosnippet>70</a>//!     on_click = async_hn!(number, |_| {
-<a href=#71 id=71 data-nosnippet>71</a>//!         assert_eq!(number.get(), 0);
-<a href=#72 id=72 data-nosnippet>72</a>//!         number.set(1);
-<a href=#73 id=73 data-nosnippet>73</a>//!         assert_eq!(number.get(), 0);
-<a href=#74 id=74 data-nosnippet>74</a>//!
-<a href=#75 id=75 data-nosnippet>75</a>//!         task::yield_now().await;
-<a href=#76 id=76 data-nosnippet>76</a>//!         assert_eq!(number.get(), 1);
-<a href=#77 id=77 data-nosnippet>77</a>//!     });
-<a href=#78 id=78 data-nosnippet>78</a>//! }
-<a href=#79 id=79 data-nosnippet>79</a>//! # ;
-<a href=#80 id=80 data-nosnippet>80</a>//! ```
-<a href=#81 id=81 data-nosnippet>81</a>//!
-<a href=#82 id=82 data-nosnippet>82</a>//! The example above demonstrates the delayed update of a variable.
-<a href=#83 id=83 data-nosnippet>83</a>//!
-<a href=#84 id=84 data-nosnippet>84</a>//! If multiple widgets set the same variable on the same update only
-<a href=#85 id=85 data-nosnippet>85</a>//! the last value set will be used, widgets update in parallel by default so it is difficult to predict who is the last. The [`modify`](Var::modify)
-<a href=#86 id=86 data-nosnippet>86</a>//! method can be used register a closure that can modify the value, this closure will observe the partially updated value that may already be
-<a href=#87 id=87 data-nosnippet>87</a>//! modified by other widgets.
-<a href=#88 id=88 data-nosnippet>88</a>//!
-<a href=#89 id=89 data-nosnippet>89</a>//! The example below demonstrates how the `modify` closure observes a value that was just set in the same update cycle.
-<a href=#90 id=90 data-nosnippet>90</a>//!
-<a href=#91 id=91 data-nosnippet>91</a>//! ```
-<a href=#92 id=92 data-nosnippet>92</a>//! use zng::prelude::*;
-<a href=#93 id=93 data-nosnippet>93</a>//! # let _scope = APP.defaults();
-<a href=#94 id=94 data-nosnippet>94</a>//!
-<a href=#95 id=95 data-nosnippet>95</a>//! let foo = var(0u8);
-<a href=#96 id=96 data-nosnippet>96</a>//! # let _ =
-<a href=#97 id=97 data-nosnippet>97</a>//! Wgt! {
-<a href=#98 id=98 data-nosnippet>98</a>//!     widget::on_init = async_hn!(foo, |_| {
-<a href=#99 id=99 data-nosnippet>99</a>//!         foo.set(1);
-<a href=#100 id=100 data-nosnippet>100</a>//!         assert_eq!(0, foo.get());
-<a href=#101 id=101 data-nosnippet>101</a>//!         foo.modify(|m| {
-<a href=#102 id=102 data-nosnippet>102</a>//!             assert_eq!(1, **m);
-<a href=#103 id=103 data-nosnippet>103</a>//!             **m = 2;
-<a href=#104 id=104 data-nosnippet>104</a>//!         });
-<a href=#105 id=105 data-nosnippet>105</a>//!         assert_eq!(0, foo.get());
-<a href=#106 id=106 data-nosnippet>106</a>//!
-<a href=#107 id=107 data-nosnippet>107</a>//!         foo.wait_update().await;
-<a href=#108 id=108 data-nosnippet>108</a>//!         assert_eq!(2, foo.get());
-<a href=#109 id=109 data-nosnippet>109</a>//!
-<a href=#110 id=110 data-nosnippet>110</a>//!         println!("test ok");
-<a href=#111 id=111 data-nosnippet>111</a>//!     });
-<a href=#112 id=112 data-nosnippet>112</a>//! }
-<a href=#113 id=113 data-nosnippet>113</a>//! # ;
-<a href=#114 id=114 data-nosnippet>114</a>//! ```
-<a href=#115 id=115 data-nosnippet>115</a>//!
-<a href=#116 id=116 data-nosnippet>116</a>//! # Mapping
-<a href=#117 id=117 data-nosnippet>117</a>//!
-<a href=#118 id=118 data-nosnippet>118</a>//! Variables can be mapped to other value types, when the source variable updates the mapping closure re-evaluates and the mapped variable
-<a href=#119 id=119 data-nosnippet>119</a>//! updates, all in the same update cycle, that is both variable will be flagged new at the same time. Mapping can also be bidirectional.
-<a href=#120 id=120 data-nosnippet>120</a>//!
-<a href=#121 id=121 data-nosnippet>121</a>//! The example below demonstrates a button that updates an integer variable that is mapped to a text.
-<a href=#122 id=122 data-nosnippet>122</a>//!
-<a href=#123 id=123 data-nosnippet>123</a>//! ```
-<a href=#124 id=124 data-nosnippet>124</a>//! use zng::prelude::*;
-<a href=#125 id=125 data-nosnippet>125</a>//! # let _scope = APP.defaults();
-<a href=#126 id=126 data-nosnippet>126</a>//!
-<a href=#127 id=127 data-nosnippet>127</a>//! let count = var(0u32);
-<a href=#128 id=128 data-nosnippet>128</a>//! # let _ =
-<a href=#129 id=129 data-nosnippet>129</a>//! Button! {
-<a href=#130 id=130 data-nosnippet>130</a>//!     child = Text!(count.map(|i| match i {
-<a href=#131 id=131 data-nosnippet>131</a>//!         0 =&gt; Txt::from("Click Me!"),
-<a href=#132 id=132 data-nosnippet>132</a>//!         1 =&gt; Txt::from("Clicked 1 time!"),
-<a href=#133 id=133 data-nosnippet>133</a>//!         n =&gt; formatx!("Clicked {n} times!"),
-<a href=#134 id=134 data-nosnippet>134</a>//!     }));
-<a href=#135 id=135 data-nosnippet>135</a>//!     on_click = hn!(|_| {
-<a href=#136 id=136 data-nosnippet>136</a>//!         count.set(count.get() + 1);
-<a href=#137 id=137 data-nosnippet>137</a>//!     });
-<a href=#138 id=138 data-nosnippet>138</a>//! }
-<a href=#139 id=139 data-nosnippet>139</a>//! # ;
-<a href=#140 id=140 data-nosnippet>140</a>//! ```
-<a href=#141 id=141 data-nosnippet>141</a>//!
-<a href=#142 id=142 data-nosnippet>142</a>//! # Binding
-<a href=#143 id=143 data-nosnippet>143</a>//!
-<a href=#144 id=144 data-nosnippet>144</a>//! Two existing variables can be bound, such that one variable update sets the other. The example below rewrites the mapping
-<a href=#145 id=145 data-nosnippet>145</a>//! demo to use a [`bind_map`](Var::bind_map) instead.
-<a href=#146 id=146 data-nosnippet>146</a>//!
-<a href=#147 id=147 data-nosnippet>147</a>//! ```
-<a href=#148 id=148 data-nosnippet>148</a>//! use zng::prelude::*;
-<a href=#149 id=149 data-nosnippet>149</a>//! # let _scope = APP.defaults();
-<a href=#150 id=150 data-nosnippet>150</a>//!
-<a href=#151 id=151 data-nosnippet>151</a>//! let count = var(0u32);
-<a href=#152 id=152 data-nosnippet>152</a>//! let label = var(Txt::from("Click Me!"));
-<a href=#153 id=153 data-nosnippet>153</a>//! count
-<a href=#154 id=154 data-nosnippet>154</a>//!     .bind_map(&amp;label, |i| match i {
-<a href=#155 id=155 data-nosnippet>155</a>//!         1 =&gt; Txt::from("Clicked 1 time!"),
-<a href=#156 id=156 data-nosnippet>156</a>//!         n =&gt; formatx!("Clicked {n} times!"),
-<a href=#157 id=157 data-nosnippet>157</a>//!     })
-<a href=#158 id=158 data-nosnippet>158</a>//!     .perm();
-<a href=#159 id=159 data-nosnippet>159</a>//! # let _ =
-<a href=#160 id=160 data-nosnippet>160</a>//! Button! {
-<a href=#161 id=161 data-nosnippet>161</a>//!     child = Text!(label);
-<a href=#162 id=162 data-nosnippet>162</a>//!     on_click = hn!(|_| {
-<a href=#163 id=163 data-nosnippet>163</a>//!         count.set(count.get() + 1);
-<a href=#164 id=164 data-nosnippet>164</a>//!     });
-<a href=#165 id=165 data-nosnippet>165</a>//! }
-<a href=#166 id=166 data-nosnippet>166</a>//! # ;
-<a href=#167 id=167 data-nosnippet>167</a>//! ```
-<a href=#168 id=168 data-nosnippet>168</a>//!
-<a href=#169 id=169 data-nosnippet>169</a>//! Note that unlike a map the initial value of the output variable is not updated, only subsequent ones. You can use
-<a href=#170 id=170 data-nosnippet>170</a>//! [`set_from`](Var::set_from) to update the initial value too.
-<a href=#171 id=171 data-nosnippet>171</a>//!
-<a href=#172 id=172 data-nosnippet>172</a>//! # Animating
-<a href=#173 id=173 data-nosnippet>173</a>//!
-<a href=#174 id=174 data-nosnippet>174</a>//! Animation is implemented using variables, at the lowest level [`VARS.animate`](VARS::animate) is used to register a closure to be
-<a href=#175 id=175 data-nosnippet>175</a>//! called every frame, the closure can set any number of variables, at a higher level the [`Var::ease`] and [`Var::chase`] methods
-<a href=#176 id=176 data-nosnippet>176</a>//! can be used to animate the value of a variable.
-<a href=#177 id=177 data-nosnippet>177</a>//!
-<a href=#178 id=178 data-nosnippet>178</a>//! The example below uses [`Var::easing`] to animate the window background:
-<a href=#179 id=179 data-nosnippet>179</a>//! ```
-<a href=#180 id=180 data-nosnippet>180</a>//! use zng::prelude::*;
-<a href=#181 id=181 data-nosnippet>181</a>//! # let _scope = APP.defaults();
-<a href=#182 id=182 data-nosnippet>182</a>//!
-<a href=#183 id=183 data-nosnippet>183</a>//! let color = var(colors::AZURE.darken(30.pct()));
-<a href=#184 id=184 data-nosnippet>184</a>//! # let _ =
-<a href=#185 id=185 data-nosnippet>185</a>//! Window! {
-<a href=#186 id=186 data-nosnippet>186</a>//!     widget::background_color = color.easing(500.ms(), easing::linear);
-<a href=#187 id=187 data-nosnippet>187</a>//!     child = Button! {
-<a href=#188 id=188 data-nosnippet>188</a>//!         layout::align = layout::Align::TOP;
-<a href=#189 id=189 data-nosnippet>189</a>//!         on_click = hn!(|_|{
-<a href=#190 id=190 data-nosnippet>190</a>//!             let mut c = color::Hsla::from(color.get());
-<a href=#191 id=191 data-nosnippet>191</a>//!             c.hue += 60.0;
-<a href=#192 id=192 data-nosnippet>192</a>//!             color.set(c);
-<a href=#193 id=193 data-nosnippet>193</a>//!         });
-<a href=#194 id=194 data-nosnippet>194</a>//!         child = Text!("Change background color");
-<a href=#195 id=195 data-nosnippet>195</a>//!     }
-<a href=#196 id=196 data-nosnippet>196</a>//! }
-<a href=#197 id=197 data-nosnippet>197</a>//! # ;
-<a href=#198 id=198 data-nosnippet>198</a>//! ```
-<a href=#199 id=199 data-nosnippet>199</a>//!
-<a href=#200 id=200 data-nosnippet>200</a>//! Variables can only be operated by a single animation, when a newer animation or modify affects a variable older animations can no longer
-<a href=#201 id=201 data-nosnippet>201</a>//! affect it, see [`VARS.animate`](VARS::animate) for more details.
-<a href=#202 id=202 data-nosnippet>202</a>//!
-<a href=#203 id=203 data-nosnippet>203</a>//! # Response
-<a href=#204 id=204 data-nosnippet>204</a>//!
-<a href=#205 id=205 data-nosnippet>205</a>//! The [`ResponseVar&lt;T&gt;`] is a specialized variable that represents the result of an async task. You can use `.await` directly
-<a href=#206 id=206 data-nosnippet>206</a>//! in any async handler, but a response var lets you plug a query directly into a property. You can use [`task::respond`] to convert
-<a href=#207 id=207 data-nosnippet>207</a>//! any future into a response var, and you can use [`wait_rsp`] to convert a response var to a future.
-<a href=#208 id=208 data-nosnippet>208</a>//!
-<a href=#209 id=209 data-nosnippet>209</a>//! ```no_run
-<a href=#210 id=210 data-nosnippet>210</a>//! use zng::prelude::*;
-<a href=#211 id=211 data-nosnippet>211</a>//! # let _scope = APP.defaults();
-<a href=#212 id=212 data-nosnippet>212</a>//!
-<a href=#213 id=213 data-nosnippet>213</a>//! let rsp = task::respond(async {
-<a href=#214 id=214 data-nosnippet>214</a>//!     let url = "https://raw.githubusercontent.com/git/git-scm.com/main/MIT-LICENSE.txt";
-<a href=#215 id=215 data-nosnippet>215</a>//!     match task::http::get_txt(url).await {
-<a href=#216 id=216 data-nosnippet>216</a>//!         Ok(t) =&gt; t,
-<a href=#217 id=217 data-nosnippet>217</a>//!         Err(e) =&gt; formatx!("{e}"),
-<a href=#218 id=218 data-nosnippet>218</a>//!     }
-<a href=#219 id=219 data-nosnippet>219</a>//! });
-<a href=#220 id=220 data-nosnippet>220</a>//! # let _ =
-<a href=#221 id=221 data-nosnippet>221</a>//! SelectableText!(rsp.map(|r| {
-<a href=#222 id=222 data-nosnippet>222</a>//!     use zng::var::Response::*;
-<a href=#223 id=223 data-nosnippet>223</a>//!     match r {
-<a href=#224 id=224 data-nosnippet>224</a>//!         Waiting =&gt; Txt::from("loading.."),
-<a href=#225 id=225 data-nosnippet>225</a>//!         Done(t) =&gt; t.clone(),
-<a href=#226 id=226 data-nosnippet>226</a>//!     }
-<a href=#227 id=227 data-nosnippet>227</a>//! }))
-<a href=#228 id=228 data-nosnippet>228</a>//! # ;
-<a href=#229 id=229 data-nosnippet>229</a>//! ```
-<a href=#230 id=230 data-nosnippet>230</a>//!
-<a href=#231 id=231 data-nosnippet>231</a>//! The example above creates a response var from a download future and maps the response to a widget.
-<a href=#232 id=232 data-nosnippet>232</a>//!
-<a href=#233 id=233 data-nosnippet>233</a>//! A response var is paired with a [`ResponderVar&lt;T&gt;`], you can create a *response channel* using the [`response_var`] function.
-<a href=#234 id=234 data-nosnippet>234</a>//!
-<a href=#235 id=235 data-nosnippet>235</a>//! [`task::respond`]: crate::task::respond
-<a href=#236 id=236 data-nosnippet>236</a>//! [`wait_rsp`]: ResponseVar::wait_rsp
-<a href=#237 id=237 data-nosnippet>237</a>//!
-<a href=#238 id=238 data-nosnippet>238</a>//! # Merge
-<a href=#239 id=239 data-nosnippet>239</a>//!
-<a href=#240 id=240 data-nosnippet>240</a>//! The [`merge_var!`] and [`expr_var!`] macros can be used to declare a variable that merges multiple other variable values.
-<a href=#241 id=241 data-nosnippet>241</a>//!
-<a href=#242 id=242 data-nosnippet>242</a>//! The example below demonstrates the two macros.
-<a href=#243 id=243 data-nosnippet>243</a>//!
-<a href=#244 id=244 data-nosnippet>244</a>//! ```
-<a href=#245 id=245 data-nosnippet>245</a>//! use zng::prelude::*;
-<a href=#246 id=246 data-nosnippet>246</a>//! # let _scope = APP.defaults();
-<a href=#247 id=247 data-nosnippet>247</a>//!
-<a href=#248 id=248 data-nosnippet>248</a>//! let a = var(10u32);
-<a href=#249 id=249 data-nosnippet>249</a>//! let b = var(1u32);
-<a href=#250 id=250 data-nosnippet>250</a>//!
-<a href=#251 id=251 data-nosnippet>251</a>//! // let merge = expr_var!({
-<a href=#252 id=252 data-nosnippet>252</a>//! //     let a = *#{a};
-<a href=#253 id=253 data-nosnippet>253</a>//! //     let b = *#{b.clone()};
-<a href=#254 id=254 data-nosnippet>254</a>//! //     formatx!("{a} + {b} = {}", a + b)
-<a href=#255 id=255 data-nosnippet>255</a>//! // });
-<a href=#256 id=256 data-nosnippet>256</a>//! let merge = merge_var!(a, b.clone(), |&amp;a, &amp;b| {
-<a href=#257 id=257 data-nosnippet>257</a>//!     formatx!("{a} + {b} = {}", a + b)
-<a href=#258 id=258 data-nosnippet>258</a>//! });
-<a href=#259 id=259 data-nosnippet>259</a>//! # let _ =
-<a href=#260 id=260 data-nosnippet>260</a>//! Button! {
-<a href=#261 id=261 data-nosnippet>261</a>//!     child = Text!(merge);
-<a href=#262 id=262 data-nosnippet>262</a>//!     on_click = hn!(|_| b.set(b.get() + 1));
-<a href=#263 id=263 data-nosnippet>263</a>//! }
-<a href=#264 id=264 data-nosnippet>264</a>//! # ;
-<a href=#265 id=265 data-nosnippet>265</a>//! ```
-<a href=#266 id=266 data-nosnippet>266</a>//!
-<a href=#267 id=267 data-nosnippet>267</a>//! # Contextual
-<a href=#268 id=268 data-nosnippet>268</a>//!
-<a href=#269 id=269 data-nosnippet>269</a>//! The [`ContextVar&lt;T&gt;`] type represents a variable that has context depend value, meaning they can produce a different value depending
-<a href=#270 id=270 data-nosnippet>270</a>//! on where they are used. Context vars are declared using the [`context_var!`] macro.
-<a href=#271 id=271 data-nosnippet>271</a>//!
-<a href=#272 id=272 data-nosnippet>272</a>//! The example below declares a context var and a property that sets it. The context var is then used in two texts with
-<a href=#273 id=273 data-nosnippet>273</a>//! two different contexts, the first text will show "Text!", the second will show "Stack!".
-<a href=#274 id=274 data-nosnippet>274</a>//!
-<a href=#275 id=275 data-nosnippet>275</a>//! ```
-<a href=#276 id=276 data-nosnippet>276</a>//! # fn main() { }
-<a href=#277 id=277 data-nosnippet>277</a>//! use zng::prelude::*;
-<a href=#278 id=278 data-nosnippet>278</a>//!
-<a href=#279 id=279 data-nosnippet>279</a>//! context_var! {
-<a href=#280 id=280 data-nosnippet>280</a>//!     static FOO_VAR: Txt = "";
-<a href=#281 id=281 data-nosnippet>281</a>//! }
-<a href=#282 id=282 data-nosnippet>282</a>//!
-<a href=#283 id=283 data-nosnippet>283</a>//! #[zng::widget::property(CONTEXT, default(FOO_VAR))]
-<a href=#284 id=284 data-nosnippet>284</a>//! pub fn foo(child: impl IntoUiNode, foo: impl IntoVar&lt;Txt&gt;) -&gt; UiNode {
-<a href=#285 id=285 data-nosnippet>285</a>//!     zng::widget::node::with_context_var(child, FOO_VAR, foo)
-<a href=#286 id=286 data-nosnippet>286</a>//! }
-<a href=#287 id=287 data-nosnippet>287</a>//!
-<a href=#288 id=288 data-nosnippet>288</a>//! fn demo() -&gt; UiNode {
-<a href=#289 id=289 data-nosnippet>289</a>//!     Stack! {
-<a href=#290 id=290 data-nosnippet>290</a>//!         direction = StackDirection::top_to_bottom();
-<a href=#291 id=291 data-nosnippet>291</a>//!         spacing = 5;
-<a href=#292 id=292 data-nosnippet>292</a>//!         foo = "Stack!";
-<a href=#293 id=293 data-nosnippet>293</a>//!         children = ui_vec![
-<a href=#294 id=294 data-nosnippet>294</a>//!             Text! {
-<a href=#295 id=295 data-nosnippet>295</a>//!                 txt = FOO_VAR;
-<a href=#296 id=296 data-nosnippet>296</a>//!                 foo = "Text!";
-<a href=#297 id=297 data-nosnippet>297</a>//!             },
-<a href=#298 id=298 data-nosnippet>298</a>//!             Text!(FOO_VAR),
-<a href=#299 id=299 data-nosnippet>299</a>//!         ]
-<a href=#300 id=300 data-nosnippet>300</a>//!     }
-<a href=#301 id=301 data-nosnippet>301</a>//! }
-<a href=#302 id=302 data-nosnippet>302</a>//! ```
-<a href=#303 id=303 data-nosnippet>303</a>//!
-<a href=#304 id=304 data-nosnippet>304</a>//! Context variables have all the same capabilities of other variables if the example if `foo` is set to a [`var`]
-<a href=#305 id=305 data-nosnippet>305</a>//! the context var will be editable, and if `FOO_VAR` is mapped the mapping variable is also contextual.
-<a href=#306 id=306 data-nosnippet>306</a>//!
-<a href=#307 id=307 data-nosnippet>307</a>//! # Full API
-<a href=#308 id=308 data-nosnippet>308</a>//!
-<a href=#309 id=309 data-nosnippet>309</a>//! See [`zng_var`] for the full var API.
-<a href=#310 id=310 data-nosnippet>310</a>
-<a href=#311 id=311 data-nosnippet>311</a></span><span class="kw">pub use </span>zng_var::{
-<a href=#312 id=312 data-nosnippet>312</a>    AnyVar, AnyVarValue, AnyWhenVarBuilder, ArcEq, BoxAnyVarValue, ContextInitHandle, ContextVar, IntoValue, IntoVar, MergeVarBuilder,
-<a href=#313 id=313 data-nosnippet>313</a>    ObservableVec, ResponderVar, Response, ResponseVar, VARS, Var, VarCapability, VarEq, VarHandle, VarHandles, VarHookArgs,
-<a href=#314 id=314 data-nosnippet>314</a>    VarInstanceTag, VarModify, VarUpdateId, VarValue, VecChange, WeakAnyVar, WeakVar, any_var_derived, const_var, context_var,
-<a href=#315 id=315 data-nosnippet>315</a>    contextual_var, expr_var, impl_from_and_into_var, merge_var, response_done_var, response_var, var, var_default, var_from, var_getter,
-<a href=#316 id=316 data-nosnippet>316</a>    var_state, when_var,
-<a href=#317 id=317 data-nosnippet>317</a>};
-<a href=#318 id=318 data-nosnippet>318</a>
-<a href=#319 id=319 data-nosnippet>319</a><span class="kw">pub use </span>zng_app::widget::{AnyVarSubscribe, OnVarArgs, VarLayout, VarSubscribe};
-<a href=#320 id=320 data-nosnippet>320</a>
-<a href=#321 id=321 data-nosnippet>321</a><span class="doccomment">/// Var animation types and functions.
-<a href=#322 id=322 data-nosnippet>322</a></span><span class="kw">pub mod </span>animation {
-<a href=#323 id=323 data-nosnippet>323</a>    <span class="kw">pub use </span>zng_var::animation::{
-<a href=#324 id=324 data-nosnippet>324</a>        Animation, AnimationController, AnimationHandle, ChaseAnimation, ForceAnimationController, ModifyInfo, Transition, TransitionKeyed,
-<a href=#325 id=325 data-nosnippet>325</a>        Transitionable, WeakAnimationHandle,
-<a href=#326 id=326 data-nosnippet>326</a>    };
-<a href=#327 id=327 data-nosnippet>327</a>
-<a href=#328 id=328 data-nosnippet>328</a>    <span class="doccomment">/// Common easing functions.
-<a href=#329 id=329 data-nosnippet>329</a>    </span><span class="kw">pub mod </span>easing {
-<a href=#330 id=330 data-nosnippet>330</a>        <span class="kw">pub use </span>zng_var::animation::easing::{
-<a href=#331 id=331 data-nosnippet>331</a>            Bezier, EasingFn, EasingStep, EasingTime, back, bounce, circ, cubic, cubic_bezier, ease_in, ease_in_out, ease_out, ease_out_in,
-<a href=#332 id=332 data-nosnippet>332</a>            elastic, expo, linear, none, quad, quart, quint, reverse, reverse_out, sine, step_ceil, step_floor,
-<a href=#333 id=333 data-nosnippet>333</a>        };
-<a href=#334 id=334 data-nosnippet>334</a>    }
-<a href=#335 id=335 data-nosnippet>335</a>}</code></pre></div></section></main></body></html>
+<a href=#50 id=50 data-nosnippet>50</a>//!     on_click = hn!(height, |_| {
+<a href=#51 id=51 data-nosnippet>51</a>//!         // clone `height` reference for the handler.
+<a href=#52 id=52 data-nosnippet>52</a>//!         height.set(height.get() + 10); // request an update to a new value.
+<a href=#53 id=53 data-nosnippet>53</a>//!     });
+<a href=#54 id=54 data-nosnippet>54</a>//!     layout::align = layout::Align::CENTER;
+<a href=#55 id=55 data-nosnippet>55</a>//!     layout::height; // set the height (shorthand, variable is same name as property)
+<a href=#56 id=56 data-nosnippet>56</a>//! }
+<a href=#57 id=57 data-nosnippet>57</a>//! # ;
+<a href=#58 id=58 data-nosnippet>58</a>//! ```
+<a href=#59 id=59 data-nosnippet>59</a>//!
+<a href=#60 id=60 data-nosnippet>60</a>//! Note that variable updates don't happen immediately, in the handler above the variable is still the previous value after the [`set`](Var::set) call,
+<a href=#61 id=61 data-nosnippet>61</a>//! this is done so that all widgets in a single update react to the same value. The variable values is updated at the end of the current update.
+<a href=#62 id=62 data-nosnippet>62</a>//!
+<a href=#63 id=63 data-nosnippet>63</a>//! ```
+<a href=#64 id=64 data-nosnippet>64</a>//! use zng::prelude::*;
+<a href=#65 id=65 data-nosnippet>65</a>//! # let _scope = APP.defaults();
+<a href=#66 id=66 data-nosnippet>66</a>//!
+<a href=#67 id=67 data-nosnippet>67</a>//! let number = var(0u8);
+<a href=#68 id=68 data-nosnippet>68</a>//! # let _ =
+<a href=#69 id=69 data-nosnippet>69</a>//! Button! {
+<a href=#70 id=70 data-nosnippet>70</a>//!     child = Text!("Test");
+<a href=#71 id=71 data-nosnippet>71</a>//!     on_click = async_hn!(number, |_| {
+<a href=#72 id=72 data-nosnippet>72</a>//!         assert_eq!(number.get(), 0);
+<a href=#73 id=73 data-nosnippet>73</a>//!         number.set(1);
+<a href=#74 id=74 data-nosnippet>74</a>//!         assert_eq!(number.get(), 0);
+<a href=#75 id=75 data-nosnippet>75</a>//!
+<a href=#76 id=76 data-nosnippet>76</a>//!         task::yield_now().await;
+<a href=#77 id=77 data-nosnippet>77</a>//!         assert_eq!(number.get(), 1);
+<a href=#78 id=78 data-nosnippet>78</a>//!     });
+<a href=#79 id=79 data-nosnippet>79</a>//! }
+<a href=#80 id=80 data-nosnippet>80</a>//! # ;
+<a href=#81 id=81 data-nosnippet>81</a>//! ```
+<a href=#82 id=82 data-nosnippet>82</a>//!
+<a href=#83 id=83 data-nosnippet>83</a>//! The example above demonstrates the delayed update of a variable.
+<a href=#84 id=84 data-nosnippet>84</a>//!
+<a href=#85 id=85 data-nosnippet>85</a>//! If multiple widgets set the same variable on the same update only
+<a href=#86 id=86 data-nosnippet>86</a>//! the last value set will be used, widgets update in parallel by default so it is difficult to predict who is the last. The [`modify`](Var::modify)
+<a href=#87 id=87 data-nosnippet>87</a>//! method can be used register a closure that can modify the value, this closure will observe the partially updated value that may already be
+<a href=#88 id=88 data-nosnippet>88</a>//! modified by other widgets.
+<a href=#89 id=89 data-nosnippet>89</a>//!
+<a href=#90 id=90 data-nosnippet>90</a>//! The example below demonstrates how the `modify` closure observes a value that was just set in the same update cycle.
+<a href=#91 id=91 data-nosnippet>91</a>//!
+<a href=#92 id=92 data-nosnippet>92</a>//! ```
+<a href=#93 id=93 data-nosnippet>93</a>//! use zng::prelude::*;
+<a href=#94 id=94 data-nosnippet>94</a>//! # let _scope = APP.defaults();
+<a href=#95 id=95 data-nosnippet>95</a>//!
+<a href=#96 id=96 data-nosnippet>96</a>//! let foo = var(0u8);
+<a href=#97 id=97 data-nosnippet>97</a>//! # let _ =
+<a href=#98 id=98 data-nosnippet>98</a>//! Wgt! {
+<a href=#99 id=99 data-nosnippet>99</a>//!     widget::on_init = async_hn!(foo, |_| {
+<a href=#100 id=100 data-nosnippet>100</a>//!         foo.set(1);
+<a href=#101 id=101 data-nosnippet>101</a>//!         assert_eq!(0, foo.get());
+<a href=#102 id=102 data-nosnippet>102</a>//!         foo.modify(|m| {
+<a href=#103 id=103 data-nosnippet>103</a>//!             assert_eq!(1, **m);
+<a href=#104 id=104 data-nosnippet>104</a>//!             **m = 2;
+<a href=#105 id=105 data-nosnippet>105</a>//!         });
+<a href=#106 id=106 data-nosnippet>106</a>//!         assert_eq!(0, foo.get());
+<a href=#107 id=107 data-nosnippet>107</a>//!
+<a href=#108 id=108 data-nosnippet>108</a>//!         foo.wait_update().await;
+<a href=#109 id=109 data-nosnippet>109</a>//!         assert_eq!(2, foo.get());
+<a href=#110 id=110 data-nosnippet>110</a>//!
+<a href=#111 id=111 data-nosnippet>111</a>//!         println!("test ok");
+<a href=#112 id=112 data-nosnippet>112</a>//!     });
+<a href=#113 id=113 data-nosnippet>113</a>//! }
+<a href=#114 id=114 data-nosnippet>114</a>//! # ;
+<a href=#115 id=115 data-nosnippet>115</a>//! ```
+<a href=#116 id=116 data-nosnippet>116</a>//!
+<a href=#117 id=117 data-nosnippet>117</a>//! # Mapping
+<a href=#118 id=118 data-nosnippet>118</a>//!
+<a href=#119 id=119 data-nosnippet>119</a>//! Variables can be mapped to other value types, when the source variable updates the mapping closure re-evaluates and the mapped variable
+<a href=#120 id=120 data-nosnippet>120</a>//! updates, all in the same update cycle, that is both variable will be flagged new at the same time. Mapping can also be bidirectional.
+<a href=#121 id=121 data-nosnippet>121</a>//!
+<a href=#122 id=122 data-nosnippet>122</a>//! The example below demonstrates a button that updates an integer variable that is mapped to a text.
+<a href=#123 id=123 data-nosnippet>123</a>//!
+<a href=#124 id=124 data-nosnippet>124</a>//! ```
+<a href=#125 id=125 data-nosnippet>125</a>//! use zng::prelude::*;
+<a href=#126 id=126 data-nosnippet>126</a>//! # let _scope = APP.defaults();
+<a href=#127 id=127 data-nosnippet>127</a>//!
+<a href=#128 id=128 data-nosnippet>128</a>//! let count = var(0u32);
+<a href=#129 id=129 data-nosnippet>129</a>//! # let _ =
+<a href=#130 id=130 data-nosnippet>130</a>//! Button! {
+<a href=#131 id=131 data-nosnippet>131</a>//!     child = Text!(count.map(|i| match i {
+<a href=#132 id=132 data-nosnippet>132</a>//!         0 =&gt; Txt::from("Click Me!"),
+<a href=#133 id=133 data-nosnippet>133</a>//!         1 =&gt; Txt::from("Clicked 1 time!"),
+<a href=#134 id=134 data-nosnippet>134</a>//!         n =&gt; formatx!("Clicked {n} times!"),
+<a href=#135 id=135 data-nosnippet>135</a>//!     }));
+<a href=#136 id=136 data-nosnippet>136</a>//!     on_click = hn!(|_| {
+<a href=#137 id=137 data-nosnippet>137</a>//!         count.set(count.get() + 1);
+<a href=#138 id=138 data-nosnippet>138</a>//!     });
+<a href=#139 id=139 data-nosnippet>139</a>//! }
+<a href=#140 id=140 data-nosnippet>140</a>//! # ;
+<a href=#141 id=141 data-nosnippet>141</a>//! ```
+<a href=#142 id=142 data-nosnippet>142</a>//!
+<a href=#143 id=143 data-nosnippet>143</a>//! # Binding
+<a href=#144 id=144 data-nosnippet>144</a>//!
+<a href=#145 id=145 data-nosnippet>145</a>//! Two existing variables can be bound, such that one variable update sets the other. The example below rewrites the mapping
+<a href=#146 id=146 data-nosnippet>146</a>//! demo to use a [`bind_map`](Var::bind_map) instead.
+<a href=#147 id=147 data-nosnippet>147</a>//!
+<a href=#148 id=148 data-nosnippet>148</a>//! ```
+<a href=#149 id=149 data-nosnippet>149</a>//! use zng::prelude::*;
+<a href=#150 id=150 data-nosnippet>150</a>//! # let _scope = APP.defaults();
+<a href=#151 id=151 data-nosnippet>151</a>//!
+<a href=#152 id=152 data-nosnippet>152</a>//! let count = var(0u32);
+<a href=#153 id=153 data-nosnippet>153</a>//! let label = var(Txt::from("Click Me!"));
+<a href=#154 id=154 data-nosnippet>154</a>//! count
+<a href=#155 id=155 data-nosnippet>155</a>//!     .bind_map(&amp;label, |i| match i {
+<a href=#156 id=156 data-nosnippet>156</a>//!         1 =&gt; Txt::from("Clicked 1 time!"),
+<a href=#157 id=157 data-nosnippet>157</a>//!         n =&gt; formatx!("Clicked {n} times!"),
+<a href=#158 id=158 data-nosnippet>158</a>//!     })
+<a href=#159 id=159 data-nosnippet>159</a>//!     .perm();
+<a href=#160 id=160 data-nosnippet>160</a>//! # let _ =
+<a href=#161 id=161 data-nosnippet>161</a>//! Button! {
+<a href=#162 id=162 data-nosnippet>162</a>//!     child = Text!(label);
+<a href=#163 id=163 data-nosnippet>163</a>//!     on_click = hn!(|_| {
+<a href=#164 id=164 data-nosnippet>164</a>//!         count.set(count.get() + 1);
+<a href=#165 id=165 data-nosnippet>165</a>//!     });
+<a href=#166 id=166 data-nosnippet>166</a>//! }
+<a href=#167 id=167 data-nosnippet>167</a>//! # ;
+<a href=#168 id=168 data-nosnippet>168</a>//! ```
+<a href=#169 id=169 data-nosnippet>169</a>//!
+<a href=#170 id=170 data-nosnippet>170</a>//! Note that unlike a map the initial value of the output variable is not updated, only subsequent ones. You can use
+<a href=#171 id=171 data-nosnippet>171</a>//! [`set_from`](Var::set_from) to update the initial value too.
+<a href=#172 id=172 data-nosnippet>172</a>//!
+<a href=#173 id=173 data-nosnippet>173</a>//! # Animating
+<a href=#174 id=174 data-nosnippet>174</a>//!
+<a href=#175 id=175 data-nosnippet>175</a>//! Animation is implemented using variables, at the lowest level [`VARS.animate`](VARS::animate) is used to register a closure to be
+<a href=#176 id=176 data-nosnippet>176</a>//! called every frame, the closure can set any number of variables, at a higher level the [`Var::ease`] and [`Var::chase`] methods
+<a href=#177 id=177 data-nosnippet>177</a>//! can be used to animate the value of a variable.
+<a href=#178 id=178 data-nosnippet>178</a>//!
+<a href=#179 id=179 data-nosnippet>179</a>//! The example below uses [`Var::easing`] to animate the window background:
+<a href=#180 id=180 data-nosnippet>180</a>//! ```
+<a href=#181 id=181 data-nosnippet>181</a>//! use zng::prelude::*;
+<a href=#182 id=182 data-nosnippet>182</a>//! # let _scope = APP.defaults();
+<a href=#183 id=183 data-nosnippet>183</a>//!
+<a href=#184 id=184 data-nosnippet>184</a>//! let color = var(colors::AZURE.darken(30.pct()));
+<a href=#185 id=185 data-nosnippet>185</a>//! # let _ =
+<a href=#186 id=186 data-nosnippet>186</a>//! Window! {
+<a href=#187 id=187 data-nosnippet>187</a>//!     widget::background_color = color.easing(500.ms(), easing::linear);
+<a href=#188 id=188 data-nosnippet>188</a>//!     child = Button! {
+<a href=#189 id=189 data-nosnippet>189</a>//!         layout::align = layout::Align::TOP;
+<a href=#190 id=190 data-nosnippet>190</a>//!         on_click = hn!(|_| {
+<a href=#191 id=191 data-nosnippet>191</a>//!             let mut c = color::Hsla::from(color.get());
+<a href=#192 id=192 data-nosnippet>192</a>//!             c.hue += 60.0;
+<a href=#193 id=193 data-nosnippet>193</a>//!             color.set(c);
+<a href=#194 id=194 data-nosnippet>194</a>//!         });
+<a href=#195 id=195 data-nosnippet>195</a>//!         child = Text!("Change background color");
+<a href=#196 id=196 data-nosnippet>196</a>//!     };
+<a href=#197 id=197 data-nosnippet>197</a>//! }
+<a href=#198 id=198 data-nosnippet>198</a>//! # ;
+<a href=#199 id=199 data-nosnippet>199</a>//! ```
+<a href=#200 id=200 data-nosnippet>200</a>//!
+<a href=#201 id=201 data-nosnippet>201</a>//! Variables can only be operated by a single animation, when a newer animation or modify affects a variable older animations can no longer
+<a href=#202 id=202 data-nosnippet>202</a>//! affect it, see [`VARS.animate`](VARS::animate) for more details.
+<a href=#203 id=203 data-nosnippet>203</a>//!
+<a href=#204 id=204 data-nosnippet>204</a>//! # Response
+<a href=#205 id=205 data-nosnippet>205</a>//!
+<a href=#206 id=206 data-nosnippet>206</a>//! The [`ResponseVar&lt;T&gt;`] is a specialized variable that represents the result of an async task. You can use `.await` directly
+<a href=#207 id=207 data-nosnippet>207</a>//! in any async handler, but a response var lets you plug a query directly into a property. You can use [`task::respond`] to convert
+<a href=#208 id=208 data-nosnippet>208</a>//! any future into a response var, and you can use [`wait_rsp`] to convert a response var to a future.
+<a href=#209 id=209 data-nosnippet>209</a>//!
+<a href=#210 id=210 data-nosnippet>210</a>//! ```no_run
+<a href=#211 id=211 data-nosnippet>211</a>//! use zng::prelude::*;
+<a href=#212 id=212 data-nosnippet>212</a>//! # let _scope = APP.defaults();
+<a href=#213 id=213 data-nosnippet>213</a>//!
+<a href=#214 id=214 data-nosnippet>214</a>//! let rsp = task::respond(async {
+<a href=#215 id=215 data-nosnippet>215</a>//!     let url = "https://raw.githubusercontent.com/git/git-scm.com/main/MIT-LICENSE.txt";
+<a href=#216 id=216 data-nosnippet>216</a>//!     match task::http::get_txt(url).await {
+<a href=#217 id=217 data-nosnippet>217</a>//!         Ok(t) =&gt; t,
+<a href=#218 id=218 data-nosnippet>218</a>//!         Err(e) =&gt; formatx!("{e}"),
+<a href=#219 id=219 data-nosnippet>219</a>//!     }
+<a href=#220 id=220 data-nosnippet>220</a>//! });
+<a href=#221 id=221 data-nosnippet>221</a>//! # let _ =
+<a href=#222 id=222 data-nosnippet>222</a>//! SelectableText!(rsp.map(|r| {
+<a href=#223 id=223 data-nosnippet>223</a>//!     use zng::var::Response::*;
+<a href=#224 id=224 data-nosnippet>224</a>//!     match r {
+<a href=#225 id=225 data-nosnippet>225</a>//!         Waiting =&gt; Txt::from("loading.."),
+<a href=#226 id=226 data-nosnippet>226</a>//!         Done(t) =&gt; t.clone(),
+<a href=#227 id=227 data-nosnippet>227</a>//!     }
+<a href=#228 id=228 data-nosnippet>228</a>//! }))
+<a href=#229 id=229 data-nosnippet>229</a>//! # ;
+<a href=#230 id=230 data-nosnippet>230</a>//! ```
+<a href=#231 id=231 data-nosnippet>231</a>//!
+<a href=#232 id=232 data-nosnippet>232</a>//! The example above creates a response var from a download future and maps the response to a widget.
+<a href=#233 id=233 data-nosnippet>233</a>//!
+<a href=#234 id=234 data-nosnippet>234</a>//! A response var is paired with a [`ResponderVar&lt;T&gt;`], you can create a *response channel* using the [`response_var`] function.
+<a href=#235 id=235 data-nosnippet>235</a>//!
+<a href=#236 id=236 data-nosnippet>236</a>//! [`task::respond`]: crate::task::respond
+<a href=#237 id=237 data-nosnippet>237</a>//! [`wait_rsp`]: ResponseVar::wait_rsp
+<a href=#238 id=238 data-nosnippet>238</a>//!
+<a href=#239 id=239 data-nosnippet>239</a>//! # Merge
+<a href=#240 id=240 data-nosnippet>240</a>//!
+<a href=#241 id=241 data-nosnippet>241</a>//! The [`merge_var!`] and [`expr_var!`] macros can be used to declare a variable that merges multiple other variable values.
+<a href=#242 id=242 data-nosnippet>242</a>//!
+<a href=#243 id=243 data-nosnippet>243</a>//! The example below demonstrates the two macros.
+<a href=#244 id=244 data-nosnippet>244</a>//!
+<a href=#245 id=245 data-nosnippet>245</a>//! ```
+<a href=#246 id=246 data-nosnippet>246</a>//! use zng::prelude::*;
+<a href=#247 id=247 data-nosnippet>247</a>//! # let _scope = APP.defaults();
+<a href=#248 id=248 data-nosnippet>248</a>//!
+<a href=#249 id=249 data-nosnippet>249</a>//! let a = var(10u32);
+<a href=#250 id=250 data-nosnippet>250</a>//! let b = var(1u32);
+<a href=#251 id=251 data-nosnippet>251</a>//!
+<a href=#252 id=252 data-nosnippet>252</a>//! // let merge = expr_var!({
+<a href=#253 id=253 data-nosnippet>253</a>//! //     let a = *#{a};
+<a href=#254 id=254 data-nosnippet>254</a>//! //     let b = *#{b.clone()};
+<a href=#255 id=255 data-nosnippet>255</a>//! //     formatx!("{a} + {b} = {}", a + b)
+<a href=#256 id=256 data-nosnippet>256</a>//! // });
+<a href=#257 id=257 data-nosnippet>257</a>//! let merge = merge_var!(a, b.clone(), |&amp;a, &amp;b| { formatx!("{a} + {b} = {}", a + b) });
+<a href=#258 id=258 data-nosnippet>258</a>//! # let _ =
+<a href=#259 id=259 data-nosnippet>259</a>//! Button! {
+<a href=#260 id=260 data-nosnippet>260</a>//!     child = Text!(merge);
+<a href=#261 id=261 data-nosnippet>261</a>//!     on_click = hn!(|_| b.set(b.get() + 1));
+<a href=#262 id=262 data-nosnippet>262</a>//! }
+<a href=#263 id=263 data-nosnippet>263</a>//! # ;
+<a href=#264 id=264 data-nosnippet>264</a>//! ```
+<a href=#265 id=265 data-nosnippet>265</a>//!
+<a href=#266 id=266 data-nosnippet>266</a>//! # Contextual
+<a href=#267 id=267 data-nosnippet>267</a>//!
+<a href=#268 id=268 data-nosnippet>268</a>//! The [`ContextVar&lt;T&gt;`] type represents a variable that has context depend value, meaning they can produce a different value depending
+<a href=#269 id=269 data-nosnippet>269</a>//! on where they are used. Context vars are declared using the [`context_var!`] macro.
+<a href=#270 id=270 data-nosnippet>270</a>//!
+<a href=#271 id=271 data-nosnippet>271</a>//! The example below declares a context var and a property that sets it. The context var is then used in two texts with
+<a href=#272 id=272 data-nosnippet>272</a>//! two different contexts, the first text will show "Text!", the second will show "Stack!".
+<a href=#273 id=273 data-nosnippet>273</a>//!
+<a href=#274 id=274 data-nosnippet>274</a>//! ```
+<a href=#275 id=275 data-nosnippet>275</a>//! # fn main() { }
+<a href=#276 id=276 data-nosnippet>276</a>//! use zng::prelude::*;
+<a href=#277 id=277 data-nosnippet>277</a>//!
+<a href=#278 id=278 data-nosnippet>278</a>//! context_var! {
+<a href=#279 id=279 data-nosnippet>279</a>//!     static FOO_VAR: Txt = "";
+<a href=#280 id=280 data-nosnippet>280</a>//! }
+<a href=#281 id=281 data-nosnippet>281</a>//!
+<a href=#282 id=282 data-nosnippet>282</a>//! #[zng::widget::property(CONTEXT, default(FOO_VAR))]
+<a href=#283 id=283 data-nosnippet>283</a>//! pub fn foo(child: impl IntoUiNode, foo: impl IntoVar&lt;Txt&gt;) -&gt; UiNode {
+<a href=#284 id=284 data-nosnippet>284</a>//!     zng::widget::node::with_context_var(child, FOO_VAR, foo)
+<a href=#285 id=285 data-nosnippet>285</a>//! }
+<a href=#286 id=286 data-nosnippet>286</a>//!
+<a href=#287 id=287 data-nosnippet>287</a>//! fn demo() -&gt; UiNode {
+<a href=#288 id=288 data-nosnippet>288</a>//!     Stack! {
+<a href=#289 id=289 data-nosnippet>289</a>//!         direction = StackDirection::top_to_bottom();
+<a href=#290 id=290 data-nosnippet>290</a>//!         spacing = 5;
+<a href=#291 id=291 data-nosnippet>291</a>//!         foo = "Stack!";
+<a href=#292 id=292 data-nosnippet>292</a>//!         children = ui_vec![
+<a href=#293 id=293 data-nosnippet>293</a>//!             Text! {
+<a href=#294 id=294 data-nosnippet>294</a>//!                 txt = FOO_VAR;
+<a href=#295 id=295 data-nosnippet>295</a>//!                 foo = "Text!";
+<a href=#296 id=296 data-nosnippet>296</a>//!             },
+<a href=#297 id=297 data-nosnippet>297</a>//!             Text!(FOO_VAR),
+<a href=#298 id=298 data-nosnippet>298</a>//!         ];
+<a href=#299 id=299 data-nosnippet>299</a>//!     }
+<a href=#300 id=300 data-nosnippet>300</a>//! }
+<a href=#301 id=301 data-nosnippet>301</a>//! ```
+<a href=#302 id=302 data-nosnippet>302</a>//!
+<a href=#303 id=303 data-nosnippet>303</a>//! Context variables have all the same capabilities of other variables if the example if `foo` is set to a [`var`]
+<a href=#304 id=304 data-nosnippet>304</a>//! the context var will be editable, and if `FOO_VAR` is mapped the mapping variable is also contextual.
+<a href=#305 id=305 data-nosnippet>305</a>//!
+<a href=#306 id=306 data-nosnippet>306</a>//! # Full API
+<a href=#307 id=307 data-nosnippet>307</a>//!
+<a href=#308 id=308 data-nosnippet>308</a>//! See [`zng_var`] for the full var API.
+<a href=#309 id=309 data-nosnippet>309</a>
+<a href=#310 id=310 data-nosnippet>310</a></span><span class="kw">pub use </span>zng_var::{
+<a href=#311 id=311 data-nosnippet>311</a>    AnyVar, AnyVarValue, AnyWhenVarBuilder, ArcEq, BoxAnyVarValue, ContextInitHandle, ContextVar, IntoValue, IntoVar, MergeVarBuilder,
+<a href=#312 id=312 data-nosnippet>312</a>    ObservableVec, ResponderVar, Response, ResponseVar, VARS, Var, VarCapability, VarEq, VarHandle, VarHandles, VarHookArgs,
+<a href=#313 id=313 data-nosnippet>313</a>    VarInstanceTag, VarModify, VarUpdateId, VarValue, VecChange, WeakAnyVar, WeakVar, any_var_derived, const_var, context_var,
+<a href=#314 id=314 data-nosnippet>314</a>    contextual_var, expr_var, impl_from_and_into_var, merge_var, response_done_var, response_var, var, var_default, var_from, var_getter,
+<a href=#315 id=315 data-nosnippet>315</a>    var_state, when_var,
+<a href=#316 id=316 data-nosnippet>316</a>};
+<a href=#317 id=317 data-nosnippet>317</a>
+<a href=#318 id=318 data-nosnippet>318</a><span class="kw">pub use </span>zng_app::widget::{AnyVarSubscribe, OnVarArgs, VarLayout, VarSubscribe};
+<a href=#319 id=319 data-nosnippet>319</a>
+<a href=#320 id=320 data-nosnippet>320</a><span class="doccomment">/// Var animation types and functions.
+<a href=#321 id=321 data-nosnippet>321</a></span><span class="kw">pub mod </span>animation {
+<a href=#322 id=322 data-nosnippet>322</a>    <span class="kw">pub use </span>zng_var::animation::{
+<a href=#323 id=323 data-nosnippet>323</a>        Animation, AnimationController, AnimationHandle, ChaseAnimation, ForceAnimationController, ModifyInfo, Transition, TransitionKeyed,
+<a href=#324 id=324 data-nosnippet>324</a>        Transitionable, WeakAnimationHandle,
+<a href=#325 id=325 data-nosnippet>325</a>    };
+<a href=#326 id=326 data-nosnippet>326</a>
+<a href=#327 id=327 data-nosnippet>327</a>    <span class="doccomment">/// Common easing functions.
+<a href=#328 id=328 data-nosnippet>328</a>    </span><span class="kw">pub mod </span>easing {
+<a href=#329 id=329 data-nosnippet>329</a>        <span class="kw">pub use </span>zng_var::animation::easing::{
+<a href=#330 id=330 data-nosnippet>330</a>            Bezier, EasingFn, EasingStep, EasingTime, back, bounce, circ, cubic, cubic_bezier, ease_in, ease_in_out, ease_out, ease_out_in,
+<a href=#331 id=331 data-nosnippet>331</a>            elastic, expo, linear, none, quad, quart, quint, reverse, reverse_out, sine, step_ceil, step_floor,
+<a href=#332 id=332 data-nosnippet>332</a>        };
+<a href=#333 id=333 data-nosnippet>333</a>    }
+<a href=#334 id=334 data-nosnippet>334</a>}</code></pre></div></section></main></body></html>

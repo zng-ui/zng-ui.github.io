@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 </script>
-</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng_app/index.html">zng_app</a><span class="version">0.17.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">app_hn</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#examples" title="Examples">Examples</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="index.html">In zng_<wbr>app::<wbr>handler</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng_app</a>::<wbr><a href="index.html">handler</a></div><h1>Macro <span class="macro">app_hn</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng_app/handler.rs.html#777-781">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! app_hn {
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng_app/index.html">zng_app</a><span class="version">0.17.1</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">app_hn</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#examples" title="Examples">Examples</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="index.html">In zng_<wbr>app::<wbr>handler</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng_app</a>::<wbr><a href="index.html">handler</a></div><h1>Macro <span class="macro">app_hn</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng_app/handler.rs.html#786-790">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! app_hn {
     ($($tt:tt)+) =&gt; { ... };
 }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Declare a mutable <em>clone-move</em> app event handler.</p>
 <p>The macro input is a closure with optional <em>clone-move</em> variables, internally it uses <a href="../../zng_clone_move/macro.clmv.html" title="macro zng_clone_move::clmv"><code>clmv!</code></a> so
@@ -42,25 +42,31 @@ the input is the same syntax.</p>
 <h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
 <p>The example declares an event handler for the <code>CLICK_EVENT</code>.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code>CLICK_EVENT.on_event(<span class="macro">app_hn!</span>(|<span class="kw">_</span>, <span class="kw">_</span>| {
-    <span class="macro">println!</span>(<span class="string">"Clicked Somewhere!"</span>);
-})).perm();</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>CLICK_EVENT
+    .on_event(<span class="macro">app_hn!</span>(|<span class="kw">_</span>, <span class="kw">_</span>| {
+        <span class="macro">println!</span>(<span class="string">"Clicked Somewhere!"</span>);
+    }))
+    .perm();</code></pre></div>
 <p>The closure input is <code>&amp;A, &amp;dyn AppWeakHandle</code> with <code>&amp;A</code> equaling <code>&amp;ClickArgs</code> for this event. Note that
 if you want to use the event args you must annotate the input type, the context and handle type is inferred.</p>
 <p>The handle can be used to unsubscribe the event handler, if <a href="trait.AppWeakHandle.html#tymethod.unsubscribe" title="method zng_app::handler::AppWeakHandle::unsubscribe"><code>unsubscribe</code></a> is called the handler
 will be dropped some time before the next event update.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code>CLICK_EVENT.on_event(<span class="macro">app_hn!</span>(|args: <span class="kw-2">&amp;</span>ClickArgs, handle| {
-    <span class="macro">println!</span>(<span class="string">"Clicked {}!"</span>, args.target);
-    handle.unsubscribe();
-})).perm();</code></pre></div>
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>CLICK_EVENT
+    .on_event(<span class="macro">app_hn!</span>(|args: <span class="kw-2">&amp;</span>ClickArgs, handle| {
+        <span class="macro">println!</span>(<span class="string">"Clicked {}!"</span>, args.target);
+        handle.unsubscribe();
+    }))
+    .perm();</code></pre></div>
 <p>Internally the <a href="../../zng_clone_move/macro.clmv.html" title="macro zng_clone_move::clmv"><code>clmv!</code></a> macro is used so you can <em>clone-move</em> variables into the handler.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>foo = var(<span class="string">""</span>.to_txt());
 
-CLICK_EVENT.on_event(<span class="macro">app_hn!</span>(foo, |args: <span class="kw-2">&amp;</span>ClickArgs, <span class="kw">_</span>| {
-    foo.set(args.target.to_txt());
-})).perm();
+CLICK_EVENT
+    .on_event(<span class="macro">app_hn!</span>(foo, |args: <span class="kw-2">&amp;</span>ClickArgs, <span class="kw">_</span>| {
+        foo.set(args.target.to_txt());
+    }))
+    .perm();
 
 <span class="comment">// can still use after:
 </span><span class="kw">let </span>bar = foo.map(|c| <span class="macro">formatx!</span>(<span class="string">"last click: {c}"</span>));
