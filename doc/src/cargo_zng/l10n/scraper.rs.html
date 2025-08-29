@@ -303,9 +303,9 @@
 <a href=#303 id=303 data-nosnippet>303</a>            [TokenTree::Literal(l0), TokenTree::Punct(p), TokenTree::Literal(l1)] <span class="kw">if </span>p.as_char() == <span class="string">',' </span>=&gt; {
 <a href=#304 id=304 data-nosnippet>304</a>                <span class="kw">match </span>(StringLit::try_from(l0), StringLit::try_from(l1)) {
 <a href=#305 id=305 data-nosnippet>305</a>                    (<span class="prelude-val">Ok</span>(s0), <span class="prelude-val">Ok</span>(s1)) =&gt; <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
-<a href=#306 id=306 data-nosnippet>306</a>                        id: s0.into_value().into_owned(),
+<a href=#306 id=306 data-nosnippet>306</a>                        id: s0.into_value(),
 <a href=#307 id=307 data-nosnippet>307</a>                        id_span: l0.span(),
-<a href=#308 id=308 data-nosnippet>308</a>                        msg: s1.into_value().into_owned(),
+<a href=#308 id=308 data-nosnippet>308</a>                        msg: s1.into_value(),
 <a href=#309 id=309 data-nosnippet>309</a>                    }),
 <a href=#310 id=310 data-nosnippet>310</a>                    <span class="kw">_ </span>=&gt; <span class="prelude-val">Err</span>(String::new()),
 <a href=#311 id=311 data-nosnippet>311</a>                }
@@ -389,7 +389,7 @@
 <a href=#389 id=389 data-nosnippet>389</a>            ] <span class="kw">if </span>i == <span class="string">"l10n" </span>&amp;&amp; p0.as_char() == <span class="string">'!' </span>&amp;&amp; p1.as_char() == <span class="string">':' </span>&amp;&amp; p2.as_char() == <span class="string">',' </span>=&gt; {
 <a href=#390 id=390 data-nosnippet>390</a>                <span class="kw">match </span>litrs::Literal::try_from(value) {
 <a href=#391 id=391 data-nosnippet>391</a>                    <span class="prelude-val">Ok</span>(litrs::Literal::String(str)) =&gt; {
-<a href=#392 id=392 data-nosnippet>392</a>                        r.id = str.into_value().into_owned();
+<a href=#392 id=392 data-nosnippet>392</a>                        r.id = str.into_value();
 <a href=#393 id=393 data-nosnippet>393</a>                        r.file_span = value.span();
 <a href=#394 id=394 data-nosnippet>394</a>                    }
 <a href=#395 id=395 data-nosnippet>395</a>                    <span class="prelude-val">Ok</span>(litrs::Literal::Bool(b)) =&gt; {
@@ -422,7 +422,7 @@
 <a href=#422 id=422 data-nosnippet>422</a>                        <span class="kw">if let </span><span class="prelude-val">Ok</span>(s) = StringLit::try_from(l) {
 <a href=#423 id=423 data-nosnippet>423</a>                            r.metadata.push(CommandMetaEntry {
 <a href=#424 id=424 data-nosnippet>424</a>                                name: i.clone(),
-<a href=#425 id=425 data-nosnippet>425</a>                                value: s.into_value().into_owned(),
+<a href=#425 id=425 data-nosnippet>425</a>                                value: s.into_value(),
 <a href=#426 id=426 data-nosnippet>426</a>                                value_span: l.span(),
 <a href=#427 id=427 data-nosnippet>427</a>                            })
 <a href=#428 id=428 data-nosnippet>428</a>                        }
