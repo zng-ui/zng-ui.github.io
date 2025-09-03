@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#57 id=57 data-nosnippet>57</a>/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 <a href=#58 id=58 data-nosnippet>58</a></span><span class="attr">#[property(EVENT)]
 <a href=#59 id=59 data-nosnippet>59</a></span><span class="kw">pub fn </span>on_node_op(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#60 id=60 data-nosnippet>60</a>    on_node_op_impl(child.into_node(), handler.cfg_boxed(), |<span class="kw">_</span>| <span class="bool-val">true</span>)
+<a href=#60 id=60 data-nosnippet>60</a>    on_node_op_impl(child.into_node(), handler, |<span class="kw">_</span>| <span class="bool-val">true</span>)
 <a href=#61 id=61 data-nosnippet>61</a>}
 <a href=#62 id=62 data-nosnippet>62</a><span class="kw">fn </span>on_node_op_impl(
 <a href=#63 id=63 data-nosnippet>63</a>    child: UiNode,
@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#105 id=105 data-nosnippet>105</a>/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 <a href=#106 id=106 data-nosnippet>106</a></span><span class="attr">#[property(EVENT)]
 <a href=#107 id=107 data-nosnippet>107</a></span><span class="kw">pub fn </span>on_pre_node_op(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#108 id=108 data-nosnippet>108</a>    on_pre_node_op_impl(child.into_node(), handler.cfg_boxed(), |<span class="kw">_</span>| <span class="bool-val">true</span>)
+<a href=#108 id=108 data-nosnippet>108</a>    on_pre_node_op_impl(child.into_node(), handler, |<span class="kw">_</span>| <span class="bool-val">true</span>)
 <a href=#109 id=109 data-nosnippet>109</a>}
 <a href=#110 id=110 data-nosnippet>110</a><span class="kw">fn </span>on_pre_node_op_impl(
 <a href=#111 id=111 data-nosnippet>111</a>    child: UiNode,
@@ -191,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#155 id=155 data-nosnippet>155</a>/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 <a href=#156 id=156 data-nosnippet>156</a></span><span class="attr">#[property(EVENT)]
 <a href=#157 id=157 data-nosnippet>157</a></span><span class="kw">pub fn </span>on_init(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#158 id=158 data-nosnippet>158</a>    on_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Init))
+<a href=#158 id=158 data-nosnippet>158</a>    on_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Init))
 <a href=#159 id=159 data-nosnippet>159</a>}
 <a href=#160 id=160 data-nosnippet>160</a>
 <a href=#161 id=161 data-nosnippet>161</a><span class="doccomment">/// Preview [`on_init`] event.
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#163 id=163 data-nosnippet>163</a>/// [`on_init`]: fn@on_init
 <a href=#164 id=164 data-nosnippet>164</a></span><span class="attr">#[property(EVENT)]
 <a href=#165 id=165 data-nosnippet>165</a></span><span class="kw">pub fn </span>on_pre_init(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#166 id=166 data-nosnippet>166</a>    on_pre_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Init))
+<a href=#166 id=166 data-nosnippet>166</a>    on_pre_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Init))
 <a href=#167 id=167 data-nosnippet>167</a>}
 <a href=#168 id=168 data-nosnippet>168</a>
 <a href=#169 id=169 data-nosnippet>169</a><span class="doccomment">/// Widget info is now available.
@@ -228,7 +228,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#192 id=192 data-nosnippet>192</a>/// [`WidgetHandler`]: zng_app::handler::WidgetHandler
 <a href=#193 id=193 data-nosnippet>193</a></span><span class="attr">#[property(EVENT)]
 <a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub fn </span>on_info_init(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#195 id=195 data-nosnippet>195</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.cfg_boxed();
+<a href=#195 id=195 data-nosnippet>195</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler;
 <a href=#196 id=196 data-nosnippet>196</a>    <span class="kw">let </span><span class="kw-2">mut </span>count = <span class="number">1</span>;
 <a href=#197 id=197 data-nosnippet>197</a>    <span class="kw">enum </span>State {
 <a href=#198 id=198 data-nosnippet>198</a>        WaitInfo,
@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#239 id=239 data-nosnippet>239</a>/// [`hn_once!`]: zng_app::handler::hn_once!
 <a href=#240 id=240 data-nosnippet>240</a></span><span class="attr">#[property(EVENT)]
 <a href=#241 id=241 data-nosnippet>241</a></span><span class="kw">pub fn </span>on_update(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#242 id=242 data-nosnippet>242</a>    on_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
+<a href=#242 id=242 data-nosnippet>242</a>    on_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
 <a href=#243 id=243 data-nosnippet>243</a>}
 <a href=#244 id=244 data-nosnippet>244</a>
 <a href=#245 id=245 data-nosnippet>245</a><span class="doccomment">/// Preview [`on_update`] event.
@@ -294,7 +294,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#258 id=258 data-nosnippet>258</a>/// [`hn_once!`]: zng_app::handler::hn_once!
 <a href=#259 id=259 data-nosnippet>259</a></span><span class="attr">#[property(EVENT)]
 <a href=#260 id=260 data-nosnippet>260</a></span><span class="kw">pub fn </span>on_pre_update(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#261 id=261 data-nosnippet>261</a>    on_pre_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
+<a href=#261 id=261 data-nosnippet>261</a>    on_pre_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Update))
 <a href=#262 id=262 data-nosnippet>262</a>}
 <a href=#263 id=263 data-nosnippet>263</a>
 <a href=#264 id=264 data-nosnippet>264</a><span class="doccomment">/// Widget deinited.
@@ -325,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#289 id=289 data-nosnippet>289</a>/// [`task::spawn`]: zng_task::spawn
 <a href=#290 id=290 data-nosnippet>290</a></span><span class="attr">#[property(EVENT)]
 <a href=#291 id=291 data-nosnippet>291</a></span><span class="kw">pub fn </span>on_deinit(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#292 id=292 data-nosnippet>292</a>    on_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Deinit))
+<a href=#292 id=292 data-nosnippet>292</a>    on_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Deinit))
 <a href=#293 id=293 data-nosnippet>293</a>}
 <a href=#294 id=294 data-nosnippet>294</a>
 <a href=#295 id=295 data-nosnippet>295</a><span class="doccomment">/// Preview [`on_deinit`] event.
@@ -333,7 +333,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#297 id=297 data-nosnippet>297</a>/// [`on_deinit`]: fn@on_deinit
 <a href=#298 id=298 data-nosnippet>298</a></span><span class="attr">#[property(EVENT)]
 <a href=#299 id=299 data-nosnippet>299</a></span><span class="kw">pub fn </span>on_pre_deinit(child: <span class="kw">impl </span>IntoUiNode, handler: <span class="kw">impl </span>WidgetHandler&lt;OnNodeOpArgs&gt;) -&gt; UiNode {
-<a href=#300 id=300 data-nosnippet>300</a>    on_pre_node_op_impl(child.into_node(), handler.cfg_boxed(), |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Deinit))
+<a href=#300 id=300 data-nosnippet>300</a>    on_pre_node_op_impl(child.into_node(), handler, |op| <span class="macro">matches!</span>(op, UiNodeOpMethod::Deinit))
 <a href=#301 id=301 data-nosnippet>301</a>}
 <a href=#302 id=302 data-nosnippet>302</a>
 <a href=#303 id=303 data-nosnippet>303</a><span class="doccomment">/// If the widget has been initialized.

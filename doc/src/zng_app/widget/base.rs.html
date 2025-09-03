@@ -968,138 +968,145 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#932 id=932 data-nosnippet>932</a>                visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
 <a href=#933 id=933 data-nosnippet>933</a>            }
 <a href=#934 id=934 data-nosnippet>934</a>
-<a href=#935 id=935 data-nosnippet>935</a>            <span class="kw">fn </span>par_each_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode) + Sync)) {
-<a href=#936 id=936 data-nosnippet>936</a>                visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
-<a href=#937 id=937 data-nosnippet>937</a>            }
-<a href=#938 id=938 data-nosnippet>938</a>
-<a href=#939 id=939 data-nosnippet>939</a>            <span class="kw">fn </span>par_fold_reduce(
-<a href=#940 id=940 data-nosnippet>940</a>                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-<a href=#941 id=941 data-nosnippet>941</a>                identity: zng_var::BoxAnyVarValue,
-<a href=#942 id=942 data-nosnippet>942</a>                fold: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, usize, <span class="kw-2">&amp;mut </span>UiNode) -&gt; zng_var::BoxAnyVarValue + Sync),
-<a href=#943 id=943 data-nosnippet>943</a>                <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, zng_var::BoxAnyVarValue) -&gt; zng_var::BoxAnyVarValue + Sync),
-<a href=#944 id=944 data-nosnippet>944</a>            ) -&gt; zng_var::BoxAnyVarValue {
-<a href=#945 id=945 data-nosnippet>945</a>                fold(identity, <span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
-<a href=#946 id=946 data-nosnippet>946</a>            }
-<a href=#947 id=947 data-nosnippet>947</a>        }
-<a href=#948 id=948 data-nosnippet>948</a>
-<a href=#949 id=949 data-nosnippet>949</a>        WidgetNode {
-<a href=#950 id=950 data-nosnippet>950</a>            ctx: WidgetCtx::new(id.into()),
-<a href=#951 id=951 data-nosnippet>951</a>            child: child.into_node(),
-<a href=#952 id=952 data-nosnippet>952</a>
-<a href=#953 id=953 data-nosnippet>953</a>            <span class="attr">#[cfg(debug_assertions)]
-<a href=#954 id=954 data-nosnippet>954</a>            </span>inited: <span class="bool-val">false</span>,
-<a href=#955 id=955 data-nosnippet>955</a>            <span class="attr">#[cfg(debug_assertions)]
-<a href=#956 id=956 data-nosnippet>956</a>            </span>info_built: <span class="bool-val">false</span>,
-<a href=#957 id=957 data-nosnippet>957</a>        }
-<a href=#958 id=958 data-nosnippet>958</a>        .into_node()
-<a href=#959 id=959 data-nosnippet>959</a>    }
-<a href=#960 id=960 data-nosnippet>960</a>}
-<a href=#961 id=961 data-nosnippet>961</a>
-<a href=#962 id=962 data-nosnippet>962</a><span class="doccomment">/// Unique ID of the widget instance.
-<a href=#963 id=963 data-nosnippet>963</a>///
-<a href=#964 id=964 data-nosnippet>964</a>/// Note that the `id` can convert from a `&amp;'static str` unique name.
-<a href=#965 id=965 data-nosnippet>965</a></span><span class="attr">#[property(CONTEXT, capture, default(WidgetId::new_unique()), widget_impl(WidgetBase))]
-<a href=#966 id=966 data-nosnippet>966</a></span><span class="kw">pub fn </span>id(id: <span class="kw">impl </span>IntoValue&lt;WidgetId&gt;) {}
-<a href=#967 id=967 data-nosnippet>967</a>
-<a href=#968 id=968 data-nosnippet>968</a><span class="doccomment">/// Defines if and how a widget is hit-tested.
-<a href=#969 id=969 data-nosnippet>969</a></span><span class="attr">#[derive(Copy, Clone, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
-<a href=#970 id=970 data-nosnippet>970</a></span><span class="kw">pub enum </span>HitTestMode {
-<a href=#971 id=971 data-nosnippet>971</a>    <span class="doccomment">/// Widget is never hit.
-<a href=#972 id=972 data-nosnippet>972</a>    ///
-<a href=#973 id=973 data-nosnippet>973</a>    /// This mode affects the entire UI branch, if set it disables hit-testing for the widget and all its descendants,
-<a href=#974 id=974 data-nosnippet>974</a>    /// even if they set explicitly set their hit-test mode to something else.
-<a href=#975 id=975 data-nosnippet>975</a>    </span>Disabled,
-<a href=#976 id=976 data-nosnippet>976</a>    <span class="doccomment">/// Widget is hit by any point that intersects the transformed inner bounds rectangle. If the widget is inlined
-<a href=#977 id=977 data-nosnippet>977</a>    /// excludes the first row advance and the last row trailing space.
-<a href=#978 id=978 data-nosnippet>978</a>    </span>Bounds,
-<a href=#979 id=979 data-nosnippet>979</a>    <span class="doccomment">/// Same as `Bounds`, but also excludes the outside of rounded corners.
-<a href=#980 id=980 data-nosnippet>980</a>    ///
-<a href=#981 id=981 data-nosnippet>981</a>    /// This is the default mode.
-<a href=#982 id=982 data-nosnippet>982</a>    </span><span class="attr">#[default]
-<a href=#983 id=983 data-nosnippet>983</a>    </span>RoundedBounds,
-<a href=#984 id=984 data-nosnippet>984</a>    <span class="doccomment">/// Widget is hit by any point that intersects the hit-test shape defined on render by
-<a href=#985 id=985 data-nosnippet>985</a>    /// [`FrameBuilder::hit_test`] and auto hit-test.
-<a href=#986 id=986 data-nosnippet>986</a>    ///
-<a href=#987 id=987 data-nosnippet>987</a>    /// [`FrameBuilder::hit_test`]: crate::render::FrameBuilder::hit_test
-<a href=#988 id=988 data-nosnippet>988</a>    </span>Detailed,
-<a href=#989 id=989 data-nosnippet>989</a>}
-<a href=#990 id=990 data-nosnippet>990</a><span class="kw">impl </span>HitTestMode {
-<a href=#991 id=991 data-nosnippet>991</a>    <span class="doccomment">/// Returns `true` if is any mode other then [`Disabled`].
-<a href=#992 id=992 data-nosnippet>992</a>    ///
-<a href=#993 id=993 data-nosnippet>993</a>    /// [`Disabled`]: Self::Disabled
-<a href=#994 id=994 data-nosnippet>994</a>    </span><span class="kw">pub fn </span>is_hit_testable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#995 id=995 data-nosnippet>995</a>        !<span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Disabled)
-<a href=#996 id=996 data-nosnippet>996</a>    }
-<a href=#997 id=997 data-nosnippet>997</a>}
-<a href=#998 id=998 data-nosnippet>998</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>HitTestMode {
-<a href=#999 id=999 data-nosnippet>999</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#1000 id=1000 data-nosnippet>1000</a>        <span class="kw">if </span>f.alternate() {
-<a href=#1001 id=1001 data-nosnippet>1001</a>            <span class="macro">write!</span>(f, <span class="string">"HitTestMode::"</span>)<span class="question-mark">?</span>;
-<a href=#1002 id=1002 data-nosnippet>1002</a>        }
-<a href=#1003 id=1003 data-nosnippet>1003</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#1004 id=1004 data-nosnippet>1004</a>            <span class="self">Self</span>::Disabled =&gt; <span class="macro">write!</span>(f, <span class="string">"Disabled"</span>),
-<a href=#1005 id=1005 data-nosnippet>1005</a>            <span class="self">Self</span>::Bounds =&gt; <span class="macro">write!</span>(f, <span class="string">"Bounds"</span>),
-<a href=#1006 id=1006 data-nosnippet>1006</a>            <span class="self">Self</span>::RoundedBounds =&gt; <span class="macro">write!</span>(f, <span class="string">"RoundedBounds"</span>),
-<a href=#1007 id=1007 data-nosnippet>1007</a>            <span class="self">Self</span>::Detailed =&gt; <span class="macro">write!</span>(f, <span class="string">"Detailed"</span>),
-<a href=#1008 id=1008 data-nosnippet>1008</a>        }
-<a href=#1009 id=1009 data-nosnippet>1009</a>    }
-<a href=#1010 id=1010 data-nosnippet>1010</a>}
-<a href=#1011 id=1011 data-nosnippet>1011</a><span class="macro">impl_from_and_into_var!</span> {
-<a href=#1012 id=1012 data-nosnippet>1012</a>    <span class="kw">fn </span>from(default_or_disabled: bool) -&gt; HitTestMode {
-<a href=#1013 id=1013 data-nosnippet>1013</a>        <span class="kw">if </span>default_or_disabled {
-<a href=#1014 id=1014 data-nosnippet>1014</a>            HitTestMode::default()
-<a href=#1015 id=1015 data-nosnippet>1015</a>        } <span class="kw">else </span>{
-<a href=#1016 id=1016 data-nosnippet>1016</a>            HitTestMode::Disabled
-<a href=#1017 id=1017 data-nosnippet>1017</a>        }
-<a href=#1018 id=1018 data-nosnippet>1018</a>    }
-<a href=#1019 id=1019 data-nosnippet>1019</a>}
-<a href=#1020 id=1020 data-nosnippet>1020</a>
-<a href=#1021 id=1021 data-nosnippet>1021</a><span class="macro">bitflags::bitflags!</span> {
-<a href=#1022 id=1022 data-nosnippet>1022</a>    <span class="doccomment">/// Node list methods that are made parallel.
-<a href=#1023 id=1023 data-nosnippet>1023</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
-<a href=#1024 id=1024 data-nosnippet>1024</a>    #[serde(transparent)]
-<a href=#1025 id=1025 data-nosnippet>1025</a>    </span><span class="kw">pub struct </span>Parallel: u8 {
-<a href=#1026 id=1026 data-nosnippet>1026</a>        <span class="doccomment">/// Descendants [`UiNode::init`] can run in parallel.
-<a href=#1027 id=1027 data-nosnippet>1027</a>        </span><span class="kw">const </span>INIT = <span class="number">0b0000_0001</span>;
-<a href=#1028 id=1028 data-nosnippet>1028</a>        <span class="doccomment">/// Descendants [`UiNode::info`] can run in parallel.
-<a href=#1029 id=1029 data-nosnippet>1029</a>        </span><span class="kw">const </span>INFO = <span class="number">0b0001_0000</span>;
-<a href=#1030 id=1030 data-nosnippet>1030</a>        <span class="doccomment">/// Descendants [`UiNode::deinit`] can run in parallel.
-<a href=#1031 id=1031 data-nosnippet>1031</a>        </span><span class="kw">const </span>DEINIT = <span class="number">0b0000_0010</span>;
-<a href=#1032 id=1032 data-nosnippet>1032</a>        <span class="doccomment">/// Descendants [`UiNode::event`] can run in parallel.
-<a href=#1033 id=1033 data-nosnippet>1033</a>        </span><span class="kw">const </span>EVENT = <span class="number">0b0000_0100</span>;
-<a href=#1034 id=1034 data-nosnippet>1034</a>        <span class="doccomment">/// Descendants [`UiNode::update`] can run in parallel.
-<a href=#1035 id=1035 data-nosnippet>1035</a>        </span><span class="kw">const </span>UPDATE = <span class="number">0b0000_1000</span>;
-<a href=#1036 id=1036 data-nosnippet>1036</a>        <span class="doccomment">/// Descendants [`UiNode::measure`] and [`UiNode::layout`] can run in parallel.
-<a href=#1037 id=1037 data-nosnippet>1037</a>        </span><span class="kw">const </span>LAYOUT = <span class="number">0b0010_0000</span>;
-<a href=#1038 id=1038 data-nosnippet>1038</a>        <span class="doccomment">/// Descendants [`UiNode::render`] and [`UiNode::render_update`] can run in parallel.
-<a href=#1039 id=1039 data-nosnippet>1039</a>        </span><span class="kw">const </span>RENDER = <span class="number">0b0100_0000</span>;
-<a href=#1040 id=1040 data-nosnippet>1040</a>    }
-<a href=#1041 id=1041 data-nosnippet>1041</a>}
-<a href=#1042 id=1042 data-nosnippet>1042</a><span class="kw">impl </span>Default <span class="kw">for </span>Parallel {
-<a href=#1043 id=1043 data-nosnippet>1043</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#1044 id=1044 data-nosnippet>1044</a>        <span class="self">Self</span>::all()
-<a href=#1045 id=1045 data-nosnippet>1045</a>    }
-<a href=#1046 id=1046 data-nosnippet>1046</a>}
-<a href=#1047 id=1047 data-nosnippet>1047</a><span class="macro">context_var!</span> {
-<a href=#1048 id=1048 data-nosnippet>1048</a>    <span class="doccomment">/// Defines what node list methods can run in parallel in a widget and descendants.
-<a href=#1049 id=1049 data-nosnippet>1049</a>    ///
-<a href=#1050 id=1050 data-nosnippet>1050</a>    /// This variable can be set using the `parallel` property.
-<a href=#1051 id=1051 data-nosnippet>1051</a>    ///
-<a href=#1052 id=1052 data-nosnippet>1052</a>    /// Is all enabled by default.
-<a href=#1053 id=1053 data-nosnippet>1053</a>    </span><span class="kw">pub static </span>PARALLEL_VAR: Parallel = Parallel::default();
-<a href=#1054 id=1054 data-nosnippet>1054</a>
-<a href=#1055 id=1055 data-nosnippet>1055</a>    <span class="doccomment">/// Defines the hit-test mode for a widget and descendants.
+<a href=#935 id=935 data-nosnippet>935</a>            <span class="kw">fn </span>try_for_each_child(
+<a href=#936 id=936 data-nosnippet>936</a>                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+<a href=#937 id=937 data-nosnippet>937</a>                visitor: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>UiNode) -&gt; std::ops::ControlFlow&lt;zng_var::BoxAnyVarValue&gt;,
+<a href=#938 id=938 data-nosnippet>938</a>            ) -&gt; std::ops::ControlFlow&lt;zng_var::BoxAnyVarValue&gt; {
+<a href=#939 id=939 data-nosnippet>939</a>                visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
+<a href=#940 id=940 data-nosnippet>940</a>            }
+<a href=#941 id=941 data-nosnippet>941</a>
+<a href=#942 id=942 data-nosnippet>942</a>            <span class="kw">fn </span>par_each_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode) + Sync)) {
+<a href=#943 id=943 data-nosnippet>943</a>                visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
+<a href=#944 id=944 data-nosnippet>944</a>            }
+<a href=#945 id=945 data-nosnippet>945</a>
+<a href=#946 id=946 data-nosnippet>946</a>            <span class="kw">fn </span>par_fold_reduce(
+<a href=#947 id=947 data-nosnippet>947</a>                <span class="kw-2">&amp;mut </span><span class="self">self</span>,
+<a href=#948 id=948 data-nosnippet>948</a>                identity: zng_var::BoxAnyVarValue,
+<a href=#949 id=949 data-nosnippet>949</a>                fold: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, usize, <span class="kw-2">&amp;mut </span>UiNode) -&gt; zng_var::BoxAnyVarValue + Sync),
+<a href=#950 id=950 data-nosnippet>950</a>                <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, zng_var::BoxAnyVarValue) -&gt; zng_var::BoxAnyVarValue + Sync),
+<a href=#951 id=951 data-nosnippet>951</a>            ) -&gt; zng_var::BoxAnyVarValue {
+<a href=#952 id=952 data-nosnippet>952</a>                fold(identity, <span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.child)
+<a href=#953 id=953 data-nosnippet>953</a>            }
+<a href=#954 id=954 data-nosnippet>954</a>        }
+<a href=#955 id=955 data-nosnippet>955</a>
+<a href=#956 id=956 data-nosnippet>956</a>        WidgetNode {
+<a href=#957 id=957 data-nosnippet>957</a>            ctx: WidgetCtx::new(id.into()),
+<a href=#958 id=958 data-nosnippet>958</a>            child: child.into_node(),
+<a href=#959 id=959 data-nosnippet>959</a>
+<a href=#960 id=960 data-nosnippet>960</a>            <span class="attr">#[cfg(debug_assertions)]
+<a href=#961 id=961 data-nosnippet>961</a>            </span>inited: <span class="bool-val">false</span>,
+<a href=#962 id=962 data-nosnippet>962</a>            <span class="attr">#[cfg(debug_assertions)]
+<a href=#963 id=963 data-nosnippet>963</a>            </span>info_built: <span class="bool-val">false</span>,
+<a href=#964 id=964 data-nosnippet>964</a>        }
+<a href=#965 id=965 data-nosnippet>965</a>        .into_node()
+<a href=#966 id=966 data-nosnippet>966</a>    }
+<a href=#967 id=967 data-nosnippet>967</a>}
+<a href=#968 id=968 data-nosnippet>968</a>
+<a href=#969 id=969 data-nosnippet>969</a><span class="doccomment">/// Unique ID of the widget instance.
+<a href=#970 id=970 data-nosnippet>970</a>///
+<a href=#971 id=971 data-nosnippet>971</a>/// Note that the `id` can convert from a `&amp;'static str` unique name.
+<a href=#972 id=972 data-nosnippet>972</a></span><span class="attr">#[property(CONTEXT, capture, default(WidgetId::new_unique()), widget_impl(WidgetBase))]
+<a href=#973 id=973 data-nosnippet>973</a></span><span class="kw">pub fn </span>id(id: <span class="kw">impl </span>IntoValue&lt;WidgetId&gt;) {}
+<a href=#974 id=974 data-nosnippet>974</a>
+<a href=#975 id=975 data-nosnippet>975</a><span class="doccomment">/// Defines if and how a widget is hit-tested.
+<a href=#976 id=976 data-nosnippet>976</a></span><span class="attr">#[derive(Copy, Clone, PartialEq, Eq, Default, serde::Serialize, serde::Deserialize)]
+<a href=#977 id=977 data-nosnippet>977</a></span><span class="kw">pub enum </span>HitTestMode {
+<a href=#978 id=978 data-nosnippet>978</a>    <span class="doccomment">/// Widget is never hit.
+<a href=#979 id=979 data-nosnippet>979</a>    ///
+<a href=#980 id=980 data-nosnippet>980</a>    /// This mode affects the entire UI branch, if set it disables hit-testing for the widget and all its descendants,
+<a href=#981 id=981 data-nosnippet>981</a>    /// even if they set explicitly set their hit-test mode to something else.
+<a href=#982 id=982 data-nosnippet>982</a>    </span>Disabled,
+<a href=#983 id=983 data-nosnippet>983</a>    <span class="doccomment">/// Widget is hit by any point that intersects the transformed inner bounds rectangle. If the widget is inlined
+<a href=#984 id=984 data-nosnippet>984</a>    /// excludes the first row advance and the last row trailing space.
+<a href=#985 id=985 data-nosnippet>985</a>    </span>Bounds,
+<a href=#986 id=986 data-nosnippet>986</a>    <span class="doccomment">/// Same as `Bounds`, but also excludes the outside of rounded corners.
+<a href=#987 id=987 data-nosnippet>987</a>    ///
+<a href=#988 id=988 data-nosnippet>988</a>    /// This is the default mode.
+<a href=#989 id=989 data-nosnippet>989</a>    </span><span class="attr">#[default]
+<a href=#990 id=990 data-nosnippet>990</a>    </span>RoundedBounds,
+<a href=#991 id=991 data-nosnippet>991</a>    <span class="doccomment">/// Widget is hit by any point that intersects the hit-test shape defined on render by
+<a href=#992 id=992 data-nosnippet>992</a>    /// [`FrameBuilder::hit_test`] and auto hit-test.
+<a href=#993 id=993 data-nosnippet>993</a>    ///
+<a href=#994 id=994 data-nosnippet>994</a>    /// [`FrameBuilder::hit_test`]: crate::render::FrameBuilder::hit_test
+<a href=#995 id=995 data-nosnippet>995</a>    </span>Detailed,
+<a href=#996 id=996 data-nosnippet>996</a>}
+<a href=#997 id=997 data-nosnippet>997</a><span class="kw">impl </span>HitTestMode {
+<a href=#998 id=998 data-nosnippet>998</a>    <span class="doccomment">/// Returns `true` if is any mode other then [`Disabled`].
+<a href=#999 id=999 data-nosnippet>999</a>    ///
+<a href=#1000 id=1000 data-nosnippet>1000</a>    /// [`Disabled`]: Self::Disabled
+<a href=#1001 id=1001 data-nosnippet>1001</a>    </span><span class="kw">pub fn </span>is_hit_testable(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#1002 id=1002 data-nosnippet>1002</a>        !<span class="macro">matches!</span>(<span class="self">self</span>, <span class="self">Self</span>::Disabled)
+<a href=#1003 id=1003 data-nosnippet>1003</a>    }
+<a href=#1004 id=1004 data-nosnippet>1004</a>}
+<a href=#1005 id=1005 data-nosnippet>1005</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>HitTestMode {
+<a href=#1006 id=1006 data-nosnippet>1006</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#1007 id=1007 data-nosnippet>1007</a>        <span class="kw">if </span>f.alternate() {
+<a href=#1008 id=1008 data-nosnippet>1008</a>            <span class="macro">write!</span>(f, <span class="string">"HitTestMode::"</span>)<span class="question-mark">?</span>;
+<a href=#1009 id=1009 data-nosnippet>1009</a>        }
+<a href=#1010 id=1010 data-nosnippet>1010</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#1011 id=1011 data-nosnippet>1011</a>            <span class="self">Self</span>::Disabled =&gt; <span class="macro">write!</span>(f, <span class="string">"Disabled"</span>),
+<a href=#1012 id=1012 data-nosnippet>1012</a>            <span class="self">Self</span>::Bounds =&gt; <span class="macro">write!</span>(f, <span class="string">"Bounds"</span>),
+<a href=#1013 id=1013 data-nosnippet>1013</a>            <span class="self">Self</span>::RoundedBounds =&gt; <span class="macro">write!</span>(f, <span class="string">"RoundedBounds"</span>),
+<a href=#1014 id=1014 data-nosnippet>1014</a>            <span class="self">Self</span>::Detailed =&gt; <span class="macro">write!</span>(f, <span class="string">"Detailed"</span>),
+<a href=#1015 id=1015 data-nosnippet>1015</a>        }
+<a href=#1016 id=1016 data-nosnippet>1016</a>    }
+<a href=#1017 id=1017 data-nosnippet>1017</a>}
+<a href=#1018 id=1018 data-nosnippet>1018</a><span class="macro">impl_from_and_into_var!</span> {
+<a href=#1019 id=1019 data-nosnippet>1019</a>    <span class="kw">fn </span>from(default_or_disabled: bool) -&gt; HitTestMode {
+<a href=#1020 id=1020 data-nosnippet>1020</a>        <span class="kw">if </span>default_or_disabled {
+<a href=#1021 id=1021 data-nosnippet>1021</a>            HitTestMode::default()
+<a href=#1022 id=1022 data-nosnippet>1022</a>        } <span class="kw">else </span>{
+<a href=#1023 id=1023 data-nosnippet>1023</a>            HitTestMode::Disabled
+<a href=#1024 id=1024 data-nosnippet>1024</a>        }
+<a href=#1025 id=1025 data-nosnippet>1025</a>    }
+<a href=#1026 id=1026 data-nosnippet>1026</a>}
+<a href=#1027 id=1027 data-nosnippet>1027</a>
+<a href=#1028 id=1028 data-nosnippet>1028</a><span class="macro">bitflags::bitflags!</span> {
+<a href=#1029 id=1029 data-nosnippet>1029</a>    <span class="doccomment">/// Node list methods that are made parallel.
+<a href=#1030 id=1030 data-nosnippet>1030</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#1031 id=1031 data-nosnippet>1031</a>    #[serde(transparent)]
+<a href=#1032 id=1032 data-nosnippet>1032</a>    </span><span class="kw">pub struct </span>Parallel: u8 {
+<a href=#1033 id=1033 data-nosnippet>1033</a>        <span class="doccomment">/// Descendants [`UiNode::init`] can run in parallel.
+<a href=#1034 id=1034 data-nosnippet>1034</a>        </span><span class="kw">const </span>INIT = <span class="number">0b0000_0001</span>;
+<a href=#1035 id=1035 data-nosnippet>1035</a>        <span class="doccomment">/// Descendants [`UiNode::info`] can run in parallel.
+<a href=#1036 id=1036 data-nosnippet>1036</a>        </span><span class="kw">const </span>INFO = <span class="number">0b0001_0000</span>;
+<a href=#1037 id=1037 data-nosnippet>1037</a>        <span class="doccomment">/// Descendants [`UiNode::deinit`] can run in parallel.
+<a href=#1038 id=1038 data-nosnippet>1038</a>        </span><span class="kw">const </span>DEINIT = <span class="number">0b0000_0010</span>;
+<a href=#1039 id=1039 data-nosnippet>1039</a>        <span class="doccomment">/// Descendants [`UiNode::event`] can run in parallel.
+<a href=#1040 id=1040 data-nosnippet>1040</a>        </span><span class="kw">const </span>EVENT = <span class="number">0b0000_0100</span>;
+<a href=#1041 id=1041 data-nosnippet>1041</a>        <span class="doccomment">/// Descendants [`UiNode::update`] can run in parallel.
+<a href=#1042 id=1042 data-nosnippet>1042</a>        </span><span class="kw">const </span>UPDATE = <span class="number">0b0000_1000</span>;
+<a href=#1043 id=1043 data-nosnippet>1043</a>        <span class="doccomment">/// Descendants [`UiNode::measure`] and [`UiNode::layout`] can run in parallel.
+<a href=#1044 id=1044 data-nosnippet>1044</a>        </span><span class="kw">const </span>LAYOUT = <span class="number">0b0010_0000</span>;
+<a href=#1045 id=1045 data-nosnippet>1045</a>        <span class="doccomment">/// Descendants [`UiNode::render`] and [`UiNode::render_update`] can run in parallel.
+<a href=#1046 id=1046 data-nosnippet>1046</a>        </span><span class="kw">const </span>RENDER = <span class="number">0b0100_0000</span>;
+<a href=#1047 id=1047 data-nosnippet>1047</a>    }
+<a href=#1048 id=1048 data-nosnippet>1048</a>}
+<a href=#1049 id=1049 data-nosnippet>1049</a><span class="kw">impl </span>Default <span class="kw">for </span>Parallel {
+<a href=#1050 id=1050 data-nosnippet>1050</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#1051 id=1051 data-nosnippet>1051</a>        <span class="self">Self</span>::all()
+<a href=#1052 id=1052 data-nosnippet>1052</a>    }
+<a href=#1053 id=1053 data-nosnippet>1053</a>}
+<a href=#1054 id=1054 data-nosnippet>1054</a><span class="macro">context_var!</span> {
+<a href=#1055 id=1055 data-nosnippet>1055</a>    <span class="doccomment">/// Defines what node list methods can run in parallel in a widget and descendants.
 <a href=#1056 id=1056 data-nosnippet>1056</a>    ///
-<a href=#1057 id=1057 data-nosnippet>1057</a>    /// This variable can be set using the `hit_test_mode` property.
+<a href=#1057 id=1057 data-nosnippet>1057</a>    /// This variable can be set using the `parallel` property.
 <a href=#1058 id=1058 data-nosnippet>1058</a>    ///
-<a href=#1059 id=1059 data-nosnippet>1059</a>    /// Note that hit-test is disabled for the entire sub-tree, even if a child sets to a
-<a href=#1060 id=1060 data-nosnippet>1060</a>    /// different mode again, the `hit_test_mode` property already enforces this, custom
-<a href=#1061 id=1061 data-nosnippet>1061</a>    /// nodes should avoid overriding `Disabled`, as the hit-test will still be disabled,
-<a href=#1062 id=1062 data-nosnippet>1062</a>    /// but other custom code that depend on this variable will read an incorrect state.
-<a href=#1063 id=1063 data-nosnippet>1063</a>    </span><span class="kw">pub static </span>HIT_TEST_MODE_VAR: HitTestMode = HitTestMode::default();
-<a href=#1064 id=1064 data-nosnippet>1064</a>}
-<a href=#1065 id=1065 data-nosnippet>1065</a><span class="macro">impl_from_and_into_var!</span> {
-<a href=#1066 id=1066 data-nosnippet>1066</a>    <span class="kw">fn </span>from(all: bool) -&gt; Parallel {
-<a href=#1067 id=1067 data-nosnippet>1067</a>        <span class="kw">if </span>all { Parallel::all() } <span class="kw">else </span>{ Parallel::empty() }
-<a href=#1068 id=1068 data-nosnippet>1068</a>    }
-<a href=#1069 id=1069 data-nosnippet>1069</a>}</code></pre></div></section></main></body></html>
+<a href=#1059 id=1059 data-nosnippet>1059</a>    /// Is all enabled by default.
+<a href=#1060 id=1060 data-nosnippet>1060</a>    </span><span class="kw">pub static </span>PARALLEL_VAR: Parallel = Parallel::default();
+<a href=#1061 id=1061 data-nosnippet>1061</a>
+<a href=#1062 id=1062 data-nosnippet>1062</a>    <span class="doccomment">/// Defines the hit-test mode for a widget and descendants.
+<a href=#1063 id=1063 data-nosnippet>1063</a>    ///
+<a href=#1064 id=1064 data-nosnippet>1064</a>    /// This variable can be set using the `hit_test_mode` property.
+<a href=#1065 id=1065 data-nosnippet>1065</a>    ///
+<a href=#1066 id=1066 data-nosnippet>1066</a>    /// Note that hit-test is disabled for the entire sub-tree, even if a child sets to a
+<a href=#1067 id=1067 data-nosnippet>1067</a>    /// different mode again, the `hit_test_mode` property already enforces this, custom
+<a href=#1068 id=1068 data-nosnippet>1068</a>    /// nodes should avoid overriding `Disabled`, as the hit-test will still be disabled,
+<a href=#1069 id=1069 data-nosnippet>1069</a>    /// but other custom code that depend on this variable will read an incorrect state.
+<a href=#1070 id=1070 data-nosnippet>1070</a>    </span><span class="kw">pub static </span>HIT_TEST_MODE_VAR: HitTestMode = HitTestMode::default();
+<a href=#1071 id=1071 data-nosnippet>1071</a>}
+<a href=#1072 id=1072 data-nosnippet>1072</a><span class="macro">impl_from_and_into_var!</span> {
+<a href=#1073 id=1073 data-nosnippet>1073</a>    <span class="kw">fn </span>from(all: bool) -&gt; Parallel {
+<a href=#1074 id=1074 data-nosnippet>1074</a>        <span class="kw">if </span>all { Parallel::all() } <span class="kw">else </span>{ Parallel::empty() }
+<a href=#1075 id=1075 data-nosnippet>1075</a>    }
+<a href=#1076 id=1076 data-nosnippet>1076</a>}</code></pre></div></section></main></body></html>

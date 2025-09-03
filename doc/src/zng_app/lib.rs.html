@@ -1367,170 +1367,168 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1331 id=1331 data-nosnippet>1331</a>    /// by opening a window, the app will keep running after `start` is finished.
 <a href=#1332 id=1332 data-nosnippet>1332</a>    </span><span class="kw">pub fn </span>run&lt;F: Future&lt;Output = ()&gt; + Send + <span class="lifetime">'static</span>&gt;(<span class="self">self</span>, start: <span class="kw">impl </span>IntoFuture&lt;IntoFuture = F&gt;) {
 <a href=#1333 id=1333 data-nosnippet>1333</a>        <span class="kw">let </span>start = start.into_future();
-<a href=#1334 id=1334 data-nosnippet>1334</a>        <span class="attr">#[cfg(feature = <span class="string">"dyn_closure"</span>)]
-<a href=#1335 id=1335 data-nosnippet>1335</a>        </span><span class="kw">let </span>start = Box::pin(start);
-<a href=#1336 id=1336 data-nosnippet>1336</a>        <span class="self">self</span>.run_impl(start)
-<a href=#1337 id=1337 data-nosnippet>1337</a>    }
-<a href=#1338 id=1338 data-nosnippet>1338</a>
-<a href=#1339 id=1339 data-nosnippet>1339</a>    <span class="doccomment">/// Initializes extensions in headless mode and returns an [`HeadlessApp`].
-<a href=#1340 id=1340 data-nosnippet>1340</a>    ///
-<a href=#1341 id=1341 data-nosnippet>1341</a>    /// If `with_renderer` is `true` spawns a renderer process for headless rendering. See [`HeadlessApp::renderer_enabled`]
-<a href=#1342 id=1342 data-nosnippet>1342</a>    /// for more details.
-<a href=#1343 id=1343 data-nosnippet>1343</a>    </span><span class="kw">pub fn </span>run_headless(<span class="self">self</span>, with_renderer: bool) -&gt; HeadlessApp {
-<a href=#1344 id=1344 data-nosnippet>1344</a>        <span class="self">self</span>.run_headless_impl(with_renderer)
-<a href=#1345 id=1345 data-nosnippet>1345</a>    }
-<a href=#1346 id=1346 data-nosnippet>1346</a>}
-<a href=#1347 id=1347 data-nosnippet>1347</a>
-<a href=#1348 id=1348 data-nosnippet>1348</a><span class="comment">// this module is declared here on purpose so that advanced `impl APP` blocks show later in the docs.
-<a href=#1349 id=1349 data-nosnippet>1349</a></span><span class="kw">mod </span>running;
-<a href=#1350 id=1350 data-nosnippet>1350</a><span class="kw">pub use </span>running::<span class="kw-2">*</span>;
-<a href=#1351 id=1351 data-nosnippet>1351</a><span class="kw">use </span>zng_view_api::DeviceEventsFilter;
-<a href=#1352 id=1352 data-nosnippet>1352</a>
-<a href=#1353 id=1353 data-nosnippet>1353</a><span class="kw">mod </span>private {
-<a href=#1354 id=1354 data-nosnippet>1354</a>    <span class="comment">// https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed
-<a href=#1355 id=1355 data-nosnippet>1355</a>    </span><span class="kw">pub trait </span>Sealed {}
-<a href=#1356 id=1356 data-nosnippet>1356</a>}
-<a href=#1357 id=1357 data-nosnippet>1357</a>
-<a href=#1358 id=1358 data-nosnippet>1358</a><span class="doccomment">/// Enables [`tracing`] events printing if a subscriber is not already set.
+<a href=#1334 id=1334 data-nosnippet>1334</a>        <span class="self">self</span>.run_impl(start)
+<a href=#1335 id=1335 data-nosnippet>1335</a>    }
+<a href=#1336 id=1336 data-nosnippet>1336</a>
+<a href=#1337 id=1337 data-nosnippet>1337</a>    <span class="doccomment">/// Initializes extensions in headless mode and returns an [`HeadlessApp`].
+<a href=#1338 id=1338 data-nosnippet>1338</a>    ///
+<a href=#1339 id=1339 data-nosnippet>1339</a>    /// If `with_renderer` is `true` spawns a renderer process for headless rendering. See [`HeadlessApp::renderer_enabled`]
+<a href=#1340 id=1340 data-nosnippet>1340</a>    /// for more details.
+<a href=#1341 id=1341 data-nosnippet>1341</a>    </span><span class="kw">pub fn </span>run_headless(<span class="self">self</span>, with_renderer: bool) -&gt; HeadlessApp {
+<a href=#1342 id=1342 data-nosnippet>1342</a>        <span class="self">self</span>.run_headless_impl(with_renderer)
+<a href=#1343 id=1343 data-nosnippet>1343</a>    }
+<a href=#1344 id=1344 data-nosnippet>1344</a>}
+<a href=#1345 id=1345 data-nosnippet>1345</a>
+<a href=#1346 id=1346 data-nosnippet>1346</a><span class="comment">// this module is declared here on purpose so that advanced `impl APP` blocks show later in the docs.
+<a href=#1347 id=1347 data-nosnippet>1347</a></span><span class="kw">mod </span>running;
+<a href=#1348 id=1348 data-nosnippet>1348</a><span class="kw">pub use </span>running::<span class="kw-2">*</span>;
+<a href=#1349 id=1349 data-nosnippet>1349</a><span class="kw">use </span>zng_view_api::DeviceEventsFilter;
+<a href=#1350 id=1350 data-nosnippet>1350</a>
+<a href=#1351 id=1351 data-nosnippet>1351</a><span class="kw">mod </span>private {
+<a href=#1352 id=1352 data-nosnippet>1352</a>    <span class="comment">// https://rust-lang.github.io/api-guidelines/future-proofing.html#sealed-traits-protect-against-downstream-implementations-c-sealed
+<a href=#1353 id=1353 data-nosnippet>1353</a>    </span><span class="kw">pub trait </span>Sealed {}
+<a href=#1354 id=1354 data-nosnippet>1354</a>}
+<a href=#1355 id=1355 data-nosnippet>1355</a>
+<a href=#1356 id=1356 data-nosnippet>1356</a><span class="doccomment">/// Enables [`tracing`] events printing if a subscriber is not already set.
+<a href=#1357 id=1357 data-nosnippet>1357</a>///
+<a href=#1358 id=1358 data-nosnippet>1358</a>/// All non-fatal errors in the Zng project are logged using tracing.
 <a href=#1359 id=1359 data-nosnippet>1359</a>///
-<a href=#1360 id=1360 data-nosnippet>1360</a>/// All non-fatal errors in the Zng project are logged using tracing.
+<a href=#1360 id=1360 data-nosnippet>1360</a>/// In debug builds this function is called automatically with level INFO on app start.
 <a href=#1361 id=1361 data-nosnippet>1361</a>///
-<a href=#1362 id=1362 data-nosnippet>1362</a>/// In debug builds this function is called automatically with level INFO on app start.
+<a href=#1362 id=1362 data-nosnippet>1362</a>/// In `"wasm32"` builds logs to the browser console.
 <a href=#1363 id=1363 data-nosnippet>1363</a>///
-<a href=#1364 id=1364 data-nosnippet>1364</a>/// In `"wasm32"` builds logs to the browser console.
+<a href=#1364 id=1364 data-nosnippet>1364</a>/// In `"android"` builds logs to logcat.
 <a href=#1365 id=1365 data-nosnippet>1365</a>///
-<a href=#1366 id=1366 data-nosnippet>1366</a>/// In `"android"` builds logs to logcat.
+<a href=#1366 id=1366 data-nosnippet>1366</a>/// See also [`test_log`] to enable panicking on error log.
 <a href=#1367 id=1367 data-nosnippet>1367</a>///
-<a href=#1368 id=1368 data-nosnippet>1368</a>/// See also [`test_log`] to enable panicking on error log.
+<a href=#1368 id=1368 data-nosnippet>1368</a>/// See also [`print_tracing_filter`] for the filter used by this.
 <a href=#1369 id=1369 data-nosnippet>1369</a>///
-<a href=#1370 id=1370 data-nosnippet>1370</a>/// See also [`print_tracing_filter`] for the filter used by this.
-<a href=#1371 id=1371 data-nosnippet>1371</a>///
-<a href=#1372 id=1372 data-nosnippet>1372</a>/// [`tracing`]: https://docs.rs/tracing
-<a href=#1373 id=1373 data-nosnippet>1373</a></span><span class="kw">pub fn </span>print_tracing(max: tracing::Level) -&gt; bool {
-<a href=#1374 id=1374 data-nosnippet>1374</a>    <span class="kw">use </span>tracing_subscriber::prelude::<span class="kw-2">*</span>;
+<a href=#1370 id=1370 data-nosnippet>1370</a>/// [`tracing`]: https://docs.rs/tracing
+<a href=#1371 id=1371 data-nosnippet>1371</a></span><span class="kw">pub fn </span>print_tracing(max: tracing::Level) -&gt; bool {
+<a href=#1372 id=1372 data-nosnippet>1372</a>    <span class="kw">use </span>tracing_subscriber::prelude::<span class="kw-2">*</span>;
+<a href=#1373 id=1373 data-nosnippet>1373</a>
+<a href=#1374 id=1374 data-nosnippet>1374</a>    <span class="kw">let </span>layers = tracing_subscriber::registry().with(FilterLayer(max));
 <a href=#1375 id=1375 data-nosnippet>1375</a>
-<a href=#1376 id=1376 data-nosnippet>1376</a>    <span class="kw">let </span>layers = tracing_subscriber::registry().with(FilterLayer(max));
-<a href=#1377 id=1377 data-nosnippet>1377</a>
-<a href=#1378 id=1378 data-nosnippet>1378</a>    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
-<a href=#1379 id=1379 data-nosnippet>1379</a>    </span><span class="kw">let </span>layers = layers.with(tracing_android::layer(<span class="kw-2">&amp;</span>zng_env::about().pkg_name).unwrap());
-<a href=#1380 id=1380 data-nosnippet>1380</a>
-<a href=#1381 id=1381 data-nosnippet>1381</a>    <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
-<a href=#1382 id=1382 data-nosnippet>1382</a>    </span><span class="kw">let </span>layers = {
-<a href=#1383 id=1383 data-nosnippet>1383</a>        <span class="kw">let </span>fmt_layer = tracing_subscriber::fmt::layer().without_time();
-<a href=#1384 id=1384 data-nosnippet>1384</a>
-<a href=#1385 id=1385 data-nosnippet>1385</a>        <span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
-<a href=#1386 id=1386 data-nosnippet>1386</a>        </span><span class="kw">let </span>fmt_layer = fmt_layer.with_ansi(<span class="bool-val">false</span>).with_writer(tracing_web::MakeWebConsoleWriter::new());
-<a href=#1387 id=1387 data-nosnippet>1387</a>
-<a href=#1388 id=1388 data-nosnippet>1388</a>        layers.with(fmt_layer)
-<a href=#1389 id=1389 data-nosnippet>1389</a>    };
-<a href=#1390 id=1390 data-nosnippet>1390</a>
-<a href=#1391 id=1391 data-nosnippet>1391</a>    layers.try_init().is_ok()
-<a href=#1392 id=1392 data-nosnippet>1392</a>}
-<a href=#1393 id=1393 data-nosnippet>1393</a>
-<a href=#1394 id=1394 data-nosnippet>1394</a><span class="kw">struct </span>FilterLayer(tracing::Level);
-<a href=#1395 id=1395 data-nosnippet>1395</a><span class="kw">impl</span>&lt;S: tracing::Subscriber&gt; tracing_subscriber::Layer&lt;S&gt; <span class="kw">for </span>FilterLayer {
-<a href=#1396 id=1396 data-nosnippet>1396</a>    <span class="kw">fn </span>enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, metadata: <span class="kw-2">&amp;</span>tracing::Metadata&lt;<span class="lifetime">'_</span>&gt;, <span class="kw">_</span>: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) -&gt; bool {
-<a href=#1397 id=1397 data-nosnippet>1397</a>        print_tracing_filter(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, metadata)
-<a href=#1398 id=1398 data-nosnippet>1398</a>    }
-<a href=#1399 id=1399 data-nosnippet>1399</a>
-<a href=#1400 id=1400 data-nosnippet>1400</a>    <span class="kw">fn </span>max_level_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;tracing::metadata::LevelFilter&gt; {
-<a href=#1401 id=1401 data-nosnippet>1401</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="number">0</span>.into())
-<a href=#1402 id=1402 data-nosnippet>1402</a>    }
-<a href=#1403 id=1403 data-nosnippet>1403</a>
-<a href=#1404 id=1404 data-nosnippet>1404</a>    <span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
-<a href=#1405 id=1405 data-nosnippet>1405</a>    </span><span class="kw">fn </span>on_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>tracing::Event&lt;<span class="lifetime">'_</span>&gt;, _ctx: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) {
-<a href=#1406 id=1406 data-nosnippet>1406</a>        <span class="kw">if </span>event.metadata().level() == <span class="kw-2">&amp;</span>tracing::Level::ERROR &amp;&amp; APP.is_running() &amp;&amp; TEST_LOG.get() {
-<a href=#1407 id=1407 data-nosnippet>1407</a>            <span class="kw">struct </span>MsgCollector&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>String);
-<a href=#1408 id=1408 data-nosnippet>1408</a>            <span class="kw">impl </span>tracing::field::Visit <span class="kw">for </span>MsgCollector&lt;<span class="lifetime">'_</span>&gt; {
-<a href=#1409 id=1409 data-nosnippet>1409</a>                <span class="kw">fn </span>record_debug(<span class="kw-2">&amp;mut </span><span class="self">self</span>, field: <span class="kw-2">&amp;</span>tracing::field::Field, value: <span class="kw-2">&amp;</span><span class="kw">dyn </span>fmt::Debug) {
-<a href=#1410 id=1410 data-nosnippet>1410</a>                    <span class="kw">use </span>std::fmt::Write;
-<a href=#1411 id=1411 data-nosnippet>1411</a>                    <span class="macro">write!</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="string">"\n  {} = {:?}"</span>, field.name(), value).unwrap();
-<a href=#1412 id=1412 data-nosnippet>1412</a>                }
-<a href=#1413 id=1413 data-nosnippet>1413</a>            }
-<a href=#1414 id=1414 data-nosnippet>1414</a>
-<a href=#1415 id=1415 data-nosnippet>1415</a>            <span class="kw">let </span>meta = event.metadata();
-<a href=#1416 id=1416 data-nosnippet>1416</a>            <span class="kw">let </span>file = meta.file().unwrap_or(<span class="string">""</span>);
-<a href=#1417 id=1417 data-nosnippet>1417</a>            <span class="kw">let </span>line = meta.line().unwrap_or(<span class="number">0</span>);
-<a href=#1418 id=1418 data-nosnippet>1418</a>
-<a href=#1419 id=1419 data-nosnippet>1419</a>            <span class="kw">let </span><span class="kw-2">mut </span>msg = <span class="macro">format!</span>(<span class="string">"[{file}:{line}]"</span>);
-<a href=#1420 id=1420 data-nosnippet>1420</a>            event.record(<span class="kw-2">&amp;mut </span>MsgCollector(<span class="kw-2">&amp;mut </span>msg));
-<a href=#1421 id=1421 data-nosnippet>1421</a>
-<a href=#1422 id=1422 data-nosnippet>1422</a>            <span class="macro">panic!</span>(<span class="string">"[LOG-ERROR]{msg}"</span>)
-<a href=#1423 id=1423 data-nosnippet>1423</a>        }
-<a href=#1424 id=1424 data-nosnippet>1424</a>    }
-<a href=#1425 id=1425 data-nosnippet>1425</a>}
-<a href=#1426 id=1426 data-nosnippet>1426</a><span class="doccomment">/// Filter used by [`print_tracing`], removes some log noise from dependencies.
-<a href=#1427 id=1427 data-nosnippet>1427</a>///
-<a href=#1428 id=1428 data-nosnippet>1428</a>/// Use `tracing_subscriber::filter::FilterFn` plug this filter into a tracing setup.
-<a href=#1429 id=1429 data-nosnippet>1429</a></span><span class="kw">pub fn </span>print_tracing_filter(level: <span class="kw-2">&amp;</span>tracing::Level, metadata: <span class="kw-2">&amp;</span>tracing::Metadata) -&gt; bool {
-<a href=#1430 id=1430 data-nosnippet>1430</a>    <span class="kw">if </span>metadata.level() &gt; level {
-<a href=#1431 id=1431 data-nosnippet>1431</a>        <span class="kw">return </span><span class="bool-val">false</span>;
-<a href=#1432 id=1432 data-nosnippet>1432</a>    }
-<a href=#1433 id=1433 data-nosnippet>1433</a>
-<a href=#1434 id=1434 data-nosnippet>1434</a>    <span class="kw">if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::INFO {
-<a href=#1435 id=1435 data-nosnippet>1435</a>        <span class="comment">// suppress large info about texture cache
-<a href=#1436 id=1436 data-nosnippet>1436</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
-<a href=#1437 id=1437 data-nosnippet>1437</a>            <span class="kw">return </span><span class="bool-val">false</span>;
-<a href=#1438 id=1438 data-nosnippet>1438</a>        }
-<a href=#1439 id=1439 data-nosnippet>1439</a>        <span class="comment">// suppress config dump
-<a href=#1440 id=1440 data-nosnippet>1440</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::renderer::init" </span>{
-<a href=#1441 id=1441 data-nosnippet>1441</a>            <span class="kw">return </span><span class="bool-val">false</span>;
-<a href=#1442 id=1442 data-nosnippet>1442</a>        }
-<a href=#1443 id=1443 data-nosnippet>1443</a>    } <span class="kw">else if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::WARN {
-<a href=#1444 id=1444 data-nosnippet>1444</a>        <span class="comment">// suppress webrender warnings:
-<a href=#1445 id=1445 data-nosnippet>1445</a>        //
-<a href=#1446 id=1446 data-nosnippet>1446</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
-<a href=#1447 id=1447 data-nosnippet>1447</a>            <span class="comment">// Suppress "Cropping texture upload Box2D((0, 0), (0, 1)) to None"
-<a href=#1448 id=1448 data-nosnippet>1448</a>            // This happens when an empty frame is rendered.
-<a href=#1449 id=1449 data-nosnippet>1449</a>            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">4647</span>) {
-<a href=#1450 id=1450 data-nosnippet>1450</a>                <span class="kw">return </span><span class="bool-val">false</span>;
-<a href=#1451 id=1451 data-nosnippet>1451</a>            }
-<a href=#1452 id=1452 data-nosnippet>1452</a>        }
-<a href=#1453 id=1453 data-nosnippet>1453</a>
-<a href=#1454 id=1454 data-nosnippet>1454</a>        <span class="comment">// suppress font-kit warnings:
-<a href=#1455 id=1455 data-nosnippet>1455</a>        //
-<a href=#1456 id=1456 data-nosnippet>1456</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"font_kit::loaders::freetype" </span>{
-<a href=#1457 id=1457 data-nosnippet>1457</a>            <span class="comment">// Suppress "$fn(): found invalid platform ID $n"
-<a href=#1458 id=1458 data-nosnippet>1458</a>            // This does not look fully implemented and generates a lot of warns
-<a href=#1459 id=1459 data-nosnippet>1459</a>            // with the default Ubuntu font set all with valid platform IDs.
-<a href=#1460 id=1460 data-nosnippet>1460</a>            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">734</span>) {
-<a href=#1461 id=1461 data-nosnippet>1461</a>                <span class="kw">return </span><span class="bool-val">false</span>;
-<a href=#1462 id=1462 data-nosnippet>1462</a>            }
-<a href=#1463 id=1463 data-nosnippet>1463</a>        }
-<a href=#1464 id=1464 data-nosnippet>1464</a>    }
-<a href=#1465 id=1465 data-nosnippet>1465</a>
-<a href=#1466 id=1466 data-nosnippet>1466</a>    <span class="bool-val">true
-<a href=#1467 id=1467 data-nosnippet>1467</a></span>}
-<a href=#1468 id=1468 data-nosnippet>1468</a>
-<a href=#1469 id=1469 data-nosnippet>1469</a><span class="doccomment">/// Modifies the [`print_tracing`] subscriber to panic for error logs in the current app.
-<a href=#1470 id=1470 data-nosnippet>1470</a></span><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
-<a href=#1471 id=1471 data-nosnippet>1471</a></span><span class="kw">pub fn </span>test_log() {
-<a href=#1472 id=1472 data-nosnippet>1472</a>    TEST_LOG.set(<span class="bool-val">true</span>);
-<a href=#1473 id=1473 data-nosnippet>1473</a>}
-<a href=#1474 id=1474 data-nosnippet>1474</a>
-<a href=#1475 id=1475 data-nosnippet>1475</a><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
-<a href=#1476 id=1476 data-nosnippet>1476</a></span><span class="macro">zng_app_context::app_local!</span> {
-<a href=#1477 id=1477 data-nosnippet>1477</a>    <span class="kw">static </span>TEST_LOG: bool = <span class="bool-val">false</span>;
-<a href=#1478 id=1478 data-nosnippet>1478</a>}
-<a href=#1479 id=1479 data-nosnippet>1479</a>
-<a href=#1480 id=1480 data-nosnippet>1480</a><span class="attr">#[doc(hidden)]
-<a href=#1481 id=1481 data-nosnippet>1481</a></span><span class="kw">pub fn </span>name_from_pkg_name(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Txt {
-<a href=#1482 id=1482 data-nosnippet>1482</a>    <span class="kw">let </span><span class="kw-2">mut </span>n = String::new();
-<a href=#1483 id=1483 data-nosnippet>1483</a>    <span class="kw">let </span><span class="kw-2">mut </span>sep = <span class="string">""</span>;
-<a href=#1484 id=1484 data-nosnippet>1484</a>    <span class="kw">for </span>part <span class="kw">in </span>name.split(<span class="kw-2">&amp;</span>[<span class="string">'-'</span>, <span class="string">'_'</span>]) {
-<a href=#1485 id=1485 data-nosnippet>1485</a>        n.push_str(sep);
-<a href=#1486 id=1486 data-nosnippet>1486</a>        <span class="kw">let </span><span class="kw-2">mut </span>chars = part.char_indices();
-<a href=#1487 id=1487 data-nosnippet>1487</a>        <span class="kw">let </span>(<span class="kw">_</span>, c) = chars.next().unwrap();
-<a href=#1488 id=1488 data-nosnippet>1488</a>        c.to_uppercase().for_each(|c| n.push(c));
-<a href=#1489 id=1489 data-nosnippet>1489</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((i, <span class="kw">_</span>)) = chars.next() {
-<a href=#1490 id=1490 data-nosnippet>1490</a>            n.push_str(<span class="kw-2">&amp;</span>part[i..]);
-<a href=#1491 id=1491 data-nosnippet>1491</a>        }
-<a href=#1492 id=1492 data-nosnippet>1492</a>        sep = <span class="string">" "</span>;
-<a href=#1493 id=1493 data-nosnippet>1493</a>    }
-<a href=#1494 id=1494 data-nosnippet>1494</a>    n.into()
-<a href=#1495 id=1495 data-nosnippet>1495</a>}
-<a href=#1496 id=1496 data-nosnippet>1496</a>
-<a href=#1497 id=1497 data-nosnippet>1497</a><span class="attr">#[doc(hidden)]
-<a href=#1498 id=1498 data-nosnippet>1498</a></span><span class="kw">pub fn </span>txt_from_pkg_meta(value: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Txt {
-<a href=#1499 id=1499 data-nosnippet>1499</a>    value.into()
-<a href=#1500 id=1500 data-nosnippet>1500</a>}</code></pre></div></section></main></body></html>
+<a href=#1376 id=1376 data-nosnippet>1376</a>    <span class="attr">#[cfg(target_os = <span class="string">"android"</span>)]
+<a href=#1377 id=1377 data-nosnippet>1377</a>    </span><span class="kw">let </span>layers = layers.with(tracing_android::layer(<span class="kw-2">&amp;</span>zng_env::about().pkg_name).unwrap());
+<a href=#1378 id=1378 data-nosnippet>1378</a>
+<a href=#1379 id=1379 data-nosnippet>1379</a>    <span class="attr">#[cfg(not(target_os = <span class="string">"android"</span>))]
+<a href=#1380 id=1380 data-nosnippet>1380</a>    </span><span class="kw">let </span>layers = {
+<a href=#1381 id=1381 data-nosnippet>1381</a>        <span class="kw">let </span>fmt_layer = tracing_subscriber::fmt::layer().without_time();
+<a href=#1382 id=1382 data-nosnippet>1382</a>
+<a href=#1383 id=1383 data-nosnippet>1383</a>        <span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+<a href=#1384 id=1384 data-nosnippet>1384</a>        </span><span class="kw">let </span>fmt_layer = fmt_layer.with_ansi(<span class="bool-val">false</span>).with_writer(tracing_web::MakeWebConsoleWriter::new());
+<a href=#1385 id=1385 data-nosnippet>1385</a>
+<a href=#1386 id=1386 data-nosnippet>1386</a>        layers.with(fmt_layer)
+<a href=#1387 id=1387 data-nosnippet>1387</a>    };
+<a href=#1388 id=1388 data-nosnippet>1388</a>
+<a href=#1389 id=1389 data-nosnippet>1389</a>    layers.try_init().is_ok()
+<a href=#1390 id=1390 data-nosnippet>1390</a>}
+<a href=#1391 id=1391 data-nosnippet>1391</a>
+<a href=#1392 id=1392 data-nosnippet>1392</a><span class="kw">struct </span>FilterLayer(tracing::Level);
+<a href=#1393 id=1393 data-nosnippet>1393</a><span class="kw">impl</span>&lt;S: tracing::Subscriber&gt; tracing_subscriber::Layer&lt;S&gt; <span class="kw">for </span>FilterLayer {
+<a href=#1394 id=1394 data-nosnippet>1394</a>    <span class="kw">fn </span>enabled(<span class="kw-2">&amp;</span><span class="self">self</span>, metadata: <span class="kw-2">&amp;</span>tracing::Metadata&lt;<span class="lifetime">'_</span>&gt;, <span class="kw">_</span>: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) -&gt; bool {
+<a href=#1395 id=1395 data-nosnippet>1395</a>        print_tracing_filter(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>, metadata)
+<a href=#1396 id=1396 data-nosnippet>1396</a>    }
+<a href=#1397 id=1397 data-nosnippet>1397</a>
+<a href=#1398 id=1398 data-nosnippet>1398</a>    <span class="kw">fn </span>max_level_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;tracing::metadata::LevelFilter&gt; {
+<a href=#1399 id=1399 data-nosnippet>1399</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.<span class="number">0</span>.into())
+<a href=#1400 id=1400 data-nosnippet>1400</a>    }
+<a href=#1401 id=1401 data-nosnippet>1401</a>
+<a href=#1402 id=1402 data-nosnippet>1402</a>    <span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+<a href=#1403 id=1403 data-nosnippet>1403</a>    </span><span class="kw">fn </span>on_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>tracing::Event&lt;<span class="lifetime">'_</span>&gt;, _ctx: tracing_subscriber::layer::Context&lt;<span class="lifetime">'_</span>, S&gt;) {
+<a href=#1404 id=1404 data-nosnippet>1404</a>        <span class="kw">if </span>event.metadata().level() == <span class="kw-2">&amp;</span>tracing::Level::ERROR &amp;&amp; APP.is_running() &amp;&amp; TEST_LOG.get() {
+<a href=#1405 id=1405 data-nosnippet>1405</a>            <span class="kw">struct </span>MsgCollector&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>String);
+<a href=#1406 id=1406 data-nosnippet>1406</a>            <span class="kw">impl </span>tracing::field::Visit <span class="kw">for </span>MsgCollector&lt;<span class="lifetime">'_</span>&gt; {
+<a href=#1407 id=1407 data-nosnippet>1407</a>                <span class="kw">fn </span>record_debug(<span class="kw-2">&amp;mut </span><span class="self">self</span>, field: <span class="kw-2">&amp;</span>tracing::field::Field, value: <span class="kw-2">&amp;</span><span class="kw">dyn </span>fmt::Debug) {
+<a href=#1408 id=1408 data-nosnippet>1408</a>                    <span class="kw">use </span>std::fmt::Write;
+<a href=#1409 id=1409 data-nosnippet>1409</a>                    <span class="macro">write!</span>(<span class="self">self</span>.<span class="number">0</span>, <span class="string">"\n  {} = {:?}"</span>, field.name(), value).unwrap();
+<a href=#1410 id=1410 data-nosnippet>1410</a>                }
+<a href=#1411 id=1411 data-nosnippet>1411</a>            }
+<a href=#1412 id=1412 data-nosnippet>1412</a>
+<a href=#1413 id=1413 data-nosnippet>1413</a>            <span class="kw">let </span>meta = event.metadata();
+<a href=#1414 id=1414 data-nosnippet>1414</a>            <span class="kw">let </span>file = meta.file().unwrap_or(<span class="string">""</span>);
+<a href=#1415 id=1415 data-nosnippet>1415</a>            <span class="kw">let </span>line = meta.line().unwrap_or(<span class="number">0</span>);
+<a href=#1416 id=1416 data-nosnippet>1416</a>
+<a href=#1417 id=1417 data-nosnippet>1417</a>            <span class="kw">let </span><span class="kw-2">mut </span>msg = <span class="macro">format!</span>(<span class="string">"[{file}:{line}]"</span>);
+<a href=#1418 id=1418 data-nosnippet>1418</a>            event.record(<span class="kw-2">&amp;mut </span>MsgCollector(<span class="kw-2">&amp;mut </span>msg));
+<a href=#1419 id=1419 data-nosnippet>1419</a>
+<a href=#1420 id=1420 data-nosnippet>1420</a>            <span class="macro">panic!</span>(<span class="string">"[LOG-ERROR]{msg}"</span>)
+<a href=#1421 id=1421 data-nosnippet>1421</a>        }
+<a href=#1422 id=1422 data-nosnippet>1422</a>    }
+<a href=#1423 id=1423 data-nosnippet>1423</a>}
+<a href=#1424 id=1424 data-nosnippet>1424</a><span class="doccomment">/// Filter used by [`print_tracing`], removes some log noise from dependencies.
+<a href=#1425 id=1425 data-nosnippet>1425</a>///
+<a href=#1426 id=1426 data-nosnippet>1426</a>/// Use `tracing_subscriber::filter::FilterFn` plug this filter into a tracing setup.
+<a href=#1427 id=1427 data-nosnippet>1427</a></span><span class="kw">pub fn </span>print_tracing_filter(level: <span class="kw-2">&amp;</span>tracing::Level, metadata: <span class="kw-2">&amp;</span>tracing::Metadata) -&gt; bool {
+<a href=#1428 id=1428 data-nosnippet>1428</a>    <span class="kw">if </span>metadata.level() &gt; level {
+<a href=#1429 id=1429 data-nosnippet>1429</a>        <span class="kw">return </span><span class="bool-val">false</span>;
+<a href=#1430 id=1430 data-nosnippet>1430</a>    }
+<a href=#1431 id=1431 data-nosnippet>1431</a>
+<a href=#1432 id=1432 data-nosnippet>1432</a>    <span class="kw">if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::INFO {
+<a href=#1433 id=1433 data-nosnippet>1433</a>        <span class="comment">// suppress large info about texture cache
+<a href=#1434 id=1434 data-nosnippet>1434</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
+<a href=#1435 id=1435 data-nosnippet>1435</a>            <span class="kw">return </span><span class="bool-val">false</span>;
+<a href=#1436 id=1436 data-nosnippet>1436</a>        }
+<a href=#1437 id=1437 data-nosnippet>1437</a>        <span class="comment">// suppress config dump
+<a href=#1438 id=1438 data-nosnippet>1438</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::renderer::init" </span>{
+<a href=#1439 id=1439 data-nosnippet>1439</a>            <span class="kw">return </span><span class="bool-val">false</span>;
+<a href=#1440 id=1440 data-nosnippet>1440</a>        }
+<a href=#1441 id=1441 data-nosnippet>1441</a>    } <span class="kw">else if </span>metadata.level() == <span class="kw-2">&amp;</span>tracing::Level::WARN {
+<a href=#1442 id=1442 data-nosnippet>1442</a>        <span class="comment">// suppress webrender warnings:
+<a href=#1443 id=1443 data-nosnippet>1443</a>        //
+<a href=#1444 id=1444 data-nosnippet>1444</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"zng_webrender::device::gl" </span>{
+<a href=#1445 id=1445 data-nosnippet>1445</a>            <span class="comment">// Suppress "Cropping texture upload Box2D((0, 0), (0, 1)) to None"
+<a href=#1446 id=1446 data-nosnippet>1446</a>            // This happens when an empty frame is rendered.
+<a href=#1447 id=1447 data-nosnippet>1447</a>            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">4647</span>) {
+<a href=#1448 id=1448 data-nosnippet>1448</a>                <span class="kw">return </span><span class="bool-val">false</span>;
+<a href=#1449 id=1449 data-nosnippet>1449</a>            }
+<a href=#1450 id=1450 data-nosnippet>1450</a>        }
+<a href=#1451 id=1451 data-nosnippet>1451</a>
+<a href=#1452 id=1452 data-nosnippet>1452</a>        <span class="comment">// suppress font-kit warnings:
+<a href=#1453 id=1453 data-nosnippet>1453</a>        //
+<a href=#1454 id=1454 data-nosnippet>1454</a>        </span><span class="kw">if </span>metadata.target() == <span class="string">"font_kit::loaders::freetype" </span>{
+<a href=#1455 id=1455 data-nosnippet>1455</a>            <span class="comment">// Suppress "$fn(): found invalid platform ID $n"
+<a href=#1456 id=1456 data-nosnippet>1456</a>            // This does not look fully implemented and generates a lot of warns
+<a href=#1457 id=1457 data-nosnippet>1457</a>            // with the default Ubuntu font set all with valid platform IDs.
+<a href=#1458 id=1458 data-nosnippet>1458</a>            </span><span class="kw">if </span>metadata.line() == <span class="prelude-val">Some</span>(<span class="number">734</span>) {
+<a href=#1459 id=1459 data-nosnippet>1459</a>                <span class="kw">return </span><span class="bool-val">false</span>;
+<a href=#1460 id=1460 data-nosnippet>1460</a>            }
+<a href=#1461 id=1461 data-nosnippet>1461</a>        }
+<a href=#1462 id=1462 data-nosnippet>1462</a>    }
+<a href=#1463 id=1463 data-nosnippet>1463</a>
+<a href=#1464 id=1464 data-nosnippet>1464</a>    <span class="bool-val">true
+<a href=#1465 id=1465 data-nosnippet>1465</a></span>}
+<a href=#1466 id=1466 data-nosnippet>1466</a>
+<a href=#1467 id=1467 data-nosnippet>1467</a><span class="doccomment">/// Modifies the [`print_tracing`] subscriber to panic for error logs in the current app.
+<a href=#1468 id=1468 data-nosnippet>1468</a></span><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+<a href=#1469 id=1469 data-nosnippet>1469</a></span><span class="kw">pub fn </span>test_log() {
+<a href=#1470 id=1470 data-nosnippet>1470</a>    TEST_LOG.set(<span class="bool-val">true</span>);
+<a href=#1471 id=1471 data-nosnippet>1471</a>}
+<a href=#1472 id=1472 data-nosnippet>1472</a>
+<a href=#1473 id=1473 data-nosnippet>1473</a><span class="attr">#[cfg(any(test, feature = <span class="string">"test_util"</span>))]
+<a href=#1474 id=1474 data-nosnippet>1474</a></span><span class="macro">zng_app_context::app_local!</span> {
+<a href=#1475 id=1475 data-nosnippet>1475</a>    <span class="kw">static </span>TEST_LOG: bool = <span class="bool-val">false</span>;
+<a href=#1476 id=1476 data-nosnippet>1476</a>}
+<a href=#1477 id=1477 data-nosnippet>1477</a>
+<a href=#1478 id=1478 data-nosnippet>1478</a><span class="attr">#[doc(hidden)]
+<a href=#1479 id=1479 data-nosnippet>1479</a></span><span class="kw">pub fn </span>name_from_pkg_name(name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Txt {
+<a href=#1480 id=1480 data-nosnippet>1480</a>    <span class="kw">let </span><span class="kw-2">mut </span>n = String::new();
+<a href=#1481 id=1481 data-nosnippet>1481</a>    <span class="kw">let </span><span class="kw-2">mut </span>sep = <span class="string">""</span>;
+<a href=#1482 id=1482 data-nosnippet>1482</a>    <span class="kw">for </span>part <span class="kw">in </span>name.split(<span class="kw-2">&amp;</span>[<span class="string">'-'</span>, <span class="string">'_'</span>]) {
+<a href=#1483 id=1483 data-nosnippet>1483</a>        n.push_str(sep);
+<a href=#1484 id=1484 data-nosnippet>1484</a>        <span class="kw">let </span><span class="kw-2">mut </span>chars = part.char_indices();
+<a href=#1485 id=1485 data-nosnippet>1485</a>        <span class="kw">let </span>(<span class="kw">_</span>, c) = chars.next().unwrap();
+<a href=#1486 id=1486 data-nosnippet>1486</a>        c.to_uppercase().for_each(|c| n.push(c));
+<a href=#1487 id=1487 data-nosnippet>1487</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>((i, <span class="kw">_</span>)) = chars.next() {
+<a href=#1488 id=1488 data-nosnippet>1488</a>            n.push_str(<span class="kw-2">&amp;</span>part[i..]);
+<a href=#1489 id=1489 data-nosnippet>1489</a>        }
+<a href=#1490 id=1490 data-nosnippet>1490</a>        sep = <span class="string">" "</span>;
+<a href=#1491 id=1491 data-nosnippet>1491</a>    }
+<a href=#1492 id=1492 data-nosnippet>1492</a>    n.into()
+<a href=#1493 id=1493 data-nosnippet>1493</a>}
+<a href=#1494 id=1494 data-nosnippet>1494</a>
+<a href=#1495 id=1495 data-nosnippet>1495</a><span class="attr">#[doc(hidden)]
+<a href=#1496 id=1496 data-nosnippet>1496</a></span><span class="kw">pub fn </span>txt_from_pkg_meta(value: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) -&gt; Txt {
+<a href=#1497 id=1497 data-nosnippet>1497</a>    value.into()
+<a href=#1498 id=1498 data-nosnippet>1498</a>}</code></pre></div></section></main></body></html>
