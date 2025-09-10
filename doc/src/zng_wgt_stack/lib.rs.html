@@ -195,7 +195,7 @@
 <a href=#195 id=195 data-nosnippet>195</a>        }
 <a href=#196 id=196 data-nosnippet>196</a>        op @ UiNodeOp::Measure { .. } | op @ UiNodeOp::Layout { .. } =&gt; {
 <a href=#197 id=197 data-nosnippet>197</a>            <span class="kw">let </span><span class="kw-2">mut </span>measure = |wm| {
-<a href=#198 id=198 data-nosnippet>198</a>                <span class="kw">let </span>constraints = LAYOUT.constraints();
+<a href=#198 id=198 data-nosnippet>198</a>                <span class="kw">let </span>constraints = LAYOUT.constraints().inner();
 <a href=#199 id=199 data-nosnippet>199</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(known) = constraints.fill_or_exact() {
 <a href=#200 id=200 data-nosnippet>200</a>                    child.delegated();
 <a href=#201 id=201 data-nosnippet>201</a>                    <span class="kw">return </span>known;
@@ -258,7 +258,7 @@
 <a href=#258 id=258 data-nosnippet>258</a><span class="kw">fn </span>measure(wm: <span class="kw-2">&amp;mut </span>WidgetMeasure, children: <span class="kw-2">&amp;mut </span>PanelList, direction: StackDirection, spacing: Length, children_align: Align) -&gt; PxSize {
 <a href=#259 id=259 data-nosnippet>259</a>    <span class="kw">let </span>metrics = LAYOUT.metrics();
 <a href=#260 id=260 data-nosnippet>260</a>    <span class="kw">let </span>constraints = metrics.constraints();
-<a href=#261 id=261 data-nosnippet>261</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(known) = constraints.fill_or_exact() {
+<a href=#261 id=261 data-nosnippet>261</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(known) = constraints.inner().fill_or_exact() {
 <a href=#262 id=262 data-nosnippet>262</a>        <span class="kw">return </span>known;
 <a href=#263 id=263 data-nosnippet>263</a>    }
 <a href=#264 id=264 data-nosnippet>264</a>
@@ -309,7 +309,7 @@
 <a href=#309 id=309 data-nosnippet>309</a>        },
 <a href=#310 id=310 data-nosnippet>310</a>    );
 <a href=#311 id=311 data-nosnippet>311</a>
-<a href=#312 id=312 data-nosnippet>312</a>    constraints.fill_size_or(item_bounds.size())
+<a href=#312 id=312 data-nosnippet>312</a>    constraints.inner().fill_size_or(item_bounds.size())
 <a href=#313 id=313 data-nosnippet>313</a>}
 <a href=#314 id=314 data-nosnippet>314</a><span class="kw">fn </span>layout(wl: <span class="kw-2">&amp;mut </span>WidgetLayout, children: <span class="kw-2">&amp;mut </span>PanelList, direction: StackDirection, spacing: Length, children_align: Align) -&gt; PxSize {
 <a href=#315 id=315 data-nosnippet>315</a>    <span class="kw">let </span>metrics = LAYOUT.metrics();
@@ -377,7 +377,7 @@
 <a href=#377 id=377 data-nosnippet>377</a>
 <a href=#378 id=378 data-nosnippet>378</a>    <span class="comment">// final position, align child inside item_bounds and item_bounds in the panel area.
 <a href=#379 id=379 data-nosnippet>379</a>    </span><span class="kw">let </span>items_size = item_bounds.size();
-<a href=#380 id=380 data-nosnippet>380</a>    <span class="kw">let </span>panel_size = constraints.fill_size_or(items_size);
+<a href=#380 id=380 data-nosnippet>380</a>    <span class="kw">let </span>panel_size = constraints.inner().fill_size_or(items_size);
 <a href=#381 id=381 data-nosnippet>381</a>    <span class="kw">let </span>children_offset = -item_bounds.min.to_vector() + (panel_size - items_size).to_vector() * children_align.xy(LAYOUT.direction());
 <a href=#382 id=382 data-nosnippet>382</a>    <span class="kw">let </span>align_baseline = children_align.is_baseline();
 <a href=#383 id=383 data-nosnippet>383</a>    <span class="kw">let </span>child_align = child_align.xy(LAYOUT.direction());

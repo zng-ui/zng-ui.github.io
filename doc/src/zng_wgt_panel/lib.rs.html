@@ -80,31 +80,30 @@
 <a href=#80 id=80 data-nosnippet>80</a>
 <a href=#81 id=81 data-nosnippet>81</a><span class="doccomment">/// Panel widget child node.
 <a href=#82 id=82 data-nosnippet>82</a></span><span class="kw">pub fn </span>node(children: ArcNode, panel_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;PanelArgs&gt;&gt;) -&gt; UiNode {
-<a href=#83 id=83 data-nosnippet>83</a>    <span class="kw">let </span><span class="kw-2">mut </span>child = UiNode::nil();
-<a href=#84 id=84 data-nosnippet>84</a>    <span class="kw">let </span>panel_fn = panel_fn.into_var();
-<a href=#85 id=85 data-nosnippet>85</a>    match_node_leaf(<span class="kw">move </span>|op| <span class="kw">match </span>op {
-<a href=#86 id=86 data-nosnippet>86</a>        UiNodeOp::Init =&gt; {
-<a href=#87 id=87 data-nosnippet>87</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>panel_fn);
-<a href=#88 id=88 data-nosnippet>88</a>            child = panel_fn.get().call(PanelArgs {
-<a href=#89 id=89 data-nosnippet>89</a>                children: children.take_on_init(),
-<a href=#90 id=90 data-nosnippet>90</a>            });
-<a href=#91 id=91 data-nosnippet>91</a>            child.init();
-<a href=#92 id=92 data-nosnippet>92</a>        }
-<a href=#93 id=93 data-nosnippet>93</a>        UiNodeOp::Deinit =&gt; {
-<a href=#94 id=94 data-nosnippet>94</a>            child.deinit();
-<a href=#95 id=95 data-nosnippet>95</a>            child = UiNode::nil();
-<a href=#96 id=96 data-nosnippet>96</a>        }
-<a href=#97 id=97 data-nosnippet>97</a>        UiNodeOp::Update { updates } =&gt; {
-<a href=#98 id=98 data-nosnippet>98</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = panel_fn.get_new() {
-<a href=#99 id=99 data-nosnippet>99</a>                child.deinit();
-<a href=#100 id=100 data-nosnippet>100</a>                child = f(PanelArgs {
-<a href=#101 id=101 data-nosnippet>101</a>                    children: children.take_on_init(),
-<a href=#102 id=102 data-nosnippet>102</a>                });
-<a href=#103 id=103 data-nosnippet>103</a>                child.init();
-<a href=#104 id=104 data-nosnippet>104</a>            } <span class="kw">else </span>{
-<a href=#105 id=105 data-nosnippet>105</a>                child.update(updates);
-<a href=#106 id=106 data-nosnippet>106</a>            }
-<a href=#107 id=107 data-nosnippet>107</a>        }
-<a href=#108 id=108 data-nosnippet>108</a>        op =&gt; child.op(op),
-<a href=#109 id=109 data-nosnippet>109</a>    })
-<a href=#110 id=110 data-nosnippet>110</a>}</code></pre></div></section></main></body></html>
+<a href=#83 id=83 data-nosnippet>83</a>    <span class="kw">let </span>panel_fn = panel_fn.into_var();
+<a href=#84 id=84 data-nosnippet>84</a>    match_node(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#85 id=85 data-nosnippet>85</a>        UiNodeOp::Init =&gt; {
+<a href=#86 id=86 data-nosnippet>86</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>panel_fn);
+<a href=#87 id=87 data-nosnippet>87</a>            <span class="kw-2">*</span>c.node() = panel_fn.get().call(PanelArgs {
+<a href=#88 id=88 data-nosnippet>88</a>                children: children.take_on_init(),
+<a href=#89 id=89 data-nosnippet>89</a>            });
+<a href=#90 id=90 data-nosnippet>90</a>            c.init();
+<a href=#91 id=91 data-nosnippet>91</a>        }
+<a href=#92 id=92 data-nosnippet>92</a>        UiNodeOp::Deinit =&gt; {
+<a href=#93 id=93 data-nosnippet>93</a>            c.deinit();
+<a href=#94 id=94 data-nosnippet>94</a>            <span class="kw-2">*</span>c.node() = UiNode::nil();
+<a href=#95 id=95 data-nosnippet>95</a>        }
+<a href=#96 id=96 data-nosnippet>96</a>        UiNodeOp::Update { updates } =&gt; {
+<a href=#97 id=97 data-nosnippet>97</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = panel_fn.get_new() {
+<a href=#98 id=98 data-nosnippet>98</a>                c.deinit();
+<a href=#99 id=99 data-nosnippet>99</a>                <span class="kw-2">*</span>c.node() = f(PanelArgs {
+<a href=#100 id=100 data-nosnippet>100</a>                    children: children.take_on_init(),
+<a href=#101 id=101 data-nosnippet>101</a>                });
+<a href=#102 id=102 data-nosnippet>102</a>                c.init();
+<a href=#103 id=103 data-nosnippet>103</a>            } <span class="kw">else </span>{
+<a href=#104 id=104 data-nosnippet>104</a>                c.update(updates);
+<a href=#105 id=105 data-nosnippet>105</a>            }
+<a href=#106 id=106 data-nosnippet>106</a>        }
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#108 id=108 data-nosnippet>108</a>    })
+<a href=#109 id=109 data-nosnippet>109</a>}</code></pre></div></section></main></body></html>

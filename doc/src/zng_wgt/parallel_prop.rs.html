@@ -42,10 +42,13 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#6 id=6 data-nosnippet>6</a>///
 <a href=#7 id=7 data-nosnippet>7</a>/// This property sets the [`PARALLEL_VAR`] that is used by list node implementers to toggle parallel processing.
 <a href=#8 id=8 data-nosnippet>8</a>///
-<a href=#9 id=9 data-nosnippet>9</a>/// See also `WINDOWS.parallel` to define parallelization in multi-window apps.
-<a href=#10 id=10 data-nosnippet>10</a>///
-<a href=#11 id=11 data-nosnippet>11</a>/// [`PARALLEL_VAR`]: zng_app::widget::base::PARALLEL_VAR
-<a href=#12 id=12 data-nosnippet>12</a></span><span class="attr">#[property(CONTEXT, default(PARALLEL_VAR))]
-<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub fn </span>parallel(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;Parallel&gt;) -&gt; UiNode {
-<a href=#14 id=14 data-nosnippet>14</a>    with_context_var(child, PARALLEL_VAR, enabled)
-<a href=#15 id=15 data-nosnippet>15</a>}</code></pre></div></section></main></body></html>
+<a href=#9 id=9 data-nosnippet>9</a>/// Note that this property is set at the `WIDGET` nest group, so it will affect all parallelization in the widget, even in
+<a href=#10 id=10 data-nosnippet>10</a>/// list at the root of the widget.
+<a href=#11 id=11 data-nosnippet>11</a>///
+<a href=#12 id=12 data-nosnippet>12</a>/// See also `WINDOWS.parallel` to define parallelization between multiple windows.
+<a href=#13 id=13 data-nosnippet>13</a>///
+<a href=#14 id=14 data-nosnippet>14</a>/// [`PARALLEL_VAR`]: zng_app::widget::base::PARALLEL_VAR
+<a href=#15 id=15 data-nosnippet>15</a></span><span class="attr">#[property(WIDGET, default(PARALLEL_VAR))]
+<a href=#16 id=16 data-nosnippet>16</a></span><span class="kw">pub fn </span>parallel(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;Parallel&gt;) -&gt; UiNode {
+<a href=#17 id=17 data-nosnippet>17</a>    with_context_var(child, PARALLEL_VAR, enabled)
+<a href=#18 id=18 data-nosnippet>18</a>}</code></pre></div></section></main></body></html>

@@ -2755,237 +2755,141 @@
 <a href=#2755 id=2755 data-nosnippet>2755</a>        })
 <a href=#2756 id=2756 data-nosnippet>2756</a>    }
 <a href=#2757 id=2757 data-nosnippet>2757</a>
-<a href=#2758 id=2758 data-nosnippet>2758</a>    <span class="kw">fn </span>is_list(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#2759 id=2759 data-nosnippet>2759</a>        <span class="bool-val">false
-<a href=#2760 id=2760 data-nosnippet>2760</a>    </span>}
-<a href=#2761 id=2761 data-nosnippet>2761</a>
-<a href=#2762 id=2762 data-nosnippet>2762</a>    <span class="kw">fn </span>for_each_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>UiNode)) {
-<a href=#2763 id=2763 data-nosnippet>2763</a>        visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.c.lock().content.root)
+<a href=#2758 id=2758 data-nosnippet>2758</a>    <span class="kw">fn </span>as_widget(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span><span class="kw">dyn </span>WidgetUiNodeImpl&gt; {
+<a href=#2759 id=2759 data-nosnippet>2759</a>        <span class="kw">if </span><span class="self">self</span>.c.lock().content.root.as_widget().is_some() {
+<a href=#2760 id=2760 data-nosnippet>2760</a>            <span class="prelude-val">Some</span>(<span class="self">self</span>)
+<a href=#2761 id=2761 data-nosnippet>2761</a>        } <span class="kw">else </span>{
+<a href=#2762 id=2762 data-nosnippet>2762</a>            <span class="prelude-val">None
+<a href=#2763 id=2763 data-nosnippet>2763</a>        </span>}
 <a href=#2764 id=2764 data-nosnippet>2764</a>    }
-<a href=#2765 id=2765 data-nosnippet>2765</a>
-<a href=#2766 id=2766 data-nosnippet>2766</a>    <span class="kw">fn </span>try_for_each_child(
-<a href=#2767 id=2767 data-nosnippet>2767</a>        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-<a href=#2768 id=2768 data-nosnippet>2768</a>        visitor: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(usize, <span class="kw-2">&amp;mut </span>UiNode) -&gt; std::ops::ControlFlow&lt;zng_var::BoxAnyVarValue&gt;,
-<a href=#2769 id=2769 data-nosnippet>2769</a>    ) -&gt; std::ops::ControlFlow&lt;zng_var::BoxAnyVarValue&gt; {
-<a href=#2770 id=2770 data-nosnippet>2770</a>        visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.c.lock().content.root)
-<a href=#2771 id=2771 data-nosnippet>2771</a>    }
-<a href=#2772 id=2772 data-nosnippet>2772</a>
-<a href=#2773 id=2773 data-nosnippet>2773</a>    <span class="kw">fn </span>par_each_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, visitor: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode) + Sync)) {
-<a href=#2774 id=2774 data-nosnippet>2774</a>        visitor(<span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.c.lock().content.root)
-<a href=#2775 id=2775 data-nosnippet>2775</a>    }
-<a href=#2776 id=2776 data-nosnippet>2776</a>
-<a href=#2777 id=2777 data-nosnippet>2777</a>    <span class="kw">fn </span>par_fold_reduce(
-<a href=#2778 id=2778 data-nosnippet>2778</a>        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-<a href=#2779 id=2779 data-nosnippet>2779</a>        identity: zng_var::BoxAnyVarValue,
-<a href=#2780 id=2780 data-nosnippet>2780</a>        fold: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, usize, <span class="kw-2">&amp;mut </span>UiNode) -&gt; zng_var::BoxAnyVarValue + Sync),
-<a href=#2781 id=2781 data-nosnippet>2781</a>        <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(zng_var::BoxAnyVarValue, zng_var::BoxAnyVarValue) -&gt; zng_var::BoxAnyVarValue + Sync),
-<a href=#2782 id=2782 data-nosnippet>2782</a>    ) -&gt; zng_var::BoxAnyVarValue {
-<a href=#2783 id=2783 data-nosnippet>2783</a>        fold(identity, <span class="number">0</span>, <span class="kw-2">&amp;mut </span><span class="self">self</span>.c.lock().content.root)
-<a href=#2784 id=2784 data-nosnippet>2784</a>    }
-<a href=#2785 id=2785 data-nosnippet>2785</a>
-<a href=#2786 id=2786 data-nosnippet>2786</a>    <span class="kw">fn </span>update_list(<span class="kw-2">&amp;mut </span><span class="self">self</span>, updates: <span class="kw-2">&amp;</span>WidgetUpdates, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>zng_wgt::prelude::UiNodeListObserver) {
-<a href=#2787 id=2787 data-nosnippet>2787</a>        <span class="self">self</span>.update(updates);
-<a href=#2788 id=2788 data-nosnippet>2788</a>    }
+<a href=#2765 id=2765 data-nosnippet>2765</a>}
+<a href=#2766 id=2766 data-nosnippet>2766</a><span class="kw">impl </span>WidgetUiNodeImpl <span class="kw">for </span>NestedWindowNode {
+<a href=#2767 id=2767 data-nosnippet>2767</a>    <span class="kw">fn </span>with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update_mode: WidgetUpdateMode, visitor: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut()) {
+<a href=#2768 id=2768 data-nosnippet>2768</a>        <span class="kw">let </span><span class="kw-2">mut </span>lock = <span class="self">self</span>.c.lock();
+<a href=#2769 id=2769 data-nosnippet>2769</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>w) = lock.content.root.as_widget() {
+<a href=#2770 id=2770 data-nosnippet>2770</a>            w.with_context(update_mode, visitor)
+<a href=#2771 id=2771 data-nosnippet>2771</a>        }
+<a href=#2772 id=2772 data-nosnippet>2772</a>    }
+<a href=#2773 id=2773 data-nosnippet>2773</a>}
+<a href=#2774 id=2774 data-nosnippet>2774</a>
+<a href=#2775 id=2775 data-nosnippet>2775</a><span class="macro">static_id!</span> {
+<a href=#2776 id=2776 data-nosnippet>2776</a>    <span class="kw">static </span><span class="kw-2">ref </span>NESTED_WINDOW_INFO_ID: StateId&lt;WindowId&gt;;
+<a href=#2777 id=2777 data-nosnippet>2777</a>}
+<a href=#2778 id=2778 data-nosnippet>2778</a>
+<a href=#2779 id=2779 data-nosnippet>2779</a><span class="doccomment">/// Extension methods for widget info about a node that hosts a nested window.
+<a href=#2780 id=2780 data-nosnippet>2780</a></span><span class="kw">pub trait </span>NestedWindowWidgetInfoExt {
+<a href=#2781 id=2781 data-nosnippet>2781</a>    <span class="doccomment">/// Gets the hosted window ID if the widget hosts a nested window.
+<a href=#2782 id=2782 data-nosnippet>2782</a>    </span><span class="kw">fn </span>nested_window(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt;;
+<a href=#2783 id=2783 data-nosnippet>2783</a>
+<a href=#2784 id=2784 data-nosnippet>2784</a>    <span class="doccomment">/// Gets the hosted window info tree if the widget hosts a nested window that is open.
+<a href=#2785 id=2785 data-nosnippet>2785</a>    </span><span class="kw">fn </span>nested_window_tree(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfoTree&gt; {
+<a href=#2786 id=2786 data-nosnippet>2786</a>        WINDOWS.widget_tree(<span class="self">self</span>.nested_window()<span class="question-mark">?</span>).ok()
+<a href=#2787 id=2787 data-nosnippet>2787</a>    }
+<a href=#2788 id=2788 data-nosnippet>2788</a>}
 <a href=#2789 id=2789 data-nosnippet>2789</a>
-<a href=#2790 id=2790 data-nosnippet>2790</a>    <span class="kw">fn </span>measure_list(
-<a href=#2791 id=2791 data-nosnippet>2791</a>        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-<a href=#2792 id=2792 data-nosnippet>2792</a>        wm: <span class="kw-2">&amp;mut </span>WidgetMeasure,
-<a href=#2793 id=2793 data-nosnippet>2793</a>        <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode, <span class="kw-2">&amp;mut </span>WidgetMeasure) -&gt; PxSize + Sync),
-<a href=#2794 id=2794 data-nosnippet>2794</a>        <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Sync),
-<a href=#2795 id=2795 data-nosnippet>2795</a>    ) -&gt; PxSize {
-<a href=#2796 id=2796 data-nosnippet>2796</a>        <span class="self">self</span>.measure(wm)
-<a href=#2797 id=2797 data-nosnippet>2797</a>    }
-<a href=#2798 id=2798 data-nosnippet>2798</a>
-<a href=#2799 id=2799 data-nosnippet>2799</a>    <span class="kw">fn </span>layout_list(
-<a href=#2800 id=2800 data-nosnippet>2800</a>        <span class="kw-2">&amp;mut </span><span class="self">self</span>,
-<a href=#2801 id=2801 data-nosnippet>2801</a>        wl: <span class="kw-2">&amp;mut </span>WidgetLayout,
-<a href=#2802 id=2802 data-nosnippet>2802</a>        <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode, <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize + Sync),
-<a href=#2803 id=2803 data-nosnippet>2803</a>        <span class="kw">_</span>: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(PxSize, PxSize) -&gt; PxSize + Sync),
-<a href=#2804 id=2804 data-nosnippet>2804</a>    ) -&gt; PxSize {
-<a href=#2805 id=2805 data-nosnippet>2805</a>        <span class="self">self</span>.layout(wl)
-<a href=#2806 id=2806 data-nosnippet>2806</a>    }
-<a href=#2807 id=2807 data-nosnippet>2807</a>
-<a href=#2808 id=2808 data-nosnippet>2808</a>    <span class="kw">fn </span>render_list(<span class="kw-2">&amp;mut </span><span class="self">self</span>, frame: <span class="kw-2">&amp;mut </span>FrameBuilder, render: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode, <span class="kw-2">&amp;mut </span>FrameBuilder) + Sync)) {
-<a href=#2809 id=2809 data-nosnippet>2809</a>        <span class="kw">if </span><span class="self">self</span>.is_list() {
-<a href=#2810 id=2810 data-nosnippet>2810</a>            <span class="kw">match </span><span class="self">self</span>.children_len() {
-<a href=#2811 id=2811 data-nosnippet>2811</a>                <span class="number">0 </span>=&gt; {}
-<a href=#2812 id=2812 data-nosnippet>2812</a>                <span class="number">1 </span>=&gt; <span class="self">self</span>.with_child(<span class="number">0</span>, <span class="kw-2">&amp;mut </span>|n| render(<span class="number">0</span>, n, frame)),
-<a href=#2813 id=2813 data-nosnippet>2813</a>                <span class="kw">_ </span>=&gt; {
-<a href=#2814 id=2814 data-nosnippet>2814</a>                    <span class="attr">#[cfg(debug_assertions)]
-<a href=#2815 id=2815 data-nosnippet>2815</a>                    </span><span class="kw">if </span>zng_app::widget::base::PARALLEL_VAR
-<a href=#2816 id=2816 data-nosnippet>2816</a>                        .get()
-<a href=#2817 id=2817 data-nosnippet>2817</a>                        .contains(zng_app::widget::base::Parallel::RENDER)
-<a href=#2818 id=2818 data-nosnippet>2818</a>                    {
-<a href=#2819 id=2819 data-nosnippet>2819</a>                        <span class="comment">// wm.parallel_split() is too large to fit in BoxAnyVarValue stack space,
-<a href=#2820 id=2820 data-nosnippet>2820</a>                        // so default parallel here would alloc
-<a href=#2821 id=2821 data-nosnippet>2821</a>                        </span><span class="macro">tracing::info!</span>(<span class="string">"UiNodeImpl is_list without implementing `render_list`"</span>);
-<a href=#2822 id=2822 data-nosnippet>2822</a>                    }
-<a href=#2823 id=2823 data-nosnippet>2823</a>                    <span class="self">self</span>.for_each_child(<span class="kw-2">&amp;mut </span>|i, n| render(i, n, frame));
-<a href=#2824 id=2824 data-nosnippet>2824</a>                }
-<a href=#2825 id=2825 data-nosnippet>2825</a>            }
-<a href=#2826 id=2826 data-nosnippet>2826</a>        } <span class="kw">else </span>{
-<a href=#2827 id=2827 data-nosnippet>2827</a>            <span class="self">self</span>.render(frame);
-<a href=#2828 id=2828 data-nosnippet>2828</a>        }
-<a href=#2829 id=2829 data-nosnippet>2829</a>    }
-<a href=#2830 id=2830 data-nosnippet>2830</a>
-<a href=#2831 id=2831 data-nosnippet>2831</a>    <span class="kw">fn </span>render_update_list(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;mut </span>FrameUpdate, render_update: <span class="kw-2">&amp;</span>(<span class="kw">dyn </span>Fn(usize, <span class="kw-2">&amp;mut </span>UiNode, <span class="kw-2">&amp;mut </span>FrameUpdate) + Sync)) {
-<a href=#2832 id=2832 data-nosnippet>2832</a>        <span class="kw">if </span><span class="self">self</span>.is_list() {
-<a href=#2833 id=2833 data-nosnippet>2833</a>            <span class="kw">match </span><span class="self">self</span>.children_len() {
-<a href=#2834 id=2834 data-nosnippet>2834</a>                <span class="number">0 </span>=&gt; {}
-<a href=#2835 id=2835 data-nosnippet>2835</a>                <span class="number">1 </span>=&gt; <span class="self">self</span>.with_child(<span class="number">0</span>, <span class="kw-2">&amp;mut </span>|n| render_update(<span class="number">0</span>, n, update)),
-<a href=#2836 id=2836 data-nosnippet>2836</a>                <span class="kw">_ </span>=&gt; {
-<a href=#2837 id=2837 data-nosnippet>2837</a>                    <span class="attr">#[cfg(debug_assertions)]
-<a href=#2838 id=2838 data-nosnippet>2838</a>                    </span><span class="kw">if </span>zng_app::widget::base::PARALLEL_VAR
-<a href=#2839 id=2839 data-nosnippet>2839</a>                        .get()
-<a href=#2840 id=2840 data-nosnippet>2840</a>                        .contains(zng_app::widget::base::Parallel::RENDER)
-<a href=#2841 id=2841 data-nosnippet>2841</a>                    {
-<a href=#2842 id=2842 data-nosnippet>2842</a>                        <span class="comment">// wm.parallel_split() is too large to fit in BoxAnyVarValue stack space,
-<a href=#2843 id=2843 data-nosnippet>2843</a>                        // so default parallel here would alloc
-<a href=#2844 id=2844 data-nosnippet>2844</a>                        </span><span class="macro">tracing::info!</span>(<span class="string">"UiNodeImpl is_list without implementing `render_list`"</span>);
-<a href=#2845 id=2845 data-nosnippet>2845</a>                    }
-<a href=#2846 id=2846 data-nosnippet>2846</a>                    <span class="self">self</span>.for_each_child(<span class="kw-2">&amp;mut </span>|i, n| render_update(i, n, update));
-<a href=#2847 id=2847 data-nosnippet>2847</a>                }
-<a href=#2848 id=2848 data-nosnippet>2848</a>            }
-<a href=#2849 id=2849 data-nosnippet>2849</a>        } <span class="kw">else </span>{
-<a href=#2850 id=2850 data-nosnippet>2850</a>            <span class="self">self</span>.render_update(update);
-<a href=#2851 id=2851 data-nosnippet>2851</a>        }
-<a href=#2852 id=2852 data-nosnippet>2852</a>    }
-<a href=#2853 id=2853 data-nosnippet>2853</a>
-<a href=#2854 id=2854 data-nosnippet>2854</a>    <span class="kw">fn </span>as_widget(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;mut </span><span class="kw">dyn </span>WidgetUiNodeImpl&gt; {
-<a href=#2855 id=2855 data-nosnippet>2855</a>        <span class="kw">if </span><span class="self">self</span>.c.lock().content.root.as_widget().is_some() {
-<a href=#2856 id=2856 data-nosnippet>2856</a>            <span class="prelude-val">Some</span>(<span class="self">self</span>)
-<a href=#2857 id=2857 data-nosnippet>2857</a>        } <span class="kw">else </span>{
-<a href=#2858 id=2858 data-nosnippet>2858</a>            <span class="prelude-val">None
-<a href=#2859 id=2859 data-nosnippet>2859</a>        </span>}
-<a href=#2860 id=2860 data-nosnippet>2860</a>    }
-<a href=#2861 id=2861 data-nosnippet>2861</a>}
-<a href=#2862 id=2862 data-nosnippet>2862</a><span class="kw">impl </span>WidgetUiNodeImpl <span class="kw">for </span>NestedWindowNode {
-<a href=#2863 id=2863 data-nosnippet>2863</a>    <span class="kw">fn </span>with_context(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update_mode: WidgetUpdateMode, visitor: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut()) {
-<a href=#2864 id=2864 data-nosnippet>2864</a>        <span class="kw">let </span><span class="kw-2">mut </span>lock = <span class="self">self</span>.c.lock();
-<a href=#2865 id=2865 data-nosnippet>2865</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>w) = lock.content.root.as_widget() {
-<a href=#2866 id=2866 data-nosnippet>2866</a>            w.with_context(update_mode, visitor)
-<a href=#2867 id=2867 data-nosnippet>2867</a>        }
-<a href=#2868 id=2868 data-nosnippet>2868</a>    }
-<a href=#2869 id=2869 data-nosnippet>2869</a>}
-<a href=#2870 id=2870 data-nosnippet>2870</a>
-<a href=#2871 id=2871 data-nosnippet>2871</a><span class="macro">static_id!</span> {
-<a href=#2872 id=2872 data-nosnippet>2872</a>    <span class="kw">static </span><span class="kw-2">ref </span>NESTED_WINDOW_INFO_ID: StateId&lt;WindowId&gt;;
-<a href=#2873 id=2873 data-nosnippet>2873</a>}
-<a href=#2874 id=2874 data-nosnippet>2874</a>
-<a href=#2875 id=2875 data-nosnippet>2875</a><span class="doccomment">/// Extension methods for widget info about a node that hosts a nested window.
-<a href=#2876 id=2876 data-nosnippet>2876</a></span><span class="kw">pub trait </span>NestedWindowWidgetInfoExt {
-<a href=#2877 id=2877 data-nosnippet>2877</a>    <span class="doccomment">/// Gets the hosted window ID if the widget hosts a nested window.
-<a href=#2878 id=2878 data-nosnippet>2878</a>    </span><span class="kw">fn </span>nested_window(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt;;
-<a href=#2879 id=2879 data-nosnippet>2879</a>
-<a href=#2880 id=2880 data-nosnippet>2880</a>    <span class="doccomment">/// Gets the hosted window info tree if the widget hosts a nested window that is open.
-<a href=#2881 id=2881 data-nosnippet>2881</a>    </span><span class="kw">fn </span>nested_window_tree(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WidgetInfoTree&gt; {
-<a href=#2882 id=2882 data-nosnippet>2882</a>        WINDOWS.widget_tree(<span class="self">self</span>.nested_window()<span class="question-mark">?</span>).ok()
-<a href=#2883 id=2883 data-nosnippet>2883</a>    }
-<a href=#2884 id=2884 data-nosnippet>2884</a>}
-<a href=#2885 id=2885 data-nosnippet>2885</a>
-<a href=#2886 id=2886 data-nosnippet>2886</a><span class="kw">impl </span>NestedWindowWidgetInfoExt <span class="kw">for </span>WidgetInfo {
-<a href=#2887 id=2887 data-nosnippet>2887</a>    <span class="kw">fn </span>nested_window(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt; {
-<a href=#2888 id=2888 data-nosnippet>2888</a>        <span class="self">self</span>.meta().get_clone(<span class="kw-2">*</span>NESTED_WINDOW_INFO_ID)
-<a href=#2889 id=2889 data-nosnippet>2889</a>    }
-<a href=#2890 id=2890 data-nosnippet>2890</a>}
-<a href=#2891 id=2891 data-nosnippet>2891</a>
-<a href=#2892 id=2892 data-nosnippet>2892</a><span class="attr">#[allow(clippy::large_enum_variant)] </span><span class="comment">// Normal is the largest, but also most common
-<a href=#2893 id=2893 data-nosnippet>2893</a></span><span class="kw">enum </span>OpenNestedHandlerArgsValue {
-<a href=#2894 id=2894 data-nosnippet>2894</a>    Normal {
-<a href=#2895 id=2895 data-nosnippet>2895</a>        ctx: WindowCtx,
-<a href=#2896 id=2896 data-nosnippet>2896</a>        vars: WindowVars,
-<a href=#2897 id=2897 data-nosnippet>2897</a>        commands: WindowCommands,
-<a href=#2898 id=2898 data-nosnippet>2898</a>        window: WindowRoot,
-<a href=#2899 id=2899 data-nosnippet>2899</a>    },
-<a href=#2900 id=2900 data-nosnippet>2900</a>    Nested {
-<a href=#2901 id=2901 data-nosnippet>2901</a>        ctx: WindowCtx,
-<a href=#2902 id=2902 data-nosnippet>2902</a>        node: Arc&lt;Mutex&lt;NestedContentCtrl&gt;&gt;,
-<a href=#2903 id=2903 data-nosnippet>2903</a>    },
-<a href=#2904 id=2904 data-nosnippet>2904</a>    TempNone,
-<a href=#2905 id=2905 data-nosnippet>2905</a>}
-<a href=#2906 id=2906 data-nosnippet>2906</a>
-<a href=#2907 id=2907 data-nosnippet>2907</a><span class="doccomment">/// Arguments for the [`WINDOWS.register_open_nested_handler`] handler.
-<a href=#2908 id=2908 data-nosnippet>2908</a>///
-<a href=#2909 id=2909 data-nosnippet>2909</a>/// [`WINDOWS.register_open_nested_handler`]: WINDOWS::register_open_nested_handler
-<a href=#2910 id=2910 data-nosnippet>2910</a></span><span class="kw">pub struct </span>OpenNestedHandlerArgs {
-<a href=#2911 id=2911 data-nosnippet>2911</a>    c: OpenNestedHandlerArgsValue,
-<a href=#2912 id=2912 data-nosnippet>2912</a>}
-<a href=#2913 id=2913 data-nosnippet>2913</a><span class="kw">impl </span>OpenNestedHandlerArgs {
-<a href=#2914 id=2914 data-nosnippet>2914</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(ctx: WindowCtx, vars: WindowVars, commands: WindowCommands, window: WindowRoot) -&gt; <span class="self">Self </span>{
-<a href=#2915 id=2915 data-nosnippet>2915</a>        <span class="self">Self </span>{
-<a href=#2916 id=2916 data-nosnippet>2916</a>            c: OpenNestedHandlerArgsValue::Normal {
-<a href=#2917 id=2917 data-nosnippet>2917</a>                ctx,
-<a href=#2918 id=2918 data-nosnippet>2918</a>                vars,
-<a href=#2919 id=2919 data-nosnippet>2919</a>                commands,
-<a href=#2920 id=2920 data-nosnippet>2920</a>                window,
-<a href=#2921 id=2921 data-nosnippet>2921</a>            },
-<a href=#2922 id=2922 data-nosnippet>2922</a>        }
-<a href=#2923 id=2923 data-nosnippet>2923</a>    }
-<a href=#2924 id=2924 data-nosnippet>2924</a>
-<a href=#2925 id=2925 data-nosnippet>2925</a>    <span class="doccomment">/// New window context.
-<a href=#2926 id=2926 data-nosnippet>2926</a>    </span><span class="kw">pub fn </span>ctx(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>WindowCtx {
-<a href=#2927 id=2927 data-nosnippet>2927</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.c {
-<a href=#2928 id=2928 data-nosnippet>2928</a>            OpenNestedHandlerArgsValue::Normal { ctx, .. } | OpenNestedHandlerArgsValue::Nested { ctx, .. } =&gt; ctx,
-<a href=#2929 id=2929 data-nosnippet>2929</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
-<a href=#2930 id=2930 data-nosnippet>2930</a>        }
-<a href=#2931 id=2931 data-nosnippet>2931</a>    }
-<a href=#2932 id=2932 data-nosnippet>2932</a>
-<a href=#2933 id=2933 data-nosnippet>2933</a>    <span class="doccomment">/// Window vars.
-<a href=#2934 id=2934 data-nosnippet>2934</a>    </span><span class="kw">pub fn </span>vars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; WindowVars {
-<a href=#2935 id=2935 data-nosnippet>2935</a>        <span class="kw">let </span>ctx = <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.c {
-<a href=#2936 id=2936 data-nosnippet>2936</a>            OpenNestedHandlerArgsValue::Normal { ctx, .. } | OpenNestedHandlerArgsValue::Nested { ctx, .. } =&gt; ctx,
-<a href=#2937 id=2937 data-nosnippet>2937</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
-<a href=#2938 id=2938 data-nosnippet>2938</a>        };
-<a href=#2939 id=2939 data-nosnippet>2939</a>        WINDOW.with_context(ctx, || WINDOW.vars())
-<a href=#2940 id=2940 data-nosnippet>2940</a>    }
-<a href=#2941 id=2941 data-nosnippet>2941</a>
-<a href=#2942 id=2942 data-nosnippet>2942</a>    <span class="doccomment">/// Instantiate a node that layouts and renders the window content.
-<a href=#2943 id=2943 data-nosnippet>2943</a>    ///
-<a href=#2944 id=2944 data-nosnippet>2944</a>    /// Calling this will stop the normal window chrome from opening, the caller is responsible for inserting the node into the
-<a href=#2945 id=2945 data-nosnippet>2945</a>    /// main window layout.
-<a href=#2946 id=2946 data-nosnippet>2946</a>    ///
-<a href=#2947 id=2947 data-nosnippet>2947</a>    /// Note that the window will notify *open* like normal, but it will only be visible on this node.
-<a href=#2948 id=2948 data-nosnippet>2948</a>    </span><span class="kw">pub fn </span>nest(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; NestedWindowNode {
-<a href=#2949 id=2949 data-nosnippet>2949</a>        <span class="kw">match </span>mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.c, OpenNestedHandlerArgsValue::TempNone) {
-<a href=#2950 id=2950 data-nosnippet>2950</a>            OpenNestedHandlerArgsValue::Normal {
-<a href=#2951 id=2951 data-nosnippet>2951</a>                <span class="kw-2">mut </span>ctx,
-<a href=#2952 id=2952 data-nosnippet>2952</a>                vars,
-<a href=#2953 id=2953 data-nosnippet>2953</a>                commands,
-<a href=#2954 id=2954 data-nosnippet>2954</a>                window,
-<a href=#2955 id=2955 data-nosnippet>2955</a>            } =&gt; {
-<a href=#2956 id=2956 data-nosnippet>2956</a>                <span class="kw">let </span>node = NestedWindowNode {
-<a href=#2957 id=2957 data-nosnippet>2957</a>                    c: Arc::new(Mutex::new(NestedContentCtrl {
-<a href=#2958 id=2958 data-nosnippet>2958</a>                        content: ContentCtrl::new(vars, commands, window),
-<a href=#2959 id=2959 data-nosnippet>2959</a>                        pending_layout: <span class="prelude-val">None</span>,
-<a href=#2960 id=2960 data-nosnippet>2960</a>                        pending_render: <span class="prelude-val">None</span>,
-<a href=#2961 id=2961 data-nosnippet>2961</a>                        pending_frame_capture: FrameCapture::None,
-<a href=#2962 id=2962 data-nosnippet>2962</a>                        ctx: ctx.share(),
-<a href=#2963 id=2963 data-nosnippet>2963</a>                        host: <span class="prelude-val">None</span>,
-<a href=#2964 id=2964 data-nosnippet>2964</a>                    })),
-<a href=#2965 id=2965 data-nosnippet>2965</a>                };
-<a href=#2966 id=2966 data-nosnippet>2966</a>                <span class="self">self</span>.c = OpenNestedHandlerArgsValue::Nested { ctx, node: node.c.clone() };
-<a href=#2967 id=2967 data-nosnippet>2967</a>                node
-<a href=#2968 id=2968 data-nosnippet>2968</a>            }
-<a href=#2969 id=2969 data-nosnippet>2969</a>            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">"already nesting"</span>),
-<a href=#2970 id=2970 data-nosnippet>2970</a>        }
-<a href=#2971 id=2971 data-nosnippet>2971</a>    }
-<a href=#2972 id=2972 data-nosnippet>2972</a>
-<a href=#2973 id=2973 data-nosnippet>2973</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>has_nested(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#2974 id=2974 data-nosnippet>2974</a>        <span class="macro">matches!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.c, OpenNestedHandlerArgsValue::Nested { .. })
-<a href=#2975 id=2975 data-nosnippet>2975</a>    }
-<a href=#2976 id=2976 data-nosnippet>2976</a>
-<a href=#2977 id=2977 data-nosnippet>2977</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>take_normal(
-<a href=#2978 id=2978 data-nosnippet>2978</a>        <span class="self">self</span>,
-<a href=#2979 id=2979 data-nosnippet>2979</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;(WindowCtx, WindowVars, WindowCommands, WindowRoot), (WindowCtx, Arc&lt;Mutex&lt;NestedContentCtrl&gt;&gt;)&gt; {
-<a href=#2980 id=2980 data-nosnippet>2980</a>        <span class="kw">match </span><span class="self">self</span>.c {
-<a href=#2981 id=2981 data-nosnippet>2981</a>            OpenNestedHandlerArgsValue::Normal {
-<a href=#2982 id=2982 data-nosnippet>2982</a>                ctx,
-<a href=#2983 id=2983 data-nosnippet>2983</a>                vars,
-<a href=#2984 id=2984 data-nosnippet>2984</a>                commands,
-<a href=#2985 id=2985 data-nosnippet>2985</a>                window,
-<a href=#2986 id=2986 data-nosnippet>2986</a>            } =&gt; <span class="prelude-val">Ok</span>((ctx, vars, commands, window)),
-<a href=#2987 id=2987 data-nosnippet>2987</a>            OpenNestedHandlerArgsValue::Nested { ctx, node } =&gt; <span class="prelude-val">Err</span>((ctx, node)),
-<a href=#2988 id=2988 data-nosnippet>2988</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
-<a href=#2989 id=2989 data-nosnippet>2989</a>        }
-<a href=#2990 id=2990 data-nosnippet>2990</a>    }
-<a href=#2991 id=2991 data-nosnippet>2991</a>}</code></pre></div></section></main></body></html>
+<a href=#2790 id=2790 data-nosnippet>2790</a><span class="kw">impl </span>NestedWindowWidgetInfoExt <span class="kw">for </span>WidgetInfo {
+<a href=#2791 id=2791 data-nosnippet>2791</a>    <span class="kw">fn </span>nested_window(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowId&gt; {
+<a href=#2792 id=2792 data-nosnippet>2792</a>        <span class="self">self</span>.meta().get_clone(<span class="kw-2">*</span>NESTED_WINDOW_INFO_ID)
+<a href=#2793 id=2793 data-nosnippet>2793</a>    }
+<a href=#2794 id=2794 data-nosnippet>2794</a>}
+<a href=#2795 id=2795 data-nosnippet>2795</a>
+<a href=#2796 id=2796 data-nosnippet>2796</a><span class="attr">#[allow(clippy::large_enum_variant)] </span><span class="comment">// Normal is the largest, but also most common
+<a href=#2797 id=2797 data-nosnippet>2797</a></span><span class="kw">enum </span>OpenNestedHandlerArgsValue {
+<a href=#2798 id=2798 data-nosnippet>2798</a>    Normal {
+<a href=#2799 id=2799 data-nosnippet>2799</a>        ctx: WindowCtx,
+<a href=#2800 id=2800 data-nosnippet>2800</a>        vars: WindowVars,
+<a href=#2801 id=2801 data-nosnippet>2801</a>        commands: WindowCommands,
+<a href=#2802 id=2802 data-nosnippet>2802</a>        window: WindowRoot,
+<a href=#2803 id=2803 data-nosnippet>2803</a>    },
+<a href=#2804 id=2804 data-nosnippet>2804</a>    Nested {
+<a href=#2805 id=2805 data-nosnippet>2805</a>        ctx: WindowCtx,
+<a href=#2806 id=2806 data-nosnippet>2806</a>        node: Arc&lt;Mutex&lt;NestedContentCtrl&gt;&gt;,
+<a href=#2807 id=2807 data-nosnippet>2807</a>    },
+<a href=#2808 id=2808 data-nosnippet>2808</a>    TempNone,
+<a href=#2809 id=2809 data-nosnippet>2809</a>}
+<a href=#2810 id=2810 data-nosnippet>2810</a>
+<a href=#2811 id=2811 data-nosnippet>2811</a><span class="doccomment">/// Arguments for the [`WINDOWS.register_open_nested_handler`] handler.
+<a href=#2812 id=2812 data-nosnippet>2812</a>///
+<a href=#2813 id=2813 data-nosnippet>2813</a>/// [`WINDOWS.register_open_nested_handler`]: WINDOWS::register_open_nested_handler
+<a href=#2814 id=2814 data-nosnippet>2814</a></span><span class="kw">pub struct </span>OpenNestedHandlerArgs {
+<a href=#2815 id=2815 data-nosnippet>2815</a>    c: OpenNestedHandlerArgsValue,
+<a href=#2816 id=2816 data-nosnippet>2816</a>}
+<a href=#2817 id=2817 data-nosnippet>2817</a><span class="kw">impl </span>OpenNestedHandlerArgs {
+<a href=#2818 id=2818 data-nosnippet>2818</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(ctx: WindowCtx, vars: WindowVars, commands: WindowCommands, window: WindowRoot) -&gt; <span class="self">Self </span>{
+<a href=#2819 id=2819 data-nosnippet>2819</a>        <span class="self">Self </span>{
+<a href=#2820 id=2820 data-nosnippet>2820</a>            c: OpenNestedHandlerArgsValue::Normal {
+<a href=#2821 id=2821 data-nosnippet>2821</a>                ctx,
+<a href=#2822 id=2822 data-nosnippet>2822</a>                vars,
+<a href=#2823 id=2823 data-nosnippet>2823</a>                commands,
+<a href=#2824 id=2824 data-nosnippet>2824</a>                window,
+<a href=#2825 id=2825 data-nosnippet>2825</a>            },
+<a href=#2826 id=2826 data-nosnippet>2826</a>        }
+<a href=#2827 id=2827 data-nosnippet>2827</a>    }
+<a href=#2828 id=2828 data-nosnippet>2828</a>
+<a href=#2829 id=2829 data-nosnippet>2829</a>    <span class="doccomment">/// New window context.
+<a href=#2830 id=2830 data-nosnippet>2830</a>    </span><span class="kw">pub fn </span>ctx(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span>WindowCtx {
+<a href=#2831 id=2831 data-nosnippet>2831</a>        <span class="kw">match </span><span class="kw-2">&amp;</span><span class="self">self</span>.c {
+<a href=#2832 id=2832 data-nosnippet>2832</a>            OpenNestedHandlerArgsValue::Normal { ctx, .. } | OpenNestedHandlerArgsValue::Nested { ctx, .. } =&gt; ctx,
+<a href=#2833 id=2833 data-nosnippet>2833</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
+<a href=#2834 id=2834 data-nosnippet>2834</a>        }
+<a href=#2835 id=2835 data-nosnippet>2835</a>    }
+<a href=#2836 id=2836 data-nosnippet>2836</a>
+<a href=#2837 id=2837 data-nosnippet>2837</a>    <span class="doccomment">/// Window vars.
+<a href=#2838 id=2838 data-nosnippet>2838</a>    </span><span class="kw">pub fn </span>vars(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; WindowVars {
+<a href=#2839 id=2839 data-nosnippet>2839</a>        <span class="kw">let </span>ctx = <span class="kw">match </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.c {
+<a href=#2840 id=2840 data-nosnippet>2840</a>            OpenNestedHandlerArgsValue::Normal { ctx, .. } | OpenNestedHandlerArgsValue::Nested { ctx, .. } =&gt; ctx,
+<a href=#2841 id=2841 data-nosnippet>2841</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
+<a href=#2842 id=2842 data-nosnippet>2842</a>        };
+<a href=#2843 id=2843 data-nosnippet>2843</a>        WINDOW.with_context(ctx, || WINDOW.vars())
+<a href=#2844 id=2844 data-nosnippet>2844</a>    }
+<a href=#2845 id=2845 data-nosnippet>2845</a>
+<a href=#2846 id=2846 data-nosnippet>2846</a>    <span class="doccomment">/// Instantiate a node that layouts and renders the window content.
+<a href=#2847 id=2847 data-nosnippet>2847</a>    ///
+<a href=#2848 id=2848 data-nosnippet>2848</a>    /// Calling this will stop the normal window chrome from opening, the caller is responsible for inserting the node into the
+<a href=#2849 id=2849 data-nosnippet>2849</a>    /// main window layout.
+<a href=#2850 id=2850 data-nosnippet>2850</a>    ///
+<a href=#2851 id=2851 data-nosnippet>2851</a>    /// Note that the window will notify *open* like normal, but it will only be visible on this node.
+<a href=#2852 id=2852 data-nosnippet>2852</a>    </span><span class="kw">pub fn </span>nest(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; NestedWindowNode {
+<a href=#2853 id=2853 data-nosnippet>2853</a>        <span class="kw">match </span>mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.c, OpenNestedHandlerArgsValue::TempNone) {
+<a href=#2854 id=2854 data-nosnippet>2854</a>            OpenNestedHandlerArgsValue::Normal {
+<a href=#2855 id=2855 data-nosnippet>2855</a>                <span class="kw-2">mut </span>ctx,
+<a href=#2856 id=2856 data-nosnippet>2856</a>                vars,
+<a href=#2857 id=2857 data-nosnippet>2857</a>                commands,
+<a href=#2858 id=2858 data-nosnippet>2858</a>                window,
+<a href=#2859 id=2859 data-nosnippet>2859</a>            } =&gt; {
+<a href=#2860 id=2860 data-nosnippet>2860</a>                <span class="kw">let </span>node = NestedWindowNode {
+<a href=#2861 id=2861 data-nosnippet>2861</a>                    c: Arc::new(Mutex::new(NestedContentCtrl {
+<a href=#2862 id=2862 data-nosnippet>2862</a>                        content: ContentCtrl::new(vars, commands, window),
+<a href=#2863 id=2863 data-nosnippet>2863</a>                        pending_layout: <span class="prelude-val">None</span>,
+<a href=#2864 id=2864 data-nosnippet>2864</a>                        pending_render: <span class="prelude-val">None</span>,
+<a href=#2865 id=2865 data-nosnippet>2865</a>                        pending_frame_capture: FrameCapture::None,
+<a href=#2866 id=2866 data-nosnippet>2866</a>                        ctx: ctx.share(),
+<a href=#2867 id=2867 data-nosnippet>2867</a>                        host: <span class="prelude-val">None</span>,
+<a href=#2868 id=2868 data-nosnippet>2868</a>                    })),
+<a href=#2869 id=2869 data-nosnippet>2869</a>                };
+<a href=#2870 id=2870 data-nosnippet>2870</a>                <span class="self">self</span>.c = OpenNestedHandlerArgsValue::Nested { ctx, node: node.c.clone() };
+<a href=#2871 id=2871 data-nosnippet>2871</a>                node
+<a href=#2872 id=2872 data-nosnippet>2872</a>            }
+<a href=#2873 id=2873 data-nosnippet>2873</a>            <span class="kw">_ </span>=&gt; <span class="macro">panic!</span>(<span class="string">"already nesting"</span>),
+<a href=#2874 id=2874 data-nosnippet>2874</a>        }
+<a href=#2875 id=2875 data-nosnippet>2875</a>    }
+<a href=#2876 id=2876 data-nosnippet>2876</a>
+<a href=#2877 id=2877 data-nosnippet>2877</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>has_nested(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#2878 id=2878 data-nosnippet>2878</a>        <span class="macro">matches!</span>(<span class="kw-2">&amp;</span><span class="self">self</span>.c, OpenNestedHandlerArgsValue::Nested { .. })
+<a href=#2879 id=2879 data-nosnippet>2879</a>    }
+<a href=#2880 id=2880 data-nosnippet>2880</a>
+<a href=#2881 id=2881 data-nosnippet>2881</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>take_normal(
+<a href=#2882 id=2882 data-nosnippet>2882</a>        <span class="self">self</span>,
+<a href=#2883 id=2883 data-nosnippet>2883</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;(WindowCtx, WindowVars, WindowCommands, WindowRoot), (WindowCtx, Arc&lt;Mutex&lt;NestedContentCtrl&gt;&gt;)&gt; {
+<a href=#2884 id=2884 data-nosnippet>2884</a>        <span class="kw">match </span><span class="self">self</span>.c {
+<a href=#2885 id=2885 data-nosnippet>2885</a>            OpenNestedHandlerArgsValue::Normal {
+<a href=#2886 id=2886 data-nosnippet>2886</a>                ctx,
+<a href=#2887 id=2887 data-nosnippet>2887</a>                vars,
+<a href=#2888 id=2888 data-nosnippet>2888</a>                commands,
+<a href=#2889 id=2889 data-nosnippet>2889</a>                window,
+<a href=#2890 id=2890 data-nosnippet>2890</a>            } =&gt; <span class="prelude-val">Ok</span>((ctx, vars, commands, window)),
+<a href=#2891 id=2891 data-nosnippet>2891</a>            OpenNestedHandlerArgsValue::Nested { ctx, node } =&gt; <span class="prelude-val">Err</span>((ctx, node)),
+<a href=#2892 id=2892 data-nosnippet>2892</a>            OpenNestedHandlerArgsValue::TempNone =&gt; <span class="macro">unreachable!</span>(),
+<a href=#2893 id=2893 data-nosnippet>2893</a>        }
+<a href=#2894 id=2894 data-nosnippet>2894</a>    }
+<a href=#2895 id=2895 data-nosnippet>2895</a>}</code></pre></div></section></main></body></html>
