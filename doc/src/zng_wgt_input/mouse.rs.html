@@ -6,8 +6,8 @@
 <a href=#6 id=6 data-nosnippet>6</a>//! [`on_click`](fn@super::gesture::on_click) event.
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a></span><span class="kw">use </span>zng_ext_input::mouse::{
-<a href=#9 id=9 data-nosnippet>9</a>    MOUSE_CLICK_EVENT, MOUSE_HOVERED_EVENT, MOUSE_INPUT_EVENT, MOUSE_MOVE_EVENT, MOUSE_WHEEL_EVENT, MouseClickArgs, MouseHoverArgs,
-<a href=#10 id=10 data-nosnippet>10</a>    MouseInputArgs, MouseMoveArgs, MouseWheelArgs,
+<a href=#9 id=9 data-nosnippet>9</a>    CTRL_SCROLL_VAR, MOUSE_CLICK_EVENT, MOUSE_HOVERED_EVENT, MOUSE_INPUT_EVENT, MOUSE_MOVE_EVENT, MOUSE_WHEEL_EVENT, MouseClickArgs,
+<a href=#10 id=10 data-nosnippet>10</a>    MouseHoverArgs, MouseInputArgs, MouseMoveArgs, MouseWheelArgs,
 <a href=#11 id=11 data-nosnippet>11</a>};
 <a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <a href=#13 id=13 data-nosnippet>13</a>
@@ -181,4 +181,15 @@
 <a href=#181 id=181 data-nosnippet>181</a>        args: MouseWheelArgs,
 <a href=#182 id=182 data-nosnippet>182</a>        filter: |args| args.is_zoom() &amp;&amp; args.target.contains_enabled(WIDGET.id()),
 <a href=#183 id=183 data-nosnippet>183</a>    }
-<a href=#184 id=184 data-nosnippet>184</a>}</code></pre></div></section></main></body></html>
+<a href=#184 id=184 data-nosnippet>184</a>}
+<a href=#185 id=185 data-nosnippet>185</a>
+<a href=#186 id=186 data-nosnippet>186</a><span class="doccomment">/// Defines if [`MouseWheelArgs`] gesture [`is_scroll`] when `CTRL` is pressed and [`is_zoom`] when no modifier is pressed.
+<a href=#187 id=187 data-nosnippet>187</a>///
+<a href=#188 id=188 data-nosnippet>188</a>/// This property sets the [`CTRL_SCROLL_VAR`].
+<a href=#189 id=189 data-nosnippet>189</a>///
+<a href=#190 id=190 data-nosnippet>190</a>/// [`is_scroll`]: MouseWheelArgs::is_scroll
+<a href=#191 id=191 data-nosnippet>191</a>/// [`is_zoom`]: MouseWheelArgs::is_zoom
+<a href=#192 id=192 data-nosnippet>192</a></span><span class="attr">#[property(CONTEXT, default(CTRL_SCROLL_VAR))]
+<a href=#193 id=193 data-nosnippet>193</a></span><span class="kw">pub fn </span>ctrl_scroll(child: <span class="kw">impl </span>IntoUiNode, ctrl_scroll: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#194 id=194 data-nosnippet>194</a>    with_context_var(child, CTRL_SCROLL_VAR, ctrl_scroll)
+<a href=#195 id=195 data-nosnippet>195</a>}</code></pre></div></section></main></body></html>
