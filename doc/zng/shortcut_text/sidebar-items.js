@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["chord_separator_fn","first_n","key_fn","key_gesture_fn","key_gesture_separator_fn","key_txt","keycap","modifier_fn","modifier_txt","panel_fn","shortcut_fn","shortcuts_separator_fn"],"struct":["ShortcutText"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["color","line_style","margin","stroke_thickness"],"struct":["Hr"]};
+window.SIDEBAR_ITEMS = {"fn":["color","line_style","margin","stroke_thickness","width"],"struct":["Hr"]};

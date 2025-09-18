@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["hr","vr"],"struct":["RuleLine"]};
+window.SIDEBAR_ITEMS = {"fn":["collapse_scope"],"mod":["hr","vr"],"struct":["CollapseMode","RuleLine"]};

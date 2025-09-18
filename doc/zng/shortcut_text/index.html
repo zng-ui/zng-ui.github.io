@@ -1,0 +1,71 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Keyboard shortcut display widget."><title>zng::shortcut_text - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.16.6</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module shortcut_<wbr>text</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#full-api" title="Full API">Full API</a></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#functions" title="Functions">Functions</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate zng</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng</a></div><h1>Module <span>shortcut_text</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng/shortcut_text.rs.html#1-91">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Keyboard shortcut display widget.</p>
+<p>The <a href="struct.ShortcutText.html" title="struct zng::shortcut_text::ShortcutText"><code>ShortcutText!</code></a> is composite widget that generates localized and styled shortcut <em>text</em>, it
+can handle all shortcut variations, multiple shortcuts and partially invalid shortcuts.
+Extensive configuration is possible using contextual properties that can override.</p>
+<p>The example below demonstrates a basic <em>key binding editor</em> that uses the <a href="struct.ShortcutText.html" title="struct zng::shortcut_text::ShortcutText"><code>ShortcutText!</code></a> widget in multiple places.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">pub fn </span>shortcut_input(shortcut: Var&lt;Shortcuts&gt;) -&gt; UiNode {
+    <span class="macro">Button!</span> {
+        <span class="comment">// display the shortcut, or the `none_fn` content if there is no shortcut.
+        </span>child = <span class="macro">ShortcutText!</span> {
+            shortcut = shortcut.clone();
+            none_fn = <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| <span class="macro">Text!</span>(<span class="string">"no shortcut"</span>));
+        };
+        on_click = <span class="macro">hn!</span>(|<span class="kw">_</span>| {
+            DIALOG.custom(shortcut_input_dialog(shortcut.clone()));
+        });
+    }
+}
+<span class="kw">fn </span>shortcut_input_dialog(output: Var&lt;gesture::Shortcuts&gt;) -&gt; UiNode {
+    <span class="kw">let </span>pressed = var(Shortcuts::new());
+    <span class="kw">let </span>is_valid = var(<span class="bool-val">true</span>);
+    <span class="macro">Container!</span> {
+        child_top =
+            <span class="macro">Wrap!</span>(<span class="macro">ui_vec!</span>[
+                <span class="macro">Text!</span>(<span class="string">"Press the new shortcut and then press "</span>),
+                <span class="macro">ShortcutText!</span>(<span class="macro">shortcut!</span>(Enter)), <span class="comment">// shortcut text supports inlining
+            </span>]),
+            <span class="number">20</span>,
+        ;
+        <span class="comment">// default style is derived from the `font_size` and `font_color` values.
+        </span>child = <span class="macro">ShortcutText!</span> {
+            shortcut = pressed.clone();
+            font_size = <span class="number">3</span>.em();
+            align = Align::TOP;
+            when !#{is_valid.clone()} {
+                font_color = colors::RED;
+            }
+        };
+
+        on_pre_key_down = <span class="macro">hn!</span>(|args: <span class="kw-2">&amp;</span>KeyInputArgs| {
+            args.propagation().stop();
+            <span class="kw">match </span><span class="kw-2">&amp;</span>args.key {
+                Key::Enter =&gt; {
+                    <span class="kw">let </span>shortcut = pressed.get();
+                    <span class="kw">if </span>shortcut.is_empty() || shortcut[<span class="number">0</span>].is_valid() {
+                        is_valid.set(<span class="bool-val">true</span>);
+                        output.set(shortcut);
+                        DIALOG.respond(dialog::Response::ok());
+                    } <span class="kw">else </span>{
+                        is_valid.set(<span class="bool-val">false</span>);
+                    }
+                }
+                Key::Escape =&gt; {
+                    DIALOG.respond(dialog::Response::cancel());
+                }
+                <span class="kw">_ </span>=&gt; {
+                    is_valid.set(<span class="bool-val">true</span>); <span class="comment">// clear
+                    </span>pressed.set(args.editing_shortcut().unwrap());
+                }
+            }
+        });
+        align = Align::CENTER;
+        min_height = <span class="number">200</span>;
+        focusable = <span class="bool-val">true</span>;
+        focus_on_init = <span class="bool-val">true</span>;
+    }
+}</code></pre></div>
+<h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_wgt_shortcut/index.html" title="mod zng_wgt_shortcut"><code>zng_wgt_shortcut</code></a> for the full widget API.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.ShortcutText.html" title="struct zng::shortcut_text::ShortcutText">Shortcut<wbr>Text</a></dt><dd><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Display keyboard shortcuts.</dd></dl><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><dl class="item-table"><dt><a class="fn" href="fn.chord_separator_fn.html" title="fn zng::shortcut_text::chord_separator_fn">chord_<wbr>separator_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.ChordSeparatorFnArgs.html" title="struct zng_wgt_shortcut::ChordSeparatorFnArgs"><code>ChordSeparatorFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.first_n.html" title="fn zng::shortcut_text::first_n">first_n</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Maximum number of shortcuts to display.</dd><dt><a class="fn" href="fn.key_fn.html" title="fn zng::shortcut_text::key_fn">key_fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts a <a href="../../zng_wgt_shortcut/struct.KeyFnArgs.html" title="struct zng_wgt_shortcut::KeyFnArgs"><code>KeyFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.key_gesture_fn.html" title="fn zng::shortcut_text::key_gesture_fn">key_<wbr>gesture_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.KeyGestureFnArgs.html" title="struct zng_wgt_shortcut::KeyGestureFnArgs"><code>KeyGestureFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.key_gesture_separator_fn.html" title="fn zng::shortcut_text::key_gesture_separator_fn">key_<wbr>gesture_<wbr>separator_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.KeyGestureSeparatorFnArgs.html" title="struct zng_wgt_shortcut::KeyGestureSeparatorFnArgs"><code>KeyGestureSeparatorFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.key_txt.html" title="fn zng::shortcut_text::key_txt">key_txt</a></dt><dd>Gets the localized key name.</dd><dt><a class="fn" href="fn.keycap.html" title="fn zng::shortcut_text::keycap">keycap</a></dt><dd>Widget used b the <a href="../../zng_wgt_shortcut/fn.default_modifier_fn.html" title="fn zng_wgt_shortcut::default_modifier_fn"><code>default_modifier_fn</code></a> and <a href="../../zng_wgt_shortcut/fn.default_key_fn.html" title="fn zng_wgt_shortcut::default_key_fn"><code>default_key_fn</code></a> to render a <code>Text!</code> styled to look like a keycap.</dd><dt><a class="fn" href="fn.modifier_fn.html" title="fn zng::shortcut_text::modifier_fn">modifier_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts a <a href="../../zng_wgt_shortcut/struct.ModifierFnArgs.html" title="struct zng_wgt_shortcut::ModifierFnArgs"><code>ModifierFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.modifier_txt.html" title="fn zng::shortcut_text::modifier_txt">modifier_<wbr>txt</a></dt><dd>Gets the localized modifier name.</dd><dt><a class="fn" href="fn.panel_fn.html" title="fn zng::shortcut_text::panel_fn">panel_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.PanelFnArgs.html" title="struct zng_wgt_shortcut::PanelFnArgs"><code>PanelFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.shortcut_fn.html" title="fn zng::shortcut_text::shortcut_fn">shortcut_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.ShortcutFnArgs.html" title="struct zng_wgt_shortcut::ShortcutFnArgs"><code>ShortcutFnArgs</code></a> to a widget.</dd><dt><a class="fn" href="fn.shortcuts_separator_fn.html" title="fn zng::shortcut_text::shortcuts_separator_fn">shortcuts_<wbr>separator_<wbr>fn</a></dt><dd><strong title='Property function' data-tag='P'><code>P</code></strong>  Widget function that converts <a href="../../zng_wgt_shortcut/struct.ShortcutsSeparatorFnArgs.html" title="struct zng_wgt_shortcut::ShortcutsSeparatorFnArgs"><code>ShortcutsSeparatorFnArgs</code></a> to a widget.</dd></dl></section></div></main></body></html>
