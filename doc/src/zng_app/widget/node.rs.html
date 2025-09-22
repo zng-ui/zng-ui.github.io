@@ -1183,9 +1183,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1147 id=1147 data-nosnippet>1147</a>    }
 <a href=#1148 id=1148 data-nosnippet>1148</a>
 <a href=#1149 id=1149 data-nosnippet>1149</a>    <span class="doccomment">/// Wraps this in a node that, before delegating each method, calls a closure with
-<a href=#1150 id=1150 data-nosnippet>1150</a>    /// the [`UiNodeOpMethod`], the closure can return a *span* that is dropped after the method delegation.
+<a href=#1150 id=1150 data-nosnippet>1150</a>    /// the [`UiNodeMethod`], the closure can return a *span* that is dropped after the method delegation.
 <a href=#1151 id=1151 data-nosnippet>1151</a>    ///
-<a href=#1152 id=1152 data-nosnippet>1152</a>    /// The tracing node delegates all methods to self, but currently only traces the [`UiNodeOpMethod`] methods. If
+<a href=#1152 id=1152 data-nosnippet>1152</a>    /// The tracing node delegates all methods to self, but only traces the [`UiNodeMethod`] methods. If
 <a href=#1153 id=1153 data-nosnippet>1153</a>    /// this node is an widget the `enter_mtd` closure will be called (and span dropped) in the context of the widget.
 <a href=#1154 id=1154 data-nosnippet>1154</a>    ///
 <a href=#1155 id=1155 data-nosnippet>1155</a>    /// You can use the [`tracing`](https://docs.rs/tracing) crate to create the span. You can also use the [`RunOnDrop`]
@@ -1195,7 +1195,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1159 id=1159 data-nosnippet>1159</a>    </span><span class="kw">pub fn </span>trace&lt;E, S&gt;(<span class="self">self</span>, enter_mtd: E) -&gt; UiNode
 <a href=#1160 id=1160 data-nosnippet>1160</a>    <span class="kw">where
 <a href=#1161 id=1161 data-nosnippet>1161</a>        </span><span class="self">Self</span>: Sized,
-<a href=#1162 id=1162 data-nosnippet>1162</a>        E: FnMut(UiNodeOpMethod) -&gt; S + Send + <span class="lifetime">'static</span>,
+<a href=#1162 id=1162 data-nosnippet>1162</a>        E: FnMut(UiNodeMethod) -&gt; S + Send + <span class="lifetime">'static</span>,
 <a href=#1163 id=1163 data-nosnippet>1163</a>    {
 <a href=#1164 id=1164 data-nosnippet>1164</a>        UiNode::new(trace::TraceNode::new(<span class="self">self</span>, enter_mtd))
 <a href=#1165 id=1165 data-nosnippet>1165</a>    }

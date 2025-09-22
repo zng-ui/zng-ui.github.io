@@ -1848,17 +1848,17 @@
 <a href=#1848 id=1848 data-nosnippet>1848</a>/// # use zng_ext_font::font_features::*;
 <a href=#1849 id=1849 data-nosnippet>1849</a>/// # fn assert_type(_: FontVariations) { }
 <a href=#1850 id=1850 data-nosnippet>1850</a>/// let variations = font_variations! {
-<a href=#1851 id=1851 data-nosnippet>1851</a>///     b"SKLA": 1000.0,
-<a href=#1852 id=1852 data-nosnippet>1852</a>///     b"TRMG": 750.0
+<a href=#1851 id=1851 data-nosnippet>1851</a>///     b"SKLA" =&gt; 1000.0,
+<a href=#1852 id=1852 data-nosnippet>1852</a>///     b"TRMG" =&gt; 750.0
 <a href=#1853 id=1853 data-nosnippet>1853</a>/// };
 <a href=#1854 id=1854 data-nosnippet>1854</a>/// # assert_type(variations);
 <a href=#1855 id=1855 data-nosnippet>1855</a>/// ```
 <a href=#1856 id=1856 data-nosnippet>1856</a></span><span class="attr">#[macro_export]
 <a href=#1857 id=1857 data-nosnippet>1857</a></span><span class="macro">macro_rules!</span> font_variations {
 <a href=#1858 id=1858 data-nosnippet>1858</a>    [$(
-<a href=#1859 id=1859 data-nosnippet>1859</a>        <span class="macro-nonterminal">$name</span>:tt : <span class="macro-nonterminal">$value</span>: expr
-<a href=#1860 id=1860 data-nosnippet>1860</a>    ),* $(,)<span class="question-mark">?</span>] =&gt; { <span class="comment">// TODO(breaking) change syntax to name =&gt; value for better support by zng fmt
-<a href=#1861 id=1861 data-nosnippet>1861</a>        </span><span class="macro-nonterminal">$crate::font_features::FontVariations::from_pairs</span>(<span class="kw-2">&amp;</span>[
+<a href=#1859 id=1859 data-nosnippet>1859</a>        <span class="macro-nonterminal">$name</span>:tt =&gt; <span class="macro-nonterminal">$value</span>: expr
+<a href=#1860 id=1860 data-nosnippet>1860</a>    ),* $(,)<span class="question-mark">?</span>] =&gt; {
+<a href=#1861 id=1861 data-nosnippet>1861</a>        <span class="macro-nonterminal">$crate::font_features::FontVariations::from_pairs</span>(<span class="kw-2">&amp;</span>[
 <a href=#1862 id=1862 data-nosnippet>1862</a>            $(
 <a href=#1863 id=1863 data-nosnippet>1863</a>                (<span class="macro-nonterminal">$name</span>.into(), <span class="macro-nonterminal">$value</span>),
 <a href=#1864 id=1864 data-nosnippet>1864</a>            )*

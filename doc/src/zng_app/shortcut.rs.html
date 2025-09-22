@@ -618,9 +618,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#582 id=582 data-nosnippet>582</a>        </span><span class="kw">const </span>ALT = <span class="number">0b0011_0000</span>;
 <a href=#583 id=583 data-nosnippet>583</a>
 <a href=#584 id=584 data-nosnippet>584</a>        <span class="doccomment">/// The left "logo" key.
-<a href=#585 id=585 data-nosnippet>585</a>        </span><span class="kw">const </span>L_LOGO = <span class="number">0b0100_0000</span>; <span class="comment">// TODO(breaking) rename to SUPER
-<a href=#586 id=586 data-nosnippet>586</a>        </span><span class="doccomment">/// The right "logo" key.
-<a href=#587 id=587 data-nosnippet>587</a>        </span><span class="kw">const </span>R_LOGO = <span class="number">0b1000_0000</span>;
+<a href=#585 id=585 data-nosnippet>585</a>        </span><span class="kw">const </span>L_SUPER = <span class="number">0b0100_0000</span>;
+<a href=#586 id=586 data-nosnippet>586</a>        <span class="doccomment">/// The right "logo" key.
+<a href=#587 id=587 data-nosnippet>587</a>        </span><span class="kw">const </span>R_SUPER = <span class="number">0b1000_0000</span>;
 <a href=#588 id=588 data-nosnippet>588</a>        <span class="doccomment">/// Any "logo" key.
 <a href=#589 id=589 data-nosnippet>589</a>        ///
 <a href=#590 id=590 data-nosnippet>590</a>        /// This is the "windows" key on PC and "command" key on Mac.
@@ -743,8 +743,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#707 id=707 data-nosnippet>707</a>            KeyCode::CtrlRight =&gt; <span class="self">Self</span>::R_CTRL,
 <a href=#708 id=708 data-nosnippet>708</a>            KeyCode::ShiftLeft =&gt; <span class="self">Self</span>::L_SHIFT,
 <a href=#709 id=709 data-nosnippet>709</a>            KeyCode::ShiftRight =&gt; <span class="self">Self</span>::R_SHIFT,
-<a href=#710 id=710 data-nosnippet>710</a>            KeyCode::SuperLeft =&gt; <span class="self">Self</span>::L_LOGO,
-<a href=#711 id=711 data-nosnippet>711</a>            KeyCode::SuperRight =&gt; <span class="self">Self</span>::R_LOGO,
+<a href=#710 id=710 data-nosnippet>710</a>            KeyCode::SuperLeft =&gt; <span class="self">Self</span>::L_SUPER,
+<a href=#711 id=711 data-nosnippet>711</a>            KeyCode::SuperRight =&gt; <span class="self">Self</span>::R_SUPER,
 <a href=#712 id=712 data-nosnippet>712</a>            <span class="kw">_ </span>=&gt; <span class="self">Self</span>::empty(),
 <a href=#713 id=713 data-nosnippet>713</a>        }
 <a href=#714 id=714 data-nosnippet>714</a>    }
@@ -769,9 +769,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#733 id=733 data-nosnippet>733</a>    </span><span class="kw">pub fn </span>codes(<span class="self">self</span>) -&gt; Vec&lt;KeyCode&gt; {
 <a href=#734 id=734 data-nosnippet>734</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="macro">vec!</span>[];
 <a href=#735 id=735 data-nosnippet>735</a>
-<a href=#736 id=736 data-nosnippet>736</a>        <span class="kw">if </span><span class="self">self</span>.contains(<span class="self">Self</span>::L_LOGO) {
+<a href=#736 id=736 data-nosnippet>736</a>        <span class="kw">if </span><span class="self">self</span>.contains(<span class="self">Self</span>::L_SUPER) {
 <a href=#737 id=737 data-nosnippet>737</a>            r.push(KeyCode::SuperLeft);
-<a href=#738 id=738 data-nosnippet>738</a>        } <span class="kw">else if </span><span class="self">self</span>.contains(<span class="self">Self</span>::R_LOGO) {
+<a href=#738 id=738 data-nosnippet>738</a>        } <span class="kw">else if </span><span class="self">self</span>.contains(<span class="self">Self</span>::R_SUPER) {
 <a href=#739 id=739 data-nosnippet>739</a>            r.push(KeyCode::SuperRight);
 <a href=#740 id=740 data-nosnippet>740</a>        }
 <a href=#741 id=741 data-nosnippet>741</a>

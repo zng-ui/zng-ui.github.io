@@ -5,7 +5,7 @@
 <a href=#5 id=5 data-nosnippet>5</a></span><span class="kw">use </span>std::{collections::HashMap, mem, num::NonZeroU32, time::<span class="kw-2">*</span>};
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>zng_app::{
-<a href=#8 id=8 data-nosnippet>8</a>    AppExtension, DInstant, INSTANT,
+<a href=#8 id=8 data-nosnippet>8</a>    APP, AppExtension, DInstant, INSTANT,
 <a href=#9 id=9 data-nosnippet>9</a>    event::{EventPropagationHandle, event, event_args},
 <a href=#10 id=10 data-nosnippet>10</a>    shortcut::ModifiersState,
 <a href=#11 id=11 data-nosnippet>11</a>    timer::{DeadlineVar, TIMERS},
@@ -1438,7 +1438,7 @@
 <a href=#1438 id=1438 data-nosnippet>1438</a>///
 <a href=#1439 id=1439 data-nosnippet>1439</a>/// # Provider
 <a href=#1440 id=1440 data-nosnippet>1440</a>///
-<a href=#1441 id=1441 data-nosnippet>1441</a>/// This service is provided by the [`MouseManager`] extension.
+<a href=#1441 id=1441 data-nosnippet>1441</a>/// This service is provided by the [`MouseManager`] extension, it will panic if used in an app not extended.
 <a href=#1442 id=1442 data-nosnippet>1442</a>///
 <a href=#1443 id=1443 data-nosnippet>1443</a>/// [`POINTER_CAPTURE`]: crate::pointer_capture::POINTER_CAPTURE
 <a href=#1444 id=1444 data-nosnippet>1444</a></span><span class="kw">pub struct </span>MOUSE;
@@ -1511,28 +1511,29 @@
 <a href=#1511 id=1511 data-nosnippet>1511</a>
 <a href=#1512 id=1512 data-nosnippet>1512</a><span class="macro">app_local!</span> {
 <a href=#1513 id=1513 data-nosnippet>1513</a>    <span class="kw">static </span>MOUSE_SV: MouseService = {
-<a href=#1514 id=1514 data-nosnippet>1514</a>        <span class="kw">let </span>sys_multi_click_config = var(MultiClickConfig::default());
-<a href=#1515 id=1515 data-nosnippet>1515</a>        MouseService {
-<a href=#1516 id=1516 data-nosnippet>1516</a>            multi_click_config: sys_multi_click_config.cow(),
-<a href=#1517 id=1517 data-nosnippet>1517</a>            sys_multi_click_config,
-<a href=#1518 id=1518 data-nosnippet>1518</a>            repeat_config: KEYBOARD
-<a href=#1519 id=1519 data-nosnippet>1519</a>                .repeat_config()
-<a href=#1520 id=1520 data-nosnippet>1520</a>                .map(|c| ButtonRepeatConfig {
-<a href=#1521 id=1521 data-nosnippet>1521</a>                    start_delay: c.start_delay,
-<a href=#1522 id=1522 data-nosnippet>1522</a>                    interval: c.interval,
-<a href=#1523 id=1523 data-nosnippet>1523</a>                })
-<a href=#1524 id=1524 data-nosnippet>1524</a>                .cow(),
-<a href=#1525 id=1525 data-nosnippet>1525</a>            buttons: var(<span class="macro">vec!</span>[]),
-<a href=#1526 id=1526 data-nosnippet>1526</a>            hovered: var(<span class="prelude-val">None</span>),
-<a href=#1527 id=1527 data-nosnippet>1527</a>            position: var(<span class="prelude-val">None</span>),
-<a href=#1528 id=1528 data-nosnippet>1528</a>        }
-<a href=#1529 id=1529 data-nosnippet>1529</a>    };
-<a href=#1530 id=1530 data-nosnippet>1530</a>}
-<a href=#1531 id=1531 data-nosnippet>1531</a><span class="kw">struct </span>MouseService {
-<a href=#1532 id=1532 data-nosnippet>1532</a>    multi_click_config: Var&lt;MultiClickConfig&gt;,
-<a href=#1533 id=1533 data-nosnippet>1533</a>    sys_multi_click_config: Var&lt;MultiClickConfig&gt;,
-<a href=#1534 id=1534 data-nosnippet>1534</a>    repeat_config: Var&lt;ButtonRepeatConfig&gt;,
-<a href=#1535 id=1535 data-nosnippet>1535</a>    buttons: Var&lt;Vec&lt;MouseButton&gt;&gt;,
-<a href=#1536 id=1536 data-nosnippet>1536</a>    hovered: Var&lt;<span class="prelude-ty">Option</span>&lt;InteractionPath&gt;&gt;,
-<a href=#1537 id=1537 data-nosnippet>1537</a>    position: Var&lt;<span class="prelude-ty">Option</span>&lt;MousePosition&gt;&gt;,
-<a href=#1538 id=1538 data-nosnippet>1538</a>}</code></pre></div></section></main></body></html>
+<a href=#1514 id=1514 data-nosnippet>1514</a>        APP.extensions().require::&lt;MouseManager&gt;();
+<a href=#1515 id=1515 data-nosnippet>1515</a>        <span class="kw">let </span>sys_multi_click_config = var(MultiClickConfig::default());
+<a href=#1516 id=1516 data-nosnippet>1516</a>        MouseService {
+<a href=#1517 id=1517 data-nosnippet>1517</a>            multi_click_config: sys_multi_click_config.cow(),
+<a href=#1518 id=1518 data-nosnippet>1518</a>            sys_multi_click_config,
+<a href=#1519 id=1519 data-nosnippet>1519</a>            repeat_config: KEYBOARD
+<a href=#1520 id=1520 data-nosnippet>1520</a>                .repeat_config()
+<a href=#1521 id=1521 data-nosnippet>1521</a>                .map(|c| ButtonRepeatConfig {
+<a href=#1522 id=1522 data-nosnippet>1522</a>                    start_delay: c.start_delay,
+<a href=#1523 id=1523 data-nosnippet>1523</a>                    interval: c.interval,
+<a href=#1524 id=1524 data-nosnippet>1524</a>                })
+<a href=#1525 id=1525 data-nosnippet>1525</a>                .cow(),
+<a href=#1526 id=1526 data-nosnippet>1526</a>            buttons: var(<span class="macro">vec!</span>[]),
+<a href=#1527 id=1527 data-nosnippet>1527</a>            hovered: var(<span class="prelude-val">None</span>),
+<a href=#1528 id=1528 data-nosnippet>1528</a>            position: var(<span class="prelude-val">None</span>),
+<a href=#1529 id=1529 data-nosnippet>1529</a>        }
+<a href=#1530 id=1530 data-nosnippet>1530</a>    };
+<a href=#1531 id=1531 data-nosnippet>1531</a>}
+<a href=#1532 id=1532 data-nosnippet>1532</a><span class="kw">struct </span>MouseService {
+<a href=#1533 id=1533 data-nosnippet>1533</a>    multi_click_config: Var&lt;MultiClickConfig&gt;,
+<a href=#1534 id=1534 data-nosnippet>1534</a>    sys_multi_click_config: Var&lt;MultiClickConfig&gt;,
+<a href=#1535 id=1535 data-nosnippet>1535</a>    repeat_config: Var&lt;ButtonRepeatConfig&gt;,
+<a href=#1536 id=1536 data-nosnippet>1536</a>    buttons: Var&lt;Vec&lt;MouseButton&gt;&gt;,
+<a href=#1537 id=1537 data-nosnippet>1537</a>    hovered: Var&lt;<span class="prelude-ty">Option</span>&lt;InteractionPath&gt;&gt;,
+<a href=#1538 id=1538 data-nosnippet>1538</a>    position: Var&lt;<span class="prelude-ty">Option</span>&lt;MousePosition&gt;&gt;,
+<a href=#1539 id=1539 data-nosnippet>1539</a>}</code></pre></div></section></main></body></html>
