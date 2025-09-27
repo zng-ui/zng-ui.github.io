@@ -1,5 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/fs_watcher.rs`."><title>fs_watcher.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
-</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>fs_watcher.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-2"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"fs_watcher"</span>)]
+</head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>fs_watcher.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"fs_watcher"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//! File system watcher service and other types.
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -62,4 +62,41 @@
 <a href=#61 id=61 data-nosnippet>61</a></span><span class="kw">pub use </span>zng_ext_fs_watcher::{
 <a href=#62 id=62 data-nosnippet>62</a>    FS_CHANGES_EVENT, FsChange, FsChangeNote, FsChangeNoteHandle, FsChangesArgs, WATCHER, WatchFile, WatcherHandle, WatcherReadStatus,
 <a href=#63 id=63 data-nosnippet>63</a>    WatcherSyncStatus, WriteFile, fs_event,
-<a href=#64 id=64 data-nosnippet>64</a>};</code></pre></div></section></main></body></html>
+<a href=#64 id=64 data-nosnippet>64</a>};
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a><span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#67 id=67 data-nosnippet>67</a></span><span class="kw">mod </span>images_ext {
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">use </span>std::path::PathBuf;
+<a href=#69 id=69 data-nosnippet>69</a>
+<a href=#70 id=70 data-nosnippet>70</a>    <span class="kw">use </span>zng_app::app_hn;
+<a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">use </span>zng_ext_fs_watcher::WATCHER;
+<a href=#72 id=72 data-nosnippet>72</a>    <span class="kw">use </span>zng_ext_image::{IMAGES, ImageVar};
+<a href=#73 id=73 data-nosnippet>73</a>
+<a href=#74 id=74 data-nosnippet>74</a>    <span class="doccomment">/// File watcher extensions for [`IMAGES`] service.
+<a href=#75 id=75 data-nosnippet>75</a>    </span><span class="attr">#[expect(non_camel_case_types)]
+<a href=#76 id=76 data-nosnippet>76</a>    </span><span class="kw">pub trait </span>IMAGES_Ext {
+<a href=#77 id=77 data-nosnippet>77</a>        <span class="doccomment">/// Like [`IMAGES.read`] with automatic reload when the file at `path` is modified.
+<a href=#78 id=78 data-nosnippet>78</a>        ///
+<a href=#79 id=79 data-nosnippet>79</a>        /// [`IMAGES.read`]: IMAGES::read
+<a href=#80 id=80 data-nosnippet>80</a>        </span><span class="kw">fn </span>watch(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw">impl </span>Into&lt;PathBuf&gt;) -&gt; ImageVar;
+<a href=#81 id=81 data-nosnippet>81</a>    }
+<a href=#82 id=82 data-nosnippet>82</a>    <span class="kw">impl </span>IMAGES_Ext <span class="kw">for </span>IMAGES {
+<a href=#83 id=83 data-nosnippet>83</a>        <span class="kw">fn </span>watch(<span class="kw-2">&amp;</span><span class="self">self</span>, path: <span class="kw">impl </span>Into&lt;PathBuf&gt;) -&gt; ImageVar {
+<a href=#84 id=84 data-nosnippet>84</a>            watch(path.into())
+<a href=#85 id=85 data-nosnippet>85</a>        }
+<a href=#86 id=86 data-nosnippet>86</a>    }
+<a href=#87 id=87 data-nosnippet>87</a>
+<a href=#88 id=88 data-nosnippet>88</a>    <span class="kw">fn </span>watch(path: PathBuf) -&gt; ImageVar {
+<a href=#89 id=89 data-nosnippet>89</a>        <span class="kw">let </span>img = IMAGES.read(path.clone());
+<a href=#90 id=90 data-nosnippet>90</a>        <span class="kw">let </span>handle = WATCHER.on_file_changed(
+<a href=#91 id=91 data-nosnippet>91</a>            path.clone(),
+<a href=#92 id=92 data-nosnippet>92</a>            <span class="macro">app_hn!</span>(|<span class="kw">_</span>, <span class="kw">_</span>| {
+<a href=#93 id=93 data-nosnippet>93</a>                <span class="kw">let _ </span>= IMAGES.reload(path.clone());
+<a href=#94 id=94 data-nosnippet>94</a>            }),
+<a href=#95 id=95 data-nosnippet>95</a>        );
+<a href=#96 id=96 data-nosnippet>96</a>        img.hold(handle).perm();
+<a href=#97 id=97 data-nosnippet>97</a>        img
+<a href=#98 id=98 data-nosnippet>98</a>    }
+<a href=#99 id=99 data-nosnippet>99</a>}
+<a href=#100 id=100 data-nosnippet>100</a><span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#101 id=101 data-nosnippet>101</a></span><span class="kw">pub use </span>images_ext::<span class="kw-2">*</span>;</code></pre></div></section></main></body></html>
