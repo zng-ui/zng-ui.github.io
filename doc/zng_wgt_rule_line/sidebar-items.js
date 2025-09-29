@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["collapse_scope","color","length","line_style","orientation","stroke_thickness"],"mod":["hr","vr"],"static":["COLLAPSABLE_LINE_ID"],"struct":["COLLAPSE_SCOPE","CollapseMode","RuleLine"]};
+window.SIDEBAR_ITEMS = {"fn":["collapse_scope","collapse_skip","color","length","line_style","orientation","stroke_thickness"],"mod":["hr","vr"],"static":["COLLAPSABLE_LINE_ID","COLLAPSE_SKIP_ID"],"struct":["COLLAPSE_SCOPE","CollapseMode","RuleLine"]};
