@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["is_indeterminate","on_complete","on_progress"],"static":["PROGRESS_VAR"],"struct":["DefaultStyle","ProgressView","SimpleBarStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["is_indeterminate","on_complete","on_progress","simple_bar_style_fn"],"static":["PROGRESS_VAR"],"struct":["DefaultStyle","ProgressView","SimpleBarStyle"]};

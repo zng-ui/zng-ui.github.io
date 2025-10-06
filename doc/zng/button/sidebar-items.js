@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["style_fn"],"struct":["BUTTON","Button","DefaultStyle","LightStyle","LinkStyle","PrimaryStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["light_style_fn","link_style_fn","primary_style_fn","style_fn"],"struct":["BUTTON","Button","DefaultStyle","LightStyle","LinkStyle","PrimaryStyle"]};

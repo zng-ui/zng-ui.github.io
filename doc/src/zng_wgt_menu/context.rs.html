@@ -9,7 +9,7 @@
 <a href=#9 id=9 data-nosnippet>9</a>    popup::{CONTEXT_CAPTURE_VAR, POPUP, PopupState},
 <a href=#10 id=10 data-nosnippet>10</a>};
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>zng_wgt_stack::{Stack, StackDirection};
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>zng_wgt_style::{impl_style_fn, style_fn};
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>zng_wgt_style::{impl_named_style_fn, impl_style_fn, style_fn};
 <a href=#13 id=13 data-nosnippet>13</a>
 <a href=#14 id=14 data-nosnippet>14</a><span class="doccomment">/// Defines the context menu shown when the widget is enabled and receives a context click.
 <a href=#15 id=15 data-nosnippet>15</a>///
@@ -199,16 +199,18 @@
 <a href=#199 id=199 data-nosnippet>199</a><span class="doccomment">/// Touch context menu popup default style.
 <a href=#200 id=200 data-nosnippet>200</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::context::TouchStyle</span>)]
 <a href=#201 id=201 data-nosnippet>201</a></span><span class="kw">pub struct </span>TouchStyle(<span class="kw">crate</span>::popup::DefaultStyle);
-<a href=#202 id=202 data-nosnippet>202</a><span class="kw">impl </span>TouchStyle {
-<a href=#203 id=203 data-nosnippet>203</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#204 id=204 data-nosnippet>204</a>        <span class="macro">widget_set!</span> {
-<a href=#205 id=205 data-nosnippet>205</a>            <span class="self">self</span>;
-<a href=#206 id=206 data-nosnippet>206</a>
-<a href=#207 id=207 data-nosnippet>207</a>            panel_fn = <span class="macro">wgt_fn!</span>(|args: zng_wgt_panel::PanelArgs| <span class="macro">Stack!</span> {
-<a href=#208 id=208 data-nosnippet>208</a>                direction = StackDirection::left_to_right();
-<a href=#209 id=209 data-nosnippet>209</a>                children = args.children;
-<a href=#210 id=210 data-nosnippet>210</a>            });
-<a href=#211 id=211 data-nosnippet>211</a>            zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">super::sub::TouchButtonStyle!</span>());
-<a href=#212 id=212 data-nosnippet>212</a>        }
-<a href=#213 id=213 data-nosnippet>213</a>    }
-<a href=#214 id=214 data-nosnippet>214</a>}</code></pre></div></section></main></body></html>
+<a href=#202 id=202 data-nosnippet>202</a><span class="macro">impl_named_style_fn!</span>(touch, TouchStyle);
+<a href=#203 id=203 data-nosnippet>203</a><span class="kw">impl </span>TouchStyle {
+<a href=#204 id=204 data-nosnippet>204</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#205 id=205 data-nosnippet>205</a>        <span class="macro">widget_set!</span> {
+<a href=#206 id=206 data-nosnippet>206</a>            <span class="self">self</span>;
+<a href=#207 id=207 data-nosnippet>207</a>            named_style_fn = TOUCH_STYLE_FN_VAR;
+<a href=#208 id=208 data-nosnippet>208</a>
+<a href=#209 id=209 data-nosnippet>209</a>            panel_fn = <span class="macro">wgt_fn!</span>(|args: zng_wgt_panel::PanelArgs| <span class="macro">Stack!</span> {
+<a href=#210 id=210 data-nosnippet>210</a>                direction = StackDirection::left_to_right();
+<a href=#211 id=211 data-nosnippet>211</a>                children = args.children;
+<a href=#212 id=212 data-nosnippet>212</a>            });
+<a href=#213 id=213 data-nosnippet>213</a>            zng_wgt_button::style_fn = <span class="macro">style_fn!</span>(|<span class="kw">_</span>| <span class="macro">super::sub::TouchButtonStyle!</span>());
+<a href=#214 id=214 data-nosnippet>214</a>        }
+<a href=#215 id=215 data-nosnippet>215</a>    }
+<a href=#216 id=216 data-nosnippet>216</a>}</code></pre></div></section></main></body></html>

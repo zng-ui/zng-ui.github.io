@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["data_notes_adorner_fn","field_help","max_chars_count_adorner_fn","style_fn"],"struct":["DefaultStyle","FieldStyle","SearchStyle","TextInput"]};
+window.SIDEBAR_ITEMS = {"fn":["data_notes_adorner_fn","field_help","field_style_fn","max_chars_count_adorner_fn","search_style_fn","style_fn"],"struct":["DefaultStyle","FieldStyle","SearchStyle","TextInput"]};

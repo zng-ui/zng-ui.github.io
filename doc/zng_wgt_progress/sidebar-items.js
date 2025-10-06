@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["collapse_complete","is_indeterminate","on_complete","on_progress","progress","style_fn"],"static":["PROGRESS_VAR","STYLE_FN_VAR"],"struct":["DefaultStyle","Progress","ProgressView","SimpleBarStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["collapse_complete","is_indeterminate","on_complete","on_progress","progress","simple_bar_style_fn","style_fn"],"static":["PROGRESS_VAR","SIMPLE_BAR_STYLE_FN_VAR","STYLE_FN_VAR"],"struct":["DefaultStyle","Progress","ProgressView","SimpleBarStyle"]};

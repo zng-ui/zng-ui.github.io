@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["replace","style_base_fn","with_style_fn"],"macro":["impl_style_fn","style_fn"],"struct":["Style","StyleArgs","StyleBuilder","StyleFn","StyleMix"]};
+window.SIDEBAR_ITEMS = {"fn":["named_style_fn","replace","style_base_fn","with_style_fn"],"macro":["impl_named_style_fn","impl_style_fn","style_fn"],"struct":["NamedStyleVar","Style","StyleArgs","StyleBuilder","StyleFn","StyleMix"]};
