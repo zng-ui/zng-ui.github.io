@@ -11,8 +11,8 @@
 <a href=#11 id=11 data-nosnippet>11</a>//!
 <a href=#12 id=12 data-nosnippet>12</a>//! ```toml
 <a href=#13 id=13 data-nosnippet>13</a>//! [dependencies]
-<a href=#14 id=14 data-nosnippet>14</a>//! zng = "0.17.4"
-<a href=#15 id=15 data-nosnippet>15</a>//! zng-view = "0.12.2"
+<a href=#14 id=14 data-nosnippet>14</a>//! zng = "0.18.0"
+<a href=#15 id=15 data-nosnippet>15</a>//! zng-view = "0.13.0"
 <a href=#16 id=16 data-nosnippet>16</a>//! ```
 <a href=#17 id=17 data-nosnippet>17</a>//!
 <a href=#18 id=18 data-nosnippet>18</a>//! Then call `zng::env::init` before any other code in `main` to setup a view-process that uses
@@ -183,7 +183,7 @@
 <a href=#183 id=183 data-nosnippet>183</a>/// Note that this only needs to be called if the view-process is not built on the same executable, if
 <a href=#184 id=184 data-nosnippet>184</a>/// it is you only need to call [`zng_env::init!`] at the beginning of the executable main.
 <a href=#185 id=185 data-nosnippet>185</a>///
-<a href=#186 id=186 data-nosnippet>186</a>/// You can also disable start on init by setting the `ZNG_VIEW_NO_INIT_START` environment variable. In this
+<a href=#186 id=186 data-nosnippet>186</a>/// You can also disable start on init by setting the `"ZNG_VIEW_NO_INIT_START"` environment variable. In this
 <a href=#187 id=187 data-nosnippet>187</a>/// case you must manually call this function.
 <a href=#188 id=188 data-nosnippet>188</a></span><span class="attr">#[cfg(ipc)]
 <a href=#189 id=189 data-nosnippet>189</a></span><span class="kw">pub fn </span>view_process_main() {
@@ -2420,122 +2420,127 @@
 <a href=#2420 id=2420 data-nosnippet>2420</a>            ApiExtensionPayload::invalid_request(extension_id, <span class="string">"renderer not found"</span>)
 <a href=#2421 id=2421 data-nosnippet>2421</a>        })
 <a href=#2422 id=2422 data-nosnippet>2422</a>    }
-<a href=#2423 id=2423 data-nosnippet>2423</a>}
-<a href=#2424 id=2424 data-nosnippet>2424</a>
-<a href=#2425 id=2425 data-nosnippet>2425</a><span class="doccomment">/// Message inserted in the event loop from the view-process.
-<a href=#2426 id=2426 data-nosnippet>2426</a></span><span class="attr">#[derive(Debug)]
-<a href=#2427 id=2427 data-nosnippet>2427</a>#[allow(clippy::large_enum_variant)]
-<a href=#2428 id=2428 data-nosnippet>2428</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>AppEvent {
-<a href=#2429 id=2429 data-nosnippet>2429</a>    <span class="doccomment">/// One or more [`RequestEvent`] are pending in the request channel.
-<a href=#2430 id=2430 data-nosnippet>2430</a>    </span>Request,
-<a href=#2431 id=2431 data-nosnippet>2431</a>    <span class="doccomment">/// Notify an event.
-<a href=#2432 id=2432 data-nosnippet>2432</a>    </span>Notify(Event),
-<a href=#2433 id=2433 data-nosnippet>2433</a>    <span class="doccomment">/// Re-query available monitors and send update event.
-<a href=#2434 id=2434 data-nosnippet>2434</a>    </span><span class="attr">#[cfg_attr(not(windows), allow(unused))]
-<a href=#2435 id=2435 data-nosnippet>2435</a>    </span>RefreshMonitors,
-<a href=#2436 id=2436 data-nosnippet>2436</a>
-<a href=#2437 id=2437 data-nosnippet>2437</a>    <span class="doccomment">/// Simulate winit window event Focused.
-<a href=#2438 id=2438 data-nosnippet>2438</a>    </span><span class="attr">#[cfg_attr(not(windows), allow(unused))]
-<a href=#2439 id=2439 data-nosnippet>2439</a>    </span>WinitFocused(winit::window::WindowId, bool),
-<a href=#2440 id=2440 data-nosnippet>2440</a>
-<a href=#2441 id=2441 data-nosnippet>2441</a>    <span class="doccomment">/// Lost connection with app-process.
-<a href=#2442 id=2442 data-nosnippet>2442</a>    </span>ParentProcessExited,
-<a href=#2443 id=2443 data-nosnippet>2443</a>
-<a href=#2444 id=2444 data-nosnippet>2444</a>    <span class="doccomment">/// Image finished decoding, must call [`ImageCache::loaded`].
-<a href=#2445 id=2445 data-nosnippet>2445</a>    </span>ImageLoaded(ImageLoadedData),
-<a href=#2446 id=2446 data-nosnippet>2446</a>
-<a href=#2447 id=2447 data-nosnippet>2447</a>    <span class="doccomment">/// Enable disable winit device events.
-<a href=#2448 id=2448 data-nosnippet>2448</a>    </span>SetDeviceEventsFilter(DeviceEventsFilter),
-<a href=#2449 id=2449 data-nosnippet>2449</a>
-<a href=#2450 id=2450 data-nosnippet>2450</a>    <span class="doccomment">/// Send when monitor was turned on/off by the OS, need to redraw all screens to avoid blank issue.
-<a href=#2451 id=2451 data-nosnippet>2451</a>    </span><span class="attr">#[allow(unused)]
-<a href=#2452 id=2452 data-nosnippet>2452</a>    </span>MonitorPowerChanged,
-<a href=#2453 id=2453 data-nosnippet>2453</a>}
+<a href=#2423 id=2423 data-nosnippet>2423</a>
+<a href=#2424 id=2424 data-nosnippet>2424</a>    <span class="kw">fn </span>ping(<span class="kw-2">&amp;mut </span><span class="self">self</span>, count: u16) -&gt; u16 {
+<a href=#2425 id=2425 data-nosnippet>2425</a>        <span class="self">self</span>.notify(Event::Pong(count));
+<a href=#2426 id=2426 data-nosnippet>2426</a>        count
+<a href=#2427 id=2427 data-nosnippet>2427</a>    }
+<a href=#2428 id=2428 data-nosnippet>2428</a>}
+<a href=#2429 id=2429 data-nosnippet>2429</a>
+<a href=#2430 id=2430 data-nosnippet>2430</a><span class="doccomment">/// Message inserted in the event loop from the view-process.
+<a href=#2431 id=2431 data-nosnippet>2431</a></span><span class="attr">#[derive(Debug)]
+<a href=#2432 id=2432 data-nosnippet>2432</a>#[allow(clippy::large_enum_variant)]
+<a href=#2433 id=2433 data-nosnippet>2433</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>AppEvent {
+<a href=#2434 id=2434 data-nosnippet>2434</a>    <span class="doccomment">/// One or more [`RequestEvent`] are pending in the request channel.
+<a href=#2435 id=2435 data-nosnippet>2435</a>    </span>Request,
+<a href=#2436 id=2436 data-nosnippet>2436</a>    <span class="doccomment">/// Notify an event.
+<a href=#2437 id=2437 data-nosnippet>2437</a>    </span>Notify(Event),
+<a href=#2438 id=2438 data-nosnippet>2438</a>    <span class="doccomment">/// Re-query available monitors and send update event.
+<a href=#2439 id=2439 data-nosnippet>2439</a>    </span><span class="attr">#[cfg_attr(not(windows), allow(unused))]
+<a href=#2440 id=2440 data-nosnippet>2440</a>    </span>RefreshMonitors,
+<a href=#2441 id=2441 data-nosnippet>2441</a>
+<a href=#2442 id=2442 data-nosnippet>2442</a>    <span class="doccomment">/// Simulate winit window event Focused.
+<a href=#2443 id=2443 data-nosnippet>2443</a>    </span><span class="attr">#[cfg_attr(not(windows), allow(unused))]
+<a href=#2444 id=2444 data-nosnippet>2444</a>    </span>WinitFocused(winit::window::WindowId, bool),
+<a href=#2445 id=2445 data-nosnippet>2445</a>
+<a href=#2446 id=2446 data-nosnippet>2446</a>    <span class="doccomment">/// Lost connection with app-process.
+<a href=#2447 id=2447 data-nosnippet>2447</a>    </span>ParentProcessExited,
+<a href=#2448 id=2448 data-nosnippet>2448</a>
+<a href=#2449 id=2449 data-nosnippet>2449</a>    <span class="doccomment">/// Image finished decoding, must call [`ImageCache::loaded`].
+<a href=#2450 id=2450 data-nosnippet>2450</a>    </span>ImageLoaded(ImageLoadedData),
+<a href=#2451 id=2451 data-nosnippet>2451</a>
+<a href=#2452 id=2452 data-nosnippet>2452</a>    <span class="doccomment">/// Enable disable winit device events.
+<a href=#2453 id=2453 data-nosnippet>2453</a>    </span>SetDeviceEventsFilter(DeviceEventsFilter),
 <a href=#2454 id=2454 data-nosnippet>2454</a>
-<a href=#2455 id=2455 data-nosnippet>2455</a><span class="doccomment">/// Message inserted in the request loop from the view-process.
-<a href=#2456 id=2456 data-nosnippet>2456</a>///
-<a href=#2457 id=2457 data-nosnippet>2457</a>/// These *events* are detached from [`AppEvent`] so that we can continue receiving requests while
-<a href=#2458 id=2458 data-nosnippet>2458</a>/// the main loop is blocked in a resize operation.
-<a href=#2459 id=2459 data-nosnippet>2459</a></span><span class="attr">#[allow(clippy::large_enum_variant)] </span><span class="comment">// Request is the largest, but also most common
-<a href=#2460 id=2460 data-nosnippet>2460</a></span><span class="attr">#[derive(Debug)]
-<a href=#2461 id=2461 data-nosnippet>2461</a></span><span class="kw">enum </span>RequestEvent {
-<a href=#2462 id=2462 data-nosnippet>2462</a>    <span class="doccomment">/// A request from the [`Api`].
-<a href=#2463 id=2463 data-nosnippet>2463</a>    </span>Request(Request),
-<a href=#2464 id=2464 data-nosnippet>2464</a>    <span class="doccomment">/// Webrender finished rendering a frame, ready for redraw.
-<a href=#2465 id=2465 data-nosnippet>2465</a>    </span>FrameReady(WindowId, FrameReadyMsg),
-<a href=#2466 id=2466 data-nosnippet>2466</a>}
-<a href=#2467 id=2467 data-nosnippet>2467</a>
-<a href=#2468 id=2468 data-nosnippet>2468</a><span class="attr">#[derive(Debug)]
-<a href=#2469 id=2469 data-nosnippet>2469</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>FrameReadyMsg {
-<a href=#2470 id=2470 data-nosnippet>2470</a>    <span class="kw">pub </span>composite_needed: bool,
+<a href=#2455 id=2455 data-nosnippet>2455</a>    <span class="doccomment">/// Send when monitor was turned on/off by the OS, need to redraw all screens to avoid blank issue.
+<a href=#2456 id=2456 data-nosnippet>2456</a>    </span><span class="attr">#[allow(unused)]
+<a href=#2457 id=2457 data-nosnippet>2457</a>    </span>MonitorPowerChanged,
+<a href=#2458 id=2458 data-nosnippet>2458</a>}
+<a href=#2459 id=2459 data-nosnippet>2459</a>
+<a href=#2460 id=2460 data-nosnippet>2460</a><span class="doccomment">/// Message inserted in the request loop from the view-process.
+<a href=#2461 id=2461 data-nosnippet>2461</a>///
+<a href=#2462 id=2462 data-nosnippet>2462</a>/// These *events* are detached from [`AppEvent`] so that we can continue receiving requests while
+<a href=#2463 id=2463 data-nosnippet>2463</a>/// the main loop is blocked in a resize operation.
+<a href=#2464 id=2464 data-nosnippet>2464</a></span><span class="attr">#[allow(clippy::large_enum_variant)] </span><span class="comment">// Request is the largest, but also most common
+<a href=#2465 id=2465 data-nosnippet>2465</a></span><span class="attr">#[derive(Debug)]
+<a href=#2466 id=2466 data-nosnippet>2466</a></span><span class="kw">enum </span>RequestEvent {
+<a href=#2467 id=2467 data-nosnippet>2467</a>    <span class="doccomment">/// A request from the [`Api`].
+<a href=#2468 id=2468 data-nosnippet>2468</a>    </span>Request(Request),
+<a href=#2469 id=2469 data-nosnippet>2469</a>    <span class="doccomment">/// Webrender finished rendering a frame, ready for redraw.
+<a href=#2470 id=2470 data-nosnippet>2470</a>    </span>FrameReady(WindowId, FrameReadyMsg),
 <a href=#2471 id=2471 data-nosnippet>2471</a>}
 <a href=#2472 id=2472 data-nosnippet>2472</a>
-<a href=#2473 id=2473 data-nosnippet>2473</a><span class="doccomment">/// Abstraction over channel senders that can inject [`AppEvent`] in the app loop.
-<a href=#2474 id=2474 data-nosnippet>2474</a></span><span class="attr">#[derive(Clone)]
-<a href=#2475 id=2475 data-nosnippet>2475</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>AppEventSender {
-<a href=#2476 id=2476 data-nosnippet>2476</a>    Headed(EventLoopProxy&lt;AppEvent&gt;, flume::Sender&lt;RequestEvent&gt;),
-<a href=#2477 id=2477 data-nosnippet>2477</a>    Headless(flume::Sender&lt;AppEvent&gt;, flume::Sender&lt;RequestEvent&gt;),
-<a href=#2478 id=2478 data-nosnippet>2478</a>}
-<a href=#2479 id=2479 data-nosnippet>2479</a><span class="kw">impl </span>AppEventSender {
-<a href=#2480 id=2480 data-nosnippet>2480</a>    <span class="doccomment">/// Send an event.
-<a href=#2481 id=2481 data-nosnippet>2481</a>    </span><span class="kw">fn </span>send(<span class="kw-2">&amp;</span><span class="self">self</span>, ev: AppEvent) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
-<a href=#2482 id=2482 data-nosnippet>2482</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#2483 id=2483 data-nosnippet>2483</a>            AppEventSender::Headed(p, <span class="kw">_</span>) =&gt; p.send_event(ev).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2484 id=2484 data-nosnippet>2484</a>            AppEventSender::Headless(p, <span class="kw">_</span>) =&gt; p.send(ev).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2485 id=2485 data-nosnippet>2485</a>        }
-<a href=#2486 id=2486 data-nosnippet>2486</a>    }
-<a href=#2487 id=2487 data-nosnippet>2487</a>
-<a href=#2488 id=2488 data-nosnippet>2488</a>    <span class="doccomment">/// Send a request.
-<a href=#2489 id=2489 data-nosnippet>2489</a>    </span><span class="kw">fn </span>request(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
-<a href=#2490 id=2490 data-nosnippet>2490</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#2491 id=2491 data-nosnippet>2491</a>            AppEventSender::Headed(<span class="kw">_</span>, p) =&gt; p.send(RequestEvent::Request(req)).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2492 id=2492 data-nosnippet>2492</a>            AppEventSender::Headless(<span class="kw">_</span>, p) =&gt; p.send(RequestEvent::Request(req)).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2493 id=2493 data-nosnippet>2493</a>        }<span class="question-mark">?</span>;
-<a href=#2494 id=2494 data-nosnippet>2494</a>        <span class="self">self</span>.send(AppEvent::Request)
-<a href=#2495 id=2495 data-nosnippet>2495</a>    }
-<a href=#2496 id=2496 data-nosnippet>2496</a>
-<a href=#2497 id=2497 data-nosnippet>2497</a>    <span class="doccomment">/// Send a frame-ready.
-<a href=#2498 id=2498 data-nosnippet>2498</a>    </span><span class="kw">fn </span>frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: WindowId, msg: FrameReadyMsg) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
-<a href=#2499 id=2499 data-nosnippet>2499</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#2500 id=2500 data-nosnippet>2500</a>            AppEventSender::Headed(<span class="kw">_</span>, p) =&gt; p
-<a href=#2501 id=2501 data-nosnippet>2501</a>                .send(RequestEvent::FrameReady(window_id, msg))
-<a href=#2502 id=2502 data-nosnippet>2502</a>                .map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2503 id=2503 data-nosnippet>2503</a>            AppEventSender::Headless(<span class="kw">_</span>, p) =&gt; p
-<a href=#2504 id=2504 data-nosnippet>2504</a>                .send(RequestEvent::FrameReady(window_id, msg))
-<a href=#2505 id=2505 data-nosnippet>2505</a>                .map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
-<a href=#2506 id=2506 data-nosnippet>2506</a>        }<span class="question-mark">?</span>;
-<a href=#2507 id=2507 data-nosnippet>2507</a>        <span class="self">self</span>.send(AppEvent::Request)
-<a href=#2508 id=2508 data-nosnippet>2508</a>    }
-<a href=#2509 id=2509 data-nosnippet>2509</a>}
-<a href=#2510 id=2510 data-nosnippet>2510</a>
-<a href=#2511 id=2511 data-nosnippet>2511</a><span class="doccomment">/// Webrender frame-ready notifier.
-<a href=#2512 id=2512 data-nosnippet>2512</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WrNotifier {
-<a href=#2513 id=2513 data-nosnippet>2513</a>    id: WindowId,
-<a href=#2514 id=2514 data-nosnippet>2514</a>    sender: AppEventSender,
-<a href=#2515 id=2515 data-nosnippet>2515</a>}
-<a href=#2516 id=2516 data-nosnippet>2516</a><span class="kw">impl </span>WrNotifier {
-<a href=#2517 id=2517 data-nosnippet>2517</a>    <span class="kw">pub fn </span>create(id: WindowId, sender: AppEventSender) -&gt; Box&lt;<span class="kw">dyn </span>RenderNotifier&gt; {
-<a href=#2518 id=2518 data-nosnippet>2518</a>        Box::new(WrNotifier { id, sender })
-<a href=#2519 id=2519 data-nosnippet>2519</a>    }
+<a href=#2473 id=2473 data-nosnippet>2473</a><span class="attr">#[derive(Debug)]
+<a href=#2474 id=2474 data-nosnippet>2474</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>FrameReadyMsg {
+<a href=#2475 id=2475 data-nosnippet>2475</a>    <span class="kw">pub </span>composite_needed: bool,
+<a href=#2476 id=2476 data-nosnippet>2476</a>}
+<a href=#2477 id=2477 data-nosnippet>2477</a>
+<a href=#2478 id=2478 data-nosnippet>2478</a><span class="doccomment">/// Abstraction over channel senders that can inject [`AppEvent`] in the app loop.
+<a href=#2479 id=2479 data-nosnippet>2479</a></span><span class="attr">#[derive(Clone)]
+<a href=#2480 id=2480 data-nosnippet>2480</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">enum </span>AppEventSender {
+<a href=#2481 id=2481 data-nosnippet>2481</a>    Headed(EventLoopProxy&lt;AppEvent&gt;, flume::Sender&lt;RequestEvent&gt;),
+<a href=#2482 id=2482 data-nosnippet>2482</a>    Headless(flume::Sender&lt;AppEvent&gt;, flume::Sender&lt;RequestEvent&gt;),
+<a href=#2483 id=2483 data-nosnippet>2483</a>}
+<a href=#2484 id=2484 data-nosnippet>2484</a><span class="kw">impl </span>AppEventSender {
+<a href=#2485 id=2485 data-nosnippet>2485</a>    <span class="doccomment">/// Send an event.
+<a href=#2486 id=2486 data-nosnippet>2486</a>    </span><span class="kw">fn </span>send(<span class="kw-2">&amp;</span><span class="self">self</span>, ev: AppEvent) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
+<a href=#2487 id=2487 data-nosnippet>2487</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#2488 id=2488 data-nosnippet>2488</a>            AppEventSender::Headed(p, <span class="kw">_</span>) =&gt; p.send_event(ev).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2489 id=2489 data-nosnippet>2489</a>            AppEventSender::Headless(p, <span class="kw">_</span>) =&gt; p.send(ev).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2490 id=2490 data-nosnippet>2490</a>        }
+<a href=#2491 id=2491 data-nosnippet>2491</a>    }
+<a href=#2492 id=2492 data-nosnippet>2492</a>
+<a href=#2493 id=2493 data-nosnippet>2493</a>    <span class="doccomment">/// Send a request.
+<a href=#2494 id=2494 data-nosnippet>2494</a>    </span><span class="kw">fn </span>request(<span class="kw-2">&amp;</span><span class="self">self</span>, req: Request) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
+<a href=#2495 id=2495 data-nosnippet>2495</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#2496 id=2496 data-nosnippet>2496</a>            AppEventSender::Headed(<span class="kw">_</span>, p) =&gt; p.send(RequestEvent::Request(req)).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2497 id=2497 data-nosnippet>2497</a>            AppEventSender::Headless(<span class="kw">_</span>, p) =&gt; p.send(RequestEvent::Request(req)).map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2498 id=2498 data-nosnippet>2498</a>        }<span class="question-mark">?</span>;
+<a href=#2499 id=2499 data-nosnippet>2499</a>        <span class="self">self</span>.send(AppEvent::Request)
+<a href=#2500 id=2500 data-nosnippet>2500</a>    }
+<a href=#2501 id=2501 data-nosnippet>2501</a>
+<a href=#2502 id=2502 data-nosnippet>2502</a>    <span class="doccomment">/// Send a frame-ready.
+<a href=#2503 id=2503 data-nosnippet>2503</a>    </span><span class="kw">fn </span>frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, window_id: WindowId, msg: FrameReadyMsg) -&gt; <span class="prelude-ty">Result</span>&lt;(), ipc::ViewChannelError&gt; {
+<a href=#2504 id=2504 data-nosnippet>2504</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#2505 id=2505 data-nosnippet>2505</a>            AppEventSender::Headed(<span class="kw">_</span>, p) =&gt; p
+<a href=#2506 id=2506 data-nosnippet>2506</a>                .send(RequestEvent::FrameReady(window_id, msg))
+<a href=#2507 id=2507 data-nosnippet>2507</a>                .map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2508 id=2508 data-nosnippet>2508</a>            AppEventSender::Headless(<span class="kw">_</span>, p) =&gt; p
+<a href=#2509 id=2509 data-nosnippet>2509</a>                .send(RequestEvent::FrameReady(window_id, msg))
+<a href=#2510 id=2510 data-nosnippet>2510</a>                .map_err(|<span class="kw">_</span>| ipc::ViewChannelError::Disconnected),
+<a href=#2511 id=2511 data-nosnippet>2511</a>        }<span class="question-mark">?</span>;
+<a href=#2512 id=2512 data-nosnippet>2512</a>        <span class="self">self</span>.send(AppEvent::Request)
+<a href=#2513 id=2513 data-nosnippet>2513</a>    }
+<a href=#2514 id=2514 data-nosnippet>2514</a>}
+<a href=#2515 id=2515 data-nosnippet>2515</a>
+<a href=#2516 id=2516 data-nosnippet>2516</a><span class="doccomment">/// Webrender frame-ready notifier.
+<a href=#2517 id=2517 data-nosnippet>2517</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WrNotifier {
+<a href=#2518 id=2518 data-nosnippet>2518</a>    id: WindowId,
+<a href=#2519 id=2519 data-nosnippet>2519</a>    sender: AppEventSender,
 <a href=#2520 id=2520 data-nosnippet>2520</a>}
-<a href=#2521 id=2521 data-nosnippet>2521</a><span class="kw">impl </span>RenderNotifier <span class="kw">for </span>WrNotifier {
-<a href=#2522 id=2522 data-nosnippet>2522</a>    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>RenderNotifier&gt; {
-<a href=#2523 id=2523 data-nosnippet>2523</a>        Box::new(<span class="self">Self </span>{
-<a href=#2524 id=2524 data-nosnippet>2524</a>            id: <span class="self">self</span>.id,
-<a href=#2525 id=2525 data-nosnippet>2525</a>            sender: <span class="self">self</span>.sender.clone(),
-<a href=#2526 id=2526 data-nosnippet>2526</a>        })
-<a href=#2527 id=2527 data-nosnippet>2527</a>    }
-<a href=#2528 id=2528 data-nosnippet>2528</a>
-<a href=#2529 id=2529 data-nosnippet>2529</a>    <span class="kw">fn </span>wake_up(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: bool) {}
-<a href=#2530 id=2530 data-nosnippet>2530</a>
-<a href=#2531 id=2531 data-nosnippet>2531</a>    <span class="kw">fn </span>new_frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: DocumentId, <span class="kw">_</span>: FramePublishId, params: <span class="kw-2">&amp;</span>FrameReadyParams) {
-<a href=#2532 id=2532 data-nosnippet>2532</a>        <span class="comment">// render is composite_needed (https://github.com/servo/webrender/commit/82860cfd6ebb012a009d639629eeb29078e2974f)
-<a href=#2533 id=2533 data-nosnippet>2533</a>        </span><span class="kw">let </span>msg = FrameReadyMsg {
-<a href=#2534 id=2534 data-nosnippet>2534</a>            composite_needed: params.render,
-<a href=#2535 id=2535 data-nosnippet>2535</a>        };
-<a href=#2536 id=2536 data-nosnippet>2536</a>        <span class="kw">let _ </span>= <span class="self">self</span>.sender.frame_ready(<span class="self">self</span>.id, msg);
-<a href=#2537 id=2537 data-nosnippet>2537</a>    }
-<a href=#2538 id=2538 data-nosnippet>2538</a>}
-<a href=#2539 id=2539 data-nosnippet>2539</a>
-<a href=#2540 id=2540 data-nosnippet>2540</a><span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
-<a href=#2541 id=2541 data-nosnippet>2541</a></span><span class="macro">compile_error!</span>(<span class="string">"zng-view does not support Wasm"</span>);</code></pre></div></section></main></body></html>
+<a href=#2521 id=2521 data-nosnippet>2521</a><span class="kw">impl </span>WrNotifier {
+<a href=#2522 id=2522 data-nosnippet>2522</a>    <span class="kw">pub fn </span>create(id: WindowId, sender: AppEventSender) -&gt; Box&lt;<span class="kw">dyn </span>RenderNotifier&gt; {
+<a href=#2523 id=2523 data-nosnippet>2523</a>        Box::new(WrNotifier { id, sender })
+<a href=#2524 id=2524 data-nosnippet>2524</a>    }
+<a href=#2525 id=2525 data-nosnippet>2525</a>}
+<a href=#2526 id=2526 data-nosnippet>2526</a><span class="kw">impl </span>RenderNotifier <span class="kw">for </span>WrNotifier {
+<a href=#2527 id=2527 data-nosnippet>2527</a>    <span class="kw">fn </span>clone(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Box&lt;<span class="kw">dyn </span>RenderNotifier&gt; {
+<a href=#2528 id=2528 data-nosnippet>2528</a>        Box::new(<span class="self">Self </span>{
+<a href=#2529 id=2529 data-nosnippet>2529</a>            id: <span class="self">self</span>.id,
+<a href=#2530 id=2530 data-nosnippet>2530</a>            sender: <span class="self">self</span>.sender.clone(),
+<a href=#2531 id=2531 data-nosnippet>2531</a>        })
+<a href=#2532 id=2532 data-nosnippet>2532</a>    }
+<a href=#2533 id=2533 data-nosnippet>2533</a>
+<a href=#2534 id=2534 data-nosnippet>2534</a>    <span class="kw">fn </span>wake_up(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: bool) {}
+<a href=#2535 id=2535 data-nosnippet>2535</a>
+<a href=#2536 id=2536 data-nosnippet>2536</a>    <span class="kw">fn </span>new_frame_ready(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: DocumentId, <span class="kw">_</span>: FramePublishId, params: <span class="kw-2">&amp;</span>FrameReadyParams) {
+<a href=#2537 id=2537 data-nosnippet>2537</a>        <span class="comment">// render is composite_needed (https://github.com/servo/webrender/commit/82860cfd6ebb012a009d639629eeb29078e2974f)
+<a href=#2538 id=2538 data-nosnippet>2538</a>        </span><span class="kw">let </span>msg = FrameReadyMsg {
+<a href=#2539 id=2539 data-nosnippet>2539</a>            composite_needed: params.render,
+<a href=#2540 id=2540 data-nosnippet>2540</a>        };
+<a href=#2541 id=2541 data-nosnippet>2541</a>        <span class="kw">let _ </span>= <span class="self">self</span>.sender.frame_ready(<span class="self">self</span>.id, msg);
+<a href=#2542 id=2542 data-nosnippet>2542</a>    }
+<a href=#2543 id=2543 data-nosnippet>2543</a>}
+<a href=#2544 id=2544 data-nosnippet>2544</a>
+<a href=#2545 id=2545 data-nosnippet>2545</a><span class="attr">#[cfg(target_arch = <span class="string">"wasm32"</span>)]
+<a href=#2546 id=2546 data-nosnippet>2546</a></span><span class="macro">compile_error!</span>(<span class="string">"zng-view does not support Wasm"</span>);</code></pre></div></section></main></body></html>

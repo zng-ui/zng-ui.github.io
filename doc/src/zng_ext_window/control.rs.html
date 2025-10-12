@@ -5,8 +5,8 @@
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>parking_lot::Mutex;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>zng_app::{
 <a href=#7 id=7 data-nosnippet>7</a>    access::{ACCESS_DEINITED_EVENT, ACCESS_INITED_EVENT},
-<a href=#8 id=8 data-nosnippet>8</a>    app_hn_once,
-<a href=#9 id=9 data-nosnippet>9</a>    event::{AnyEventArgs, CommandHandle},
+<a href=#8 id=8 data-nosnippet>8</a>    event::{AnyEventArgs, CommandHandle},
+<a href=#9 id=9 data-nosnippet>9</a>    hn_once,
 <a href=#10 id=10 data-nosnippet>10</a>    render::{FrameBuilder, FrameUpdate},
 <a href=#11 id=11 data-nosnippet>11</a>    static_id,
 <a href=#12 id=12 data-nosnippet>12</a>    timer::TIMERS,
@@ -498,7 +498,7 @@
 <a href=#498 id=498 data-nosnippet>498</a>                TIMERS
 <a href=#499 id=499 data-nosnippet>499</a>                    .on_deadline(
 <a href=#500 id=500 data-nosnippet>500</a>                        <span class="self">self</span>.img_res.deadline,
-<a href=#501 id=501 data-nosnippet>501</a>                        <span class="macro">app_hn_once!</span>(|<span class="kw">_</span>| {
+<a href=#501 id=501 data-nosnippet>501</a>                        <span class="macro">hn_once!</span>(|<span class="kw">_</span>| {
 <a href=#502 id=502 data-nosnippet>502</a>                            <span class="kw">if </span>img_res_loading.iter().any(|i| i.get().is_loading()) {
 <a href=#503 id=503 data-nosnippet>503</a>                                <span class="comment">// window maybe still waiting.
 <a href=#504 id=504 data-nosnippet>504</a>                                </span>UPDATES.layout_window(window_id);
@@ -2751,7 +2751,7 @@
 <a href=#2751 id=2751 data-nosnippet>2751</a>        TIMERS
 <a href=#2752 id=2752 data-nosnippet>2752</a>            .on_deadline(
 <a href=#2753 id=2753 data-nosnippet>2753</a>                <span class="number">100</span>.ms(),
-<a href=#2754 id=2754 data-nosnippet>2754</a>                <span class="macro">app_hn_once!</span>(c, |<span class="kw">_</span>| {
+<a href=#2754 id=2754 data-nosnippet>2754</a>                <span class="macro">hn_once!</span>(c, |<span class="kw">_</span>| {
 <a href=#2755 id=2755 data-nosnippet>2755</a>                    <span class="kw">let </span>c = c.lock();
 <a href=#2756 id=2756 data-nosnippet>2756</a>                    <span class="kw">if </span>c.host.is_none() {
 <a href=#2757 id=2757 data-nosnippet>2757</a>                        <span class="kw">let _ </span>= WINDOWS.close(c.ctx.id());

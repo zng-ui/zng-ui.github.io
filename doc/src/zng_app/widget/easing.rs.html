@@ -55,8 +55,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#19 id=19 data-nosnippet>19</a>#[expect(non_camel_case_types)]
 <a href=#20 id=20 data-nosnippet>20</a></span><span class="kw">pub trait </span>easing_property: Send + Sync + Clone + Copy {
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">fn </span>easing_property_unset(<span class="self">self</span>);
-<a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">fn </span>easing_property(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; Vec&lt;Box&lt;<span class="kw">dyn </span>AnyPropertyBuildAction&gt;&gt;;
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">fn </span>easing_when_data(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; WhenBuildAction;
+<a href=#22 id=22 data-nosnippet>22</a>    <span class="kw">fn </span>easing_property(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; Vec&lt;Box&lt;<span class="kw">dyn </span>AnyPropertyAttribute&gt;&gt;;
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="kw">fn </span>easing_when_data(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; PropertyAttributeWhen;
 <a href=#24 id=24 data-nosnippet>24</a>}
 <a href=#25 id=25 data-nosnippet>25</a>
 <a href=#26 id=26 data-nosnippet>26</a><span class="attr">#[doc(hidden)]
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">fn </span>easing(<span class="self">self</span>, duration: Duration, easing: EasingFn, when_conditions_data: <span class="kw-2">&amp;</span>[<span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;&gt;]) -&gt; <span class="self">Self</span>;
 <a href=#31 id=31 data-nosnippet>31</a>}
 <a href=#32 id=32 data-nosnippet>32</a><span class="kw">impl</span>&lt;T: VarValue + Transitionable&gt; easing_property_input_Transitionable <span class="kw">for </span>Var&lt;T&gt; {
-<a href=#33 id=33 data-nosnippet>33</a>    <span class="comment">// Called by PropertyBuildAction for each property input of properties that have #[easing(_)]
+<a href=#33 id=33 data-nosnippet>33</a>    <span class="comment">// Called by PropertyAttribute for each property input of properties that have #[easing(_)]
 <a href=#34 id=34 data-nosnippet>34</a>    </span><span class="kw">fn </span>easing(<span class="self">self</span>, duration: Duration, easing: EasingFn, when_conditions_data: <span class="kw-2">&amp;</span>[<span class="prelude-ty">Option</span>&lt;Arc&lt;<span class="kw">dyn </span>Any + Send + Sync&gt;&gt;]) -&gt; <span class="self">Self </span>{
 <a href=#35 id=35 data-nosnippet>35</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(when) = WhenVarBuilder::try_from_built(<span class="kw-2">&amp;</span><span class="self">self</span>) {
 <a href=#36 id=36 data-nosnippet>36</a>            <span class="comment">// property assigned normally and in when conditions, may need to coordinate multiple `#[easing(_)]` animations
@@ -101,33 +101,33 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#65 id=65 data-nosnippet>65</a>            <span class="macro-nonterminal">$T0</span>: easing_property_input_Transitionable,
 <a href=#66 id=66 data-nosnippet>66</a>            $(<span class="macro-nonterminal">$T</span>: easing_property_input_Transitionable),*
 <a href=#67 id=67 data-nosnippet>67</a>        &gt; easing_property <span class="kw">for </span>PropertyInputTypes&lt;(<span class="macro-nonterminal">$T0</span>, $(<span class="macro-nonterminal">$T</span>,)<span class="kw-2">*</span>)&gt; {
-<a href=#68 id=68 data-nosnippet>68</a>            <span class="comment">// #[easing(unset)] calls this simply to assert T: Transitionable, will generate a push_unset_property_build_action__ on the builder
+<a href=#68 id=68 data-nosnippet>68</a>            <span class="comment">// #[easing(unset)] calls this simply to assert T: Transitionable, will generate a push_unset_property_attribute__ on the builder
 <a href=#69 id=69 data-nosnippet>69</a>            </span><span class="kw">fn </span>easing_property_unset(<span class="self">self</span>) { }
 <a href=#70 id=70 data-nosnippet>70</a>
-<a href=#71 id=71 data-nosnippet>71</a>            <span class="comment">// #[easing(duration, easing?)] in normal assign calls this to build data for push_property_build_action__
-<a href=#72 id=72 data-nosnippet>72</a>            </span><span class="kw">fn </span>easing_property(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; Vec&lt;Box&lt;<span class="kw">dyn </span>AnyPropertyBuildAction&gt;&gt; {
+<a href=#71 id=71 data-nosnippet>71</a>            <span class="comment">// #[easing(duration, easing?)] in normal assign calls this to build data for push_property_attribute__
+<a href=#72 id=72 data-nosnippet>72</a>            </span><span class="kw">fn </span>easing_property(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; Vec&lt;Box&lt;<span class="kw">dyn </span>AnyPropertyAttribute&gt;&gt; {
 <a href=#73 id=73 data-nosnippet>73</a>                <span class="kw">if </span>duration == Duration::ZERO {
 <a href=#74 id=74 data-nosnippet>74</a>                    <span class="macro">vec!</span>[]
 <a href=#75 id=75 data-nosnippet>75</a>                } <span class="kw">else </span>{
 <a href=#76 id=76 data-nosnippet>76</a>                    <span class="macro">vec!</span>[
-<a href=#77 id=77 data-nosnippet>77</a>                        Box::new(PropertyBuildAction::&lt;<span class="macro-nonterminal">$T0</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, duration, easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),
-<a href=#78 id=78 data-nosnippet>78</a>                        $(Box::new(PropertyBuildAction::&lt;<span class="macro-nonterminal">$T</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, duration, easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),)*
+<a href=#77 id=77 data-nosnippet>77</a>                        Box::new(PropertyAttribute::&lt;<span class="macro-nonterminal">$T0</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, duration, easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),
+<a href=#78 id=78 data-nosnippet>78</a>                        $(Box::new(PropertyAttribute::&lt;<span class="macro-nonterminal">$T</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, duration, easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),)*
 <a href=#79 id=79 data-nosnippet>79</a>                    ]
 <a href=#80 id=80 data-nosnippet>80</a>                }
 <a href=#81 id=81 data-nosnippet>81</a>            }
 <a href=#82 id=82 data-nosnippet>82</a>
-<a href=#83 id=83 data-nosnippet>83</a>            <span class="comment">// #[easing(duration, easing?)] in when assign calls this to build data for push_when_build_action_data__
-<a href=#84 id=84 data-nosnippet>84</a>            </span><span class="kw">fn </span>easing_when_data(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; WhenBuildAction {
+<a href=#83 id=83 data-nosnippet>83</a>            <span class="comment">// #[easing(duration, easing?)] in when assign calls this to build data for push_when_property_attribute_data__
+<a href=#84 id=84 data-nosnippet>84</a>            </span><span class="kw">fn </span>easing_when_data(<span class="self">self</span>, duration: Duration, easing: EasingFn) -&gt; PropertyAttributeWhen {
 <a href=#85 id=85 data-nosnippet>85</a>                <span class="kw">if </span>duration == Duration::ZERO {
-<a href=#86 id=86 data-nosnippet>86</a>                    WhenBuildAction::new_no_default((duration, easing))
+<a href=#86 id=86 data-nosnippet>86</a>                    PropertyAttributeWhen::new_no_default((duration, easing))
 <a href=#87 id=87 data-nosnippet>87</a>                } <span class="kw">else </span>{
-<a href=#88 id=88 data-nosnippet>88</a>                    WhenBuildAction::new(
+<a href=#88 id=88 data-nosnippet>88</a>                    PropertyAttributeWhen::new(
 <a href=#89 id=89 data-nosnippet>89</a>                        (duration, easing),
 <a href=#90 id=90 data-nosnippet>90</a>                        || {
 <a href=#91 id=91 data-nosnippet>91</a>                            <span class="kw">let </span>easing = Arc::new(<span class="macro-nonterminal">$crate::var::animation::easing::linear</span>) <span class="kw">as </span>EasingFn;
 <a href=#92 id=92 data-nosnippet>92</a>                            <span class="macro">vec!</span>[
-<a href=#93 id=93 data-nosnippet>93</a>                                Box::new(PropertyBuildAction::&lt;<span class="macro-nonterminal">$T0</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, <span class="number">0</span>.ms(), easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),
-<a href=#94 id=94 data-nosnippet>94</a>                                $(Box::new(PropertyBuildAction::&lt;<span class="macro-nonterminal">$T</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, <span class="number">0</span>.ms(), easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),)*
+<a href=#93 id=93 data-nosnippet>93</a>                                Box::new(PropertyAttribute::&lt;<span class="macro-nonterminal">$T0</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, <span class="number">0</span>.ms(), easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),
+<a href=#94 id=94 data-nosnippet>94</a>                                $(Box::new(PropertyAttribute::&lt;<span class="macro-nonterminal">$T</span>&gt;::new(<span class="macro-nonterminal">$</span><span class="macro">crate::handler::clmv!</span>(<span class="macro-nonterminal">easing</span>, |a| easing_property_input_Transitionable::easing(a.input, <span class="number">0</span>.ms(), easing.clone(), <span class="kw-2">&amp;</span>a.when_conditions_data)))),)*
 <a href=#95 id=95 data-nosnippet>95</a>                            ]
 <a href=#96 id=96 data-nosnippet>96</a>                        }
 <a href=#97 id=97 data-nosnippet>97</a>                    )

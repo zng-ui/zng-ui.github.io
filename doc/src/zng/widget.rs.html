@@ -137,11 +137,11 @@
 <a href=#136 id=136 data-nosnippet>136</a>/// See [`zng_app::widget::builder`] for the full API.
 <a href=#137 id=137 data-nosnippet>137</a></span><span class="kw">pub mod </span>builder {
 <a href=#138 id=138 data-nosnippet>138</a>    <span class="kw">pub use </span>zng_app::widget::builder::{
-<a href=#139 id=139 data-nosnippet>139</a>        AnyWhenArcWidgetHandlerBuilder, ArcWidgetHandler, BuilderProperty, BuilderPropertyMut, BuilderPropertyRef, Importance, InputKind,
-<a href=#140 id=140 data-nosnippet>140</a>        NestGroup, NestPosition, PropertyArgs, PropertyBuildAction, PropertyBuildActionArgs, PropertyBuildActions,
-<a href=#141 id=141 data-nosnippet>141</a>        PropertyBuildActionsWhenData, PropertyId, PropertyInfo, PropertyInput, PropertyInputTypes, PropertyNewArgs, SourceLocation,
-<a href=#142 id=142 data-nosnippet>142</a>        WhenBuildAction, WhenInfo, WhenInput, WhenInputMember, WhenInputVar, WidgetBuilder, WidgetBuilderProperties, WidgetBuilding,
-<a href=#143 id=143 data-nosnippet>143</a>        WidgetType, property_args, property_id, property_info, property_input_types, source_location, widget_type,
+<a href=#139 id=139 data-nosnippet>139</a>        AnyWhenArcHandlerBuilder, BuilderProperty, BuilderPropertyMut, BuilderPropertyRef, Importance, InputKind, NestGroup, NestPosition,
+<a href=#140 id=140 data-nosnippet>140</a>        PropertyArgs, PropertyAttribute, PropertyAttributeArgs, PropertyAttributeWhen, PropertyAttributes, PropertyAttributesWhenData,
+<a href=#141 id=141 data-nosnippet>141</a>        PropertyId, PropertyInfo, PropertyInput, PropertyInputTypes, PropertyNewArgs, SourceLocation, WhenInfo, WhenInput, WhenInputMember,
+<a href=#142 id=142 data-nosnippet>142</a>        WhenInputVar, WidgetBuilder, WidgetBuilderProperties, WidgetBuilding, WidgetType, property_args, property_id, property_info,
+<a href=#143 id=143 data-nosnippet>143</a>        property_input_types, source_location, widget_type,
 <a href=#144 id=144 data-nosnippet>144</a>    };
 <a href=#145 id=145 data-nosnippet>145</a>}
 <a href=#146 id=146 data-nosnippet>146</a>
@@ -245,7 +245,7 @@
 <a href=#244 id=244 data-nosnippet>244</a><span class="doccomment">/// Expands a struct to a widget struct and macro.
 <a href=#245 id=245 data-nosnippet>245</a>///
 <a href=#246 id=246 data-nosnippet>246</a>/// Each widget is a struct and macro pair of the same name that builds a custom widget using [`WidgetBuilder`]. Widgets
-<a href=#247 id=247 data-nosnippet>247</a>/// *inherit* from one other widget and can also inherit multiple mix-ins. Widgets can have intrinsic nodes, default properties
+<a href=#247 id=247 data-nosnippet>247</a>/// *inherit* from one other widget and can also inherit multiple mixins. Widgets can have intrinsic nodes, default properties
 <a href=#248 id=248 data-nosnippet>248</a>/// and can build to a custom output type.
 <a href=#249 id=249 data-nosnippet>249</a>///
 <a href=#250 id=250 data-nosnippet>250</a>/// Properties can be strongly associated with the widget using the `#[property(.., widget_impl(Widget))]` directive, existing properties
@@ -480,12 +480,12 @@
 <a href=#479 id=479 data-nosnippet>479</a>/// &lt;/script&gt;
 <a href=#480 id=480 data-nosnippet>480</a></span><span class="kw">pub use </span>zng_app::widget::widget;
 <a href=#481 id=481 data-nosnippet>481</a>
-<a href=#482 id=482 data-nosnippet>482</a><span class="doccomment">/// Expands a struct to a widget mix-in.
+<a href=#482 id=482 data-nosnippet>482</a><span class="doccomment">/// Expands a struct to a widget mixin.
 <a href=#483 id=483 data-nosnippet>483</a>///
-<a href=#484 id=484 data-nosnippet>484</a>/// Widget mix-ins can be inserted on a widgets inheritance chain, but they cannot be instantiated directly. Unlike
+<a href=#484 id=484 data-nosnippet>484</a>/// Widget mixins can be inserted on a widgets inheritance chain, but they cannot be instantiated directly. Unlike
 <a href=#485 id=485 data-nosnippet>485</a>/// the full widgets it defines its parent as a generic type, that must be filled with a real widget when used.
 <a href=#486 id=486 data-nosnippet>486</a>///
-<a href=#487 id=487 data-nosnippet>487</a>/// By convention mix-ins have the suffix `Mix` and the generic parent is named `P`. The `P` must not have any generic bounds
+<a href=#487 id=487 data-nosnippet>487</a>/// By convention mixins have the suffix `Mix` and the generic parent is named `P`. The `P` must not have any generic bounds
 <a href=#488 id=488 data-nosnippet>488</a>/// in the declaration, the expansion will bound it to [`WidgetImpl`].
 <a href=#489 id=489 data-nosnippet>489</a>///
 <a href=#490 id=490 data-nosnippet>490</a>/// # Examples
@@ -516,11 +516,11 @@
 <a href=#515 id=515 data-nosnippet>515</a>/// pub struct Foo(FocusableMix&lt;WidgetBase&gt;);
 <a href=#516 id=516 data-nosnippet>516</a>/// ```
 <a href=#517 id=517 data-nosnippet>517</a>///
-<a href=#518 id=518 data-nosnippet>518</a>/// The example above declares a mix-in `FocusableMix&lt;P&gt;` and a widget `Foo`, the mix-in is used as a parent of the widget, only
-<a href=#519 id=519 data-nosnippet>519</a>/// the `Foo! { }` widget can be instantiated, and it will have the strongly associated property `focusable` from the mix-in.
+<a href=#518 id=518 data-nosnippet>518</a>/// The example above declares a mixin `FocusableMix&lt;P&gt;` and a widget `Foo`, the mixin is used as a parent of the widget, only
+<a href=#519 id=519 data-nosnippet>519</a>/// the `Foo! { }` widget can be instantiated, and it will have the strongly associated property `focusable` from the mixin.
 <a href=#520 id=520 data-nosnippet>520</a>///
-<a href=#521 id=521 data-nosnippet>521</a>/// All widget `impl` items can be declared in a mix-in, including the `fn widget_build(&amp;mut self) -&gt; T`. Multiple mix-ins can be inherited
-<a href=#522 id=522 data-nosnippet>522</a>/// by nesting the types in a full widget `Foo(AMix&lt;BMix&lt;Base&gt;&gt;)`. Mix-ins cannot inherit from other mix-ins.
+<a href=#521 id=521 data-nosnippet>521</a>/// All widget `impl` items can be declared in a mixin, including the `fn widget_build(&amp;mut self) -&gt; T`. Multiple mixins can be inherited
+<a href=#522 id=522 data-nosnippet>522</a>/// by nesting the types in a full widget `Foo(AMix&lt;BMix&lt;Base&gt;&gt;)`. Mixins cannot inherit from other mixins.
 <a href=#523 id=523 data-nosnippet>523</a>///
 <a href=#524 id=524 data-nosnippet>524</a>/// &lt;script&gt;
 <a href=#525 id=525 data-nosnippet>525</a>/// // hide re-exported docs
@@ -535,7 +535,7 @@
 <a href=#534 id=534 data-nosnippet>534</a>
 <a href=#535 id=535 data-nosnippet>535</a><span class="doccomment">/// Expands a property assign to include an easing animation.
 <a href=#536 id=536 data-nosnippet>536</a>///
-<a href=#537 id=537 data-nosnippet>537</a>/// The attribute generates a [property build action] that applies [`Var::easing`] to the final variable inputs of the property.
+<a href=#537 id=537 data-nosnippet>537</a>/// The attribute generates a [property attribute] that applies [`Var::easing`] to the final variable inputs of the property.
 <a href=#538 id=538 data-nosnippet>538</a>///
 <a href=#539 id=539 data-nosnippet>539</a>/// # Arguments
 <a href=#540 id=540 data-nosnippet>540</a>///
@@ -552,7 +552,7 @@
 <a href=#551 id=551 data-nosnippet>551</a>/// [`TimeUnits`]: zng::layout::TimeUnits
 <a href=#552 id=552 data-nosnippet>552</a>/// [`easing`]: mod@zng::var::animation::easing
 <a href=#553 id=553 data-nosnippet>553</a>/// [`easing::linear`]: zng::var::animation::easing::linear
-<a href=#554 id=554 data-nosnippet>554</a>/// [property build action]: crate::widget::builder::WidgetBuilder::push_property_build_action
+<a href=#554 id=554 data-nosnippet>554</a>/// [property attribute]: crate::widget::builder::WidgetBuilder::push_property_attribute
 <a href=#555 id=555 data-nosnippet>555</a>/// [`Var::easing`]: crate::var::Var::easing
 <a href=#556 id=556 data-nosnippet>556</a>///
 <a href=#557 id=557 data-nosnippet>557</a>/// ## When
@@ -611,7 +611,7 @@
 <a href=#610 id=610 data-nosnippet>610</a><span class="doccomment">/// Expands a function to a widget property.
 <a href=#611 id=611 data-nosnippet>611</a>///
 <a href=#612 id=612 data-nosnippet>612</a>/// Property functions take one [`IntoUiNode`] child input and one or more other inputs and produces an [`UiNode`] that implements
-<a href=#613 id=613 data-nosnippet>613</a>/// the property feature.
+<a href=#613 id=613 data-nosnippet>613</a>/// the property feature. Alternatively it takes one [`WidgetBuilding`] input plus other inputs and modifies the widget build.
 <a href=#614 id=614 data-nosnippet>614</a>///
 <a href=#615 id=615 data-nosnippet>615</a>/// The attribute expansion does not modify the function, it can still be used as a function directly. Some
 <a href=#616 id=616 data-nosnippet>616</a>/// properties are implemented by calling other property functions to generate a derived effect.
@@ -620,7 +620,7 @@
 <a href=#619 id=619 data-nosnippet>619</a>/// the widget macros use this to set the property. Because it has the same name it is imported together with the property
 <a href=#620 id=620 data-nosnippet>620</a>/// function, in practice this only matters in doc links where you must use the `fn@` disambiguator.
 <a href=#621 id=621 data-nosnippet>621</a>///
-<a href=#622 id=622 data-nosnippet>622</a>/// # Attribute
+<a href=#622 id=622 data-nosnippet>622</a>/// # Attribute Args
 <a href=#623 id=623 data-nosnippet>623</a>///
 <a href=#624 id=624 data-nosnippet>624</a>/// The property attribute has one required argument and three optional.
 <a href=#625 id=625 data-nosnippet>625</a>///
@@ -693,144 +693,170 @@
 <a href=#692 id=692 data-nosnippet>692</a>///
 <a href=#693 id=693 data-nosnippet>693</a>/// Note that you can also use the [`widget_impl!`] in widget declarations to implement existing properties for a widget.
 <a href=#694 id=694 data-nosnippet>694</a>///
-<a href=#695 id=695 data-nosnippet>695</a>/// #### Capture
+<a href=#695 id=695 data-nosnippet>695</a>/// # Function Args
 <a href=#696 id=696 data-nosnippet>696</a>///
-<a href=#697 id=697 data-nosnippet>697</a>/// After the nest group and before default the `, capture, ` value indicates that the property is capture-only. This flag
-<a href=#698 id=698 data-nosnippet>698</a>/// changes how the property must be declared, the first argument is a property input and the function can have only one input,
-<a href=#699 id=699 data-nosnippet>699</a>/// no return type is allowed and the function body must be empty, unused input warnings are suppressed by the expanded code.
+<a href=#697 id=697 data-nosnippet>697</a>/// The property function requires at least two args, the first is the child node and the other(s) the input values. The
+<a href=#698 id=698 data-nosnippet>698</a>/// number and type of inputs is validated at compile time, the types are limited and are identified and validated by their
+<a href=#699 id=699 data-nosnippet>699</a>/// token name, so you cannot use renamed types.
 <a href=#700 id=700 data-nosnippet>700</a>///
-<a href=#701 id=701 data-nosnippet>701</a>/// Capture-only properties must be captured by a widget and implemented as part of the widget's intrinsics, the reason for
-<a href=#702 id=702 data-nosnippet>702</a>/// a property function is purely to define the property signature and metadata, the capture-only property function can also
-<a href=#703 id=703 data-nosnippet>703</a>/// be used to set a property dynamically, such as in a style widget that is applied on the actual widget that captures the property.
-<a href=#704 id=704 data-nosnippet>704</a>///
-<a href=#705 id=705 data-nosnippet>705</a>/// A documentation sections explaining capture-only properties is generated for the property, it is also tagged differently in the functions list.
+<a href=#701 id=701 data-nosnippet>701</a>/// #### Child
+<a href=#702 id=702 data-nosnippet>702</a>///
+<a href=#703 id=703 data-nosnippet>703</a>/// The first function arg must be of type `impl IntoUiNode`, it represents the child node and the property node must
+<a href=#704 id=704 data-nosnippet>704</a>/// delegate to it so that the UI tree functions correctly. The type must be an `impl` generic, a full path to [`IntoUiNode`]
+<a href=#705 id=705 data-nosnippet>705</a>/// is allowed, but no import renames as the proc-macro attribute can only use tokens to identify the type.
 <a href=#706 id=706 data-nosnippet>706</a>///
-<a href=#707 id=707 data-nosnippet>707</a>/// ```
-<a href=#708 id=708 data-nosnippet>708</a>/// # fn main() { }
-<a href=#709 id=709 data-nosnippet>709</a>/// use zng::prelude_wgt::*;
-<a href=#710 id=710 data-nosnippet>710</a>///
-<a href=#711 id=711 data-nosnippet>711</a>/// /// Children property, must be captured by panel widgets.
-<a href=#712 id=712 data-nosnippet>712</a>/// #[property(CONTEXT, capture)]
-<a href=#713 id=713 data-nosnippet>713</a>/// pub fn children(children: impl IntoUiNode) {}
-<a href=#714 id=714 data-nosnippet>714</a>/// ```
-<a href=#715 id=715 data-nosnippet>715</a>///
-<a href=#716 id=716 data-nosnippet>716</a>/// # Args
-<a href=#717 id=717 data-nosnippet>717</a>///
-<a href=#718 id=718 data-nosnippet>718</a>/// The property function requires at least two args, the first is the child node and the other(s) the input values. The
-<a href=#719 id=719 data-nosnippet>719</a>/// number and type of inputs is validated at compile time, the types are limited and are identified and validated by their
-<a href=#720 id=720 data-nosnippet>720</a>/// token name, so you cannot use renamed types.
-<a href=#721 id=721 data-nosnippet>721</a>///
-<a href=#722 id=722 data-nosnippet>722</a>/// #### Child
-<a href=#723 id=723 data-nosnippet>723</a>///
-<a href=#724 id=724 data-nosnippet>724</a>/// The first function arg must be of type `impl IntoUiNode`, it represents the child node and the property node must
-<a href=#725 id=725 data-nosnippet>725</a>/// delegate to it so that the UI tree functions correctly. The type must be an `impl` generic, a full path to [`IntoUiNode`]
-<a href=#726 id=726 data-nosnippet>726</a>/// is allowed, but no import renames as the proc-macro attribute can only use tokens to identify the type.
-<a href=#727 id=727 data-nosnippet>727</a>///
-<a href=#728 id=728 data-nosnippet>728</a>/// #### Inputs
-<a href=#729 id=729 data-nosnippet>729</a>///
-<a href=#730 id=730 data-nosnippet>730</a>/// The second arg and optional other args define the property inputs. When a property is assigned in a widget only these inputs
-<a href=#731 id=731 data-nosnippet>731</a>/// are defined by the user, the child arg is provided by the widget builder. Property inputs are limited, and must be identifiable
-<a href=#732 id=732 data-nosnippet>732</a>/// by their token name alone. The types are validated at compile time, they must be declared using `impl` generics,
-<a href=#733 id=733 data-nosnippet>733</a>/// a full path to the generic traits is allowed, but no import renames.
-<a href=#734 id=734 data-nosnippet>734</a>///
-<a href=#735 id=735 data-nosnippet>735</a>/// #### Input Types
-<a href=#736 id=736 data-nosnippet>736</a>///
-<a href=#737 id=737 data-nosnippet>737</a>/// These are the allowed input types:
-<a href=#738 id=738 data-nosnippet>738</a>///
-<a href=#739 id=739 data-nosnippet>739</a>/// ##### `impl IntoVar&lt;T&gt;`
-<a href=#740 id=740 data-nosnippet>740</a>///
-<a href=#741 id=741 data-nosnippet>741</a>/// The most common type, accepts any value that can be converted [`IntoVar&lt;T&gt;`], usually the property defines the `T`, but it can be generic.
-<a href=#742 id=742 data-nosnippet>742</a>/// The property node must respond to var updates. The input kind is [`InputKind::Var`]. No auto-default is generated for this type, property
-<a href=#743 id=743 data-nosnippet>743</a>/// implementation should provide a default value that causes the property to behave as if it was not set.
+<a href=#707 id=707 data-nosnippet>707</a>/// ##### Or Building
+<a href=#708 id=708 data-nosnippet>708</a>///
+<a href=#709 id=709 data-nosnippet>709</a>/// Alternatively, the first function arg must be of type `&amp;mut WidgetBuilding`, in this case the property function runs
+<a href=#710 id=710 data-nosnippet>710</a>/// during widget build and can do things like insert multiple nodes on the widget or set the widget child node.
+<a href=#711 id=711 data-nosnippet>711</a>///
+<a href=#712 id=712 data-nosnippet>712</a>/// #### Inputs
+<a href=#713 id=713 data-nosnippet>713</a>///
+<a href=#714 id=714 data-nosnippet>714</a>/// The second arg and optional other args define the property inputs. When a property is assigned in a widget only these inputs
+<a href=#715 id=715 data-nosnippet>715</a>/// are defined by the user, the child arg is provided by the widget builder. Property inputs are limited, and must be identifiable
+<a href=#716 id=716 data-nosnippet>716</a>/// by their token name alone. The types are validated at compile time, they must be declared using `impl` generics,
+<a href=#717 id=717 data-nosnippet>717</a>/// a full path to the generic traits is allowed, but no import renames.
+<a href=#718 id=718 data-nosnippet>718</a>///
+<a href=#719 id=719 data-nosnippet>719</a>/// #### Input Types
+<a href=#720 id=720 data-nosnippet>720</a>///
+<a href=#721 id=721 data-nosnippet>721</a>/// These are the allowed input types:
+<a href=#722 id=722 data-nosnippet>722</a>///
+<a href=#723 id=723 data-nosnippet>723</a>/// ##### `impl IntoVar&lt;T&gt;`
+<a href=#724 id=724 data-nosnippet>724</a>///
+<a href=#725 id=725 data-nosnippet>725</a>/// The most common type, accepts any value that can be converted [`IntoVar&lt;T&gt;`], usually the property defines the `T`, but it can be generic.
+<a href=#726 id=726 data-nosnippet>726</a>/// The property node must respond to var updates. The input kind is [`InputKind::Var`]. No auto-default is generated for this type, property
+<a href=#727 id=727 data-nosnippet>727</a>/// implementation should provide a default value that causes the property to behave as if it was not set.
+<a href=#728 id=728 data-nosnippet>728</a>///
+<a href=#729 id=729 data-nosnippet>729</a>/// The input can be read in `when` expressions and can be assigned in `when` blocks.
+<a href=#730 id=730 data-nosnippet>730</a>///
+<a href=#731 id=731 data-nosnippet>731</a>/// ##### `impl IntoValue&lt;T&gt;`
+<a href=#732 id=732 data-nosnippet>732</a>///
+<a href=#733 id=733 data-nosnippet>733</a>/// Accepts any value that can be converted [`IntoValue&lt;T&gt;`] that does not change, usually the property
+<a href=#734 id=734 data-nosnippet>734</a>/// defines the `T`, but it can be generic. The input kind is [`InputKind::Value`]. No auto-default is generated for this type.
+<a href=#735 id=735 data-nosnippet>735</a>///
+<a href=#736 id=736 data-nosnippet>736</a>/// The input can be read in `when` expressions, but cannot be assigned in `when` blocks.
+<a href=#737 id=737 data-nosnippet>737</a>///
+<a href=#738 id=738 data-nosnippet>738</a>/// ##### `impl IntoUiNode`
+<a href=#739 id=739 data-nosnippet>739</a>///
+<a href=#740 id=740 data-nosnippet>740</a>/// This input accepts another [`UiNode`], the implementation must handle it like it handles the child node, delegating all methods. The
+<a href=#741 id=741 data-nosnippet>741</a>/// input kind is [`InputKind::UiNode`]. The [`UiNode::nil`] is used as the default value if no other is provided.
+<a href=#742 id=742 data-nosnippet>742</a>///
+<a href=#743 id=743 data-nosnippet>743</a>/// The input cannot be read in `when` expressions, but can be assigned in `when` blocks.
 <a href=#744 id=744 data-nosnippet>744</a>///
-<a href=#745 id=745 data-nosnippet>745</a>/// The input can be read in `when` expressions and can be assigned in `when` blocks.
+<a href=#745 id=745 data-nosnippet>745</a>/// Note that UI lists like [`ui_vec!`] are also nodes, so panel children properties also receive `impl IntoUiNode`.
 <a href=#746 id=746 data-nosnippet>746</a>///
-<a href=#747 id=747 data-nosnippet>747</a>/// ##### `impl IntoValue&lt;T&gt;`
+<a href=#747 id=747 data-nosnippet>747</a>/// ##### `Handler&lt;A&gt;`
 <a href=#748 id=748 data-nosnippet>748</a>///
-<a href=#749 id=749 data-nosnippet>749</a>/// Accepts any value that can be converted [`IntoValue&lt;T&gt;`] that does not change, usually the property
-<a href=#750 id=750 data-nosnippet>750</a>/// defines the `T`, but it can be generic. The input kind is [`InputKind::Value`]. No auto-default is generated for this type.
+<a href=#749 id=749 data-nosnippet>749</a>/// This input is the type alias [`Handler&lt;A&gt;`], generic for the argument type `A`, usually the property defines the `A`, but it can be generic.
+<a href=#750 id=750 data-nosnippet>750</a>/// The input kind is [`InputKind::Handler`]. A no-op handler is used for the default if no other is provided.
 <a href=#751 id=751 data-nosnippet>751</a>///
-<a href=#752 id=752 data-nosnippet>752</a>/// The input can be read in `when` expressions, but cannot be assigned in `when` blocks.
+<a href=#752 id=752 data-nosnippet>752</a>/// Event handler properties usually have the `on_` name prefix. You can use the [`event_property!`] macro to generate standard event properties.
 <a href=#753 id=753 data-nosnippet>753</a>///
-<a href=#754 id=754 data-nosnippet>754</a>/// ##### `impl IntoUiNode`
+<a href=#754 id=754 data-nosnippet>754</a>/// The input cannot be read in `when` expressions, but can be assigned in `when` blocks.
 <a href=#755 id=755 data-nosnippet>755</a>///
-<a href=#756 id=756 data-nosnippet>756</a>/// This input accepts another [`UiNode`], the implementation must handle it like it handles the child node, delegating all methods. The
-<a href=#757 id=757 data-nosnippet>757</a>/// input kind is [`InputKind::UiNode`]. The [`UiNode::nil`] is used as the default value if no other is provided.
-<a href=#758 id=758 data-nosnippet>758</a>///
-<a href=#759 id=759 data-nosnippet>759</a>/// The input cannot be read in `when` expressions, but can be assigned in `when` blocks.
-<a href=#760 id=760 data-nosnippet>760</a>///
-<a href=#761 id=761 data-nosnippet>761</a>/// Note that UI lists like [`ui_vec!`] are also nodes, so panel children properties also receive `impl IntoUiNode`.
-<a href=#762 id=762 data-nosnippet>762</a>///
-<a href=#763 id=763 data-nosnippet>763</a>/// ##### `impl WidgetHandler&lt;A&gt;`
-<a href=#764 id=764 data-nosnippet>764</a>///
-<a href=#765 id=765 data-nosnippet>765</a>/// This input accepts any [`WidgetHandler&lt;A&gt;`] for the argument type `A`, usually the property defines the `A`, but it can be generic.
-<a href=#766 id=766 data-nosnippet>766</a>/// The input kind is [`InputKind::WidgetHandler`]. A no-op handler is used for the default if no other is provided.
-<a href=#767 id=767 data-nosnippet>767</a>///
-<a href=#768 id=768 data-nosnippet>768</a>/// Event handler properties usually have the `on_` name prefix. You can use the [`event_property!`] macro to generate standard event properties.
+<a href=#756 id=756 data-nosnippet>756</a>/// # Getter Properties
+<a href=#757 id=757 data-nosnippet>757</a>///
+<a href=#758 id=758 data-nosnippet>758</a>/// Most properties with var inputs are *setters*, that is the inputs affect the widget. Some properties
+<a href=#759 id=759 data-nosnippet>759</a>/// can be *getters*, detecting widget state and setting it on the *input* variable. These properties are usually named with
+<a href=#760 id=760 data-nosnippet>760</a>/// a prefix that indicates their input is actually for getting state, the prefixes `is_` and `has_` mark a property with
+<a href=#761 id=761 data-nosnippet>761</a>/// a single `bool` input that reads a widget state, the prefix `get_` and `actual_` marks a property that reads a non-boolean state from
+<a href=#762 id=762 data-nosnippet>762</a>/// the widget.
+<a href=#763 id=763 data-nosnippet>763</a>///
+<a href=#764 id=764 data-nosnippet>764</a>/// Getter properties are configured with a default read-write variable, so that they can be used in `when` expressions directly,
+<a href=#765 id=765 data-nosnippet>765</a>/// for example, `when *#is_pressed`, the `is_pressed` property has a `default(var(false))`, so it automatically initializes
+<a href=#766 id=766 data-nosnippet>766</a>/// with a read-write variable that is used in the when condition. The property attribute generates defaults automatically
+<a href=#767 id=767 data-nosnippet>767</a>/// based on the prefix, the default is `var(T::default())`, this can be overwritten just by setting the default,
+<a href=#768 id=768 data-nosnippet>768</a>/// it is not possible to declare a getter property without default.
 <a href=#769 id=769 data-nosnippet>769</a>///
-<a href=#770 id=770 data-nosnippet>770</a>/// The input cannot be read in `when` expressions, but can be assigned in `when` blocks.
-<a href=#771 id=771 data-nosnippet>771</a>///
-<a href=#772 id=772 data-nosnippet>772</a>/// # Getter Properties
-<a href=#773 id=773 data-nosnippet>773</a>///
-<a href=#774 id=774 data-nosnippet>774</a>/// Most properties with var inputs are *setters*, that is the inputs affect the widget. Some properties
-<a href=#775 id=775 data-nosnippet>775</a>/// can be *getters*, detecting widget state and setting it on the *input* variable. These properties are usually named with
-<a href=#776 id=776 data-nosnippet>776</a>/// a prefix that indicates their input is actually for getting state, the prefixes `is_` and `has_` mark a property with
-<a href=#777 id=777 data-nosnippet>777</a>/// a single `bool` input that reads a widget state, the prefix `get_` and `actual_` marks a property that reads a non-boolean state from
-<a href=#778 id=778 data-nosnippet>778</a>/// the widget.
+<a href=#770 id=770 data-nosnippet>770</a>/// Note that if a property is used in `when` condition without being set and without default value the when block is discarded on
+<a href=#771 id=771 data-nosnippet>771</a>/// widget build. If you are implementing a getter property that is not named using the prefixes listed above you must set `default(var(T::default())`.
+<a href=#772 id=772 data-nosnippet>772</a>///
+<a href=#773 id=773 data-nosnippet>773</a>/// # Generics
+<a href=#774 id=774 data-nosnippet>774</a>///
+<a href=#775 id=775 data-nosnippet>775</a>/// Apart from the `impl` generics of inputs and child, there is some support for named generic types, only one named generic is allowed
+<a href=#776 id=776 data-nosnippet>776</a>/// for inputs `impl IntoVar&lt;T&gt;`, `impl IntoValue&lt;T&gt;` and `Handler&lt;A&gt;`.
+<a href=#777 id=777 data-nosnippet>777</a>///
+<a href=#778 id=778 data-nosnippet>778</a>/// # Output
 <a href=#779 id=779 data-nosnippet>779</a>///
-<a href=#780 id=780 data-nosnippet>780</a>/// Getter properties are configured with a default read-write variable, so that they can be used in `when` expressions directly,
-<a href=#781 id=781 data-nosnippet>781</a>/// for example, `when *#is_pressed`, the `is_pressed` property has a `default(var(false))`, so it automatically initializes
-<a href=#782 id=782 data-nosnippet>782</a>/// with a read-write variable that is used in the when condition. The property attribute generates defaults automatically
-<a href=#783 id=783 data-nosnippet>783</a>/// based on the prefix, the default is `var(T::default())`, this can be overwritten just by setting the default,
-<a href=#784 id=784 data-nosnippet>784</a>/// it is not possible to declare a getter property without default.
-<a href=#785 id=785 data-nosnippet>785</a>///
-<a href=#786 id=786 data-nosnippet>786</a>/// Note that if a property is used in `when` condition without being set and without default value the when block is discarded on
-<a href=#787 id=787 data-nosnippet>787</a>/// widget build. If you are implementing a getter property that is not named using the prefixes listed above you must set `default(var(T::default())`.
-<a href=#788 id=788 data-nosnippet>788</a>///
-<a href=#789 id=789 data-nosnippet>789</a>/// # Generics
+<a href=#780 id=780 data-nosnippet>780</a>/// The property output type must be [`UiNode`]. The property node implementation can be anything, as long as it delegates
+<a href=#781 id=781 data-nosnippet>781</a>/// to the child node, see [`match_node`] or [`ui_node`] about implementing a node.
+<a href=#782 id=782 data-nosnippet>782</a>///
+<a href=#783 id=783 data-nosnippet>783</a>/// Some common property patterns have helper functions, for example, to setup a context var you can use the [`with_context_var`] function.
+<a href=#784 id=784 data-nosnippet>784</a>///
+<a href=#785 id=785 data-nosnippet>785</a>/// # Build Action Properties
+<a href=#786 id=786 data-nosnippet>786</a>///
+<a href=#787 id=787 data-nosnippet>787</a>/// Property functions can take a `&amp;mut WidgetBuilding` first arg, in this case they are *build action properties*. These properties cannot
+<a href=#788 id=788 data-nosnippet>788</a>/// be instantiated into a node, they only work if set on an widget. The property function is called during widget build, after property resolution
+<a href=#789 id=789 data-nosnippet>789</a>/// and widget intrinsic build actions, the function can modify the [`WidgetBuilding`], just like an intrinsic build action.
 <a href=#790 id=790 data-nosnippet>790</a>///
-<a href=#791 id=791 data-nosnippet>791</a>/// Apart from the `impl` generics of inputs and child, there is some support for named generic types, only one named generic is allowed
-<a href=#792 id=792 data-nosnippet>792</a>/// for inputs `impl IntoVar&lt;T&gt;`, `impl IntoValue&lt;T&gt;` and `impl WidgetHandler&lt;A&gt;`.
-<a href=#793 id=793 data-nosnippet>793</a>///
-<a href=#794 id=794 data-nosnippet>794</a>/// # Output
-<a href=#795 id=795 data-nosnippet>795</a>///
-<a href=#796 id=796 data-nosnippet>796</a>/// The property output type must be [`UiNode`]. The property node implementation can be anything, as long as it delegates
-<a href=#797 id=797 data-nosnippet>797</a>/// to the child node, see [`match_node`] or [`ui_node`] about implementing a node.
-<a href=#798 id=798 data-nosnippet>798</a>///
-<a href=#799 id=799 data-nosnippet>799</a>/// Some common property patterns have helper functions, for example, to setup a context var you can use the [`with_context_var`] function.
+<a href=#791 id=791 data-nosnippet>791</a>/// ```
+<a href=#792 id=792 data-nosnippet>792</a>/// # fn main() { }
+<a href=#793 id=793 data-nosnippet>793</a>/// use zng::prelude_wgt::*;
+<a href=#794 id=794 data-nosnippet>794</a>///
+<a href=#795 id=795 data-nosnippet>795</a>/// #[property(CHILD)]
+<a href=#796 id=796 data-nosnippet>796</a>/// pub fn child(wgt: &amp;mut WidgetBuilding, child: impl IntoUiNode) {
+<a href=#797 id=797 data-nosnippet>797</a>///     wgt.set_child(child);
+<a href=#798 id=798 data-nosnippet>798</a>/// }
+<a href=#799 id=799 data-nosnippet>799</a>/// ```
 <a href=#800 id=800 data-nosnippet>800</a>///
-<a href=#801 id=801 data-nosnippet>801</a>/// # More Details
+<a href=#801 id=801 data-nosnippet>801</a>/// The example above declares a simple property that replaces the widget child.
 <a href=#802 id=802 data-nosnippet>802</a>///
-<a href=#803 id=803 data-nosnippet>803</a>/// See [`property_id!`] and [`property_args!`] for more details about what kind of meta-code is generated for properties.
+<a href=#803 id=803 data-nosnippet>803</a>/// ## Capture Only
 <a href=#804 id=804 data-nosnippet>804</a>///
-<a href=#805 id=805 data-nosnippet>805</a>/// [`NestGroup`]: crate::widget::builder::NestGroup
-<a href=#806 id=806 data-nosnippet>806</a>/// [`property_id!`]: crate::widget::builder::property_id
-<a href=#807 id=807 data-nosnippet>807</a>/// [`property_args!`]: crate::widget::builder::property_args
-<a href=#808 id=808 data-nosnippet>808</a>/// [`ui_node`]: macro@ui_node
-<a href=#809 id=809 data-nosnippet>809</a>/// [`match_node`]: crate::widget::node::match_node
-<a href=#810 id=810 data-nosnippet>810</a>/// [`with_context_var`]: crate::widget::node::with_context_var
-<a href=#811 id=811 data-nosnippet>811</a>/// [`VarValue`]: crate::var::VarValue
-<a href=#812 id=812 data-nosnippet>812</a>/// [`IntoValue&lt;T&gt;`]: crate::var::IntoValue
-<a href=#813 id=813 data-nosnippet>813</a>/// [`IntoVar&lt;T&gt;`]: crate::var::IntoVar
-<a href=#814 id=814 data-nosnippet>814</a>/// [`WidgetHandler&lt;A&gt;`]: crate::handler::WidgetHandler
-<a href=#815 id=815 data-nosnippet>815</a>/// [`UiNode`]: crate::widget::node::UiNode
-<a href=#816 id=816 data-nosnippet>816</a>/// [`IntoUiNode`]: crate::widget::node::IntoUiNode
-<a href=#817 id=817 data-nosnippet>817</a>/// [`UiNode::nil`]: crate::widget::node::UiNode::nil
-<a href=#818 id=818 data-nosnippet>818</a>/// [`ui_vec!`]: crate::widget::node::ui_vec
-<a href=#819 id=819 data-nosnippet>819</a>/// [`InputKind::Var`]: crate::widget::builder::InputKind::Var
-<a href=#820 id=820 data-nosnippet>820</a>/// [`InputKind::Value`]: crate::widget::builder::InputKind::Value
-<a href=#821 id=821 data-nosnippet>821</a>/// [`InputKind::UiNode`]: crate::widget::builder::InputKind::UiNode
-<a href=#822 id=822 data-nosnippet>822</a>/// [`InputKind::UiNodeList`]: crate::widget::builder::InputKind::UiNodeList
-<a href=#823 id=823 data-nosnippet>823</a>/// [`InputKind::WidgetHandler`]: crate::widget::builder::InputKind::WidgetHandler
-<a href=#824 id=824 data-nosnippet>824</a>/// [`event_property!`]: crate::event::event_property
-<a href=#825 id=825 data-nosnippet>825</a>///
-<a href=#826 id=826 data-nosnippet>826</a>/// &lt;script&gt;
-<a href=#827 id=827 data-nosnippet>827</a>/// // hide re-exported docs
-<a href=#828 id=828 data-nosnippet>828</a>/// let me = document.currentScript;
-<a href=#829 id=829 data-nosnippet>829</a>/// document.addEventListener("DOMContentLoaded", function() {
-<a href=#830 id=830 data-nosnippet>830</a>///     while(me.nextElementSibling !== null) {
-<a href=#831 id=831 data-nosnippet>831</a>///         me.nextElementSibling.remove();
-<a href=#832 id=832 data-nosnippet>832</a>///     }
-<a href=#833 id=833 data-nosnippet>833</a>/// });
-<a href=#834 id=834 data-nosnippet>834</a>/// &lt;/script&gt;
-<a href=#835 id=835 data-nosnippet>835</a></span><span class="kw">pub use </span>zng_app::widget::property;</code></pre></div></section></main></body></html>
+<a href=#805 id=805 data-nosnippet>805</a>/// Some widgets intrinsic behavior depend on the value of multiple properties that cannot provide any implementation by themselves. In
+<a href=#806 id=806 data-nosnippet>806</a>/// this case the property should be declared as a build action property and call [`expect_property_capture`].
+<a href=#807 id=807 data-nosnippet>807</a>/// The widget them must capture the property during build, if it does not an error is logged in build with debug assertions enabled.
+<a href=#808 id=808 data-nosnippet>808</a>///
+<a href=#809 id=809 data-nosnippet>809</a>/// ```
+<a href=#810 id=810 data-nosnippet>810</a>/// # fn main() { }
+<a href=#811 id=811 data-nosnippet>811</a>/// use zng::prelude_wgt::*;
+<a href=#812 id=812 data-nosnippet>812</a>/// # #[widget($crate::MyPanel)]
+<a href=#813 id=813 data-nosnippet>813</a>/// # pub struct MyPanel(WidgetBase);
+<a href=#814 id=814 data-nosnippet>814</a>///
+<a href=#815 id=815 data-nosnippet>815</a>/// #[property(CHILD, widget_impl(MyPanel))]
+<a href=#816 id=816 data-nosnippet>816</a>/// pub fn children(wgt: &amp;mut WidgetBuilding, children: impl IntoUiNode) {
+<a href=#817 id=817 data-nosnippet>817</a>///     let _ = children;
+<a href=#818 id=818 data-nosnippet>818</a>///     wgt.expect_property_capture();
+<a href=#819 id=819 data-nosnippet>819</a>/// }
+<a href=#820 id=820 data-nosnippet>820</a>/// ```
+<a href=#821 id=821 data-nosnippet>821</a>///
+<a href=#822 id=822 data-nosnippet>822</a>/// The example above declares a property that expects to be captured, if the property function actually runs it will log an error
+<a href=#823 id=823 data-nosnippet>823</a>/// in builds with debug assertions enabled.
+<a href=#824 id=824 data-nosnippet>824</a>///
+<a href=#825 id=825 data-nosnippet>825</a>/// # More Details
+<a href=#826 id=826 data-nosnippet>826</a>///
+<a href=#827 id=827 data-nosnippet>827</a>/// See [`property_id!`] and [`property_args!`] for more details about what kind of meta-code is generated for properties.
+<a href=#828 id=828 data-nosnippet>828</a>///
+<a href=#829 id=829 data-nosnippet>829</a>/// [`NestGroup`]: crate::widget::builder::NestGroup
+<a href=#830 id=830 data-nosnippet>830</a>/// [`WidgetBuilding`]: crate::widget::builder::WidgetBuilding
+<a href=#831 id=831 data-nosnippet>831</a>/// [`expect_property_capture`]: crate::widget::builder::WidgetBuilding::expect_property_capture
+<a href=#832 id=832 data-nosnippet>832</a>/// [`property_id!`]: crate::widget::builder::property_id
+<a href=#833 id=833 data-nosnippet>833</a>/// [`property_args!`]: crate::widget::builder::property_args
+<a href=#834 id=834 data-nosnippet>834</a>/// [`ui_node`]: macro@ui_node
+<a href=#835 id=835 data-nosnippet>835</a>/// [`match_node`]: crate::widget::node::match_node
+<a href=#836 id=836 data-nosnippet>836</a>/// [`with_context_var`]: crate::widget::node::with_context_var
+<a href=#837 id=837 data-nosnippet>837</a>/// [`VarValue`]: crate::var::VarValue
+<a href=#838 id=838 data-nosnippet>838</a>/// [`IntoValue&lt;T&gt;`]: crate::var::IntoValue
+<a href=#839 id=839 data-nosnippet>839</a>/// [`IntoVar&lt;T&gt;`]: crate::var::IntoVar
+<a href=#840 id=840 data-nosnippet>840</a>/// [`Handler&lt;A&gt;`]: crate::handler::Handler
+<a href=#841 id=841 data-nosnippet>841</a>/// [`UiNode`]: crate::widget::node::UiNode
+<a href=#842 id=842 data-nosnippet>842</a>/// [`IntoUiNode`]: crate::widget::node::IntoUiNode
+<a href=#843 id=843 data-nosnippet>843</a>/// [`UiNode::nil`]: crate::widget::node::UiNode::nil
+<a href=#844 id=844 data-nosnippet>844</a>/// [`ui_vec!`]: crate::widget::node::ui_vec
+<a href=#845 id=845 data-nosnippet>845</a>/// [`InputKind::Var`]: crate::widget::builder::InputKind::Var
+<a href=#846 id=846 data-nosnippet>846</a>/// [`InputKind::Value`]: crate::widget::builder::InputKind::Value
+<a href=#847 id=847 data-nosnippet>847</a>/// [`InputKind::UiNode`]: crate::widget::builder::InputKind::UiNode
+<a href=#848 id=848 data-nosnippet>848</a>/// [`InputKind::UiNodeList`]: crate::widget::builder::InputKind::UiNodeList
+<a href=#849 id=849 data-nosnippet>849</a>/// [`InputKind::Handler`]: crate::widget::builder::InputKind::Handler
+<a href=#850 id=850 data-nosnippet>850</a>/// [`event_property!`]: crate::event::event_property
+<a href=#851 id=851 data-nosnippet>851</a>///
+<a href=#852 id=852 data-nosnippet>852</a>/// &lt;script&gt;
+<a href=#853 id=853 data-nosnippet>853</a>/// // hide re-exported docs
+<a href=#854 id=854 data-nosnippet>854</a>/// let me = document.currentScript;
+<a href=#855 id=855 data-nosnippet>855</a>/// document.addEventListener("DOMContentLoaded", function() {
+<a href=#856 id=856 data-nosnippet>856</a>///     while(me.nextElementSibling !== null) {
+<a href=#857 id=857 data-nosnippet>857</a>///         me.nextElementSibling.remove();
+<a href=#858 id=858 data-nosnippet>858</a>///     }
+<a href=#859 id=859 data-nosnippet>859</a>/// });
+<a href=#860 id=860 data-nosnippet>860</a>/// &lt;/script&gt;
+<a href=#861 id=861 data-nosnippet>861</a></span><span class="kw">pub use </span>zng_app::widget::property;</code></pre></div></section></main></body></html>

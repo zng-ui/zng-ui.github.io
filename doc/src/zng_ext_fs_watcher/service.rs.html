@@ -7,7 +7,7 @@
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>atomic::{Atomic, Ordering};
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>zng_app::{
-<a href=#10 id=10 data-nosnippet>10</a>    APP, DInstant, INSTANT, app_hn_once,
+<a href=#10 id=10 data-nosnippet>10</a>    APP, DInstant, INSTANT, hn_once,
 <a href=#11 id=11 data-nosnippet>11</a>    timer::{DeadlineHandle, TIMERS},
 <a href=#12 id=12 data-nosnippet>12</a>};
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>zng_app_context::{LocalContext, app_local};
@@ -347,7 +347,7 @@
 <a href=#347 id=347 data-nosnippet>347</a>        } <span class="kw">else if </span><span class="self">self</span>.debounce_timer.is_none() {
 <a href=#348 id=348 data-nosnippet>348</a>            <span class="self">self</span>.debounce_timer = <span class="prelude-val">Some</span>(TIMERS.on_deadline(
 <a href=#349 id=349 data-nosnippet>349</a>                <span class="self">self</span>.debounce.get(),
-<a href=#350 id=350 data-nosnippet>350</a>                <span class="macro">app_hn_once!</span>(|<span class="kw">_</span>| {
+<a href=#350 id=350 data-nosnippet>350</a>                <span class="macro">hn_once!</span>(|<span class="kw">_</span>| {
 <a href=#351 id=351 data-nosnippet>351</a>                    WATCHER_SV.write().on_debounce_timer();
 <a href=#352 id=352 data-nosnippet>352</a>                }),
 <a href=#353 id=353 data-nosnippet>353</a>            ));

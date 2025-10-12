@@ -24,7 +24,7 @@
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>zng_app::{
 <a href=#25 id=25 data-nosnippet>25</a>    AppExtension,
 <a href=#26 id=26 data-nosnippet>26</a>    event::{EventHandle, event, event_args},
-<a href=#27 id=27 data-nosnippet>27</a>    handler::{AppHandler, FilterAppHandler},
+<a href=#27 id=27 data-nosnippet>27</a>    handler::{Handler, HandlerExt <span class="kw">as _</span>},
 <a href=#28 id=28 data-nosnippet>28</a>    update::EventUpdate,
 <a href=#29 id=29 data-nosnippet>29</a>    view_process::raw_events::LOW_MEMORY_EVENT,
 <a href=#30 id=30 data-nosnippet>30</a>};
@@ -321,15 +321,15 @@
 <a href=#321 id=321 data-nosnippet>321</a>
 <a href=#322 id=322 data-nosnippet>322</a>    <span class="doccomment">/// Watch `file` and calls `handler` every time it changes.
 <a href=#323 id=323 data-nosnippet>323</a>    ///
-<a href=#324 id=324 data-nosnippet>324</a>    /// Note that the `handler` is blocking, use [`async_app_hn!`] and [`task::wait`] to run IO without
+<a href=#324 id=324 data-nosnippet>324</a>    /// Note that the `handler` is blocking, use [`async_hn!`] and [`task::wait`] to run IO without
 <a href=#325 id=325 data-nosnippet>325</a>    /// blocking the app.
 <a href=#326 id=326 data-nosnippet>326</a>    ///
-<a href=#327 id=327 data-nosnippet>327</a>    /// [`async_app_hn!`]: macro@zng_app::handler::async_app_hn
+<a href=#327 id=327 data-nosnippet>327</a>    /// [`async_hn!`]: macro@zng_app::handler::async_hn
 <a href=#328 id=328 data-nosnippet>328</a>    /// [`task::wait`]: zng_task::wait
-<a href=#329 id=329 data-nosnippet>329</a>    </span><span class="kw">pub fn </span>on_file_changed(<span class="kw-2">&amp;</span><span class="self">self</span>, file: <span class="kw">impl </span>Into&lt;PathBuf&gt;, handler: <span class="kw">impl </span>AppHandler&lt;FsChangesArgs&gt;) -&gt; EventHandle {
+<a href=#329 id=329 data-nosnippet>329</a>    </span><span class="kw">pub fn </span>on_file_changed(<span class="kw-2">&amp;</span><span class="self">self</span>, file: <span class="kw">impl </span>Into&lt;PathBuf&gt;, handler: Handler&lt;FsChangesArgs&gt;) -&gt; EventHandle {
 <a href=#330 id=330 data-nosnippet>330</a>        <span class="kw">let </span>file = file.into();
 <a href=#331 id=331 data-nosnippet>331</a>        <span class="kw">let </span>handle = <span class="self">self</span>.watch(file.clone());
-<a href=#332 id=332 data-nosnippet>332</a>        FS_CHANGES_EVENT.on_event(FilterAppHandler::new(handler, <span class="kw">move </span>|args| {
+<a href=#332 id=332 data-nosnippet>332</a>        FS_CHANGES_EVENT.on_event(handler.filtered(<span class="kw">move </span>|args| {
 <a href=#333 id=333 data-nosnippet>333</a>            <span class="kw">let </span>_handle = <span class="kw-2">&amp;</span>handle;
 <a href=#334 id=334 data-nosnippet>334</a>            args.events_for_path(<span class="kw-2">&amp;</span>file).next().is_some()
 <a href=#335 id=335 data-nosnippet>335</a>        }))
@@ -337,15 +337,15 @@
 <a href=#337 id=337 data-nosnippet>337</a>
 <a href=#338 id=338 data-nosnippet>338</a>    <span class="doccomment">/// Watch `dir` and calls `handler` every time something inside it changes.
 <a href=#339 id=339 data-nosnippet>339</a>    ///
-<a href=#340 id=340 data-nosnippet>340</a>    /// Note that the `handler` is blocking, use [`async_app_hn!`] and [`task::wait`] to run IO without
+<a href=#340 id=340 data-nosnippet>340</a>    /// Note that the `handler` is blocking, use [`async_hn!`] and [`task::wait`] to run IO without
 <a href=#341 id=341 data-nosnippet>341</a>    /// blocking the app.
 <a href=#342 id=342 data-nosnippet>342</a>    ///
-<a href=#343 id=343 data-nosnippet>343</a>    /// [`async_app_hn!`]: macro@zng_app::handler::async_app_hn
+<a href=#343 id=343 data-nosnippet>343</a>    /// [`async_hn!`]: macro@zng_app::handler::async_hn
 <a href=#344 id=344 data-nosnippet>344</a>    /// [`task::wait`]: zng_task::wait
-<a href=#345 id=345 data-nosnippet>345</a>    </span><span class="kw">pub fn </span>on_dir_changed(<span class="kw-2">&amp;</span><span class="self">self</span>, dir: <span class="kw">impl </span>Into&lt;PathBuf&gt;, recursive: bool, handler: <span class="kw">impl </span>AppHandler&lt;FsChangesArgs&gt;) -&gt; EventHandle {
+<a href=#345 id=345 data-nosnippet>345</a>    </span><span class="kw">pub fn </span>on_dir_changed(<span class="kw-2">&amp;</span><span class="self">self</span>, dir: <span class="kw">impl </span>Into&lt;PathBuf&gt;, recursive: bool, handler: Handler&lt;FsChangesArgs&gt;) -&gt; EventHandle {
 <a href=#346 id=346 data-nosnippet>346</a>        <span class="kw">let </span>dir = dir.into();
 <a href=#347 id=347 data-nosnippet>347</a>        <span class="kw">let </span>handle = <span class="self">self</span>.watch_dir(dir.clone(), recursive);
-<a href=#348 id=348 data-nosnippet>348</a>        FS_CHANGES_EVENT.on_event(FilterAppHandler::new(handler, <span class="kw">move </span>|args| {
+<a href=#348 id=348 data-nosnippet>348</a>        FS_CHANGES_EVENT.on_event(handler.filtered(<span class="kw">move </span>|args| {
 <a href=#349 id=349 data-nosnippet>349</a>            <span class="kw">let </span>_handle = <span class="kw-2">&amp;</span>handle;
 <a href=#350 id=350 data-nosnippet>350</a>            args.events_for_path(<span class="kw-2">&amp;</span>dir).next().is_some()
 <a href=#351 id=351 data-nosnippet>351</a>        }))

@@ -30,7 +30,7 @@
 <a href=#29 id=29 data-nosnippet>29</a>//!     on_click = hn!(count, |_| {
 <a href=#30 id=30 data-nosnippet>30</a>//!         count.set(count.get() + 1);
 <a href=#31 id=31 data-nosnippet>31</a>//!     });
-<a href=#32 id=32 data-nosnippet>32</a>//!     gesture::on_pre_click = hn!(|args: &amp;gesture::ClickArgs| {
+<a href=#32 id=32 data-nosnippet>32</a>//!     gesture::on_pre_click = hn!(|args| {
 <a href=#33 id=33 data-nosnippet>33</a>//!         if count.get() == 10 {
 <a href=#34 id=34 data-nosnippet>34</a>//!             args.propagation().stop();
 <a href=#35 id=35 data-nosnippet>35</a>//!             count.set(0u8);
@@ -78,55 +78,53 @@
 <a href=#77 id=77 data-nosnippet>77</a>//! # fn example() {
 <a href=#78 id=78 data-nosnippet>78</a>//! # fn cmd_btn_example() -&gt; UiNode { widget::node::UiNode::nil() }
 <a href=#79 id=79 data-nosnippet>79</a>//! # let _ =
-<a href=#80 id=80 data-nosnippet>80</a>//! zng::clipboard::COPY_CMD.on_event(true, app_hn!(|_, _| { println!("copy") })).perm();
-<a href=#81 id=81 data-nosnippet>81</a>//! zng::clipboard::PASTE_CMD
-<a href=#82 id=82 data-nosnippet>82</a>//!     .on_event(true, app_hn!(|_, _| { println!("paste") }))
-<a href=#83 id=83 data-nosnippet>83</a>//!     .perm();
-<a href=#84 id=84 data-nosnippet>84</a>//! Window! {
-<a href=#85 id=85 data-nosnippet>85</a>//!     child = cmd_btn_example();
-<a href=#86 id=86 data-nosnippet>86</a>//! }
-<a href=#87 id=87 data-nosnippet>87</a>//! # ; }
-<a href=#88 id=88 data-nosnippet>88</a>//! ```
+<a href=#80 id=80 data-nosnippet>80</a>//! zng::clipboard::COPY_CMD.on_event(true, hn!(|_| println!("copy"))).perm();
+<a href=#81 id=81 data-nosnippet>81</a>//! zng::clipboard::PASTE_CMD.on_event(true, hn!(|_| println!("paste"))).perm();
+<a href=#82 id=82 data-nosnippet>82</a>//! Window! {
+<a href=#83 id=83 data-nosnippet>83</a>//!     child = cmd_btn_example();
+<a href=#84 id=84 data-nosnippet>84</a>//! }
+<a href=#85 id=85 data-nosnippet>85</a>//! # ; }
+<a href=#86 id=86 data-nosnippet>86</a>//! ```
+<a href=#87 id=87 data-nosnippet>87</a>//!
+<a href=#88 id=88 data-nosnippet>88</a>//! [`widget::visibility`]: fn@crate::widget::visibility
 <a href=#89 id=89 data-nosnippet>89</a>//!
-<a href=#90 id=90 data-nosnippet>90</a>//! [`widget::visibility`]: fn@crate::widget::visibility
+<a href=#90 id=90 data-nosnippet>90</a>//! # Style
 <a href=#91 id=91 data-nosnippet>91</a>//!
-<a href=#92 id=92 data-nosnippet>92</a>//! # Style
-<a href=#93 id=93 data-nosnippet>93</a>//!
-<a href=#94 id=94 data-nosnippet>94</a>//! The button widget is styleable, the [`style_fn`](fn@style_fn) property can be set in any parent widget or the button
-<a href=#95 id=95 data-nosnippet>95</a>//! itself to extend or replace the button style.
+<a href=#92 id=92 data-nosnippet>92</a>//! The button widget is styleable, the [`style_fn`](fn@style_fn) property can be set in any parent widget or the button
+<a href=#93 id=93 data-nosnippet>93</a>//! itself to extend or replace the button style.
+<a href=#94 id=94 data-nosnippet>94</a>//!
+<a href=#95 id=95 data-nosnippet>95</a>//! ## Base Colors
 <a href=#96 id=96 data-nosnippet>96</a>//!
-<a href=#97 id=97 data-nosnippet>97</a>//! ## Base Colors
-<a href=#98 id=98 data-nosnippet>98</a>//!
-<a href=#99 id=99 data-nosnippet>99</a>//! The default style derive all colors from the [`base_color`](fn@crate::color::base_color), so if you
-<a href=#100 id=100 data-nosnippet>100</a>//! only want to change color of buttons you can use this property.
-<a href=#101 id=101 data-nosnippet>101</a>//!
-<a href=#102 id=102 data-nosnippet>102</a>//! The example below extends the button style to change the button color to red when it represents
-<a href=#103 id=103 data-nosnippet>103</a>//! an specific command.
-<a href=#104 id=104 data-nosnippet>104</a>//!
-<a href=#105 id=105 data-nosnippet>105</a>//! ```
-<a href=#106 id=106 data-nosnippet>106</a>//! use zng::prelude::*;
-<a href=#107 id=107 data-nosnippet>107</a>//! use zng::{button, color::base_color};
-<a href=#108 id=108 data-nosnippet>108</a>//!
-<a href=#109 id=109 data-nosnippet>109</a>//! # fn example() { let _ =
-<a href=#110 id=110 data-nosnippet>110</a>//! Window! {
-<a href=#111 id=111 data-nosnippet>111</a>//!     button::style_fn = Style! {
-<a href=#112 id=112 data-nosnippet>112</a>//!         when *#{button::BUTTON.cmd()} == Some(window::cmd::CLOSE_CMD) {
-<a href=#113 id=113 data-nosnippet>113</a>//!             base_color = color::LightDark {
-<a href=#114 id=114 data-nosnippet>114</a>//!                 // light theme base
-<a href=#115 id=115 data-nosnippet>115</a>//!                 light: colors::WHITE.with_alpha(80.pct()).mix_normal(colors::RED),
-<a href=#116 id=116 data-nosnippet>116</a>//!                 // dark theme base
-<a href=#117 id=117 data-nosnippet>117</a>//!                 dark: colors::BLACK.with_alpha(80.pct()).mix_normal(colors::RED),
-<a href=#118 id=118 data-nosnippet>118</a>//!             };
-<a href=#119 id=119 data-nosnippet>119</a>//!         }
-<a href=#120 id=120 data-nosnippet>120</a>//!     };
-<a href=#121 id=121 data-nosnippet>121</a>//! }
-<a href=#122 id=122 data-nosnippet>122</a>//! # ; }
-<a href=#123 id=123 data-nosnippet>123</a>//! ```
+<a href=#97 id=97 data-nosnippet>97</a>//! The default style derive all colors from the [`base_color`](fn@crate::color::base_color), so if you
+<a href=#98 id=98 data-nosnippet>98</a>//! only want to change color of buttons you can use this property.
+<a href=#99 id=99 data-nosnippet>99</a>//!
+<a href=#100 id=100 data-nosnippet>100</a>//! The example below extends the button style to change the button color to red when it represents
+<a href=#101 id=101 data-nosnippet>101</a>//! an specific command.
+<a href=#102 id=102 data-nosnippet>102</a>//!
+<a href=#103 id=103 data-nosnippet>103</a>//! ```
+<a href=#104 id=104 data-nosnippet>104</a>//! use zng::prelude::*;
+<a href=#105 id=105 data-nosnippet>105</a>//! use zng::{button, color::base_color};
+<a href=#106 id=106 data-nosnippet>106</a>//!
+<a href=#107 id=107 data-nosnippet>107</a>//! # fn example() { let _ =
+<a href=#108 id=108 data-nosnippet>108</a>//! Window! {
+<a href=#109 id=109 data-nosnippet>109</a>//!     button::style_fn = Style! {
+<a href=#110 id=110 data-nosnippet>110</a>//!         when *#{button::BUTTON.cmd()} == Some(window::cmd::CLOSE_CMD) {
+<a href=#111 id=111 data-nosnippet>111</a>//!             base_color = color::LightDark {
+<a href=#112 id=112 data-nosnippet>112</a>//!                 // light theme base
+<a href=#113 id=113 data-nosnippet>113</a>//!                 light: colors::WHITE.with_alpha(80.pct()).mix_normal(colors::RED),
+<a href=#114 id=114 data-nosnippet>114</a>//!                 // dark theme base
+<a href=#115 id=115 data-nosnippet>115</a>//!                 dark: colors::BLACK.with_alpha(80.pct()).mix_normal(colors::RED),
+<a href=#116 id=116 data-nosnippet>116</a>//!             };
+<a href=#117 id=117 data-nosnippet>117</a>//!         }
+<a href=#118 id=118 data-nosnippet>118</a>//!     };
+<a href=#119 id=119 data-nosnippet>119</a>//! }
+<a href=#120 id=120 data-nosnippet>120</a>//! # ; }
+<a href=#121 id=121 data-nosnippet>121</a>//! ```
+<a href=#122 id=122 data-nosnippet>122</a>//!
+<a href=#123 id=123 data-nosnippet>123</a>//! # Full API
 <a href=#124 id=124 data-nosnippet>124</a>//!
-<a href=#125 id=125 data-nosnippet>125</a>//! # Full API
-<a href=#126 id=126 data-nosnippet>126</a>//!
-<a href=#127 id=127 data-nosnippet>127</a>//! See [`zng_wgt_button`] for the full widget API.
-<a href=#128 id=128 data-nosnippet>128</a>
-<a href=#129 id=129 data-nosnippet>129</a></span><span class="kw">pub use </span>zng_wgt_button::{
-<a href=#130 id=130 data-nosnippet>130</a>    BUTTON, Button, DefaultStyle, LightStyle, LinkStyle, PrimaryStyle, light_style_fn, link_style_fn, primary_style_fn, style_fn,
-<a href=#131 id=131 data-nosnippet>131</a>};</code></pre></div></section></main></body></html>
+<a href=#125 id=125 data-nosnippet>125</a>//! See [`zng_wgt_button`] for the full widget API.
+<a href=#126 id=126 data-nosnippet>126</a>
+<a href=#127 id=127 data-nosnippet>127</a></span><span class="kw">pub use </span>zng_wgt_button::{
+<a href=#128 id=128 data-nosnippet>128</a>    BUTTON, Button, DefaultStyle, LightStyle, LinkStyle, PrimaryStyle, light_style_fn, link_style_fn, primary_style_fn, style_fn,
+<a href=#129 id=129 data-nosnippet>129</a>};</code></pre></div></section></main></body></html>

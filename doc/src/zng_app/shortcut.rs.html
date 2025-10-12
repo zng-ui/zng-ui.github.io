@@ -342,7 +342,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#306 id=306 data-nosnippet>306</a>    <span class="doccomment">/// To modifiers state.
 <a href=#307 id=307 data-nosnippet>307</a>    </span><span class="kw">pub fn </span>modifiers_state(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ModifiersState {
 <a href=#308 id=308 data-nosnippet>308</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#309 id=309 data-nosnippet>309</a>            ModifierGesture::Super =&gt; ModifiersState::LOGO,
+<a href=#309 id=309 data-nosnippet>309</a>            ModifierGesture::Super =&gt; ModifiersState::SUPER,
 <a href=#310 id=310 data-nosnippet>310</a>            ModifierGesture::Ctrl =&gt; ModifiersState::CTRL,
 <a href=#311 id=311 data-nosnippet>311</a>            ModifierGesture::Shift =&gt; ModifiersState::SHIFT,
 <a href=#312 id=312 data-nosnippet>312</a>            ModifierGesture::Alt =&gt; ModifiersState::ALT,
@@ -624,8 +624,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#588 id=588 data-nosnippet>588</a>        <span class="doccomment">/// Any "logo" key.
 <a href=#589 id=589 data-nosnippet>589</a>        ///
 <a href=#590 id=590 data-nosnippet>590</a>        /// This is the "windows" key on PC and "command" key on Mac.
-<a href=#591 id=591 data-nosnippet>591</a>        </span><span class="kw">const </span>LOGO = <span class="number">0b1100_0000</span>; <span class="comment">// TODO(breaking) rename to SUPER
-<a href=#592 id=592 data-nosnippet>592</a>    </span>}
+<a href=#591 id=591 data-nosnippet>591</a>        </span><span class="kw">const </span>SUPER = <span class="number">0b1100_0000</span>;
+<a href=#592 id=592 data-nosnippet>592</a>    }
 <a href=#593 id=593 data-nosnippet>593</a>}
 <a href=#594 id=594 data-nosnippet>594</a><span class="kw">impl </span>ModifiersState {
 <a href=#595 id=595 data-nosnippet>595</a>    <span class="doccomment">/// Returns `true` if any shift key is pressed.
@@ -642,7 +642,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#606 id=606 data-nosnippet>606</a>    }
 <a href=#607 id=607 data-nosnippet>607</a>    <span class="doccomment">/// Returns `true` if any logo key is pressed.
 <a href=#608 id=608 data-nosnippet>608</a>    </span><span class="kw">pub fn </span>has_super(<span class="self">self</span>) -&gt; bool {
-<a href=#609 id=609 data-nosnippet>609</a>        <span class="self">self</span>.intersects(<span class="self">Self</span>::LOGO)
+<a href=#609 id=609 data-nosnippet>609</a>        <span class="self">self</span>.intersects(<span class="self">Self</span>::SUPER)
 <a href=#610 id=610 data-nosnippet>610</a>    }
 <a href=#611 id=611 data-nosnippet>611</a>
 <a href=#612 id=612 data-nosnippet>612</a>    <span class="doccomment">/// Returns `true` if only any flag in `part` is pressed.
@@ -663,8 +663,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#627 id=627 data-nosnippet>627</a>        <span class="self">self</span>.is_only(ModifiersState::ALT)
 <a href=#628 id=628 data-nosnippet>628</a>    }
 <a href=#629 id=629 data-nosnippet>629</a>    <span class="doccomment">/// Returns `true` if only any logo key is pressed.
-<a href=#630 id=630 data-nosnippet>630</a>    </span><span class="kw">pub fn </span>is_only_logo(<span class="self">self</span>) -&gt; bool {
-<a href=#631 id=631 data-nosnippet>631</a>        <span class="self">self</span>.is_only(ModifiersState::LOGO)
+<a href=#630 id=630 data-nosnippet>630</a>    </span><span class="kw">pub fn </span>is_only_super(<span class="self">self</span>) -&gt; bool {
+<a href=#631 id=631 data-nosnippet>631</a>        <span class="self">self</span>.is_only(ModifiersState::SUPER)
 <a href=#632 id=632 data-nosnippet>632</a>    }
 <a href=#633 id=633 data-nosnippet>633</a>
 <a href=#634 id=634 data-nosnippet>634</a>    <span class="doccomment">/// Removes `part` and returns if it was removed.
@@ -691,9 +691,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#655 id=655 data-nosnippet>655</a>        <span class="self">self</span>.take(ModifiersState::ALT)
 <a href=#656 id=656 data-nosnippet>656</a>    }
 <a href=#657 id=657 data-nosnippet>657</a>
-<a href=#658 id=658 data-nosnippet>658</a>    <span class="doccomment">/// Removes `LOGO` and returns if it was removed.
-<a href=#659 id=659 data-nosnippet>659</a>    </span><span class="kw">pub fn </span>take_logo(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
-<a href=#660 id=660 data-nosnippet>660</a>        <span class="self">self</span>.take(ModifiersState::LOGO)
+<a href=#658 id=658 data-nosnippet>658</a>    <span class="doccomment">/// Removes `SUPER` and returns if it was removed.
+<a href=#659 id=659 data-nosnippet>659</a>    </span><span class="kw">pub fn </span>take_super(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; bool {
+<a href=#660 id=660 data-nosnippet>660</a>        <span class="self">self</span>.take(ModifiersState::SUPER)
 <a href=#661 id=661 data-nosnippet>661</a>    }
 <a href=#662 id=662 data-nosnippet>662</a>
 <a href=#663 id=663 data-nosnippet>663</a>    <span class="doccomment">/// Returns modifiers that set both left and right flags if any side is set in `self`.
@@ -709,7 +709,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#673 id=673 data-nosnippet>673</a>            r |= <span class="self">Self</span>::SHIFT;
 <a href=#674 id=674 data-nosnippet>674</a>        }
 <a href=#675 id=675 data-nosnippet>675</a>        <span class="kw">if </span><span class="self">self</span>.has_super() {
-<a href=#676 id=676 data-nosnippet>676</a>            r |= <span class="self">Self</span>::LOGO;
+<a href=#676 id=676 data-nosnippet>676</a>            r |= <span class="self">Self</span>::SUPER;
 <a href=#677 id=677 data-nosnippet>677</a>        }
 <a href=#678 id=678 data-nosnippet>678</a>        r
 <a href=#679 id=679 data-nosnippet>679</a>    }
@@ -730,8 +730,8 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#694 id=694 data-nosnippet>694</a>    }
 <a href=#695 id=695 data-nosnippet>695</a>
 <a href=#696 id=696 data-nosnippet>696</a>    <span class="doccomment">/// Returns only the logo flags in `self`.
-<a href=#697 id=697 data-nosnippet>697</a>    </span><span class="kw">pub fn </span>into_logo(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
-<a href=#698 id=698 data-nosnippet>698</a>        <span class="self">self </span>&amp; <span class="self">Self</span>::LOGO
+<a href=#697 id=697 data-nosnippet>697</a>    </span><span class="kw">pub fn </span>into_super(<span class="self">self</span>) -&gt; <span class="self">Self </span>{
+<a href=#698 id=698 data-nosnippet>698</a>        <span class="self">self </span>&amp; <span class="self">Self</span>::SUPER
 <a href=#699 id=699 data-nosnippet>699</a>    }
 <a href=#700 id=700 data-nosnippet>700</a>
 <a href=#701 id=701 data-nosnippet>701</a>    <span class="doccomment">/// Modifier from `code`, returns empty if the key is not a modifier.
@@ -756,14 +756,14 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#720 id=720 data-nosnippet>720</a>            Key::AltGraph =&gt; <span class="self">Self</span>::R_ALT,
 <a href=#721 id=721 data-nosnippet>721</a>            Key::Shift =&gt; <span class="self">Self</span>::SHIFT,
 <a href=#722 id=722 data-nosnippet>722</a>            Key::Ctrl =&gt; <span class="self">Self</span>::CTRL,
-<a href=#723 id=723 data-nosnippet>723</a>            Key::Super =&gt; <span class="self">Self</span>::LOGO,
+<a href=#723 id=723 data-nosnippet>723</a>            Key::Super =&gt; <span class="self">Self</span>::SUPER,
 <a href=#724 id=724 data-nosnippet>724</a>            <span class="kw">_ </span>=&gt; <span class="self">Self</span>::empty(),
 <a href=#725 id=725 data-nosnippet>725</a>        }
 <a href=#726 id=726 data-nosnippet>726</a>    }
 <a href=#727 id=727 data-nosnippet>727</a>
 <a href=#728 id=728 data-nosnippet>728</a>    <span class="doccomment">/// All key codes that when pressed form the modifiers state.
 <a href=#729 id=729 data-nosnippet>729</a>    ///
-<a href=#730 id=730 data-nosnippet>730</a>    /// In case of multiple keys the order is `LOGO`, `CTRL`, `SHIFT`, `ALT`.
+<a href=#730 id=730 data-nosnippet>730</a>    /// In case of multiple keys the order is `SUPER`, `CTRL`, `SHIFT`, `ALT`.
 <a href=#731 id=731 data-nosnippet>731</a>    ///
 <a href=#732 id=732 data-nosnippet>732</a>    /// In case both left and right keys are flagged for a modifier, the left key is used.
 <a href=#733 id=733 data-nosnippet>733</a>    </span><span class="kw">pub fn </span>codes(<span class="self">self</span>) -&gt; Vec&lt;KeyCode&gt; {
@@ -798,11 +798,11 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#762 id=762 data-nosnippet>762</a>
 <a href=#763 id=763 data-nosnippet>763</a>    <span class="doccomment">/// All keys that when pressed form the modifiers state.
 <a href=#764 id=764 data-nosnippet>764</a>    ///
-<a href=#765 id=765 data-nosnippet>765</a>    /// In case of multiple keys the order is `LOGO`, `CTRL`, `SHIFT`, `ALT`.
+<a href=#765 id=765 data-nosnippet>765</a>    /// In case of multiple keys the order is `SUPER`, `CTRL`, `SHIFT`, `ALT`.
 <a href=#766 id=766 data-nosnippet>766</a>    </span><span class="kw">pub fn </span>keys(<span class="self">self</span>) -&gt; Vec&lt;Key&gt; {
 <a href=#767 id=767 data-nosnippet>767</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="macro">vec!</span>[];
 <a href=#768 id=768 data-nosnippet>768</a>
-<a href=#769 id=769 data-nosnippet>769</a>        <span class="kw">if </span><span class="self">self</span>.intersects(<span class="self">Self</span>::LOGO) {
+<a href=#769 id=769 data-nosnippet>769</a>        <span class="kw">if </span><span class="self">self</span>.intersects(<span class="self">Self</span>::SUPER) {
 <a href=#770 id=770 data-nosnippet>770</a>            r.push(Key::Super);
 <a href=#771 id=771 data-nosnippet>771</a>        }
 <a href=#772 id=772 data-nosnippet>772</a>

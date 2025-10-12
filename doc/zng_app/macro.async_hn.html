@@ -34,16 +34,18 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })
 </script>
-</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_app/index.html">zng_app</a><span class="version">0.18.3</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">async_<wbr>hn</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#examples" title="Examples">Examples</a><ul><li><a href="#futures-and-clone-move" title="Futures and Clone-Move">Futures and Clone-Move</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate zng_<wbr>app</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">zng_app</a></div><h1>Macro <span class="macro">async_hn</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/zng_app/handler.rs.html#387-391">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! async_hn {
-    ($($tt:tt)+) =&gt; { ... };
+</head><body class="rustdoc macro"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle" title="show sidebar"></button><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt=""></a></nav><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../zng_app/index.html"><img src="https://raw.githubusercontent.com/zng-ui/zng/main/examples/image/res/zng-logo.png" alt="logo"></a><h2><a href="../zng_app/index.html">zng_app</a><span class="version">0.19.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">async_<wbr>hn</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#examples" title="Examples">Examples</a><ul><li><a href="#futures-and-clone-move" title="Futures and Clone-Move">Futures and Clone-Move</a></li></ul></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="index.html">In crate zng_<wbr>app</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="index.html">zng_app</a></div><h1>Macro <span class="macro">async_hn</span><button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../src/zng_app/handler.rs.html#446-465">Source</a> </span></div><pre class="rust item-decl"><code>macro_rules! async_hn {
+    ($($clmv:ident,)* |_| $body:expr) =&gt; { ... };
+    ($($clmv:ident,)* |$args:ident| $body:expr) =&gt; { ... };
+    ($($clmv:ident,)* |$args:ident  : &amp; $Args:ty| $body:expr) =&gt; { ... };
 }</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p><span data-del-macro-root></span> Declare an async <em>clone-move</em> event handler.</p>
-<p>The macro input is a closure with optional <em>clone-move</em> variables, internally it uses <a href="../zng_clone_move/macro.async_clmv_fn.html" title="macro zng_clone_move::async_clmv_fn"><code>async_clmv_fn!</code></a> so
-the input is the same syntax.</p>
+<p>The macro input is a closure with optional <em>clone-move</em> variables, internally it uses <a href="../zng_clone_move/macro.clmv.html" title="macro zng_clone_move::clmv"><code>clmv!</code></a> so
+the input is the same syntax, for each call is also uses <a href="../zng_clone_move/macro.async_clmv.html" title="macro zng_clone_move::async_clmv"><code>async_clmv!</code></a> to clone the args and other cloning captures.</p>
 <h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
 <p>The example declares an async event handler for the <code>on_click</code> property.</p>
 
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code>on_click = <span class="macro">async_hn!</span>(|<span class="kw">_</span>| {
-    <span class="macro">println!</span>(<span class="string">"Clicked!"</span>);
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code>on_click = <span class="macro">async_hn!</span>(|args| {
+    <span class="macro">println!</span>(<span class="string">"Clicked {} {} times!"</span>, WIDGET.id(), args.click_count);
 
     task::run(<span class="kw">async </span>{
         <span class="macro">println!</span>(<span class="string">"In other thread!"</span>);
@@ -52,19 +54,13 @@ the input is the same syntax.</p>
 
     <span class="macro">println!</span>(<span class="string">"Back in UI thread, in a widget update."</span>);
 });</code></pre></div>
-<p>The closure input is <code>ClickArgs</code> for this property. Note that
-if you want to use the event args you must annotate the input type.</p>
-
-<div class="example-wrap"><pre class="rust rust-example-rendered"><code>on_click = <span class="macro">async_hn!</span>(|args: ClickArgs| {
-    <span class="macro">println!</span>(<span class="string">"Clicked {} {} times!"</span>, WIDGET.id(), args.click_count);
-});</code></pre></div>
-<p>Internally the <a href="../zng_clone_move/macro.async_clmv_fn.html" title="macro zng_clone_move::async_clmv_fn"><code>async_clmv_fn!</code></a> macro is used so you can <em>clone-move</em> variables into the handler.</p>
+<p>Internally the <a href="../zng_clone_move/macro.clmv.html" title="macro zng_clone_move::clmv"><code>clmv!</code></a> macro is used so you can <em>clone-move</em> variables into the handler.</p>
 
 <div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>enabled = var(<span class="bool-val">true</span>);
 
 <span class="comment">// ..
 
-</span>on_click = <span class="macro">async_hn!</span>(enabled, |args: ClickArgs| {
+</span>on_click = <span class="macro">async_hn!</span>(enabled, |args: <span class="kw-2">&amp;</span>ClickArgs| {
     enabled.set(<span class="bool-val">false</span>);
 
     task::run(<span class="kw">async move </span>{

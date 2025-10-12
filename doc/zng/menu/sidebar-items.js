@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["icon","icon_fn","panel_fn","shortcut_spacing","shortcut_txt","style_fn"],"mod":["context","popup","sub"],"struct":["ButtonStyle","DefaultStyle","IconButtonStyle","Menu","TextInputStyle","ToggleStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["icon","icon_fn","panel_fn","shortcut_txt","style_fn"],"mod":["context","popup","sub"],"struct":["ButtonStyle","DefaultStyle","IconButtonStyle","Menu","TextInputStyle","ToggleStyle"]};
