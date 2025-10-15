@@ -175,7 +175,7 @@
 <a href=#175 id=175 data-nosnippet>175</a>    <span class="doccomment">/// Decoded BGRA8.
 <a href=#176 id=176 data-nosnippet>176</a>    ///
 <a href=#177 id=177 data-nosnippet>177</a>    /// This is the internal image format, it indicates the image data
-<a href=#178 id=178 data-nosnippet>178</a>    /// is already decoded and must only be entered into the cache.
+<a href=#178 id=178 data-nosnippet>178</a>    /// is already decoded and color managed (to sRGB).
 <a href=#179 id=179 data-nosnippet>179</a>    </span>Bgra8 {
 <a href=#180 id=180 data-nosnippet>180</a>        <span class="doccomment">/// Size in pixels.
 <a href=#181 id=181 data-nosnippet>181</a>        </span>size: PxSize,
@@ -186,7 +186,7 @@
 <a href=#186 id=186 data-nosnippet>186</a>    <span class="doccomment">/// Decoded A8.
 <a href=#187 id=187 data-nosnippet>187</a>    ///
 <a href=#188 id=188 data-nosnippet>188</a>    /// This is the internal mask format it indicates the mask data
-<a href=#189 id=189 data-nosnippet>189</a>    /// is already decoded and must only be entered into the cache.
+<a href=#189 id=189 data-nosnippet>189</a>    /// is already decoded.
 <a href=#190 id=190 data-nosnippet>190</a>    </span>A8 {
 <a href=#191 id=191 data-nosnippet>191</a>        <span class="doccomment">/// Size in pixels.
 <a href=#192 id=192 data-nosnippet>192</a>        </span>size: PxSize,
@@ -329,36 +329,56 @@
 <a href=#329 id=329 data-nosnippet>329</a>    </span><span class="kw">pub const fn </span>splat(xy: f32) -&gt; <span class="self">Self </span>{
 <a href=#330 id=330 data-nosnippet>330</a>        <span class="self">Self</span>::new(xy, xy)
 <a href=#331 id=331 data-nosnippet>331</a>    }
-<a href=#332 id=332 data-nosnippet>332</a>}
-<a href=#333 id=333 data-nosnippet>333</a><span class="kw">impl </span>Default <span class="kw">for </span>ImagePpi {
-<a href=#334 id=334 data-nosnippet>334</a>    <span class="doccomment">/// 96.0
-<a href=#335 id=335 data-nosnippet>335</a>    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#336 id=336 data-nosnippet>336</a>        <span class="self">Self</span>::splat(<span class="number">96.0</span>)
-<a href=#337 id=337 data-nosnippet>337</a>    }
-<a href=#338 id=338 data-nosnippet>338</a>}
-<a href=#339 id=339 data-nosnippet>339</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ImagePpi {
-<a href=#340 id=340 data-nosnippet>340</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#341 id=341 data-nosnippet>341</a>        <span class="kw">if </span>f.alternate() || <span class="self">self</span>.x != <span class="self">self</span>.y {
-<a href=#342 id=342 data-nosnippet>342</a>            f.debug_struct(<span class="string">"ImagePpi"</span>).field(<span class="string">"x"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.x).field(<span class="string">"y"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.y).finish()
-<a href=#343 id=343 data-nosnippet>343</a>        } <span class="kw">else </span>{
-<a href=#344 id=344 data-nosnippet>344</a>            <span class="macro">write!</span>(f, <span class="string">"{}"</span>, <span class="self">self</span>.x)
-<a href=#345 id=345 data-nosnippet>345</a>        }
-<a href=#346 id=346 data-nosnippet>346</a>    }
-<a href=#347 id=347 data-nosnippet>347</a>}
-<a href=#348 id=348 data-nosnippet>348</a>
-<a href=#349 id=349 data-nosnippet>349</a><span class="kw">impl </span>From&lt;f32&gt; <span class="kw">for </span>ImagePpi {
-<a href=#350 id=350 data-nosnippet>350</a>    <span class="kw">fn </span>from(xy: f32) -&gt; <span class="self">Self </span>{
-<a href=#351 id=351 data-nosnippet>351</a>        ImagePpi::splat(xy)
-<a href=#352 id=352 data-nosnippet>352</a>    }
-<a href=#353 id=353 data-nosnippet>353</a>}
-<a href=#354 id=354 data-nosnippet>354</a><span class="kw">impl </span>From&lt;(f32, f32)&gt; <span class="kw">for </span>ImagePpi {
-<a href=#355 id=355 data-nosnippet>355</a>    <span class="kw">fn </span>from((x, y): (f32, f32)) -&gt; <span class="self">Self </span>{
-<a href=#356 id=356 data-nosnippet>356</a>        ImagePpi::new(x, y)
+<a href=#332 id=332 data-nosnippet>332</a>
+<a href=#333 id=333 data-nosnippet>333</a>    <span class="doccomment">/// New from pixels-per-centimeter
+<a href=#334 id=334 data-nosnippet>334</a>    </span><span class="kw">pub const fn </span>new_cm(x: f32, y: f32) -&gt; <span class="self">Self </span>{
+<a href=#335 id=335 data-nosnippet>335</a>        <span class="self">Self </span>{
+<a href=#336 id=336 data-nosnippet>336</a>            x: x * <span class="self">Self</span>::CM_TO_INCH,
+<a href=#337 id=337 data-nosnippet>337</a>            y: y * <span class="self">Self</span>::CM_TO_INCH,
+<a href=#338 id=338 data-nosnippet>338</a>        }
+<a href=#339 id=339 data-nosnippet>339</a>    }
+<a href=#340 id=340 data-nosnippet>340</a>
+<a href=#341 id=341 data-nosnippet>341</a>    <span class="doccomment">/// Pixels-per-centimeter in the X dimension.
+<a href=#342 id=342 data-nosnippet>342</a>    </span><span class="kw">pub const fn </span>x_cm(<span class="self">self</span>) -&gt; f32 {
+<a href=#343 id=343 data-nosnippet>343</a>        <span class="self">self</span>.x / <span class="self">Self</span>::CM_TO_INCH
+<a href=#344 id=344 data-nosnippet>344</a>    }
+<a href=#345 id=345 data-nosnippet>345</a>
+<a href=#346 id=346 data-nosnippet>346</a>    <span class="doccomment">/// Pixels-per-centimeter in the Y dimension.
+<a href=#347 id=347 data-nosnippet>347</a>    </span><span class="kw">pub const fn </span>y_cm(<span class="self">self</span>) -&gt; f32 {
+<a href=#348 id=348 data-nosnippet>348</a>        <span class="self">self</span>.y / <span class="self">Self</span>::CM_TO_INCH
+<a href=#349 id=349 data-nosnippet>349</a>    }
+<a href=#350 id=350 data-nosnippet>350</a>
+<a href=#351 id=351 data-nosnippet>351</a>    <span class="kw">const </span>CM_TO_INCH: f32 = <span class="number">2.54</span>;
+<a href=#352 id=352 data-nosnippet>352</a>}
+<a href=#353 id=353 data-nosnippet>353</a><span class="kw">impl </span>Default <span class="kw">for </span>ImagePpi {
+<a href=#354 id=354 data-nosnippet>354</a>    <span class="doccomment">/// 96.0
+<a href=#355 id=355 data-nosnippet>355</a>    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#356 id=356 data-nosnippet>356</a>        <span class="self">Self</span>::splat(<span class="number">96.0</span>)
 <a href=#357 id=357 data-nosnippet>357</a>    }
 <a href=#358 id=358 data-nosnippet>358</a>}
-<a href=#359 id=359 data-nosnippet>359</a>
-<a href=#360 id=360 data-nosnippet>360</a><span class="attr">#[cfg(feature = <span class="string">"var"</span>)]
-<a href=#361 id=361 data-nosnippet>361</a></span><span class="macro">zng_var::impl_from_and_into_var!</span> {
-<a href=#362 id=362 data-nosnippet>362</a>    <span class="kw">fn </span>from(xy: f32) -&gt; ImagePpi;
-<a href=#363 id=363 data-nosnippet>363</a>    <span class="kw">fn </span>from(xy: (f32, f32)) -&gt; ImagePpi;
-<a href=#364 id=364 data-nosnippet>364</a>}</code></pre></div></section></main></body></html>
+<a href=#359 id=359 data-nosnippet>359</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>ImagePpi {
+<a href=#360 id=360 data-nosnippet>360</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#361 id=361 data-nosnippet>361</a>        <span class="kw">if </span>f.alternate() || <span class="self">self</span>.x != <span class="self">self</span>.y {
+<a href=#362 id=362 data-nosnippet>362</a>            f.debug_struct(<span class="string">"ImagePpi"</span>).field(<span class="string">"x"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.x).field(<span class="string">"y"</span>, <span class="kw-2">&amp;</span><span class="self">self</span>.y).finish()
+<a href=#363 id=363 data-nosnippet>363</a>        } <span class="kw">else </span>{
+<a href=#364 id=364 data-nosnippet>364</a>            <span class="macro">write!</span>(f, <span class="string">"{}"</span>, <span class="self">self</span>.x)
+<a href=#365 id=365 data-nosnippet>365</a>        }
+<a href=#366 id=366 data-nosnippet>366</a>    }
+<a href=#367 id=367 data-nosnippet>367</a>}
+<a href=#368 id=368 data-nosnippet>368</a>
+<a href=#369 id=369 data-nosnippet>369</a><span class="kw">impl </span>From&lt;f32&gt; <span class="kw">for </span>ImagePpi {
+<a href=#370 id=370 data-nosnippet>370</a>    <span class="kw">fn </span>from(xy: f32) -&gt; <span class="self">Self </span>{
+<a href=#371 id=371 data-nosnippet>371</a>        ImagePpi::splat(xy)
+<a href=#372 id=372 data-nosnippet>372</a>    }
+<a href=#373 id=373 data-nosnippet>373</a>}
+<a href=#374 id=374 data-nosnippet>374</a><span class="kw">impl </span>From&lt;(f32, f32)&gt; <span class="kw">for </span>ImagePpi {
+<a href=#375 id=375 data-nosnippet>375</a>    <span class="kw">fn </span>from((x, y): (f32, f32)) -&gt; <span class="self">Self </span>{
+<a href=#376 id=376 data-nosnippet>376</a>        ImagePpi::new(x, y)
+<a href=#377 id=377 data-nosnippet>377</a>    }
+<a href=#378 id=378 data-nosnippet>378</a>}
+<a href=#379 id=379 data-nosnippet>379</a>
+<a href=#380 id=380 data-nosnippet>380</a><span class="attr">#[cfg(feature = <span class="string">"var"</span>)]
+<a href=#381 id=381 data-nosnippet>381</a></span><span class="macro">zng_var::impl_from_and_into_var!</span> {
+<a href=#382 id=382 data-nosnippet>382</a>    <span class="kw">fn </span>from(xy: f32) -&gt; ImagePpi;
+<a href=#383 id=383 data-nosnippet>383</a>    <span class="kw">fn </span>from(xy: (f32, f32)) -&gt; ImagePpi;
+<a href=#384 id=384 data-nosnippet>384</a>}</code></pre></div></section></main></body></html>

@@ -382,8 +382,28 @@
 <a href=#382 id=382 data-nosnippet>382</a>        builder.insert(<span class="string">"interactivity"</span>, target.info().map(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.interactivity())));
 <a href=#383 id=383 data-nosnippet>383</a>        builder.insert(<span class="string">"visibility"</span>, target.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.visibility())));
 <a href=#384 id=384 data-nosnippet>384</a>        builder.insert(
-<a href=#385 id=385 data-nosnippet>385</a>            <span class="string">"inner_bounds"</span>,
-<a href=#386 id=386 data-nosnippet>386</a>            target.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.bounds_info().inner_bounds())),
-<a href=#387 id=387 data-nosnippet>387</a>        );
-<a href=#388 id=388 data-nosnippet>388</a>    }
-<a href=#389 id=389 data-nosnippet>389</a>}</code></pre></div></section></main></body></html>
+<a href=#385 id=385 data-nosnippet>385</a>            <span class="string">"actual_size"</span>,
+<a href=#386 id=386 data-nosnippet>386</a>            target.render_watcher(|i| {
+<a href=#387 id=387 data-nosnippet>387</a>                <span class="kw">let </span>size_px = i.bounds_info().inner_bounds().size;
+<a href=#388 id=388 data-nosnippet>388</a>                <span class="kw">let </span>size = size_px.to_dip(i.tree().scale_factor());
+<a href=#389 id=389 data-nosnippet>389</a>                <span class="macro">formatx!</span>(<span class="string">"{:.0?}"</span>, Size::from(size))
+<a href=#390 id=390 data-nosnippet>390</a>            }),
+<a href=#391 id=391 data-nosnippet>391</a>        );
+<a href=#392 id=392 data-nosnippet>392</a>
+<a href=#393 id=393 data-nosnippet>393</a>        <span class="kw">if </span>target.info().with(|i| i.parent().is_none()) {
+<a href=#394 id=394 data-nosnippet>394</a>            <span class="comment">// root widget
+<a href=#395 id=395 data-nosnippet>395</a>
+<a href=#396 id=396 data-nosnippet>396</a>            </span>builder.insert(<span class="string">"scale_factor"</span>, target.render_watcher(|i| i.tree().scale_factor().to_txt()));
+<a href=#397 id=397 data-nosnippet>397</a>            builder.insert(
+<a href=#398 id=398 data-nosnippet>398</a>                <span class="string">"view_process_gen"</span>,
+<a href=#399 id=399 data-nosnippet>399</a>                target.render_watcher(|i| i.tree().view_process_gen().get().to_txt()),
+<a href=#400 id=400 data-nosnippet>400</a>            );
+<a href=#401 id=401 data-nosnippet>401</a>            builder.insert(
+<a href=#402 id=402 data-nosnippet>402</a>                <span class="string">"last_frame"</span>,
+<a href=#403 id=403 data-nosnippet>403</a>                target.render_watcher(|i| <span class="macro">formatx!</span>(<span class="string">"{:?}"</span>, i.tree().stats().last_frame)),
+<a href=#404 id=404 data-nosnippet>404</a>            );
+<a href=#405 id=405 data-nosnippet>405</a>            builder.insert(<span class="string">"tree.len"</span>, target.info().map(|i| <span class="macro">formatx!</span>(<span class="string">"{} widgets"</span>, i.tree().len())));
+<a href=#406 id=406 data-nosnippet>406</a>            builder.insert(<span class="string">"tree.generation"</span>, target.info().map(|i| i.tree().stats().generation.to_txt()));
+<a href=#407 id=407 data-nosnippet>407</a>        }
+<a href=#408 id=408 data-nosnippet>408</a>    }
+<a href=#409 id=409 data-nosnippet>409</a>}</code></pre></div></section></main></body></html>
