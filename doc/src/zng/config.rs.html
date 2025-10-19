@@ -66,7 +66,7 @@
 <a href=#65 id=65 data-nosnippet>65</a>//!     // config file for the app, keys with prefix "main." are saved here.
 <a href=#66 id=66 data-nosnippet>66</a>//!     let user_cfg = JsonConfig::sync("target/tmp/example.config.json");
 <a href=#67 id=67 data-nosnippet>67</a>//!     // entries not found in `user_cfg` bind to this file first before going to embedded fallback.
-<a href=#68 id=68 data-nosnippet>68</a>//!     let default_cfg = ReadOnlyConfig::new(JsonConfig::sync("examples/config/res/defaults.json"));
+<a href=#68 id=68 data-nosnippet>68</a>//!     let default_cfg = JsonConfig::read("examples/config/res/defaults.json");
 <a href=#69 id=69 data-nosnippet>69</a>//!
 <a href=#70 id=70 data-nosnippet>70</a>//!     // the app settings.
 <a href=#71 id=71 data-nosnippet>71</a>//!     let main_cfg = FallbackConfig::new(user_cfg, default_cfg);
@@ -107,27 +107,119 @@
 <a href=#106 id=106 data-nosnippet>106</a><span class="attr">#[cfg(feature = <span class="string">"config_yaml"</span>)]
 <a href=#107 id=107 data-nosnippet>107</a></span><span class="kw">pub use </span>zng_ext_config::YamlConfig;
 <a href=#108 id=108 data-nosnippet>108</a>
-<a href=#109 id=109 data-nosnippet>109</a><span class="doccomment">/// Settings are the config the user can directly edit, this module implements a basic settings data model.
+<a href=#109 id=109 data-nosnippet>109</a><span class="doccomment">/// Settings metadata model.
 <a href=#110 id=110 data-nosnippet>110</a>///
-<a href=#111 id=111 data-nosnippet>111</a>/// # Full API
-<a href=#112 id=112 data-nosnippet>112</a>///
-<a href=#113 id=113 data-nosnippet>113</a>/// See [`zng_ext_config::settings`] for the full settings API.
-<a href=#114 id=114 data-nosnippet>114</a></span><span class="kw">pub mod </span>settings {
-<a href=#115 id=115 data-nosnippet>115</a>    <span class="kw">pub use </span>zng_ext_config::settings::{
-<a href=#116 id=116 data-nosnippet>116</a>        CategoriesBuilder, Category, CategoryBuilder, CategoryId, SETTINGS, Setting, SettingBuilder, SettingsBuilder,
-<a href=#117 id=117 data-nosnippet>117</a>    };
-<a href=#118 id=118 data-nosnippet>118</a>    <span class="kw">pub use </span>zng_wgt_input::cmd::{SETTINGS_CMD, can_settings, on_pre_settings, on_settings};
-<a href=#119 id=119 data-nosnippet>119</a>
-<a href=#120 id=120 data-nosnippet>120</a>    <span class="doccomment">/// Settings editor widget.
-<a href=#121 id=121 data-nosnippet>121</a>    ///
-<a href=#122 id=122 data-nosnippet>122</a>    /// # Full API
-<a href=#123 id=123 data-nosnippet>123</a>    ///
-<a href=#124 id=124 data-nosnippet>124</a>    /// See [`zng_wgt_settings`] for the full settings editor API.
-<a href=#125 id=125 data-nosnippet>125</a>    </span><span class="attr">#[cfg(feature = <span class="string">"settings_editor"</span>)]
-<a href=#126 id=126 data-nosnippet>126</a>    </span><span class="kw">pub mod </span>editor {
-<a href=#127 id=127 data-nosnippet>127</a>        <span class="kw">pub use </span>zng_wgt_settings::{
-<a href=#128 id=128 data-nosnippet>128</a>            CategoriesListArgs, CategoryHeaderArgs, CategoryItemArgs, SettingArgs, SettingBuilderEditorExt, SettingsArgs, SettingsCtxExt,
-<a href=#129 id=129 data-nosnippet>129</a>            SettingsEditor, categories_list_fn, category_header_fn, category_item_fn, setting_fn, settings_fn,
-<a href=#130 id=130 data-nosnippet>130</a>        };
-<a href=#131 id=131 data-nosnippet>131</a>    }
-<a href=#132 id=132 data-nosnippet>132</a>}</code></pre></div></section></main></body></html>
+<a href=#111 id=111 data-nosnippet>111</a>/// Settings are the [`CONFIG`] the user can directly edit, they have associated metadata such as display name and description,
+<a href=#112 id=112 data-nosnippet>112</a>/// and will usually be editable in a special settings window. This module provides a basic settings data model, with category grouping,
+<a href=#113 id=113 data-nosnippet>113</a>/// sorting and filtering. A default settings editor window is also provided.
+<a href=#114 id=114 data-nosnippet>114</a>///
+<a href=#115 id=115 data-nosnippet>115</a>/// ```
+<a href=#116 id=116 data-nosnippet>116</a>/// # use zng::config::settings::*;
+<a href=#117 id=117 data-nosnippet>117</a>/// # use zng::prelude::*;
+<a href=#118 id=118 data-nosnippet>118</a>/// fn register_categories() {
+<a href=#119 id=119 data-nosnippet>119</a>///     SETTINGS.register_categories(|c| {
+<a href=#120 id=120 data-nosnippet>120</a>///         c.entry("cat-example", |c| c.name("Example Settings"));
+<a href=#121 id=121 data-nosnippet>121</a>///     });
+<a href=#122 id=122 data-nosnippet>122</a>/// }
+<a href=#123 id=123 data-nosnippet>123</a>///
+<a href=#124 id=124 data-nosnippet>124</a>/// fn register_settings() {
+<a href=#125 id=125 data-nosnippet>125</a>///     SETTINGS.register(|s| {
+<a href=#126 id=126 data-nosnippet>126</a>///         s.entry("settings.value", "cat-example", |s| {
+<a href=#127 id=127 data-nosnippet>127</a>///             s.name("Value")
+<a href=#128 id=128 data-nosnippet>128</a>///                 .description("Example using EDITORS provided editor.")
+<a href=#129 id=129 data-nosnippet>129</a>///                 .value(Txt::default())
+<a href=#130 id=130 data-nosnippet>130</a>///         });
+<a href=#131 id=131 data-nosnippet>131</a>///         s.entry("settings.custom", "cat-example", |s| {
+<a href=#132 id=132 data-nosnippet>132</a>///             s.name("Custom")
+<a href=#133 id=133 data-nosnippet>133</a>///                 .description("Example using custom editor.")
+<a href=#134 id=134 data-nosnippet>134</a>///                 .editor_fn(wgt_fn!(|_setting| {
+<a href=#135 id=135 data-nosnippet>135</a>///                     TextInput! {
+<a href=#136 id=136 data-nosnippet>136</a>///                         txt = CONFIG.get("settings.custom", Txt::default());
+<a href=#137 id=137 data-nosnippet>137</a>///                     }
+<a href=#138 id=138 data-nosnippet>138</a>///                 }))
+<a href=#139 id=139 data-nosnippet>139</a>///         });
+<a href=#140 id=140 data-nosnippet>140</a>///     });
+<a href=#141 id=141 data-nosnippet>141</a>/// }
+<a href=#142 id=142 data-nosnippet>142</a>/// ```
+<a href=#143 id=143 data-nosnippet>143</a>///
+<a href=#144 id=144 data-nosnippet>144</a>/// The example above demonstrates how to register a settings category and two values, one using a default editor, the other
+<a href=#145 id=145 data-nosnippet>145</a>/// using a custom editor. When no [`editor_fn`] is set and the [`value`] config is called the [`zng::widget::EDITORS`] service is used
+<a href=#146 id=146 data-nosnippet>146</a>/// to find an editor for the config. The editor closure parameter is a [`Setting`] that is not used in this case, as the editor already
+<a href=#147 id=147 data-nosnippet>147</a>/// binds to the config directly.
+<a href=#148 id=148 data-nosnippet>148</a>///
+<a href=#149 id=149 data-nosnippet>149</a>/// Note that the `name` and `description` accepts variable inputs, in a full app use the [`l10n!`] macro to declare localized metadata.
+<a href=#150 id=150 data-nosnippet>150</a>///
+<a href=#151 id=151 data-nosnippet>151</a>/// In the default `APP` the [`SETTINGS_CMD`] command is handled and shows a [`settings::editor`] window that implements search, edit and reset
+<a href=#152 id=152 data-nosnippet>152</a>/// features. See the [config example] for a full demonstration of settings.
+<a href=#153 id=153 data-nosnippet>153</a>///
+<a href=#154 id=154 data-nosnippet>154</a>/// # Reset
+<a href=#155 id=155 data-nosnippet>155</a>///
+<a href=#156 id=156 data-nosnippet>156</a>/// Restoring settings to default is a common feature, you can simply update the value to a *default*, or with some setup, you can
+<a href=#157 id=157 data-nosnippet>157</a>/// actually remove the config from the user file.
+<a href=#158 id=158 data-nosnippet>158</a>///
+<a href=#159 id=159 data-nosnippet>159</a>/// ```
+<a href=#160 id=160 data-nosnippet>160</a>/// # use zng::config::*;
+<a href=#161 id=161 data-nosnippet>161</a>/// # use zng::config::settings::*;
+<a href=#162 id=162 data-nosnippet>162</a>/// # use zng::prelude::*;
+<a href=#163 id=163 data-nosnippet>163</a>/// #
+<a href=#164 id=164 data-nosnippet>164</a>/// fn load_config() -&gt; Box&lt;dyn FallbackConfigReset&gt; {
+<a href=#165 id=165 data-nosnippet>165</a>///     // user edited config (settings.)
+<a href=#166 id=166 data-nosnippet>166</a>///     let user = JsonConfig::sync(zng::env::config("settings.json"));
+<a href=#167 id=167 data-nosnippet>167</a>///     let default = JsonConfig::read(zng::env::res("default-settings.json"));
+<a href=#168 id=168 data-nosnippet>168</a>///     let settings = FallbackConfig::new(user, default);
+<a href=#169 id=169 data-nosnippet>169</a>///     let settings_ref = settings.clone_boxed();
+<a href=#170 id=170 data-nosnippet>170</a>///
+<a href=#171 id=171 data-nosnippet>171</a>///     // any other configs (Window::save_state for example)
+<a href=#172 id=172 data-nosnippet>172</a>///     let other = JsonConfig::sync(zng::env::config("config.json"));
+<a href=#173 id=173 data-nosnippet>173</a>///
+<a href=#174 id=174 data-nosnippet>174</a>///     CONFIG.load(SwitchConfig::new().with_prefix("settings.", settings).with_prefix("", other));
+<a href=#175 id=175 data-nosnippet>175</a>///
+<a href=#176 id=176 data-nosnippet>176</a>///     settings_ref
+<a href=#177 id=177 data-nosnippet>177</a>/// }
+<a href=#178 id=178 data-nosnippet>178</a>/// fn register_settings(reset: Box&lt;dyn FallbackConfigReset&gt;) {
+<a href=#179 id=179 data-nosnippet>179</a>///     SETTINGS.register(move |s| {
+<a href=#180 id=180 data-nosnippet>180</a>///         s.entry("settings.value", "cat-example", |s| {
+<a href=#181 id=181 data-nosnippet>181</a>///             s.name("Value").value(Txt::default()).reset(reset.clone_boxed(), "settings.")
+<a href=#182 id=182 data-nosnippet>182</a>///         });
+<a href=#183 id=183 data-nosnippet>183</a>///     });
+<a href=#184 id=184 data-nosnippet>184</a>/// }
+<a href=#185 id=185 data-nosnippet>185</a>/// ```
+<a href=#186 id=186 data-nosnippet>186</a>///
+<a href=#187 id=187 data-nosnippet>187</a>/// The example above declares a config system with three files, the relevant ones are `"default-settings.json"` and `"settings.json"`.
+<a href=#188 id=188 data-nosnippet>188</a>/// The default file is deployed with the app resources and is read-only, the user file is created in the user data directory and
+<a href=#189 id=189 data-nosnippet>189</a>/// contains only the custom values set by the user. The [`FallbackConfigReset`] has access to the user file and can remove entries from it.
+<a href=#190 id=190 data-nosnippet>190</a>///
+<a href=#191 id=191 data-nosnippet>191</a>/// The [`FallbackConfigReset::can_reset`] variable tracks the presence of the config in the user file. The default settings widget
+<a href=#192 id=192 data-nosnippet>192</a>/// uses this to show a little reset arrow button that users can click to reset.
+<a href=#193 id=193 data-nosnippet>193</a>///
+<a href=#194 id=194 data-nosnippet>194</a>/// The [`FallbackConfig`] handles entry removal by updating the config variable back to the fallback file entry.
+<a href=#195 id=195 data-nosnippet>195</a>///
+<a href=#196 id=196 data-nosnippet>196</a>/// # Full API
+<a href=#197 id=197 data-nosnippet>197</a>///
+<a href=#198 id=198 data-nosnippet>198</a>/// See [`zng_ext_config::settings`] for the full settings API.
+<a href=#199 id=199 data-nosnippet>199</a>///
+<a href=#200 id=200 data-nosnippet>200</a>/// [`editor_fn`]: crate::config::settings::editor::SettingBuilderEditorExt::editor_fn
+<a href=#201 id=201 data-nosnippet>201</a>/// [`value`]: crate::config::settings::SettingBuilder::value
+<a href=#202 id=202 data-nosnippet>202</a>/// [`Setting`]: crate::config::settings::Setting
+<a href=#203 id=203 data-nosnippet>203</a>/// [`SETTINGS_CMD`]: crate::config::settings::SETTINGS_CMD
+<a href=#204 id=204 data-nosnippet>204</a>/// [`l10n!`]: crate::l10n::l10n
+<a href=#205 id=205 data-nosnippet>205</a>/// [config example]: https://github.com/zng-ui/zng/blob/main/examples/config/src/main.rs
+<a href=#206 id=206 data-nosnippet>206</a></span><span class="kw">pub mod </span>settings {
+<a href=#207 id=207 data-nosnippet>207</a>    <span class="kw">pub use </span>zng_ext_config::settings::{
+<a href=#208 id=208 data-nosnippet>208</a>        CategoriesBuilder, Category, CategoryBuilder, CategoryId, SETTINGS, Setting, SettingBuilder, SettingsBuilder,
+<a href=#209 id=209 data-nosnippet>209</a>    };
+<a href=#210 id=210 data-nosnippet>210</a>    <span class="kw">pub use </span>zng_wgt_input::cmd::{SETTINGS_CMD, can_settings, on_pre_settings, on_settings};
+<a href=#211 id=211 data-nosnippet>211</a>
+<a href=#212 id=212 data-nosnippet>212</a>    <span class="doccomment">/// Settings editor widget.
+<a href=#213 id=213 data-nosnippet>213</a>    ///
+<a href=#214 id=214 data-nosnippet>214</a>    /// # Full API
+<a href=#215 id=215 data-nosnippet>215</a>    ///
+<a href=#216 id=216 data-nosnippet>216</a>    /// See [`zng_wgt_settings`] for the full settings editor API.
+<a href=#217 id=217 data-nosnippet>217</a>    </span><span class="attr">#[cfg(feature = <span class="string">"settings_editor"</span>)]
+<a href=#218 id=218 data-nosnippet>218</a>    </span><span class="kw">pub mod </span>editor {
+<a href=#219 id=219 data-nosnippet>219</a>        <span class="kw">pub use </span>zng_wgt_settings::{
+<a href=#220 id=220 data-nosnippet>220</a>            CategoriesListArgs, CategoryHeaderArgs, CategoryItemArgs, SettingArgs, SettingBuilderEditorExt, SettingsArgs, SettingsCtxExt,
+<a href=#221 id=221 data-nosnippet>221</a>            SettingsEditor, categories_list_fn, category_header_fn, category_item_fn, reset_button, setting_fn, settings_fn,
+<a href=#222 id=222 data-nosnippet>222</a>        };
+<a href=#223 id=223 data-nosnippet>223</a>    }
+<a href=#224 id=224 data-nosnippet>224</a>}</code></pre></div></section></main></body></html>

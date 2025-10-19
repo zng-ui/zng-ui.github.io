@@ -110,22 +110,46 @@
 <a href=#110 id=110 data-nosnippet>110</a>    }
 <a href=#111 id=111 data-nosnippet>111</a>}
 <a href=#112 id=112 data-nosnippet>112</a>
-<a href=#113 id=113 data-nosnippet>113</a><span class="kw">impl </span>fmt::Display <span class="kw">for </span>Ppi {
-<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#115 id=115 data-nosnippet>115</a>        <span class="macro">write!</span>(f, <span class="string">"{}ppi"</span>, <span class="self">self</span>.<span class="number">0</span>)
-<a href=#116 id=116 data-nosnippet>116</a>    }
-<a href=#117 id=117 data-nosnippet>117</a>}
-<a href=#118 id=118 data-nosnippet>118</a><span class="kw">impl </span>fmt::Display <span class="kw">for </span>Ppm {
-<a href=#119 id=119 data-nosnippet>119</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#120 id=120 data-nosnippet>120</a>        <span class="macro">write!</span>(f, <span class="string">"{}ppm"</span>, <span class="self">self</span>.<span class="number">0</span>)
+<a href=#113 id=113 data-nosnippet>113</a><span class="doccomment">/// Prints `"{}ppi"`. Alternate prints `"{}dpi"`.
+<a href=#114 id=114 data-nosnippet>114</a></span><span class="kw">impl </span>fmt::Display <span class="kw">for </span>Ppi {
+<a href=#115 id=115 data-nosnippet>115</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">if </span>f.alternate() {
+<a href=#117 id=117 data-nosnippet>117</a>            <span class="macro">write!</span>(f, <span class="string">"{}dpi"</span>, <span class="self">self</span>.<span class="number">0</span>)
+<a href=#118 id=118 data-nosnippet>118</a>        } <span class="kw">else </span>{
+<a href=#119 id=119 data-nosnippet>119</a>            <span class="macro">write!</span>(f, <span class="string">"{}ppi"</span>, <span class="self">self</span>.<span class="number">0</span>)
+<a href=#120 id=120 data-nosnippet>120</a>        }
 <a href=#121 id=121 data-nosnippet>121</a>    }
 <a href=#122 id=122 data-nosnippet>122</a>}
-<a href=#123 id=123 data-nosnippet>123</a><span class="macro">impl_from_and_into_var!</span> {
-<a href=#124 id=124 data-nosnippet>124</a>    <span class="kw">fn </span>from(ppi: Ppi) -&gt; Ppm {
-<a href=#125 id=125 data-nosnippet>125</a>        Ppm(ppi.<span class="number">0 </span>* <span class="number">39.3701</span>)
+<a href=#123 id=123 data-nosnippet>123</a><span class="kw">impl </span>fmt::Display <span class="kw">for </span>Ppm {
+<a href=#124 id=124 data-nosnippet>124</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#125 id=125 data-nosnippet>125</a>        <span class="macro">write!</span>(f, <span class="string">"{}ppm"</span>, <span class="self">self</span>.<span class="number">0</span>)
 <a href=#126 id=126 data-nosnippet>126</a>    }
-<a href=#127 id=127 data-nosnippet>127</a>
-<a href=#128 id=128 data-nosnippet>128</a>    <span class="kw">fn </span>from(ppm: Ppm) -&gt; Ppi {
-<a href=#129 id=129 data-nosnippet>129</a>        Ppi(ppm.<span class="number">0 </span>/ <span class="number">39.3701</span>)
-<a href=#130 id=130 data-nosnippet>130</a>    }
-<a href=#131 id=131 data-nosnippet>131</a>}</code></pre></div></section></main></body></html>
+<a href=#127 id=127 data-nosnippet>127</a>}
+<a href=#128 id=128 data-nosnippet>128</a><span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>Ppi {
+<a href=#129 id=129 data-nosnippet>129</a>    <span class="kw">type </span><span class="prelude-val">Err </span>= std::num::ParseFloatError;
+<a href=#130 id=130 data-nosnippet>130</a>
+<a href=#131 id=131 data-nosnippet>131</a>    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+<a href=#132 id=132 data-nosnippet>132</a>        <span class="kw">let </span>s = s.strip_suffix(<span class="string">"ppi"</span>).or_else(|| s.strip_suffix(<span class="string">"dpi"</span>)).unwrap_or(s);
+<a href=#133 id=133 data-nosnippet>133</a>        <span class="prelude-val">Ok</span>(Ppi(s.parse()<span class="question-mark">?</span>))
+<a href=#134 id=134 data-nosnippet>134</a>    }
+<a href=#135 id=135 data-nosnippet>135</a>}
+<a href=#136 id=136 data-nosnippet>136</a><span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>Ppm {
+<a href=#137 id=137 data-nosnippet>137</a>    <span class="kw">type </span><span class="prelude-val">Err </span>= std::num::ParseFloatError;
+<a href=#138 id=138 data-nosnippet>138</a>
+<a href=#139 id=139 data-nosnippet>139</a>    <span class="kw">fn </span>from_str(s: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>, <span class="self">Self</span>::Err&gt; {
+<a href=#140 id=140 data-nosnippet>140</a>        <span class="kw">let </span>s = s.strip_suffix(<span class="string">"ppm"</span>).unwrap_or(s);
+<a href=#141 id=141 data-nosnippet>141</a>        <span class="prelude-val">Ok</span>(Ppm(s.parse()<span class="question-mark">?</span>))
+<a href=#142 id=142 data-nosnippet>142</a>    }
+<a href=#143 id=143 data-nosnippet>143</a>}
+<a href=#144 id=144 data-nosnippet>144</a>
+<a href=#145 id=145 data-nosnippet>145</a><span class="macro">impl_from_and_into_var!</span> {
+<a href=#146 id=146 data-nosnippet>146</a>    <span class="kw">fn </span>from(ppi: Ppi) -&gt; Ppm {
+<a href=#147 id=147 data-nosnippet>147</a>        Ppm(ppi.<span class="number">0 </span>* <span class="number">39.3701</span>)
+<a href=#148 id=148 data-nosnippet>148</a>    }
+<a href=#149 id=149 data-nosnippet>149</a>
+<a href=#150 id=150 data-nosnippet>150</a>    <span class="kw">fn </span>from(ppm: Ppm) -&gt; Ppi {
+<a href=#151 id=151 data-nosnippet>151</a>        Ppi(ppm.<span class="number">0 </span>/ <span class="number">39.3701</span>)
+<a href=#152 id=152 data-nosnippet>152</a>    }
+<a href=#153 id=153 data-nosnippet>153</a>}
+<a href=#154 id=154 data-nosnippet>154</a>
+<a href=#155 id=155 data-nosnippet>155</a><span class="comment">// TODO(breaking) integrate this with ImagePpi</span></code></pre></div></section></main></body></html>

@@ -18,7 +18,7 @@
 <a href=#17 id=17 data-nosnippet>17</a>//!
 <a href=#18 id=18 data-nosnippet>18</a>//! ```toml
 <a href=#19 id=19 data-nosnippet>19</a>//! [dependencies]
-<a href=#20 id=20 data-nosnippet>20</a>//! zng = { version = "0.18.1", features = ["view_prebuilt"] }
+<a href=#20 id=20 data-nosnippet>20</a>//! zng = { version = "0.18.2", features = ["view_prebuilt"] }
 <a href=#21 id=21 data-nosnippet>21</a>//! ```
 <a href=#22 id=22 data-nosnippet>22</a>//!
 <a href=#23 id=23 data-nosnippet>23</a>//! Then create your first app:
@@ -595,9 +595,9 @@
 <a href=#594 id=594 data-nosnippet>594</a>
 <a href=#595 id=595 data-nosnippet>595</a>    <span class="kw">pub use </span>zng_var::{
 <a href=#596 id=596 data-nosnippet>596</a>        IntoValue, IntoVar, Var, VarValue, const_var, context_var, expr_var, merge_var, var, var_from, var_getter, var_state, when_var,
-<a href=#597 id=597 data-nosnippet>597</a>    };
+<a href=#597 id=597 data-nosnippet>597</a>    }; <span class="comment">// TODO(breaking) add flat_expr_var!
 <a href=#598 id=598 data-nosnippet>598</a>
-<a href=#599 id=599 data-nosnippet>599</a>    <span class="kw">pub use </span><span class="kw">crate</span>::var::animation::easing;
+<a href=#599 id=599 data-nosnippet>599</a>    </span><span class="kw">pub use </span><span class="kw">crate</span>::var::animation::easing;
 <a href=#600 id=600 data-nosnippet>600</a>
 <a href=#601 id=601 data-nosnippet>601</a>    <span class="kw">pub use </span>zng_layout::unit::{
 <a href=#602 id=602 data-nosnippet>602</a>        Align, AngleUnits <span class="kw">as _</span>, ByteUnits <span class="kw">as _</span>, DipToPx <span class="kw">as _</span>, FactorUnits <span class="kw">as _</span>, Layout1d <span class="kw">as _</span>, Layout2d <span class="kw">as _</span>, Length, LengthUnits <span class="kw">as _</span>,
@@ -800,9 +800,9 @@
 <a href=#799 id=799 data-nosnippet>799</a>    <span class="kw">pub use </span>zng_var::{
 <a href=#800 id=800 data-nosnippet>800</a>        ContextVar, IntoValue, IntoVar, ResponderVar, ResponseVar, Var, VarCapability, VarHandle, VarHandles, VarValue, const_var,
 <a href=#801 id=801 data-nosnippet>801</a>        context_var, expr_var, impl_from_and_into_var, merge_var, response_done_var, response_var, var, var_getter, var_state, when_var,
-<a href=#802 id=802 data-nosnippet>802</a>    };
+<a href=#802 id=802 data-nosnippet>802</a>    }; <span class="comment">// TODO(breaking): add flat_expr_var!
 <a href=#803 id=803 data-nosnippet>803</a>
-<a href=#804 id=804 data-nosnippet>804</a>    <span class="kw">pub use </span>zng_layout::{
+<a href=#804 id=804 data-nosnippet>804</a>    </span><span class="kw">pub use </span>zng_layout::{
 <a href=#805 id=805 data-nosnippet>805</a>        context::{DIRECTION_VAR, LAYOUT, LayoutDirection, LayoutMetrics},
 <a href=#806 id=806 data-nosnippet>806</a>        unit::{
 <a href=#807 id=807 data-nosnippet>807</a>            Align, AngleDegree, AngleGradian, AngleRadian, AngleUnits <span class="kw">as _</span>, ByteUnits <span class="kw">as _</span>, Dip, DipBox, DipPoint, DipRect, DipSideOffsets,
@@ -994,7 +994,7 @@
 <a href=#993 id=993 data-nosnippet>993</a>        <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
 <a href=#994 id=994 data-nosnippet>994</a>            <span class="comment">// Common editors.
 <a href=#995 id=995 data-nosnippet>995</a>            </span>zng_wgt::EDITORS.register_fallback(zng_wgt::WidgetFn::new(default_editors::handler));
-<a href=#996 id=996 data-nosnippet>996</a>            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, var_editor set"</span>);
+<a href=#996 id=996 data-nosnippet>996</a>            <span class="macro">tracing::debug!</span>(<span class="string">"defaults init, EDITORS set"</span>);
 <a href=#997 id=997 data-nosnippet>997</a>
 <a href=#998 id=998 data-nosnippet>998</a>            <span class="comment">// injected in all windows
 <a href=#999 id=999 data-nosnippet>999</a>            </span><span class="attr">#[cfg(feature = <span class="string">"window"</span>)]

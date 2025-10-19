@@ -63,22 +63,34 @@
 <a href=#63 id=63 data-nosnippet>63</a>    };
 <a href=#64 id=64 data-nosnippet>64</a>}
 <a href=#65 id=65 data-nosnippet>65</a>
-<a href=#66 id=66 data-nosnippet>66</a><span class="attr">#[doc(hidden)]
-<a href=#67 id=67 data-nosnippet>67</a></span><span class="kw">pub use </span>zng_var_proc_macros::expr_var <span class="kw">as </span>__expr_var;
-<a href=#68 id=68 data-nosnippet>68</a>
-<a href=#69 id=69 data-nosnippet>69</a><span class="kw">use crate</span>::{IntoVar, MergeInput, Var, VarValue};
-<a href=#70 id=70 data-nosnippet>70</a>
-<a href=#71 id=71 data-nosnippet>71</a><span class="attr">#[doc(hidden)]
-<a href=#72 id=72 data-nosnippet>72</a></span><span class="kw">pub fn </span>expr_var_into&lt;T: VarValue&gt;(expr: <span class="kw">impl </span>IntoVar&lt;T&gt;) -&gt; Var&lt;T&gt; {
-<a href=#73 id=73 data-nosnippet>73</a>    expr.into_var()
-<a href=#74 id=74 data-nosnippet>74</a>}
-<a href=#75 id=75 data-nosnippet>75</a>
-<a href=#76 id=76 data-nosnippet>76</a><span class="attr">#[doc(hidden)]
-<a href=#77 id=77 data-nosnippet>77</a></span><span class="kw">pub fn </span>expr_var_as&lt;T: VarValue&gt;(var: <span class="kw">impl </span>MergeInput&lt;T&gt;) -&gt; Var&lt;T&gt; {
-<a href=#78 id=78 data-nosnippet>78</a>    var.into_merge_input()
-<a href=#79 id=79 data-nosnippet>79</a>}
+<a href=#66 id=66 data-nosnippet>66</a><span class="doccomment">///&lt;span data-del-macro-root&gt;&lt;/span&gt; New variable from an expression with interpolated vars that produces another variable.
+<a href=#67 id=67 data-nosnippet>67</a>///
+<a href=#68 id=68 data-nosnippet>68</a>/// This macro is very similar to [`expr_var!`], it just expect an expression that produces another variable and flattens it.
+<a href=#69 id=69 data-nosnippet>69</a></span><span class="attr">#[macro_export]
+<a href=#70 id=70 data-nosnippet>70</a></span><span class="macro">macro_rules!</span> flat_expr_var {
+<a href=#71 id=71 data-nosnippet>71</a>    ($(<span class="macro-nonterminal">$expr</span>:tt)+) =&gt; {
+<a href=#72 id=72 data-nosnippet>72</a>        <span class="macro-nonterminal">$</span><span class="macro">crate::expr_var!</span> {
+<a href=#73 id=73 data-nosnippet>73</a>            <span class="macro-nonterminal">$crate::VarEq</span>($(<span class="macro-nonterminal">$expr</span>)+)
+<a href=#74 id=74 data-nosnippet>74</a>        }.flatten()
+<a href=#75 id=75 data-nosnippet>75</a>    };
+<a href=#76 id=76 data-nosnippet>76</a>}
+<a href=#77 id=77 data-nosnippet>77</a>
+<a href=#78 id=78 data-nosnippet>78</a><span class="attr">#[doc(hidden)]
+<a href=#79 id=79 data-nosnippet>79</a></span><span class="kw">pub use </span>zng_var_proc_macros::expr_var <span class="kw">as </span>__expr_var;
 <a href=#80 id=80 data-nosnippet>80</a>
-<a href=#81 id=81 data-nosnippet>81</a><span class="attr">#[doc(hidden)]
-<a href=#82 id=82 data-nosnippet>82</a></span><span class="kw">pub fn </span>expr_var_map&lt;I: VarValue, O: VarValue&gt;(input: <span class="kw">impl </span>MergeInput&lt;I&gt;, map: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>I) -&gt; O + Send + <span class="lifetime">'static</span>) -&gt; Var&lt;O&gt; {
-<a href=#83 id=83 data-nosnippet>83</a>    input.into_merge_input().map(map)
-<a href=#84 id=84 data-nosnippet>84</a>}</code></pre></div></section></main></body></html>
+<a href=#81 id=81 data-nosnippet>81</a><span class="kw">use crate</span>::{IntoVar, MergeInput, Var, VarValue};
+<a href=#82 id=82 data-nosnippet>82</a>
+<a href=#83 id=83 data-nosnippet>83</a><span class="attr">#[doc(hidden)]
+<a href=#84 id=84 data-nosnippet>84</a></span><span class="kw">pub fn </span>expr_var_into&lt;T: VarValue&gt;(expr: <span class="kw">impl </span>IntoVar&lt;T&gt;) -&gt; Var&lt;T&gt; {
+<a href=#85 id=85 data-nosnippet>85</a>    expr.into_var()
+<a href=#86 id=86 data-nosnippet>86</a>}
+<a href=#87 id=87 data-nosnippet>87</a>
+<a href=#88 id=88 data-nosnippet>88</a><span class="attr">#[doc(hidden)]
+<a href=#89 id=89 data-nosnippet>89</a></span><span class="kw">pub fn </span>expr_var_as&lt;T: VarValue&gt;(var: <span class="kw">impl </span>MergeInput&lt;T&gt;) -&gt; Var&lt;T&gt; {
+<a href=#90 id=90 data-nosnippet>90</a>    var.into_merge_input()
+<a href=#91 id=91 data-nosnippet>91</a>}
+<a href=#92 id=92 data-nosnippet>92</a>
+<a href=#93 id=93 data-nosnippet>93</a><span class="attr">#[doc(hidden)]
+<a href=#94 id=94 data-nosnippet>94</a></span><span class="kw">pub fn </span>expr_var_map&lt;I: VarValue, O: VarValue&gt;(input: <span class="kw">impl </span>MergeInput&lt;I&gt;, map: <span class="kw">impl </span>FnMut(<span class="kw-2">&amp;</span>I) -&gt; O + Send + <span class="lifetime">'static</span>) -&gt; Var&lt;O&gt; {
+<a href=#95 id=95 data-nosnippet>95</a>    input.into_merge_input().map(map)
+<a href=#96 id=96 data-nosnippet>96</a>}</code></pre></div></section></main></body></html>
