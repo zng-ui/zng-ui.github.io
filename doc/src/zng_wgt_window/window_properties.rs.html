@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-window/src/window_properties.rs`."><title>window_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_window/</div>window_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::time::Duration;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-window/src/window_properties.rs`."><title>window_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_window/</div>window_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::time::Duration;
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>zng_app::widget::base::Parallel;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>zng_ext_config::{AnyConfig <span class="kw">as _</span>, CONFIG, ConfigKey, ConfigStatus, ConfigValue};
@@ -15,7 +15,7 @@
 <a href=#15 id=15 data-nosnippet>15</a><span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
 <a href=#16 id=16 data-nosnippet>16</a></span><span class="kw">use </span>zng_ext_window::FrameCaptureMode;
 <a href=#17 id=17 data-nosnippet>17</a>
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">super</span>::Window;
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use super</span>::{DefaultStyle, Window};
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">fn </span>bind_window_var&lt;T&gt;(child: <span class="kw">impl </span>IntoUiNode, user_var: <span class="kw">impl </span>IntoVar&lt;T&gt;, select: <span class="kw">impl </span>Fn(<span class="kw-2">&amp;</span>WindowVars) -&gt; Var&lt;T&gt; + Send + <span class="lifetime">'static</span>) -&gt; UiNode
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">where
@@ -45,7 +45,7 @@
 <a href=#45 id=45 data-nosnippet>45</a>            <span class="attr">#[doc = <span class="string">"Binds the [`"</span><span class="macro-nonterminal">$ident </span><span class="string">"`](fn@WindowVars::"</span><span class="macro-nonterminal">$ident </span><span class="string">") window var with the property value."</span>]
 <a href=#46 id=46 data-nosnippet>46</a>            </span><span class="doccomment">///
 <a href=#47 id=47 data-nosnippet>47</a>            /// The binding is bidirectional and the window variable is assigned on init.
-<a href=#48 id=48 data-nosnippet>48</a>            </span><span class="attr">#[property(CONTEXT, widget_impl(Window))]
+<a href=#48 id=48 data-nosnippet>48</a>            </span><span class="attr">#[property(CONTEXT, widget_impl(Window, DefaultStyle))]
 <a href=#49 id=49 data-nosnippet>49</a>            </span><span class="kw">pub fn </span><span class="macro-nonterminal">$ident</span>(child: <span class="kw">impl </span>IntoUiNode, <span class="macro-nonterminal">$ident</span>: <span class="kw">impl </span>IntoVar&lt;<span class="macro-nonterminal">$Type</span>&gt;) -&gt; UiNode {
 <a href=#50 id=50 data-nosnippet>50</a>                bind_window_var(child, <span class="macro-nonterminal">$ident</span>, |w|w.<span class="macro-nonterminal">$ident</span>().clone())
 <a href=#51 id=51 data-nosnippet>51</a>            }
@@ -101,7 +101,7 @@
 <a href=#101 id=101 data-nosnippet>101</a>        <span class="attr">#[doc = <span class="string">"Binds the `"</span><span class="macro-nonterminal">$member </span><span class="string">"` of the [`"</span><span class="macro-nonterminal">$ident </span><span class="string">"`](fn@WindowVars::"</span><span class="macro-nonterminal">$ident </span><span class="string">") window var with the property value."</span>]
 <a href=#102 id=102 data-nosnippet>102</a>        </span><span class="doccomment">///
 <a href=#103 id=103 data-nosnippet>103</a>        /// The binding is bidirectional and the window variable is assigned on init.
-<a href=#104 id=104 data-nosnippet>104</a>        </span><span class="attr">#[property(CONTEXT, widget_impl(Window))]
+<a href=#104 id=104 data-nosnippet>104</a>        </span><span class="attr">#[property(CONTEXT, widget_impl(Window, DefaultStyle))]
 <a href=#105 id=105 data-nosnippet>105</a>        </span><span class="kw">pub fn </span><span class="macro-nonterminal">$name</span>(child: <span class="kw">impl </span>IntoUiNode, <span class="macro-nonterminal">$name</span>: <span class="kw">impl </span>IntoVar&lt;<span class="macro-nonterminal">$Type</span>&gt;) -&gt; UiNode {
 <a href=#106 id=106 data-nosnippet>106</a>            bind_window_var(child, <span class="macro-nonterminal">$name</span>, |w|w.<span class="macro-nonterminal">$ident</span>().map_bidi_modify(|v| v.<span class="macro-nonterminal">$member</span>.clone(), |v, m|m.<span class="macro-nonterminal">$member </span>= v.clone()))
 <a href=#107 id=107 data-nosnippet>107</a>        }
@@ -125,7 +125,7 @@
 <a href=#125 id=125 data-nosnippet>125</a>/// It is visible if window content does not completely fill the content area, this
 <a href=#126 id=126 data-nosnippet>126</a>/// can happen if you do not set a background or the background is semi-transparent, also
 <a href=#127 id=127 data-nosnippet>127</a>/// can happen during very fast resizes.
-<a href=#128 id=128 data-nosnippet>128</a></span><span class="attr">#[property(LAYOUT-<span class="number">1</span>, default(colors::WHITE), widget_impl(Window))]
+<a href=#128 id=128 data-nosnippet>128</a></span><span class="attr">#[property(LAYOUT-<span class="number">1</span>, default(colors::WHITE), widget_impl(Window, DefaultStyle))]
 <a href=#129 id=129 data-nosnippet>129</a></span><span class="kw">pub fn </span>clear_color(child: <span class="kw">impl </span>IntoUiNode, color: <span class="kw">impl </span>IntoVar&lt;Rgba&gt;) -&gt; UiNode {
 <a href=#130 id=130 data-nosnippet>130</a>    <span class="kw">let </span>clear_color = color.into_var();
 <a href=#131 id=131 data-nosnippet>131</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
@@ -487,7 +487,7 @@
 <a href=#487 id=487 data-nosnippet>487</a>///
 <a href=#488 id=488 data-nosnippet>488</a>/// [`chrome`]: fn@chrome
 <a href=#489 id=489 data-nosnippet>489</a>/// [`WINDOWS.system_chrome`]: WINDOWS::system_chrome
-<a href=#490 id=490 data-nosnippet>490</a></span><span class="attr">#[property(EVENT, default(var_state()), widget_impl(Window))]
+<a href=#490 id=490 data-nosnippet>490</a></span><span class="attr">#[property(EVENT, default(var_state()), widget_impl(Window, DefaultStyle))]
 <a href=#491 id=491 data-nosnippet>491</a></span><span class="kw">pub fn </span>prefer_custom_chrome(child: <span class="kw">impl </span>IntoUiNode, prefer: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
 <a href=#492 id=492 data-nosnippet>492</a>    zng_wgt::node::bind_state(child, WINDOWS.system_chrome().map(|c| c.prefer_custom), prefer)
 <a href=#493 id=493 data-nosnippet>493</a>}
@@ -500,7 +500,7 @@
 <a href=#500 id=500 data-nosnippet>500</a>/// Note that you can also set the `custom_chrome_padding_fn` to ensure that the content is not hidden behind the adorner.
 <a href=#501 id=501 data-nosnippet>501</a>///
 <a href=#502 id=502 data-nosnippet>502</a>/// [`adorner_fn`]: fn@adorner_fn
-<a href=#503 id=503 data-nosnippet>503</a></span><span class="attr">#[property(FILL, default(WidgetFn::nil()), widget_impl(Window))]
+<a href=#503 id=503 data-nosnippet>503</a></span><span class="attr">#[property(FILL, default(WidgetFn::nil()), widget_impl(Window, DefaultStyle))]
 <a href=#504 id=504 data-nosnippet>504</a></span><span class="kw">pub fn </span>custom_chrome_adorner_fn(child: <span class="kw">impl </span>IntoUiNode, custom_chrome: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; UiNode {
 <a href=#505 id=505 data-nosnippet>505</a>    adorner_fn(child, custom_chrome)
 <a href=#506 id=506 data-nosnippet>506</a>}
@@ -508,7 +508,7 @@
 <a href=#508 id=508 data-nosnippet>508</a><span class="doccomment">/// Extra padding for window content in windows that display a [`custom_chrome_adorner_fn`].
 <a href=#509 id=509 data-nosnippet>509</a>///
 <a href=#510 id=510 data-nosnippet>510</a>/// [`custom_chrome_adorner_fn`]: fn@custom_chrome_adorner_fn
-<a href=#511 id=511 data-nosnippet>511</a></span><span class="attr">#[property(CHILD_LAYOUT, default(<span class="number">0</span>), widget_impl(Window))]
+<a href=#511 id=511 data-nosnippet>511</a></span><span class="attr">#[property(CHILD_LAYOUT, default(<span class="number">0</span>), widget_impl(Window, DefaultStyle))]
 <a href=#512 id=512 data-nosnippet>512</a></span><span class="kw">pub fn </span>custom_chrome_padding_fn(child: <span class="kw">impl </span>IntoUiNode, padding: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;) -&gt; UiNode {
 <a href=#513 id=513 data-nosnippet>513</a>    zng_wgt_container::padding(child, padding)
 <a href=#514 id=514 data-nosnippet>514</a>}</code></pre></div></section></main></body></html>

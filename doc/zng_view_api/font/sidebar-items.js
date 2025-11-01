@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["FontFaceId","FontId","FontOptions","GlyphInstance"],"type":["FontVariationName","GlyphIndex","GlyphOptions"]};
+window.SIDEBAR_ITEMS = {"enum":["IpcFontBytes"],"struct":["FontFaceId","FontId","FontOptions","GlyphInstance"],"type":["FontVariationName","GlyphIndex","GlyphOptions"]};

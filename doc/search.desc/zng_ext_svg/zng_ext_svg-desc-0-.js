@@ -1,1 +1,0 @@
-searchState.loadedDescShard("zng_ext_svg", 0, "SVG image support.\nApplication extension that installs SVG handling.\nImage cache proxy that handlers SVG requests.\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.")

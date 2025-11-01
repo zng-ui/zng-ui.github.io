@@ -1,1 +1,0 @@
-searchState.loadedDescShard("zng_var_proc_macros", 0, "Proc-macros for the <code>zng-var</code> crate.\nImplement transition by delegating all type parts.")

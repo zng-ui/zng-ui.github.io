@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::fmt;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>node::CONTEXT_IMAGE_VAR;
@@ -125,7 +125,7 @@
 <a href=#125 id=125 data-nosnippet>125</a>    <span class="doccomment">/// If the image desired size is scaled considering the image and screen PPIs.
 <a href=#126 id=126 data-nosnippet>126</a>    ///
 <a href=#127 id=127 data-nosnippet>127</a>    /// Is `false` by default.
-<a href=#128 id=128 data-nosnippet>128</a>    </span><span class="kw">pub static </span>IMAGE_SCALE_PPI_VAR: bool = <span class="bool-val">false</span>;
+<a href=#128 id=128 data-nosnippet>128</a>    </span><span class="kw">pub static </span>IMAGE_SCALE_DENSITY_VAR: bool = <span class="bool-val">false</span>;
 <a href=#129 id=129 data-nosnippet>129</a>
 <a href=#130 id=130 data-nosnippet>130</a>    <span class="doccomment">/// Align of the image in relation to the image widget final size.
 <a href=#131 id=131 data-nosnippet>131</a>    ///
@@ -161,11 +161,11 @@
 <a href=#161 id=161 data-nosnippet>161</a>
 <a href=#162 id=162 data-nosnippet>162</a><span class="doccomment">/// Sets the scale applied to all inner images.
 <a href=#163 id=163 data-nosnippet>163</a>///
-<a href=#164 id=164 data-nosnippet>164</a>/// The scaling is applied after [`img_scale_ppi`] if active.
+<a href=#164 id=164 data-nosnippet>164</a>/// The scaling is applied after [`img_scale_density`] if active.
 <a href=#165 id=165 data-nosnippet>165</a>///
 <a href=#166 id=166 data-nosnippet>166</a>/// By default not scaling is done.
 <a href=#167 id=167 data-nosnippet>167</a>///
-<a href=#168 id=168 data-nosnippet>168</a>/// [`img_scale_ppi`]: fn@img_scale_ppi
+<a href=#168 id=168 data-nosnippet>168</a>/// [`img_scale_density`]: fn@img_scale_density
 <a href=#169 id=169 data-nosnippet>169</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_SCALE_VAR), widget_impl(Image))]
 <a href=#170 id=170 data-nosnippet>170</a></span><span class="kw">pub fn </span>img_scale(child: <span class="kw">impl </span>IntoUiNode, scale: <span class="kw">impl </span>IntoVar&lt;Factor2d&gt;) -&gt; UiNode {
 <a href=#171 id=171 data-nosnippet>171</a>    with_context_var(child, IMAGE_SCALE_VAR, scale)
@@ -185,19 +185,19 @@
 <a href=#185 id=185 data-nosnippet>185</a>    with_context_var(child, IMAGE_SCALE_FACTOR_VAR, enabled)
 <a href=#186 id=186 data-nosnippet>186</a>}
 <a href=#187 id=187 data-nosnippet>187</a>
-<a href=#188 id=188 data-nosnippet>188</a><span class="doccomment">/// Sets if the image desired size is scaled considering the image and monitor PPI.
+<a href=#188 id=188 data-nosnippet>188</a><span class="doccomment">/// Sets if the image desired size is scaled considering the image and monitor pixel density.
 <a href=#189 id=189 data-nosnippet>189</a>///
 <a href=#190 id=190 data-nosnippet>190</a>/// The image desired size is its original size, after [`img_crop`], and it can be in pixels or scaled considering
-<a href=#191 id=191 data-nosnippet>191</a>/// the image PPI, monitor PPI and scale factor.
+<a href=#191 id=191 data-nosnippet>191</a>/// the image pixel density, monitor pixel density and scale factor.
 <a href=#192 id=192 data-nosnippet>192</a>///
 <a href=#193 id=193 data-nosnippet>193</a>/// By default this is `false`, if `true` the image is scaled in a attempt to recreate the original physical dimensions, this
-<a href=#194 id=194 data-nosnippet>194</a>/// only works if the image and monitor PPI are set correctly. The monitor PPI can be set using the [`MONITORS`] service.
+<a href=#194 id=194 data-nosnippet>194</a>/// only works if the image and monitor pixel density are set correctly. The monitor pixel density can be set using the [`MONITORS`] service.
 <a href=#195 id=195 data-nosnippet>195</a>///
 <a href=#196 id=196 data-nosnippet>196</a>/// [`img_crop`]: fn@img_crop
 <a href=#197 id=197 data-nosnippet>197</a>/// [`MONITORS`]: zng_ext_window::MONITORS
-<a href=#198 id=198 data-nosnippet>198</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_SCALE_PPI_VAR), widget_impl(Image))]
-<a href=#199 id=199 data-nosnippet>199</a></span><span class="kw">pub fn </span>img_scale_ppi(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#200 id=200 data-nosnippet>200</a>    with_context_var(child, IMAGE_SCALE_PPI_VAR, enabled)
+<a href=#198 id=198 data-nosnippet>198</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_SCALE_DENSITY_VAR), widget_impl(Image))]
+<a href=#199 id=199 data-nosnippet>199</a></span><span class="kw">pub fn </span>img_scale_density(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#200 id=200 data-nosnippet>200</a>    with_context_var(child, IMAGE_SCALE_DENSITY_VAR, enabled)
 <a href=#201 id=201 data-nosnippet>201</a>}
 <a href=#202 id=202 data-nosnippet>202</a>
 <a href=#203 id=203 data-nosnippet>203</a><span class="doccomment">/// Sets the [`Align`] of all inner images within each image widget area.
@@ -235,13 +235,13 @@
 <a href=#235 id=235 data-nosnippet>235</a>
 <a href=#236 id=236 data-nosnippet>236</a><span class="doccomment">/// Sets a [`Rect`] that is a clip applied to all inner images before their layout.
 <a href=#237 id=237 data-nosnippet>237</a>///
-<a href=#238 id=238 data-nosnippet>238</a>/// Relative values are calculated from the image pixel size, the [`img_scale_ppi`] is only considered after.
+<a href=#238 id=238 data-nosnippet>238</a>/// Relative values are calculated from the image pixel size, the [`img_scale_density`] is only considered after.
 <a href=#239 id=239 data-nosnippet>239</a>/// Note that more complex clipping can be applied after to the full widget, this property exists primarily to
 <a href=#240 id=240 data-nosnippet>240</a>/// render selections of a [texture atlas].
 <a href=#241 id=241 data-nosnippet>241</a>///
 <a href=#242 id=242 data-nosnippet>242</a>/// By default no cropping is done.
 <a href=#243 id=243 data-nosnippet>243</a>///
-<a href=#244 id=244 data-nosnippet>244</a>/// [`img_scale_ppi`]: #fn@img_scale_ppi
+<a href=#244 id=244 data-nosnippet>244</a>/// [`img_scale_density`]: #fn@img_scale_density
 <a href=#245 id=245 data-nosnippet>245</a>/// [texture atlas]: https://en.wikipedia.org/wiki/Texture_atlas
 <a href=#246 id=246 data-nosnippet>246</a>/// [`Rect`]: zng_wgt::prelude::Rect
 <a href=#247 id=247 data-nosnippet>247</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_CROP_VAR), widget_impl(Image))]

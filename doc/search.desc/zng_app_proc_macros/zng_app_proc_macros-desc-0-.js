@@ -1,1 +1,0 @@
-searchState.loadedDescShard("zng_app_proc_macros", 0, "Proc-macros for <code>zng-app</code>.\nExpands a property assign to include a build action that …\nExpands a function to a widget property.\nExpands a struct to a widget and macro.\nExpands a generic struct to a widget mixin.")

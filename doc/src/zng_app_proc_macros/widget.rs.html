@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/widget.rs`."><title>widget.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-aa0817cf.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.90.0 (1159e78c4 2025-09-14)" data-channel="1.90.0" data-search-js="search-fa3e91e5.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app_proc_macros/</div>widget.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>proc_macro2::{Span, TokenStream, TokenTree};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/widget.rs`."><title>widget.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app_proc_macros/</div>widget.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>proc_macro2::{Span, TokenStream, TokenTree};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>quote::{ToTokens, quote};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>syn::{ext::IdentExt, parse::Parse, spanned::Spanned, <span class="kw-2">*</span>};
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -595,101 +595,101 @@
 <a href=#595 id=595 data-nosnippet>595</a><span class="kw">fn </span>prop_assign(prop: <span class="kw-2">&amp;</span>WgtProperty, errors: <span class="kw-2">&amp;mut </span>Errors, is_when: bool) -&gt; TokenStream {
 <a href=#596 id=596 data-nosnippet>596</a>    <span class="kw">let </span>core = util::crate_core();
 <a href=#597 id=597 data-nosnippet>597</a>
-<a href=#598 id=598 data-nosnippet>598</a>    <span class="kw">let </span>custom_expand = <span class="kw">if </span>prop.has_custom_attrs() {
-<a href=#599 id=599 data-nosnippet>599</a>        prop.custom_attrs_expand(<span class="macro">ident!</span>(<span class="string">"wgt__"</span>), is_when)
-<a href=#600 id=600 data-nosnippet>600</a>    } <span class="kw">else </span>{
-<a href=#601 id=601 data-nosnippet>601</a>        <span class="macro">quote!</span>()
-<a href=#602 id=602 data-nosnippet>602</a>    };
-<a href=#603 id=603 data-nosnippet>603</a>    <span class="kw">let </span>attrs = prop.attrs.cfg_and_lints();
+<a href=#598 id=598 data-nosnippet>598</a>    <span class="kw">let </span>attrs = prop.attrs.cfg_and_lints();
+<a href=#599 id=599 data-nosnippet>599</a>
+<a href=#600 id=600 data-nosnippet>600</a>    <span class="kw">let </span>ident = prop.ident();
+<a href=#601 id=601 data-nosnippet>601</a>    <span class="kw">let </span>path = <span class="kw-2">&amp;</span>prop.path;
+<a href=#602 id=602 data-nosnippet>602</a>
+<a href=#603 id=603 data-nosnippet>603</a>    <span class="kw">let </span>generics = <span class="kw-2">&amp;</span>prop.generics;
 <a href=#604 id=604 data-nosnippet>604</a>
-<a href=#605 id=605 data-nosnippet>605</a>    <span class="kw">let </span>ident = prop.ident();
-<a href=#606 id=606 data-nosnippet>606</a>    <span class="kw">let </span>path = <span class="kw-2">&amp;</span>prop.path;
-<a href=#607 id=607 data-nosnippet>607</a>
-<a href=#608 id=608 data-nosnippet>608</a>    <span class="kw">let </span>generics = <span class="kw-2">&amp;</span>prop.generics;
-<a href=#609 id=609 data-nosnippet>609</a>
-<a href=#610 id=610 data-nosnippet>610</a>    <span class="macro">macro_rules!</span> quote_call {
-<a href=#611 id=611 data-nosnippet>611</a>        (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
-<a href=#612 id=612 data-nosnippet>612</a>            <span class="kw">if </span>path.get_ident().is_some() {
-<a href=#613 id=613 data-nosnippet>613</a>                <span class="macro">quote!</span> {
-<a href=#614 id=614 data-nosnippet>614</a>                    wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
-<a href=#615 id=615 data-nosnippet>615</a>                }
-<a href=#616 id=616 data-nosnippet>616</a>            } <span class="kw">else </span>{
-<a href=#617 id=617 data-nosnippet>617</a>                <span class="macro">quote!</span> {
-<a href=#618 id=618 data-nosnippet>618</a>                    #path::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
-<a href=#619 id=619 data-nosnippet>619</a>                }
-<a href=#620 id=620 data-nosnippet>620</a>            }
-<a href=#621 id=621 data-nosnippet>621</a>        }
-<a href=#622 id=622 data-nosnippet>622</a>    }
-<a href=#623 id=623 data-nosnippet>623</a>
-<a href=#624 id=624 data-nosnippet>624</a>    <span class="kw">let </span>ident_meta = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"{}_"</span>, ident);
-<a href=#625 id=625 data-nosnippet>625</a>
-<a href=#626 id=626 data-nosnippet>626</a>    <span class="kw">let </span>when_check = <span class="kw">if </span>is_when {
-<a href=#627 id=627 data-nosnippet>627</a>        <span class="kw">let </span>meta = <span class="macro">quote_call!</span>(#ident_meta());
-<a href=#628 id=628 data-nosnippet>628</a>        <span class="macro">quote!</span> {
-<a href=#629 id=629 data-nosnippet>629</a>            {
-<a href=#630 id=630 data-nosnippet>630</a>                <span class="kw">let </span>meta__ = #meta
-<a href=#631 id=631 data-nosnippet>631</a>                meta__.allowed_in_when_assign();
-<a href=#632 id=632 data-nosnippet>632</a>            }
-<a href=#633 id=633 data-nosnippet>633</a>        }
-<a href=#634 id=634 data-nosnippet>634</a>    } <span class="kw">else </span>{
-<a href=#635 id=635 data-nosnippet>635</a>        <span class="macro">quote!</span>()
-<a href=#636 id=636 data-nosnippet>636</a>    };
-<a href=#637 id=637 data-nosnippet>637</a>
-<a href=#638 id=638 data-nosnippet>638</a>    <span class="kw">let </span>prop_init;
-<a href=#639 id=639 data-nosnippet>639</a>
-<a href=#640 id=640 data-nosnippet>640</a>    <span class="kw">match </span><span class="kw-2">&amp;</span>prop.value {
-<a href=#641 id=641 data-nosnippet>641</a>        <span class="prelude-val">Some</span>((<span class="kw">_</span>, val)) =&gt; <span class="kw">match </span>val {
-<a href=#642 id=642 data-nosnippet>642</a>            widget_util::PropertyValue::Special(special, <span class="kw">_</span>) =&gt; {
-<a href=#643 id=643 data-nosnippet>643</a>                <span class="kw">if </span>prop.is_unset() {
-<a href=#644 id=644 data-nosnippet>644</a>                    <span class="kw">let </span>unset_ident = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"unset_{}"</span>, ident);
-<a href=#645 id=645 data-nosnippet>645</a>                    prop_init = <span class="macro">quote_call!</span>(#unset_ident());
-<a href=#646 id=646 data-nosnippet>646</a>                } <span class="kw">else </span>{
-<a href=#647 id=647 data-nosnippet>647</a>                    errors.push(<span class="string">"unknown value, expected `unset!`"</span>, special.span());
-<a href=#648 id=648 data-nosnippet>648</a>                    <span class="kw">return </span><span class="macro">quote!</span>();
-<a href=#649 id=649 data-nosnippet>649</a>                }
-<a href=#650 id=650 data-nosnippet>650</a>            }
-<a href=#651 id=651 data-nosnippet>651</a>            widget_util::PropertyValue::Unnamed(val) =&gt; {
-<a href=#652 id=652 data-nosnippet>652</a>                prop_init = <span class="macro">quote_call!</span>( #ident(#val));
-<a href=#653 id=653 data-nosnippet>653</a>            }
-<a href=#654 id=654 data-nosnippet>654</a>            widget_util::PropertyValue::Named(<span class="kw">_</span>, fields) =&gt; {
-<a href=#655 id=655 data-nosnippet>655</a>                <span class="kw">let </span><span class="kw-2">mut </span>idents_sorted: Vec&lt;<span class="kw">_</span>&gt; = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.ident).collect();
-<a href=#656 id=656 data-nosnippet>656</a>                idents_sorted.sort();
-<a href=#657 id=657 data-nosnippet>657</a>                <span class="kw">let </span>idents = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.ident);
-<a href=#658 id=658 data-nosnippet>658</a>                <span class="kw">let </span>values = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.expr);
-<a href=#659 id=659 data-nosnippet>659</a>                <span class="kw">let </span>ident_sorted = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"{}__"</span>, ident);
-<a href=#660 id=660 data-nosnippet>660</a>
-<a href=#661 id=661 data-nosnippet>661</a>                <span class="kw">let </span>call = <span class="macro">quote_call!</span>(#ident_sorted(#(#idents_sorted),<span class="kw-2">*</span>));
-<a href=#662 id=662 data-nosnippet>662</a>                <span class="kw">let </span>meta = <span class="kw">if </span>path.get_ident().is_some() {
-<a href=#663 id=663 data-nosnippet>663</a>                    <span class="macro">quote!</span> {
-<a href=#664 id=664 data-nosnippet>664</a>                        wgt__.#ident_meta()
-<a href=#665 id=665 data-nosnippet>665</a>                    }
-<a href=#666 id=666 data-nosnippet>666</a>                } <span class="kw">else </span>{
-<a href=#667 id=667 data-nosnippet>667</a>                    <span class="macro">quote!</span> {
-<a href=#668 id=668 data-nosnippet>668</a>                        &lt;#core::widget::builder::WgtInfo <span class="kw">as </span>#path&gt;::#ident_meta(<span class="kw-2">&amp;</span>#core::widget::builder::WgtInfo)
-<a href=#669 id=669 data-nosnippet>669</a>                    }
-<a href=#670 id=670 data-nosnippet>670</a>                };
-<a href=#671 id=671 data-nosnippet>671</a>                prop_init = <span class="macro">quote!</span> {
-<a href=#672 id=672 data-nosnippet>672</a>                    {
-<a href=#673 id=673 data-nosnippet>673</a>                        <span class="kw">let </span>meta__ = #meta;
-<a href=#674 id=674 data-nosnippet>674</a>                        #(
-<a href=#675 id=675 data-nosnippet>675</a>                            <span class="kw">let </span>#idents = meta__.inputs().#idents(#values);
-<a href=#676 id=676 data-nosnippet>676</a>                        )*
-<a href=#677 id=677 data-nosnippet>677</a>                        #call
-<a href=#678 id=678 data-nosnippet>678</a>                    }
-<a href=#679 id=679 data-nosnippet>679</a>                };
-<a href=#680 id=680 data-nosnippet>680</a>            }
-<a href=#681 id=681 data-nosnippet>681</a>        },
-<a href=#682 id=682 data-nosnippet>682</a>        <span class="prelude-val">None </span>=&gt; {
-<a href=#683 id=683 data-nosnippet>683</a>            <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>prop.path.segments.last().unwrap().ident;
-<a href=#684 id=684 data-nosnippet>684</a>            prop_init = <span class="macro">quote_call!</span>(#ident(#ident));
-<a href=#685 id=685 data-nosnippet>685</a>        }
-<a href=#686 id=686 data-nosnippet>686</a>    }
-<a href=#687 id=687 data-nosnippet>687</a>
-<a href=#688 id=688 data-nosnippet>688</a>    <span class="macro">quote!</span> {
-<a href=#689 id=689 data-nosnippet>689</a>        #attrs {
-<a href=#690 id=690 data-nosnippet>690</a>            #when_check
-<a href=#691 id=691 data-nosnippet>691</a>            #custom_expand
-<a href=#692 id=692 data-nosnippet>692</a>            #prop_init
+<a href=#605 id=605 data-nosnippet>605</a>    <span class="macro">macro_rules!</span> quote_call {
+<a href=#606 id=606 data-nosnippet>606</a>        (#<span class="macro-nonterminal">$mtd</span>:ident ( $(<span class="macro-nonterminal">$args</span>:tt)* )) =&gt; {
+<a href=#607 id=607 data-nosnippet>607</a>            <span class="kw">if </span>path.get_ident().is_some() { <span class="comment">// is single ident
+<a href=#608 id=608 data-nosnippet>608</a>                </span><span class="macro">quote!</span> {
+<a href=#609 id=609 data-nosnippet>609</a>                    wgt__.#<span class="macro-nonterminal">$mtd </span>#generics($(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
+<a href=#610 id=610 data-nosnippet>610</a>                }
+<a href=#611 id=611 data-nosnippet>611</a>            } <span class="kw">else </span>{
+<a href=#612 id=612 data-nosnippet>612</a>                <span class="macro">quote!</span> {
+<a href=#613 id=613 data-nosnippet>613</a>                    #path::#<span class="macro-nonterminal">$mtd </span>#generics(#core::widget::base::WidgetImpl::base(<span class="kw-2">&amp;mut *</span>wgt__), $(<span class="macro-nonterminal">$args</span>)<span class="kw-2">*</span>);
+<a href=#614 id=614 data-nosnippet>614</a>                }
+<a href=#615 id=615 data-nosnippet>615</a>            }
+<a href=#616 id=616 data-nosnippet>616</a>        }
+<a href=#617 id=617 data-nosnippet>617</a>    }
+<a href=#618 id=618 data-nosnippet>618</a>
+<a href=#619 id=619 data-nosnippet>619</a>    <span class="kw">let </span>ident_meta = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"{}_"</span>, ident);
+<a href=#620 id=620 data-nosnippet>620</a>
+<a href=#621 id=621 data-nosnippet>621</a>    <span class="kw">let </span>when_check = <span class="kw">if </span>is_when {
+<a href=#622 id=622 data-nosnippet>622</a>        <span class="kw">let </span>meta = <span class="macro">quote_call!</span>(#ident_meta());
+<a href=#623 id=623 data-nosnippet>623</a>        <span class="macro">quote!</span> {
+<a href=#624 id=624 data-nosnippet>624</a>            {
+<a href=#625 id=625 data-nosnippet>625</a>                <span class="kw">let </span>meta__ = #meta
+<a href=#626 id=626 data-nosnippet>626</a>                meta__.allowed_in_when_assign();
+<a href=#627 id=627 data-nosnippet>627</a>            }
+<a href=#628 id=628 data-nosnippet>628</a>        }
+<a href=#629 id=629 data-nosnippet>629</a>    } <span class="kw">else </span>{
+<a href=#630 id=630 data-nosnippet>630</a>        <span class="macro">quote!</span>()
+<a href=#631 id=631 data-nosnippet>631</a>    };
+<a href=#632 id=632 data-nosnippet>632</a>
+<a href=#633 id=633 data-nosnippet>633</a>    <span class="kw">let </span>prop_init;
+<a href=#634 id=634 data-nosnippet>634</a>
+<a href=#635 id=635 data-nosnippet>635</a>    <span class="kw">match </span><span class="kw-2">&amp;</span>prop.value {
+<a href=#636 id=636 data-nosnippet>636</a>        <span class="prelude-val">Some</span>((<span class="kw">_</span>, val)) =&gt; <span class="kw">match </span>val {
+<a href=#637 id=637 data-nosnippet>637</a>            widget_util::PropertyValue::Special(special, <span class="kw">_</span>) =&gt; {
+<a href=#638 id=638 data-nosnippet>638</a>                <span class="kw">if </span>prop.is_unset() {
+<a href=#639 id=639 data-nosnippet>639</a>                    <span class="kw">let </span>unset_ident = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"unset_{}"</span>, ident);
+<a href=#640 id=640 data-nosnippet>640</a>                    prop_init = <span class="macro">quote_call!</span>(#unset_ident());
+<a href=#641 id=641 data-nosnippet>641</a>                } <span class="kw">else </span>{
+<a href=#642 id=642 data-nosnippet>642</a>                    errors.push(<span class="string">"unknown value, expected `unset!`"</span>, special.span());
+<a href=#643 id=643 data-nosnippet>643</a>                    <span class="kw">return </span><span class="macro">quote!</span>();
+<a href=#644 id=644 data-nosnippet>644</a>                }
+<a href=#645 id=645 data-nosnippet>645</a>            }
+<a href=#646 id=646 data-nosnippet>646</a>            widget_util::PropertyValue::Unnamed(val) =&gt; {
+<a href=#647 id=647 data-nosnippet>647</a>                prop_init = <span class="macro">quote_call!</span>( #ident(#val));
+<a href=#648 id=648 data-nosnippet>648</a>            }
+<a href=#649 id=649 data-nosnippet>649</a>            widget_util::PropertyValue::Named(<span class="kw">_</span>, fields) =&gt; {
+<a href=#650 id=650 data-nosnippet>650</a>                <span class="kw">let </span><span class="kw-2">mut </span>idents_sorted: Vec&lt;<span class="kw">_</span>&gt; = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.ident).collect();
+<a href=#651 id=651 data-nosnippet>651</a>                idents_sorted.sort();
+<a href=#652 id=652 data-nosnippet>652</a>                <span class="kw">let </span>idents = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.ident);
+<a href=#653 id=653 data-nosnippet>653</a>                <span class="kw">let </span>values = fields.iter().map(|f| <span class="kw-2">&amp;</span>f.expr);
+<a href=#654 id=654 data-nosnippet>654</a>                <span class="kw">let </span>ident_sorted = <span class="macro">ident_spanned!</span>(ident.span()=&gt; <span class="string">"{}__"</span>, ident);
+<a href=#655 id=655 data-nosnippet>655</a>
+<a href=#656 id=656 data-nosnippet>656</a>                <span class="kw">let </span>call = <span class="macro">quote_call!</span>(#ident_sorted(#(#idents_sorted),<span class="kw-2">*</span>));
+<a href=#657 id=657 data-nosnippet>657</a>                <span class="kw">let </span>meta = <span class="kw">if </span>path.get_ident().is_some() {
+<a href=#658 id=658 data-nosnippet>658</a>                    <span class="macro">quote!</span> {
+<a href=#659 id=659 data-nosnippet>659</a>                        wgt__.#ident_meta()
+<a href=#660 id=660 data-nosnippet>660</a>                    }
+<a href=#661 id=661 data-nosnippet>661</a>                } <span class="kw">else </span>{
+<a href=#662 id=662 data-nosnippet>662</a>                    <span class="macro">quote!</span> {
+<a href=#663 id=663 data-nosnippet>663</a>                        &lt;#core::widget::builder::WgtInfo <span class="kw">as </span>#path&gt;::#ident_meta(<span class="kw-2">&amp;</span>#core::widget::builder::WgtInfo)
+<a href=#664 id=664 data-nosnippet>664</a>                    }
+<a href=#665 id=665 data-nosnippet>665</a>                };
+<a href=#666 id=666 data-nosnippet>666</a>                prop_init = <span class="macro">quote!</span> {
+<a href=#667 id=667 data-nosnippet>667</a>                    {
+<a href=#668 id=668 data-nosnippet>668</a>                        <span class="kw">let </span>meta__ = #meta;
+<a href=#669 id=669 data-nosnippet>669</a>                        #(
+<a href=#670 id=670 data-nosnippet>670</a>                            <span class="kw">let </span>#idents = meta__.inputs().#idents(#values);
+<a href=#671 id=671 data-nosnippet>671</a>                        )*
+<a href=#672 id=672 data-nosnippet>672</a>                        #call
+<a href=#673 id=673 data-nosnippet>673</a>                    }
+<a href=#674 id=674 data-nosnippet>674</a>                };
+<a href=#675 id=675 data-nosnippet>675</a>            }
+<a href=#676 id=676 data-nosnippet>676</a>        },
+<a href=#677 id=677 data-nosnippet>677</a>        <span class="prelude-val">None </span>=&gt; {
+<a href=#678 id=678 data-nosnippet>678</a>            <span class="kw">let </span>ident = <span class="kw-2">&amp;</span>prop.path.segments.last().unwrap().ident;
+<a href=#679 id=679 data-nosnippet>679</a>            prop_init = <span class="macro">quote_call!</span>(#ident(#ident));
+<a href=#680 id=680 data-nosnippet>680</a>        }
+<a href=#681 id=681 data-nosnippet>681</a>    }
+<a href=#682 id=682 data-nosnippet>682</a>
+<a href=#683 id=683 data-nosnippet>683</a>    <span class="kw">let </span>expand = <span class="kw">if </span>prop.has_custom_attrs() {
+<a href=#684 id=684 data-nosnippet>684</a>        prop.custom_attrs_expand(<span class="macro">ident!</span>(<span class="string">"wgt__"</span>), is_when, prop_init)
+<a href=#685 id=685 data-nosnippet>685</a>    } <span class="kw">else </span>{
+<a href=#686 id=686 data-nosnippet>686</a>        prop_init
+<a href=#687 id=687 data-nosnippet>687</a>    };
+<a href=#688 id=688 data-nosnippet>688</a>
+<a href=#689 id=689 data-nosnippet>689</a>    <span class="macro">quote!</span> {
+<a href=#690 id=690 data-nosnippet>690</a>        #attrs {
+<a href=#691 id=691 data-nosnippet>691</a>            #when_check
+<a href=#692 id=692 data-nosnippet>692</a>            #expand
 <a href=#693 id=693 data-nosnippet>693</a>        }
 <a href=#694 id=694 data-nosnippet>694</a>    }
 <a href=#695 id=695 data-nosnippet>695</a>}
