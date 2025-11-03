@@ -152,54 +152,53 @@
 <a href=#152 id=152 data-nosnippet>152</a>                background_color = colors::BASE_COLOR_VAR.rgba();
 <a href=#153 id=153 data-nosnippet>153</a>
 <a href=#154 id=154 data-nosnippet>154</a>                clip_to_bounds = <span class="bool-val">true</span>;
-<a href=#155 id=155 data-nosnippet>155</a>                child_align = Align::FILL_START;
-<a href=#156 id=156 data-nosnippet>156</a>                child = <span class="macro">zng_wgt::Wgt!</span> {
-<a href=#157 id=157 data-nosnippet>157</a>                    background_color = colors::ACCENT_COLOR_VAR.rgba();
-<a href=#158 id=158 data-nosnippet>158</a>
-<a href=#159 id=159 data-nosnippet>159</a>                    <span class="attr">#[easing(<span class="number">200</span>.ms())]
-<a href=#160 id=160 data-nosnippet>160</a>                    </span>width = PROGRESS_VAR.map(|p| Length::from(p.fct()));
-<a href=#161 id=161 data-nosnippet>161</a>
-<a href=#162 id=162 data-nosnippet>162</a>                    on_progress = <span class="macro">hn!</span>(indeterminate_x, |p| {
-<a href=#163 id=163 data-nosnippet>163</a>                        <span class="kw">if </span>p.is_indeterminate() {
-<a href=#164 id=164 data-nosnippet>164</a>                            <span class="comment">// only animates when actually indeterminate
-<a href=#165 id=165 data-nosnippet>165</a>                            </span><span class="kw">if </span>indeterminate_animation.is_none() {
-<a href=#166 id=166 data-nosnippet>166</a>                                <span class="kw">let </span>h = indeterminate_x.sequence(<span class="kw">move </span>|i| {
-<a href=#167 id=167 data-nosnippet>167</a>                                    <span class="kw">use </span>zng_var::animation::easing;
-<a href=#168 id=168 data-nosnippet>168</a>                                    i.set_ease(-indeterminate_width, <span class="number">100</span>.pct(), <span class="number">1.5</span>.secs(), |t| easing::ease_out(easing::quad, t))
-<a href=#169 id=169 data-nosnippet>169</a>                                });
-<a href=#170 id=170 data-nosnippet>170</a>                                indeterminate_animation = <span class="prelude-val">Some</span>(h);
-<a href=#171 id=171 data-nosnippet>171</a>                            }
-<a href=#172 id=172 data-nosnippet>172</a>                        } <span class="kw">else </span>{
-<a href=#173 id=173 data-nosnippet>173</a>                            indeterminate_animation = <span class="prelude-val">None</span>;
-<a href=#174 id=174 data-nosnippet>174</a>                        }
-<a href=#175 id=175 data-nosnippet>175</a>                    });
-<a href=#176 id=176 data-nosnippet>176</a>                    when <span class="kw-2">*</span>#{PROGRESS_VAR.map(|p| p.is_indeterminate())} {
-<a href=#177 id=177 data-nosnippet>177</a>                        width = indeterminate_width;
-<a href=#178 id=178 data-nosnippet>178</a>                        x = indeterminate_x;
-<a href=#179 id=179 data-nosnippet>179</a>                    }
-<a href=#180 id=180 data-nosnippet>180</a>                };
-<a href=#181 id=181 data-nosnippet>181</a>            };
-<a href=#182 id=182 data-nosnippet>182</a>
-<a href=#183 id=183 data-nosnippet>183</a>            zng_wgt_container::child_spacing = <span class="number">6</span>;
-<a href=#184 id=184 data-nosnippet>184</a>            zng_wgt_container::child_out_bottom = <span class="macro">zng_wgt_text::Text!</span> {
-<a href=#185 id=185 data-nosnippet>185</a>                txt = PROGRESS_VAR.map(|p| p.msg());
-<a href=#186 id=186 data-nosnippet>186</a>                zng_wgt::visibility = PROGRESS_VAR.map(|p| Visibility::from(!p.msg().is_empty()));
-<a href=#187 id=187 data-nosnippet>187</a>                zng_wgt::align = Align::CENTER;
-<a href=#188 id=188 data-nosnippet>188</a>            };
-<a href=#189 id=189 data-nosnippet>189</a>        }
-<a href=#190 id=190 data-nosnippet>190</a>    }
-<a href=#191 id=191 data-nosnippet>191</a>}
-<a href=#192 id=192 data-nosnippet>192</a>
-<a href=#193 id=193 data-nosnippet>193</a><span class="doccomment">/// Progress view style that is only the progress bar, no message text.
-<a href=#194 id=194 data-nosnippet>194</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::SimpleBarStyle</span>)]
-<a href=#195 id=195 data-nosnippet>195</a></span><span class="kw">pub struct </span>SimpleBarStyle(DefaultStyle);
-<a href=#196 id=196 data-nosnippet>196</a><span class="macro">impl_named_style_fn!</span>(simple_bar, SimpleBarStyle);
-<a href=#197 id=197 data-nosnippet>197</a><span class="kw">impl </span>SimpleBarStyle {
-<a href=#198 id=198 data-nosnippet>198</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#199 id=199 data-nosnippet>199</a>        <span class="macro">widget_set!</span> {
-<a href=#200 id=200 data-nosnippet>200</a>            <span class="self">self</span>;
-<a href=#201 id=201 data-nosnippet>201</a>            named_style_fn = SIMPLE_BAR_STYLE_FN_VAR;
-<a href=#202 id=202 data-nosnippet>202</a>            zng_wgt_container::child_out_bottom = <span class="macro">unset!</span>;
-<a href=#203 id=203 data-nosnippet>203</a>        }
-<a href=#204 id=204 data-nosnippet>204</a>    }
-<a href=#205 id=205 data-nosnippet>205</a>}</code></pre></div></section></main></body></html>
+<a href=#155 id=155 data-nosnippet>155</a>                child = <span class="macro">zng_wgt::Wgt!</span> {
+<a href=#156 id=156 data-nosnippet>156</a>                    background_color = colors::ACCENT_COLOR_VAR.rgba();
+<a href=#157 id=157 data-nosnippet>157</a>
+<a href=#158 id=158 data-nosnippet>158</a>                    <span class="attr">#[easing(<span class="number">200</span>.ms())]
+<a href=#159 id=159 data-nosnippet>159</a>                    </span>width = PROGRESS_VAR.map(|p| Length::from(p.fct()));
+<a href=#160 id=160 data-nosnippet>160</a>
+<a href=#161 id=161 data-nosnippet>161</a>                    on_progress = <span class="macro">hn!</span>(indeterminate_x, |p| {
+<a href=#162 id=162 data-nosnippet>162</a>                        <span class="kw">if </span>p.is_indeterminate() {
+<a href=#163 id=163 data-nosnippet>163</a>                            <span class="comment">// only animates when actually indeterminate
+<a href=#164 id=164 data-nosnippet>164</a>                            </span><span class="kw">if </span>indeterminate_animation.is_none() {
+<a href=#165 id=165 data-nosnippet>165</a>                                <span class="kw">let </span>h = indeterminate_x.sequence(<span class="kw">move </span>|i| {
+<a href=#166 id=166 data-nosnippet>166</a>                                    <span class="kw">use </span>zng_var::animation::easing;
+<a href=#167 id=167 data-nosnippet>167</a>                                    i.set_ease(-indeterminate_width, <span class="number">100</span>.pct(), <span class="number">1.5</span>.secs(), |t| easing::ease_out(easing::quad, t))
+<a href=#168 id=168 data-nosnippet>168</a>                                });
+<a href=#169 id=169 data-nosnippet>169</a>                                indeterminate_animation = <span class="prelude-val">Some</span>(h);
+<a href=#170 id=170 data-nosnippet>170</a>                            }
+<a href=#171 id=171 data-nosnippet>171</a>                        } <span class="kw">else </span>{
+<a href=#172 id=172 data-nosnippet>172</a>                            indeterminate_animation = <span class="prelude-val">None</span>;
+<a href=#173 id=173 data-nosnippet>173</a>                        }
+<a href=#174 id=174 data-nosnippet>174</a>                    });
+<a href=#175 id=175 data-nosnippet>175</a>                    when <span class="kw-2">*</span>#{PROGRESS_VAR.map(|p| p.is_indeterminate())} {
+<a href=#176 id=176 data-nosnippet>176</a>                        width = indeterminate_width;
+<a href=#177 id=177 data-nosnippet>177</a>                        x = indeterminate_x;
+<a href=#178 id=178 data-nosnippet>178</a>                    }
+<a href=#179 id=179 data-nosnippet>179</a>                };
+<a href=#180 id=180 data-nosnippet>180</a>            };
+<a href=#181 id=181 data-nosnippet>181</a>
+<a href=#182 id=182 data-nosnippet>182</a>            zng_wgt_container::child_spacing = <span class="number">6</span>;
+<a href=#183 id=183 data-nosnippet>183</a>            zng_wgt_container::child_out_bottom = <span class="macro">zng_wgt_text::Text!</span> {
+<a href=#184 id=184 data-nosnippet>184</a>                txt = PROGRESS_VAR.map(|p| p.msg());
+<a href=#185 id=185 data-nosnippet>185</a>                zng_wgt::visibility = PROGRESS_VAR.map(|p| Visibility::from(!p.msg().is_empty()));
+<a href=#186 id=186 data-nosnippet>186</a>                zng_wgt::align = Align::CENTER;
+<a href=#187 id=187 data-nosnippet>187</a>            };
+<a href=#188 id=188 data-nosnippet>188</a>        }
+<a href=#189 id=189 data-nosnippet>189</a>    }
+<a href=#190 id=190 data-nosnippet>190</a>}
+<a href=#191 id=191 data-nosnippet>191</a>
+<a href=#192 id=192 data-nosnippet>192</a><span class="doccomment">/// Progress view style that is only the progress bar, no message text.
+<a href=#193 id=193 data-nosnippet>193</a></span><span class="attr">#[widget(<span class="macro-nonterminal">$crate::SimpleBarStyle</span>)]
+<a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub struct </span>SimpleBarStyle(DefaultStyle);
+<a href=#195 id=195 data-nosnippet>195</a><span class="macro">impl_named_style_fn!</span>(simple_bar, SimpleBarStyle);
+<a href=#196 id=196 data-nosnippet>196</a><span class="kw">impl </span>SimpleBarStyle {
+<a href=#197 id=197 data-nosnippet>197</a>    <span class="kw">fn </span>widget_intrinsic(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#198 id=198 data-nosnippet>198</a>        <span class="macro">widget_set!</span> {
+<a href=#199 id=199 data-nosnippet>199</a>            <span class="self">self</span>;
+<a href=#200 id=200 data-nosnippet>200</a>            named_style_fn = SIMPLE_BAR_STYLE_FN_VAR;
+<a href=#201 id=201 data-nosnippet>201</a>            zng_wgt_container::child_out_bottom = <span class="macro">unset!</span>;
+<a href=#202 id=202 data-nosnippet>202</a>        }
+<a href=#203 id=203 data-nosnippet>203</a>    }
+<a href=#204 id=204 data-nosnippet>204</a>}</code></pre></div></section></main></body></html>
