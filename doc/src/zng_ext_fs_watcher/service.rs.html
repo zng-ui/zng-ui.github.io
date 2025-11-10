@@ -383,5 +383,11 @@
 <a href=#383 id=383 data-nosnippet>383</a>}
 <a href=#384 id=384 data-nosnippet>384</a><span class="kw">fn </span>notify_watcher_handler() -&gt; <span class="kw">impl </span>notify::EventHandler {
 <a href=#385 id=385 data-nosnippet>385</a>    <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture();
-<a href=#386 id=386 data-nosnippet>386</a>    <span class="kw">move </span>|r| ctx.with_context(|| WATCHER_SV.write().on_watcher(r))
-<a href=#387 id=387 data-nosnippet>387</a>}</code></pre></div></section></main></body></html>
+<a href=#386 id=386 data-nosnippet>386</a>    <span class="kw">move </span>|r| {
+<a href=#387 id=387 data-nosnippet>387</a>        ctx.with_context(|| {
+<a href=#388 id=388 data-nosnippet>388</a>            <span class="comment">// this is an attempt to workaround https://github.com/notify-rs/notify/issues/463
+<a href=#389 id=389 data-nosnippet>389</a>            // we have observed deadlocks inside notify code with a debugger
+<a href=#390 id=390 data-nosnippet>390</a>            </span>zng_task::spawn(<span class="kw">async move </span>{ WATCHER_SV.write().on_watcher(r) });
+<a href=#391 id=391 data-nosnippet>391</a>        })
+<a href=#392 id=392 data-nosnippet>392</a>    }
+<a href=#393 id=393 data-nosnippet>393</a>}</code></pre></div></section></main></body></html>

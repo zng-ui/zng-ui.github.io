@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["is_indeterminate","on_complete","on_progress","simple_bar_style_fn"],"static":["PROGRESS_VAR"],"struct":["DefaultStyle","ProgressView","SimpleBarStyle"]};
+window.SIDEBAR_ITEMS = {"fn":["circular_style_fn","is_indeterminate","on_complete","on_progress","simple_bar_style_fn","simple_circular_style_fn"],"static":["PROGRESS_VAR"],"struct":["CircularStyle","DefaultStyle","ProgressView","SimpleBarStyle","SimpleCircularStyle"]};

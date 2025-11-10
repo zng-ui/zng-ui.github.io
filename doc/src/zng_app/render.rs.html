@@ -3083,143 +3083,144 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#3047 id=3047 data-nosnippet>3047</a>    <span class="doccomment">/// Create a binding with this key.
 <a href=#3048 id=3048 data-nosnippet>3048</a>    ///
 <a href=#3049 id=3049 data-nosnippet>3049</a>    /// The `animating` flag controls if the binding will propagate to webrender, if `true`
-<a href=#3050 id=3050 data-nosnippet>3050</a>    /// webrender frame updates are generated for
-<a href=#3051 id=3051 data-nosnippet>3051</a>    </span><span class="kw">pub fn </span>bind(<span class="self">self</span>, value: T, animating: bool) -&gt; FrameValue&lt;T&gt; {
-<a href=#3052 id=3052 data-nosnippet>3052</a>        <span class="self">self</span>.bind_child(u32::MAX, value, animating)
-<a href=#3053 id=3053 data-nosnippet>3053</a>    }
-<a href=#3054 id=3054 data-nosnippet>3054</a>
-<a href=#3055 id=3055 data-nosnippet>3055</a>    <span class="doccomment">/// Like [`bind`] but the key is modified to include the `child_index`.
-<a href=#3056 id=3056 data-nosnippet>3056</a>    ///
-<a href=#3057 id=3057 data-nosnippet>3057</a>    /// [`bind`]: Self::bind
-<a href=#3058 id=3058 data-nosnippet>3058</a>    </span><span class="kw">pub fn </span>bind_child(<span class="self">self</span>, child_index: u32, value: T, animating: bool) -&gt; FrameValue&lt;T&gt; {
-<a href=#3059 id=3059 data-nosnippet>3059</a>        FrameValue::Bind {
-<a href=#3060 id=3060 data-nosnippet>3060</a>            id: <span class="self">self</span>.to_wr_child(child_index),
-<a href=#3061 id=3061 data-nosnippet>3061</a>            value,
-<a href=#3062 id=3062 data-nosnippet>3062</a>            animating,
-<a href=#3063 id=3063 data-nosnippet>3063</a>        }
-<a href=#3064 id=3064 data-nosnippet>3064</a>    }
-<a href=#3065 id=3065 data-nosnippet>3065</a>
-<a href=#3066 id=3066 data-nosnippet>3066</a>    <span class="doccomment">/// Create a value update with this key.
-<a href=#3067 id=3067 data-nosnippet>3067</a>    </span><span class="kw">pub fn </span>update(<span class="self">self</span>, value: T, animating: bool) -&gt; FrameValueUpdate&lt;T&gt; {
-<a href=#3068 id=3068 data-nosnippet>3068</a>        <span class="self">self</span>.update_child(u32::MAX, value, animating)
-<a href=#3069 id=3069 data-nosnippet>3069</a>    }
-<a href=#3070 id=3070 data-nosnippet>3070</a>
-<a href=#3071 id=3071 data-nosnippet>3071</a>    <span class="doccomment">/// Like [`update`] but the key is modified to include the `child_index`.
-<a href=#3072 id=3072 data-nosnippet>3072</a>    ///
-<a href=#3073 id=3073 data-nosnippet>3073</a>    /// [`update`]: Self::update
-<a href=#3074 id=3074 data-nosnippet>3074</a>    </span><span class="kw">pub fn </span>update_child(<span class="self">self</span>, child_index: u32, value: T, animating: bool) -&gt; FrameValueUpdate&lt;T&gt; {
-<a href=#3075 id=3075 data-nosnippet>3075</a>        FrameValueUpdate::new(<span class="self">self</span>.to_wr_child(child_index), value, animating)
-<a href=#3076 id=3076 data-nosnippet>3076</a>    }
-<a href=#3077 id=3077 data-nosnippet>3077</a>
-<a href=#3078 id=3078 data-nosnippet>3078</a>    <span class="doccomment">/// Create a binding with this key and `var`.
-<a href=#3079 id=3079 data-nosnippet>3079</a>    ///
-<a href=#3080 id=3080 data-nosnippet>3080</a>    /// The `map` must produce a copy or clone of the frame value.
-<a href=#3081 id=3081 data-nosnippet>3081</a>    </span><span class="kw">pub fn </span>bind_var&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; FrameValue&lt;T&gt; {
-<a href=#3082 id=3082 data-nosnippet>3082</a>        <span class="self">self</span>.bind_var_child(u32::MAX, var, map)
-<a href=#3083 id=3083 data-nosnippet>3083</a>    }
-<a href=#3084 id=3084 data-nosnippet>3084</a>
-<a href=#3085 id=3085 data-nosnippet>3085</a>    <span class="doccomment">/// Like [`bind_var`] but the key is modified to include the `child_index`.
-<a href=#3086 id=3086 data-nosnippet>3086</a>    ///
-<a href=#3087 id=3087 data-nosnippet>3087</a>    /// [`bind_var`]: Self::bind_var
-<a href=#3088 id=3088 data-nosnippet>3088</a>    </span><span class="kw">pub fn </span>bind_var_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; FrameValue&lt;T&gt; {
-<a href=#3089 id=3089 data-nosnippet>3089</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
-<a href=#3090 id=3090 data-nosnippet>3090</a>            FrameValue::Bind {
-<a href=#3091 id=3091 data-nosnippet>3091</a>                id: <span class="self">self</span>.to_wr_child(child_index),
-<a href=#3092 id=3092 data-nosnippet>3092</a>                value: var.with(map),
-<a href=#3093 id=3093 data-nosnippet>3093</a>                animating: var.is_animating(),
-<a href=#3094 id=3094 data-nosnippet>3094</a>            }
-<a href=#3095 id=3095 data-nosnippet>3095</a>        } <span class="kw">else </span>{
-<a href=#3096 id=3096 data-nosnippet>3096</a>            FrameValue::Value(var.with(map))
-<a href=#3097 id=3097 data-nosnippet>3097</a>        }
-<a href=#3098 id=3098 data-nosnippet>3098</a>    }
-<a href=#3099 id=3099 data-nosnippet>3099</a>
-<a href=#3100 id=3100 data-nosnippet>3100</a>    <span class="doccomment">/// Create a binding with this key, `var` and already mapped `value`.
-<a href=#3101 id=3101 data-nosnippet>3101</a>    </span><span class="kw">pub fn </span>bind_var_mapped&lt;VT: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; FrameValue&lt;T&gt; {
-<a href=#3102 id=3102 data-nosnippet>3102</a>        <span class="self">self</span>.bind_var_mapped_child(u32::MAX, var, value)
-<a href=#3103 id=3103 data-nosnippet>3103</a>    }
-<a href=#3104 id=3104 data-nosnippet>3104</a>
-<a href=#3105 id=3105 data-nosnippet>3105</a>    <span class="doccomment">/// Like [`bind_var_mapped`] but the key is modified to include the `child_index`.
-<a href=#3106 id=3106 data-nosnippet>3106</a>    ///
-<a href=#3107 id=3107 data-nosnippet>3107</a>    /// [`bind_var_mapped`]: Self::bind_var_mapped
-<a href=#3108 id=3108 data-nosnippet>3108</a>    </span><span class="kw">pub fn </span>bind_var_mapped_child&lt;VT: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; FrameValue&lt;T&gt; {
-<a href=#3109 id=3109 data-nosnippet>3109</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
-<a href=#3110 id=3110 data-nosnippet>3110</a>            FrameValue::Bind {
-<a href=#3111 id=3111 data-nosnippet>3111</a>                id: <span class="self">self</span>.to_wr_child(child_index),
-<a href=#3112 id=3112 data-nosnippet>3112</a>                value,
-<a href=#3113 id=3113 data-nosnippet>3113</a>                animating: var.is_animating(),
-<a href=#3114 id=3114 data-nosnippet>3114</a>            }
-<a href=#3115 id=3115 data-nosnippet>3115</a>        } <span class="kw">else </span>{
-<a href=#3116 id=3116 data-nosnippet>3116</a>            FrameValue::Value(value)
-<a href=#3117 id=3117 data-nosnippet>3117</a>        }
-<a href=#3118 id=3118 data-nosnippet>3118</a>    }
-<a href=#3119 id=3119 data-nosnippet>3119</a>
-<a href=#3120 id=3120 data-nosnippet>3120</a>    <span class="doccomment">/// Create a value update with this key and `var`.
-<a href=#3121 id=3121 data-nosnippet>3121</a>    </span><span class="kw">pub fn </span>update_var&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-<a href=#3122 id=3122 data-nosnippet>3122</a>        <span class="self">self</span>.update_var_child(u32::MAX, var, map)
-<a href=#3123 id=3123 data-nosnippet>3123</a>    }
-<a href=#3124 id=3124 data-nosnippet>3124</a>
-<a href=#3125 id=3125 data-nosnippet>3125</a>    <span class="doccomment">/// Like [`update_var`] but the key is modified to include the `child_index`.
-<a href=#3126 id=3126 data-nosnippet>3126</a>    ///
-<a href=#3127 id=3127 data-nosnippet>3127</a>    /// [`update_var`]: Self::update_var
-<a href=#3128 id=3128 data-nosnippet>3128</a>    </span><span class="kw">pub fn </span>update_var_child&lt;VT: VarValue&gt;(
-<a href=#3129 id=3129 data-nosnippet>3129</a>        <span class="self">self</span>,
-<a href=#3130 id=3130 data-nosnippet>3130</a>        child_index: u32,
-<a href=#3131 id=3131 data-nosnippet>3131</a>        var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;,
-<a href=#3132 id=3132 data-nosnippet>3132</a>        map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T,
-<a href=#3133 id=3133 data-nosnippet>3133</a>    ) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-<a href=#3134 id=3134 data-nosnippet>3134</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
-<a href=#3135 id=3135 data-nosnippet>3135</a>            <span class="prelude-val">Some</span>(FrameValueUpdate::new(
-<a href=#3136 id=3136 data-nosnippet>3136</a>                <span class="self">self</span>.to_wr_child(child_index),
-<a href=#3137 id=3137 data-nosnippet>3137</a>                var.with(map),
-<a href=#3138 id=3138 data-nosnippet>3138</a>                var.is_animating(),
-<a href=#3139 id=3139 data-nosnippet>3139</a>            ))
-<a href=#3140 id=3140 data-nosnippet>3140</a>        } <span class="kw">else </span>{
-<a href=#3141 id=3141 data-nosnippet>3141</a>            <span class="prelude-val">None
-<a href=#3142 id=3142 data-nosnippet>3142</a>        </span>}
-<a href=#3143 id=3143 data-nosnippet>3143</a>    }
-<a href=#3144 id=3144 data-nosnippet>3144</a>
-<a href=#3145 id=3145 data-nosnippet>3145</a>    <span class="doccomment">/// Create a value update with this key, `var` and already mapped `value`.
-<a href=#3146 id=3146 data-nosnippet>3146</a>    </span><span class="kw">pub fn </span>update_var_mapped&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-<a href=#3147 id=3147 data-nosnippet>3147</a>        <span class="self">self</span>.update_var_mapped_child(u32::MAX, var, value)
-<a href=#3148 id=3148 data-nosnippet>3148</a>    }
-<a href=#3149 id=3149 data-nosnippet>3149</a>
-<a href=#3150 id=3150 data-nosnippet>3150</a>    <span class="doccomment">/// Like [`update_var_mapped`] but the key is modified to include the `child_index`.
-<a href=#3151 id=3151 data-nosnippet>3151</a>    ///
-<a href=#3152 id=3152 data-nosnippet>3152</a>    /// [`update_var_mapped`]: Self::update_var_mapped
-<a href=#3153 id=3153 data-nosnippet>3153</a>    </span><span class="kw">pub fn </span>update_var_mapped_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
-<a href=#3154 id=3154 data-nosnippet>3154</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
-<a href=#3155 id=3155 data-nosnippet>3155</a>            <span class="prelude-val">Some</span>(FrameValueUpdate::new(<span class="self">self</span>.to_wr_child(child_index), value, var.is_animating()))
-<a href=#3156 id=3156 data-nosnippet>3156</a>        } <span class="kw">else </span>{
-<a href=#3157 id=3157 data-nosnippet>3157</a>            <span class="prelude-val">None
-<a href=#3158 id=3158 data-nosnippet>3158</a>        </span>}
-<a href=#3159 id=3159 data-nosnippet>3159</a>    }
-<a href=#3160 id=3160 data-nosnippet>3160</a>}
-<a href=#3161 id=3161 data-nosnippet>3161</a>
-<a href=#3162 id=3162 data-nosnippet>3162</a><span class="macro">bitflags::bitflags!</span> {
-<a href=#3163 id=3163 data-nosnippet>3163</a>    <span class="doccomment">/// Configure if a synthetic font is generated for fonts that do not implement **bold** or *oblique* variants.
-<a href=#3164 id=3164 data-nosnippet>3164</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
-<a href=#3165 id=3165 data-nosnippet>3165</a>    #[serde(transparent)]
-<a href=#3166 id=3166 data-nosnippet>3166</a>    </span><span class="kw">pub struct </span>FontSynthesis: u8 {
-<a href=#3167 id=3167 data-nosnippet>3167</a>        <span class="doccomment">/// No synthetic font generated, if font resolution does not find a variant the matches the requested style and weight
-<a href=#3168 id=3168 data-nosnippet>3168</a>        /// the request is ignored and the normal font is returned.
-<a href=#3169 id=3169 data-nosnippet>3169</a>        </span><span class="kw">const </span>DISABLED = <span class="number">0</span>;
-<a href=#3170 id=3170 data-nosnippet>3170</a>        <span class="doccomment">/// Enable synthetic bold. Font resolution finds the closest bold variant, the difference is added using extra stroke.
-<a href=#3171 id=3171 data-nosnippet>3171</a>        </span><span class="kw">const </span>BOLD = <span class="number">1</span>;
-<a href=#3172 id=3172 data-nosnippet>3172</a>        <span class="doccomment">/// Enable synthetic oblique. If the font resolution does not find an oblique or italic variant a skew transform is applied.
-<a href=#3173 id=3173 data-nosnippet>3173</a>        </span><span class="kw">const </span>OBLIQUE = <span class="number">2</span>;
-<a href=#3174 id=3174 data-nosnippet>3174</a>        <span class="doccomment">/// Enabled all synthetic font possibilities.
-<a href=#3175 id=3175 data-nosnippet>3175</a>        </span><span class="kw">const </span>ENABLED = <span class="self">Self</span>::BOLD.bits() | <span class="self">Self</span>::OBLIQUE.bits();
-<a href=#3176 id=3176 data-nosnippet>3176</a>    }
-<a href=#3177 id=3177 data-nosnippet>3177</a>}
-<a href=#3178 id=3178 data-nosnippet>3178</a><span class="kw">impl </span>Default <span class="kw">for </span>FontSynthesis {
-<a href=#3179 id=3179 data-nosnippet>3179</a>    <span class="doccomment">/// [`FontSynthesis::ENABLED`]
-<a href=#3180 id=3180 data-nosnippet>3180</a>    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#3181 id=3181 data-nosnippet>3181</a>        FontSynthesis::ENABLED
-<a href=#3182 id=3182 data-nosnippet>3182</a>    }
-<a href=#3183 id=3183 data-nosnippet>3183</a>}
-<a href=#3184 id=3184 data-nosnippet>3184</a><span class="macro">impl_from_and_into_var!</span> {
-<a href=#3185 id=3185 data-nosnippet>3185</a>    <span class="doccomment">/// Convert to full [`ENABLED`](FontSynthesis::ENABLED) or [`DISABLED`](FontSynthesis::DISABLED).
-<a href=#3186 id=3186 data-nosnippet>3186</a>    </span><span class="kw">fn </span>from(enabled: bool) -&gt; FontSynthesis {
-<a href=#3187 id=3187 data-nosnippet>3187</a>        <span class="kw">if </span>enabled { FontSynthesis::ENABLED } <span class="kw">else </span>{ FontSynthesis::DISABLED }
-<a href=#3188 id=3188 data-nosnippet>3188</a>    }
-<a href=#3189 id=3189 data-nosnippet>3189</a>}</code></pre></div></section></main></body></html>
+<a href=#3050 id=3050 data-nosnippet>3050</a>    /// webrender frame updates are generated for frame update requests, if `false` only the display
+<a href=#3051 id=3051 data-nosnippet>3051</a>    /// list is patched, a full frame is rendered on frame update requests.
+<a href=#3052 id=3052 data-nosnippet>3052</a>    </span><span class="kw">pub fn </span>bind(<span class="self">self</span>, value: T, animating: bool) -&gt; FrameValue&lt;T&gt; {
+<a href=#3053 id=3053 data-nosnippet>3053</a>        <span class="self">self</span>.bind_child(u32::MAX, value, animating)
+<a href=#3054 id=3054 data-nosnippet>3054</a>    }
+<a href=#3055 id=3055 data-nosnippet>3055</a>
+<a href=#3056 id=3056 data-nosnippet>3056</a>    <span class="doccomment">/// Like [`bind`] but the key is modified to include the `child_index`.
+<a href=#3057 id=3057 data-nosnippet>3057</a>    ///
+<a href=#3058 id=3058 data-nosnippet>3058</a>    /// [`bind`]: Self::bind
+<a href=#3059 id=3059 data-nosnippet>3059</a>    </span><span class="kw">pub fn </span>bind_child(<span class="self">self</span>, child_index: u32, value: T, animating: bool) -&gt; FrameValue&lt;T&gt; {
+<a href=#3060 id=3060 data-nosnippet>3060</a>        FrameValue::Bind {
+<a href=#3061 id=3061 data-nosnippet>3061</a>            id: <span class="self">self</span>.to_wr_child(child_index),
+<a href=#3062 id=3062 data-nosnippet>3062</a>            value,
+<a href=#3063 id=3063 data-nosnippet>3063</a>            animating,
+<a href=#3064 id=3064 data-nosnippet>3064</a>        }
+<a href=#3065 id=3065 data-nosnippet>3065</a>    }
+<a href=#3066 id=3066 data-nosnippet>3066</a>
+<a href=#3067 id=3067 data-nosnippet>3067</a>    <span class="doccomment">/// Create a value update with this key.
+<a href=#3068 id=3068 data-nosnippet>3068</a>    </span><span class="kw">pub fn </span>update(<span class="self">self</span>, value: T, animating: bool) -&gt; FrameValueUpdate&lt;T&gt; {
+<a href=#3069 id=3069 data-nosnippet>3069</a>        <span class="self">self</span>.update_child(u32::MAX, value, animating)
+<a href=#3070 id=3070 data-nosnippet>3070</a>    }
+<a href=#3071 id=3071 data-nosnippet>3071</a>
+<a href=#3072 id=3072 data-nosnippet>3072</a>    <span class="doccomment">/// Like [`update`] but the key is modified to include the `child_index`.
+<a href=#3073 id=3073 data-nosnippet>3073</a>    ///
+<a href=#3074 id=3074 data-nosnippet>3074</a>    /// [`update`]: Self::update
+<a href=#3075 id=3075 data-nosnippet>3075</a>    </span><span class="kw">pub fn </span>update_child(<span class="self">self</span>, child_index: u32, value: T, animating: bool) -&gt; FrameValueUpdate&lt;T&gt; {
+<a href=#3076 id=3076 data-nosnippet>3076</a>        FrameValueUpdate::new(<span class="self">self</span>.to_wr_child(child_index), value, animating)
+<a href=#3077 id=3077 data-nosnippet>3077</a>    }
+<a href=#3078 id=3078 data-nosnippet>3078</a>
+<a href=#3079 id=3079 data-nosnippet>3079</a>    <span class="doccomment">/// Create a binding with this key and `var`.
+<a href=#3080 id=3080 data-nosnippet>3080</a>    ///
+<a href=#3081 id=3081 data-nosnippet>3081</a>    /// The `map` must produce a copy or clone of the frame value.
+<a href=#3082 id=3082 data-nosnippet>3082</a>    </span><span class="kw">pub fn </span>bind_var&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; FrameValue&lt;T&gt; {
+<a href=#3083 id=3083 data-nosnippet>3083</a>        <span class="self">self</span>.bind_var_child(u32::MAX, var, map)
+<a href=#3084 id=3084 data-nosnippet>3084</a>    }
+<a href=#3085 id=3085 data-nosnippet>3085</a>
+<a href=#3086 id=3086 data-nosnippet>3086</a>    <span class="doccomment">/// Like [`bind_var`] but the key is modified to include the `child_index`.
+<a href=#3087 id=3087 data-nosnippet>3087</a>    ///
+<a href=#3088 id=3088 data-nosnippet>3088</a>    /// [`bind_var`]: Self::bind_var
+<a href=#3089 id=3089 data-nosnippet>3089</a>    </span><span class="kw">pub fn </span>bind_var_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; FrameValue&lt;T&gt; {
+<a href=#3090 id=3090 data-nosnippet>3090</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
+<a href=#3091 id=3091 data-nosnippet>3091</a>            FrameValue::Bind {
+<a href=#3092 id=3092 data-nosnippet>3092</a>                id: <span class="self">self</span>.to_wr_child(child_index),
+<a href=#3093 id=3093 data-nosnippet>3093</a>                value: var.with(map),
+<a href=#3094 id=3094 data-nosnippet>3094</a>                animating: var.is_animating(),
+<a href=#3095 id=3095 data-nosnippet>3095</a>            }
+<a href=#3096 id=3096 data-nosnippet>3096</a>        } <span class="kw">else </span>{
+<a href=#3097 id=3097 data-nosnippet>3097</a>            FrameValue::Value(var.with(map))
+<a href=#3098 id=3098 data-nosnippet>3098</a>        }
+<a href=#3099 id=3099 data-nosnippet>3099</a>    }
+<a href=#3100 id=3100 data-nosnippet>3100</a>
+<a href=#3101 id=3101 data-nosnippet>3101</a>    <span class="doccomment">/// Create a binding with this key, `var` and already mapped `value`.
+<a href=#3102 id=3102 data-nosnippet>3102</a>    </span><span class="kw">pub fn </span>bind_var_mapped&lt;VT: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; FrameValue&lt;T&gt; {
+<a href=#3103 id=3103 data-nosnippet>3103</a>        <span class="self">self</span>.bind_var_mapped_child(u32::MAX, var, value)
+<a href=#3104 id=3104 data-nosnippet>3104</a>    }
+<a href=#3105 id=3105 data-nosnippet>3105</a>
+<a href=#3106 id=3106 data-nosnippet>3106</a>    <span class="doccomment">/// Like [`bind_var_mapped`] but the key is modified to include the `child_index`.
+<a href=#3107 id=3107 data-nosnippet>3107</a>    ///
+<a href=#3108 id=3108 data-nosnippet>3108</a>    /// [`bind_var_mapped`]: Self::bind_var_mapped
+<a href=#3109 id=3109 data-nosnippet>3109</a>    </span><span class="kw">pub fn </span>bind_var_mapped_child&lt;VT: VarValue&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; FrameValue&lt;T&gt; {
+<a href=#3110 id=3110 data-nosnippet>3110</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
+<a href=#3111 id=3111 data-nosnippet>3111</a>            FrameValue::Bind {
+<a href=#3112 id=3112 data-nosnippet>3112</a>                id: <span class="self">self</span>.to_wr_child(child_index),
+<a href=#3113 id=3113 data-nosnippet>3113</a>                value,
+<a href=#3114 id=3114 data-nosnippet>3114</a>                animating: var.is_animating(),
+<a href=#3115 id=3115 data-nosnippet>3115</a>            }
+<a href=#3116 id=3116 data-nosnippet>3116</a>        } <span class="kw">else </span>{
+<a href=#3117 id=3117 data-nosnippet>3117</a>            FrameValue::Value(value)
+<a href=#3118 id=3118 data-nosnippet>3118</a>        }
+<a href=#3119 id=3119 data-nosnippet>3119</a>    }
+<a href=#3120 id=3120 data-nosnippet>3120</a>
+<a href=#3121 id=3121 data-nosnippet>3121</a>    <span class="doccomment">/// Create a value update with this key and `var`.
+<a href=#3122 id=3122 data-nosnippet>3122</a>    </span><span class="kw">pub fn </span>update_var&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
+<a href=#3123 id=3123 data-nosnippet>3123</a>        <span class="self">self</span>.update_var_child(u32::MAX, var, map)
+<a href=#3124 id=3124 data-nosnippet>3124</a>    }
+<a href=#3125 id=3125 data-nosnippet>3125</a>
+<a href=#3126 id=3126 data-nosnippet>3126</a>    <span class="doccomment">/// Like [`update_var`] but the key is modified to include the `child_index`.
+<a href=#3127 id=3127 data-nosnippet>3127</a>    ///
+<a href=#3128 id=3128 data-nosnippet>3128</a>    /// [`update_var`]: Self::update_var
+<a href=#3129 id=3129 data-nosnippet>3129</a>    </span><span class="kw">pub fn </span>update_var_child&lt;VT: VarValue&gt;(
+<a href=#3130 id=3130 data-nosnippet>3130</a>        <span class="self">self</span>,
+<a href=#3131 id=3131 data-nosnippet>3131</a>        child_index: u32,
+<a href=#3132 id=3132 data-nosnippet>3132</a>        var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;,
+<a href=#3133 id=3133 data-nosnippet>3133</a>        map: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>VT) -&gt; T,
+<a href=#3134 id=3134 data-nosnippet>3134</a>    ) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
+<a href=#3135 id=3135 data-nosnippet>3135</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
+<a href=#3136 id=3136 data-nosnippet>3136</a>            <span class="prelude-val">Some</span>(FrameValueUpdate::new(
+<a href=#3137 id=3137 data-nosnippet>3137</a>                <span class="self">self</span>.to_wr_child(child_index),
+<a href=#3138 id=3138 data-nosnippet>3138</a>                var.with(map),
+<a href=#3139 id=3139 data-nosnippet>3139</a>                var.is_animating(),
+<a href=#3140 id=3140 data-nosnippet>3140</a>            ))
+<a href=#3141 id=3141 data-nosnippet>3141</a>        } <span class="kw">else </span>{
+<a href=#3142 id=3142 data-nosnippet>3142</a>            <span class="prelude-val">None
+<a href=#3143 id=3143 data-nosnippet>3143</a>        </span>}
+<a href=#3144 id=3144 data-nosnippet>3144</a>    }
+<a href=#3145 id=3145 data-nosnippet>3145</a>
+<a href=#3146 id=3146 data-nosnippet>3146</a>    <span class="doccomment">/// Create a value update with this key, `var` and already mapped `value`.
+<a href=#3147 id=3147 data-nosnippet>3147</a>    </span><span class="kw">pub fn </span>update_var_mapped&lt;VT: VarValue&gt;(<span class="self">self</span>, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
+<a href=#3148 id=3148 data-nosnippet>3148</a>        <span class="self">self</span>.update_var_mapped_child(u32::MAX, var, value)
+<a href=#3149 id=3149 data-nosnippet>3149</a>    }
+<a href=#3150 id=3150 data-nosnippet>3150</a>
+<a href=#3151 id=3151 data-nosnippet>3151</a>    <span class="doccomment">/// Like [`update_var_mapped`] but the key is modified to include the `child_index`.
+<a href=#3152 id=3152 data-nosnippet>3152</a>    ///
+<a href=#3153 id=3153 data-nosnippet>3153</a>    /// [`update_var_mapped`]: Self::update_var_mapped
+<a href=#3154 id=3154 data-nosnippet>3154</a>    </span><span class="kw">pub fn </span>update_var_mapped_child&lt;VT: VarValue&gt;(<span class="self">self</span>, child_index: u32, var: <span class="kw-2">&amp;</span>Var&lt;VT&gt;, value: T) -&gt; <span class="prelude-ty">Option</span>&lt;FrameValueUpdate&lt;T&gt;&gt; {
+<a href=#3155 id=3155 data-nosnippet>3155</a>        <span class="kw">if </span>var.capabilities().contains(VarCapability::NEW) {
+<a href=#3156 id=3156 data-nosnippet>3156</a>            <span class="prelude-val">Some</span>(FrameValueUpdate::new(<span class="self">self</span>.to_wr_child(child_index), value, var.is_animating()))
+<a href=#3157 id=3157 data-nosnippet>3157</a>        } <span class="kw">else </span>{
+<a href=#3158 id=3158 data-nosnippet>3158</a>            <span class="prelude-val">None
+<a href=#3159 id=3159 data-nosnippet>3159</a>        </span>}
+<a href=#3160 id=3160 data-nosnippet>3160</a>    }
+<a href=#3161 id=3161 data-nosnippet>3161</a>}
+<a href=#3162 id=3162 data-nosnippet>3162</a>
+<a href=#3163 id=3163 data-nosnippet>3163</a><span class="macro">bitflags::bitflags!</span> {
+<a href=#3164 id=3164 data-nosnippet>3164</a>    <span class="doccomment">/// Configure if a synthetic font is generated for fonts that do not implement **bold** or *oblique* variants.
+<a href=#3165 id=3165 data-nosnippet>3165</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#3166 id=3166 data-nosnippet>3166</a>    #[serde(transparent)]
+<a href=#3167 id=3167 data-nosnippet>3167</a>    </span><span class="kw">pub struct </span>FontSynthesis: u8 {
+<a href=#3168 id=3168 data-nosnippet>3168</a>        <span class="doccomment">/// No synthetic font generated, if font resolution does not find a variant the matches the requested style and weight
+<a href=#3169 id=3169 data-nosnippet>3169</a>        /// the request is ignored and the normal font is returned.
+<a href=#3170 id=3170 data-nosnippet>3170</a>        </span><span class="kw">const </span>DISABLED = <span class="number">0</span>;
+<a href=#3171 id=3171 data-nosnippet>3171</a>        <span class="doccomment">/// Enable synthetic bold. Font resolution finds the closest bold variant, the difference is added using extra stroke.
+<a href=#3172 id=3172 data-nosnippet>3172</a>        </span><span class="kw">const </span>BOLD = <span class="number">1</span>;
+<a href=#3173 id=3173 data-nosnippet>3173</a>        <span class="doccomment">/// Enable synthetic oblique. If the font resolution does not find an oblique or italic variant a skew transform is applied.
+<a href=#3174 id=3174 data-nosnippet>3174</a>        </span><span class="kw">const </span>OBLIQUE = <span class="number">2</span>;
+<a href=#3175 id=3175 data-nosnippet>3175</a>        <span class="doccomment">/// Enabled all synthetic font possibilities.
+<a href=#3176 id=3176 data-nosnippet>3176</a>        </span><span class="kw">const </span>ENABLED = <span class="self">Self</span>::BOLD.bits() | <span class="self">Self</span>::OBLIQUE.bits();
+<a href=#3177 id=3177 data-nosnippet>3177</a>    }
+<a href=#3178 id=3178 data-nosnippet>3178</a>}
+<a href=#3179 id=3179 data-nosnippet>3179</a><span class="kw">impl </span>Default <span class="kw">for </span>FontSynthesis {
+<a href=#3180 id=3180 data-nosnippet>3180</a>    <span class="doccomment">/// [`FontSynthesis::ENABLED`]
+<a href=#3181 id=3181 data-nosnippet>3181</a>    </span><span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#3182 id=3182 data-nosnippet>3182</a>        FontSynthesis::ENABLED
+<a href=#3183 id=3183 data-nosnippet>3183</a>    }
+<a href=#3184 id=3184 data-nosnippet>3184</a>}
+<a href=#3185 id=3185 data-nosnippet>3185</a><span class="macro">impl_from_and_into_var!</span> {
+<a href=#3186 id=3186 data-nosnippet>3186</a>    <span class="doccomment">/// Convert to full [`ENABLED`](FontSynthesis::ENABLED) or [`DISABLED`](FontSynthesis::DISABLED).
+<a href=#3187 id=3187 data-nosnippet>3187</a>    </span><span class="kw">fn </span>from(enabled: bool) -&gt; FontSynthesis {
+<a href=#3188 id=3188 data-nosnippet>3188</a>        <span class="kw">if </span>enabled { FontSynthesis::ENABLED } <span class="kw">else </span>{ FontSynthesis::DISABLED }
+<a href=#3189 id=3189 data-nosnippet>3189</a>    }
+<a href=#3190 id=3190 data-nosnippet>3190</a>}</code></pre></div></section></main></body></html>

@@ -495,7 +495,7 @@
 <a href=#495 id=495 data-nosnippet>495</a>            }
 <a href=#496 id=496 data-nosnippet>496</a>        }
 <a href=#497 id=497 data-nosnippet>497</a>
-<a href=#498 id=498 data-nosnippet>498</a>        <span class="kw">let </span>code_and_output = <span class="kw">match </span>process.wait() {
+<a href=#498 id=498 data-nosnippet>498</a>        <span class="kw">let </span>exit_status = <span class="kw">match </span>process.wait() {
 <a href=#499 id=499 data-nosnippet>499</a>            <span class="prelude-val">Ok</span>(c) =&gt; <span class="prelude-val">Some</span>(c),
 <a href=#500 id=500 data-nosnippet>500</a>            <span class="prelude-val">Err</span>(e) =&gt; {
 <a href=#501 id=501 data-nosnippet>501</a>                <span class="macro">tracing::error!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process could not be killed, will abandon running, {e:?}"</span>);
@@ -504,7 +504,7 @@
 <a href=#504 id=504 data-nosnippet>504</a>        };
 <a href=#505 id=505 data-nosnippet>505</a>
 <a href=#506 id=506 data-nosnippet>506</a>        <span class="comment">// try print stdout/err and exit code.
-<a href=#507 id=507 data-nosnippet>507</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = code_and_output {
+<a href=#507 id=507 data-nosnippet>507</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(c) = exit_status {
 <a href=#508 id=508 data-nosnippet>508</a>            <span class="macro">tracing::info!</span>(target: <span class="string">"vp_respawn"</span>, <span class="string">"view-process killed"</span>);
 <a href=#509 id=509 data-nosnippet>509</a>
 <a href=#510 id=510 data-nosnippet>510</a>            <span class="kw">let </span>code = c.code();
