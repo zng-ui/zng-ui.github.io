@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ViewChannelError"],"fn":["bytes_channel","connect_view_process"],"struct":["EventSender","IpcBytes","IpcBytesReceiver","IpcBytesSender","RequestReceiver","ResponseSender","ViewChannels"]};
+window.SIDEBAR_ITEMS = {"fn":["connect_view_process"],"struct":["EventSender","RequestReceiver","ResponseSender","ViewChannels"]};

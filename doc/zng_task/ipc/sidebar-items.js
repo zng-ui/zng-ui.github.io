@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["VERSION"],"enum":["RunError"],"fn":["run_worker"],"struct":["RequestArgs","Worker","WorkerCrashError"],"trait":["IpcValue"]};

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/task.rs`."><title>task.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/task.rs`."><title>task.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>task.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Parallel async tasks and async task runners.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Use [`run`], [`respond`] or [`spawn`] to run parallel tasks, use [`wait`], [`io`] and [`fs`] to unblock
@@ -142,7 +142,7 @@
 <a href=#141 id=141 data-nosnippet>141</a>//!
 <a href=#142 id=142 data-nosnippet>142</a>//! # Full API
 <a href=#143 id=143 data-nosnippet>143</a>//!
-<a href=#144 id=144 data-nosnippet>144</a>//! This module fully re-exports [`zng_task`].
+<a href=#144 id=144 data-nosnippet>144</a>//! See [`zng_task`] for the full API.
 <a href=#145 id=145 data-nosnippet>145</a>
 <a href=#146 id=146 data-nosnippet>146</a></span><span class="kw">pub use </span>zng_task::{
 <a href=#147 id=147 data-nosnippet>147</a>    DeadlineError, McWaker, ParallelIteratorExt, ParallelIteratorWithCtx, Progress, ScopeCtx, SignalOnce, TaskPanicError, UiTask, all,
@@ -153,13 +153,47 @@
 <a href=#152 id=152 data-nosnippet>152</a><span class="attr">#[cfg(any(doc, feature = <span class="string">"test_util"</span>))]
 <a href=#153 id=153 data-nosnippet>153</a></span><span class="kw">pub use </span>zng_task::{doc_test, spin_on};
 <a href=#154 id=154 data-nosnippet>154</a>
-<a href=#155 id=155 data-nosnippet>155</a><span class="attr">#[cfg(feature = <span class="string">"http"</span>)]
-<a href=#156 id=156 data-nosnippet>156</a></span><span class="kw">pub use </span>zng_task::http;
-<a href=#157 id=157 data-nosnippet>157</a>
-<a href=#158 id=158 data-nosnippet>158</a><span class="attr">#[cfg(ipc)]
-<a href=#159 id=159 data-nosnippet>159</a></span><span class="kw">pub use </span>zng_task::ipc;
-<a href=#160 id=160 data-nosnippet>160</a>
-<a href=#161 id=161 data-nosnippet>161</a><span class="attr">#[doc(no_inline)]
-<a href=#162 id=162 data-nosnippet>162</a></span><span class="kw">pub use </span>zng_task::{parking_lot, rayon};
-<a href=#163 id=163 data-nosnippet>163</a>
-<a href=#164 id=164 data-nosnippet>164</a><span class="kw">pub use </span>zng_app::widget::UiTaskWidget;</code></pre></div></section></main></body></html>
+<a href=#155 id=155 data-nosnippet>155</a><span class="doccomment">/// HTTP client.
+<a href=#156 id=156 data-nosnippet>156</a>///
+<a href=#157 id=157 data-nosnippet>157</a>/// This module provides an HTTP client API that is backend agnostic. By default it uses the system `curl` command
+<a href=#158 id=158 data-nosnippet>158</a>/// line utility with a simple cache, this can be replaced using the full API.
+<a href=#159 id=159 data-nosnippet>159</a>///
+<a href=#160 id=160 data-nosnippet>160</a>/// # Examples
+<a href=#161 id=161 data-nosnippet>161</a>///
+<a href=#162 id=162 data-nosnippet>162</a>/// Get some text:
+<a href=#163 id=163 data-nosnippet>163</a>///
+<a href=#164 id=164 data-nosnippet>164</a>/// ```
+<a href=#165 id=165 data-nosnippet>165</a>/// # use zng::task;
+<a href=#166 id=166 data-nosnippet>166</a>/// # async fn demo() -&gt; Result&lt;(), zng::task::http::Error&gt; {
+<a href=#167 id=167 data-nosnippet>167</a>/// let text = task::http::get_txt("https://httpbin.org/base64/SGVsbG8gV29ybGQ=").await?;
+<a href=#168 id=168 data-nosnippet>168</a>/// println!("{text}!");
+<a href=#169 id=169 data-nosnippet>169</a>/// # Ok(()) }
+<a href=#170 id=170 data-nosnippet>170</a>/// ```
+<a href=#171 id=171 data-nosnippet>171</a>///
+<a href=#172 id=172 data-nosnippet>172</a>/// # Full API
+<a href=#173 id=173 data-nosnippet>173</a>///
+<a href=#174 id=174 data-nosnippet>174</a>/// See [`zng_task::http`] for the full API.
+<a href=#175 id=175 data-nosnippet>175</a></span><span class="attr">#[cfg(feature = <span class="string">"http"</span>)]
+<a href=#176 id=176 data-nosnippet>176</a></span><span class="kw">pub mod </span>http {
+<a href=#177 id=177 data-nosnippet>177</a>    <span class="kw">pub use </span>zng_task::http::{
+<a href=#178 id=178 data-nosnippet>178</a>        Error, Method, Request, Response, StatusCode, Uri, delete, get, get_bytes, get_json, get_txt, head, header, method, post, put,
+<a href=#179 id=179 data-nosnippet>179</a>        send, set_request_default, uri,
+<a href=#180 id=180 data-nosnippet>180</a>    };
+<a href=#181 id=181 data-nosnippet>181</a>
+<a href=#182 id=182 data-nosnippet>182</a>    <span class="doccomment">/// Remove all cached entries, or just older ones if `prune` is enabled.
+<a href=#183 id=183 data-nosnippet>183</a>    </span><span class="kw">pub async fn </span>cache_clean(prune: bool) {
+<a href=#184 id=184 data-nosnippet>184</a>        <span class="kw">if </span>prune {
+<a href=#185 id=185 data-nosnippet>185</a>            zng_task::http::http_cache().prune().<span class="kw">await</span>;
+<a href=#186 id=186 data-nosnippet>186</a>        } <span class="kw">else </span>{
+<a href=#187 id=187 data-nosnippet>187</a>            zng_task::http::http_cache().purge().<span class="kw">await</span>;
+<a href=#188 id=188 data-nosnippet>188</a>        }
+<a href=#189 id=189 data-nosnippet>189</a>    }
+<a href=#190 id=190 data-nosnippet>190</a>}
+<a href=#191 id=191 data-nosnippet>191</a>
+<a href=#192 id=192 data-nosnippet>192</a><span class="attr">#[cfg(ipc)]
+<a href=#193 id=193 data-nosnippet>193</a></span><span class="kw">pub use </span>zng_task::process;
+<a href=#194 id=194 data-nosnippet>194</a>
+<a href=#195 id=195 data-nosnippet>195</a><span class="attr">#[doc(no_inline)]
+<a href=#196 id=196 data-nosnippet>196</a></span><span class="kw">pub use </span>zng_task::{parking_lot, rayon};
+<a href=#197 id=197 data-nosnippet>197</a>
+<a href=#198 id=198 data-nosnippet>198</a><span class="kw">pub use </span>zng_app::widget::UiTaskWidget;</code></pre></div></section></main></body></html>

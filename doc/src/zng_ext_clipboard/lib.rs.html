@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-clipboard/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_clipboard/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://zng-ui.github.io/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-clipboard/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_clipboard" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_clipboard/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://zng-ui.github.io/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://zng-ui.github.io/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Clipboard app extension, service and commands.
@@ -20,12 +20,12 @@
 <a href=#20 id=20 data-nosnippet>20</a>};
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_app_context::app_local;
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_ext_image::{IMAGES, ImageHasher, ImageVar, Img};
-<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>zng_txt::{ToTxt, Txt};
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>zng_var::{ResponderVar, ResponseVar, response_var};
-<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span>zng_wgt::{CommandIconExt <span class="kw">as _</span>, ICONS, wgt_fn};
-<a href=#26 id=26 data-nosnippet>26</a>
-<a href=#27 id=27 data-nosnippet>27</a><span class="kw">use </span>zng_view_api::ipc::IpcBytes;
-<a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span>zng_view_api::{clipboard <span class="kw">as </span>clipboard_api, ipc::ViewChannelError};
+<a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>zng_task::channel::{ChannelError, IpcBytes};
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>zng_txt::{ToTxt, Txt};
+<a href=#25 id=25 data-nosnippet>25</a><span class="kw">use </span>zng_var::{ResponderVar, ResponseVar, response_var};
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">use </span>zng_wgt::{CommandIconExt <span class="kw">as _</span>, ICONS, wgt_fn};
+<a href=#27 id=27 data-nosnippet>27</a>
+<a href=#28 id=28 data-nosnippet>28</a><span class="kw">use </span>zng_view_api::clipboard <span class="kw">as </span>clipboard_api;
 <a href=#29 id=29 data-nosnippet>29</a>
 <a href=#30 id=30 data-nosnippet>30</a><span class="doccomment">/// Clipboard app extension.
 <a href=#31 id=31 data-nosnippet>31</a>///
@@ -236,8 +236,8 @@
 <a href=#236 id=236 data-nosnippet>236</a>            <span class="kw">match </span>img {
 <a href=#237 id=237 data-nosnippet>237</a>                <span class="prelude-val">Ok</span>(img) =&gt; {
 <a href=#238 id=238 data-nosnippet>238</a>                    <span class="kw">let </span><span class="kw-2">mut </span>hash = ImageHasher::new();
-<a href=#239 id=239 data-nosnippet>239</a>                    hash.update(<span class="string">"zng_ext_clipboard::CLIPBOARD"</span>);
-<a href=#240 id=240 data-nosnippet>240</a>                    hash.update(img.id().unwrap().get().to_be_bytes());
+<a href=#239 id=239 data-nosnippet>239</a>                    hash.update(<span class="string">"zng_ext_clipboard::CLIPBOARD"</span>.as_bytes());
+<a href=#240 id=240 data-nosnippet>240</a>                    hash.update(<span class="kw-2">&amp;</span>img.id().unwrap().get().to_be_bytes());
 <a href=#241 id=241 data-nosnippet>241</a>                    <span class="kw">match </span>IMAGES.register(hash.finish(), img) {
 <a href=#242 id=242 data-nosnippet>242</a>                        <span class="prelude-val">Ok</span>(r) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(r)),
 <a href=#243 id=243 data-nosnippet>243</a>                        <span class="prelude-val">Err</span>((<span class="kw">_</span>, r)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(r)),
@@ -287,7 +287,7 @@
 <a href=#287 id=287 data-nosnippet>287</a>    }
 <a href=#288 id=288 data-nosnippet>288</a>}
 <a href=#289 id=289 data-nosnippet>289</a>
-<a href=#290 id=290 data-nosnippet>290</a><span class="kw">type </span>ActualClipboardResult&lt;T&gt; = <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Result</span>&lt;T, clipboard_api::ClipboardError&gt;, ViewChannelError&gt;;
+<a href=#290 id=290 data-nosnippet>290</a><span class="kw">type </span>ActualClipboardResult&lt;T&gt; = <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Result</span>&lt;T, clipboard_api::ClipboardError&gt;, ChannelError&gt;;
 <a href=#291 id=291 data-nosnippet>291</a><span class="kw">impl </span>CLIPBOARD {
 <a href=#292 id=292 data-nosnippet>292</a>    <span class="kw">fn </span>actual(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw">dyn </span>ActualClipboard {
 <a href=#293 id=293 data-nosnippet>293</a>        <span class="kw">if </span>VIEW_PROCESS.is_available() {
@@ -297,14 +297,14 @@
 <a href=#297 id=297 data-nosnippet>297</a>                    <span class="kw">if </span>!APP.window_mode().has_renderer() {
 <a href=#298 id=298 data-nosnippet>298</a>                        <span class="kw-2">&amp;</span>CLIPBOARD
 <a href=#299 id=299 data-nosnippet>299</a>                    } <span class="kw">else </span>{
-<a href=#300 id=300 data-nosnippet>300</a>                        <span class="kw-2">&amp;</span>ViewChannelError::Disconnected
+<a href=#300 id=300 data-nosnippet>300</a>                        <span class="kw-2">&amp;</span>NO_CLIPBOARD
 <a href=#301 id=301 data-nosnippet>301</a>                    }
 <a href=#302 id=302 data-nosnippet>302</a>                }
 <a href=#303 id=303 data-nosnippet>303</a>            }
 <a href=#304 id=304 data-nosnippet>304</a>        } <span class="kw">else if </span>!APP.window_mode().has_renderer() {
 <a href=#305 id=305 data-nosnippet>305</a>            <span class="kw-2">&amp;</span>CLIPBOARD
 <a href=#306 id=306 data-nosnippet>306</a>        } <span class="kw">else </span>{
-<a href=#307 id=307 data-nosnippet>307</a>            <span class="kw-2">&amp;</span>ViewChannelError::Disconnected
+<a href=#307 id=307 data-nosnippet>307</a>            <span class="kw-2">&amp;</span>NO_CLIPBOARD
 <a href=#308 id=308 data-nosnippet>308</a>        }
 <a href=#309 id=309 data-nosnippet>309</a>    }
 <a href=#310 id=310 data-nosnippet>310</a>}
@@ -404,64 +404,65 @@
 <a href=#404 id=404 data-nosnippet>404</a>        <span class="self">self</span>.headless_clipboard_set((data_type, data))
 <a href=#405 id=405 data-nosnippet>405</a>    }
 <a href=#406 id=406 data-nosnippet>406</a>}
-<a href=#407 id=407 data-nosnippet>407</a><span class="kw">impl </span>ActualClipboard <span class="kw">for </span>ViewChannelError {
-<a href=#408 id=408 data-nosnippet>408</a>    <span class="kw">fn </span>read_text(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;Txt&gt; {
-<a href=#409 id=409 data-nosnippet>409</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#410 id=410 data-nosnippet>410</a>    }
-<a href=#411 id=411 data-nosnippet>411</a>    <span class="kw">fn </span>write_text(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt) -&gt; ActualClipboardResult&lt;()&gt; {
-<a href=#412 id=412 data-nosnippet>412</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#413 id=413 data-nosnippet>413</a>    }
-<a href=#414 id=414 data-nosnippet>414</a>
-<a href=#415 id=415 data-nosnippet>415</a>    <span class="kw">fn </span>read_image(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;ViewImage&gt; {
-<a href=#416 id=416 data-nosnippet>416</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#417 id=417 data-nosnippet>417</a>    }
-<a href=#418 id=418 data-nosnippet>418</a>    <span class="kw">fn </span>write_image(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ViewImage) -&gt; ActualClipboardResult&lt;()&gt; {
-<a href=#419 id=419 data-nosnippet>419</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#420 id=420 data-nosnippet>420</a>    }
-<a href=#421 id=421 data-nosnippet>421</a>
-<a href=#422 id=422 data-nosnippet>422</a>    <span class="kw">fn </span>read_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;Vec&lt;PathBuf&gt;&gt; {
-<a href=#423 id=423 data-nosnippet>423</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#424 id=424 data-nosnippet>424</a>    }
-<a href=#425 id=425 data-nosnippet>425</a>    <span class="kw">fn </span>write_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Vec&lt;PathBuf&gt;) -&gt; ActualClipboardResult&lt;()&gt; {
-<a href=#426 id=426 data-nosnippet>426</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#427 id=427 data-nosnippet>427</a>    }
-<a href=#428 id=428 data-nosnippet>428</a>
-<a href=#429 id=429 data-nosnippet>429</a>    <span class="kw">fn </span>read_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt) -&gt; ActualClipboardResult&lt;IpcBytes&gt; {
-<a href=#430 id=430 data-nosnippet>430</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#431 id=431 data-nosnippet>431</a>    }
-<a href=#432 id=432 data-nosnippet>432</a>    <span class="kw">fn </span>write_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt, <span class="kw">_</span>: IpcBytes) -&gt; ActualClipboardResult&lt;()&gt; {
-<a href=#433 id=433 data-nosnippet>433</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
-<a href=#434 id=434 data-nosnippet>434</a>    }
-<a href=#435 id=435 data-nosnippet>435</a>}
-<a href=#436 id=436 data-nosnippet>436</a>
-<a href=#437 id=437 data-nosnippet>437</a><span class="macro">command!</span> {
-<a href=#438 id=438 data-nosnippet>438</a>    <span class="doccomment">/// Represents the clipboard **cut** action.
-<a href=#439 id=439 data-nosnippet>439</a>    </span><span class="kw">pub static </span>CUT_CMD = {
-<a href=#440 id=440 data-nosnippet>440</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
-<a href=#441 id=441 data-nosnippet>441</a>        name: <span class="string">"Cut"</span>,
-<a href=#442 id=442 data-nosnippet>442</a>        info: <span class="string">"Remove the selection and place it in the clipboard"</span>,
-<a href=#443 id=443 data-nosnippet>443</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'X'</span>), <span class="macro">shortcut!</span>(SHIFT + Delete), <span class="macro">shortcut!</span>(Cut)],
-<a href=#444 id=444 data-nosnippet>444</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
-<a href=#445 id=445 data-nosnippet>445</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"cut"</span>)),
-<a href=#446 id=446 data-nosnippet>446</a>    };
-<a href=#447 id=447 data-nosnippet>447</a>
-<a href=#448 id=448 data-nosnippet>448</a>    <span class="doccomment">/// Represents the clipboard **copy** action.
-<a href=#449 id=449 data-nosnippet>449</a>    </span><span class="kw">pub static </span>COPY_CMD = {
-<a href=#450 id=450 data-nosnippet>450</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
-<a href=#451 id=451 data-nosnippet>451</a>        name: <span class="string">"Copy"</span>,
-<a href=#452 id=452 data-nosnippet>452</a>        info: <span class="string">"Place a copy of the selection in the clipboard"</span>,
-<a href=#453 id=453 data-nosnippet>453</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'C'</span>), <span class="macro">shortcut!</span>(CTRL + Insert), <span class="macro">shortcut!</span>(Copy)],
-<a href=#454 id=454 data-nosnippet>454</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
-<a href=#455 id=455 data-nosnippet>455</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"copy"</span>)),
-<a href=#456 id=456 data-nosnippet>456</a>    };
-<a href=#457 id=457 data-nosnippet>457</a>
-<a href=#458 id=458 data-nosnippet>458</a>    <span class="doccomment">/// Represents the clipboard **paste** action.
-<a href=#459 id=459 data-nosnippet>459</a>    </span><span class="kw">pub static </span>PASTE_CMD = {
-<a href=#460 id=460 data-nosnippet>460</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
-<a href=#461 id=461 data-nosnippet>461</a>        name: <span class="string">"Paste"</span>,
-<a href=#462 id=462 data-nosnippet>462</a>        info: <span class="string">"Insert content from the clipboard"</span>,
-<a href=#463 id=463 data-nosnippet>463</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'V'</span>), <span class="macro">shortcut!</span>(SHIFT + Insert), <span class="macro">shortcut!</span>(Paste)],
-<a href=#464 id=464 data-nosnippet>464</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
-<a href=#465 id=465 data-nosnippet>465</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"paste"</span>)),
-<a href=#466 id=466 data-nosnippet>466</a>    };
-<a href=#467 id=467 data-nosnippet>467</a>}</code></pre></div></section></main></body></html>
+<a href=#407 id=407 data-nosnippet>407</a><span class="kw">static </span>NO_CLIPBOARD: ChannelError = ChannelError::Disconnected { cause: <span class="prelude-val">None </span>};
+<a href=#408 id=408 data-nosnippet>408</a><span class="kw">impl </span>ActualClipboard <span class="kw">for </span>ChannelError {
+<a href=#409 id=409 data-nosnippet>409</a>    <span class="kw">fn </span>read_text(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;Txt&gt; {
+<a href=#410 id=410 data-nosnippet>410</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#411 id=411 data-nosnippet>411</a>    }
+<a href=#412 id=412 data-nosnippet>412</a>    <span class="kw">fn </span>write_text(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt) -&gt; ActualClipboardResult&lt;()&gt; {
+<a href=#413 id=413 data-nosnippet>413</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#414 id=414 data-nosnippet>414</a>    }
+<a href=#415 id=415 data-nosnippet>415</a>
+<a href=#416 id=416 data-nosnippet>416</a>    <span class="kw">fn </span>read_image(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;ViewImage&gt; {
+<a href=#417 id=417 data-nosnippet>417</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#418 id=418 data-nosnippet>418</a>    }
+<a href=#419 id=419 data-nosnippet>419</a>    <span class="kw">fn </span>write_image(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>ViewImage) -&gt; ActualClipboardResult&lt;()&gt; {
+<a href=#420 id=420 data-nosnippet>420</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#421 id=421 data-nosnippet>421</a>    }
+<a href=#422 id=422 data-nosnippet>422</a>
+<a href=#423 id=423 data-nosnippet>423</a>    <span class="kw">fn </span>read_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ActualClipboardResult&lt;Vec&lt;PathBuf&gt;&gt; {
+<a href=#424 id=424 data-nosnippet>424</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#425 id=425 data-nosnippet>425</a>    }
+<a href=#426 id=426 data-nosnippet>426</a>    <span class="kw">fn </span>write_file_list(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Vec&lt;PathBuf&gt;) -&gt; ActualClipboardResult&lt;()&gt; {
+<a href=#427 id=427 data-nosnippet>427</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#428 id=428 data-nosnippet>428</a>    }
+<a href=#429 id=429 data-nosnippet>429</a>
+<a href=#430 id=430 data-nosnippet>430</a>    <span class="kw">fn </span>read_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt) -&gt; ActualClipboardResult&lt;IpcBytes&gt; {
+<a href=#431 id=431 data-nosnippet>431</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#432 id=432 data-nosnippet>432</a>    }
+<a href=#433 id=433 data-nosnippet>433</a>    <span class="kw">fn </span>write_extension(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw">_</span>: Txt, <span class="kw">_</span>: IpcBytes) -&gt; ActualClipboardResult&lt;()&gt; {
+<a href=#434 id=434 data-nosnippet>434</a>        <span class="prelude-val">Err</span>(<span class="self">self</span>.clone())
+<a href=#435 id=435 data-nosnippet>435</a>    }
+<a href=#436 id=436 data-nosnippet>436</a>}
+<a href=#437 id=437 data-nosnippet>437</a>
+<a href=#438 id=438 data-nosnippet>438</a><span class="macro">command!</span> {
+<a href=#439 id=439 data-nosnippet>439</a>    <span class="doccomment">/// Represents the clipboard **cut** action.
+<a href=#440 id=440 data-nosnippet>440</a>    </span><span class="kw">pub static </span>CUT_CMD = {
+<a href=#441 id=441 data-nosnippet>441</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#442 id=442 data-nosnippet>442</a>        name: <span class="string">"Cut"</span>,
+<a href=#443 id=443 data-nosnippet>443</a>        info: <span class="string">"Remove the selection and place it in the clipboard"</span>,
+<a href=#444 id=444 data-nosnippet>444</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'X'</span>), <span class="macro">shortcut!</span>(SHIFT + Delete), <span class="macro">shortcut!</span>(Cut)],
+<a href=#445 id=445 data-nosnippet>445</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+<a href=#446 id=446 data-nosnippet>446</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"cut"</span>)),
+<a href=#447 id=447 data-nosnippet>447</a>    };
+<a href=#448 id=448 data-nosnippet>448</a>
+<a href=#449 id=449 data-nosnippet>449</a>    <span class="doccomment">/// Represents the clipboard **copy** action.
+<a href=#450 id=450 data-nosnippet>450</a>    </span><span class="kw">pub static </span>COPY_CMD = {
+<a href=#451 id=451 data-nosnippet>451</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#452 id=452 data-nosnippet>452</a>        name: <span class="string">"Copy"</span>,
+<a href=#453 id=453 data-nosnippet>453</a>        info: <span class="string">"Place a copy of the selection in the clipboard"</span>,
+<a href=#454 id=454 data-nosnippet>454</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'C'</span>), <span class="macro">shortcut!</span>(CTRL + Insert), <span class="macro">shortcut!</span>(Copy)],
+<a href=#455 id=455 data-nosnippet>455</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+<a href=#456 id=456 data-nosnippet>456</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"copy"</span>)),
+<a href=#457 id=457 data-nosnippet>457</a>    };
+<a href=#458 id=458 data-nosnippet>458</a>
+<a href=#459 id=459 data-nosnippet>459</a>    <span class="doccomment">/// Represents the clipboard **paste** action.
+<a href=#460 id=460 data-nosnippet>460</a>    </span><span class="kw">pub static </span>PASTE_CMD = {
+<a href=#461 id=461 data-nosnippet>461</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#462 id=462 data-nosnippet>462</a>        name: <span class="string">"Paste"</span>,
+<a href=#463 id=463 data-nosnippet>463</a>        info: <span class="string">"Insert content from the clipboard"</span>,
+<a href=#464 id=464 data-nosnippet>464</a>        shortcut: [<span class="macro">shortcut!</span>(CTRL + <span class="string">'V'</span>), <span class="macro">shortcut!</span>(SHIFT + Insert), <span class="macro">shortcut!</span>(Paste)],
+<a href=#465 id=465 data-nosnippet>465</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
+<a href=#466 id=466 data-nosnippet>466</a>        icon: <span class="macro">wgt_fn!</span>(|<span class="kw">_</span>| ICONS.get(<span class="string">"paste"</span>)),
+<a href=#467 id=467 data-nosnippet>467</a>    };
+<a href=#468 id=468 data-nosnippet>468</a>}</code></pre></div></section></main></body></html>

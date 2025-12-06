@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/types.rs`."><title>types.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0 (f8297e351 2025-10-28)" data-channel="1.91.0" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>types.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! General event types.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/types.rs`."><title>types.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>types.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! General event types.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use crate</span>::{
 <a href=#4 id=4 data-nosnippet>4</a>    access::{AccessCmd, AccessNodeId},
@@ -10,15 +10,15 @@
 <a href=#10 id=10 data-nosnippet>10</a>    dialog::{DialogId, FileDialogResponse, MsgDialogResponse},
 <a href=#11 id=11 data-nosnippet>11</a>    drag_drop::{DragDropData, DragDropEffect},
 <a href=#12 id=12 data-nosnippet>12</a>    image::{ImageId, ImageLoadedData},
-<a href=#13 id=13 data-nosnippet>13</a>    ipc::{<span class="self">self</span>, IpcBytes},
-<a href=#14 id=14 data-nosnippet>14</a>    keyboard::{Key, KeyCode, KeyLocation, KeyState},
-<a href=#15 id=15 data-nosnippet>15</a>    mouse::{ButtonState, MouseButton, MouseScrollDelta},
-<a href=#16 id=16 data-nosnippet>16</a>    raw_input::{InputDeviceCapability, InputDeviceEvent, InputDeviceId, InputDeviceInfo},
-<a href=#17 id=17 data-nosnippet>17</a>    touch::{TouchPhase, TouchUpdate},
-<a href=#18 id=18 data-nosnippet>18</a>    window::{EventFrameRendered, FrameId, HeadlessOpenData, MonitorId, MonitorInfo, WindowChanged, WindowId, WindowOpenData},
-<a href=#19 id=19 data-nosnippet>19</a>};
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>serde::{Deserialize, Serialize};
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>std::fmt;
+<a href=#13 id=13 data-nosnippet>13</a>    keyboard::{Key, KeyCode, KeyLocation, KeyState},
+<a href=#14 id=14 data-nosnippet>14</a>    mouse::{ButtonState, MouseButton, MouseScrollDelta},
+<a href=#15 id=15 data-nosnippet>15</a>    raw_input::{InputDeviceCapability, InputDeviceEvent, InputDeviceId, InputDeviceInfo},
+<a href=#16 id=16 data-nosnippet>16</a>    touch::{TouchPhase, TouchUpdate},
+<a href=#17 id=17 data-nosnippet>17</a>    window::{EventFrameRendered, FrameId, HeadlessOpenData, MonitorId, MonitorInfo, WindowChanged, WindowId, WindowOpenData},
+<a href=#18 id=18 data-nosnippet>18</a>};
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>serde::{Deserialize, Serialize};
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>std::fmt;
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_task::channel::{ChannelError, IpcBytes};
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_txt::Txt;
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>zng_unit::{DipPoint, PxDensity2d, PxRect, PxSize, Rgba};
 <a href=#24 id=24 data-nosnippet>24</a>
@@ -801,7 +801,7 @@
 <a href=#801 id=801 data-nosnippet>801</a>}
 <a href=#802 id=802 data-nosnippet>802</a>
 <a href=#803 id=803 data-nosnippet>803</a><span class="doccomment">/// View Process IPC result.
-<a href=#804 id=804 data-nosnippet>804</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>VpResult&lt;T&gt; = std::result::Result&lt;T, ipc::ViewChannelError&gt;;
+<a href=#804 id=804 data-nosnippet>804</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">type </span>VpResult&lt;T&gt; = std::result::Result&lt;T, ChannelError&gt;;
 <a href=#805 id=805 data-nosnippet>805</a>
 <a href=#806 id=806 data-nosnippet>806</a><span class="doccomment">/// Offset and color in a gradient.
 <a href=#807 id=807 data-nosnippet>807</a></span><span class="attr">#[repr(C)]
@@ -1010,161 +1010,151 @@
 <a href=#1010 id=1010 data-nosnippet>1010</a>    </span>Pixelated = <span class="number">2</span>,
 <a href=#1011 id=1011 data-nosnippet>1011</a>}
 <a href=#1012 id=1012 data-nosnippet>1012</a>
-<a href=#1013 id=1013 data-nosnippet>1013</a><span class="doccomment">/// Pixel color alpha type.
-<a href=#1014 id=1014 data-nosnippet>1014</a></span><span class="attr">#[repr(u8)]
-<a href=#1015 id=1015 data-nosnippet>1015</a>#[derive(Clone, Copy, Debug, Deserialize, Eq, Hash, PartialEq, Serialize)]
-<a href=#1016 id=1016 data-nosnippet>1016</a></span><span class="kw">pub enum </span>AlphaType {
-<a href=#1017 id=1017 data-nosnippet>1017</a>    <span class="doccomment">/// Components are not pre-multiplied by alpha.
-<a href=#1018 id=1018 data-nosnippet>1018</a>    </span>Alpha = <span class="number">0</span>,
-<a href=#1019 id=1019 data-nosnippet>1019</a>    <span class="doccomment">/// Components are pre-multiplied by alpha.
-<a href=#1020 id=1020 data-nosnippet>1020</a>    </span>PremultipliedAlpha = <span class="number">1</span>,
-<a href=#1021 id=1021 data-nosnippet>1021</a>}
-<a href=#1022 id=1022 data-nosnippet>1022</a>
-<a href=#1023 id=1023 data-nosnippet>1023</a><span class="doccomment">/// Gradient extend mode.
-<a href=#1024 id=1024 data-nosnippet>1024</a></span><span class="attr">#[allow(missing_docs)]
-<a href=#1025 id=1025 data-nosnippet>1025</a>#[repr(u8)]
-<a href=#1026 id=1026 data-nosnippet>1026</a>#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq, Serialize, Deserialize, Ord, PartialOrd)]
-<a href=#1027 id=1027 data-nosnippet>1027</a></span><span class="kw">pub enum </span>ExtendMode {
-<a href=#1028 id=1028 data-nosnippet>1028</a>    Clamp,
-<a href=#1029 id=1029 data-nosnippet>1029</a>    Repeat,
-<a href=#1030 id=1030 data-nosnippet>1030</a>}
-<a href=#1031 id=1031 data-nosnippet>1031</a>
-<a href=#1032 id=1032 data-nosnippet>1032</a><span class="doccomment">/// Orientation of a straight line.
-<a href=#1033 id=1033 data-nosnippet>1033</a></span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-<a href=#1034 id=1034 data-nosnippet>1034</a></span><span class="kw">pub enum </span>LineOrientation {
-<a href=#1035 id=1035 data-nosnippet>1035</a>    <span class="doccomment">/// Top-to-bottom line.
-<a href=#1036 id=1036 data-nosnippet>1036</a>    </span>Vertical,
-<a href=#1037 id=1037 data-nosnippet>1037</a>    <span class="doccomment">/// Left-to-right line.
-<a href=#1038 id=1038 data-nosnippet>1038</a>    </span>Horizontal,
-<a href=#1039 id=1039 data-nosnippet>1039</a>}
-<a href=#1040 id=1040 data-nosnippet>1040</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>LineOrientation {
-<a href=#1041 id=1041 data-nosnippet>1041</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#1042 id=1042 data-nosnippet>1042</a>        <span class="kw">if </span>f.alternate() {
-<a href=#1043 id=1043 data-nosnippet>1043</a>            <span class="macro">write!</span>(f, <span class="string">"LineOrientation::"</span>)<span class="question-mark">?</span>;
-<a href=#1044 id=1044 data-nosnippet>1044</a>        }
-<a href=#1045 id=1045 data-nosnippet>1045</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#1046 id=1046 data-nosnippet>1046</a>            LineOrientation::Vertical =&gt; {
-<a href=#1047 id=1047 data-nosnippet>1047</a>                <span class="macro">write!</span>(f, <span class="string">"Vertical"</span>)
-<a href=#1048 id=1048 data-nosnippet>1048</a>            }
-<a href=#1049 id=1049 data-nosnippet>1049</a>            LineOrientation::Horizontal =&gt; {
-<a href=#1050 id=1050 data-nosnippet>1050</a>                <span class="macro">write!</span>(f, <span class="string">"Horizontal"</span>)
-<a href=#1051 id=1051 data-nosnippet>1051</a>            }
-<a href=#1052 id=1052 data-nosnippet>1052</a>        }
-<a href=#1053 id=1053 data-nosnippet>1053</a>    }
-<a href=#1054 id=1054 data-nosnippet>1054</a>}
+<a href=#1013 id=1013 data-nosnippet>1013</a><span class="doccomment">/// Gradient extend mode.
+<a href=#1014 id=1014 data-nosnippet>1014</a></span><span class="attr">#[allow(missing_docs)]
+<a href=#1015 id=1015 data-nosnippet>1015</a>#[repr(u8)]
+<a href=#1016 id=1016 data-nosnippet>1016</a>#[derive(Debug, Copy, Clone, Hash, Eq, PartialEq, Serialize, Deserialize, Ord, PartialOrd)]
+<a href=#1017 id=1017 data-nosnippet>1017</a></span><span class="kw">pub enum </span>ExtendMode {
+<a href=#1018 id=1018 data-nosnippet>1018</a>    Clamp,
+<a href=#1019 id=1019 data-nosnippet>1019</a>    Repeat,
+<a href=#1020 id=1020 data-nosnippet>1020</a>}
+<a href=#1021 id=1021 data-nosnippet>1021</a>
+<a href=#1022 id=1022 data-nosnippet>1022</a><span class="doccomment">/// Orientation of a straight line.
+<a href=#1023 id=1023 data-nosnippet>1023</a></span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
+<a href=#1024 id=1024 data-nosnippet>1024</a></span><span class="kw">pub enum </span>LineOrientation {
+<a href=#1025 id=1025 data-nosnippet>1025</a>    <span class="doccomment">/// Top-to-bottom line.
+<a href=#1026 id=1026 data-nosnippet>1026</a>    </span>Vertical,
+<a href=#1027 id=1027 data-nosnippet>1027</a>    <span class="doccomment">/// Left-to-right line.
+<a href=#1028 id=1028 data-nosnippet>1028</a>    </span>Horizontal,
+<a href=#1029 id=1029 data-nosnippet>1029</a>}
+<a href=#1030 id=1030 data-nosnippet>1030</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>LineOrientation {
+<a href=#1031 id=1031 data-nosnippet>1031</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#1032 id=1032 data-nosnippet>1032</a>        <span class="kw">if </span>f.alternate() {
+<a href=#1033 id=1033 data-nosnippet>1033</a>            <span class="macro">write!</span>(f, <span class="string">"LineOrientation::"</span>)<span class="question-mark">?</span>;
+<a href=#1034 id=1034 data-nosnippet>1034</a>        }
+<a href=#1035 id=1035 data-nosnippet>1035</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#1036 id=1036 data-nosnippet>1036</a>            LineOrientation::Vertical =&gt; {
+<a href=#1037 id=1037 data-nosnippet>1037</a>                <span class="macro">write!</span>(f, <span class="string">"Vertical"</span>)
+<a href=#1038 id=1038 data-nosnippet>1038</a>            }
+<a href=#1039 id=1039 data-nosnippet>1039</a>            LineOrientation::Horizontal =&gt; {
+<a href=#1040 id=1040 data-nosnippet>1040</a>                <span class="macro">write!</span>(f, <span class="string">"Horizontal"</span>)
+<a href=#1041 id=1041 data-nosnippet>1041</a>            }
+<a href=#1042 id=1042 data-nosnippet>1042</a>        }
+<a href=#1043 id=1043 data-nosnippet>1043</a>    }
+<a href=#1044 id=1044 data-nosnippet>1044</a>}
+<a href=#1045 id=1045 data-nosnippet>1045</a>
+<a href=#1046 id=1046 data-nosnippet>1046</a><span class="doccomment">/// Represents a line style.
+<a href=#1047 id=1047 data-nosnippet>1047</a></span><span class="attr">#[allow(missing_docs)]
+<a href=#1048 id=1048 data-nosnippet>1048</a>#[repr(u8)]
+<a href=#1049 id=1049 data-nosnippet>1049</a>#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
+<a href=#1050 id=1050 data-nosnippet>1050</a>#[non_exhaustive]
+<a href=#1051 id=1051 data-nosnippet>1051</a></span><span class="kw">pub enum </span>LineStyle {
+<a href=#1052 id=1052 data-nosnippet>1052</a>    Solid,
+<a href=#1053 id=1053 data-nosnippet>1053</a>    Dotted,
+<a href=#1054 id=1054 data-nosnippet>1054</a>    Dashed,
 <a href=#1055 id=1055 data-nosnippet>1055</a>
-<a href=#1056 id=1056 data-nosnippet>1056</a><span class="doccomment">/// Represents a line style.
-<a href=#1057 id=1057 data-nosnippet>1057</a></span><span class="attr">#[allow(missing_docs)]
-<a href=#1058 id=1058 data-nosnippet>1058</a>#[repr(u8)]
-<a href=#1059 id=1059 data-nosnippet>1059</a>#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
-<a href=#1060 id=1060 data-nosnippet>1060</a>#[non_exhaustive]
-<a href=#1061 id=1061 data-nosnippet>1061</a></span><span class="kw">pub enum </span>LineStyle {
-<a href=#1062 id=1062 data-nosnippet>1062</a>    Solid,
-<a href=#1063 id=1063 data-nosnippet>1063</a>    Dotted,
-<a href=#1064 id=1064 data-nosnippet>1064</a>    Dashed,
-<a href=#1065 id=1065 data-nosnippet>1065</a>
-<a href=#1066 id=1066 data-nosnippet>1066</a>    <span class="doccomment">/// A wavy line, like an error underline.
-<a href=#1067 id=1067 data-nosnippet>1067</a>    ///
-<a href=#1068 id=1068 data-nosnippet>1068</a>    /// The wave magnitude is defined by the overall line thickness, the associated value
-<a href=#1069 id=1069 data-nosnippet>1069</a>    /// here defines the thickness of the wavy line.
-<a href=#1070 id=1070 data-nosnippet>1070</a>    </span>Wavy(f32),
-<a href=#1071 id=1071 data-nosnippet>1071</a>}
-<a href=#1072 id=1072 data-nosnippet>1072</a>
-<a href=#1073 id=1073 data-nosnippet>1073</a><span class="doccomment">/// The line style for the sides of a widget's border.
-<a href=#1074 id=1074 data-nosnippet>1074</a></span><span class="attr">#[repr(u8)]
-<a href=#1075 id=1075 data-nosnippet>1075</a>#[derive(Default, Debug, Clone, Copy, PartialEq, Hash, Eq, serde::Serialize, serde::Deserialize)]
-<a href=#1076 id=1076 data-nosnippet>1076</a>#[non_exhaustive]
-<a href=#1077 id=1077 data-nosnippet>1077</a></span><span class="kw">pub enum </span>BorderStyle {
-<a href=#1078 id=1078 data-nosnippet>1078</a>    <span class="doccomment">/// No border line.
-<a href=#1079 id=1079 data-nosnippet>1079</a>    </span><span class="attr">#[default]
-<a href=#1080 id=1080 data-nosnippet>1080</a>    </span><span class="prelude-val">None </span>= <span class="number">0</span>,
+<a href=#1056 id=1056 data-nosnippet>1056</a>    <span class="doccomment">/// A wavy line, like an error underline.
+<a href=#1057 id=1057 data-nosnippet>1057</a>    ///
+<a href=#1058 id=1058 data-nosnippet>1058</a>    /// The wave magnitude is defined by the overall line thickness, the associated value
+<a href=#1059 id=1059 data-nosnippet>1059</a>    /// here defines the thickness of the wavy line.
+<a href=#1060 id=1060 data-nosnippet>1060</a>    </span>Wavy(f32),
+<a href=#1061 id=1061 data-nosnippet>1061</a>}
+<a href=#1062 id=1062 data-nosnippet>1062</a>
+<a href=#1063 id=1063 data-nosnippet>1063</a><span class="doccomment">/// The line style for the sides of a widget's border.
+<a href=#1064 id=1064 data-nosnippet>1064</a></span><span class="attr">#[repr(u8)]
+<a href=#1065 id=1065 data-nosnippet>1065</a>#[derive(Default, Debug, Clone, Copy, PartialEq, Hash, Eq, serde::Serialize, serde::Deserialize)]
+<a href=#1066 id=1066 data-nosnippet>1066</a>#[non_exhaustive]
+<a href=#1067 id=1067 data-nosnippet>1067</a></span><span class="kw">pub enum </span>BorderStyle {
+<a href=#1068 id=1068 data-nosnippet>1068</a>    <span class="doccomment">/// No border line.
+<a href=#1069 id=1069 data-nosnippet>1069</a>    </span><span class="attr">#[default]
+<a href=#1070 id=1070 data-nosnippet>1070</a>    </span><span class="prelude-val">None </span>= <span class="number">0</span>,
+<a href=#1071 id=1071 data-nosnippet>1071</a>
+<a href=#1072 id=1072 data-nosnippet>1072</a>    <span class="doccomment">/// A single straight solid line.
+<a href=#1073 id=1073 data-nosnippet>1073</a>    </span>Solid = <span class="number">1</span>,
+<a href=#1074 id=1074 data-nosnippet>1074</a>    <span class="doccomment">/// Two straight solid lines that add up to the pixel size defined by the side width.
+<a href=#1075 id=1075 data-nosnippet>1075</a>    </span>Double = <span class="number">2</span>,
+<a href=#1076 id=1076 data-nosnippet>1076</a>
+<a href=#1077 id=1077 data-nosnippet>1077</a>    <span class="doccomment">/// Displays a series of rounded dots.
+<a href=#1078 id=1078 data-nosnippet>1078</a>    </span>Dotted = <span class="number">3</span>,
+<a href=#1079 id=1079 data-nosnippet>1079</a>    <span class="doccomment">/// Displays a series of short square-ended dashes or line segments.
+<a href=#1080 id=1080 data-nosnippet>1080</a>    </span>Dashed = <span class="number">4</span>,
 <a href=#1081 id=1081 data-nosnippet>1081</a>
-<a href=#1082 id=1082 data-nosnippet>1082</a>    <span class="doccomment">/// A single straight solid line.
-<a href=#1083 id=1083 data-nosnippet>1083</a>    </span>Solid = <span class="number">1</span>,
-<a href=#1084 id=1084 data-nosnippet>1084</a>    <span class="doccomment">/// Two straight solid lines that add up to the pixel size defined by the side width.
-<a href=#1085 id=1085 data-nosnippet>1085</a>    </span>Double = <span class="number">2</span>,
-<a href=#1086 id=1086 data-nosnippet>1086</a>
-<a href=#1087 id=1087 data-nosnippet>1087</a>    <span class="doccomment">/// Displays a series of rounded dots.
-<a href=#1088 id=1088 data-nosnippet>1088</a>    </span>Dotted = <span class="number">3</span>,
-<a href=#1089 id=1089 data-nosnippet>1089</a>    <span class="doccomment">/// Displays a series of short square-ended dashes or line segments.
-<a href=#1090 id=1090 data-nosnippet>1090</a>    </span>Dashed = <span class="number">4</span>,
-<a href=#1091 id=1091 data-nosnippet>1091</a>
-<a href=#1092 id=1092 data-nosnippet>1092</a>    <span class="doccomment">/// Fully transparent line.
-<a href=#1093 id=1093 data-nosnippet>1093</a>    </span>Hidden = <span class="number">5</span>,
-<a href=#1094 id=1094 data-nosnippet>1094</a>
-<a href=#1095 id=1095 data-nosnippet>1095</a>    <span class="doccomment">/// Displays a border with a carved appearance.
-<a href=#1096 id=1096 data-nosnippet>1096</a>    </span>Groove = <span class="number">6</span>,
-<a href=#1097 id=1097 data-nosnippet>1097</a>    <span class="doccomment">/// Displays a border with an extruded appearance.
-<a href=#1098 id=1098 data-nosnippet>1098</a>    </span>Ridge = <span class="number">7</span>,
-<a href=#1099 id=1099 data-nosnippet>1099</a>
-<a href=#1100 id=1100 data-nosnippet>1100</a>    <span class="doccomment">/// Displays a border that makes the widget appear embedded.
-<a href=#1101 id=1101 data-nosnippet>1101</a>    </span>Inset = <span class="number">8</span>,
-<a href=#1102 id=1102 data-nosnippet>1102</a>    <span class="doccomment">/// Displays a border that makes the widget appear embossed.
-<a href=#1103 id=1103 data-nosnippet>1103</a>    </span>Outset = <span class="number">9</span>,
-<a href=#1104 id=1104 data-nosnippet>1104</a>}
-<a href=#1105 id=1105 data-nosnippet>1105</a>
-<a href=#1106 id=1106 data-nosnippet>1106</a><span class="doccomment">/// Result of a focus request.
-<a href=#1107 id=1107 data-nosnippet>1107</a></span><span class="attr">#[repr(u8)]
-<a href=#1108 id=1108 data-nosnippet>1108</a>#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
-<a href=#1109 id=1109 data-nosnippet>1109</a>#[non_exhaustive]
-<a href=#1110 id=1110 data-nosnippet>1110</a></span><span class="kw">pub enum </span>FocusResult {
-<a href=#1111 id=1111 data-nosnippet>1111</a>    <span class="doccomment">/// Focus was requested, an [`Event::FocusChanged`] will be send if the operating system gives focus to the window.
-<a href=#1112 id=1112 data-nosnippet>1112</a>    </span>Requested,
-<a href=#1113 id=1113 data-nosnippet>1113</a>    <span class="doccomment">/// Window is already focused.
-<a href=#1114 id=1114 data-nosnippet>1114</a>    </span>AlreadyFocused,
-<a href=#1115 id=1115 data-nosnippet>1115</a>}
-<a href=#1116 id=1116 data-nosnippet>1116</a>
-<a href=#1117 id=1117 data-nosnippet>1117</a><span class="doccomment">/// Defines what raw device events the view-process instance should monitor and notify.
-<a href=#1118 id=1118 data-nosnippet>1118</a>///
-<a href=#1119 id=1119 data-nosnippet>1119</a>/// Raw device events are global and can be received even when the app has no visible window.
-<a href=#1120 id=1120 data-nosnippet>1120</a>///
-<a href=#1121 id=1121 data-nosnippet>1121</a>/// These events are disabled by default as they can impact performance or may require special security clearance,
-<a href=#1122 id=1122 data-nosnippet>1122</a>/// depending on the view-process implementation and operating system.
-<a href=#1123 id=1123 data-nosnippet>1123</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
-<a href=#1124 id=1124 data-nosnippet>1124</a>#[non_exhaustive]
-<a href=#1125 id=1125 data-nosnippet>1125</a></span><span class="kw">pub struct </span>DeviceEventsFilter {
-<a href=#1126 id=1126 data-nosnippet>1126</a>    <span class="doccomment">/// What raw input events should be watched/send.
-<a href=#1127 id=1127 data-nosnippet>1127</a>    ///
-<a href=#1128 id=1128 data-nosnippet>1128</a>    /// Note that although the view-process will filter input device events using these flags setting
-<a href=#1129 id=1129 data-nosnippet>1129</a>    /// just one of them may cause a general native listener to init.
-<a href=#1130 id=1130 data-nosnippet>1130</a>    </span><span class="kw">pub </span>input: InputDeviceCapability,
-<a href=#1131 id=1131 data-nosnippet>1131</a>}
-<a href=#1132 id=1132 data-nosnippet>1132</a><span class="kw">impl </span>DeviceEventsFilter {
-<a href=#1133 id=1133 data-nosnippet>1133</a>    <span class="doccomment">/// Default value, no device events are needed.
-<a href=#1134 id=1134 data-nosnippet>1134</a>    </span><span class="kw">pub fn </span>empty() -&gt; <span class="self">Self </span>{
-<a href=#1135 id=1135 data-nosnippet>1135</a>        <span class="self">Self </span>{
-<a href=#1136 id=1136 data-nosnippet>1136</a>            input: InputDeviceCapability::empty(),
-<a href=#1137 id=1137 data-nosnippet>1137</a>        }
+<a href=#1082 id=1082 data-nosnippet>1082</a>    <span class="doccomment">/// Fully transparent line.
+<a href=#1083 id=1083 data-nosnippet>1083</a>    </span>Hidden = <span class="number">5</span>,
+<a href=#1084 id=1084 data-nosnippet>1084</a>
+<a href=#1085 id=1085 data-nosnippet>1085</a>    <span class="doccomment">/// Displays a border with a carved appearance.
+<a href=#1086 id=1086 data-nosnippet>1086</a>    </span>Groove = <span class="number">6</span>,
+<a href=#1087 id=1087 data-nosnippet>1087</a>    <span class="doccomment">/// Displays a border with an extruded appearance.
+<a href=#1088 id=1088 data-nosnippet>1088</a>    </span>Ridge = <span class="number">7</span>,
+<a href=#1089 id=1089 data-nosnippet>1089</a>
+<a href=#1090 id=1090 data-nosnippet>1090</a>    <span class="doccomment">/// Displays a border that makes the widget appear embedded.
+<a href=#1091 id=1091 data-nosnippet>1091</a>    </span>Inset = <span class="number">8</span>,
+<a href=#1092 id=1092 data-nosnippet>1092</a>    <span class="doccomment">/// Displays a border that makes the widget appear embossed.
+<a href=#1093 id=1093 data-nosnippet>1093</a>    </span>Outset = <span class="number">9</span>,
+<a href=#1094 id=1094 data-nosnippet>1094</a>}
+<a href=#1095 id=1095 data-nosnippet>1095</a>
+<a href=#1096 id=1096 data-nosnippet>1096</a><span class="doccomment">/// Result of a focus request.
+<a href=#1097 id=1097 data-nosnippet>1097</a></span><span class="attr">#[repr(u8)]
+<a href=#1098 id=1098 data-nosnippet>1098</a>#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#1099 id=1099 data-nosnippet>1099</a>#[non_exhaustive]
+<a href=#1100 id=1100 data-nosnippet>1100</a></span><span class="kw">pub enum </span>FocusResult {
+<a href=#1101 id=1101 data-nosnippet>1101</a>    <span class="doccomment">/// Focus was requested, an [`Event::FocusChanged`] will be send if the operating system gives focus to the window.
+<a href=#1102 id=1102 data-nosnippet>1102</a>    </span>Requested,
+<a href=#1103 id=1103 data-nosnippet>1103</a>    <span class="doccomment">/// Window is already focused.
+<a href=#1104 id=1104 data-nosnippet>1104</a>    </span>AlreadyFocused,
+<a href=#1105 id=1105 data-nosnippet>1105</a>}
+<a href=#1106 id=1106 data-nosnippet>1106</a>
+<a href=#1107 id=1107 data-nosnippet>1107</a><span class="doccomment">/// Defines what raw device events the view-process instance should monitor and notify.
+<a href=#1108 id=1108 data-nosnippet>1108</a>///
+<a href=#1109 id=1109 data-nosnippet>1109</a>/// Raw device events are global and can be received even when the app has no visible window.
+<a href=#1110 id=1110 data-nosnippet>1110</a>///
+<a href=#1111 id=1111 data-nosnippet>1111</a>/// These events are disabled by default as they can impact performance or may require special security clearance,
+<a href=#1112 id=1112 data-nosnippet>1112</a>/// depending on the view-process implementation and operating system.
+<a href=#1113 id=1113 data-nosnippet>1113</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#1114 id=1114 data-nosnippet>1114</a>#[non_exhaustive]
+<a href=#1115 id=1115 data-nosnippet>1115</a></span><span class="kw">pub struct </span>DeviceEventsFilter {
+<a href=#1116 id=1116 data-nosnippet>1116</a>    <span class="doccomment">/// What raw input events should be watched/send.
+<a href=#1117 id=1117 data-nosnippet>1117</a>    ///
+<a href=#1118 id=1118 data-nosnippet>1118</a>    /// Note that although the view-process will filter input device events using these flags setting
+<a href=#1119 id=1119 data-nosnippet>1119</a>    /// just one of them may cause a general native listener to init.
+<a href=#1120 id=1120 data-nosnippet>1120</a>    </span><span class="kw">pub </span>input: InputDeviceCapability,
+<a href=#1121 id=1121 data-nosnippet>1121</a>}
+<a href=#1122 id=1122 data-nosnippet>1122</a><span class="kw">impl </span>DeviceEventsFilter {
+<a href=#1123 id=1123 data-nosnippet>1123</a>    <span class="doccomment">/// Default value, no device events are needed.
+<a href=#1124 id=1124 data-nosnippet>1124</a>    </span><span class="kw">pub fn </span>empty() -&gt; <span class="self">Self </span>{
+<a href=#1125 id=1125 data-nosnippet>1125</a>        <span class="self">Self </span>{
+<a href=#1126 id=1126 data-nosnippet>1126</a>            input: InputDeviceCapability::empty(),
+<a href=#1127 id=1127 data-nosnippet>1127</a>        }
+<a href=#1128 id=1128 data-nosnippet>1128</a>    }
+<a href=#1129 id=1129 data-nosnippet>1129</a>
+<a href=#1130 id=1130 data-nosnippet>1130</a>    <span class="doccomment">/// If the filter does not include any event.
+<a href=#1131 id=1131 data-nosnippet>1131</a>    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#1132 id=1132 data-nosnippet>1132</a>        <span class="self">self</span>.input.is_empty()
+<a href=#1133 id=1133 data-nosnippet>1133</a>    }
+<a href=#1134 id=1134 data-nosnippet>1134</a>
+<a href=#1135 id=1135 data-nosnippet>1135</a>    <span class="doccomment">/// New with input device events needed.
+<a href=#1136 id=1136 data-nosnippet>1136</a>    </span><span class="kw">pub fn </span>new(input: InputDeviceCapability) -&gt; <span class="self">Self </span>{
+<a href=#1137 id=1137 data-nosnippet>1137</a>        <span class="self">Self </span>{ input }
 <a href=#1138 id=1138 data-nosnippet>1138</a>    }
-<a href=#1139 id=1139 data-nosnippet>1139</a>
-<a href=#1140 id=1140 data-nosnippet>1140</a>    <span class="doccomment">/// If the filter does not include any event.
-<a href=#1141 id=1141 data-nosnippet>1141</a>    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#1142 id=1142 data-nosnippet>1142</a>        <span class="self">self</span>.input.is_empty()
+<a href=#1139 id=1139 data-nosnippet>1139</a>}
+<a href=#1140 id=1140 data-nosnippet>1140</a><span class="kw">impl </span>Default <span class="kw">for </span>DeviceEventsFilter {
+<a href=#1141 id=1141 data-nosnippet>1141</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#1142 id=1142 data-nosnippet>1142</a>        <span class="self">Self</span>::empty()
 <a href=#1143 id=1143 data-nosnippet>1143</a>    }
-<a href=#1144 id=1144 data-nosnippet>1144</a>
-<a href=#1145 id=1145 data-nosnippet>1145</a>    <span class="doccomment">/// New with input device events needed.
-<a href=#1146 id=1146 data-nosnippet>1146</a>    </span><span class="kw">pub fn </span>new(input: InputDeviceCapability) -&gt; <span class="self">Self </span>{
-<a href=#1147 id=1147 data-nosnippet>1147</a>        <span class="self">Self </span>{ input }
-<a href=#1148 id=1148 data-nosnippet>1148</a>    }
-<a href=#1149 id=1149 data-nosnippet>1149</a>}
-<a href=#1150 id=1150 data-nosnippet>1150</a><span class="kw">impl </span>Default <span class="kw">for </span>DeviceEventsFilter {
-<a href=#1151 id=1151 data-nosnippet>1151</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#1152 id=1152 data-nosnippet>1152</a>        <span class="self">Self</span>::empty()
-<a href=#1153 id=1153 data-nosnippet>1153</a>    }
-<a href=#1154 id=1154 data-nosnippet>1154</a>}
+<a href=#1144 id=1144 data-nosnippet>1144</a>}
+<a href=#1145 id=1145 data-nosnippet>1145</a>
+<a href=#1146 id=1146 data-nosnippet>1146</a><span class="attr">#[cfg(test)]
+<a href=#1147 id=1147 data-nosnippet>1147</a></span><span class="kw">mod </span>tests {
+<a href=#1148 id=1148 data-nosnippet>1148</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#1149 id=1149 data-nosnippet>1149</a>
+<a href=#1150 id=1150 data-nosnippet>1150</a>    <span class="attr">#[test]
+<a href=#1151 id=1151 data-nosnippet>1151</a>    </span><span class="kw">fn </span>key_code_iter() {
+<a href=#1152 id=1152 data-nosnippet>1152</a>        <span class="kw">let </span><span class="kw-2">mut </span>iter = KeyCode::all_identified();
+<a href=#1153 id=1153 data-nosnippet>1153</a>        <span class="kw">let </span>first = iter.next().unwrap();
+<a href=#1154 id=1154 data-nosnippet>1154</a>        <span class="macro">assert_eq!</span>(first, KeyCode::Backquote);
 <a href=#1155 id=1155 data-nosnippet>1155</a>
-<a href=#1156 id=1156 data-nosnippet>1156</a><span class="attr">#[cfg(test)]
-<a href=#1157 id=1157 data-nosnippet>1157</a></span><span class="kw">mod </span>tests {
-<a href=#1158 id=1158 data-nosnippet>1158</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#1159 id=1159 data-nosnippet>1159</a>
-<a href=#1160 id=1160 data-nosnippet>1160</a>    <span class="attr">#[test]
-<a href=#1161 id=1161 data-nosnippet>1161</a>    </span><span class="kw">fn </span>key_code_iter() {
-<a href=#1162 id=1162 data-nosnippet>1162</a>        <span class="kw">let </span><span class="kw-2">mut </span>iter = KeyCode::all_identified();
-<a href=#1163 id=1163 data-nosnippet>1163</a>        <span class="kw">let </span>first = iter.next().unwrap();
-<a href=#1164 id=1164 data-nosnippet>1164</a>        <span class="macro">assert_eq!</span>(first, KeyCode::Backquote);
-<a href=#1165 id=1165 data-nosnippet>1165</a>
-<a href=#1166 id=1166 data-nosnippet>1166</a>        <span class="kw">for </span>k <span class="kw">in </span>iter {
-<a href=#1167 id=1167 data-nosnippet>1167</a>            <span class="macro">assert_eq!</span>(k.name(), <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"{k:?}"</span>));
-<a href=#1168 id=1168 data-nosnippet>1168</a>        }
-<a href=#1169 id=1169 data-nosnippet>1169</a>    }
-<a href=#1170 id=1170 data-nosnippet>1170</a>}</code></pre></div></section></main></body></html>
+<a href=#1156 id=1156 data-nosnippet>1156</a>        <span class="kw">for </span>k <span class="kw">in </span>iter {
+<a href=#1157 id=1157 data-nosnippet>1157</a>            <span class="macro">assert_eq!</span>(k.name(), <span class="kw-2">&amp;</span><span class="macro">format!</span>(<span class="string">"{k:?}"</span>));
+<a href=#1158 id=1158 data-nosnippet>1158</a>        }
+<a href=#1159 id=1159 data-nosnippet>1159</a>    }
+<a href=#1160 id=1160 data-nosnippet>1160</a>}</code></pre></div></section></main></body></html>

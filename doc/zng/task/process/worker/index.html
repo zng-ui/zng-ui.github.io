@@ -1,0 +1,67 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Async worker process tasks."><title>zng::task::process::worker - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.1 (ed61e7d7e 2025-11-07)" data-channel="1.91.1" data-search-js="search-e256b49e.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../../static.files/storage-e2aeef58.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module worker</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../../zng/index.html"><img src="https://zng-ui.github.io/res/zng-logo.png" alt="logo"></a><h2><a href="../../../../zng/index.html">zng</a><span class="version">0.20.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module worker</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#examples" title="Examples">Examples</a></li><li><a href="#connect-timeout" title="Connect Timeout">Connect Timeout</a></li></ul><h3><a href="#structs">Module Items</a></h3><ul class="block"><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#constants" title="Constants">Constants</a></li><li><a href="#functions" title="Functions">Functions</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="../index.html">In zng::<wbr>task::<wbr>process</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../../index.html">zng</a>::<wbr><a href="../../index.html">task</a>::<wbr><a href="../index.html">process</a></div><h1>Module <span>worker</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../../src/zng_task/process.rs.html#8">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Async worker process tasks.</p>
+<p>This module defines a worker process that can run tasks in a separate process instance.</p>
+<p>Each worker process can run multiple tasks in parallel, the worker type is <a href="struct.Worker.html" title="struct zng::task::process::worker::Worker"><code>Worker</code></a>. Note that this module does not offer a fork
+implementation, the worker processes begin from the start state. The primary use of process tasks is to make otherwise fatal tasks
+recoverable, if the task calls unsafe code or code that can potentially terminate the entire process it should run using a <a href="struct.Worker.html" title="struct zng::task::process::worker::Worker"><code>Worker</code></a>.
+If you only want to recover from panics in safe code consider using <a href="../../fn.run_catch.html" title="fn zng::task::run_catch"><code>task::run_catch</code></a> or <a href="../../fn.wait_catch.html" title="fn zng::task::wait_catch"><code>task::wait_catch</code></a> instead.</p>
+<p>You can send <a href="../../channel/fn.ipc_unbounded.html" title="fn zng::task::channel::ipc_unbounded">IPC channel</a> endpoints in the task request messages, this can be useful for implementing progress reporting,
+you can also send <a href="../../channel/struct.IpcBytes.html" title="struct zng::task::channel::IpcBytes"><code>IpcBytes</code></a> to efficiently share large byte blobs with the worker process.</p>
+<h2 id="examples"><a class="doc-anchor" href="#examples">§</a>Examples</h2>
+<p>The example below demonstrates a worker-process setup that uses the same executable as the app-process.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">fn </span>main() {
+    <span class="macro">zng::env::init!</span>();
+    <span class="comment">// normal app init..
+</span>}
+
+<span class="kw">mod </span>task1 {
+    <span class="kw">use </span>zng::{task::process::worker, env};
+
+    <span class="kw">const </span>NAME: <span class="kw-2">&amp;</span>str = <span class="string">"zng::example::task1"</span>;
+
+    <span class="macro">env::on_process_start!</span>(|args| {
+        <span class="comment">// give tracing handlers a chance to observe the worker-process
+        </span><span class="kw">if </span>args.yield_count == <span class="number">0 </span>{ <span class="kw">return </span>args.yield_once(); }
+        worker::run_worker(NAME, work);
+    });
+    <span class="kw">async fn </span>work(args: worker::RequestArgs&lt;Request&gt;) -&gt; Response {
+        <span class="kw">let </span>rsp = <span class="macro">format!</span>(<span class="string">"received 'task1' request `{:?}` in worker-process #{}"</span>, <span class="kw-2">&amp;</span>args.request.data, std::process::id());
+        Response { data: rsp }
+    }
+     
+    <span class="attr">#[derive(Debug, serde::Serialize, serde::Deserialize)]
+    </span><span class="kw">pub struct </span>Request { <span class="kw">pub </span>data: String }
+
+    <span class="attr">#[derive(Debug, serde::Serialize, serde::Deserialize)]
+    </span><span class="kw">pub struct </span>Response { <span class="kw">pub </span>data: String }
+
+    <span class="comment">// called in app-process
+    </span><span class="kw">pub async fn </span>start() -&gt; worker::Worker&lt;Request, Response&gt; {
+        worker::Worker::start(NAME).<span class="kw">await</span>.expect(<span class="string">"cannot spawn 'task1'"</span>)
+    }
+}
+
+<span class="comment">// This runs in the app-process, it starts a worker process and requests a task run.
+</span><span class="kw">async fn </span>on_click() {
+    <span class="macro">println!</span>(<span class="string">"app-process #{} starting a worker"</span>, std::process::id());
+    <span class="kw">let </span><span class="kw-2">mut </span>worker = task1::start().<span class="kw">await</span>;
+    <span class="comment">// request a task run and await it.
+    </span><span class="kw">match </span>worker.run(task1::Request { data: <span class="string">"request"</span>.to_owned() }).<span class="kw">await </span>{
+        <span class="prelude-val">Ok</span>(task1::Response { data }) =&gt; <span class="macro">println!</span>(<span class="string">"ok. {data}"</span>),
+        <span class="prelude-val">Err</span>(e) =&gt; <span class="macro">eprintln!</span>(<span class="string">"error: {e}"</span>),
+    }
+    <span class="comment">// multiple tasks can be requested in parallel, use `task::all!` to await ..
+
+    // the worker process can be gracefully shutdown, awaits all pending tasks.
+    </span><span class="kw">let _ </span>= worker.shutdown().<span class="kw">await</span>;
+}</code></pre></div>
+<p>Note that you can setup multiple workers the same executable, as long as the <code>on_process_start!</code> call happens
+on different modules.</p>
+<h2 id="connect-timeout"><a class="doc-anchor" href="#connect-timeout">§</a>Connect Timeout</h2>
+<p>If the worker process takes longer than 10 seconds to connect the tasks fails. This is more then enough in most cases, but
+it can be too little in some test runner machines. You can set the <code>"ZNG_TASK_WORKER_TIMEOUT"</code> environment variable to a custom
+timeout in seconds. The minimum value is 1 second, set to 0 or empty use the default timeout.</p>
+</div></details><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.RequestArgs.html" title="struct zng::task::process::worker::RequestArgs">Request<wbr>Args</a></dt><dd>Arguments for <a href="fn.run_worker.html" title="fn zng::task::process::worker::run_worker"><code>run_worker</code></a>.</dd><dt><a class="struct" href="struct.Worker.html" title="struct zng::task::process::worker::Worker">Worker</a></dt><dd>Represents a running worker process.</dd><dt><a class="struct" href="struct.WorkerCrashError.html" title="struct zng::task::process::worker::WorkerCrashError">Worker<wbr>Crash<wbr>Error</a></dt><dd>Info about a worker process crash.</dd></dl><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.RunError.html" title="enum zng::task::process::worker::RunError">RunError</a></dt><dd>Worker run error.</dd></dl><h2 id="constants" class="section-header">Constants<a href="#constants" class="anchor">§</a></h2><dl class="item-table"><dt><a class="constant" href="constant.VERSION.html" title="constant zng::task::process::worker::VERSION">VERSION</a></dt><dd>The <em>App Process</em> and <em>Worker Process</em> must be build using the same exact version and this is
+validated during run-time, causing a panic if the versions don’t match.</dd></dl><h2 id="functions" class="section-header">Functions<a href="#functions" class="anchor">§</a></h2><dl class="item-table"><dt><a class="fn" href="fn.run_worker.html" title="fn zng::task::process::worker::run_worker">run_<wbr>worker</a></dt><dd>If the process was started by a <a href="struct.Worker.html" title="struct zng::task::process::worker::Worker"><code>Worker</code></a> runs the worker loop and never returns. If
+not started as worker does nothing.</dd></dl></section></div></main></body></html>

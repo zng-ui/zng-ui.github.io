@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["RecvError","RecvTimeoutError","SendTimeoutError"],"fn":["bounded","rendezvous","unbounded"],"struct":["Receiver","SendError","Sender","UnboundSender"]};
+window.SIDEBAR_ITEMS = {"enum":["ChannelError"],"fn":["bounded","ipc_unbounded","is_ipc_serialization","rendezvous","unbounded","with_ipc_serialization"],"struct":["IpcBytes","IpcBytesMut","IpcBytesWriter","IpcBytesWriterBlocking","IpcReceiver","IpcSender","NamedIpcReceiver","NamedIpcSender","Receiver","Sender","WeakIpcBytes"],"trait":["IpcValue"]};
