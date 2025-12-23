@@ -2262,7 +2262,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#2226 id=2226 data-nosnippet>2226</a><span class="doccomment">/// Node that presents `data` using `wgt_fn`.
 <a href=#2227 id=2227 data-nosnippet>2227</a>///
 <a href=#2228 id=2228 data-nosnippet>2228</a>/// The node's child is always the result of `wgt_fn` called for the `data` value, it is reinited every time
-<a href=#2229 id=2229 data-nosnippet>2229</a>/// either variable changes.
+<a href=#2229 id=2229 data-nosnippet>2229</a>/// either variable changes. If the child is an widget the node becomes it.
 <a href=#2230 id=2230 data-nosnippet>2230</a>///
 <a href=#2231 id=2231 data-nosnippet>2231</a>/// See also [`presenter_opt`] for a presenter that is nil with the data is `None`.
 <a href=#2232 id=2232 data-nosnippet>2232</a>///
@@ -2272,7 +2272,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#2236 id=2236 data-nosnippet>2236</a>    <span class="kw">let </span>data = data.into_var();
 <a href=#2237 id=2237 data-nosnippet>2237</a>    <span class="kw">let </span>wgt_fn = wgt_fn.into_var();
 <a href=#2238 id=2238 data-nosnippet>2238</a>
-<a href=#2239 id=2239 data-nosnippet>2239</a>    match_node(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#2239 id=2239 data-nosnippet>2239</a>    match_widget(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
 <a href=#2240 id=2240 data-nosnippet>2240</a>        UiNodeOp::Init =&gt; {
 <a href=#2241 id=2241 data-nosnippet>2241</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>data).sub_var(<span class="kw-2">&amp;</span>wgt_fn);
 <a href=#2242 id=2242 data-nosnippet>2242</a>            <span class="kw-2">*</span>c.node() = wgt_fn.get()(data.get());
@@ -2303,7 +2303,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#2267 id=2267 data-nosnippet>2267</a>    <span class="kw">let </span>data = data.into_var();
 <a href=#2268 id=2268 data-nosnippet>2268</a>    <span class="kw">let </span>wgt_fn = wgt_fn.into_var();
 <a href=#2269 id=2269 data-nosnippet>2269</a>
-<a href=#2270 id=2270 data-nosnippet>2270</a>    match_node(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#2270 id=2270 data-nosnippet>2270</a>    match_widget(UiNode::nil(), <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
 <a href=#2271 id=2271 data-nosnippet>2271</a>        UiNodeOp::Init =&gt; {
 <a href=#2272 id=2272 data-nosnippet>2272</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>data).sub_var(<span class="kw-2">&amp;</span>wgt_fn);
 <a href=#2273 id=2273 data-nosnippet>2273</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(data) = data.get() {
