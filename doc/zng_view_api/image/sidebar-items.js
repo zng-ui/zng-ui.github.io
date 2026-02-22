@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ImageDataFormat","ImageDownscale","ImageMaskMode"],"struct":["ImageFormat","ImageId","ImageLoadedData","ImageRequest","ImageTextureId"]};
+window.SIDEBAR_ITEMS = {"enum":["ImageDataFormat","ImageDownscaleMode","ImageEntryKind","ImageMaskMode","PartialImageKind"],"struct":["ColorType","ImageDecoded","ImageEncodeId","ImageEncodeRequest","ImageEntriesMode","ImageEntryMetadata","ImageFormat","ImageFormatCapability","ImageId","ImageMetadata","ImageRequest","ImageTextureId"]};

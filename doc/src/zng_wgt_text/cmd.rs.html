@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-text/src/cmd.rs`."><title>cmd.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_text" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_text/</div>cmd.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Commands that control the editable text.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-text/src/cmd.rs`."><title>cmd.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_text" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_text/</div>cmd.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Commands that control the editable text.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Most of the normal text editing is controlled by keyboard events, the [`EDIT_CMD`]
 <a href=#4 id=4 data-nosnippet>4</a>//! command allows for arbitrary text editing without needing to simulate keyboard events.
@@ -32,7 +32,7 @@
 <a href=#32 id=32 data-nosnippet>32</a>    <span class="doccomment">/// Select all text.
 <a href=#33 id=33 data-nosnippet>33</a>    ///
 <a href=#34 id=34 data-nosnippet>34</a>    /// The request is the same as [`SELECT_CMD`] with [`TextSelectOp::select_all`].
-<a href=#35 id=35 data-nosnippet>35</a>    </span><span class="kw">pub static </span>SELECT_ALL_CMD = {
+<a href=#35 id=35 data-nosnippet>35</a>    </span><span class="kw">pub static </span>SELECT_ALL_CMD {
 <a href=#36 id=36 data-nosnippet>36</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
 <a href=#37 id=37 data-nosnippet>37</a>        name: <span class="string">"Select All"</span>,
 <a href=#38 id=38 data-nosnippet>38</a>        shortcut: <span class="macro">shortcut!</span>(CTRL + <span class="string">'A'</span>),
@@ -116,7 +116,7 @@
 <a href=#116 id=116 data-nosnippet>116</a>
 <a href=#117 id=117 data-nosnippet>117</a>                    ctx.txt.with(|t| {
 <a href=#118 id=118 data-nosnippet>118</a>                        <span class="kw">let </span>r = <span class="kw-2">&amp;</span>t[rmv_range.clone()];
-<a href=#119 id=119 data-nosnippet>119</a>                        <span class="kw">if </span>r != data.removed {
+<a href=#119 id=119 data-nosnippet>119</a>                        <span class="kw">if </span><span class="macro">r !</span>= data.removed {
 <a href=#120 id=120 data-nosnippet>120</a>                            data.removed = Txt::from_str(r);
 <a href=#121 id=121 data-nosnippet>121</a>                        }
 <a href=#122 id=122 data-nosnippet>122</a>                    });
@@ -283,7 +283,7 @@
 <a href=#283 id=283 data-nosnippet>283</a>                <span class="kw">let </span>ctx = TEXT.resolved();
 <a href=#284 id=284 data-nosnippet>284</a>                ctx.txt.with(|t| {
 <a href=#285 id=285 data-nosnippet>285</a>                    <span class="kw">let </span>r = <span class="kw-2">&amp;</span>t[rmv.clone()];
-<a href=#286 id=286 data-nosnippet>286</a>                    <span class="kw">if </span>r != data.removed {
+<a href=#286 id=286 data-nosnippet>286</a>                    <span class="kw">if </span><span class="macro">r !</span>= data.removed {
 <a href=#287 id=287 data-nosnippet>287</a>                        data.removed = Txt::from_str(r);
 <a href=#288 id=288 data-nosnippet>288</a>                    }
 <a href=#289 id=289 data-nosnippet>289</a>                });
@@ -409,7 +409,7 @@
 <a href=#409 id=409 data-nosnippet>409</a>                <span class="kw">let </span>ctx = TEXT.resolved();
 <a href=#410 id=410 data-nosnippet>410</a>                ctx.txt.with(|t| {
 <a href=#411 id=411 data-nosnippet>411</a>                    <span class="kw">let </span>r = <span class="kw-2">&amp;</span>t[rmv.clone()];
-<a href=#412 id=412 data-nosnippet>412</a>                    <span class="kw">if </span>r != data.removed {
+<a href=#412 id=412 data-nosnippet>412</a>                    <span class="kw">if </span><span class="macro">r !</span>= data.removed {
 <a href=#413 id=413 data-nosnippet>413</a>                        data.removed = Txt::from_str(r);
 <a href=#414 id=414 data-nosnippet>414</a>                    }
 <a href=#415 id=415 data-nosnippet>415</a>                });
@@ -609,7 +609,7 @@
 <a href=#609 id=609 data-nosnippet>609</a>                });
 <a href=#610 id=610 data-nosnippet>610</a>
 <a href=#611 id=611 data-nosnippet>611</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = new_txt {
-<a href=#612 id=612 data-nosnippet>612</a>                    <span class="kw">if </span>ctx.txt.with(|t| t != prev.as_str()) {
+<a href=#612 id=612 data-nosnippet>612</a>                    <span class="kw">if </span>ctx.txt.with(|t| <span class="macro">t !</span>= prev.as_str()) {
 <a href=#613 id=613 data-nosnippet>613</a>                        prev = ctx.txt.get();
 <a href=#614 id=614 data-nosnippet>614</a>                    }
 <a href=#615 id=615 data-nosnippet>615</a>                    ctx.txt.set(t);
@@ -618,7 +618,7 @@
 <a href=#618 id=618 data-nosnippet>618</a>            UndoFullOp::Op(UndoOp::Undo) =&gt; {
 <a href=#619 id=619 data-nosnippet>619</a>                <span class="kw">let </span>ctx = TEXT.resolved();
 <a href=#620 id=620 data-nosnippet>620</a>
-<a href=#621 id=621 data-nosnippet>621</a>                <span class="kw">if </span>ctx.txt.with(|t| t != prev.as_str()) {
+<a href=#621 id=621 data-nosnippet>621</a>                <span class="kw">if </span>ctx.txt.with(|t| <span class="macro">t !</span>= prev.as_str()) {
 <a href=#622 id=622 data-nosnippet>622</a>                    ctx.txt.set(prev.clone());
 <a href=#623 id=623 data-nosnippet>623</a>                }
 <a href=#624 id=624 data-nosnippet>624</a>            }
@@ -1773,7 +1773,7 @@
 <a href=#1773 id=1773 data-nosnippet>1773</a>                                        <span class="kw">return </span><span class="bool-val">true</span>; <span class="comment">// `other` ends before this linebreak
 <a href=#1774 id=1774 data-nosnippet>1774</a>                                    </span>}
 <a href=#1775 id=1775 data-nosnippet>1775</a>                                    <span class="kw">if </span>line_info.starts_new_line {
-<a href=#1776 id=1776 data-nosnippet>1776</a>                                        <span class="kw">return </span><span class="kw-2">&amp;</span>prev != other; <span class="comment">// `other` starts the line (same line) or not (is before)
+<a href=#1776 id=1776 data-nosnippet>1776</a>                                        <span class="kw">return </span><span class="kw-2">&amp;</span><span class="macro">prev !</span>= other; <span class="comment">// `other` starts the line (same line) or not (is before)
 <a href=#1777 id=1777 data-nosnippet>1777</a>                                    </span>}
 <a href=#1778 id=1778 data-nosnippet>1778</a>
 <a href=#1779 id=1779 data-nosnippet>1779</a>                                    <span class="kw">if </span><span class="kw-2">&amp;</span>prev == other {
@@ -1945,7 +1945,7 @@
 <a href=#1945 id=1945 data-nosnippet>1945</a>        <span class="kw">let </span>last_line = laidout.shaped_text.lines_len().saturating_sub(<span class="number">1</span>);
 <a href=#1946 id=1946 data-nosnippet>1946</a>        <span class="kw">let </span>li = i.line;
 <a href=#1947 id=1947 data-nosnippet>1947</a>        <span class="kw">let </span>next_li = li.saturating_add_signed(diff).min(last_line);
-<a href=#1948 id=1948 data-nosnippet>1948</a>        <span class="kw">if </span>li != next_li {
+<a href=#1948 id=1948 data-nosnippet>1948</a>        <span class="kw">if </span><span class="macro">li !</span>= next_li {
 <a href=#1949 id=1949 data-nosnippet>1949</a>            drop(caret);
 <a href=#1950 id=1950 data-nosnippet>1950</a>            <span class="kw">let </span>resolved = TEXT.resolved();
 <a href=#1951 id=1951 data-nosnippet>1951</a>            <span class="kw">match </span>laidout.shaped_text.line(next_li) {
@@ -2084,7 +2084,7 @@
 <a href=#2084 id=2084 data-nosnippet>2084</a>        <span class="comment">// get local caret index in the rich line start/end widget
 <a href=#2085 id=2085 data-nosnippet>2085</a>        </span><span class="kw">move </span>|from_id| {
 <a href=#2086 id=2086 data-nosnippet>2086</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(from_id) = from_id
-<a href=#2087 id=2087 data-nosnippet>2087</a>                &amp;&amp; from_id != WIDGET.id()
+<a href=#2087 id=2087 data-nosnippet>2087</a>                &amp;&amp; <span class="macro">from_id !</span>= WIDGET.id()
 <a href=#2088 id=2088 data-nosnippet>2088</a>            {
 <a href=#2089 id=2089 data-nosnippet>2089</a>                <span class="comment">// ensure the caret is at a start/end from the other sibling for `local_line_start_end`
 <a href=#2090 id=2090 data-nosnippet>2090</a>                </span><span class="kw">if </span>is_end {
@@ -2558,4 +2558,5 @@
 <a href=#2558 id=2558 data-nosnippet>2558</a>        caret.set_index(CaretIndex::ZERO);
 <a href=#2559 id=2559 data-nosnippet>2559</a>        caret.clear_selection();
 <a href=#2560 id=2560 data-nosnippet>2560</a>    }
-<a href=#2561 id=2561 data-nosnippet>2561</a>}</code></pre></div></section></main></body></html>
+<a href=#2561 id=2561 data-nosnippet>2561</a>}
+</code></pre></div></section></main></body></html>

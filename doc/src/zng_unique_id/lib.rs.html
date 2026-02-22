@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-unique-id/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_unique_id" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_unique_id/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://zng-ui.github.io/res/zng-logo-icon.png"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-unique-id/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_unique_id" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_unique_id/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![doc(html_favicon_url = <span class="string">"https://zng-ui.github.io/res/zng-logo-icon.png"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>#![doc(html_logo_url = <span class="string">"https://zng-ui.github.io/res/zng-logo.png"</span>)]
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Macros for generating unique ID types.
@@ -57,8 +57,8 @@
 <a href=#57 id=57 data-nosnippet>57</a></span><span class="attr">#[macro_export]
 <a href=#58 id=58 data-nosnippet>58</a></span><span class="macro">macro_rules!</span> unique_id_32 {
 <a href=#59 id=59 data-nosnippet>59</a>    ($(<span class="attr">#[<span class="macro-nonterminal">$attrs</span>:meta]</span>)* <span class="macro-nonterminal">$vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$Type</span>:ident $(&lt; <span class="macro-nonterminal">$T</span>:ident $(:($(<span class="macro-nonterminal">$bounds</span>:tt)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">? </span>$(: <span class="macro-nonterminal">$ParentId</span>:path)<span class="question-mark">? </span>;) =&gt; {
-<a href=#60 id=60 data-nosnippet>60</a>       <span class="macro-nonterminal">$</span><span class="macro">crate::unique_id!</span> {
-<a href=#61 id=61 data-nosnippet>61</a>            <span class="macro-nonterminal">request </span>{
+<a href=#60 id=60 data-nosnippet>60</a>       <span class="macro-nonterminal">$crate::unique_id</span>! {
+<a href=#61 id=61 data-nosnippet>61</a>            request {
 <a href=#62 id=62 data-nosnippet>62</a>                $(<span class="attr">#[<span class="macro-nonterminal">$attrs</span>]</span>)*
 <a href=#63 id=63 data-nosnippet>63</a>                <span class="doccomment">///
 <a href=#64 id=64 data-nosnippet>64</a>                /// # Memory
@@ -113,8 +113,8 @@
 <a href=#113 id=113 data-nosnippet>113</a></span><span class="attr">#[macro_export]
 <a href=#114 id=114 data-nosnippet>114</a></span><span class="macro">macro_rules!</span> unique_id_64 {
 <a href=#115 id=115 data-nosnippet>115</a>    ($(<span class="attr">#[<span class="macro-nonterminal">$attrs</span>:meta]</span>)* <span class="macro-nonterminal">$vis</span>:vis <span class="kw">struct </span><span class="macro-nonterminal">$Type</span>:ident $(&lt; <span class="macro-nonterminal">$T</span>:ident $(:($(<span class="macro-nonterminal">$bounds</span>:tt)+))<span class="question-mark">? </span>&gt;)<span class="question-mark">? </span>$(: <span class="macro-nonterminal">$ParentId</span>:path)<span class="question-mark">? </span>;) =&gt; {
-<a href=#116 id=116 data-nosnippet>116</a>        <span class="macro-nonterminal">$</span><span class="macro">crate::unique_id!</span> {
-<a href=#117 id=117 data-nosnippet>117</a>            <span class="macro-nonterminal">request </span>{
+<a href=#116 id=116 data-nosnippet>116</a>        <span class="macro-nonterminal">$crate::unique_id</span>! {
+<a href=#117 id=117 data-nosnippet>117</a>            request {
 <a href=#118 id=118 data-nosnippet>118</a>                $(<span class="attr">#[<span class="macro-nonterminal">$attrs</span>]</span>)*
 <a href=#119 id=119 data-nosnippet>119</a>                <span class="doccomment">///
 <a href=#120 id=120 data-nosnippet>120</a>                /// # Memory
@@ -238,8 +238,8 @@
 <a href=#238 id=238 data-nosnippet>238</a>
 <a href=#239 id=239 data-nosnippet>239</a>        <span class="attr">#[allow(dead_code)]
 <a href=#240 id=240 data-nosnippet>240</a>        </span><span class="kw">impl</span>$(&lt;<span class="macro-nonterminal">$T </span>$(: $(<span class="macro-nonterminal">$bounds</span>)+)<span class="question-mark">?</span>&gt;)<span class="question-mark">? </span><span class="macro-nonterminal">$Type </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">? </span>{
-<a href=#241 id=241 data-nosnippet>241</a>            <span class="macro-nonterminal">$</span><span class="macro">crate::unique_id!</span> {
-<a href=#242 id=242 data-nosnippet>242</a>                <span class="macro-nonterminal">new_unique </span>{
+<a href=#241 id=241 data-nosnippet>241</a>            <span class="macro-nonterminal">$crate::unique_id</span>! {
+<a href=#242 id=242 data-nosnippet>242</a>                new_unique {
 <a href=#243 id=243 data-nosnippet>243</a>                    $(<span class="macro-nonterminal">$ParentId</span>, )<span class="question-mark">? </span>$(&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?
 <a href=#244 id=244 data-nosnippet>244</a>                </span>}
 <a href=#245 id=245 data-nosnippet>245</a>                atomic {
@@ -324,10 +324,10 @@
 <a href=#324 id=324 data-nosnippet>324</a>        </span><span class="kw">pub fn </span>new_unique() -&gt; <span class="self">Self </span>{
 <a href=#325 id=325 data-nosnippet>325</a>            <span class="kw">use </span><span class="macro-nonterminal">$atomic </span><span class="kw">as </span>__atomic;
 <a href=#326 id=326 data-nosnippet>326</a>
-<a href=#327 id=327 data-nosnippet>327</a>            <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static!</span> {
-<a href=#328 id=328 data-nosnippet>328</a>                <span class="kw">static </span><span class="macro-nonterminal">NEXT</span>: __atomic = __atomic::new(<span class="number">1</span>);
+<a href=#327 id=327 data-nosnippet>327</a>            <span class="macro-nonterminal">$crate::hot_static</span>! {
+<a href=#328 id=328 data-nosnippet>328</a>                <span class="kw">static </span>NEXT: __atomic = __atomic::new(<span class="number">1</span>);
 <a href=#329 id=329 data-nosnippet>329</a>            }
-<a href=#330 id=330 data-nosnippet>330</a>            <span class="kw">let </span>__ref = <span class="macro-nonterminal">$</span><span class="macro">crate::hot_static_ref!</span>(<span class="macro-nonterminal">NEXT</span>);
+<a href=#330 id=330 data-nosnippet>330</a>            <span class="kw">let </span>__ref = <span class="macro-nonterminal">$crate::hot_static_ref</span>!(NEXT);
 <a href=#331 id=331 data-nosnippet>331</a>            <span class="self">Self</span>(<span class="macro-nonterminal">$next_id</span>(__ref) $(, std::marker::PhantomData::&lt;<span class="macro-nonterminal">$T</span>&gt;)<span class="question-mark">?</span>)
 <a href=#332 id=332 data-nosnippet>332</a>        }
 <a href=#333 id=333 data-nosnippet>333</a>    };
@@ -668,10 +668,11 @@
 <a href=#668 id=668 data-nosnippet>668</a>        <span class="macro-nonterminal">$vis</span>:vis <span class="kw">static </span><span class="kw-2">ref </span><span class="macro-nonterminal">$IDENT</span>:ident: <span class="macro-nonterminal">$IdTy</span>:ty;
 <a href=#669 id=669 data-nosnippet>669</a>    )+) =&gt; {
 <a href=#670 id=670 data-nosnippet>670</a>        $(
-<a href=#671 id=671 data-nosnippet>671</a>            <span class="macro-nonterminal">$</span><span class="macro">crate::lazy_static!</span> {
+<a href=#671 id=671 data-nosnippet>671</a>            <span class="macro-nonterminal">$crate::lazy_static</span>! {
 <a href=#672 id=672 data-nosnippet>672</a>                $(<span class="attr">#[<span class="macro-nonterminal">$attr</span>]</span>)*
 <a href=#673 id=673 data-nosnippet>673</a>                <span class="macro-nonterminal">$vis </span><span class="kw">static </span><span class="kw-2">ref </span><span class="macro-nonterminal">$IDENT</span>: <span class="macro-nonterminal">$IdTy </span>= &lt;<span class="macro-nonterminal">$IdTy </span><span class="kw">as </span><span class="macro-nonterminal">$crate::UniqueId</span>&gt;::new_unique();
 <a href=#674 id=674 data-nosnippet>674</a>            }
 <a href=#675 id=675 data-nosnippet>675</a>        )+
 <a href=#676 id=676 data-nosnippet>676</a>    };
-<a href=#677 id=677 data-nosnippet>677</a>}</code></pre></div></section></main></body></html>
+<a href=#677 id=677 data-nosnippet>677</a>}
+</code></pre></div></section></main></body></html>

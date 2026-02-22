@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/window.rs`."><title>window.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>window.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Window, surface and frame types.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/window.rs`."><title>window.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>window.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Window, surface and frame types.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::fmt;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -8,7 +8,7 @@
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use crate</span>::{
 <a href=#9 id=9 data-nosnippet>9</a>    api_extension::{ApiExtensionId, ApiExtensionPayload},
 <a href=#10 id=10 data-nosnippet>10</a>    display_list::{DisplayList, FrameValueUpdate},
-<a href=#11 id=11 data-nosnippet>11</a>    image::{ImageId, ImageLoadedData, ImageMaskMode},
+<a href=#11 id=11 data-nosnippet>11</a>    image::{ImageDecoded, ImageId, ImageMaskMode},
 <a href=#12 id=12 data-nosnippet>12</a>};
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>zng_unit::{Dip, DipPoint, DipRect, DipSideOffsets, DipSize, DipToPx <span class="kw">as _</span>, Factor, Px, PxPoint, PxSize, PxToDip, PxTransform, Rgba};
 <a href=#14 id=14 data-nosnippet>14</a>
@@ -142,7 +142,7 @@
 <a href=#142 id=142 data-nosnippet>142</a>}
 <a href=#143 id=143 data-nosnippet>143</a>
 <a href=#144 id=144 data-nosnippet>144</a><span class="doccomment">/// Information about a monitor screen.
-<a href=#145 id=145 data-nosnippet>145</a></span><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
+<a href=#145 id=145 data-nosnippet>145</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 <a href=#146 id=146 data-nosnippet>146</a>#[non_exhaustive]
 <a href=#147 id=147 data-nosnippet>147</a></span><span class="kw">pub struct </span>MonitorInfo {
 <a href=#148 id=148 data-nosnippet>148</a>    <span class="doccomment">/// Readable name of the monitor.
@@ -291,7 +291,7 @@
 <a href=#291 id=291 data-nosnippet>291</a>}
 <a href=#292 id=292 data-nosnippet>292</a>
 <a href=#293 id=293 data-nosnippet>293</a><span class="doccomment">/// Information about a successfully opened headless surface.
-<a href=#294 id=294 data-nosnippet>294</a></span><span class="attr">#[derive(Debug, Clone, Serialize, Deserialize)]
+<a href=#294 id=294 data-nosnippet>294</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 <a href=#295 id=295 data-nosnippet>295</a>#[non_exhaustive]
 <a href=#296 id=296 data-nosnippet>296</a></span><span class="kw">pub struct </span>HeadlessOpenData {
 <a href=#297 id=297 data-nosnippet>297</a>    <span class="doccomment">/// Actual render mode, can be different from the requested mode if it is not available.
@@ -342,9 +342,9 @@
 <a href=#342 id=342 data-nosnippet>342</a>
 <a href=#343 id=343 data-nosnippet>343</a>    <span class="doccomment">/// Create an image or mask from this rendered frame.
 <a href=#344 id=344 data-nosnippet>344</a>    ///
-<a href=#345 id=345 data-nosnippet>345</a>    /// The [`Event::FrameImageReady`] is sent with the image.
+<a href=#345 id=345 data-nosnippet>345</a>    /// The [`Event::FrameRendered`] will have the frame image.
 <a href=#346 id=346 data-nosnippet>346</a>    ///
-<a href=#347 id=347 data-nosnippet>347</a>    /// [`Event::FrameImageReady`]: crate::Event::FrameImageReady
+<a href=#347 id=347 data-nosnippet>347</a>    /// [`Event::FrameRendered`]: crate::Event::FrameRendered
 <a href=#348 id=348 data-nosnippet>348</a>    </span><span class="kw">pub </span>capture: FrameCapture,
 <a href=#349 id=349 data-nosnippet>349</a>
 <a href=#350 id=350 data-nosnippet>350</a>    <span class="doccomment">/// Identifies this frame as the response to the [`WindowChanged`] resized frame request.
@@ -382,9 +382,9 @@
 <a href=#382 id=382 data-nosnippet>382</a>
 <a href=#383 id=383 data-nosnippet>383</a>    <span class="doccomment">/// Create an image or mask from this rendered frame.
 <a href=#384 id=384 data-nosnippet>384</a>    ///
-<a href=#385 id=385 data-nosnippet>385</a>    /// The [`Event::FrameImageReady`] is send with the image.
+<a href=#385 id=385 data-nosnippet>385</a>    /// The [`Event::FrameRendered`] will have the image.
 <a href=#386 id=386 data-nosnippet>386</a>    ///
-<a href=#387 id=387 data-nosnippet>387</a>    /// [`Event::FrameImageReady`]: crate::Event::FrameImageReady
+<a href=#387 id=387 data-nosnippet>387</a>    /// [`Event::FrameRendered`]: crate::Event::FrameRendered
 <a href=#388 id=388 data-nosnippet>388</a>    </span><span class="kw">pub </span>capture: FrameCapture,
 <a href=#389 id=389 data-nosnippet>389</a>
 <a href=#390 id=390 data-nosnippet>390</a>    <span class="doccomment">/// Identifies this frame as the response to the [`WindowChanged`] resized frame request.
@@ -442,7 +442,7 @@
 <a href=#442 id=442 data-nosnippet>442</a>    <span class="doccomment">/// If this request does not do anything, apart from notifying
 <a href=#443 id=443 data-nosnippet>443</a>    /// a new frame if send to the renderer.
 <a href=#444 id=444 data-nosnippet>444</a>    </span><span class="kw">pub fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#445 id=445 data-nosnippet>445</a>        !<span class="self">self</span>.has_bounds() &amp;&amp; <span class="self">self</span>.extensions.is_empty() &amp;&amp; <span class="self">self</span>.clear_color.is_none() &amp;&amp; <span class="self">self</span>.capture != FrameCapture::None
+<a href=#445 id=445 data-nosnippet>445</a>        !<span class="self">self</span>.has_bounds() &amp;&amp; <span class="self">self</span>.extensions.is_empty() &amp;&amp; <span class="self">self</span>.clear_color.is_none() &amp;&amp; <span class="self">self</span>.<span class="macro">capture !</span>= FrameCapture::None
 <a href=#446 id=446 data-nosnippet>446</a>    }
 <a href=#447 id=447 data-nosnippet>447</a>}
 <a href=#448 id=448 data-nosnippet>448</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>FrameUpdateRequest {
@@ -655,7 +655,7 @@
 <a href=#655 id=655 data-nosnippet>655</a>
 <a href=#656 id=656 data-nosnippet>656</a>    <span class="doccomment">/// If the system provided outer-border and title-bar is visible.
 <a href=#657 id=657 data-nosnippet>657</a>    ///
-<a href=#658 id=658 data-nosnippet>658</a>    /// This is also called the "decoration" or "chrome" of the window. Note that the system may prefer
+<a href=#658 id=658 data-nosnippet>658</a>    /// This is also called the "decoration" or "chrome" of the window.
 <a href=#659 id=659 data-nosnippet>659</a>    </span><span class="kw">pub </span>chrome_visible: bool,
 <a href=#660 id=660 data-nosnippet>660</a>}
 <a href=#661 id=661 data-nosnippet>661</a><span class="kw">impl </span>WindowStateAll {
@@ -705,7 +705,7 @@
 <a href=#705 id=705 data-nosnippet>705</a>    <span class="kw">fn </span>compute_restore_state(restore_state: WindowState, prev_state: WindowState, new_state: WindowState) -&gt; WindowState {
 <a href=#706 id=706 data-nosnippet>706</a>        <span class="kw">if </span>new_state == WindowState::Minimized {
 <a href=#707 id=707 data-nosnippet>707</a>            <span class="comment">// restore to previous state from minimized.
-<a href=#708 id=708 data-nosnippet>708</a>            </span><span class="kw">if </span>prev_state != WindowState::Minimized {
+<a href=#708 id=708 data-nosnippet>708</a>            </span><span class="kw">if </span><span class="macro">prev_state !</span>= WindowState::Minimized {
 <a href=#709 id=709 data-nosnippet>709</a>                prev_state
 <a href=#710 id=710 data-nosnippet>710</a>            } <span class="kw">else </span>{
 <a href=#711 id=711 data-nosnippet>711</a>                WindowState::Normal
@@ -1050,11 +1050,11 @@
 <a href=#1050 id=1050 data-nosnippet>1050</a>    <span class="doccomment">/// Frame that was rendered.
 <a href=#1051 id=1051 data-nosnippet>1051</a>    </span><span class="kw">pub </span>frame: FrameId,
 <a href=#1052 id=1052 data-nosnippet>1052</a>    <span class="doccomment">/// Frame image, if one was requested with the frame request.
-<a href=#1053 id=1053 data-nosnippet>1053</a>    </span><span class="kw">pub </span>frame_image: <span class="prelude-ty">Option</span>&lt;ImageLoadedData&gt;,
+<a href=#1053 id=1053 data-nosnippet>1053</a>    </span><span class="kw">pub </span>frame_image: <span class="prelude-ty">Option</span>&lt;ImageDecoded&gt;,
 <a href=#1054 id=1054 data-nosnippet>1054</a>}
 <a href=#1055 id=1055 data-nosnippet>1055</a><span class="kw">impl </span>EventFrameRendered {
 <a href=#1056 id=1056 data-nosnippet>1056</a>    <span class="doccomment">/// New response.
-<a href=#1057 id=1057 data-nosnippet>1057</a>    </span><span class="kw">pub fn </span>new(window: WindowId, frame: FrameId, frame_image: <span class="prelude-ty">Option</span>&lt;ImageLoadedData&gt;) -&gt; <span class="self">Self </span>{
+<a href=#1057 id=1057 data-nosnippet>1057</a>    </span><span class="kw">pub fn </span>new(window: WindowId, frame: FrameId, frame_image: <span class="prelude-ty">Option</span>&lt;ImageDecoded&gt;) -&gt; <span class="self">Self </span>{
 <a href=#1058 id=1058 data-nosnippet>1058</a>        <span class="self">Self </span>{
 <a href=#1059 id=1059 data-nosnippet>1059</a>            window,
 <a href=#1060 id=1060 data-nosnippet>1060</a>            frame,
@@ -1259,4 +1259,81 @@
 <a href=#1259 id=1259 data-nosnippet>1259</a>        <span class="doccomment">/// Maximize/restore button.
 <a href=#1260 id=1260 data-nosnippet>1260</a>        </span><span class="kw">const </span>MAXIMIZE = <span class="number">1 </span>&lt;&lt; <span class="number">2</span>;
 <a href=#1261 id=1261 data-nosnippet>1261</a>    }
-<a href=#1262 id=1262 data-nosnippet>1262</a>}</code></pre></div></section></main></body></html>
+<a href=#1262 id=1262 data-nosnippet>1262</a>}
+<a href=#1263 id=1263 data-nosnippet>1263</a>
+<a href=#1264 id=1264 data-nosnippet>1264</a><span class="macro">bitflags::bitflags!</span> {
+<a href=#1265 id=1265 data-nosnippet>1265</a>    <span class="doccomment">/// Window operations the view-process implements.
+<a href=#1266 id=1266 data-nosnippet>1266</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+<a href=#1267 id=1267 data-nosnippet>1267</a>    </span><span class="kw">pub struct </span>WindowCapability: u64 {
+<a href=#1268 id=1268 data-nosnippet>1268</a>        <span class="doccomment">/// Can set title text.
+<a href=#1269 id=1269 data-nosnippet>1269</a>        </span><span class="kw">const </span>SET_TITLE = <span class="number">1 </span>&lt;&lt; <span class="number">0</span>;
+<a href=#1270 id=1270 data-nosnippet>1270</a>        <span class="doccomment">/// Can set window visible.
+<a href=#1271 id=1271 data-nosnippet>1271</a>        </span><span class="kw">const </span>SET_VISIBLE = <span class="number">1 </span>&lt;&lt; <span class="number">1</span>;
+<a href=#1272 id=1272 data-nosnippet>1272</a>        <span class="doccomment">/// Can make window "topmost".
+<a href=#1273 id=1273 data-nosnippet>1273</a>        </span><span class="kw">const </span>SET_ALWAYS_ON_TOP = <span class="number">1 </span>&lt;&lt; <span class="number">2</span>;
+<a href=#1274 id=1274 data-nosnippet>1274</a>        <span class="doccomment">/// Can change if window can be dragged by the user.
+<a href=#1275 id=1275 data-nosnippet>1275</a>        </span><span class="kw">const </span>SET_MOVABLE = <span class="number">1 </span>&lt;&lt; <span class="number">3</span>;
+<a href=#1276 id=1276 data-nosnippet>1276</a>        <span class="doccomment">/// Can change if window can be resized by the user.
+<a href=#1277 id=1277 data-nosnippet>1277</a>        </span><span class="kw">const </span>SET_RESIZABLE = <span class="number">1 </span>&lt;&lt; <span class="number">4</span>;
+<a href=#1278 id=1278 data-nosnippet>1278</a>        <span class="doccomment">/// Can make window icon not appear on the taskbar while the window remains visible.
+<a href=#1279 id=1279 data-nosnippet>1279</a>        </span><span class="kw">const </span>SET_TASKBAR_VISIBLE = <span class="number">1 </span>&lt;&lt; <span class="number">5</span>;
+<a href=#1280 id=1280 data-nosnippet>1280</a>        <span class="doccomment">/// Can force window to appear in front of other apps, without focusing input.
+<a href=#1281 id=1281 data-nosnippet>1281</a>        </span><span class="kw">const </span>BRING_TO_TOP = <span class="number">1 </span>&lt;&lt; <span class="number">6</span>;
+<a href=#1282 id=1282 data-nosnippet>1282</a>        <span class="doccomment">/// Can set the window icon.
+<a href=#1283 id=1283 data-nosnippet>1283</a>        ///
+<a href=#1284 id=1284 data-nosnippet>1284</a>        /// When this is not possible the system specific application metadata icon is used for all windows of the app.
+<a href=#1285 id=1285 data-nosnippet>1285</a>        </span><span class="kw">const </span>SET_ICON = <span class="number">1 </span>&lt;&lt; <span class="number">7</span>;
+<a href=#1286 id=1286 data-nosnippet>1286</a>        <span class="doccomment">/// Can set the window cursor to one of the named [`CursorIcon`].
+<a href=#1287 id=1287 data-nosnippet>1287</a>        </span><span class="kw">const </span>SET_CURSOR = <span class="number">1 </span>&lt;&lt; <span class="number">8</span>;
+<a href=#1288 id=1288 data-nosnippet>1288</a>        <span class="doccomment">/// Can set the window cursor to a custom image.
+<a href=#1289 id=1289 data-nosnippet>1289</a>        </span><span class="kw">const </span>SET_CURSOR_IMAGE = <span class="number">1 </span>&lt;&lt; <span class="number">9</span>;
+<a href=#1290 id=1290 data-nosnippet>1290</a>        <span class="doccomment">/// Can set attention indicator for the window.
+<a href=#1291 id=1291 data-nosnippet>1291</a>        </span><span class="kw">const </span>SET_FOCUS_INDICATOR = <span class="number">1 </span>&lt;&lt; <span class="number">10</span>;
+<a href=#1292 id=1292 data-nosnippet>1292</a>        <span class="doccomment">/// Can focus input on the window.
+<a href=#1293 id=1293 data-nosnippet>1293</a>        ///
+<a href=#1294 id=1294 data-nosnippet>1294</a>        /// This is also true if can the system only shows an attention indicator for the window some times.
+<a href=#1295 id=1295 data-nosnippet>1295</a>        </span><span class="kw">const </span>FOCUS = <span class="number">1 </span>&lt;&lt; <span class="number">11</span>;
+<a href=#1296 id=1296 data-nosnippet>1296</a>        <span class="doccomment">/// Can initiate a window move operation from a mouse press in the content area.
+<a href=#1297 id=1297 data-nosnippet>1297</a>        </span><span class="kw">const </span>DRAG_MOVE = <span class="number">1 </span>&lt;&lt; <span class="number">12</span>;
+<a href=#1298 id=1298 data-nosnippet>1298</a>        <span class="doccomment">/// Can initiate a window resize operation from a mouse press in the content area.
+<a href=#1299 id=1299 data-nosnippet>1299</a>        </span><span class="kw">const </span>DRAG_RESIZE = <span class="number">1 </span>&lt;&lt; <span class="number">13</span>;
+<a href=#1300 id=1300 data-nosnippet>1300</a>        <span class="doccomment">/// Can open the system context menu that usually shows on right click on the title bar.
+<a href=#1301 id=1301 data-nosnippet>1301</a>        </span><span class="kw">const </span>OPEN_TITLE_BAR_CONTEXT_MENU = <span class="number">1 </span>&lt;&lt; <span class="number">14</span>;
+<a href=#1302 id=1302 data-nosnippet>1302</a>
+<a href=#1303 id=1303 data-nosnippet>1303</a>        <span class="doccomment">/// If operating system provides a window chrome (title bar, resize borders).
+<a href=#1304 id=1304 data-nosnippet>1304</a>        </span><span class="kw">const </span>SYSTEM_CHROME = <span class="number">1 </span>&lt;&lt; <span class="number">15</span>;
+<a href=#1305 id=1305 data-nosnippet>1305</a>
+<a href=#1306 id=1306 data-nosnippet>1306</a>        <span class="doccomment">/// Can minimize window.
+<a href=#1307 id=1307 data-nosnippet>1307</a>        </span><span class="kw">const </span>MINIMIZE = (<span class="number">1 </span>&lt;&lt; <span class="number">16</span>);
+<a href=#1308 id=1308 data-nosnippet>1308</a>        <span class="doccomment">/// Can restore window to *normal*.
+<a href=#1309 id=1309 data-nosnippet>1309</a>        </span><span class="kw">const </span>RESTORE = (<span class="number">1 </span>&lt;&lt; <span class="number">17</span>);
+<a href=#1310 id=1310 data-nosnippet>1310</a>        <span class="doccomment">/// Can maximize window.
+<a href=#1311 id=1311 data-nosnippet>1311</a>        </span><span class="kw">const </span>MAXIMIZE = (<span class="number">1 </span>&lt;&lt; <span class="number">18</span>);
+<a href=#1312 id=1312 data-nosnippet>1312</a>        <span class="doccomment">/// Can make window fullscreen.
+<a href=#1313 id=1313 data-nosnippet>1313</a>        </span><span class="kw">const </span>FULLSCREEN = (<span class="number">1 </span>&lt;&lt; <span class="number">19</span>);
+<a href=#1314 id=1314 data-nosnippet>1314</a>        <span class="doccomment">/// Can takeover video output to show only the window content.
+<a href=#1315 id=1315 data-nosnippet>1315</a>        </span><span class="kw">const </span>EXCLUSIVE = (<span class="number">1 </span>&lt;&lt; <span class="number">20</span>);
+<a href=#1316 id=1316 data-nosnippet>1316</a>
+<a href=#1317 id=1317 data-nosnippet>1317</a>        <span class="doccomment">/// Can toggle if the system chrome (title bar, resize border) is visible.
+<a href=#1318 id=1318 data-nosnippet>1318</a>        </span><span class="kw">const </span>SET_CHROME = (<span class="number">1 </span>&lt;&lt; <span class="number">21</span>) | <span class="self">Self</span>::SYSTEM_CHROME.bits();
+<a href=#1319 id=1319 data-nosnippet>1319</a>        <span class="doccomment">/// Can programmatically move window after it is open.
+<a href=#1320 id=1320 data-nosnippet>1320</a>        </span><span class="kw">const </span>SET_POSITION = (<span class="number">1 </span>&lt;&lt; <span class="number">22</span>);
+<a href=#1321 id=1321 data-nosnippet>1321</a>
+<a href=#1322 id=1322 data-nosnippet>1322</a>        <span class="doccomment">/// Can programmatically resize window after it is open.
+<a href=#1323 id=1323 data-nosnippet>1323</a>        </span><span class="kw">const </span>SET_SIZE = (<span class="number">1 </span>&lt;&lt; <span class="number">23</span>);
+<a href=#1324 id=1324 data-nosnippet>1324</a>
+<a href=#1325 id=1325 data-nosnippet>1325</a>        <span class="doccomment">/// Can disable close button.
+<a href=#1326 id=1326 data-nosnippet>1326</a>        </span><span class="kw">const </span>DISABLE_CLOSE_BUTTON = (<span class="number">1 </span>&lt;&lt; <span class="number">24</span>);
+<a href=#1327 id=1327 data-nosnippet>1327</a>        <span class="doccomment">/// Can disable minimize button.
+<a href=#1328 id=1328 data-nosnippet>1328</a>        </span><span class="kw">const </span>DISABLE_MINIMIZE_BUTTON = (<span class="number">1 </span>&lt;&lt; <span class="number">25</span>);
+<a href=#1329 id=1329 data-nosnippet>1329</a>        <span class="doccomment">/// Can disable maximize button.
+<a href=#1330 id=1330 data-nosnippet>1330</a>        </span><span class="kw">const </span>DISABLE_MAXIMIZE_BUTTON = (<span class="number">1 </span>&lt;&lt; <span class="number">26</span>);
+<a href=#1331 id=1331 data-nosnippet>1331</a>
+<a href=#1332 id=1332 data-nosnippet>1332</a>        <span class="doccomment">/// Can set a system shutdown warning/blocker associated with the window.
+<a href=#1333 id=1333 data-nosnippet>1333</a>        </span><span class="kw">const </span>SET_SYSTEM_SHUTDOWN_WARN = (<span class="number">1 </span>&lt;&lt; <span class="number">27</span>);
+<a href=#1334 id=1334 data-nosnippet>1334</a>
+<a href=#1335 id=1335 data-nosnippet>1335</a>        <span class="doccomment">/// Can set the IME area, show virtual keyboard.
+<a href=#1336 id=1336 data-nosnippet>1336</a>        </span><span class="kw">const </span>SET_IME_AREA = (<span class="number">1 </span>&lt;&lt; <span class="number">28</span>);
+<a href=#1337 id=1337 data-nosnippet>1337</a>    }
+<a href=#1338 id=1338 data-nosnippet>1338</a>}
+</code></pre></div></section></main></body></html>

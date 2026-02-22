@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/util.rs`."><title>util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app_proc_macros/</div>util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{borrow::Cow, env, fs, path::PathBuf};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app-proc-macros/src/util.rs`."><title>util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app_proc_macros" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_app_proc_macros/</div>util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{borrow::Cow, env, fs, path::PathBuf};
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>proc_macro2::<span class="kw-2">*</span>;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>quote::{ToTokens, quote_spanned};
@@ -229,7 +229,7 @@
 <a href=#229 id=229 data-nosnippet>229</a>            <span class="kw">fn </span>inner(input: syn::parse::ParseStream) -&gt; syn::Result&lt;syn::parse::ParseBuffer&gt; {
 <a href=#230 id=230 data-nosnippet>230</a>                <span class="kw">let </span>inner;
 <a href=#231 id=231 data-nosnippet>231</a>                <span class="comment">// this macro inserts a return Err(..) but we want to panic
-<a href=#232 id=232 data-nosnippet>232</a>                </span>syn::<span class="macro-nonterminal">$</span><span class="macro">group_kind!</span>(<span class="macro-nonterminal">inner </span><span class="kw">in </span>input);
+<a href=#232 id=232 data-nosnippet>232</a>                </span>syn::<span class="macro-nonterminal">$group_kind</span>!(inner <span class="kw">in </span>input);
 <a href=#233 id=233 data-nosnippet>233</a>                <span class="prelude-val">Ok</span>(inner)
 <a href=#234 id=234 data-nosnippet>234</a>            }
 <a href=#235 id=235 data-nosnippet>235</a>            inner(<span class="macro-nonterminal">$input</span>).unwrap_or_else(|e| <span class="macro">non_user_error!</span>(e))
@@ -239,7 +239,7 @@
 <a href=#239 id=239 data-nosnippet>239</a>        {
 <a href=#240 id=240 data-nosnippet>240</a>            <span class="kw">let </span>id: syn::Ident = <span class="macro-nonterminal">$input</span>.parse().unwrap_or_else(|e| <span class="macro">non_user_error!</span>(e));
 <a href=#241 id=241 data-nosnippet>241</a>            <span class="kw">let </span>ident = <span class="macro-nonterminal">$ident</span>;
-<a href=#242 id=242 data-nosnippet>242</a>            <span class="kw">if </span>id != ident {
+<a href=#242 id=242 data-nosnippet>242</a>            <span class="kw">if </span><span class="macro">id !</span>= ident {
 <a href=#243 id=243 data-nosnippet>243</a>                <span class="macro">non_user_error!</span>(<span class="macro">format!</span>(<span class="string">"expected `{ident}`"</span>));
 <a href=#244 id=244 data-nosnippet>244</a>            }
 <a href=#245 id=245 data-nosnippet>245</a>            <span class="macro">non_user_group!</span> { <span class="macro-nonterminal">$group_kind</span>, <span class="macro-nonterminal">$input </span>}
@@ -290,7 +290,7 @@
 <a href=#290 id=290 data-nosnippet>290</a>        <span class="kw">for </span>error <span class="kw">in </span>error {
 <a href=#291 id=291 data-nosnippet>291</a>            <span class="kw">let </span>span = error.span();
 <a href=#292 id=292 data-nosnippet>292</a>            <span class="kw">let </span>msg = error.to_string();
-<a href=#293 id=293 data-nosnippet>293</a>            <span class="kw">if </span>msg != RECOVERABLE_TAG {
+<a href=#293 id=293 data-nosnippet>293</a>            <span class="kw">if </span><span class="macro">msg !</span>= RECOVERABLE_TAG {
 <a href=#294 id=294 data-nosnippet>294</a>                <span class="self">self</span>.push(error, span);
 <a href=#295 id=295 data-nosnippet>295</a>            }
 <a href=#296 id=296 data-nosnippet>296</a>        }
@@ -619,7 +619,7 @@
 <a href=#619 id=619 data-nosnippet>619</a>
 <a href=#620 id=620 data-nosnippet>620</a>    <span class="kw">pub fn </span>enable(enable: bool) {
 <a href=#621 id=621 data-nosnippet>621</a>        <span class="kw">let </span>prev = ENABLED.swap(enable, Ordering::SeqCst);
-<a href=#622 id=622 data-nosnippet>622</a>        <span class="kw">if </span>prev != enable {
+<a href=#622 id=622 data-nosnippet>622</a>        <span class="kw">if </span><span class="macro">prev !</span>= enable {
 <a href=#623 id=623 data-nosnippet>623</a>            <span class="macro">eprintln!</span>(<span class="string">"zng-proc-macros::debug_trace {}"</span>, <span class="kw">if </span>enable { <span class="string">"enabled" </span>} <span class="kw">else </span>{ <span class="string">"disabled" </span>});
 <a href=#624 id=624 data-nosnippet>624</a>        }
 <a href=#625 id=625 data-nosnippet>625</a>    }
@@ -887,4 +887,5 @@
 <a href=#887 id=887 data-nosnippet>887</a>        <span class="kw">let </span>r = crate_name_impl(<span class="string">"crate-name"</span>, toml).unwrap();
 <a href=#888 id=888 data-nosnippet>888</a>        <span class="macro">assert_eq!</span>(FoundCrate::Name(<span class="string">"crate_name"</span>.to_owned()), r);
 <a href=#889 id=889 data-nosnippet>889</a>    }
-<a href=#890 id=890 data-nosnippet>890</a>}</code></pre></div></section></main></body></html>
+<a href=#890 id=890 data-nosnippet>890</a>}
+</code></pre></div></section></main></body></html>

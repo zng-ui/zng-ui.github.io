@@ -1,336 +1,324 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/event.rs`."><title>event.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/event.rs`."><title>event.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>event.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Event and command API.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Events are represented by a static instance of [`Event&lt;A&gt;`] with name suffix `_EVENT`. Events have
 <a href=#4 id=4 data-nosnippet>4</a>//! custom argument types that implement [`EventArgs`], this means that all event arg types have a timestamp, propagation
 <a href=#5 id=5 data-nosnippet>5</a>//! handle and can define their own delivery list.
 <a href=#6 id=6 data-nosnippet>6</a>//!
-<a href=#7 id=7 data-nosnippet>7</a>//! # Notify
-<a href=#8 id=8 data-nosnippet>8</a>//!
-<a href=#9 id=9 data-nosnippet>9</a>//! An event update is requested using [`Event::notify`] the notification is pending until the end of the current update,
-<a href=#10 id=10 data-nosnippet>10</a>//! at that moment the pending notifications apply, in the order they where requested. Each event notifies in this order:
+<a href=#7 id=7 data-nosnippet>7</a>//! Events are an specialized variable type, the [`Event::var`] and other methods can be used to bind directly to the underlying var.
+<a href=#8 id=8 data-nosnippet>8</a>//! The variable value is [`EventUpdates`], a list of all the notifications requested in the previous update.
+<a href=#9 id=9 data-nosnippet>9</a>//!
+<a href=#10 id=10 data-nosnippet>10</a>//! # Notify
 <a href=#11 id=11 data-nosnippet>11</a>//!
-<a href=#12 id=12 data-nosnippet>12</a>//! 1 - All [`AppExtension::event_preview`](crate::app::AppExtension::event_preview).
-<a href=#13 id=13 data-nosnippet>13</a>//! 2 - All [`Event::on_pre_event`] handlers.
-<a href=#14 id=14 data-nosnippet>14</a>//! 3 - All [`AppExtension::event_ui`](crate::app::AppExtension::event_ui).
-<a href=#15 id=15 data-nosnippet>15</a>//! 3.1 - Preview route from window root to each target widget.
-<a href=#16 id=16 data-nosnippet>16</a>//! 3.2 - Main route from target widget to window root.
-<a href=#17 id=17 data-nosnippet>17</a>//! 4 - All [`AppExtension::event`](crate::app::AppExtension::event).
-<a href=#18 id=18 data-nosnippet>18</a>//! 5 - All [``Event::on_event`] handlers.
-<a href=#19 id=19 data-nosnippet>19</a>//!
-<a href=#20 id=20 data-nosnippet>20</a>//! Each event args has an [`EventPropagationHandle`] that can be used to signal later handlers that the event
-<a href=#21 id=21 data-nosnippet>21</a>//! is already handled. The event notification always makes the full route, low level handlers must check if propagation
-<a href=#22 id=22 data-nosnippet>22</a>//! is stopped or can deliberately ignore it. Event properties automatically check propagation.
-<a href=#23 id=23 data-nosnippet>23</a>//!
-<a href=#24 id=24 data-nosnippet>24</a>//! The two event routes in widgets are an emergent property of nested nodes. There is only a method for events, [`UiNode::event`],
-<a href=#25 id=25 data-nosnippet>25</a>//! if a node handles the event before propagating to the child node it handled it in the preview route (also called tunnel route),
-<a href=#26 id=26 data-nosnippet>26</a>//! if it handles the event after it propagated it to the child node it handled it in the main route (also called bubble route).
-<a href=#27 id=27 data-nosnippet>27</a>//!
-<a href=#28 id=28 data-nosnippet>28</a>//! [`UiNode::event`]: crate::widget::node::UiNode::event
+<a href=#12 id=12 data-nosnippet>12</a>//! An event update is requested using [`Event::notify`], this schedules a var modify that clears the previous [`EventUpdates`] and
+<a href=#13 id=13 data-nosnippet>13</a>//! inserts the new update, sorted by timestamp.
+<a href=#14 id=14 data-nosnippet>14</a>//!
+<a href=#15 id=15 data-nosnippet>15</a>//! Each event args has an [`EventPropagationHandle`] that can be used to signal later handlers that the event
+<a href=#16 id=16 data-nosnippet>16</a>//! is already handled. The event notification always makes the full route, direct subscribers can choose if they still
+<a href=#17 id=17 data-nosnippet>17</a>//! execute when the args is flagged handled.
+<a href=#18 id=18 data-nosnippet>18</a>//!
+<a href=#19 id=19 data-nosnippet>19</a>//! The [`Event::hook`] can be used to bind the event during var update time, like [`Var::hook`] any variable modify or event
+<a href=#20 id=20 data-nosnippet>20</a>//! notify requests made in the hook will notify in the same next update pass.
+<a href=#21 id=21 data-nosnippet>21</a>//!
+<a href=#22 id=22 data-nosnippet>22</a>//! The [`Event::on_pre_event`] and [`Event::on_event`] can be used to register handles that on the *preview route*, before UI
+<a href=#23 id=23 data-nosnippet>23</a>//! update and before `on_event`, the *main route*.
+<a href=#24 id=24 data-nosnippet>24</a>//!
+<a href=#25 id=25 data-nosnippet>25</a>//! In widgets the two event routes are an emergent property of nested nodes. The [`UiNode::update`] method is called to
+<a href=#26 id=26 data-nosnippet>26</a>//! all widget nodes in the path to the subscriber, nodes can choose to handle the event before or after propagating the call
+<a href=#27 id=27 data-nosnippet>27</a>//! the the children [`UiNode::update`], if a node handles it before children, this called the *preview route*,
+<a href=#28 id=28 data-nosnippet>28</a>//! if it handles the event after it propagated it to the children this is called the *main route*.
 <a href=#29 id=29 data-nosnippet>29</a>//!
-<a href=#30 id=30 data-nosnippet>30</a>//! # Subscribe
+<a href=#30 id=30 data-nosnippet>30</a>//! In other UI frameworks the preview route is also called *tunneling* and the main route *bubbling*.
 <a href=#31 id=31 data-nosnippet>31</a>//!
-<a href=#32 id=32 data-nosnippet>32</a>//! The high-level way to subscribe to an event is by using an event property. These are properties named with prefix
-<a href=#33 id=33 data-nosnippet>33</a>//! `on_` and `on_pre_`, these properties handle subscription for the widget, filter out propagation stopped events and
-<a href=#34 id=34 data-nosnippet>34</a>//! also filter into specific aspects of an underlying event.
+<a href=#32 id=32 data-nosnippet>32</a>//! [`UiNode::update`]: crate::widget::node::UiNode::update
+<a href=#33 id=33 data-nosnippet>33</a>//!
+<a href=#34 id=34 data-nosnippet>34</a>//! # Subscribe
 <a href=#35 id=35 data-nosnippet>35</a>//!
-<a href=#36 id=36 data-nosnippet>36</a>//! ```
-<a href=#37 id=37 data-nosnippet>37</a>//! use zng::prelude::*;
-<a href=#38 id=38 data-nosnippet>38</a>//!
-<a href=#39 id=39 data-nosnippet>39</a>//! # fn example() {
-<a href=#40 id=40 data-nosnippet>40</a>//! # let _ =
-<a href=#41 id=41 data-nosnippet>41</a>//! Button! {
-<a href=#42 id=42 data-nosnippet>42</a>//!     child = Text!("Button");
-<a href=#43 id=43 data-nosnippet>43</a>//!
-<a href=#44 id=44 data-nosnippet>44</a>//!     gesture::on_pre_single_click = hn!(|args| {
-<a href=#45 id=45 data-nosnippet>45</a>//!         assert!(args.is_single());
-<a href=#46 id=46 data-nosnippet>46</a>//!         println!("single click");
-<a href=#47 id=47 data-nosnippet>47</a>//!         args.propagation().stop();
-<a href=#48 id=48 data-nosnippet>48</a>//!     });
-<a href=#49 id=49 data-nosnippet>49</a>//!     on_click = hn!(|args| {
-<a href=#50 id=50 data-nosnippet>50</a>//!         assert!(!args.is_single());
-<a href=#51 id=51 data-nosnippet>51</a>//!         println!("click {:?}", args.click_count.get());
+<a href=#36 id=36 data-nosnippet>36</a>//! The high-level way to subscribe to an event is by using an event property. These are properties named with prefix
+<a href=#37 id=37 data-nosnippet>37</a>//! `on_` and `on_pre_`, these properties handle subscription for the widget, filter out propagation stopped events and
+<a href=#38 id=38 data-nosnippet>38</a>//! also filter into specific aspects of an underlying event.
+<a href=#39 id=39 data-nosnippet>39</a>//!
+<a href=#40 id=40 data-nosnippet>40</a>//! ```
+<a href=#41 id=41 data-nosnippet>41</a>//! use zng::prelude::*;
+<a href=#42 id=42 data-nosnippet>42</a>//!
+<a href=#43 id=43 data-nosnippet>43</a>//! # fn example() {
+<a href=#44 id=44 data-nosnippet>44</a>//! # let _ =
+<a href=#45 id=45 data-nosnippet>45</a>//! Button! {
+<a href=#46 id=46 data-nosnippet>46</a>//!     child = Text!("Button");
+<a href=#47 id=47 data-nosnippet>47</a>//!
+<a href=#48 id=48 data-nosnippet>48</a>//!     gesture::on_pre_single_click = hn!(|args| {
+<a href=#49 id=49 data-nosnippet>49</a>//!         assert!(args.is_single());
+<a href=#50 id=50 data-nosnippet>50</a>//!         println!("single click");
+<a href=#51 id=51 data-nosnippet>51</a>//!         args.propagation.stop();
 <a href=#52 id=52 data-nosnippet>52</a>//!     });
-<a href=#53 id=53 data-nosnippet>53</a>//! }
-<a href=#54 id=54 data-nosnippet>54</a>//! # ; }
-<a href=#55 id=55 data-nosnippet>55</a>//! ```
-<a href=#56 id=56 data-nosnippet>56</a>//!
-<a href=#57 id=57 data-nosnippet>57</a>//! In the example above the [`gesture::on_pre_single_click`] and [`gesture::on_click`] are handled, both properties
-<a href=#58 id=58 data-nosnippet>58</a>//! operate on the same underlying [`gesture::CLICK_EVENT`]. The `on_pre_single_click` property only accepts clicks
-<a href=#59 id=59 data-nosnippet>59</a>//! with the primary button that are not double-clicks (or triple, etc.), the `on_click` only accepts clicks with
-<a href=#60 id=60 data-nosnippet>60</a>//! the primary button. In the example `on_click` is never called for single clicks because the `on_pre_single_click` handler
-<a href=#61 id=61 data-nosnippet>61</a>//! stopped propagation for those events in the preview route, before the click handler.
-<a href=#62 id=62 data-nosnippet>62</a>//!
-<a href=#63 id=63 data-nosnippet>63</a>//! ## Subscribe in Nodes
-<a href=#64 id=64 data-nosnippet>64</a>//!
-<a href=#65 id=65 data-nosnippet>65</a>//! Widget and properties can subscribe to events directly. When the event [`UpdateDeliveryList`] is build only widgets
-<a href=#66 id=66 data-nosnippet>66</a>//! selected by the event arguments that are also subscribers to the event are added to the list.
-<a href=#67 id=67 data-nosnippet>67</a>//!
-<a href=#68 id=68 data-nosnippet>68</a>//! The [`WIDGET.sub_event`] method can be used to subscribe for the lifetime of the widget, the [`Event::subscribe`]
-<a href=#69 id=69 data-nosnippet>69</a>//! method can be used to subscribe for an arbitrary lifetime. The [`Event::on`] or [`Event::on_unhandled`] can be
-<a href=#70 id=70 data-nosnippet>70</a>//! used to match and receive the event.
+<a href=#53 id=53 data-nosnippet>53</a>//!     on_click = hn!(|args| {
+<a href=#54 id=54 data-nosnippet>54</a>//!         assert!(!args.is_single());
+<a href=#55 id=55 data-nosnippet>55</a>//!         println!("click {:?}", args.click_count.get());
+<a href=#56 id=56 data-nosnippet>56</a>//!     });
+<a href=#57 id=57 data-nosnippet>57</a>//! }
+<a href=#58 id=58 data-nosnippet>58</a>//! # ; }
+<a href=#59 id=59 data-nosnippet>59</a>//! ```
+<a href=#60 id=60 data-nosnippet>60</a>//!
+<a href=#61 id=61 data-nosnippet>61</a>//! In the example above the [`gesture::on_pre_single_click`] and [`gesture::on_click`] are handled, both properties
+<a href=#62 id=62 data-nosnippet>62</a>//! operate on the same underlying [`gesture::CLICK_EVENT`]. The `on_pre_single_click` property only accepts clicks
+<a href=#63 id=63 data-nosnippet>63</a>//! with the primary button that are not double-clicks (or triple, etc.), the `on_click` only accepts clicks with
+<a href=#64 id=64 data-nosnippet>64</a>//! the primary button. In the example `on_click` is never called for single clicks because the `on_pre_single_click` handler
+<a href=#65 id=65 data-nosnippet>65</a>//! stopped propagation for those events in the preview route, before the click handler.
+<a href=#66 id=66 data-nosnippet>66</a>//!
+<a href=#67 id=67 data-nosnippet>67</a>//! ## Subscribe in Nodes
+<a href=#68 id=68 data-nosnippet>68</a>//!
+<a href=#69 id=69 data-nosnippet>69</a>//! Widget and properties can subscribe to events directly. When the [`UpdateDeliveryList`] is build only widgets
+<a href=#70 id=70 data-nosnippet>70</a>//! selected by the event arguments that are also subscribers to the event are added to the list.
 <a href=#71 id=71 data-nosnippet>71</a>//!
-<a href=#72 id=72 data-nosnippet>72</a>//! [`WIDGET.sub_event`]: crate::widget::WIDGET::sub_event
-<a href=#73 id=73 data-nosnippet>73</a>//! [`UpdateDeliveryList`]: crate::update::UpdateDeliveryList
-<a href=#74 id=74 data-nosnippet>74</a>//!
-<a href=#75 id=75 data-nosnippet>75</a>//! ```
-<a href=#76 id=76 data-nosnippet>76</a>//! # fn main() { }
-<a href=#77 id=77 data-nosnippet>77</a>//! use zng::prelude::*;
-<a href=#78 id=78 data-nosnippet>78</a>//! use zng::prelude_wgt::*;
+<a href=#72 id=72 data-nosnippet>72</a>//! The [`WIDGET.sub_event`] method can be used to subscribe for the lifetime of the widget, the [`Event::subscribe`]
+<a href=#73 id=73 data-nosnippet>73</a>//! method can be used to subscribe for an arbitrary lifetime. The [`Event::each_update`] or [`Event::latest_update`] can be
+<a href=#74 id=74 data-nosnippet>74</a>//! used to match and receive the event.
+<a href=#75 id=75 data-nosnippet>75</a>//!
+<a href=#76 id=76 data-nosnippet>76</a>//! [`WIDGET.sub_event`]: crate::widget::WIDGET::sub_event
+<a href=#77 id=77 data-nosnippet>77</a>//! [`UpdateDeliveryList`]: crate::update::UpdateDeliveryList
+<a href=#78 id=78 data-nosnippet>78</a>//! [`Var::hook`]: crate::var::Var::hook
 <a href=#79 id=79 data-nosnippet>79</a>//!
-<a href=#80 id=80 data-nosnippet>80</a>//! #[property(EVENT)]
-<a href=#81 id=81 data-nosnippet>81</a>//! pub fn print_click(child: impl IntoUiNode, preview: impl IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#82 id=82 data-nosnippet>82</a>//!     let preview = preview.into_var();
-<a href=#83 id=83 data-nosnippet>83</a>//!     match_node(child, move |child, op| match op {
-<a href=#84 id=84 data-nosnippet>84</a>//!         UiNodeOp::Init =&gt; {
-<a href=#85 id=85 data-nosnippet>85</a>//!             WIDGET.sub_event(&amp;gesture::CLICK_EVENT);
-<a href=#86 id=86 data-nosnippet>86</a>//!         }
-<a href=#87 id=87 data-nosnippet>87</a>//!         UiNodeOp::Event { update } =&gt; {
-<a href=#88 id=88 data-nosnippet>88</a>//!             if let Some(args) = gesture::CLICK_EVENT.on(update) {
-<a href=#89 id=89 data-nosnippet>89</a>//!                 if preview.get() {
-<a href=#90 id=90 data-nosnippet>90</a>//!                     println!("preview click {:?}", args.propagation().is_stopped());
-<a href=#91 id=91 data-nosnippet>91</a>//!                     child.event(update);
-<a href=#92 id=92 data-nosnippet>92</a>//!                 } else {
-<a href=#93 id=93 data-nosnippet>93</a>//!                     child.event(update);
-<a href=#94 id=94 data-nosnippet>94</a>//!                     println!("click {:?}", args.propagation().is_stopped());
-<a href=#95 id=95 data-nosnippet>95</a>//!                 }
-<a href=#96 id=96 data-nosnippet>96</a>//!             }
-<a href=#97 id=97 data-nosnippet>97</a>//!         }
-<a href=#98 id=98 data-nosnippet>98</a>//!         _ =&gt; {}
-<a href=#99 id=99 data-nosnippet>99</a>//!     })
-<a href=#100 id=100 data-nosnippet>100</a>//! }
-<a href=#101 id=101 data-nosnippet>101</a>//! ```
-<a href=#102 id=102 data-nosnippet>102</a>//!
-<a href=#103 id=103 data-nosnippet>103</a>//! The example above declares a property that prints the `CLICK_EVENT` propagation status, the preview/main
-<a href=#104 id=104 data-nosnippet>104</a>//! routes are defined merely by the position of `child.event(update)` in relation with the handling code.
-<a href=#105 id=105 data-nosnippet>105</a>//!
-<a href=#106 id=106 data-nosnippet>106</a>//! ## App Extensions
+<a href=#80 id=80 data-nosnippet>80</a>//! ```
+<a href=#81 id=81 data-nosnippet>81</a>//! # fn main() { }
+<a href=#82 id=82 data-nosnippet>82</a>//! use zng::prelude::*;
+<a href=#83 id=83 data-nosnippet>83</a>//! use zng::prelude_wgt::*;
+<a href=#84 id=84 data-nosnippet>84</a>//!
+<a href=#85 id=85 data-nosnippet>85</a>//! #[property(EVENT)]
+<a href=#86 id=86 data-nosnippet>86</a>//! pub fn print_click(child: impl IntoUiNode, preview: impl IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#87 id=87 data-nosnippet>87</a>//!     let preview = preview.into_var();
+<a href=#88 id=88 data-nosnippet>88</a>//!     match_node(child, move |child, op| match op {
+<a href=#89 id=89 data-nosnippet>89</a>//!         UiNodeOp::Init =&gt; {
+<a href=#90 id=90 data-nosnippet>90</a>//!             WIDGET.sub_event(&amp;gesture::CLICK_EVENT);
+<a href=#91 id=91 data-nosnippet>91</a>//!         }
+<a href=#92 id=92 data-nosnippet>92</a>//!         UiNodeOp::Update { updates } =&gt; {
+<a href=#93 id=93 data-nosnippet>93</a>//!             gesture::CLICK_EVENT.each_update(true, |args| {
+<a href=#94 id=94 data-nosnippet>94</a>//!                 if preview.get() {
+<a href=#95 id=95 data-nosnippet>95</a>//!                     println!("preview click {:?}", args.propagation.is_stopped());
+<a href=#96 id=96 data-nosnippet>96</a>//!                     child.update(updates);
+<a href=#97 id=97 data-nosnippet>97</a>//!                 } else {
+<a href=#98 id=98 data-nosnippet>98</a>//!                     child.update(updates);
+<a href=#99 id=99 data-nosnippet>99</a>//!                     println!("click {:?}", args.propagation.is_stopped());
+<a href=#100 id=100 data-nosnippet>100</a>//!                 }
+<a href=#101 id=101 data-nosnippet>101</a>//!             });
+<a href=#102 id=102 data-nosnippet>102</a>//!         }
+<a href=#103 id=103 data-nosnippet>103</a>//!         _ =&gt; {}
+<a href=#104 id=104 data-nosnippet>104</a>//!     })
+<a href=#105 id=105 data-nosnippet>105</a>//! }
+<a href=#106 id=106 data-nosnippet>106</a>//! ```
 <a href=#107 id=107 data-nosnippet>107</a>//!
-<a href=#108 id=108 data-nosnippet>108</a>//! App extensions don't need to subscribe to events, they all receive all events.
-<a href=#109 id=109 data-nosnippet>109</a>//!
-<a href=#110 id=110 data-nosnippet>110</a>//! ```
-<a href=#111 id=111 data-nosnippet>111</a>//! use zng::{app::AppExtension, gesture::CLICK_EVENT, update::EventUpdate};
+<a href=#108 id=108 data-nosnippet>108</a>//! The example above declares a property that prints the `CLICK_EVENT` propagation status, the preview/main
+<a href=#109 id=109 data-nosnippet>109</a>//! routes are defined merely by the position of `child.update(updates)` in relation with the handling code.
+<a href=#110 id=110 data-nosnippet>110</a>//!
+<a href=#111 id=111 data-nosnippet>111</a>//! ## Direct Handlers
 <a href=#112 id=112 data-nosnippet>112</a>//!
-<a href=#113 id=113 data-nosnippet>113</a>//! #[derive(Default)]
-<a href=#114 id=114 data-nosnippet>114</a>//! struct PrintClickManager {}
-<a href=#115 id=115 data-nosnippet>115</a>//!
-<a href=#116 id=116 data-nosnippet>116</a>//! impl AppExtension for PrintClickManager {
-<a href=#117 id=117 data-nosnippet>117</a>//!     fn event_preview(&amp;mut self, update: &amp;mut EventUpdate) {
-<a href=#118 id=118 data-nosnippet>118</a>//!         if let Some(args) = CLICK_EVENT.on(update) {
-<a href=#119 id=119 data-nosnippet>119</a>//!             println!("click, before all UI handlers");
-<a href=#120 id=120 data-nosnippet>120</a>//!         }
-<a href=#121 id=121 data-nosnippet>121</a>//!     }
-<a href=#122 id=122 data-nosnippet>122</a>//!
-<a href=#123 id=123 data-nosnippet>123</a>//!     fn event(&amp;mut self, update: &amp;mut EventUpdate) {
-<a href=#124 id=124 data-nosnippet>124</a>//!         if let Some(args) = CLICK_EVENT.on(update) {
-<a href=#125 id=125 data-nosnippet>125</a>//!             println!("click, after all UI handlers");
-<a href=#126 id=126 data-nosnippet>126</a>//!         }
-<a href=#127 id=127 data-nosnippet>127</a>//!     }
-<a href=#128 id=128 data-nosnippet>128</a>//! }
-<a href=#129 id=129 data-nosnippet>129</a>//! ```
-<a href=#130 id=130 data-nosnippet>130</a>//!
-<a href=#131 id=131 data-nosnippet>131</a>//! ## Direct Handlers
-<a href=#132 id=132 data-nosnippet>132</a>//!
-<a href=#133 id=133 data-nosnippet>133</a>//! Event handlers can be set directly on the events using [`Event::on_event`] and [`Event::on_pre_event`].
-<a href=#134 id=134 data-nosnippet>134</a>//! The handlers run in the app scope (same as app extensions). These event handlers are only called if
-<a href=#135 id=135 data-nosnippet>135</a>//! propagation is not stopped.
-<a href=#136 id=136 data-nosnippet>136</a>//!
-<a href=#137 id=137 data-nosnippet>137</a>//! ```
-<a href=#138 id=138 data-nosnippet>138</a>//! use zng::prelude::*;
-<a href=#139 id=139 data-nosnippet>139</a>//! # fn example() {
+<a href=#113 id=113 data-nosnippet>113</a>//! Event handlers can be set directly on the events using [`Event::on_event`] and [`Event::on_pre_event`].
+<a href=#114 id=114 data-nosnippet>114</a>//! The handlers run in the app scope (same as app extensions). These event handlers can be configured to ignore
+<a href=#115 id=115 data-nosnippet>115</a>//! the propagation handle.
+<a href=#116 id=116 data-nosnippet>116</a>//!
+<a href=#117 id=117 data-nosnippet>117</a>//! ```
+<a href=#118 id=118 data-nosnippet>118</a>//! use zng::prelude::*;
+<a href=#119 id=119 data-nosnippet>119</a>//! # fn example() {
+<a href=#120 id=120 data-nosnippet>120</a>//!
+<a href=#121 id=121 data-nosnippet>121</a>//! gesture::CLICK_EVENT
+<a href=#122 id=122 data-nosnippet>122</a>//!     .on_pre_event(
+<a href=#123 id=123 data-nosnippet>123</a>//!         true,
+<a href=#124 id=124 data-nosnippet>124</a>//!         hn!(|_| {
+<a href=#125 id=125 data-nosnippet>125</a>//!             println!("click, before all UI handlers");
+<a href=#126 id=126 data-nosnippet>126</a>//!         }),
+<a href=#127 id=127 data-nosnippet>127</a>//!     )
+<a href=#128 id=128 data-nosnippet>128</a>//!     .perm();
+<a href=#129 id=129 data-nosnippet>129</a>//!
+<a href=#130 id=130 data-nosnippet>130</a>//! gesture::CLICK_EVENT
+<a href=#131 id=131 data-nosnippet>131</a>//!     .on_event(
+<a href=#132 id=132 data-nosnippet>132</a>//!         true,
+<a href=#133 id=133 data-nosnippet>133</a>//!         hn!(|_| {
+<a href=#134 id=134 data-nosnippet>134</a>//!             println!("click, after all UI handlers");
+<a href=#135 id=135 data-nosnippet>135</a>//!         }),
+<a href=#136 id=136 data-nosnippet>136</a>//!     )
+<a href=#137 id=137 data-nosnippet>137</a>//!     .perm();
+<a href=#138 id=138 data-nosnippet>138</a>//! # }
+<a href=#139 id=139 data-nosnippet>139</a>//! ```
 <a href=#140 id=140 data-nosnippet>140</a>//!
-<a href=#141 id=141 data-nosnippet>141</a>//! gesture::CLICK_EVENT
-<a href=#142 id=142 data-nosnippet>142</a>//!     .on_pre_event(hn!(|_| {
-<a href=#143 id=143 data-nosnippet>143</a>//!         println!("click, before all UI handlers");
-<a href=#144 id=144 data-nosnippet>144</a>//!     }))
-<a href=#145 id=145 data-nosnippet>145</a>//!     .perm();
+<a href=#141 id=141 data-nosnippet>141</a>//! [`gesture::on_pre_single_click`]: fn@crate::gesture::on_pre_single_click
+<a href=#142 id=142 data-nosnippet>142</a>//! [`gesture::on_click`]: fn@crate::gesture::on_click
+<a href=#143 id=143 data-nosnippet>143</a>//! [`gesture::CLICK_EVENT`]: crate::gesture::CLICK_EVENT
+<a href=#144 id=144 data-nosnippet>144</a>//!
+<a href=#145 id=145 data-nosnippet>145</a>//! # Event Macros
 <a href=#146 id=146 data-nosnippet>146</a>//!
-<a href=#147 id=147 data-nosnippet>147</a>//! gesture::CLICK_EVENT
-<a href=#148 id=148 data-nosnippet>148</a>//!     .on_event(hn!(|_| {
-<a href=#149 id=149 data-nosnippet>149</a>//!         println!("click, after all UI handlers");
-<a href=#150 id=150 data-nosnippet>150</a>//!     }))
-<a href=#151 id=151 data-nosnippet>151</a>//!     .perm();
-<a href=#152 id=152 data-nosnippet>152</a>//! # }
-<a href=#153 id=153 data-nosnippet>153</a>//! ```
-<a href=#154 id=154 data-nosnippet>154</a>//!
-<a href=#155 id=155 data-nosnippet>155</a>//! [`gesture::on_pre_single_click`]: fn@crate::gesture::on_pre_single_click
-<a href=#156 id=156 data-nosnippet>156</a>//! [`gesture::on_click`]: fn@crate::gesture::on_click
-<a href=#157 id=157 data-nosnippet>157</a>//! [`gesture::CLICK_EVENT`]: crate::gesture::CLICK_EVENT
-<a href=#158 id=158 data-nosnippet>158</a>//!
-<a href=#159 id=159 data-nosnippet>159</a>//! # Event Macros
-<a href=#160 id=160 data-nosnippet>160</a>//!
-<a href=#161 id=161 data-nosnippet>161</a>//! Events can be declared using the [`event!`] macro, event arguments using the [`event_args!`]. Event properties
-<a href=#162 id=162 data-nosnippet>162</a>//! can be declared using [`event_property!`].
-<a href=#163 id=163 data-nosnippet>163</a>//!
-<a href=#164 id=164 data-nosnippet>164</a>//! ```
-<a href=#165 id=165 data-nosnippet>165</a>//! # fn main() { }
-<a href=#166 id=166 data-nosnippet>166</a>//! use zng::prelude_wgt::*;
-<a href=#167 id=167 data-nosnippet>167</a>//!
-<a href=#168 id=168 data-nosnippet>168</a>//! event_args! {
-<a href=#169 id=169 data-nosnippet>169</a>//!     pub struct FooArgs {
-<a href=#170 id=170 data-nosnippet>170</a>//!         pub target: WidgetPath,
-<a href=#171 id=171 data-nosnippet>171</a>//!
-<a href=#172 id=172 data-nosnippet>172</a>//!         ..
-<a href=#173 id=173 data-nosnippet>173</a>//!
-<a href=#174 id=174 data-nosnippet>174</a>//!         fn delivery_list(&amp;self, list: &amp;mut UpdateDeliveryList) {
-<a href=#175 id=175 data-nosnippet>175</a>//!             list.insert_wgt(&amp;self.target);
-<a href=#176 id=176 data-nosnippet>176</a>//!         }
-<a href=#177 id=177 data-nosnippet>177</a>//!     }
-<a href=#178 id=178 data-nosnippet>178</a>//! }
-<a href=#179 id=179 data-nosnippet>179</a>//!
-<a href=#180 id=180 data-nosnippet>180</a>//! event! {
-<a href=#181 id=181 data-nosnippet>181</a>//!     pub static FOO_EVENT: FooArgs;
-<a href=#182 id=182 data-nosnippet>182</a>//! }
-<a href=#183 id=183 data-nosnippet>183</a>//!
-<a href=#184 id=184 data-nosnippet>184</a>//! event_property! {
-<a href=#185 id=185 data-nosnippet>185</a>//!     pub fn foo {
-<a href=#186 id=186 data-nosnippet>186</a>//!         event: FOO_EVENT,
-<a href=#187 id=187 data-nosnippet>187</a>//!         args: FooArgs,
-<a href=#188 id=188 data-nosnippet>188</a>//!     }
-<a href=#189 id=189 data-nosnippet>189</a>//! }
-<a href=#190 id=190 data-nosnippet>190</a>//!
-<a href=#191 id=191 data-nosnippet>191</a>//! # fn usage() -&gt; UiNode {
-<a href=#192 id=192 data-nosnippet>192</a>//! zng::widget::Wgt! {
-<a href=#193 id=193 data-nosnippet>193</a>//!     zng::widget::on_info_init = hn!(|_| {
-<a href=#194 id=194 data-nosnippet>194</a>//!         let this_wgt = WIDGET.info().path();
-<a href=#195 id=195 data-nosnippet>195</a>//!         FOO_EVENT.notify(FooArgs::now(this_wgt));
-<a href=#196 id=196 data-nosnippet>196</a>//!     });
+<a href=#147 id=147 data-nosnippet>147</a>//! Events can be declared using the [`event!`] macro, event arguments using the [`event_args!`]. Event properties
+<a href=#148 id=148 data-nosnippet>148</a>//! can be declared using [`event_property!`].
+<a href=#149 id=149 data-nosnippet>149</a>//!
+<a href=#150 id=150 data-nosnippet>150</a>//! ```
+<a href=#151 id=151 data-nosnippet>151</a>//! # fn main() { }
+<a href=#152 id=152 data-nosnippet>152</a>//! use zng::prelude_wgt::*;
+<a href=#153 id=153 data-nosnippet>153</a>//!
+<a href=#154 id=154 data-nosnippet>154</a>//! event_args! {
+<a href=#155 id=155 data-nosnippet>155</a>//!     pub struct FooArgs {
+<a href=#156 id=156 data-nosnippet>156</a>//!         pub target: WidgetPath,
+<a href=#157 id=157 data-nosnippet>157</a>//!
+<a href=#158 id=158 data-nosnippet>158</a>//!         ..
+<a href=#159 id=159 data-nosnippet>159</a>//!
+<a href=#160 id=160 data-nosnippet>160</a>//!         fn is_in_target(&amp;self, id: WidgetId) -&gt; bool {
+<a href=#161 id=161 data-nosnippet>161</a>//!             self.target.contains(id)
+<a href=#162 id=162 data-nosnippet>162</a>//!         }
+<a href=#163 id=163 data-nosnippet>163</a>//!     }
+<a href=#164 id=164 data-nosnippet>164</a>//! }
+<a href=#165 id=165 data-nosnippet>165</a>//!
+<a href=#166 id=166 data-nosnippet>166</a>//! event! {
+<a href=#167 id=167 data-nosnippet>167</a>//!     pub static FOO_EVENT: FooArgs;
+<a href=#168 id=168 data-nosnippet>168</a>//! }
+<a href=#169 id=169 data-nosnippet>169</a>//!
+<a href=#170 id=170 data-nosnippet>170</a>//! event_property! {
+<a href=#171 id=171 data-nosnippet>171</a>//!     #[property(EVENT)]
+<a href=#172 id=172 data-nosnippet>172</a>//!     pub fn on_foo&lt;on_pre_foo&gt;(child: impl IntoUiNode, handler: Handler&lt;FooArgs&gt;) -&gt; UiNode {
+<a href=#173 id=173 data-nosnippet>173</a>//!         const PRE: bool;
+<a href=#174 id=174 data-nosnippet>174</a>//!         EventNodeBuilder::new(FOO_EVENT).build::&lt;PRE&gt;(child, handler)
+<a href=#175 id=175 data-nosnippet>175</a>//!     }
+<a href=#176 id=176 data-nosnippet>176</a>//! }
+<a href=#177 id=177 data-nosnippet>177</a>//!
+<a href=#178 id=178 data-nosnippet>178</a>//! # fn usage() -&gt; UiNode {
+<a href=#179 id=179 data-nosnippet>179</a>//! zng::widget::Wgt! {
+<a href=#180 id=180 data-nosnippet>180</a>//!     zng::widget::on_info_init = hn!(|_| {
+<a href=#181 id=181 data-nosnippet>181</a>//!         let this_wgt = WIDGET.info().path();
+<a href=#182 id=182 data-nosnippet>182</a>//!         FOO_EVENT.notify(FooArgs::now(this_wgt));
+<a href=#183 id=183 data-nosnippet>183</a>//!     });
+<a href=#184 id=184 data-nosnippet>184</a>//!
+<a href=#185 id=185 data-nosnippet>185</a>//!     on_pre_foo = hn!(|_| {
+<a href=#186 id=186 data-nosnippet>186</a>//!         println!("on_pre_foo!");
+<a href=#187 id=187 data-nosnippet>187</a>//!     });
+<a href=#188 id=188 data-nosnippet>188</a>//!     on_foo = hn!(|_| {
+<a href=#189 id=189 data-nosnippet>189</a>//!         println!("on_foo!");
+<a href=#190 id=190 data-nosnippet>190</a>//!     });
+<a href=#191 id=191 data-nosnippet>191</a>//! }
+<a href=#192 id=192 data-nosnippet>192</a>//! # }
+<a href=#193 id=193 data-nosnippet>193</a>//! ```
+<a href=#194 id=194 data-nosnippet>194</a>//!
+<a href=#195 id=195 data-nosnippet>195</a>//! The example above declares `FooArgs`, `FOO_EVENT`, `on_pre_foo` and `on_foo`. The example then instantiates
+<a href=#196 id=196 data-nosnippet>196</a>//! a widget that sends the `FOO_EVENT` to itself on init and receives it using the event properties.
 <a href=#197 id=197 data-nosnippet>197</a>//!
-<a href=#198 id=198 data-nosnippet>198</a>//!     on_pre_foo = hn!(|_| {
-<a href=#199 id=199 data-nosnippet>199</a>//!         println!("on_pre_foo!");
-<a href=#200 id=200 data-nosnippet>200</a>//!     });
-<a href=#201 id=201 data-nosnippet>201</a>//!     on_foo = hn!(|_| {
-<a href=#202 id=202 data-nosnippet>202</a>//!         println!("on_foo!");
-<a href=#203 id=203 data-nosnippet>203</a>//!     });
-<a href=#204 id=204 data-nosnippet>204</a>//! }
-<a href=#205 id=205 data-nosnippet>205</a>//! # }
-<a href=#206 id=206 data-nosnippet>206</a>//! ```
+<a href=#198 id=198 data-nosnippet>198</a>//! # Commands
+<a href=#199 id=199 data-nosnippet>199</a>//!
+<a href=#200 id=200 data-nosnippet>200</a>//! Command events are represented by a static instance of [`Command`] with name suffix `_CMD`. Commands have
+<a href=#201 id=201 data-nosnippet>201</a>//! custom argument type [`CommandArgs`]. Every command event is also an `Event&lt;CommandArgs&gt;`, commands extend
+<a href=#202 id=202 data-nosnippet>202</a>//! the event type to provide associated metadata, scope and *enabled* control.
+<a href=#203 id=203 data-nosnippet>203</a>//!
+<a href=#204 id=204 data-nosnippet>204</a>//! ## Command Macros
+<a href=#205 id=205 data-nosnippet>205</a>//!
+<a href=#206 id=206 data-nosnippet>206</a>//! Commands can be declared using the [`command!`] macro. Command properties can be declared using [`command_property!`].
 <a href=#207 id=207 data-nosnippet>207</a>//!
-<a href=#208 id=208 data-nosnippet>208</a>//! The example above declares `FooArgs`, `FOO_EVENT`, `on_pre_foo` and `on_foo`. The example then declares
-<a href=#209 id=209 data-nosnippet>209</a>//! a widget that sends the `FOO_EVENT` to itself on init and receives it using the event properties.
-<a href=#210 id=210 data-nosnippet>210</a>//!
-<a href=#211 id=211 data-nosnippet>211</a>//! # Commands
-<a href=#212 id=212 data-nosnippet>212</a>//!
-<a href=#213 id=213 data-nosnippet>213</a>//! Command events are represented by a static instance of [`Command`] with name suffix `_CMD`. Commands have
-<a href=#214 id=214 data-nosnippet>214</a>//! custom argument type [`CommandArgs`]. Every command event is also an `Event&lt;CommandArgs&gt;`, commands extend
-<a href=#215 id=215 data-nosnippet>215</a>//! the event type to provide associated metadata, scope and *enabled* control.
-<a href=#216 id=216 data-nosnippet>216</a>//!
-<a href=#217 id=217 data-nosnippet>217</a>//! ## Command Macros
-<a href=#218 id=218 data-nosnippet>218</a>//!
-<a href=#219 id=219 data-nosnippet>219</a>//! Commands can be declared using the [`command!`] macro. Command properties can be declared using [`command_property!`].
-<a href=#220 id=220 data-nosnippet>220</a>//!
-<a href=#221 id=221 data-nosnippet>221</a>//! ```
-<a href=#222 id=222 data-nosnippet>222</a>//! # fn main() { }
-<a href=#223 id=223 data-nosnippet>223</a>//! use zng::prelude_wgt::*;
-<a href=#224 id=224 data-nosnippet>224</a>//!
-<a href=#225 id=225 data-nosnippet>225</a>//! command! {
-<a href=#226 id=226 data-nosnippet>226</a>//!     /// Foo docs.
-<a href=#227 id=227 data-nosnippet>227</a>//!     pub static FOO_CMD = {
-<a href=#228 id=228 data-nosnippet>228</a>//!         l10n!: true,
-<a href=#229 id=229 data-nosnippet>229</a>//!         name: "Foo",
-<a href=#230 id=230 data-nosnippet>230</a>//!         info: "foo bar",
-<a href=#231 id=231 data-nosnippet>231</a>//!         shortcut: shortcut![CTRL + 'F'],
-<a href=#232 id=232 data-nosnippet>232</a>//!     };
-<a href=#233 id=233 data-nosnippet>233</a>//! }
+<a href=#208 id=208 data-nosnippet>208</a>//! ```
+<a href=#209 id=209 data-nosnippet>209</a>//! # fn main() { }
+<a href=#210 id=210 data-nosnippet>210</a>//! use zng::prelude_wgt::*;
+<a href=#211 id=211 data-nosnippet>211</a>//!
+<a href=#212 id=212 data-nosnippet>212</a>//! command! {
+<a href=#213 id=213 data-nosnippet>213</a>//!     /// Foo docs.
+<a href=#214 id=214 data-nosnippet>214</a>//!     pub static FOO_CMD {
+<a href=#215 id=215 data-nosnippet>215</a>//!         l10n!: true,
+<a href=#216 id=216 data-nosnippet>216</a>//!         name: "Foo",
+<a href=#217 id=217 data-nosnippet>217</a>//!         info: "foo bar",
+<a href=#218 id=218 data-nosnippet>218</a>//!         shortcut: shortcut![CTRL + 'F'],
+<a href=#219 id=219 data-nosnippet>219</a>//!     };
+<a href=#220 id=220 data-nosnippet>220</a>//! }
+<a href=#221 id=221 data-nosnippet>221</a>//!
+<a href=#222 id=222 data-nosnippet>222</a>//! command_property! {
+<a href=#223 id=223 data-nosnippet>223</a>//!     #[property(EVENT)]
+<a href=#224 id=224 data-nosnippet>224</a>//!     pub fn on_foo&lt;on_pre_foo, can_foo&gt;(child: impl IntoUiNode, handler: Handler&lt;CommandArgs&gt;) -&gt; UiNode {
+<a href=#225 id=225 data-nosnippet>225</a>//!         FOO_CMD
+<a href=#226 id=226 data-nosnippet>226</a>//!     }
+<a href=#227 id=227 data-nosnippet>227</a>//! }
+<a href=#228 id=228 data-nosnippet>228</a>//!
+<a href=#229 id=229 data-nosnippet>229</a>//! # fn usage() -&gt; UiNode {
+<a href=#230 id=230 data-nosnippet>230</a>//! zng::widget::Wgt! {
+<a href=#231 id=231 data-nosnippet>231</a>//!     zng::widget::on_info_init = hn!(|_| {
+<a href=#232 id=232 data-nosnippet>232</a>//!         FOO_CMD.scoped(WIDGET.id()).notify();
+<a href=#233 id=233 data-nosnippet>233</a>//!     });
 <a href=#234 id=234 data-nosnippet>234</a>//!
-<a href=#235 id=235 data-nosnippet>235</a>//! command_property! {
-<a href=#236 id=236 data-nosnippet>236</a>//!     pub fn foo {
-<a href=#237 id=237 data-nosnippet>237</a>//!         cmd: FOO_CMD.scoped(WIDGET.id()),
-<a href=#238 id=238 data-nosnippet>238</a>//!     }
-<a href=#239 id=239 data-nosnippet>239</a>//! }
-<a href=#240 id=240 data-nosnippet>240</a>//!
-<a href=#241 id=241 data-nosnippet>241</a>//! # fn usage() -&gt; UiNode {
-<a href=#242 id=242 data-nosnippet>242</a>//! zng::widget::Wgt! {
-<a href=#243 id=243 data-nosnippet>243</a>//!     zng::widget::on_info_init = hn!(|_| {
-<a href=#244 id=244 data-nosnippet>244</a>//!         FOO_CMD.scoped(WIDGET.id()).notify();
-<a href=#245 id=245 data-nosnippet>245</a>//!     });
-<a href=#246 id=246 data-nosnippet>246</a>//!
-<a href=#247 id=247 data-nosnippet>247</a>//!     on_pre_foo = hn!(|_| {
-<a href=#248 id=248 data-nosnippet>248</a>//!         println!("on_pre_foo!");
-<a href=#249 id=249 data-nosnippet>249</a>//!     });
-<a href=#250 id=250 data-nosnippet>250</a>//!     on_foo = hn!(|_| {
-<a href=#251 id=251 data-nosnippet>251</a>//!         println!("on_foo!");
-<a href=#252 id=252 data-nosnippet>252</a>//!     });
-<a href=#253 id=253 data-nosnippet>253</a>//! }
-<a href=#254 id=254 data-nosnippet>254</a>//! # }
-<a href=#255 id=255 data-nosnippet>255</a>//! ```
+<a href=#235 id=235 data-nosnippet>235</a>//!     on_pre_foo = hn!(|_| {
+<a href=#236 id=236 data-nosnippet>236</a>//!         println!("on_pre_foo!");
+<a href=#237 id=237 data-nosnippet>237</a>//!     });
+<a href=#238 id=238 data-nosnippet>238</a>//!     on_foo = hn!(|_| {
+<a href=#239 id=239 data-nosnippet>239</a>//!         println!("on_foo!");
+<a href=#240 id=240 data-nosnippet>240</a>//!     });
+<a href=#241 id=241 data-nosnippet>241</a>//! }
+<a href=#242 id=242 data-nosnippet>242</a>//! # }
+<a href=#243 id=243 data-nosnippet>243</a>//! ```
+<a href=#244 id=244 data-nosnippet>244</a>//!
+<a href=#245 id=245 data-nosnippet>245</a>//! The example above declares `FOO_CMD`, `on_pre_foo`, `on_foo`, `can_foo` and `CAN_FOO_VAR`. The example then instantiates
+<a href=#246 id=246 data-nosnippet>246</a>//! a widget that sends the `FOO_CMD` to itself on init and receives it using the event properties.
+<a href=#247 id=247 data-nosnippet>247</a>//!
+<a href=#248 id=248 data-nosnippet>248</a>//! ## Metadata
+<a href=#249 id=249 data-nosnippet>249</a>//!
+<a href=#250 id=250 data-nosnippet>250</a>//! All commands provide an [`Command::with_meta`] access point for reading and writing arbitrary metadata. Usually
+<a href=#251 id=251 data-nosnippet>251</a>//! metadata is declared following the [command extensions] pattern. In the example above the `name`, `info` and `shortcut`
+<a href=#252 id=252 data-nosnippet>252</a>//! are actually command extensions declared as [`CommandNameExt`], [`CommandInfoExt`] and [`CommandShortcutExt`].
+<a href=#253 id=253 data-nosnippet>253</a>//!
+<a href=#254 id=254 data-nosnippet>254</a>//! [command extensions]: Command#extensions
+<a href=#255 id=255 data-nosnippet>255</a>//! [`CommandShortcutExt`]: crate::gesture::CommandShortcutExt
 <a href=#256 id=256 data-nosnippet>256</a>//!
-<a href=#257 id=257 data-nosnippet>257</a>//! The example above declares `FOO_CMD`, `on_pre_foo`, `on_foo`, `can_foo` and `CAN_FOO_VAR`. The example then declares
-<a href=#258 id=258 data-nosnippet>258</a>//! a widget that sends the `FOO_CMD` to itself on init and receives it using the event properties.
-<a href=#259 id=259 data-nosnippet>259</a>//!
-<a href=#260 id=260 data-nosnippet>260</a>//! ## Metadata
+<a href=#257 id=257 data-nosnippet>257</a>//! ### Localization
+<a href=#258 id=258 data-nosnippet>258</a>//!
+<a href=#259 id=259 data-nosnippet>259</a>//! The special `l10n!:` metadata enables localization for the other text metadata of the command. It must be the first
+<a href=#260 id=260 data-nosnippet>260</a>//! metadata assign and the value must be a literal `bool` or string `""`, the string defines the localization file.
 <a href=#261 id=261 data-nosnippet>261</a>//!
-<a href=#262 id=262 data-nosnippet>262</a>//! All commands provide an [`Command::with_meta`] access point for reading and writing arbitrary metadata. Usually
-<a href=#263 id=263 data-nosnippet>263</a>//! metadata is declared following the [command extensions] pattern. In the example above the `name`, `info` and `shortcut`
-<a href=#264 id=264 data-nosnippet>264</a>//! are actually command extensions declared as [`CommandNameExt`], [`CommandInfoExt`] and [`CommandShortcutExt`].
+<a href=#262 id=262 data-nosnippet>262</a>//! See the [`l10n`](crate::zng::l10n#commands) module docs om commands for more details.
+<a href=#263 id=263 data-nosnippet>263</a>//!
+<a href=#264 id=264 data-nosnippet>264</a>//! ## Scopes
 <a href=#265 id=265 data-nosnippet>265</a>//!
-<a href=#266 id=266 data-nosnippet>266</a>//! [command extensions]: Command#extensions
-<a href=#267 id=267 data-nosnippet>267</a>//! [`CommandShortcutExt`]: crate::gesture::CommandShortcutExt
+<a href=#266 id=266 data-nosnippet>266</a>//! Commands can be scoped to a window or widget, a scoped command is a different instance of [`Command`], it
+<a href=#267 id=267 data-nosnippet>267</a>//! inherits metadata from the main command (app scoped), but metadata can be set for a specific scope.
 <a href=#268 id=268 data-nosnippet>268</a>//!
-<a href=#269 id=269 data-nosnippet>269</a>//! ### Localization
-<a href=#270 id=270 data-nosnippet>270</a>//!
-<a href=#271 id=271 data-nosnippet>271</a>//! The special `l10n!:` metadata enables localization for the other text metadata of the command. It must be the first
-<a href=#272 id=272 data-nosnippet>272</a>//! metadata assign and the value must be a literal `bool` or string `""`, the string defines the localization file.
-<a href=#273 id=273 data-nosnippet>273</a>//!
-<a href=#274 id=274 data-nosnippet>274</a>//! See the [`l10n`](crate::zng::l10n#commands) module docs om commands for more details.
-<a href=#275 id=275 data-nosnippet>275</a>//!
-<a href=#276 id=276 data-nosnippet>276</a>//! ## Scopes
-<a href=#277 id=277 data-nosnippet>277</a>//!
-<a href=#278 id=278 data-nosnippet>278</a>//! Commands can be scoped to a window or widget, a scoped command is a different instance of [`Command`], it
-<a href=#279 id=279 data-nosnippet>279</a>//! inherits metadata from the main command (app scoped), but metadata can be set for a specific scope.
-<a href=#280 id=280 data-nosnippet>280</a>//!
-<a href=#281 id=281 data-nosnippet>281</a>//! ```
-<a href=#282 id=282 data-nosnippet>282</a>//! use zng::prelude::*;
-<a href=#283 id=283 data-nosnippet>283</a>//! use zng::{clipboard, event::CommandArgs};
-<a href=#284 id=284 data-nosnippet>284</a>//!
-<a href=#285 id=285 data-nosnippet>285</a>//! # fn example() {
-<a href=#286 id=286 data-nosnippet>286</a>//! # let _ =
-<a href=#287 id=287 data-nosnippet>287</a>//! Stack!(
-<a href=#288 id=288 data-nosnippet>288</a>//!     top_to_bottom,
-<a href=#289 id=289 data-nosnippet>289</a>//!     5,
-<a href=#290 id=290 data-nosnippet>290</a>//!     ui_vec![
-<a href=#291 id=291 data-nosnippet>291</a>//!         SelectableText! {
-<a href=#292 id=292 data-nosnippet>292</a>//!             id = "print-copy";
-<a href=#293 id=293 data-nosnippet>293</a>//!             txt = "Print Copy";
-<a href=#294 id=294 data-nosnippet>294</a>//!
-<a href=#295 id=295 data-nosnippet>295</a>//!             widget::on_init = hn!(|_| {
-<a href=#296 id=296 data-nosnippet>296</a>//!                 let cmd = clipboard::COPY_CMD.scoped(WIDGET.id());
-<a href=#297 id=297 data-nosnippet>297</a>//!                 cmd.name().set(r#"Print "copy!""#);
-<a href=#298 id=298 data-nosnippet>298</a>//!                 cmd.info().set("");
-<a href=#299 id=299 data-nosnippet>299</a>//!             });
-<a href=#300 id=300 data-nosnippet>300</a>//!             clipboard::on_pre_copy = hn!(|args| {
-<a href=#301 id=301 data-nosnippet>301</a>//!                 args.propagation().stop();
-<a href=#302 id=302 data-nosnippet>302</a>//!                 println!("copy!");
-<a href=#303 id=303 data-nosnippet>303</a>//!             });
-<a href=#304 id=304 data-nosnippet>304</a>//!         },
-<a href=#305 id=305 data-nosnippet>305</a>//!         SelectableText! {
-<a href=#306 id=306 data-nosnippet>306</a>//!             id = "default-copy";
-<a href=#307 id=307 data-nosnippet>307</a>//!             txt = "Default Copy";
-<a href=#308 id=308 data-nosnippet>308</a>//!         },
-<a href=#309 id=309 data-nosnippet>309</a>//!         Button!(clipboard::COPY_CMD.scoped(WidgetId::named("print-copy"))),
-<a href=#310 id=310 data-nosnippet>310</a>//!         Button!(clipboard::COPY_CMD.scoped(WidgetId::named("default-copy"))),
-<a href=#311 id=311 data-nosnippet>311</a>//!         Button! {
-<a href=#312 id=312 data-nosnippet>312</a>//!             cmd = clipboard::COPY_CMD.focus_scoped();
-<a href=#313 id=313 data-nosnippet>313</a>//!             zng::focus::alt_focus_scope = true;
-<a href=#314 id=314 data-nosnippet>314</a>//!         },
-<a href=#315 id=315 data-nosnippet>315</a>//!     ]
-<a href=#316 id=316 data-nosnippet>316</a>//! )
-<a href=#317 id=317 data-nosnippet>317</a>//! # ; }
-<a href=#318 id=318 data-nosnippet>318</a>//! ```
-<a href=#319 id=319 data-nosnippet>319</a>//!
-<a href=#320 id=320 data-nosnippet>320</a>//! The example above overrides the metadata and implementation of the copy command for the "print-copy" widget, buttons
-<a href=#321 id=321 data-nosnippet>321</a>//! targeting that widget show the new metadata.
-<a href=#322 id=322 data-nosnippet>322</a>//!
-<a href=#323 id=323 data-nosnippet>323</a>//! Widgets should prefer subscribing only to the command scoped to the widget. App scoped commands target all subscribers,
-<a href=#324 id=324 data-nosnippet>324</a>//! widget scoped commands target the widget only.
-<a href=#325 id=325 data-nosnippet>325</a>//!
-<a href=#326 id=326 data-nosnippet>326</a>//! # Full API
-<a href=#327 id=327 data-nosnippet>327</a>//!
-<a href=#328 id=328 data-nosnippet>328</a>//! See [`zng_app::event`] for the full event API.
-<a href=#329 id=329 data-nosnippet>329</a>
-<a href=#330 id=330 data-nosnippet>330</a></span><span class="kw">pub use </span>zng_app::event::{
-<a href=#331 id=331 data-nosnippet>331</a>    AnyEvent, AnyEventArgs, AppCommandArgs, Command, CommandArgs, CommandHandle, CommandInfoExt, CommandMeta, CommandMetaVar,
-<a href=#332 id=332 data-nosnippet>332</a>    CommandMetaVarId, CommandNameExt, CommandParam, CommandScope, EVENTS, Event, EventArgs, EventHandle, EventHandles,
-<a href=#333 id=333 data-nosnippet>333</a>    EventPropagationHandle, command, event, event_args,
-<a href=#334 id=334 data-nosnippet>334</a>};
-<a href=#335 id=335 data-nosnippet>335</a><span class="kw">pub use </span>zng_wgt::node::{command_property, event_property, on_command, on_event, on_pre_command, on_pre_event};</code></pre></div></section></main></body></html>
+<a href=#269 id=269 data-nosnippet>269</a>//! ```
+<a href=#270 id=270 data-nosnippet>270</a>//! use zng::prelude::*;
+<a href=#271 id=271 data-nosnippet>271</a>//! use zng::{clipboard, event::CommandArgs};
+<a href=#272 id=272 data-nosnippet>272</a>//!
+<a href=#273 id=273 data-nosnippet>273</a>//! # fn example() {
+<a href=#274 id=274 data-nosnippet>274</a>//! # let _ =
+<a href=#275 id=275 data-nosnippet>275</a>//! Stack!(
+<a href=#276 id=276 data-nosnippet>276</a>//!     top_to_bottom,
+<a href=#277 id=277 data-nosnippet>277</a>//!     5,
+<a href=#278 id=278 data-nosnippet>278</a>//!     ui_vec![
+<a href=#279 id=279 data-nosnippet>279</a>//!         SelectableText! {
+<a href=#280 id=280 data-nosnippet>280</a>//!             id = "print-copy";
+<a href=#281 id=281 data-nosnippet>281</a>//!             txt = "Print Copy";
+<a href=#282 id=282 data-nosnippet>282</a>//!
+<a href=#283 id=283 data-nosnippet>283</a>//!             widget::on_init = hn!(|_| {
+<a href=#284 id=284 data-nosnippet>284</a>//!                 let cmd = clipboard::COPY_CMD.scoped(WIDGET.id());
+<a href=#285 id=285 data-nosnippet>285</a>//!                 cmd.name().set(r#"Print "copy!""#);
+<a href=#286 id=286 data-nosnippet>286</a>//!                 cmd.info().set("");
+<a href=#287 id=287 data-nosnippet>287</a>//!             });
+<a href=#288 id=288 data-nosnippet>288</a>//!             clipboard::on_pre_copy = hn!(|args| {
+<a href=#289 id=289 data-nosnippet>289</a>//!                 args.propagation.stop();
+<a href=#290 id=290 data-nosnippet>290</a>//!                 println!("copy!");
+<a href=#291 id=291 data-nosnippet>291</a>//!             });
+<a href=#292 id=292 data-nosnippet>292</a>//!         },
+<a href=#293 id=293 data-nosnippet>293</a>//!         SelectableText! {
+<a href=#294 id=294 data-nosnippet>294</a>//!             id = "default-copy";
+<a href=#295 id=295 data-nosnippet>295</a>//!             txt = "Default Copy";
+<a href=#296 id=296 data-nosnippet>296</a>//!         },
+<a href=#297 id=297 data-nosnippet>297</a>//!         Button!(clipboard::COPY_CMD.scoped(WidgetId::named("print-copy"))),
+<a href=#298 id=298 data-nosnippet>298</a>//!         Button!(clipboard::COPY_CMD.scoped(WidgetId::named("default-copy"))),
+<a href=#299 id=299 data-nosnippet>299</a>//!         Button! {
+<a href=#300 id=300 data-nosnippet>300</a>//!             cmd = clipboard::COPY_CMD.focus_scoped();
+<a href=#301 id=301 data-nosnippet>301</a>//!             zng::focus::alt_focus_scope = true;
+<a href=#302 id=302 data-nosnippet>302</a>//!         },
+<a href=#303 id=303 data-nosnippet>303</a>//!     ]
+<a href=#304 id=304 data-nosnippet>304</a>//! )
+<a href=#305 id=305 data-nosnippet>305</a>//! # ; }
+<a href=#306 id=306 data-nosnippet>306</a>//! ```
+<a href=#307 id=307 data-nosnippet>307</a>//!
+<a href=#308 id=308 data-nosnippet>308</a>//! The example above overrides the metadata and implementation of the copy command for the "print-copy" widget, buttons
+<a href=#309 id=309 data-nosnippet>309</a>//! targeting that widget show the new metadata.
+<a href=#310 id=310 data-nosnippet>310</a>//!
+<a href=#311 id=311 data-nosnippet>311</a>//! Widgets should prefer subscribing only to the command scoped to the widget. App scoped commands target all subscribers,
+<a href=#312 id=312 data-nosnippet>312</a>//! widget scoped commands target the widget only.
+<a href=#313 id=313 data-nosnippet>313</a>//!
+<a href=#314 id=314 data-nosnippet>314</a>//! # Full API
+<a href=#315 id=315 data-nosnippet>315</a>//!
+<a href=#316 id=316 data-nosnippet>316</a>//! See [`zng_app::event`] for the full event API.
+<a href=#317 id=317 data-nosnippet>317</a>
+<a href=#318 id=318 data-nosnippet>318</a></span><span class="kw">pub use </span>zng_app::event::{
+<a href=#319 id=319 data-nosnippet>319</a>    AnyEvent, AnyEventArgs, Command, CommandArgs, CommandHandle, CommandInfoExt, CommandMeta, CommandMetaVar, CommandMetaVarId,
+<a href=#320 id=320 data-nosnippet>320</a>    CommandNameExt, CommandParam, CommandScope, EVENTS, Event, EventArgs, EventPropagationHandle, EventUpdates, command, event, event_args,
+<a href=#321 id=321 data-nosnippet>321</a>};
+<a href=#322 id=322 data-nosnippet>322</a><span class="kw">pub use </span>zng_wgt::node::{EventNodeBuilder, VarEventNodeBuilder, command_property, event_property};
+</code></pre></div></section></main></body></html>

@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::<span class="kw-2">*</span>;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::<span class="kw-2">*</span>;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::fmt;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>node::CONTEXT_IMAGE_VAR;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>zng_app::render::ImageRendering;
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>zng_ext_image::{ImageDownscale, ImageLimits};
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>zng_ext_image::{ImageDownscaleMode, ImageEntriesMode, ImageLimits};
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>zng_ext_window::WINDOW_Ext <span class="kw">as _</span>;
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>zng_wgt_window::BlockWindowLoad;
 <a href=#9 id=9 data-nosnippet>9</a>
@@ -143,502 +143,549 @@
 <a href=#143 id=143 data-nosnippet>143</a>    <span class="doccomment">/// Custom resize applied during image decode.
 <a href=#144 id=144 data-nosnippet>144</a>    ///
 <a href=#145 id=145 data-nosnippet>145</a>    /// Is `None` by default.
-<a href=#146 id=146 data-nosnippet>146</a>    </span><span class="kw">pub static </span>IMAGE_DOWNSCALE_VAR: <span class="prelude-ty">Option</span>&lt;ImageDownscale&gt; = <span class="prelude-val">None</span>;
+<a href=#146 id=146 data-nosnippet>146</a>    </span><span class="kw">pub static </span>IMAGE_DOWNSCALE_VAR: <span class="prelude-ty">Option</span>&lt;ImageDownscaleMode&gt; = <span class="prelude-val">None</span>;
 <a href=#147 id=147 data-nosnippet>147</a>
-<a href=#148 id=148 data-nosnippet>148</a>    <span class="doccomment">/// The image layout mode.
-<a href=#149 id=149 data-nosnippet>149</a>    ///
-<a href=#150 id=150 data-nosnippet>150</a>    /// Is [`ImageFit::Contain`] by default.
-<a href=#151 id=151 data-nosnippet>151</a>    </span><span class="kw">pub static </span>IMAGE_FIT_VAR: ImageFit = ImageFit::Contain;
-<a href=#152 id=152 data-nosnippet>152</a>
-<a href=#153 id=153 data-nosnippet>153</a>    <span class="doccomment">/// Auto scaling applied to the image.
-<a href=#154 id=154 data-nosnippet>154</a>    ///
-<a href=#155 id=155 data-nosnippet>155</a>    /// Scales by factor by default.
-<a href=#156 id=156 data-nosnippet>156</a>    </span><span class="kw">pub static </span>IMAGE_AUTO_SCALE_VAR: ImageAutoScale = ImageAutoScale::Factor;
-<a href=#157 id=157 data-nosnippet>157</a>
-<a href=#158 id=158 data-nosnippet>158</a>    <span class="doccomment">/// Scaling applied to the image desired size.
-<a href=#159 id=159 data-nosnippet>159</a>    ///
-<a href=#160 id=160 data-nosnippet>160</a>    /// Does not scale by default, `1.0`.
-<a href=#161 id=161 data-nosnippet>161</a>    </span><span class="kw">pub static </span>IMAGE_SCALE_VAR: Factor2d = Factor2d::identity();
-<a href=#162 id=162 data-nosnippet>162</a>
-<a href=#163 id=163 data-nosnippet>163</a>    <span class="doccomment">/// Align of the image in relation to the image widget final size.
-<a href=#164 id=164 data-nosnippet>164</a>    ///
-<a href=#165 id=165 data-nosnippet>165</a>    /// Is `Align::CENTER` by default.
-<a href=#166 id=166 data-nosnippet>166</a>    </span><span class="kw">pub static </span>IMAGE_ALIGN_VAR: Align = Align::CENTER;
-<a href=#167 id=167 data-nosnippet>167</a>
-<a href=#168 id=168 data-nosnippet>168</a>    <span class="doccomment">/// Offset applied to the image after all measure and arrange.
-<a href=#169 id=169 data-nosnippet>169</a>    </span><span class="kw">pub static </span>IMAGE_OFFSET_VAR: Vector = Vector::default();
+<a href=#148 id=148 data-nosnippet>148</a>    <span class="doccomment">/// Defines what images are decoded from multi image containers.
+<a href=#149 id=149 data-nosnippet>149</a>    </span><span class="kw">pub static </span>IMAGE_ENTRIES_MODE_VAR: ImageEntriesMode = ImageEntriesMode::PRIMARY;
+<a href=#150 id=150 data-nosnippet>150</a>
+<a href=#151 id=151 data-nosnippet>151</a>    <span class="doccomment">/// The image layout mode.
+<a href=#152 id=152 data-nosnippet>152</a>    ///
+<a href=#153 id=153 data-nosnippet>153</a>    /// Is [`ImageFit::Contain`] by default.
+<a href=#154 id=154 data-nosnippet>154</a>    </span><span class="kw">pub static </span>IMAGE_FIT_VAR: ImageFit = ImageFit::Contain;
+<a href=#155 id=155 data-nosnippet>155</a>
+<a href=#156 id=156 data-nosnippet>156</a>    <span class="doccomment">/// Auto scaling applied to the image.
+<a href=#157 id=157 data-nosnippet>157</a>    ///
+<a href=#158 id=158 data-nosnippet>158</a>    /// Scales by factor by default.
+<a href=#159 id=159 data-nosnippet>159</a>    </span><span class="kw">pub static </span>IMAGE_AUTO_SCALE_VAR: ImageAutoScale = ImageAutoScale::Factor;
+<a href=#160 id=160 data-nosnippet>160</a>
+<a href=#161 id=161 data-nosnippet>161</a>    <span class="doccomment">/// Scaling applied to the image desired size.
+<a href=#162 id=162 data-nosnippet>162</a>    ///
+<a href=#163 id=163 data-nosnippet>163</a>    /// Does not scale by default, `1.0`.
+<a href=#164 id=164 data-nosnippet>164</a>    </span><span class="kw">pub static </span>IMAGE_SCALE_VAR: Factor2d = Factor2d::identity();
+<a href=#165 id=165 data-nosnippet>165</a>
+<a href=#166 id=166 data-nosnippet>166</a>    <span class="doccomment">/// Align of the image in relation to the image widget final size.
+<a href=#167 id=167 data-nosnippet>167</a>    ///
+<a href=#168 id=168 data-nosnippet>168</a>    /// Is `Align::CENTER` by default.
+<a href=#169 id=169 data-nosnippet>169</a>    </span><span class="kw">pub static </span>IMAGE_ALIGN_VAR: Align = Align::CENTER;
 <a href=#170 id=170 data-nosnippet>170</a>
-<a href=#171 id=171 data-nosnippet>171</a>    <span class="doccomment">/// Simple clip applied to the image before layout.
-<a href=#172 id=172 data-nosnippet>172</a>    ///
-<a href=#173 id=173 data-nosnippet>173</a>    /// No cropping is done by default.
-<a href=#174 id=174 data-nosnippet>174</a>    </span><span class="kw">pub static </span>IMAGE_CROP_VAR: Rect = Rect::default();
-<a href=#175 id=175 data-nosnippet>175</a>
-<a href=#176 id=176 data-nosnippet>176</a>    <span class="doccomment">/// Pattern repeat applied on the final image.
-<a href=#177 id=177 data-nosnippet>177</a>    ///
-<a href=#178 id=178 data-nosnippet>178</a>    /// Is `ImageRepeat::None` by default.
-<a href=#179 id=179 data-nosnippet>179</a>    </span><span class="kw">pub static </span>IMAGE_REPEAT_VAR: ImageRepeat = ImageRepeat::None;
-<a href=#180 id=180 data-nosnippet>180</a>
-<a href=#181 id=181 data-nosnippet>181</a>    <span class="doccomment">/// Spacing between repeated image copies.
-<a href=#182 id=182 data-nosnippet>182</a>    ///
-<a href=#183 id=183 data-nosnippet>183</a>    /// is `Size::zero` by default.
-<a href=#184 id=184 data-nosnippet>184</a>    </span><span class="kw">pub static </span>IMAGE_REPEAT_SPACING_VAR: Size = Size::zero();
-<a href=#185 id=185 data-nosnippet>185</a>}
-<a href=#186 id=186 data-nosnippet>186</a>
-<a href=#187 id=187 data-nosnippet>187</a><span class="doccomment">/// Sets the [`ImageFit`] of all inner images.
-<a href=#188 id=188 data-nosnippet>188</a>///
-<a href=#189 id=189 data-nosnippet>189</a>/// This property sets the [`IMAGE_FIT_VAR`].
-<a href=#190 id=190 data-nosnippet>190</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_FIT_VAR), widget_impl(Image))]
-<a href=#191 id=191 data-nosnippet>191</a></span><span class="kw">pub fn </span>img_fit(child: <span class="kw">impl </span>IntoUiNode, fit: <span class="kw">impl </span>IntoVar&lt;ImageFit&gt;) -&gt; UiNode {
-<a href=#192 id=192 data-nosnippet>192</a>    with_context_var(child, IMAGE_FIT_VAR, fit)
-<a href=#193 id=193 data-nosnippet>193</a>}
-<a href=#194 id=194 data-nosnippet>194</a>
-<a href=#195 id=195 data-nosnippet>195</a><span class="doccomment">/// Sets the auto scale mode applied to all inner images.
-<a href=#196 id=196 data-nosnippet>196</a>///
-<a href=#197 id=197 data-nosnippet>197</a>/// By default scales by the screen factor so that the image layouts with the same proportional dimensions
-<a href=#198 id=198 data-nosnippet>198</a>/// as other widgets independent of what screen is displaying it.
+<a href=#171 id=171 data-nosnippet>171</a>    <span class="doccomment">/// Offset applied to the image after all measure and arrange.
+<a href=#172 id=172 data-nosnippet>172</a>    </span><span class="kw">pub static </span>IMAGE_OFFSET_VAR: Vector = Vector::default();
+<a href=#173 id=173 data-nosnippet>173</a>
+<a href=#174 id=174 data-nosnippet>174</a>    <span class="doccomment">/// Simple clip applied to the image before layout.
+<a href=#175 id=175 data-nosnippet>175</a>    ///
+<a href=#176 id=176 data-nosnippet>176</a>    /// No cropping is done by default.
+<a href=#177 id=177 data-nosnippet>177</a>    </span><span class="kw">pub static </span>IMAGE_CROP_VAR: Rect = Rect::default();
+<a href=#178 id=178 data-nosnippet>178</a>
+<a href=#179 id=179 data-nosnippet>179</a>    <span class="doccomment">/// Pattern repeat applied on the final image.
+<a href=#180 id=180 data-nosnippet>180</a>    ///
+<a href=#181 id=181 data-nosnippet>181</a>    /// Is `ImageRepeat::None` by default.
+<a href=#182 id=182 data-nosnippet>182</a>    </span><span class="kw">pub static </span>IMAGE_REPEAT_VAR: ImageRepeat = ImageRepeat::None;
+<a href=#183 id=183 data-nosnippet>183</a>
+<a href=#184 id=184 data-nosnippet>184</a>    <span class="doccomment">/// Spacing between repeated image copies.
+<a href=#185 id=185 data-nosnippet>185</a>    ///
+<a href=#186 id=186 data-nosnippet>186</a>    /// is `Size::zero` by default.
+<a href=#187 id=187 data-nosnippet>187</a>    </span><span class="kw">pub static </span>IMAGE_REPEAT_SPACING_VAR: Size = Size::zero();
+<a href=#188 id=188 data-nosnippet>188</a>}
+<a href=#189 id=189 data-nosnippet>189</a>
+<a href=#190 id=190 data-nosnippet>190</a><span class="doccomment">/// Sets the [`ImageFit`] of all inner images.
+<a href=#191 id=191 data-nosnippet>191</a>///
+<a href=#192 id=192 data-nosnippet>192</a>/// This property sets the [`IMAGE_FIT_VAR`].
+<a href=#193 id=193 data-nosnippet>193</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_FIT_VAR), widget_impl(Image))]
+<a href=#194 id=194 data-nosnippet>194</a></span><span class="kw">pub fn </span>img_fit(child: <span class="kw">impl </span>IntoUiNode, fit: <span class="kw">impl </span>IntoVar&lt;ImageFit&gt;) -&gt; UiNode {
+<a href=#195 id=195 data-nosnippet>195</a>    with_context_var(child, IMAGE_FIT_VAR, fit)
+<a href=#196 id=196 data-nosnippet>196</a>}
+<a href=#197 id=197 data-nosnippet>197</a>
+<a href=#198 id=198 data-nosnippet>198</a><span class="doccomment">/// Sets the auto scale mode applied to all inner images.
 <a href=#199 id=199 data-nosnippet>199</a>///
-<a href=#200 id=200 data-nosnippet>200</a>/// Set to `false` to display the original pixel size.
-<a href=#201 id=201 data-nosnippet>201</a>///
-<a href=#202 id=202 data-nosnippet>202</a>/// Set to [`ImageAutoScale::Density`] to display the *print size* in a calibrated screen.
-<a href=#203 id=203 data-nosnippet>203</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_AUTO_SCALE_VAR), widget_impl(Image))]
-<a href=#204 id=204 data-nosnippet>204</a></span><span class="kw">pub fn </span>img_auto_scale(child: <span class="kw">impl </span>IntoUiNode, scale: <span class="kw">impl </span>IntoVar&lt;ImageAutoScale&gt;) -&gt; UiNode {
-<a href=#205 id=205 data-nosnippet>205</a>    with_context_var(child, IMAGE_AUTO_SCALE_VAR, scale)
-<a href=#206 id=206 data-nosnippet>206</a>}
-<a href=#207 id=207 data-nosnippet>207</a>
-<a href=#208 id=208 data-nosnippet>208</a><span class="doccomment">/// Custom scale applied to all inner images.
-<a href=#209 id=209 data-nosnippet>209</a>///
-<a href=#210 id=210 data-nosnippet>210</a>/// By default only [`img_auto_scale`] is done. If this is set it multiplies the auto scale.
-<a href=#211 id=211 data-nosnippet>211</a>///
-<a href=#212 id=212 data-nosnippet>212</a>/// [`img_auto_scale`]: fn@img_auto_scale
-<a href=#213 id=213 data-nosnippet>213</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_SCALE_VAR), widget_impl(Image))]
-<a href=#214 id=214 data-nosnippet>214</a></span><span class="kw">pub fn </span>img_scale(child: <span class="kw">impl </span>IntoUiNode, scale: <span class="kw">impl </span>IntoVar&lt;Factor2d&gt;) -&gt; UiNode {
-<a href=#215 id=215 data-nosnippet>215</a>    with_context_var(child, IMAGE_SCALE_VAR, scale)
-<a href=#216 id=216 data-nosnippet>216</a>}
-<a href=#217 id=217 data-nosnippet>217</a>
-<a href=#218 id=218 data-nosnippet>218</a><span class="doccomment">/// Sets the [`Align`] of all inner images within each image widget area.
-<a href=#219 id=219 data-nosnippet>219</a>///
-<a href=#220 id=220 data-nosnippet>220</a>/// If the image is smaller then the widget area it is aligned like normal, if it is larger the "viewport" it is aligned to clip,
-<a href=#221 id=221 data-nosnippet>221</a>/// for example, alignment [`BOTTOM_RIGHT`] makes a smaller image sit at the bottom-right of the widget and makes
-<a href=#222 id=222 data-nosnippet>222</a>/// a larger image bottom-right fill the widget, clipping the rest.
-<a href=#223 id=223 data-nosnippet>223</a>///
-<a href=#224 id=224 data-nosnippet>224</a>/// By default the alignment is [`CENTER`]. The [`BASELINE`] alignment is treaded the same as [`BOTTOM`].
-<a href=#225 id=225 data-nosnippet>225</a>///
-<a href=#226 id=226 data-nosnippet>226</a>/// [`BOTTOM_RIGHT`]: zng_wgt::prelude::Align::BOTTOM_RIGHT
-<a href=#227 id=227 data-nosnippet>227</a>/// [`CENTER`]: zng_wgt::prelude::Align::CENTER
-<a href=#228 id=228 data-nosnippet>228</a>/// [`BASELINE`]: zng_wgt::prelude::Align::BASELINE
-<a href=#229 id=229 data-nosnippet>229</a>/// [`BOTTOM`]: zng_wgt::prelude::Align::BOTTOM
-<a href=#230 id=230 data-nosnippet>230</a>/// [`Align`]: zng_wgt::prelude::Align
-<a href=#231 id=231 data-nosnippet>231</a>/// [`img_align`]: fn@crate::img_align
-<a href=#232 id=232 data-nosnippet>232</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ALIGN_VAR), widget_impl(Image))]
-<a href=#233 id=233 data-nosnippet>233</a></span><span class="kw">pub fn </span>img_align(child: <span class="kw">impl </span>IntoUiNode, align: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; UiNode {
-<a href=#234 id=234 data-nosnippet>234</a>    with_context_var(child, IMAGE_ALIGN_VAR, align)
-<a href=#235 id=235 data-nosnippet>235</a>}
-<a href=#236 id=236 data-nosnippet>236</a>
-<a href=#237 id=237 data-nosnippet>237</a><span class="doccomment">/// Sets a [`Point`] that is an offset applied to all inner images within each image widget area.
-<a href=#238 id=238 data-nosnippet>238</a>///
-<a href=#239 id=239 data-nosnippet>239</a>/// Relative values are calculated from the widget final size. Note that this is different the applying the
-<a href=#240 id=240 data-nosnippet>240</a>/// `offset` property on the widget itself, the widget is not moved just the image within the widget area.
-<a href=#241 id=241 data-nosnippet>241</a>///
-<a href=#242 id=242 data-nosnippet>242</a>/// This property sets the [`IMAGE_OFFSET_VAR`]. By default no offset is applied.
-<a href=#243 id=243 data-nosnippet>243</a>///
-<a href=#244 id=244 data-nosnippet>244</a>/// [`img_offset`]: fn@crate::img_offset
-<a href=#245 id=245 data-nosnippet>245</a>/// [`Point`]: zng_wgt::prelude::Point
-<a href=#246 id=246 data-nosnippet>246</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_OFFSET_VAR), widget_impl(Image))]
-<a href=#247 id=247 data-nosnippet>247</a></span><span class="kw">pub fn </span>img_offset(child: <span class="kw">impl </span>IntoUiNode, offset: <span class="kw">impl </span>IntoVar&lt;Vector&gt;) -&gt; UiNode {
-<a href=#248 id=248 data-nosnippet>248</a>    with_context_var(child, IMAGE_OFFSET_VAR, offset)
-<a href=#249 id=249 data-nosnippet>249</a>}
-<a href=#250 id=250 data-nosnippet>250</a>
-<a href=#251 id=251 data-nosnippet>251</a><span class="doccomment">/// Sets a [`Rect`] that is a clip applied to all inner images before their layout.
+<a href=#200 id=200 data-nosnippet>200</a>/// By default scales by the screen factor so that the image layouts with the same proportional dimensions
+<a href=#201 id=201 data-nosnippet>201</a>/// as other widgets independent of what screen is displaying it.
+<a href=#202 id=202 data-nosnippet>202</a>///
+<a href=#203 id=203 data-nosnippet>203</a>/// Set to `false` to display the original pixel size.
+<a href=#204 id=204 data-nosnippet>204</a>///
+<a href=#205 id=205 data-nosnippet>205</a>/// Set to [`ImageAutoScale::Density`] to display the *print size* in a calibrated screen.
+<a href=#206 id=206 data-nosnippet>206</a>///
+<a href=#207 id=207 data-nosnippet>207</a>/// This property sets the [`IMAGE_AUTO_SCALE_VAR`].
+<a href=#208 id=208 data-nosnippet>208</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_AUTO_SCALE_VAR), widget_impl(Image))]
+<a href=#209 id=209 data-nosnippet>209</a></span><span class="kw">pub fn </span>img_auto_scale(child: <span class="kw">impl </span>IntoUiNode, scale: <span class="kw">impl </span>IntoVar&lt;ImageAutoScale&gt;) -&gt; UiNode {
+<a href=#210 id=210 data-nosnippet>210</a>    with_context_var(child, IMAGE_AUTO_SCALE_VAR, scale)
+<a href=#211 id=211 data-nosnippet>211</a>}
+<a href=#212 id=212 data-nosnippet>212</a>
+<a href=#213 id=213 data-nosnippet>213</a><span class="doccomment">/// Custom scale applied to all inner images.
+<a href=#214 id=214 data-nosnippet>214</a>///
+<a href=#215 id=215 data-nosnippet>215</a>/// By default only [`img_auto_scale`] is done. If this is set it multiplies the auto scale.
+<a href=#216 id=216 data-nosnippet>216</a>///
+<a href=#217 id=217 data-nosnippet>217</a>/// This property sets the [`IMAGE_SCALE_VAR`].
+<a href=#218 id=218 data-nosnippet>218</a>///
+<a href=#219 id=219 data-nosnippet>219</a>/// [`img_auto_scale`]: fn@img_auto_scale
+<a href=#220 id=220 data-nosnippet>220</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_SCALE_VAR), widget_impl(Image))]
+<a href=#221 id=221 data-nosnippet>221</a></span><span class="kw">pub fn </span>img_scale(child: <span class="kw">impl </span>IntoUiNode, scale: <span class="kw">impl </span>IntoVar&lt;Factor2d&gt;) -&gt; UiNode {
+<a href=#222 id=222 data-nosnippet>222</a>    with_context_var(child, IMAGE_SCALE_VAR, scale)
+<a href=#223 id=223 data-nosnippet>223</a>}
+<a href=#224 id=224 data-nosnippet>224</a>
+<a href=#225 id=225 data-nosnippet>225</a><span class="doccomment">/// Sets the [`Align`] of all inner images within each image widget area.
+<a href=#226 id=226 data-nosnippet>226</a>///
+<a href=#227 id=227 data-nosnippet>227</a>/// If the image is smaller then the widget area it is aligned like normal, if it is larger the "viewport" it is aligned to clip,
+<a href=#228 id=228 data-nosnippet>228</a>/// for example, alignment [`BOTTOM_RIGHT`] makes a smaller image sit at the bottom-right of the widget and makes
+<a href=#229 id=229 data-nosnippet>229</a>/// a larger image bottom-right fill the widget, clipping the rest.
+<a href=#230 id=230 data-nosnippet>230</a>///
+<a href=#231 id=231 data-nosnippet>231</a>/// By default the alignment is [`CENTER`]. The [`BASELINE`] alignment is treaded the same as [`BOTTOM`].
+<a href=#232 id=232 data-nosnippet>232</a>///
+<a href=#233 id=233 data-nosnippet>233</a>/// This property sets the [`IMAGE_ALIGN_VAR`].
+<a href=#234 id=234 data-nosnippet>234</a>///
+<a href=#235 id=235 data-nosnippet>235</a>/// [`BOTTOM_RIGHT`]: zng_wgt::prelude::Align::BOTTOM_RIGHT
+<a href=#236 id=236 data-nosnippet>236</a>/// [`CENTER`]: zng_wgt::prelude::Align::CENTER
+<a href=#237 id=237 data-nosnippet>237</a>/// [`BASELINE`]: zng_wgt::prelude::Align::BASELINE
+<a href=#238 id=238 data-nosnippet>238</a>/// [`BOTTOM`]: zng_wgt::prelude::Align::BOTTOM
+<a href=#239 id=239 data-nosnippet>239</a>/// [`Align`]: zng_wgt::prelude::Align
+<a href=#240 id=240 data-nosnippet>240</a>/// [`img_align`]: fn@crate::img_align
+<a href=#241 id=241 data-nosnippet>241</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ALIGN_VAR), widget_impl(Image))]
+<a href=#242 id=242 data-nosnippet>242</a></span><span class="kw">pub fn </span>img_align(child: <span class="kw">impl </span>IntoUiNode, align: <span class="kw">impl </span>IntoVar&lt;Align&gt;) -&gt; UiNode {
+<a href=#243 id=243 data-nosnippet>243</a>    with_context_var(child, IMAGE_ALIGN_VAR, align)
+<a href=#244 id=244 data-nosnippet>244</a>}
+<a href=#245 id=245 data-nosnippet>245</a>
+<a href=#246 id=246 data-nosnippet>246</a><span class="doccomment">/// Sets a [`Point`] that is an offset applied to all inner images within each image widget area.
+<a href=#247 id=247 data-nosnippet>247</a>///
+<a href=#248 id=248 data-nosnippet>248</a>/// Relative values are calculated from the widget final size. Note that this is different the applying the
+<a href=#249 id=249 data-nosnippet>249</a>/// `offset` property on the widget itself, the widget is not moved just the image within the widget area.
+<a href=#250 id=250 data-nosnippet>250</a>///
+<a href=#251 id=251 data-nosnippet>251</a>/// This property sets the [`IMAGE_OFFSET_VAR`]. By default no offset is applied.
 <a href=#252 id=252 data-nosnippet>252</a>///
-<a href=#253 id=253 data-nosnippet>253</a>/// Relative values are calculated from the image pixel size, the [`img_scale_density`] is only considered after.
-<a href=#254 id=254 data-nosnippet>254</a>/// Note that more complex clipping can be applied after to the full widget, this property exists primarily to
-<a href=#255 id=255 data-nosnippet>255</a>/// render selections of a [texture atlas].
-<a href=#256 id=256 data-nosnippet>256</a>///
-<a href=#257 id=257 data-nosnippet>257</a>/// By default no cropping is done.
-<a href=#258 id=258 data-nosnippet>258</a>///
-<a href=#259 id=259 data-nosnippet>259</a>/// [`img_scale_density`]: #fn@img_scale_density
-<a href=#260 id=260 data-nosnippet>260</a>/// [texture atlas]: https://en.wikipedia.org/wiki/Texture_atlas
-<a href=#261 id=261 data-nosnippet>261</a>/// [`Rect`]: zng_wgt::prelude::Rect
-<a href=#262 id=262 data-nosnippet>262</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_CROP_VAR), widget_impl(Image))]
-<a href=#263 id=263 data-nosnippet>263</a></span><span class="kw">pub fn </span>img_crop(child: <span class="kw">impl </span>IntoUiNode, crop: <span class="kw">impl </span>IntoVar&lt;Rect&gt;) -&gt; UiNode {
-<a href=#264 id=264 data-nosnippet>264</a>    with_context_var(child, IMAGE_CROP_VAR, crop)
-<a href=#265 id=265 data-nosnippet>265</a>}
-<a href=#266 id=266 data-nosnippet>266</a>
-<a href=#267 id=267 data-nosnippet>267</a><span class="doccomment">/// Sets the [`ImageRepeat`] of all inner images.
-<a href=#268 id=268 data-nosnippet>268</a>///
-<a href=#269 id=269 data-nosnippet>269</a>/// Note that `repeat` converts from `bool` so you can set this property to `img_repeat = true;` to
-<a href=#270 id=270 data-nosnippet>270</a>/// enable repeat in all inner images.
-<a href=#271 id=271 data-nosnippet>271</a>///
-<a href=#272 id=272 data-nosnippet>272</a>/// See also [`img_repeat_spacing`] to control the space between repeated tiles.
-<a href=#273 id=273 data-nosnippet>273</a>///
-<a href=#274 id=274 data-nosnippet>274</a>/// This property sets the [`IMAGE_REPEAT_VAR`].
-<a href=#275 id=275 data-nosnippet>275</a>///
-<a href=#276 id=276 data-nosnippet>276</a>/// [`img_repeat_spacing`]: fn@img_repeat_spacing
-<a href=#277 id=277 data-nosnippet>277</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_REPEAT_VAR), widget_impl(Image))]
-<a href=#278 id=278 data-nosnippet>278</a></span><span class="kw">pub fn </span>img_repeat(child: <span class="kw">impl </span>IntoUiNode, repeat: <span class="kw">impl </span>IntoVar&lt;ImageRepeat&gt;) -&gt; UiNode {
-<a href=#279 id=279 data-nosnippet>279</a>    with_context_var(child, IMAGE_REPEAT_VAR, repeat)
-<a href=#280 id=280 data-nosnippet>280</a>}
-<a href=#281 id=281 data-nosnippet>281</a>
-<a href=#282 id=282 data-nosnippet>282</a><span class="doccomment">/// Sets the spacing between copies of the image if it is repeated.
-<a href=#283 id=283 data-nosnippet>283</a>///
-<a href=#284 id=284 data-nosnippet>284</a>/// Relative lengths are computed on the size of a single repeated tile image, so `100.pct()` is *skips*
-<a href=#285 id=285 data-nosnippet>285</a>/// an entire image of space. The leftover size is set to the space taken by tile images that do not fully
-<a href=#286 id=286 data-nosnippet>286</a>/// fit inside the clip area, `1.lft()` will insert space to cause only fully visible tiles to remain on screen.
-<a href=#287 id=287 data-nosnippet>287</a>///
-<a href=#288 id=288 data-nosnippet>288</a>/// This property sets the [`IMAGE_REPEAT_SPACING_VAR`].
-<a href=#289 id=289 data-nosnippet>289</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_REPEAT_SPACING_VAR), widget_impl(Image))]
-<a href=#290 id=290 data-nosnippet>290</a></span><span class="kw">pub fn </span>img_repeat_spacing(child: <span class="kw">impl </span>IntoUiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; UiNode {
-<a href=#291 id=291 data-nosnippet>291</a>    with_context_var(child, IMAGE_REPEAT_SPACING_VAR, spacing)
-<a href=#292 id=292 data-nosnippet>292</a>}
-<a href=#293 id=293 data-nosnippet>293</a>
-<a href=#294 id=294 data-nosnippet>294</a><span class="doccomment">/// Sets the [`ImageRendering`] of all inner images.
-<a href=#295 id=295 data-nosnippet>295</a>///
-<a href=#296 id=296 data-nosnippet>296</a>/// If the image layout size is not the same as the `source` pixel size the image must be re-scaled
-<a href=#297 id=297 data-nosnippet>297</a>/// during rendering, this property selects what algorithm is used to do this re-scaling.
+<a href=#253 id=253 data-nosnippet>253</a>/// [`img_offset`]: fn@crate::img_offset
+<a href=#254 id=254 data-nosnippet>254</a>/// [`Point`]: zng_wgt::prelude::Point
+<a href=#255 id=255 data-nosnippet>255</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_OFFSET_VAR), widget_impl(Image))]
+<a href=#256 id=256 data-nosnippet>256</a></span><span class="kw">pub fn </span>img_offset(child: <span class="kw">impl </span>IntoUiNode, offset: <span class="kw">impl </span>IntoVar&lt;Vector&gt;) -&gt; UiNode {
+<a href=#257 id=257 data-nosnippet>257</a>    with_context_var(child, IMAGE_OFFSET_VAR, offset)
+<a href=#258 id=258 data-nosnippet>258</a>}
+<a href=#259 id=259 data-nosnippet>259</a>
+<a href=#260 id=260 data-nosnippet>260</a><span class="doccomment">/// Sets a [`Rect`] that is a clip applied to all inner images before their layout.
+<a href=#261 id=261 data-nosnippet>261</a>///
+<a href=#262 id=262 data-nosnippet>262</a>/// Relative values are calculated from the image pixel size, the [`img_scale_density`] is only considered after.
+<a href=#263 id=263 data-nosnippet>263</a>/// Note that more complex clipping can be applied after to the full widget, this property exists primarily to
+<a href=#264 id=264 data-nosnippet>264</a>/// render selections of a [texture atlas].
+<a href=#265 id=265 data-nosnippet>265</a>///
+<a href=#266 id=266 data-nosnippet>266</a>/// By default no cropping is done.
+<a href=#267 id=267 data-nosnippet>267</a>///
+<a href=#268 id=268 data-nosnippet>268</a>/// This property sets the [`IMAGE_CROP_VAR`].
+<a href=#269 id=269 data-nosnippet>269</a>///
+<a href=#270 id=270 data-nosnippet>270</a>/// [`img_scale_density`]: #fn@img_scale_density
+<a href=#271 id=271 data-nosnippet>271</a>/// [texture atlas]: https://en.wikipedia.org/wiki/Texture_atlas
+<a href=#272 id=272 data-nosnippet>272</a>/// [`Rect`]: zng_wgt::prelude::Rect
+<a href=#273 id=273 data-nosnippet>273</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_CROP_VAR), widget_impl(Image))]
+<a href=#274 id=274 data-nosnippet>274</a></span><span class="kw">pub fn </span>img_crop(child: <span class="kw">impl </span>IntoUiNode, crop: <span class="kw">impl </span>IntoVar&lt;Rect&gt;) -&gt; UiNode {
+<a href=#275 id=275 data-nosnippet>275</a>    with_context_var(child, IMAGE_CROP_VAR, crop)
+<a href=#276 id=276 data-nosnippet>276</a>}
+<a href=#277 id=277 data-nosnippet>277</a>
+<a href=#278 id=278 data-nosnippet>278</a><span class="doccomment">/// Sets the [`ImageRepeat`] of all inner images.
+<a href=#279 id=279 data-nosnippet>279</a>///
+<a href=#280 id=280 data-nosnippet>280</a>/// Note that `repeat` converts from `bool` so you can set this property to `img_repeat = true;` to
+<a href=#281 id=281 data-nosnippet>281</a>/// enable repeat in all inner images.
+<a href=#282 id=282 data-nosnippet>282</a>///
+<a href=#283 id=283 data-nosnippet>283</a>/// See also [`img_repeat_spacing`] to control the space between repeated tiles.
+<a href=#284 id=284 data-nosnippet>284</a>///
+<a href=#285 id=285 data-nosnippet>285</a>/// This property sets the [`IMAGE_REPEAT_VAR`].
+<a href=#286 id=286 data-nosnippet>286</a>///
+<a href=#287 id=287 data-nosnippet>287</a>/// [`img_repeat_spacing`]: fn@img_repeat_spacing
+<a href=#288 id=288 data-nosnippet>288</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_REPEAT_VAR), widget_impl(Image))]
+<a href=#289 id=289 data-nosnippet>289</a></span><span class="kw">pub fn </span>img_repeat(child: <span class="kw">impl </span>IntoUiNode, repeat: <span class="kw">impl </span>IntoVar&lt;ImageRepeat&gt;) -&gt; UiNode {
+<a href=#290 id=290 data-nosnippet>290</a>    with_context_var(child, IMAGE_REPEAT_VAR, repeat)
+<a href=#291 id=291 data-nosnippet>291</a>}
+<a href=#292 id=292 data-nosnippet>292</a>
+<a href=#293 id=293 data-nosnippet>293</a><span class="doccomment">/// Sets the spacing between copies of the image if it is repeated.
+<a href=#294 id=294 data-nosnippet>294</a>///
+<a href=#295 id=295 data-nosnippet>295</a>/// Relative lengths are computed on the size of a single repeated tile image, so `100.pct()` is *skips*
+<a href=#296 id=296 data-nosnippet>296</a>/// an entire image of space. The leftover size is set to the space taken by tile images that do not fully
+<a href=#297 id=297 data-nosnippet>297</a>/// fit inside the clip area, `1.lft()` will insert space to cause only fully visible tiles to remain on screen.
 <a href=#298 id=298 data-nosnippet>298</a>///
-<a href=#299 id=299 data-nosnippet>299</a>/// Note that the algorithms used in the renderer value performance over quality and do a good
-<a href=#300 id=300 data-nosnippet>300</a>/// enough job for small or temporary changes in scale only. If the image stays at a very different scale
-<a href=#301 id=301 data-nosnippet>301</a>/// after a short time a CPU re-scale task is automatically started to generate a better quality re-scaling.
-<a href=#302 id=302 data-nosnippet>302</a>///
-<a href=#303 id=303 data-nosnippet>303</a>/// If the image is an app resource known during build time you should consider pre-scaling it to match the screen
-<a href=#304 id=304 data-nosnippet>304</a>/// size at different DPIs using mipmaps.
-<a href=#305 id=305 data-nosnippet>305</a>///
-<a href=#306 id=306 data-nosnippet>306</a>/// This is [`ImageRendering::Auto`] by default.
-<a href=#307 id=307 data-nosnippet>307</a>///
-<a href=#308 id=308 data-nosnippet>308</a>/// [`ImageRendering`]: zng_app::render::ImageRendering
-<a href=#309 id=309 data-nosnippet>309</a>/// [`ImageRendering::Auto`]: zng_app::render::ImageRendering::Auto
-<a href=#310 id=310 data-nosnippet>310</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_RENDERING_VAR), widget_impl(Image))]
-<a href=#311 id=311 data-nosnippet>311</a></span><span class="kw">pub fn </span>img_rendering(child: <span class="kw">impl </span>IntoUiNode, rendering: <span class="kw">impl </span>IntoVar&lt;ImageRendering&gt;) -&gt; UiNode {
-<a href=#312 id=312 data-nosnippet>312</a>    with_context_var(child, IMAGE_RENDERING_VAR, rendering)
-<a href=#313 id=313 data-nosnippet>313</a>}
-<a href=#314 id=314 data-nosnippet>314</a>
-<a href=#315 id=315 data-nosnippet>315</a><span class="doccomment">/// Sets the cache mode of all inner images.
+<a href=#299 id=299 data-nosnippet>299</a>/// This property sets the [`IMAGE_REPEAT_SPACING_VAR`].
+<a href=#300 id=300 data-nosnippet>300</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_REPEAT_SPACING_VAR), widget_impl(Image))]
+<a href=#301 id=301 data-nosnippet>301</a></span><span class="kw">pub fn </span>img_repeat_spacing(child: <span class="kw">impl </span>IntoUiNode, spacing: <span class="kw">impl </span>IntoVar&lt;Size&gt;) -&gt; UiNode {
+<a href=#302 id=302 data-nosnippet>302</a>    with_context_var(child, IMAGE_REPEAT_SPACING_VAR, spacing)
+<a href=#303 id=303 data-nosnippet>303</a>}
+<a href=#304 id=304 data-nosnippet>304</a>
+<a href=#305 id=305 data-nosnippet>305</a><span class="doccomment">/// Sets the [`ImageRendering`] of all inner images.
+<a href=#306 id=306 data-nosnippet>306</a>///
+<a href=#307 id=307 data-nosnippet>307</a>/// If the image layout size is not the same as the `source` pixel size the image must be re-scaled
+<a href=#308 id=308 data-nosnippet>308</a>/// during rendering, this property selects what algorithm is used to do this re-scaling.
+<a href=#309 id=309 data-nosnippet>309</a>///
+<a href=#310 id=310 data-nosnippet>310</a>/// Note that the algorithms used in the renderer value performance over quality and do a good
+<a href=#311 id=311 data-nosnippet>311</a>/// enough job for small or temporary changes in scale only. If the image stays at a very different scale
+<a href=#312 id=312 data-nosnippet>312</a>/// after a short time a CPU re-scale task is automatically started to generate a better quality re-scaling.
+<a href=#313 id=313 data-nosnippet>313</a>///
+<a href=#314 id=314 data-nosnippet>314</a>/// If the image is an app resource known during build time you should consider pre-scaling it to match the screen
+<a href=#315 id=315 data-nosnippet>315</a>/// size at different DPIs using mipmaps.
 <a href=#316 id=316 data-nosnippet>316</a>///
-<a href=#317 id=317 data-nosnippet>317</a>/// Sets if the [`source`] is cached.
+<a href=#317 id=317 data-nosnippet>317</a>/// This is [`ImageRendering::Auto`] by default.
 <a href=#318 id=318 data-nosnippet>318</a>///
-<a href=#319 id=319 data-nosnippet>319</a>/// By default this is `true`, meaning the image is loaded from cache and if not present it is inserted into
-<a href=#320 id=320 data-nosnippet>320</a>/// the cache, the cache lives for the app in the [`IMAGES`] service, the image can be manually removed from cache.
-<a href=#321 id=321 data-nosnippet>321</a>///
-<a href=#322 id=322 data-nosnippet>322</a>/// If set to `false` the image is always loaded and decoded on init or when [`source`] updates and is dropped when
-<a href=#323 id=323 data-nosnippet>323</a>/// the widget is deinited or dropped.
-<a href=#324 id=324 data-nosnippet>324</a>///
-<a href=#325 id=325 data-nosnippet>325</a>/// [`source`]: fn@crate::source
-<a href=#326 id=326 data-nosnippet>326</a>/// [`IMAGES`]: zng_ext_image::IMAGES
-<a href=#327 id=327 data-nosnippet>327</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_CACHE_VAR), widget_impl(Image))]
-<a href=#328 id=328 data-nosnippet>328</a></span><span class="kw">pub fn </span>img_cache(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#329 id=329 data-nosnippet>329</a>    with_context_var(child, IMAGE_CACHE_VAR, enabled)
-<a href=#330 id=330 data-nosnippet>330</a>}
-<a href=#331 id=331 data-nosnippet>331</a>
-<a href=#332 id=332 data-nosnippet>332</a><span class="doccomment">/// Sets custom image load and decode limits.
-<a href=#333 id=333 data-nosnippet>333</a>///
-<a href=#334 id=334 data-nosnippet>334</a>/// If not set or set to `None` the [`IMAGES.limits`] is used.
-<a href=#335 id=335 data-nosnippet>335</a>///
-<a href=#336 id=336 data-nosnippet>336</a>/// See also [`img_downscale`] for a way to still display unexpected large images.
+<a href=#319 id=319 data-nosnippet>319</a>/// This property sets the [`IMAGE_RENDERING_VAR`].
+<a href=#320 id=320 data-nosnippet>320</a>///
+<a href=#321 id=321 data-nosnippet>321</a>/// [`ImageRendering`]: zng_app::render::ImageRendering
+<a href=#322 id=322 data-nosnippet>322</a>/// [`ImageRendering::Auto`]: zng_app::render::ImageRendering::Auto
+<a href=#323 id=323 data-nosnippet>323</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_RENDERING_VAR), widget_impl(Image))]
+<a href=#324 id=324 data-nosnippet>324</a></span><span class="kw">pub fn </span>img_rendering(child: <span class="kw">impl </span>IntoUiNode, rendering: <span class="kw">impl </span>IntoVar&lt;ImageRendering&gt;) -&gt; UiNode {
+<a href=#325 id=325 data-nosnippet>325</a>    with_context_var(child, IMAGE_RENDERING_VAR, rendering)
+<a href=#326 id=326 data-nosnippet>326</a>}
+<a href=#327 id=327 data-nosnippet>327</a>
+<a href=#328 id=328 data-nosnippet>328</a><span class="doccomment">/// Sets the cache mode of all inner images.
+<a href=#329 id=329 data-nosnippet>329</a>///
+<a href=#330 id=330 data-nosnippet>330</a>/// Sets if the [`source`] is cached.
+<a href=#331 id=331 data-nosnippet>331</a>///
+<a href=#332 id=332 data-nosnippet>332</a>/// By default this is `true`, meaning the image is loaded from cache and if not present it is inserted into
+<a href=#333 id=333 data-nosnippet>333</a>/// the cache, the cache lives for the app in the [`IMAGES`] service, the image can be manually removed from cache.
+<a href=#334 id=334 data-nosnippet>334</a>///
+<a href=#335 id=335 data-nosnippet>335</a>/// If set to `false` the image is always loaded and decoded on init or when [`source`] updates and is dropped when
+<a href=#336 id=336 data-nosnippet>336</a>/// the widget is deinited or dropped.
 <a href=#337 id=337 data-nosnippet>337</a>///
-<a href=#338 id=338 data-nosnippet>338</a>/// [`IMAGES.limits`]: zng_ext_image::IMAGES::limits
-<a href=#339 id=339 data-nosnippet>339</a>/// [`img_downscale`]: fn@img_downscale
-<a href=#340 id=340 data-nosnippet>340</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_LIMITS_VAR), widget_impl(Image))]
-<a href=#341 id=341 data-nosnippet>341</a></span><span class="kw">pub fn </span>img_limits(child: <span class="kw">impl </span>IntoUiNode, limits: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ImageLimits&gt;&gt;) -&gt; UiNode {
-<a href=#342 id=342 data-nosnippet>342</a>    with_context_var(child, IMAGE_LIMITS_VAR, limits)
-<a href=#343 id=343 data-nosnippet>343</a>}
-<a href=#344 id=344 data-nosnippet>344</a>
-<a href=#345 id=345 data-nosnippet>345</a><span class="doccomment">/// Custom pixel resize applied during image load/decode.
-<a href=#346 id=346 data-nosnippet>346</a>///
-<a href=#347 id=347 data-nosnippet>347</a>/// Note that this resize affects the image actual pixel size directly when it is loading to force the image pixels to be within an expected size.
-<a href=#348 id=348 data-nosnippet>348</a>/// This property primary use is as error recover before the [`img_limits`] error happens, you set the limits to the size that should not even
-<a href=#349 id=349 data-nosnippet>349</a>/// be processed and set this property to the maximum size expected.
+<a href=#338 id=338 data-nosnippet>338</a>/// This property sets the [`IMAGE_CACHE_VAR`].
+<a href=#339 id=339 data-nosnippet>339</a>///
+<a href=#340 id=340 data-nosnippet>340</a>/// [`source`]: fn@crate::source
+<a href=#341 id=341 data-nosnippet>341</a>/// [`IMAGES`]: zng_ext_image::IMAGES
+<a href=#342 id=342 data-nosnippet>342</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_CACHE_VAR), widget_impl(Image))]
+<a href=#343 id=343 data-nosnippet>343</a></span><span class="kw">pub fn </span>img_cache(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#344 id=344 data-nosnippet>344</a>    with_context_var(child, IMAGE_CACHE_VAR, enabled)
+<a href=#345 id=345 data-nosnippet>345</a>}
+<a href=#346 id=346 data-nosnippet>346</a>
+<a href=#347 id=347 data-nosnippet>347</a><span class="doccomment">/// Sets custom image load and decode limits.
+<a href=#348 id=348 data-nosnippet>348</a>///
+<a href=#349 id=349 data-nosnippet>349</a>/// If not set or set to `None` the [`IMAGES.limits`] is used.
 <a href=#350 id=350 data-nosnippet>350</a>///
-<a href=#351 id=351 data-nosnippet>351</a>/// Changing this value after an image is already loaded or loading will cause the image to reload, image cache allocates different
-<a href=#352 id=352 data-nosnippet>352</a>/// entries for different downscale values, this means that this property should never be used for responsive resize,use the widget
-<a href=#353 id=353 data-nosnippet>353</a>/// size and other properties to efficiently resize an image on screen.
+<a href=#351 id=351 data-nosnippet>351</a>/// See also [`img_downscale`] for a way to still display unexpected large images.
+<a href=#352 id=352 data-nosnippet>352</a>///
+<a href=#353 id=353 data-nosnippet>353</a>/// This property sets the [`IMAGE_LIMITS_VAR`].
 <a href=#354 id=354 data-nosnippet>354</a>///
 <a href=#355 id=355 data-nosnippet>355</a>/// [`IMAGES.limits`]: zng_ext_image::IMAGES::limits
-<a href=#356 id=356 data-nosnippet>356</a>/// [`img_limits`]: fn@img_limits
-<a href=#357 id=357 data-nosnippet>357</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_DOWNSCALE_VAR), widget_impl(Image))]
-<a href=#358 id=358 data-nosnippet>358</a></span><span class="kw">pub fn </span>img_downscale(child: <span class="kw">impl </span>IntoUiNode, downscale: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ImageDownscale&gt;&gt;) -&gt; UiNode {
-<a href=#359 id=359 data-nosnippet>359</a>    with_context_var(child, IMAGE_DOWNSCALE_VAR, downscale)
+<a href=#356 id=356 data-nosnippet>356</a>/// [`img_downscale`]: fn@img_downscale
+<a href=#357 id=357 data-nosnippet>357</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_LIMITS_VAR), widget_impl(Image))]
+<a href=#358 id=358 data-nosnippet>358</a></span><span class="kw">pub fn </span>img_limits(child: <span class="kw">impl </span>IntoUiNode, limits: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ImageLimits&gt;&gt;) -&gt; UiNode {
+<a href=#359 id=359 data-nosnippet>359</a>    with_context_var(child, IMAGE_LIMITS_VAR, limits)
 <a href=#360 id=360 data-nosnippet>360</a>}
 <a href=#361 id=361 data-nosnippet>361</a>
-<a href=#362 id=362 data-nosnippet>362</a><span class="doccomment">/// If the [`CONTEXT_IMAGE_VAR`] is an error.
-<a href=#363 id=363 data-nosnippet>363</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
-<a href=#364 id=364 data-nosnippet>364</a></span><span class="kw">pub fn </span>is_error(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#365 id=365 data-nosnippet>365</a>    bind_state(child, CONTEXT_IMAGE_VAR.map(|m| m.is_error()), state)
-<a href=#366 id=366 data-nosnippet>366</a>}
-<a href=#367 id=367 data-nosnippet>367</a>
-<a href=#368 id=368 data-nosnippet>368</a><span class="doccomment">/// If the [`CONTEXT_IMAGE_VAR`] has successfully loaded.
-<a href=#369 id=369 data-nosnippet>369</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
-<a href=#370 id=370 data-nosnippet>370</a></span><span class="kw">pub fn </span>is_loaded(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#371 id=371 data-nosnippet>371</a>    bind_state(child, CONTEXT_IMAGE_VAR.map(|m| m.is_loaded()), state)
-<a href=#372 id=372 data-nosnippet>372</a>}
-<a href=#373 id=373 data-nosnippet>373</a>
-<a href=#374 id=374 data-nosnippet>374</a><span class="doccomment">/// Gets the [`CONTEXT_IMAGE_VAR`].
-<a href=#375 id=375 data-nosnippet>375</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
-<a href=#376 id=376 data-nosnippet>376</a></span><span class="kw">pub fn </span>get_img(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;Img&gt;&gt;) -&gt; UiNode {
-<a href=#377 id=377 data-nosnippet>377</a>    bind_state(child, CONTEXT_IMAGE_VAR.map_into(), state)
-<a href=#378 id=378 data-nosnippet>378</a>}
-<a href=#379 id=379 data-nosnippet>379</a>
-<a href=#380 id=380 data-nosnippet>380</a><span class="doccomment">/// Gets the [`CONTEXT_IMAGE_VAR`] ideal size.
-<a href=#381 id=381 data-nosnippet>381</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
-<a href=#382 id=382 data-nosnippet>382</a></span><span class="kw">pub fn </span>get_img_layout_size(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;PxSize&gt;) -&gt; UiNode {
-<a href=#383 id=383 data-nosnippet>383</a>    <span class="kw">let </span>state = state.into_var();
-<a href=#384 id=384 data-nosnippet>384</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
-<a href=#385 id=385 data-nosnippet>385</a>        <span class="kw">if let </span>UiNodeOp::Layout { .. } = op {
-<a href=#386 id=386 data-nosnippet>386</a>            <span class="kw">let </span>size = CONTEXT_IMAGE_VAR.with(|img| img.layout_size(<span class="kw-2">&amp;</span>LAYOUT.metrics()));
-<a href=#387 id=387 data-nosnippet>387</a>            <span class="kw">if </span>state.get() != size {
-<a href=#388 id=388 data-nosnippet>388</a>                state.set(size);
-<a href=#389 id=389 data-nosnippet>389</a>            }
-<a href=#390 id=390 data-nosnippet>390</a>        }
-<a href=#391 id=391 data-nosnippet>391</a>    })
-<a href=#392 id=392 data-nosnippet>392</a>}
-<a href=#393 id=393 data-nosnippet>393</a>
-<a href=#394 id=394 data-nosnippet>394</a><span class="doccomment">/// Sets the [`wgt_fn!`] that is used to create a content for the error message.
+<a href=#362 id=362 data-nosnippet>362</a><span class="doccomment">/// Custom pixel resize applied during image load/decode.
+<a href=#363 id=363 data-nosnippet>363</a>///
+<a href=#364 id=364 data-nosnippet>364</a>/// Note that this resize affects the image actual pixel size directly when it is loading, it can also generate multiple image entries.
+<a href=#365 id=365 data-nosnippet>365</a>///
+<a href=#366 id=366 data-nosnippet>366</a>/// If the image is smaller than the requested size it is not upscaled. If multiple downscale samples are requested they are generated as
+<a href=#367 id=367 data-nosnippet>367</a>/// synthetic [`ImageEntryKind::Reduced`].
+<a href=#368 id=368 data-nosnippet>368</a>///
+<a href=#369 id=369 data-nosnippet>369</a>/// Changing this value after an image is already loaded or loading will cause the image to reload, image cache allocates different
+<a href=#370 id=370 data-nosnippet>370</a>/// entries for different downscale values, prefer setting samples of all possible sizes at once to
+<a href=#371 id=371 data-nosnippet>371</a>/// avoid generating multiple image entries in the cache.
+<a href=#372 id=372 data-nosnippet>372</a>///
+<a href=#373 id=373 data-nosnippet>373</a>/// Rendering large (gigapixel) images can become slow if the image is scaled to fit as render
+<a href=#374 id=374 data-nosnippet>374</a>/// scaling is GPU optimized, generating mipmap alternates here is a good optimization for large image viewers.
+<a href=#375 id=375 data-nosnippet>375</a>///
+<a href=#376 id=376 data-nosnippet>376</a>/// This property sets the [`IMAGE_DOWNSCALE_VAR`].
+<a href=#377 id=377 data-nosnippet>377</a>///
+<a href=#378 id=378 data-nosnippet>378</a>/// [`IMAGES.limits`]: zng_ext_image::IMAGES::limits
+<a href=#379 id=379 data-nosnippet>379</a>/// [`img_limits`]: fn@img_limits
+<a href=#380 id=380 data-nosnippet>380</a>/// [`ImageEntryKind::Reduced`]: zng_ext_image::ImageEntryKind
+<a href=#381 id=381 data-nosnippet>381</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_DOWNSCALE_VAR), widget_impl(Image))]
+<a href=#382 id=382 data-nosnippet>382</a></span><span class="kw">pub fn </span>img_downscale(child: <span class="kw">impl </span>IntoUiNode, downscale: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ImageDownscaleMode&gt;&gt;) -&gt; UiNode {
+<a href=#383 id=383 data-nosnippet>383</a>    with_context_var(child, IMAGE_DOWNSCALE_VAR, downscale)
+<a href=#384 id=384 data-nosnippet>384</a>}
+<a href=#385 id=385 data-nosnippet>385</a>
+<a href=#386 id=386 data-nosnippet>386</a><span class="doccomment">/// Defines what images are decoded from multi image containers.
+<a href=#387 id=387 data-nosnippet>387</a>///
+<a href=#388 id=388 data-nosnippet>388</a>/// By default container types like TIFF or ICO only decode the first/largest image, this property
+<a href=#389 id=389 data-nosnippet>389</a>/// defines if other contained images are also requested.
+<a href=#390 id=390 data-nosnippet>390</a>///
+<a href=#391 id=391 data-nosnippet>391</a>/// If the image contains a [`Reduced`] alternate the best size is used during rendering, this is particularly
+<a href=#392 id=392 data-nosnippet>392</a>/// useful for displaying icon files that have symbolic alternates that are more readable at a smaller size.
+<a href=#393 id=393 data-nosnippet>393</a>///
+<a href=#394 id=394 data-nosnippet>394</a>/// You can also configure [`img_downscale`] to generate a mipmap as an optimization for displaying very large images.
 <a href=#395 id=395 data-nosnippet>395</a>///
-<a href=#396 id=396 data-nosnippet>396</a>/// [`wgt_fn!`]: zng_wgt::wgt_fn
-<a href=#397 id=397 data-nosnippet>397</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ERROR_FN_VAR), widget_impl(Image))]
-<a href=#398 id=398 data-nosnippet>398</a></span><span class="kw">pub fn </span>img_error_fn(child: <span class="kw">impl </span>IntoUiNode, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;ImgErrorArgs&gt;&gt;) -&gt; UiNode {
-<a href=#399 id=399 data-nosnippet>399</a>    with_context_var(child, IMAGE_ERROR_FN_VAR, wgt_fn)
-<a href=#400 id=400 data-nosnippet>400</a>}
-<a href=#401 id=401 data-nosnippet>401</a>
-<a href=#402 id=402 data-nosnippet>402</a><span class="doccomment">/// Sets the [`wgt_fn!`] that is used to create a content for the loading message.
-<a href=#403 id=403 data-nosnippet>403</a>///
-<a href=#404 id=404 data-nosnippet>404</a>/// [`wgt_fn!`]: zng_wgt::wgt_fn
-<a href=#405 id=405 data-nosnippet>405</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_LOADING_FN_VAR), widget_impl(Image))]
-<a href=#406 id=406 data-nosnippet>406</a></span><span class="kw">pub fn </span>img_loading_fn(child: <span class="kw">impl </span>IntoUiNode, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;ImgLoadingArgs&gt;&gt;) -&gt; UiNode {
-<a href=#407 id=407 data-nosnippet>407</a>    with_context_var(child, IMAGE_LOADING_FN_VAR, wgt_fn)
-<a href=#408 id=408 data-nosnippet>408</a>}
-<a href=#409 id=409 data-nosnippet>409</a>
-<a href=#410 id=410 data-nosnippet>410</a><span class="doccomment">/// Arguments for [`img_loading_fn`].
-<a href=#411 id=411 data-nosnippet>411</a>///
-<a href=#412 id=412 data-nosnippet>412</a>/// [`img_loading_fn`]: fn@img_loading_fn
-<a href=#413 id=413 data-nosnippet>413</a></span><span class="attr">#[derive(Clone, Default, Debug, PartialEq)]
-<a href=#414 id=414 data-nosnippet>414</a>#[non_exhaustive]
-<a href=#415 id=415 data-nosnippet>415</a></span><span class="kw">pub struct </span>ImgLoadingArgs {}
-<a href=#416 id=416 data-nosnippet>416</a>
-<a href=#417 id=417 data-nosnippet>417</a><span class="doccomment">/// Arguments for [`on_load`].
-<a href=#418 id=418 data-nosnippet>418</a>///
-<a href=#419 id=419 data-nosnippet>419</a>/// [`on_load`]: fn@on_load
-<a href=#420 id=420 data-nosnippet>420</a></span><span class="attr">#[derive(Clone, Default, Debug)]
-<a href=#421 id=421 data-nosnippet>421</a>#[non_exhaustive]
-<a href=#422 id=422 data-nosnippet>422</a></span><span class="kw">pub struct </span>ImgLoadArgs {}
-<a href=#423 id=423 data-nosnippet>423</a>
-<a href=#424 id=424 data-nosnippet>424</a><span class="doccomment">/// Arguments for [`on_error`] and [`img_error_fn`].
-<a href=#425 id=425 data-nosnippet>425</a>///
-<a href=#426 id=426 data-nosnippet>426</a>/// [`on_error`]: fn@on_error
-<a href=#427 id=427 data-nosnippet>427</a>/// [`img_error_fn`]: fn@img_error_fn
-<a href=#428 id=428 data-nosnippet>428</a></span><span class="attr">#[derive(Clone, Debug, PartialEq)]
-<a href=#429 id=429 data-nosnippet>429</a>#[non_exhaustive]
-<a href=#430 id=430 data-nosnippet>430</a></span><span class="kw">pub struct </span>ImgErrorArgs {
-<a href=#431 id=431 data-nosnippet>431</a>    <span class="doccomment">/// Error message.
-<a href=#432 id=432 data-nosnippet>432</a>    </span><span class="kw">pub </span>error: Txt,
-<a href=#433 id=433 data-nosnippet>433</a>}
-<a href=#434 id=434 data-nosnippet>434</a>
-<a href=#435 id=435 data-nosnippet>435</a><span class="kw">impl </span>ImgErrorArgs {
-<a href=#436 id=436 data-nosnippet>436</a>    <span class="doccomment">/// New args.
-<a href=#437 id=437 data-nosnippet>437</a>    </span><span class="kw">pub fn </span>new(error: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
-<a href=#438 id=438 data-nosnippet>438</a>        <span class="self">Self </span>{ error: error.into() }
-<a href=#439 id=439 data-nosnippet>439</a>    }
-<a href=#440 id=440 data-nosnippet>440</a>}
-<a href=#441 id=441 data-nosnippet>441</a>
-<a href=#442 id=442 data-nosnippet>442</a><span class="doccomment">/// Image load or decode error event.
-<a href=#443 id=443 data-nosnippet>443</a>///
-<a href=#444 id=444 data-nosnippet>444</a>/// This property calls `handler` every time the [`CONTEXT_IMAGE_VAR`] updates with a different error or on the first update
-<a href=#445 id=445 data-nosnippet>445</a>/// after init if the image is already in error on init.
-<a href=#446 id=446 data-nosnippet>446</a>///
-<a href=#447 id=447 data-nosnippet>447</a>/// # Handlers
-<a href=#448 id=448 data-nosnippet>448</a>///
-<a href=#449 id=449 data-nosnippet>449</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
-<a href=#450 id=450 data-nosnippet>450</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
-<a href=#451 id=451 data-nosnippet>451</a>///
-<a href=#452 id=452 data-nosnippet>452</a>/// # Route
-<a href=#453 id=453 data-nosnippet>453</a>///
-<a href=#454 id=454 data-nosnippet>454</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
-<a href=#455 id=455 data-nosnippet>455</a>///
-<a href=#456 id=456 data-nosnippet>456</a>/// [`Handler`]: zng_wgt::prelude::Handler
-<a href=#457 id=457 data-nosnippet>457</a>/// [`hn!`]: zng_wgt::prelude::hn!
-<a href=#458 id=458 data-nosnippet>458</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
-<a href=#459 id=459 data-nosnippet>459</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
-<a href=#460 id=460 data-nosnippet>460</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
-<a href=#461 id=461 data-nosnippet>461</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
-<a href=#462 id=462 data-nosnippet>462</a></span><span class="kw">pub fn </span>on_error(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgErrorArgs&gt;) -&gt; UiNode {
-<a href=#463 id=463 data-nosnippet>463</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
-<a href=#464 id=464 data-nosnippet>464</a>    <span class="kw">let </span><span class="kw-2">mut </span>error = Txt::from_str(<span class="string">""</span>);
-<a href=#465 id=465 data-nosnippet>465</a>    <span class="kw">let </span><span class="kw-2">mut </span>first_update = <span class="bool-val">false</span>;
-<a href=#466 id=466 data-nosnippet>466</a>
-<a href=#467 id=467 data-nosnippet>467</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#468 id=468 data-nosnippet>468</a>        UiNodeOp::Init =&gt; {
-<a href=#469 id=469 data-nosnippet>469</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
-<a href=#470 id=470 data-nosnippet>470</a>
-<a href=#471 id=471 data-nosnippet>471</a>            <span class="kw">if </span>CONTEXT_IMAGE_VAR.with(Img::is_error) {
-<a href=#472 id=472 data-nosnippet>472</a>                first_update = <span class="bool-val">true</span>;
-<a href=#473 id=473 data-nosnippet>473</a>                WIDGET.update();
-<a href=#474 id=474 data-nosnippet>474</a>            }
-<a href=#475 id=475 data-nosnippet>475</a>        }
-<a href=#476 id=476 data-nosnippet>476</a>        UiNodeOp::Deinit =&gt; {
-<a href=#477 id=477 data-nosnippet>477</a>            handler.deinit();
-<a href=#478 id=478 data-nosnippet>478</a>        }
-<a href=#479 id=479 data-nosnippet>479</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#480 id=480 data-nosnippet>480</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
-<a href=#481 id=481 data-nosnippet>481</a>                first_update = <span class="bool-val">false</span>;
-<a href=#482 id=482 data-nosnippet>482</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = new_img.error() {
-<a href=#483 id=483 data-nosnippet>483</a>                    <span class="kw">if </span>error != e {
-<a href=#484 id=484 data-nosnippet>484</a>                        error = e;
-<a href=#485 id=485 data-nosnippet>485</a>                        handler.event(<span class="kw-2">&amp;</span>ImgErrorArgs { error: error.clone() });
-<a href=#486 id=486 data-nosnippet>486</a>                    }
-<a href=#487 id=487 data-nosnippet>487</a>                } <span class="kw">else </span>{
-<a href=#488 id=488 data-nosnippet>488</a>                    error = <span class="string">""</span>.into();
-<a href=#489 id=489 data-nosnippet>489</a>                }
-<a href=#490 id=490 data-nosnippet>490</a>            } <span class="kw">else if </span>std::mem::take(<span class="kw-2">&amp;mut </span>first_update) {
-<a href=#491 id=491 data-nosnippet>491</a>                CONTEXT_IMAGE_VAR.with(|i| {
-<a href=#492 id=492 data-nosnippet>492</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = i.error() {
-<a href=#493 id=493 data-nosnippet>493</a>                        error = e;
-<a href=#494 id=494 data-nosnippet>494</a>                        handler.event(<span class="kw-2">&amp;</span>ImgErrorArgs { error: error.clone() });
-<a href=#495 id=495 data-nosnippet>495</a>                    }
-<a href=#496 id=496 data-nosnippet>496</a>                });
-<a href=#497 id=497 data-nosnippet>497</a>            }
-<a href=#498 id=498 data-nosnippet>498</a>
-<a href=#499 id=499 data-nosnippet>499</a>            handler.update();
-<a href=#500 id=500 data-nosnippet>500</a>        }
-<a href=#501 id=501 data-nosnippet>501</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#502 id=502 data-nosnippet>502</a>    })
-<a href=#503 id=503 data-nosnippet>503</a>}
-<a href=#504 id=504 data-nosnippet>504</a>
-<a href=#505 id=505 data-nosnippet>505</a><span class="doccomment">/// Image loaded event.
-<a href=#506 id=506 data-nosnippet>506</a>///
-<a href=#507 id=507 data-nosnippet>507</a>/// This property calls `handler` every time the [`CONTEXT_IMAGE_VAR`] updates with a successfully loaded image or on the first
-<a href=#508 id=508 data-nosnippet>508</a>/// update after init if the image is already loaded on init.
-<a href=#509 id=509 data-nosnippet>509</a>///
-<a href=#510 id=510 data-nosnippet>510</a>/// # Handlers
-<a href=#511 id=511 data-nosnippet>511</a>///
-<a href=#512 id=512 data-nosnippet>512</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
-<a href=#513 id=513 data-nosnippet>513</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
-<a href=#514 id=514 data-nosnippet>514</a>///
-<a href=#515 id=515 data-nosnippet>515</a>/// # Route
-<a href=#516 id=516 data-nosnippet>516</a>///
-<a href=#517 id=517 data-nosnippet>517</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
-<a href=#518 id=518 data-nosnippet>518</a>///
-<a href=#519 id=519 data-nosnippet>519</a>/// # Layout
-<a href=#520 id=520 data-nosnippet>520</a>///
-<a href=#521 id=521 data-nosnippet>521</a>/// Note that the handler is called on update before the new image is layout, use [`on_load_layout`] to handle after
-<a href=#522 id=522 data-nosnippet>522</a>/// the new image is layout.
-<a href=#523 id=523 data-nosnippet>523</a>///
-<a href=#524 id=524 data-nosnippet>524</a>/// [`Handler`]: zng_wgt::prelude::Handler
-<a href=#525 id=525 data-nosnippet>525</a>/// [`hn!`]: zng_wgt::prelude::hn!
-<a href=#526 id=526 data-nosnippet>526</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
-<a href=#527 id=527 data-nosnippet>527</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
-<a href=#528 id=528 data-nosnippet>528</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
-<a href=#529 id=529 data-nosnippet>529</a>/// [`on_load_layout`]: fn@on_load_layout
-<a href=#530 id=530 data-nosnippet>530</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
-<a href=#531 id=531 data-nosnippet>531</a></span><span class="kw">pub fn </span>on_load(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
-<a href=#532 id=532 data-nosnippet>532</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
-<a href=#533 id=533 data-nosnippet>533</a>    <span class="kw">let </span><span class="kw-2">mut </span>first_update = <span class="bool-val">false</span>;
-<a href=#534 id=534 data-nosnippet>534</a>
-<a href=#535 id=535 data-nosnippet>535</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#536 id=536 data-nosnippet>536</a>        UiNodeOp::Init =&gt; {
-<a href=#537 id=537 data-nosnippet>537</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
-<a href=#538 id=538 data-nosnippet>538</a>
-<a href=#539 id=539 data-nosnippet>539</a>            <span class="kw">if </span>CONTEXT_IMAGE_VAR.with(Img::is_loaded) {
-<a href=#540 id=540 data-nosnippet>540</a>                first_update = <span class="bool-val">true</span>;
-<a href=#541 id=541 data-nosnippet>541</a>                WIDGET.update();
-<a href=#542 id=542 data-nosnippet>542</a>            }
-<a href=#543 id=543 data-nosnippet>543</a>        }
-<a href=#544 id=544 data-nosnippet>544</a>        UiNodeOp::Deinit =&gt; {
-<a href=#545 id=545 data-nosnippet>545</a>            handler.deinit();
+<a href=#396 id=396 data-nosnippet>396</a>/// Note that although it is possible to request multi pages here the widget does not support pages, it always displays the
+<a href=#397 id=397 data-nosnippet>397</a>/// first/primary page. The image pages are decoded if requested and you can access the image variable to get the pages.
+<a href=#398 id=398 data-nosnippet>398</a>///
+<a href=#399 id=399 data-nosnippet>399</a>/// This property sets the [`IMAGE_ENTRIES_MODE_VAR`].
+<a href=#400 id=400 data-nosnippet>400</a>///
+<a href=#401 id=401 data-nosnippet>401</a>/// [`Reduced`]: zng_ext_image::ImageEntryKind::Reduced
+<a href=#402 id=402 data-nosnippet>402</a>/// [`img_downscale`]: fn@[`img_downscale`]
+<a href=#403 id=403 data-nosnippet>403</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ENTRIES_MODE_VAR), widget_impl(Image))]
+<a href=#404 id=404 data-nosnippet>404</a></span><span class="kw">pub fn </span>img_entries_mode(child: <span class="kw">impl </span>IntoUiNode, mode: <span class="kw">impl </span>IntoVar&lt;ImageEntriesMode&gt;) -&gt; UiNode {
+<a href=#405 id=405 data-nosnippet>405</a>    with_context_var(child, IMAGE_ENTRIES_MODE_VAR, mode)
+<a href=#406 id=406 data-nosnippet>406</a>}
+<a href=#407 id=407 data-nosnippet>407</a>
+<a href=#408 id=408 data-nosnippet>408</a><span class="doccomment">/// If the [`CONTEXT_IMAGE_VAR`] is an error.
+<a href=#409 id=409 data-nosnippet>409</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
+<a href=#410 id=410 data-nosnippet>410</a></span><span class="kw">pub fn </span>is_error(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#411 id=411 data-nosnippet>411</a>    bind_state(child, CONTEXT_IMAGE_VAR.map(|m| m.is_error()), state)
+<a href=#412 id=412 data-nosnippet>412</a>}
+<a href=#413 id=413 data-nosnippet>413</a>
+<a href=#414 id=414 data-nosnippet>414</a><span class="doccomment">/// If the [`CONTEXT_IMAGE_VAR`] has successfully loaded.
+<a href=#415 id=415 data-nosnippet>415</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
+<a href=#416 id=416 data-nosnippet>416</a></span><span class="kw">pub fn </span>is_loaded(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#417 id=417 data-nosnippet>417</a>    bind_state(child, CONTEXT_IMAGE_VAR.map(|m| m.is_loaded()), state)
+<a href=#418 id=418 data-nosnippet>418</a>}
+<a href=#419 id=419 data-nosnippet>419</a>
+<a href=#420 id=420 data-nosnippet>420</a><span class="doccomment">/// Gets the [`CONTEXT_IMAGE_VAR`].
+<a href=#421 id=421 data-nosnippet>421</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
+<a href=#422 id=422 data-nosnippet>422</a></span><span class="kw">pub fn </span>get_img(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ImageEntry&gt;&gt;) -&gt; UiNode {
+<a href=#423 id=423 data-nosnippet>423</a>    bind_state(child, CONTEXT_IMAGE_VAR.map_into(), state)
+<a href=#424 id=424 data-nosnippet>424</a>}
+<a href=#425 id=425 data-nosnippet>425</a>
+<a href=#426 id=426 data-nosnippet>426</a><span class="doccomment">/// Gets the [`CONTEXT_IMAGE_VAR`] ideal size.
+<a href=#427 id=427 data-nosnippet>427</a></span><span class="attr">#[property(LAYOUT, widget_impl(Image))]
+<a href=#428 id=428 data-nosnippet>428</a></span><span class="kw">pub fn </span>get_img_layout_size(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;PxSize&gt;) -&gt; UiNode {
+<a href=#429 id=429 data-nosnippet>429</a>    <span class="kw">let </span>state = state.into_var();
+<a href=#430 id=430 data-nosnippet>430</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| {
+<a href=#431 id=431 data-nosnippet>431</a>        <span class="kw">if let </span>UiNodeOp::Layout { .. } = op {
+<a href=#432 id=432 data-nosnippet>432</a>            <span class="kw">let </span>size = CONTEXT_IMAGE_VAR.with(|img| img.layout_size(<span class="kw-2">&amp;</span>LAYOUT.metrics()));
+<a href=#433 id=433 data-nosnippet>433</a>            <span class="kw">if </span>state.get() != size {
+<a href=#434 id=434 data-nosnippet>434</a>                state.set(size);
+<a href=#435 id=435 data-nosnippet>435</a>            }
+<a href=#436 id=436 data-nosnippet>436</a>        }
+<a href=#437 id=437 data-nosnippet>437</a>    })
+<a href=#438 id=438 data-nosnippet>438</a>}
+<a href=#439 id=439 data-nosnippet>439</a>
+<a href=#440 id=440 data-nosnippet>440</a><span class="doccomment">/// Sets the [`wgt_fn!`] that is used to create a content for the error message.
+<a href=#441 id=441 data-nosnippet>441</a>///
+<a href=#442 id=442 data-nosnippet>442</a>/// [`wgt_fn!`]: zng_wgt::wgt_fn
+<a href=#443 id=443 data-nosnippet>443</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_ERROR_FN_VAR), widget_impl(Image))]
+<a href=#444 id=444 data-nosnippet>444</a></span><span class="kw">pub fn </span>img_error_fn(child: <span class="kw">impl </span>IntoUiNode, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;ImgErrorArgs&gt;&gt;) -&gt; UiNode {
+<a href=#445 id=445 data-nosnippet>445</a>    with_context_var(child, IMAGE_ERROR_FN_VAR, wgt_fn)
+<a href=#446 id=446 data-nosnippet>446</a>}
+<a href=#447 id=447 data-nosnippet>447</a>
+<a href=#448 id=448 data-nosnippet>448</a><span class="doccomment">/// Sets the [`wgt_fn!`] that is used to create a content for the loading message.
+<a href=#449 id=449 data-nosnippet>449</a>///
+<a href=#450 id=450 data-nosnippet>450</a>/// [`wgt_fn!`]: zng_wgt::wgt_fn
+<a href=#451 id=451 data-nosnippet>451</a></span><span class="attr">#[property(CONTEXT, default(IMAGE_LOADING_FN_VAR), widget_impl(Image))]
+<a href=#452 id=452 data-nosnippet>452</a></span><span class="kw">pub fn </span>img_loading_fn(child: <span class="kw">impl </span>IntoUiNode, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;ImgLoadingArgs&gt;&gt;) -&gt; UiNode {
+<a href=#453 id=453 data-nosnippet>453</a>    with_context_var(child, IMAGE_LOADING_FN_VAR, wgt_fn)
+<a href=#454 id=454 data-nosnippet>454</a>}
+<a href=#455 id=455 data-nosnippet>455</a>
+<a href=#456 id=456 data-nosnippet>456</a><span class="doccomment">/// Arguments for [`img_loading_fn`].
+<a href=#457 id=457 data-nosnippet>457</a>///
+<a href=#458 id=458 data-nosnippet>458</a>/// [`img_loading_fn`]: fn@img_loading_fn
+<a href=#459 id=459 data-nosnippet>459</a></span><span class="attr">#[derive(Clone, Default, Debug, PartialEq)]
+<a href=#460 id=460 data-nosnippet>460</a>#[non_exhaustive]
+<a href=#461 id=461 data-nosnippet>461</a></span><span class="kw">pub struct </span>ImgLoadingArgs {}
+<a href=#462 id=462 data-nosnippet>462</a>
+<a href=#463 id=463 data-nosnippet>463</a><span class="doccomment">/// Arguments for [`on_load`].
+<a href=#464 id=464 data-nosnippet>464</a>///
+<a href=#465 id=465 data-nosnippet>465</a>/// [`on_load`]: fn@on_load
+<a href=#466 id=466 data-nosnippet>466</a></span><span class="attr">#[derive(Clone, Default, Debug)]
+<a href=#467 id=467 data-nosnippet>467</a>#[non_exhaustive]
+<a href=#468 id=468 data-nosnippet>468</a></span><span class="kw">pub struct </span>ImgLoadArgs {}
+<a href=#469 id=469 data-nosnippet>469</a>
+<a href=#470 id=470 data-nosnippet>470</a><span class="doccomment">/// Arguments for [`on_error`] and [`img_error_fn`].
+<a href=#471 id=471 data-nosnippet>471</a>///
+<a href=#472 id=472 data-nosnippet>472</a>/// [`on_error`]: fn@on_error
+<a href=#473 id=473 data-nosnippet>473</a>/// [`img_error_fn`]: fn@img_error_fn
+<a href=#474 id=474 data-nosnippet>474</a></span><span class="attr">#[derive(Clone, Debug, PartialEq)]
+<a href=#475 id=475 data-nosnippet>475</a>#[non_exhaustive]
+<a href=#476 id=476 data-nosnippet>476</a></span><span class="kw">pub struct </span>ImgErrorArgs {
+<a href=#477 id=477 data-nosnippet>477</a>    <span class="doccomment">/// Error message.
+<a href=#478 id=478 data-nosnippet>478</a>    </span><span class="kw">pub </span>error: Txt,
+<a href=#479 id=479 data-nosnippet>479</a>}
+<a href=#480 id=480 data-nosnippet>480</a>
+<a href=#481 id=481 data-nosnippet>481</a><span class="kw">impl </span>ImgErrorArgs {
+<a href=#482 id=482 data-nosnippet>482</a>    <span class="doccomment">/// New args.
+<a href=#483 id=483 data-nosnippet>483</a>    </span><span class="kw">pub fn </span>new(error: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
+<a href=#484 id=484 data-nosnippet>484</a>        <span class="self">Self </span>{ error: error.into() }
+<a href=#485 id=485 data-nosnippet>485</a>    }
+<a href=#486 id=486 data-nosnippet>486</a>}
+<a href=#487 id=487 data-nosnippet>487</a>
+<a href=#488 id=488 data-nosnippet>488</a><span class="doccomment">/// Image load or decode error event.
+<a href=#489 id=489 data-nosnippet>489</a>///
+<a href=#490 id=490 data-nosnippet>490</a>/// This property calls `handler` every time the [`CONTEXT_IMAGE_VAR`] updates with a different error or on the first update
+<a href=#491 id=491 data-nosnippet>491</a>/// after init if the image is already in error on init.
+<a href=#492 id=492 data-nosnippet>492</a>///
+<a href=#493 id=493 data-nosnippet>493</a>/// # Handlers
+<a href=#494 id=494 data-nosnippet>494</a>///
+<a href=#495 id=495 data-nosnippet>495</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
+<a href=#496 id=496 data-nosnippet>496</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
+<a href=#497 id=497 data-nosnippet>497</a>///
+<a href=#498 id=498 data-nosnippet>498</a>/// # Route
+<a href=#499 id=499 data-nosnippet>499</a>///
+<a href=#500 id=500 data-nosnippet>500</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
+<a href=#501 id=501 data-nosnippet>501</a>///
+<a href=#502 id=502 data-nosnippet>502</a>/// [`Handler`]: zng_wgt::prelude::Handler
+<a href=#503 id=503 data-nosnippet>503</a>/// [`hn!`]: zng_wgt::prelude::hn!
+<a href=#504 id=504 data-nosnippet>504</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+<a href=#505 id=505 data-nosnippet>505</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+<a href=#506 id=506 data-nosnippet>506</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
+<a href=#507 id=507 data-nosnippet>507</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
+<a href=#508 id=508 data-nosnippet>508</a></span><span class="kw">pub fn </span>on_error(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgErrorArgs&gt;) -&gt; UiNode {
+<a href=#509 id=509 data-nosnippet>509</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
+<a href=#510 id=510 data-nosnippet>510</a>    <span class="kw">let </span><span class="kw-2">mut </span>error = Txt::from_str(<span class="string">""</span>);
+<a href=#511 id=511 data-nosnippet>511</a>    <span class="kw">let </span><span class="kw-2">mut </span>first_update = <span class="bool-val">false</span>;
+<a href=#512 id=512 data-nosnippet>512</a>
+<a href=#513 id=513 data-nosnippet>513</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#514 id=514 data-nosnippet>514</a>        UiNodeOp::Init =&gt; {
+<a href=#515 id=515 data-nosnippet>515</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#516 id=516 data-nosnippet>516</a>
+<a href=#517 id=517 data-nosnippet>517</a>            <span class="kw">if </span>CONTEXT_IMAGE_VAR.with(ImageEntry::is_error) {
+<a href=#518 id=518 data-nosnippet>518</a>                first_update = <span class="bool-val">true</span>;
+<a href=#519 id=519 data-nosnippet>519</a>                WIDGET.update();
+<a href=#520 id=520 data-nosnippet>520</a>            }
+<a href=#521 id=521 data-nosnippet>521</a>        }
+<a href=#522 id=522 data-nosnippet>522</a>        UiNodeOp::Deinit =&gt; {
+<a href=#523 id=523 data-nosnippet>523</a>            handler.deinit();
+<a href=#524 id=524 data-nosnippet>524</a>        }
+<a href=#525 id=525 data-nosnippet>525</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#526 id=526 data-nosnippet>526</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
+<a href=#527 id=527 data-nosnippet>527</a>                first_update = <span class="bool-val">false</span>;
+<a href=#528 id=528 data-nosnippet>528</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = new_img.error() {
+<a href=#529 id=529 data-nosnippet>529</a>                    <span class="kw">if </span><span class="macro">error !</span>= e {
+<a href=#530 id=530 data-nosnippet>530</a>                        error = e;
+<a href=#531 id=531 data-nosnippet>531</a>                        handler.event(<span class="kw-2">&amp;</span>ImgErrorArgs { error: error.clone() });
+<a href=#532 id=532 data-nosnippet>532</a>                    }
+<a href=#533 id=533 data-nosnippet>533</a>                } <span class="kw">else </span>{
+<a href=#534 id=534 data-nosnippet>534</a>                    error = <span class="string">""</span>.into();
+<a href=#535 id=535 data-nosnippet>535</a>                }
+<a href=#536 id=536 data-nosnippet>536</a>            } <span class="kw">else if </span>std::mem::take(<span class="kw-2">&amp;mut </span>first_update) {
+<a href=#537 id=537 data-nosnippet>537</a>                CONTEXT_IMAGE_VAR.with(|i| {
+<a href=#538 id=538 data-nosnippet>538</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = i.error() {
+<a href=#539 id=539 data-nosnippet>539</a>                        error = e;
+<a href=#540 id=540 data-nosnippet>540</a>                        handler.event(<span class="kw-2">&amp;</span>ImgErrorArgs { error: error.clone() });
+<a href=#541 id=541 data-nosnippet>541</a>                    }
+<a href=#542 id=542 data-nosnippet>542</a>                });
+<a href=#543 id=543 data-nosnippet>543</a>            }
+<a href=#544 id=544 data-nosnippet>544</a>
+<a href=#545 id=545 data-nosnippet>545</a>            handler.update();
 <a href=#546 id=546 data-nosnippet>546</a>        }
-<a href=#547 id=547 data-nosnippet>547</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#548 id=548 data-nosnippet>548</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
-<a href=#549 id=549 data-nosnippet>549</a>                first_update = <span class="bool-val">false</span>;
-<a href=#550 id=550 data-nosnippet>550</a>                <span class="kw">if </span>new_img.is_loaded() {
-<a href=#551 id=551 data-nosnippet>551</a>                    handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
-<a href=#552 id=552 data-nosnippet>552</a>                }
-<a href=#553 id=553 data-nosnippet>553</a>            } <span class="kw">else if </span>std::mem::take(<span class="kw-2">&amp;mut </span>first_update) &amp;&amp; CONTEXT_IMAGE_VAR.with(Img::is_loaded) {
-<a href=#554 id=554 data-nosnippet>554</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
-<a href=#555 id=555 data-nosnippet>555</a>            }
-<a href=#556 id=556 data-nosnippet>556</a>
-<a href=#557 id=557 data-nosnippet>557</a>            handler.update();
-<a href=#558 id=558 data-nosnippet>558</a>        }
-<a href=#559 id=559 data-nosnippet>559</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#560 id=560 data-nosnippet>560</a>    })
-<a href=#561 id=561 data-nosnippet>561</a>}
-<a href=#562 id=562 data-nosnippet>562</a>
-<a href=#563 id=563 data-nosnippet>563</a><span class="doccomment">/// Image loaded and layout event.
+<a href=#547 id=547 data-nosnippet>547</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#548 id=548 data-nosnippet>548</a>    })
+<a href=#549 id=549 data-nosnippet>549</a>}
+<a href=#550 id=550 data-nosnippet>550</a>
+<a href=#551 id=551 data-nosnippet>551</a><span class="doccomment">/// Image loaded event.
+<a href=#552 id=552 data-nosnippet>552</a>///
+<a href=#553 id=553 data-nosnippet>553</a>/// This property calls `handler` every time the [`CONTEXT_IMAGE_VAR`] updates with a successfully loaded image or on the first
+<a href=#554 id=554 data-nosnippet>554</a>/// update after init if the image is already loaded on init.
+<a href=#555 id=555 data-nosnippet>555</a>///
+<a href=#556 id=556 data-nosnippet>556</a>/// # Handlers
+<a href=#557 id=557 data-nosnippet>557</a>///
+<a href=#558 id=558 data-nosnippet>558</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
+<a href=#559 id=559 data-nosnippet>559</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
+<a href=#560 id=560 data-nosnippet>560</a>///
+<a href=#561 id=561 data-nosnippet>561</a>/// # Route
+<a href=#562 id=562 data-nosnippet>562</a>///
+<a href=#563 id=563 data-nosnippet>563</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
 <a href=#564 id=564 data-nosnippet>564</a>///
-<a href=#565 id=565 data-nosnippet>565</a>/// This property calls `handler` every first layout after [`on_load`].
+<a href=#565 id=565 data-nosnippet>565</a>/// # Layout
 <a href=#566 id=566 data-nosnippet>566</a>///
-<a href=#567 id=567 data-nosnippet>567</a>/// # Handlers
-<a href=#568 id=568 data-nosnippet>568</a>///
-<a href=#569 id=569 data-nosnippet>569</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
-<a href=#570 id=570 data-nosnippet>570</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
-<a href=#571 id=571 data-nosnippet>571</a>///
-<a href=#572 id=572 data-nosnippet>572</a>/// # Route
-<a href=#573 id=573 data-nosnippet>573</a>///
-<a href=#574 id=574 data-nosnippet>574</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
-<a href=#575 id=575 data-nosnippet>575</a>///
-<a href=#576 id=576 data-nosnippet>576</a>/// [`Handler`]: zng_wgt::prelude::Handler
-<a href=#577 id=577 data-nosnippet>577</a>/// [`hn!`]: zng_wgt::prelude::hn!
-<a href=#578 id=578 data-nosnippet>578</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
-<a href=#579 id=579 data-nosnippet>579</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
-<a href=#580 id=580 data-nosnippet>580</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
-<a href=#581 id=581 data-nosnippet>581</a>/// [`on_load`]: fn@on_load
-<a href=#582 id=582 data-nosnippet>582</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
-<a href=#583 id=583 data-nosnippet>583</a></span><span class="kw">pub fn </span>on_load_layout(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
-<a href=#584 id=584 data-nosnippet>584</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
-<a href=#585 id=585 data-nosnippet>585</a>    <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
-<a href=#586 id=586 data-nosnippet>586</a>
-<a href=#587 id=587 data-nosnippet>587</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#588 id=588 data-nosnippet>588</a>        UiNodeOp::Init =&gt; {
-<a href=#589 id=589 data-nosnippet>589</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
-<a href=#590 id=590 data-nosnippet>590</a>
-<a href=#591 id=591 data-nosnippet>591</a>            update = CONTEXT_IMAGE_VAR.with(Img::is_loaded);
-<a href=#592 id=592 data-nosnippet>592</a>            <span class="kw">if </span>update {
-<a href=#593 id=593 data-nosnippet>593</a>                WIDGET.layout();
-<a href=#594 id=594 data-nosnippet>594</a>            }
-<a href=#595 id=595 data-nosnippet>595</a>        }
-<a href=#596 id=596 data-nosnippet>596</a>        UiNodeOp::Deinit =&gt; {
-<a href=#597 id=597 data-nosnippet>597</a>            handler.deinit();
-<a href=#598 id=598 data-nosnippet>598</a>        }
-<a href=#599 id=599 data-nosnippet>599</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#600 id=600 data-nosnippet>600</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
-<a href=#601 id=601 data-nosnippet>601</a>                update = new_img.is_loaded();
-<a href=#602 id=602 data-nosnippet>602</a>                <span class="kw">if </span>update {
-<a href=#603 id=603 data-nosnippet>603</a>                    WIDGET.layout();
-<a href=#604 id=604 data-nosnippet>604</a>                }
-<a href=#605 id=605 data-nosnippet>605</a>            }
-<a href=#606 id=606 data-nosnippet>606</a>
-<a href=#607 id=607 data-nosnippet>607</a>            handler.update();
-<a href=#608 id=608 data-nosnippet>608</a>        }
-<a href=#609 id=609 data-nosnippet>609</a>        UiNodeOp::Layout { .. } =&gt; {
-<a href=#610 id=610 data-nosnippet>610</a>            <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) &amp;&amp; CONTEXT_IMAGE_VAR.with(Img::is_loaded) {
-<a href=#611 id=611 data-nosnippet>611</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
-<a href=#612 id=612 data-nosnippet>612</a>            }
-<a href=#613 id=613 data-nosnippet>613</a>        }
-<a href=#614 id=614 data-nosnippet>614</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#615 id=615 data-nosnippet>615</a>    })
-<a href=#616 id=616 data-nosnippet>616</a>}
-<a href=#617 id=617 data-nosnippet>617</a>
-<a href=#618 id=618 data-nosnippet>618</a><span class="doccomment">/// Block window load until image is loaded.
+<a href=#567 id=567 data-nosnippet>567</a>/// Note that the handler is called on update before the new image is layout, use [`on_load_layout`] to handle after
+<a href=#568 id=568 data-nosnippet>568</a>/// the new image is layout.
+<a href=#569 id=569 data-nosnippet>569</a>///
+<a href=#570 id=570 data-nosnippet>570</a>/// [`Handler`]: zng_wgt::prelude::Handler
+<a href=#571 id=571 data-nosnippet>571</a>/// [`hn!`]: zng_wgt::prelude::hn!
+<a href=#572 id=572 data-nosnippet>572</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+<a href=#573 id=573 data-nosnippet>573</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+<a href=#574 id=574 data-nosnippet>574</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
+<a href=#575 id=575 data-nosnippet>575</a>/// [`on_load_layout`]: fn@on_load_layout
+<a href=#576 id=576 data-nosnippet>576</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
+<a href=#577 id=577 data-nosnippet>577</a></span><span class="kw">pub fn </span>on_load(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
+<a href=#578 id=578 data-nosnippet>578</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
+<a href=#579 id=579 data-nosnippet>579</a>    <span class="kw">let </span><span class="kw-2">mut </span>first_update = <span class="bool-val">false</span>;
+<a href=#580 id=580 data-nosnippet>580</a>
+<a href=#581 id=581 data-nosnippet>581</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#582 id=582 data-nosnippet>582</a>        UiNodeOp::Init =&gt; {
+<a href=#583 id=583 data-nosnippet>583</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#584 id=584 data-nosnippet>584</a>
+<a href=#585 id=585 data-nosnippet>585</a>            <span class="kw">if </span>CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded) {
+<a href=#586 id=586 data-nosnippet>586</a>                first_update = <span class="bool-val">true</span>;
+<a href=#587 id=587 data-nosnippet>587</a>                WIDGET.update();
+<a href=#588 id=588 data-nosnippet>588</a>            }
+<a href=#589 id=589 data-nosnippet>589</a>        }
+<a href=#590 id=590 data-nosnippet>590</a>        UiNodeOp::Deinit =&gt; {
+<a href=#591 id=591 data-nosnippet>591</a>            handler.deinit();
+<a href=#592 id=592 data-nosnippet>592</a>        }
+<a href=#593 id=593 data-nosnippet>593</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#594 id=594 data-nosnippet>594</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
+<a href=#595 id=595 data-nosnippet>595</a>                first_update = <span class="bool-val">false</span>;
+<a href=#596 id=596 data-nosnippet>596</a>                <span class="kw">if </span>new_img.is_loaded() {
+<a href=#597 id=597 data-nosnippet>597</a>                    handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
+<a href=#598 id=598 data-nosnippet>598</a>                }
+<a href=#599 id=599 data-nosnippet>599</a>            } <span class="kw">else if </span>std::mem::take(<span class="kw-2">&amp;mut </span>first_update) &amp;&amp; CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded) {
+<a href=#600 id=600 data-nosnippet>600</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
+<a href=#601 id=601 data-nosnippet>601</a>            }
+<a href=#602 id=602 data-nosnippet>602</a>
+<a href=#603 id=603 data-nosnippet>603</a>            handler.update();
+<a href=#604 id=604 data-nosnippet>604</a>        }
+<a href=#605 id=605 data-nosnippet>605</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#606 id=606 data-nosnippet>606</a>    })
+<a href=#607 id=607 data-nosnippet>607</a>}
+<a href=#608 id=608 data-nosnippet>608</a>
+<a href=#609 id=609 data-nosnippet>609</a><span class="doccomment">/// Image loaded and layout event.
+<a href=#610 id=610 data-nosnippet>610</a>///
+<a href=#611 id=611 data-nosnippet>611</a>/// This property calls `handler` every first layout after [`on_load`].
+<a href=#612 id=612 data-nosnippet>612</a>///
+<a href=#613 id=613 data-nosnippet>613</a>/// # Handlers
+<a href=#614 id=614 data-nosnippet>614</a>///
+<a href=#615 id=615 data-nosnippet>615</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
+<a href=#616 id=616 data-nosnippet>616</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
+<a href=#617 id=617 data-nosnippet>617</a>///
+<a href=#618 id=618 data-nosnippet>618</a>/// # Route
 <a href=#619 id=619 data-nosnippet>619</a>///
-<a href=#620 id=620 data-nosnippet>620</a>/// If the image widget is in the initial window content a [`WindowLoadingHandle`] is used to delay the window
-<a href=#621 id=621 data-nosnippet>621</a>/// visually opening until the source loads, fails to load or a timeout elapses. By default `true` sets the timeout to 1 second.
-<a href=#622 id=622 data-nosnippet>622</a>///
-<a href=#623 id=623 data-nosnippet>623</a>/// [`WindowLoadingHandle`]: zng_ext_window::WindowLoadingHandle
-<a href=#624 id=624 data-nosnippet>624</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Image))]
-<a href=#625 id=625 data-nosnippet>625</a></span><span class="kw">pub fn </span>img_block_window_load(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoValue&lt;BlockWindowLoad&gt;) -&gt; UiNode {
-<a href=#626 id=626 data-nosnippet>626</a>    <span class="kw">let </span>enabled = enabled.into();
-<a href=#627 id=627 data-nosnippet>627</a>    <span class="kw">let </span><span class="kw-2">mut </span>block = <span class="prelude-val">None</span>;
-<a href=#628 id=628 data-nosnippet>628</a>
-<a href=#629 id=629 data-nosnippet>629</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#630 id=630 data-nosnippet>630</a>        UiNodeOp::Init =&gt; {
-<a href=#631 id=631 data-nosnippet>631</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#620 id=620 data-nosnippet>620</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
+<a href=#621 id=621 data-nosnippet>621</a>///
+<a href=#622 id=622 data-nosnippet>622</a>/// [`Handler`]: zng_wgt::prelude::Handler
+<a href=#623 id=623 data-nosnippet>623</a>/// [`hn!`]: zng_wgt::prelude::hn!
+<a href=#624 id=624 data-nosnippet>624</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+<a href=#625 id=625 data-nosnippet>625</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+<a href=#626 id=626 data-nosnippet>626</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
+<a href=#627 id=627 data-nosnippet>627</a>/// [`on_load`]: fn@on_load
+<a href=#628 id=628 data-nosnippet>628</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
+<a href=#629 id=629 data-nosnippet>629</a></span><span class="kw">pub fn </span>on_load_layout(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
+<a href=#630 id=630 data-nosnippet>630</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
+<a href=#631 id=631 data-nosnippet>631</a>    <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
 <a href=#632 id=632 data-nosnippet>632</a>
-<a href=#633 id=633 data-nosnippet>633</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(delay) = enabled.deadline() {
-<a href=#634 id=634 data-nosnippet>634</a>                block = WINDOW.loading_handle(delay);
-<a href=#635 id=635 data-nosnippet>635</a>            }
-<a href=#636 id=636 data-nosnippet>636</a>        }
-<a href=#637 id=637 data-nosnippet>637</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#638 id=638 data-nosnippet>638</a>            <span class="kw">if </span>block.is_some() &amp;&amp; !CONTEXT_IMAGE_VAR.with(Img::is_loading) {
-<a href=#639 id=639 data-nosnippet>639</a>                block = <span class="prelude-val">None</span>;
+<a href=#633 id=633 data-nosnippet>633</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#634 id=634 data-nosnippet>634</a>        UiNodeOp::Init =&gt; {
+<a href=#635 id=635 data-nosnippet>635</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#636 id=636 data-nosnippet>636</a>
+<a href=#637 id=637 data-nosnippet>637</a>            update = CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded);
+<a href=#638 id=638 data-nosnippet>638</a>            <span class="kw">if </span>update {
+<a href=#639 id=639 data-nosnippet>639</a>                WIDGET.layout();
 <a href=#640 id=640 data-nosnippet>640</a>            }
 <a href=#641 id=641 data-nosnippet>641</a>        }
-<a href=#642 id=642 data-nosnippet>642</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#643 id=643 data-nosnippet>643</a>    })
-<a href=#644 id=644 data-nosnippet>644</a>}</code></pre></div></section></main></body></html>
+<a href=#642 id=642 data-nosnippet>642</a>        UiNodeOp::Deinit =&gt; {
+<a href=#643 id=643 data-nosnippet>643</a>            handler.deinit();
+<a href=#644 id=644 data-nosnippet>644</a>        }
+<a href=#645 id=645 data-nosnippet>645</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#646 id=646 data-nosnippet>646</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
+<a href=#647 id=647 data-nosnippet>647</a>                update = new_img.is_loaded();
+<a href=#648 id=648 data-nosnippet>648</a>                <span class="kw">if </span>update {
+<a href=#649 id=649 data-nosnippet>649</a>                    WIDGET.layout();
+<a href=#650 id=650 data-nosnippet>650</a>                }
+<a href=#651 id=651 data-nosnippet>651</a>            }
+<a href=#652 id=652 data-nosnippet>652</a>
+<a href=#653 id=653 data-nosnippet>653</a>            handler.update();
+<a href=#654 id=654 data-nosnippet>654</a>        }
+<a href=#655 id=655 data-nosnippet>655</a>        UiNodeOp::Layout { .. } =&gt; {
+<a href=#656 id=656 data-nosnippet>656</a>            <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) &amp;&amp; CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded) {
+<a href=#657 id=657 data-nosnippet>657</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
+<a href=#658 id=658 data-nosnippet>658</a>            }
+<a href=#659 id=659 data-nosnippet>659</a>        }
+<a href=#660 id=660 data-nosnippet>660</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#661 id=661 data-nosnippet>661</a>    })
+<a href=#662 id=662 data-nosnippet>662</a>}
+<a href=#663 id=663 data-nosnippet>663</a>
+<a href=#664 id=664 data-nosnippet>664</a><span class="doccomment">/// Block window load until image is loaded.
+<a href=#665 id=665 data-nosnippet>665</a>///
+<a href=#666 id=666 data-nosnippet>666</a>/// If the image widget is in the initial window content a [`WindowLoadingHandle`] is used to delay the window
+<a href=#667 id=667 data-nosnippet>667</a>/// visually opening until the source loads, fails to load or a timeout elapses. By default `true` sets the timeout to 1 second.
+<a href=#668 id=668 data-nosnippet>668</a>///
+<a href=#669 id=669 data-nosnippet>669</a>/// [`WindowLoadingHandle`]: zng_ext_window::WindowLoadingHandle
+<a href=#670 id=670 data-nosnippet>670</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Image))]
+<a href=#671 id=671 data-nosnippet>671</a></span><span class="kw">pub fn </span>img_block_window_load(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoValue&lt;BlockWindowLoad&gt;) -&gt; UiNode {
+<a href=#672 id=672 data-nosnippet>672</a>    <span class="kw">let </span>enabled = enabled.into();
+<a href=#673 id=673 data-nosnippet>673</a>    <span class="kw">let </span><span class="kw-2">mut </span>block = <span class="prelude-val">None</span>;
+<a href=#674 id=674 data-nosnippet>674</a>
+<a href=#675 id=675 data-nosnippet>675</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#676 id=676 data-nosnippet>676</a>        UiNodeOp::Init =&gt; {
+<a href=#677 id=677 data-nosnippet>677</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#678 id=678 data-nosnippet>678</a>
+<a href=#679 id=679 data-nosnippet>679</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(delay) = enabled.deadline() {
+<a href=#680 id=680 data-nosnippet>680</a>                block = WINDOW.loading_handle(delay, <span class="string">"img_block_window_load"</span>);
+<a href=#681 id=681 data-nosnippet>681</a>            }
+<a href=#682 id=682 data-nosnippet>682</a>        }
+<a href=#683 id=683 data-nosnippet>683</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#684 id=684 data-nosnippet>684</a>            <span class="kw">if </span>block.is_some() &amp;&amp; !CONTEXT_IMAGE_VAR.with(ImageEntry::is_loading) {
+<a href=#685 id=685 data-nosnippet>685</a>                block = <span class="prelude-val">None</span>;
+<a href=#686 id=686 data-nosnippet>686</a>            }
+<a href=#687 id=687 data-nosnippet>687</a>        }
+<a href=#688 id=688 data-nosnippet>688</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#689 id=689 data-nosnippet>689</a>    })
+<a href=#690 id=690 data-nosnippet>690</a>}
+</code></pre></div></section></main></body></html>

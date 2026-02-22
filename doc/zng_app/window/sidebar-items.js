@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["WindowMode"],"struct":["MonitorId","WINDOW","WindowCtx","WindowId"]};
+window.SIDEBAR_ITEMS = {"enum":["WindowMode"],"struct":["MonitorId","WINDOW","WINDOWS_APP","WindowCtx","WindowId"],"trait":["WindowsService"]};

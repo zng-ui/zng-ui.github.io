@@ -1,9 +1,9 @@
 (function() {
-    var implementors = Object.fromEntries([["zng",[]],["zng_task",[]]]);
+    var implementors = Object.fromEntries([["zng",[]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":57,"fragment_lengths":[10,16]}
+//{"start":57,"fragment_lengths":[10]}

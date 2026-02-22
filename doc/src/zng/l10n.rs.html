@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/l10n.rs`."><title>l10n.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng/src/l10n.rs`."><title>l10n.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
 </head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng/</div>l10n.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Localization service, sources and other types.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Localized text is declared using the [`l10n!`] macro, it provides a read-only text variable that automatically
@@ -30,7 +30,7 @@
 <a href=#29 id=29 data-nosnippet>29</a>//! ```no_run
 <a href=#30 id=30 data-nosnippet>30</a>//! use zng::prelude::*;
 <a href=#31 id=31 data-nosnippet>31</a>//!
-<a href=#32 id=32 data-nosnippet>32</a>//! APP.defaults().run_window(async {
+<a href=#32 id=32 data-nosnippet>32</a>//! APP.defaults().run_window("main", async {
 <a href=#33 id=33 data-nosnippet>33</a>//!     // start loading localization resources
 <a href=#34 id=34 data-nosnippet>34</a>//!     L10N.load_dir(zng::env::res("l10n"));
 <a href=#35 id=35 data-nosnippet>35</a>//!     // set the app language, by default is the system language
@@ -116,7 +116,7 @@
 <a href=#115 id=115 data-nosnippet>115</a>//! ```
 <a href=#116 id=116 data-nosnippet>116</a>//! # use zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
 <a href=#117 id=117 data-nosnippet>117</a>//! command! {
-<a href=#118 id=118 data-nosnippet>118</a>//!     pub static FOO_CMD = {
+<a href=#118 id=118 data-nosnippet>118</a>//!     pub static FOO_CMD {
 <a href=#119 id=119 data-nosnippet>119</a>//!         l10n!: true,
 <a href=#120 id=120 data-nosnippet>120</a>//!         name: "Foo!",
 <a href=#121 id=121 data-nosnippet>121</a>//!         info: "Does the foo thing",
@@ -137,7 +137,7 @@
 <a href=#136 id=136 data-nosnippet>136</a>//! ```
 <a href=#137 id=137 data-nosnippet>137</a>//! # use zng_app::{event::{command, CommandNameExt, CommandInfoExt}, shortcut::{CommandShortcutExt, shortcut}};
 <a href=#138 id=138 data-nosnippet>138</a>//! command! {
-<a href=#139 id=139 data-nosnippet>139</a>//!     pub static FOO_CMD = {
+<a href=#139 id=139 data-nosnippet>139</a>//!     pub static FOO_CMD {
 <a href=#140 id=140 data-nosnippet>140</a>//!         l10n!: "file",
 <a href=#141 id=141 data-nosnippet>141</a>//!         name: "Foo!",
 <a href=#142 id=142 data-nosnippet>142</a>//!     };
@@ -159,4 +159,5 @@
 <a href=#158 id=158 data-nosnippet>158</a></span><span class="kw">pub use </span>zng_ext_l10n::{
 <a href=#159 id=159 data-nosnippet>159</a>    IntoL10nVar, L10N, L10nArgument, L10nDir, L10nMessageBuilder, L10nSource, L10nTar, LANG_VAR, Lang, LangFilePath, LangMap, LangResource,
 <a href=#160 id=160 data-nosnippet>160</a>    LangResourceStatus, LangResources, Langs, NilL10nSource, SwapL10nSource, l10n, lang,
-<a href=#161 id=161 data-nosnippet>161</a>};</code></pre></div></section></main></body></html>
+<a href=#161 id=161 data-nosnippet>161</a>};
+</code></pre></div></section></main></body></html>

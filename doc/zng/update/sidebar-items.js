@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["UpdateOp"],"struct":["ContextUpdates","EventUpdate","InfoUpdates","LayoutUpdates","OnUpdateHandle","RenderUpdates","UPDATES","UpdateArgs","UpdateDeliveryList","WeakOnUpdateHandle","WidgetUpdates"],"trait":["UpdateSubscribers","UpdatesTraceUiNodeExt"]};
+window.SIDEBAR_ITEMS = {"enum":["UpdateOp"],"struct":["ContextUpdates","InfoUpdates","LayoutUpdates","OnUpdateHandle","RenderUpdates","UPDATES","UpdateArgs","UpdateDeliveryList","WeakOnUpdateHandle","WidgetUpdates"],"trait":["UpdatesTraceUiNodeExt"]};

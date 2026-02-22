@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["FileDialogKind","FileDialogResponse","MsgDialogButtons","MsgDialogIcon","MsgDialogResponse"],"struct":["DialogId","FileDialog","FileDialogFilters","MsgDialog"]};
+window.SIDEBAR_ITEMS = {"enum":["FileDialogKind","FileDialogResponse","MsgDialogButtons","MsgDialogIcon","MsgDialogResponse","NotificationResponse"],"struct":["DialogCapability","DialogId","FileDialog","FileDialogFilters","MsgDialog","Notification","NotificationAction"]};

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-input/src/drag_drop.rs`."><title>drag_drop.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_input/</div>drag_drop.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"drag_drop"</span>)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-input/src/drag_drop.rs`."><title>drag_drop.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_input/</div>drag_drop.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg(feature = <span class="string">"drag_drop"</span>)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//! Drag&amp;drop properties, event properties.
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -6,7 +6,7 @@
 <a href=#6 id=6 data-nosnippet>6</a>    DRAG_END_EVENT, DRAG_HOVERED_EVENT, DRAG_START_EVENT, DROP_EVENT, DragEndArgs, DragHoveredArgs, DragStartArgs, DropArgs,
 <a href=#7 id=7 data-nosnippet>7</a>    WidgetInfoBuilderDragDropExt <span class="kw">as _</span>,
 <a href=#8 id=8 data-nosnippet>8</a>};
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>zng_wgt::{node::bind_state_init, prelude::<span class="kw-2">*</span>};
 <a href=#10 id=10 data-nosnippet>10</a>
 <a href=#11 id=11 data-nosnippet>11</a><span class="doccomment">/// If this widget can be dragged in a drag&amp;drop operation.
 <a href=#12 id=12 data-nosnippet>12</a>///
@@ -37,103 +37,119 @@
 <a href=#37 id=37 data-nosnippet>37</a>    /// To receive this event in a widget set [`draggable`] to `true`.
 <a href=#38 id=38 data-nosnippet>38</a>    ///
 <a href=#39 id=39 data-nosnippet>39</a>    /// [`draggable`]: fn@draggable
-<a href=#40 id=40 data-nosnippet>40</a>    </span><span class="kw">pub fn </span>drag_start {
-<a href=#41 id=41 data-nosnippet>41</a>        event: DRAG_START_EVENT,
-<a href=#42 id=42 data-nosnippet>42</a>        args: DragStartArgs,
-<a href=#43 id=43 data-nosnippet>43</a>    }
-<a href=#44 id=44 data-nosnippet>44</a>
-<a href=#45 id=45 data-nosnippet>45</a>    <span class="doccomment">/// Draggable widget stopped dragging.
-<a href=#46 id=46 data-nosnippet>46</a>    ///
-<a href=#47 id=47 data-nosnippet>47</a>    /// This event is always paired with [`on_drag_start`] first.
-<a href=#48 id=48 data-nosnippet>48</a>    ///
-<a href=#49 id=49 data-nosnippet>49</a>    /// [`on_drag_start`]: fn@on_drag_start
-<a href=#50 id=50 data-nosnippet>50</a>    </span><span class="kw">pub fn </span>drag_end {
-<a href=#51 id=51 data-nosnippet>51</a>        event: DRAG_END_EVENT,
-<a href=#52 id=52 data-nosnippet>52</a>        args: DragEndArgs,
-<a href=#53 id=53 data-nosnippet>53</a>    }
-<a href=#54 id=54 data-nosnippet>54</a>
-<a href=#55 id=55 data-nosnippet>55</a>    <span class="doccomment">/// Dragging cursor entered or exited the widget area and the widget is enabled.
-<a href=#56 id=56 data-nosnippet>56</a>    </span><span class="kw">pub fn </span>drag_hovered {
-<a href=#57 id=57 data-nosnippet>57</a>        event: DRAG_HOVERED_EVENT,
-<a href=#58 id=58 data-nosnippet>58</a>        args: DragHoveredArgs,
-<a href=#59 id=59 data-nosnippet>59</a>        filter: |args| args.is_drag_enter_enabled(),
-<a href=#60 id=60 data-nosnippet>60</a>    }
-<a href=#61 id=61 data-nosnippet>61</a>    <span class="doccomment">/// Dragging cursor entered the widget area and the widget is enabled.
-<a href=#62 id=62 data-nosnippet>62</a>    </span><span class="kw">pub fn </span>drag_enter {
-<a href=#63 id=63 data-nosnippet>63</a>        event: DRAG_HOVERED_EVENT,
-<a href=#64 id=64 data-nosnippet>64</a>        args: DragHoveredArgs,
-<a href=#65 id=65 data-nosnippet>65</a>        filter: |args| args.is_drag_enter_enabled(),
-<a href=#66 id=66 data-nosnippet>66</a>    }
-<a href=#67 id=67 data-nosnippet>67</a>    <span class="doccomment">/// Dragging cursor exited the widget area and the widget is enabled.
-<a href=#68 id=68 data-nosnippet>68</a>    </span><span class="kw">pub fn </span>drag_leave {
-<a href=#69 id=69 data-nosnippet>69</a>        event: DRAG_HOVERED_EVENT,
-<a href=#70 id=70 data-nosnippet>70</a>        args: DragHoveredArgs,
-<a href=#71 id=71 data-nosnippet>71</a>        filter: |args| args.is_drag_leave_enabled(),
-<a href=#72 id=72 data-nosnippet>72</a>    }
-<a href=#73 id=73 data-nosnippet>73</a>
-<a href=#74 id=74 data-nosnippet>74</a>    <span class="doccomment">/// Dragging cursor dropped data in the widget area and the widget is enabled.
-<a href=#75 id=75 data-nosnippet>75</a>    </span><span class="kw">pub fn </span>drop {
-<a href=#76 id=76 data-nosnippet>76</a>        event: DROP_EVENT,
-<a href=#77 id=77 data-nosnippet>77</a>        args: DropArgs,
-<a href=#78 id=78 data-nosnippet>78</a>        filter: |args| args.target.contains_enabled(WIDGET.id()),
-<a href=#79 id=79 data-nosnippet>79</a>    }
-<a href=#80 id=80 data-nosnippet>80</a>}
-<a href=#81 id=81 data-nosnippet>81</a>
-<a href=#82 id=82 data-nosnippet>82</a><span class="doccomment">/// If the dragging cursor is over the widget or a descendant and the widget is enabled.
-<a href=#83 id=83 data-nosnippet>83</a>///
-<a href=#84 id=84 data-nosnippet>84</a>/// The value is always `false` when the widget is not [`ENABLED`], use [`is_drag_hovered_disabled`] to implement *disabled hovered* visuals.
-<a href=#85 id=85 data-nosnippet>85</a>///
-<a href=#86 id=86 data-nosnippet>86</a>/// [`ENABLED`]: Interactivity::ENABLED
-<a href=#87 id=87 data-nosnippet>87</a>/// [`is_drag_hovered_disabled`]: fn@is_drag_hovered_disabled
-<a href=#88 id=88 data-nosnippet>88</a></span><span class="attr">#[property(EVENT)]
-<a href=#89 id=89 data-nosnippet>89</a></span><span class="kw">pub fn </span>is_drag_hovered(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#90 id=90 data-nosnippet>90</a>    event_state(child, state, <span class="bool-val">false</span>, DRAG_HOVERED_EVENT, |args| {
-<a href=#91 id=91 data-nosnippet>91</a>        <span class="kw">if </span>args.is_drag_enter_enabled() {
-<a href=#92 id=92 data-nosnippet>92</a>            <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
-<a href=#93 id=93 data-nosnippet>93</a>        } <span class="kw">else if </span>args.is_drag_leave_enabled() {
-<a href=#94 id=94 data-nosnippet>94</a>            <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
-<a href=#95 id=95 data-nosnippet>95</a>        } <span class="kw">else </span>{
-<a href=#96 id=96 data-nosnippet>96</a>            <span class="prelude-val">None
-<a href=#97 id=97 data-nosnippet>97</a>        </span>}
-<a href=#98 id=98 data-nosnippet>98</a>    })
-<a href=#99 id=99 data-nosnippet>99</a>}
-<a href=#100 id=100 data-nosnippet>100</a>
-<a href=#101 id=101 data-nosnippet>101</a><span class="doccomment">/// If the dragging cursor is over the widget or a descendant and the widget is disabled.
-<a href=#102 id=102 data-nosnippet>102</a></span><span class="attr">#[property(EVENT)]
-<a href=#103 id=103 data-nosnippet>103</a></span><span class="kw">pub fn </span>is_drag_hovered_disabled(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#104 id=104 data-nosnippet>104</a>    event_state(child, state, <span class="bool-val">false</span>, DRAG_HOVERED_EVENT, |args| {
-<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">if </span>args.is_drag_enter_disabled() {
-<a href=#106 id=106 data-nosnippet>106</a>            <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
-<a href=#107 id=107 data-nosnippet>107</a>        } <span class="kw">else if </span>args.is_drag_leave_disabled() {
-<a href=#108 id=108 data-nosnippet>108</a>            <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
-<a href=#109 id=109 data-nosnippet>109</a>        } <span class="kw">else </span>{
-<a href=#110 id=110 data-nosnippet>110</a>            <span class="prelude-val">None
-<a href=#111 id=111 data-nosnippet>111</a>        </span>}
-<a href=#112 id=112 data-nosnippet>112</a>    })
-<a href=#113 id=113 data-nosnippet>113</a>}
-<a href=#114 id=114 data-nosnippet>114</a>
-<a href=#115 id=115 data-nosnippet>115</a><span class="doccomment">/// If the draggable widget is dragging.
-<a href=#116 id=116 data-nosnippet>116</a></span><span class="attr">#[property(EVENT)]
-<a href=#117 id=117 data-nosnippet>117</a></span><span class="kw">pub fn </span>is_dragging(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#118 id=118 data-nosnippet>118</a>    <span class="kw">let </span>state = state.into_var();
-<a href=#119 id=119 data-nosnippet>119</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#120 id=120 data-nosnippet>120</a>        UiNodeOp::Init =&gt; {
-<a href=#121 id=121 data-nosnippet>121</a>            WIDGET.sub_event(<span class="kw-2">&amp;</span>DRAG_START_EVENT).sub_event(<span class="kw-2">&amp;</span>DRAG_END_EVENT);
-<a href=#122 id=122 data-nosnippet>122</a>        }
-<a href=#123 id=123 data-nosnippet>123</a>        UiNodeOp::Deinit =&gt; {
-<a href=#124 id=124 data-nosnippet>124</a>            state.set(<span class="bool-val">false</span>);
-<a href=#125 id=125 data-nosnippet>125</a>        }
-<a href=#126 id=126 data-nosnippet>126</a>        UiNodeOp::Event { update } =&gt; {
-<a href=#127 id=127 data-nosnippet>127</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(args) = DRAG_START_EVENT.on(update) {
-<a href=#128 id=128 data-nosnippet>128</a>                <span class="kw">if </span>args.target.contains(WIDGET.id()) {
-<a href=#129 id=129 data-nosnippet>129</a>                    state.set(<span class="bool-val">true</span>);
-<a href=#130 id=130 data-nosnippet>130</a>                }
-<a href=#131 id=131 data-nosnippet>131</a>            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(args) = DRAG_END_EVENT.on(update)
-<a href=#132 id=132 data-nosnippet>132</a>                &amp;&amp; args.target.contains(WIDGET.id())
-<a href=#133 id=133 data-nosnippet>133</a>            {
-<a href=#134 id=134 data-nosnippet>134</a>                state.set(<span class="bool-val">false</span>);
-<a href=#135 id=135 data-nosnippet>135</a>            }
-<a href=#136 id=136 data-nosnippet>136</a>        }
-<a href=#137 id=137 data-nosnippet>137</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#138 id=138 data-nosnippet>138</a>    })
-<a href=#139 id=139 data-nosnippet>139</a>}</code></pre></div></section></main></body></html>
+<a href=#40 id=40 data-nosnippet>40</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#41 id=41 data-nosnippet>41</a>    </span><span class="kw">pub fn </span>on_drag_start&lt;on_pre_drag_start&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DragStartArgs&gt;) -&gt; UiNode {
+<a href=#42 id=42 data-nosnippet>42</a>        <span class="kw">const </span>PRE: bool;
+<a href=#43 id=43 data-nosnippet>43</a>        EventNodeBuilder::new(DRAG_START_EVENT).build::&lt;PRE&gt;(child, handler)
+<a href=#44 id=44 data-nosnippet>44</a>    }
+<a href=#45 id=45 data-nosnippet>45</a>
+<a href=#46 id=46 data-nosnippet>46</a>    <span class="doccomment">/// Draggable widget stopped dragging.
+<a href=#47 id=47 data-nosnippet>47</a>    ///
+<a href=#48 id=48 data-nosnippet>48</a>    /// This event is always paired with [`on_drag_start`] first.
+<a href=#49 id=49 data-nosnippet>49</a>    ///
+<a href=#50 id=50 data-nosnippet>50</a>    /// [`on_drag_start`]: fn@on_drag_start
+<a href=#51 id=51 data-nosnippet>51</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#52 id=52 data-nosnippet>52</a>    </span><span class="kw">pub fn </span>on_drag_end&lt;on_pre_drag_end&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DragEndArgs&gt;) -&gt; UiNode {
+<a href=#53 id=53 data-nosnippet>53</a>        <span class="kw">const </span>PRE: bool;
+<a href=#54 id=54 data-nosnippet>54</a>        EventNodeBuilder::new(DRAG_END_EVENT).build::&lt;PRE&gt;(child, handler)
+<a href=#55 id=55 data-nosnippet>55</a>    }
+<a href=#56 id=56 data-nosnippet>56</a>
+<a href=#57 id=57 data-nosnippet>57</a>    <span class="doccomment">/// Dragging cursor entered or exited the widget area and the widget is enabled.
+<a href=#58 id=58 data-nosnippet>58</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#59 id=59 data-nosnippet>59</a>    </span><span class="kw">pub fn </span>on_drag_hovered&lt;on_pre_drag_hovered&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DragHoveredArgs&gt;) -&gt; UiNode {
+<a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">const </span>PRE: bool;
+<a href=#61 id=61 data-nosnippet>61</a>        EventNodeBuilder::new(DRAG_HOVERED_EVENT)
+<a href=#62 id=62 data-nosnippet>62</a>            .filter(|| {
+<a href=#63 id=63 data-nosnippet>63</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#64 id=64 data-nosnippet>64</a>                <span class="kw">move </span>|args| args.is_drag_enter_enabled(id) || args.is_drag_leave_enabled(id)
+<a href=#65 id=65 data-nosnippet>65</a>            })
+<a href=#66 id=66 data-nosnippet>66</a>            .build::&lt;PRE&gt;(child, handler)
+<a href=#67 id=67 data-nosnippet>67</a>    }
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="doccomment">/// Dragging cursor entered the widget area and the widget is enabled.
+<a href=#69 id=69 data-nosnippet>69</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#70 id=70 data-nosnippet>70</a>    </span><span class="kw">pub fn </span>on_drag_enter&lt;on_pre_drag_enter&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DragHoveredArgs&gt;) -&gt; UiNode {
+<a href=#71 id=71 data-nosnippet>71</a>        <span class="kw">const </span>PRE: bool;
+<a href=#72 id=72 data-nosnippet>72</a>        EventNodeBuilder::new(DRAG_HOVERED_EVENT)
+<a href=#73 id=73 data-nosnippet>73</a>            .filter(|| {
+<a href=#74 id=74 data-nosnippet>74</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#75 id=75 data-nosnippet>75</a>                <span class="kw">move </span>|args| args.is_drag_enter_enabled(id)
+<a href=#76 id=76 data-nosnippet>76</a>            })
+<a href=#77 id=77 data-nosnippet>77</a>            .build::&lt;PRE&gt;(child, handler)
+<a href=#78 id=78 data-nosnippet>78</a>    }
+<a href=#79 id=79 data-nosnippet>79</a>    <span class="doccomment">/// Dragging cursor exited the widget area and the widget is enabled.
+<a href=#80 id=80 data-nosnippet>80</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#81 id=81 data-nosnippet>81</a>    </span><span class="kw">pub fn </span>on_drag_leave&lt;on_pre_drag_leave&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DragHoveredArgs&gt;) -&gt; UiNode {
+<a href=#82 id=82 data-nosnippet>82</a>        <span class="kw">const </span>PRE: bool;
+<a href=#83 id=83 data-nosnippet>83</a>        EventNodeBuilder::new(DRAG_HOVERED_EVENT)
+<a href=#84 id=84 data-nosnippet>84</a>            .filter(|| {
+<a href=#85 id=85 data-nosnippet>85</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#86 id=86 data-nosnippet>86</a>                <span class="kw">move </span>|args| args.is_drag_leave_enabled(id)
+<a href=#87 id=87 data-nosnippet>87</a>            })
+<a href=#88 id=88 data-nosnippet>88</a>            .build::&lt;PRE&gt;(child, handler)
+<a href=#89 id=89 data-nosnippet>89</a>    }
+<a href=#90 id=90 data-nosnippet>90</a>
+<a href=#91 id=91 data-nosnippet>91</a>    <span class="doccomment">/// Dragging cursor dropped data in the widget area and the widget is enabled.
+<a href=#92 id=92 data-nosnippet>92</a>    </span><span class="attr">#[property(EVENT)]
+<a href=#93 id=93 data-nosnippet>93</a>    </span><span class="kw">pub fn </span>on_drop&lt;on_pre_drop&gt;(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;DropArgs&gt;) -&gt; UiNode {
+<a href=#94 id=94 data-nosnippet>94</a>        <span class="kw">const </span>PRE: bool;
+<a href=#95 id=95 data-nosnippet>95</a>        EventNodeBuilder::new(DROP_EVENT)
+<a href=#96 id=96 data-nosnippet>96</a>            .filter(|| {
+<a href=#97 id=97 data-nosnippet>97</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#98 id=98 data-nosnippet>98</a>                <span class="kw">move </span>|args| args.target.contains_enabled(id)
+<a href=#99 id=99 data-nosnippet>99</a>            })
+<a href=#100 id=100 data-nosnippet>100</a>            .build::&lt;PRE&gt;(child, handler)
+<a href=#101 id=101 data-nosnippet>101</a>    }
+<a href=#102 id=102 data-nosnippet>102</a>}
+<a href=#103 id=103 data-nosnippet>103</a>
+<a href=#104 id=104 data-nosnippet>104</a><span class="doccomment">/// If the dragging cursor is over the widget or a descendant and the widget is enabled.
+<a href=#105 id=105 data-nosnippet>105</a>///
+<a href=#106 id=106 data-nosnippet>106</a>/// The value is always `false` when the widget is not [`ENABLED`], use [`is_drag_hovered_disabled`] to implement *disabled hovered* visuals.
+<a href=#107 id=107 data-nosnippet>107</a>///
+<a href=#108 id=108 data-nosnippet>108</a>/// [`ENABLED`]: Interactivity::ENABLED
+<a href=#109 id=109 data-nosnippet>109</a>/// [`is_drag_hovered_disabled`]: fn@is_drag_hovered_disabled
+<a href=#110 id=110 data-nosnippet>110</a></span><span class="attr">#[property(EVENT)]
+<a href=#111 id=111 data-nosnippet>111</a></span><span class="kw">pub fn </span>is_drag_hovered(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#112 id=112 data-nosnippet>112</a>    bind_state_init(child, state, |s| {
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">let </span>id = WIDGET.id();
+<a href=#114 id=114 data-nosnippet>114</a>        DRAG_HOVERED_EVENT.var_bind(s, <span class="kw">move </span>|args| {
+<a href=#115 id=115 data-nosnippet>115</a>            <span class="kw">if </span>args.is_drag_enter_enabled(id) {
+<a href=#116 id=116 data-nosnippet>116</a>                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
+<a href=#117 id=117 data-nosnippet>117</a>            } <span class="kw">else if </span>args.is_drag_leave_enabled(id) {
+<a href=#118 id=118 data-nosnippet>118</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
+<a href=#119 id=119 data-nosnippet>119</a>            } <span class="kw">else </span>{
+<a href=#120 id=120 data-nosnippet>120</a>                <span class="prelude-val">None
+<a href=#121 id=121 data-nosnippet>121</a>            </span>}
+<a href=#122 id=122 data-nosnippet>122</a>        })
+<a href=#123 id=123 data-nosnippet>123</a>    })
+<a href=#124 id=124 data-nosnippet>124</a>}
+<a href=#125 id=125 data-nosnippet>125</a>
+<a href=#126 id=126 data-nosnippet>126</a><span class="doccomment">/// If the dragging cursor is over the widget or a descendant and the widget is disabled.
+<a href=#127 id=127 data-nosnippet>127</a></span><span class="attr">#[property(EVENT)]
+<a href=#128 id=128 data-nosnippet>128</a></span><span class="kw">pub fn </span>is_drag_hovered_disabled(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#129 id=129 data-nosnippet>129</a>    bind_state_init(child, state, |s| {
+<a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">let </span>id = WIDGET.id();
+<a href=#131 id=131 data-nosnippet>131</a>        DRAG_HOVERED_EVENT.var_bind(s, <span class="kw">move </span>|args| {
+<a href=#132 id=132 data-nosnippet>132</a>            <span class="kw">if </span>args.is_drag_enter_disabled(id) {
+<a href=#133 id=133 data-nosnippet>133</a>                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>)
+<a href=#134 id=134 data-nosnippet>134</a>            } <span class="kw">else if </span>args.is_drag_leave_disabled(id) {
+<a href=#135 id=135 data-nosnippet>135</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>)
+<a href=#136 id=136 data-nosnippet>136</a>            } <span class="kw">else </span>{
+<a href=#137 id=137 data-nosnippet>137</a>                <span class="prelude-val">None
+<a href=#138 id=138 data-nosnippet>138</a>            </span>}
+<a href=#139 id=139 data-nosnippet>139</a>        })
+<a href=#140 id=140 data-nosnippet>140</a>    })
+<a href=#141 id=141 data-nosnippet>141</a>}
+<a href=#142 id=142 data-nosnippet>142</a>
+<a href=#143 id=143 data-nosnippet>143</a><span class="doccomment">/// If the draggable widget is dragging.
+<a href=#144 id=144 data-nosnippet>144</a></span><span class="attr">#[property(EVENT)]
+<a href=#145 id=145 data-nosnippet>145</a></span><span class="kw">pub fn </span>is_dragging(child: <span class="kw">impl </span>IntoUiNode, state: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#146 id=146 data-nosnippet>146</a>    bind_state_init(child, state, |s| {
+<a href=#147 id=147 data-nosnippet>147</a>        <span class="kw">let </span>id = WIDGET.id();
+<a href=#148 id=148 data-nosnippet>148</a>        <span class="kw">let </span>handle = DRAG_START_EVENT.var_bind(s, <span class="kw">move </span>|args| <span class="kw">if </span>args.target.contains(id) { <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) } <span class="kw">else </span>{ <span class="prelude-val">None </span>});
+<a href=#149 id=149 data-nosnippet>149</a>        DRAG_END_EVENT.var_bind(s, <span class="kw">move </span>|args| {
+<a href=#150 id=150 data-nosnippet>150</a>            <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>handle;
+<a href=#151 id=151 data-nosnippet>151</a>            <span class="kw">if </span>args.target.contains(id) { <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) } <span class="kw">else </span>{ <span class="prelude-val">None </span>}
+<a href=#152 id=152 data-nosnippet>152</a>        })
+<a href=#153 id=153 data-nosnippet>153</a>    })
+<a href=#154 id=154 data-nosnippet>154</a>}
+</code></pre></div></section></main></body></html>

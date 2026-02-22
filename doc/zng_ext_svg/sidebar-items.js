@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["SvgManager","SvgRenderCache"]};
+window.SIDEBAR_ITEMS = {"struct":["SvgRenderExtension"]};

@@ -1,6 +1,6 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/dialog.rs`."><title>dialog.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>dialog.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Native dialog types.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view-api/src/dialog.rs`."><title>dialog.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view_api" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_view_api/</div>dialog.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Native dialog types.
 <a href=#2 id=2 data-nosnippet>2</a>
-<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::{mem, path::PathBuf};
+<a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::{mem, path::PathBuf, time::Duration};
 <a href=#4 id=4 data-nosnippet>4</a>
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>zng_txt::Txt;
 <a href=#6 id=6 data-nosnippet>6</a>
@@ -90,7 +90,7 @@
 <a href=#90 id=90 data-nosnippet>90</a>    </span>Cancel,
 <a href=#91 id=91 data-nosnippet>91</a>    <span class="doccomment">/// Failed to show the message.
 <a href=#92 id=92 data-nosnippet>92</a>    ///
-<a href=#93 id=93 data-nosnippet>93</a>    /// The associated string may contain debug information, caller should assume that native file dialogs
+<a href=#93 id=93 data-nosnippet>93</a>    /// The associated text may contain debug information, caller should assume that native file dialogs
 <a href=#94 id=94 data-nosnippet>94</a>    /// are not available for the given window ID at the current view-process instance.
 <a href=#95 id=95 data-nosnippet>95</a>    </span>Error(Txt),
 <a href=#96 id=96 data-nosnippet>96</a>}
@@ -117,16 +117,16 @@
 <a href=#117 id=117 data-nosnippet>117</a>    }
 <a href=#118 id=118 data-nosnippet>118</a>
 <a href=#119 id=119 data-nosnippet>119</a>    <span class="doccomment">/// Push a filter entry.
-<a href=#120 id=120 data-nosnippet>120</a>    </span><span class="kw">pub fn </span>push_filter&lt;S: AsRef&lt;str&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw-2">&amp;</span>[S]) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+<a href=#120 id=120 data-nosnippet>120</a>    </span><span class="kw">pub fn </span>push_filter&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
 <a href=#121 id=121 data-nosnippet>121</a>        <span class="kw">if </span>!<span class="self">self</span>.<span class="number">0</span>.is_empty() &amp;&amp; !<span class="self">self</span>.<span class="number">0</span>.ends_with(<span class="string">'|'</span>) {
 <a href=#122 id=122 data-nosnippet>122</a>            <span class="self">self</span>.<span class="number">0</span>.push(<span class="string">'|'</span>);
 <a href=#123 id=123 data-nosnippet>123</a>        }
 <a href=#124 id=124 data-nosnippet>124</a>
-<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span><span class="kw-2">mut </span>extensions: Vec&lt;<span class="kw">_</span>&gt; = extensions
-<a href=#126 id=126 data-nosnippet>126</a>            .iter()
-<a href=#127 id=127 data-nosnippet>127</a>            .map(|s| s.as_ref())
-<a href=#128 id=128 data-nosnippet>128</a>            .filter(|<span class="kw-2">&amp;</span>s| !s.contains(<span class="string">'|'</span>) &amp;&amp; !s.contains(<span class="string">';'</span>))
-<a href=#129 id=129 data-nosnippet>129</a>            .collect();
+<a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">let </span>extensions: Vec&lt;<span class="kw">_</span>&gt; = extensions.into_iter().filter(|s| !s.contains(<span class="string">'|'</span>) &amp;&amp; !s.contains(<span class="string">';'</span>)).collect();
+<a href=#126 id=126 data-nosnippet>126</a>        <span class="self">self</span>.push_filter_impl(display_name, extensions)
+<a href=#127 id=127 data-nosnippet>127</a>    }
+<a href=#128 id=128 data-nosnippet>128</a>
+<a href=#129 id=129 data-nosnippet>129</a>    <span class="kw">fn </span>push_filter_impl(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, <span class="kw-2">mut </span>extensions: Vec&lt;<span class="kw-2">&amp;</span>str&gt;) -&gt; <span class="kw-2">&amp;mut </span>FileDialogFilters {
 <a href=#130 id=130 data-nosnippet>130</a>        <span class="kw">if </span>extensions.is_empty() {
 <a href=#131 id=131 data-nosnippet>131</a>            extensions = <span class="macro">vec!</span>[<span class="string">"*"</span>];
 <a href=#132 id=132 data-nosnippet>132</a>        }
@@ -287,7 +287,7 @@
 <a href=#287 id=287 data-nosnippet>287</a>    }
 <a href=#288 id=288 data-nosnippet>288</a>
 <a href=#289 id=289 data-nosnippet>289</a>    <span class="doccomment">/// Push a filter entry.
-<a href=#290 id=290 data-nosnippet>290</a>    </span><span class="kw">pub fn </span>push_filter&lt;S: AsRef&lt;str&gt;&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw-2">&amp;</span>[S]) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
+<a href=#290 id=290 data-nosnippet>290</a>    </span><span class="kw">pub fn </span>push_filter&lt;<span class="lifetime">'a</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, display_name: <span class="kw-2">&amp;</span>str, extensions: <span class="kw">impl </span>IntoIterator&lt;Item = <span class="kw-2">&amp;</span><span class="lifetime">'a </span>str&gt;) -&gt; <span class="kw-2">&amp;mut </span><span class="self">Self </span>{
 <a href=#291 id=291 data-nosnippet>291</a>        <span class="kw">let </span><span class="kw-2">mut </span>f = FileDialogFilters(mem::take(<span class="kw-2">&amp;mut </span><span class="self">self</span>.filters));
 <a href=#292 id=292 data-nosnippet>292</a>        f.push_filter(display_name, extensions);
 <a href=#293 id=293 data-nosnippet>293</a>        <span class="self">self</span>.filters = f.build();
@@ -339,7 +339,7 @@
 <a href=#339 id=339 data-nosnippet>339</a>    </span>Cancel,
 <a href=#340 id=340 data-nosnippet>340</a>    <span class="doccomment">/// Failed to show the dialog.
 <a href=#341 id=341 data-nosnippet>341</a>    ///
-<a href=#342 id=342 data-nosnippet>342</a>    /// The associated string may contain debug information, caller should assume that native file dialogs
+<a href=#342 id=342 data-nosnippet>342</a>    /// The associated text may contain debug information, caller should assume that native file dialogs
 <a href=#343 id=343 data-nosnippet>343</a>    /// are not available for the given window ID at the current view-process instance.
 <a href=#344 id=344 data-nosnippet>344</a>    </span>Error(Txt),
 <a href=#345 id=345 data-nosnippet>345</a>}
@@ -359,27 +359,137 @@
 <a href=#359 id=359 data-nosnippet>359</a>    }
 <a href=#360 id=360 data-nosnippet>360</a>}
 <a href=#361 id=361 data-nosnippet>361</a>
-<a href=#362 id=362 data-nosnippet>362</a><span class="attr">#[cfg(test)]
-<a href=#363 id=363 data-nosnippet>363</a></span><span class="kw">mod </span>tests {
-<a href=#364 id=364 data-nosnippet>364</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#365 id=365 data-nosnippet>365</a>
-<a href=#366 id=366 data-nosnippet>366</a>    <span class="attr">#[test]
-<a href=#367 id=367 data-nosnippet>367</a>    </span><span class="kw">fn </span>file_filters() {
-<a href=#368 id=368 data-nosnippet>368</a>        <span class="kw">let </span><span class="kw-2">mut </span>dlg = FileDialog {
-<a href=#369 id=369 data-nosnippet>369</a>            title: <span class="string">""</span>.into(),
-<a href=#370 id=370 data-nosnippet>370</a>            starting_dir: <span class="string">""</span>.into(),
-<a href=#371 id=371 data-nosnippet>371</a>            starting_name: <span class="string">""</span>.into(),
-<a href=#372 id=372 data-nosnippet>372</a>            filters: <span class="string">""</span>.into(),
-<a href=#373 id=373 data-nosnippet>373</a>            kind: FileDialogKind::OpenFile,
-<a href=#374 id=374 data-nosnippet>374</a>        };
-<a href=#375 id=375 data-nosnippet>375</a>
-<a href=#376 id=376 data-nosnippet>376</a>        <span class="kw">let </span>expected = <span class="string">"Display Name (*.abc, *.bca)|abc;bca|All Files (*.*)|*"</span>;
-<a href=#377 id=377 data-nosnippet>377</a>
-<a href=#378 id=378 data-nosnippet>378</a>        dlg.push_filter(<span class="string">"Display Name"</span>, <span class="kw-2">&amp;</span>[<span class="string">"abc"</span>, <span class="string">"bca"</span>]).push_filter(<span class="string">"All Files"</span>, <span class="kw-2">&amp;</span>[<span class="string">"*"</span>]);
-<a href=#379 id=379 data-nosnippet>379</a>        <span class="macro">assert_eq!</span>(expected, dlg.filters);
-<a href=#380 id=380 data-nosnippet>380</a>
-<a href=#381 id=381 data-nosnippet>381</a>        <span class="kw">let </span>expected = <span class="macro">vec!</span>[(<span class="string">"Display Name (*.abc, *.bca)"</span>, <span class="macro">vec!</span>[<span class="string">"abc"</span>, <span class="string">"bca"</span>]), (<span class="string">"All Files (*.*)"</span>, <span class="macro">vec!</span>[<span class="string">"*"</span>])];
-<a href=#382 id=382 data-nosnippet>382</a>        <span class="kw">let </span>parsed: Vec&lt;(<span class="kw-2">&amp;</span>str, Vec&lt;<span class="kw-2">&amp;</span>str&gt;)&gt; = dlg.iter_filters().map(|(n, p)| (n, p.collect())).collect();
-<a href=#383 id=383 data-nosnippet>383</a>        <span class="macro">assert_eq!</span>(expected, parsed);
+<a href=#362 id=362 data-nosnippet>362</a><span class="doccomment">/// Defines a local notification item.
+<a href=#363 id=363 data-nosnippet>363</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#364 id=364 data-nosnippet>364</a>#[non_exhaustive]
+<a href=#365 id=365 data-nosnippet>365</a></span><span class="kw">pub struct </span>Notification {
+<a href=#366 id=366 data-nosnippet>366</a>    <span class="doccomment">/// Single line to summarize the content.
+<a href=#367 id=367 data-nosnippet>367</a>    </span><span class="kw">pub </span>title: Txt,
+<a href=#368 id=368 data-nosnippet>368</a>    <span class="doccomment">/// The full notification content.
+<a href=#369 id=369 data-nosnippet>369</a>    </span><span class="kw">pub </span>message: Txt,
+<a href=#370 id=370 data-nosnippet>370</a>    <span class="doccomment">/// Response buttons.
+<a href=#371 id=371 data-nosnippet>371</a>    </span><span class="kw">pub </span>actions: Vec&lt;NotificationAction&gt;,
+<a href=#372 id=372 data-nosnippet>372</a>    <span class="doccomment">/// Maximum time to keep the notification on the list.
+<a href=#373 id=373 data-nosnippet>373</a>    </span><span class="kw">pub </span>timeout: <span class="prelude-ty">Option</span>&lt;Duration&gt;,
+<a href=#374 id=374 data-nosnippet>374</a>}
+<a href=#375 id=375 data-nosnippet>375</a><span class="kw">impl </span>Notification {
+<a href=#376 id=376 data-nosnippet>376</a>    <span class="doccomment">/// New.
+<a href=#377 id=377 data-nosnippet>377</a>    </span><span class="kw">pub fn </span>new(title: <span class="kw">impl </span>Into&lt;Txt&gt;, body: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
+<a href=#378 id=378 data-nosnippet>378</a>        <span class="self">Self </span>{
+<a href=#379 id=379 data-nosnippet>379</a>            title: title.into(),
+<a href=#380 id=380 data-nosnippet>380</a>            message: body.into(),
+<a href=#381 id=381 data-nosnippet>381</a>            actions: <span class="macro">vec!</span>[],
+<a href=#382 id=382 data-nosnippet>382</a>            timeout: <span class="prelude-val">None</span>,
+<a href=#383 id=383 data-nosnippet>383</a>        }
 <a href=#384 id=384 data-nosnippet>384</a>    }
-<a href=#385 id=385 data-nosnippet>385</a>}</code></pre></div></section></main></body></html>
+<a href=#385 id=385 data-nosnippet>385</a>
+<a href=#386 id=386 data-nosnippet>386</a>    <span class="doccomment">/// New empty notification with immediate timeout.
+<a href=#387 id=387 data-nosnippet>387</a>    ///
+<a href=#388 id=388 data-nosnippet>388</a>    /// This is a special value that indicates the notification must be closed.
+<a href=#389 id=389 data-nosnippet>389</a>    </span><span class="kw">pub const fn </span>close() -&gt; <span class="self">Self </span>{
+<a href=#390 id=390 data-nosnippet>390</a>        <span class="self">Self </span>{
+<a href=#391 id=391 data-nosnippet>391</a>            title: Txt::from_static(<span class="string">""</span>),
+<a href=#392 id=392 data-nosnippet>392</a>            message: Txt::from_static(<span class="string">""</span>),
+<a href=#393 id=393 data-nosnippet>393</a>            actions: <span class="macro">vec!</span>[],
+<a href=#394 id=394 data-nosnippet>394</a>            timeout: <span class="prelude-val">Some</span>(Duration::ZERO),
+<a href=#395 id=395 data-nosnippet>395</a>        }
+<a href=#396 id=396 data-nosnippet>396</a>    }
+<a href=#397 id=397 data-nosnippet>397</a>
+<a href=#398 id=398 data-nosnippet>398</a>    <span class="doccomment">/// Push a response action.
+<a href=#399 id=399 data-nosnippet>399</a>    </span><span class="kw">pub fn </span>push_action(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: <span class="kw">impl </span>Into&lt;Txt&gt;, label: <span class="kw">impl </span>Into&lt;Txt&gt;) {
+<a href=#400 id=400 data-nosnippet>400</a>        <span class="self">self</span>.actions.push(NotificationAction::new(id, label))
+<a href=#401 id=401 data-nosnippet>401</a>    }
+<a href=#402 id=402 data-nosnippet>402</a>}
+<a href=#403 id=403 data-nosnippet>403</a>
+<a href=#404 id=404 data-nosnippet>404</a><span class="doccomment">/// Define a response of a [`Notification`].
+<a href=#405 id=405 data-nosnippet>405</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#406 id=406 data-nosnippet>406</a>#[non_exhaustive]
+<a href=#407 id=407 data-nosnippet>407</a></span><span class="kw">pub struct </span>NotificationAction {
+<a href=#408 id=408 data-nosnippet>408</a>    <span class="doccomment">/// Unique identifier of the action.
+<a href=#409 id=409 data-nosnippet>409</a>    </span><span class="kw">pub </span>id: Txt,
+<a href=#410 id=410 data-nosnippet>410</a>    <span class="doccomment">/// Display text of the action button.
+<a href=#411 id=411 data-nosnippet>411</a>    </span><span class="kw">pub </span>label: Txt,
+<a href=#412 id=412 data-nosnippet>412</a>}
+<a href=#413 id=413 data-nosnippet>413</a><span class="kw">impl </span>NotificationAction {
+<a href=#414 id=414 data-nosnippet>414</a>    <span class="doccomment">/// New.
+<a href=#415 id=415 data-nosnippet>415</a>    </span><span class="kw">pub fn </span>new(id: <span class="kw">impl </span>Into&lt;Txt&gt;, label: <span class="kw">impl </span>Into&lt;Txt&gt;) -&gt; <span class="self">Self </span>{
+<a href=#416 id=416 data-nosnippet>416</a>        <span class="self">Self </span>{
+<a href=#417 id=417 data-nosnippet>417</a>            id: id.into(),
+<a href=#418 id=418 data-nosnippet>418</a>            label: label.into(),
+<a href=#419 id=419 data-nosnippet>419</a>        }
+<a href=#420 id=420 data-nosnippet>420</a>    }
+<a href=#421 id=421 data-nosnippet>421</a>}
+<a href=#422 id=422 data-nosnippet>422</a>
+<a href=#423 id=423 data-nosnippet>423</a><span class="doccomment">/// Response to a notification dialog.
+<a href=#424 id=424 data-nosnippet>424</a></span><span class="attr">#[derive(Debug, Clone, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#425 id=425 data-nosnippet>425</a>#[non_exhaustive]
+<a href=#426 id=426 data-nosnippet>426</a></span><span class="kw">pub enum </span>NotificationResponse {
+<a href=#427 id=427 data-nosnippet>427</a>    <span class="doccomment">/// User requested an action.
+<a href=#428 id=428 data-nosnippet>428</a>    ///
+<a href=#429 id=429 data-nosnippet>429</a>    /// The associated text is the [`NotificationAction::id`].
+<a href=#430 id=430 data-nosnippet>430</a>    ///
+<a href=#431 id=431 data-nosnippet>431</a>    /// The associated text can be empty indicating the user requested general action,
+<a href=#432 id=432 data-nosnippet>432</a>    /// usually by tapping the message directly and not another an action button.
+<a href=#433 id=433 data-nosnippet>433</a>    </span>Action(Txt),
+<a href=#434 id=434 data-nosnippet>434</a>    <span class="doccomment">/// User dismissed the notification without requesting an action.
+<a href=#435 id=435 data-nosnippet>435</a>    </span>Dismissed,
+<a href=#436 id=436 data-nosnippet>436</a>    <span class="doccomment">/// Programmatically removed. Can be due to timeout or any other reason.
+<a href=#437 id=437 data-nosnippet>437</a>    </span>Removed,
+<a href=#438 id=438 data-nosnippet>438</a>    <span class="doccomment">/// Failed to show the notification.
+<a href=#439 id=439 data-nosnippet>439</a>    ///
+<a href=#440 id=440 data-nosnippet>440</a>    /// The associated text may contain debug information.
+<a href=#441 id=441 data-nosnippet>441</a>    </span>Error(Txt),
+<a href=#442 id=442 data-nosnippet>442</a>}
+<a href=#443 id=443 data-nosnippet>443</a>
+<a href=#444 id=444 data-nosnippet>444</a><span class="macro">bitflags::bitflags!</span> {
+<a href=#445 id=445 data-nosnippet>445</a>    <span class="doccomment">/// Dialog operations the view-process implements.
+<a href=#446 id=446 data-nosnippet>446</a>    </span><span class="attr">#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
+<a href=#447 id=447 data-nosnippet>447</a>    </span><span class="kw">pub struct </span>DialogCapability: u32 {
+<a href=#448 id=448 data-nosnippet>448</a>        <span class="doccomment">/// View-process can show message dialogs.
+<a href=#449 id=449 data-nosnippet>449</a>        </span><span class="kw">const </span>MESSAGE = <span class="number">1 </span>&lt;&lt; <span class="number">0</span>;
+<a href=#450 id=450 data-nosnippet>450</a>        <span class="doccomment">/// View-process can show single file picker.
+<a href=#451 id=451 data-nosnippet>451</a>        </span><span class="kw">const </span>OPEN_FILE = <span class="number">1 </span>&lt;&lt; <span class="number">1</span>;
+<a href=#452 id=452 data-nosnippet>452</a>        <span class="doccomment">/// View-process can show multi file picker.
+<a href=#453 id=453 data-nosnippet>453</a>        </span><span class="kw">const </span>OPEN_FILES = <span class="number">1 </span>&lt;&lt; <span class="number">2</span>;
+<a href=#454 id=454 data-nosnippet>454</a>        <span class="doccomment">/// View-process can show save single file picker.
+<a href=#455 id=455 data-nosnippet>455</a>        </span><span class="kw">const </span>SAVE_FILE = <span class="number">1 </span>&lt;&lt; <span class="number">3</span>;
+<a href=#456 id=456 data-nosnippet>456</a>        <span class="doccomment">/// View-process can show single directory picker.
+<a href=#457 id=457 data-nosnippet>457</a>        </span><span class="kw">const </span>SELECT_FOLDER = <span class="number">1 </span>&lt;&lt; <span class="number">4</span>;
+<a href=#458 id=458 data-nosnippet>458</a>        <span class="doccomment">/// View-process can show multi directory picker.
+<a href=#459 id=459 data-nosnippet>459</a>        </span><span class="kw">const </span>SELECT_FOLDERS = <span class="number">1 </span>&lt;&lt; <span class="number">5</span>;
+<a href=#460 id=460 data-nosnippet>460</a>        <span class="doccomment">/// View-process can insert notifications in the system list.
+<a href=#461 id=461 data-nosnippet>461</a>        </span><span class="kw">const </span>NOTIFICATION = <span class="number">1 </span>&lt;&lt; <span class="number">6</span>;
+<a href=#462 id=462 data-nosnippet>462</a>        <span class="doccomment">/// View-process can show custom actions for dismissing the notification.
+<a href=#463 id=463 data-nosnippet>463</a>        </span><span class="kw">const </span>NOTIFICATION_ACTIONS = (<span class="number">1 </span>&lt;&lt; <span class="number">7</span>) | <span class="self">Self</span>::NOTIFICATION.bits();
+<a href=#464 id=464 data-nosnippet>464</a>        <span class="doccomment">/// View-process can handle the special close notification update that removes the notification.
+<a href=#465 id=465 data-nosnippet>465</a>        </span><span class="kw">const </span>CLOSE_NOTIFICATION = (<span class="number">1 </span>&lt;&lt; <span class="number">8</span>) | <span class="self">Self</span>::NOTIFICATION.bits();
+<a href=#466 id=466 data-nosnippet>466</a>        <span class="doccomment">/// View-process can update notification content.
+<a href=#467 id=467 data-nosnippet>467</a>        </span><span class="kw">const </span>UPDATE_NOTIFICATION = (<span class="number">1 </span>&lt;&lt; <span class="number">9</span>) | <span class="self">Self</span>::NOTIFICATION.bits();
+<a href=#468 id=468 data-nosnippet>468</a>    }
+<a href=#469 id=469 data-nosnippet>469</a>}
+<a href=#470 id=470 data-nosnippet>470</a>
+<a href=#471 id=471 data-nosnippet>471</a><span class="attr">#[cfg(test)]
+<a href=#472 id=472 data-nosnippet>472</a></span><span class="kw">mod </span>tests {
+<a href=#473 id=473 data-nosnippet>473</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#474 id=474 data-nosnippet>474</a>
+<a href=#475 id=475 data-nosnippet>475</a>    <span class="attr">#[test]
+<a href=#476 id=476 data-nosnippet>476</a>    </span><span class="kw">fn </span>file_filters() {
+<a href=#477 id=477 data-nosnippet>477</a>        <span class="kw">let </span><span class="kw-2">mut </span>dlg = FileDialog {
+<a href=#478 id=478 data-nosnippet>478</a>            title: <span class="string">""</span>.into(),
+<a href=#479 id=479 data-nosnippet>479</a>            starting_dir: <span class="string">""</span>.into(),
+<a href=#480 id=480 data-nosnippet>480</a>            starting_name: <span class="string">""</span>.into(),
+<a href=#481 id=481 data-nosnippet>481</a>            filters: <span class="string">""</span>.into(),
+<a href=#482 id=482 data-nosnippet>482</a>            kind: FileDialogKind::OpenFile,
+<a href=#483 id=483 data-nosnippet>483</a>        };
+<a href=#484 id=484 data-nosnippet>484</a>
+<a href=#485 id=485 data-nosnippet>485</a>        <span class="kw">let </span>expected = <span class="string">"Display Name (*.abc, *.bca)|abc;bca|All Files (*.*)|*"</span>;
+<a href=#486 id=486 data-nosnippet>486</a>
+<a href=#487 id=487 data-nosnippet>487</a>        dlg.push_filter(<span class="string">"Display Name"</span>, [<span class="string">"abc"</span>, <span class="string">"bca"</span>]).push_filter(<span class="string">"All Files"</span>, [<span class="string">"*"</span>]);
+<a href=#488 id=488 data-nosnippet>488</a>        <span class="macro">assert_eq!</span>(expected, dlg.filters);
+<a href=#489 id=489 data-nosnippet>489</a>
+<a href=#490 id=490 data-nosnippet>490</a>        <span class="kw">let </span>expected = <span class="macro">vec!</span>[(<span class="string">"Display Name (*.abc, *.bca)"</span>, <span class="macro">vec!</span>[<span class="string">"abc"</span>, <span class="string">"bca"</span>]), (<span class="string">"All Files (*.*)"</span>, <span class="macro">vec!</span>[<span class="string">"*"</span>])];
+<a href=#491 id=491 data-nosnippet>491</a>        <span class="kw">let </span>parsed: Vec&lt;(<span class="kw-2">&amp;</span>str, Vec&lt;<span class="kw-2">&amp;</span>str&gt;)&gt; = dlg.iter_filters().map(|(n, p)| (n, p.collect())).collect();
+<a href=#492 id=492 data-nosnippet>492</a>        <span class="macro">assert_eq!</span>(expected, parsed);
+<a href=#493 id=493 data-nosnippet>493</a>    }
+<a href=#494 id=494 data-nosnippet>494</a>}
+</code></pre></div></section></main></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/shortcut.rs`."><title>shortcut.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/shortcut.rs`."><title>shortcut.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#61 id=61 data-nosnippet>61</a>                    <span class="kw">let </span><span class="kw-2">mut </span>r = r.to_uppercase();
 <a href=#62 id=62 data-nosnippet>62</a>
 <a href=#63 id=63 data-nosnippet>63</a>                    <span class="kw">while let </span>(<span class="prelude-val">Some</span>(l), <span class="prelude-val">Some</span>(r)) = (l.next(), r.next()) {
-<a href=#64 id=64 data-nosnippet>64</a>                        <span class="kw">if </span>l != r {
+<a href=#64 id=64 data-nosnippet>64</a>                        <span class="kw">if </span><span class="macro">l !</span>= r {
 <a href=#65 id=65 data-nosnippet>65</a>                            <span class="kw">return </span><span class="bool-val">false</span>;
 <a href=#66 id=66 data-nosnippet>66</a>                        }
 <a href=#67 id=67 data-nosnippet>67</a>                    }
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#102 id=102 data-nosnippet>102</a>    /// * [`KeyCode::is_composition`]
 <a href=#103 id=103 data-nosnippet>103</a>    </span><span class="kw">pub fn </span>is_valid(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
 <a href=#104 id=104 data-nosnippet>104</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#105 id=105 data-nosnippet>105</a>            GestureKey::Key(k) =&gt; !k.is_modifier() &amp;&amp; !k.is_composition() &amp;&amp; <span class="kw-2">*</span>k != Key::Unidentified,
+<a href=#105 id=105 data-nosnippet>105</a>            GestureKey::Key(k) =&gt; !k.is_modifier() &amp;&amp; !k.is_composition() &amp;&amp; <span class="kw-2">*</span><span class="macro">k !</span>= Key::Unidentified,
 <a href=#106 id=106 data-nosnippet>106</a>            GestureKey::Code(k) =&gt; k.is_modifier() &amp;&amp; !k.is_composition(),
 <a href=#107 id=107 data-nosnippet>107</a>        }
 <a href=#108 id=108 data-nosnippet>108</a>    }
@@ -898,22 +898,22 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#862 id=862 data-nosnippet>862</a></span><span class="macro">macro_rules!</span> __shortcut {
 <a href=#863 id=863 data-nosnippet>863</a>    (-&gt; + <span class="macro-nonterminal">$Key</span>:tt) =&gt; {
 <a href=#864 id=864 data-nosnippet>864</a>        <span class="macro-nonterminal">$crate::shortcut::KeyGesture </span>{
-<a href=#865 id=865 data-nosnippet>865</a>            key: <span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(@<span class="macro-nonterminal">key $Key</span>),
+<a href=#865 id=865 data-nosnippet>865</a>            key: <span class="macro-nonterminal">$crate::__shortcut</span>!(@key <span class="macro-nonterminal">$Key</span>),
 <a href=#866 id=866 data-nosnippet>866</a>            modifiers: <span class="macro-nonterminal">$crate::shortcut::ModifiersState::empty</span>(),
 <a href=#867 id=867 data-nosnippet>867</a>        }
 <a href=#868 id=868 data-nosnippet>868</a>    };
 <a href=#869 id=869 data-nosnippet>869</a>
 <a href=#870 id=870 data-nosnippet>870</a>    (-&gt; $(<span class="macro-nonterminal">$MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$Key</span>:tt) =&gt; {
 <a href=#871 id=871 data-nosnippet>871</a>        <span class="macro-nonterminal">$crate::shortcut::KeyGesture </span>{
-<a href=#872 id=872 data-nosnippet>872</a>            key: <span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(@<span class="macro-nonterminal">key $Key</span>),
+<a href=#872 id=872 data-nosnippet>872</a>            key: <span class="macro-nonterminal">$crate::__shortcut</span>!(@key <span class="macro-nonterminal">$Key</span>),
 <a href=#873 id=873 data-nosnippet>873</a>            modifiers: $(<span class="macro-nonterminal">$crate::shortcut::ModifiersState</span>::<span class="macro-nonterminal">$MODIFIER</span>)|+,
 <a href=#874 id=874 data-nosnippet>874</a>        }
 <a href=#875 id=875 data-nosnippet>875</a>    };
 <a href=#876 id=876 data-nosnippet>876</a>
 <a href=#877 id=877 data-nosnippet>877</a>    (=&gt; $(<span class="macro-nonterminal">$STARTER_MODIFIER</span>:ident)|* + <span class="macro-nonterminal">$StarterKey</span>:tt, $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>:ident)|* + <span class="macro-nonterminal">$ComplementKey</span>:tt) =&gt; {
 <a href=#878 id=878 data-nosnippet>878</a>        <span class="macro-nonterminal">$crate::shortcut::KeyChord </span>{
-<a href=#879 id=879 data-nosnippet>879</a>            starter: <span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(-&gt; $(<span class="macro-nonterminal">$STARTER_MODIFIER</span>)|* + <span class="macro-nonterminal">$StarterKey</span>),
-<a href=#880 id=880 data-nosnippet>880</a>            complement: <span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(-&gt; $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>)|* + <span class="macro-nonterminal">$ComplementKey</span>)
+<a href=#879 id=879 data-nosnippet>879</a>            starter: <span class="macro-nonterminal">$crate::__shortcut</span>!(-&gt; $(<span class="macro-nonterminal">$STARTER_MODIFIER</span>)|* + <span class="macro-nonterminal">$StarterKey</span>),
+<a href=#880 id=880 data-nosnippet>880</a>            complement: <span class="macro-nonterminal">$crate::__shortcut</span>!(-&gt; $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>)|* + <span class="macro-nonterminal">$ComplementKey</span>)
 <a href=#881 id=881 data-nosnippet>881</a>        }
 <a href=#882 id=882 data-nosnippet>882</a>    };
 <a href=#883 id=883 data-nosnippet>883</a>
@@ -985,39 +985,40 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#949 id=949 data-nosnippet>949</a>    };
 <a href=#950 id=950 data-nosnippet>950</a>
 <a href=#951 id=951 data-nosnippet>951</a>    (<span class="macro-nonterminal">$Key</span>:tt) =&gt; {
-<a href=#952 id=952 data-nosnippet>952</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Gesture</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(-&gt; + <span class="macro-nonterminal">$Key</span>))
+<a href=#952 id=952 data-nosnippet>952</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Gesture</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(-&gt; + <span class="macro-nonterminal">$Key</span>))
 <a href=#953 id=953 data-nosnippet>953</a>    };
 <a href=#954 id=954 data-nosnippet>954</a>    ($(<span class="macro-nonterminal">$MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$Key</span>:tt) =&gt; {
-<a href=#955 id=955 data-nosnippet>955</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Gesture</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(-&gt; $(<span class="macro-nonterminal">$MODIFIER</span>)|+ + <span class="macro-nonterminal">$Key</span>))
+<a href=#955 id=955 data-nosnippet>955</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Gesture</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(-&gt; $(<span class="macro-nonterminal">$MODIFIER</span>)|+ + <span class="macro-nonterminal">$Key</span>))
 <a href=#956 id=956 data-nosnippet>956</a>    };
 <a href=#957 id=957 data-nosnippet>957</a>
 <a href=#958 id=958 data-nosnippet>958</a>    (<span class="macro-nonterminal">$StarterKey</span>:tt, <span class="macro-nonterminal">$ComplementKey</span>:tt) =&gt; {
-<a href=#959 id=959 data-nosnippet>959</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(=&gt;
+<a href=#959 id=959 data-nosnippet>959</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(=&gt;
 <a href=#960 id=960 data-nosnippet>960</a>            + <span class="macro-nonterminal">$StarterKey</span>,
 <a href=#961 id=961 data-nosnippet>961</a>            + <span class="macro-nonterminal">$ComplementKey
 <a href=#962 id=962 data-nosnippet>962</a>        </span>))
 <a href=#963 id=963 data-nosnippet>963</a>    };
 <a href=#964 id=964 data-nosnippet>964</a>
 <a href=#965 id=965 data-nosnippet>965</a>    (<span class="macro-nonterminal">$StarterKey</span>:tt, $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$ComplementKey</span>:tt) =&gt; {
-<a href=#966 id=966 data-nosnippet>966</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(=&gt;
+<a href=#966 id=966 data-nosnippet>966</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(=&gt;
 <a href=#967 id=967 data-nosnippet>967</a>            + <span class="macro-nonterminal">$StarterKey</span>,
 <a href=#968 id=968 data-nosnippet>968</a>            $(COMPLEMENT_MODIFIER)|* + <span class="macro-nonterminal">$ComplementKey
 <a href=#969 id=969 data-nosnippet>969</a>        </span>))
 <a href=#970 id=970 data-nosnippet>970</a>    };
 <a href=#971 id=971 data-nosnippet>971</a>
 <a href=#972 id=972 data-nosnippet>972</a>    ($(<span class="macro-nonterminal">$STARTER_MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$StarterKey</span>:tt, <span class="macro-nonterminal">$ComplementKey</span>:tt) =&gt; {
-<a href=#973 id=973 data-nosnippet>973</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(=&gt;
+<a href=#973 id=973 data-nosnippet>973</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(=&gt;
 <a href=#974 id=974 data-nosnippet>974</a>            $(<span class="macro-nonterminal">$STARTER_MODIFIER</span>)|* + <span class="macro-nonterminal">$StarterKey</span>,
 <a href=#975 id=975 data-nosnippet>975</a>            + <span class="macro-nonterminal">$ComplementKey
 <a href=#976 id=976 data-nosnippet>976</a>        </span>))
 <a href=#977 id=977 data-nosnippet>977</a>    };
 <a href=#978 id=978 data-nosnippet>978</a>
 <a href=#979 id=979 data-nosnippet>979</a>    ($(<span class="macro-nonterminal">$STARTER_MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$StarterKey</span>:tt, $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>:ident)|+ + <span class="macro-nonterminal">$ComplementKey</span>:tt) =&gt; {
-<a href=#980 id=980 data-nosnippet>980</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$</span><span class="macro">crate::__shortcut!</span>(=&gt;
+<a href=#980 id=980 data-nosnippet>980</a>        <span class="macro-nonterminal">$crate::shortcut::Shortcut::Chord</span>(<span class="macro-nonterminal">$crate::__shortcut</span>!(=&gt;
 <a href=#981 id=981 data-nosnippet>981</a>            $(<span class="macro-nonterminal">$STARTER_MODIFIER</span>)|* + <span class="macro-nonterminal">$StarterKey</span>,
 <a href=#982 id=982 data-nosnippet>982</a>            $(<span class="macro-nonterminal">$COMPLEMENT_MODIFIER</span>)|* + <span class="macro-nonterminal">$ComplementKey
 <a href=#983 id=983 data-nosnippet>983</a>        </span>))
 <a href=#984 id=984 data-nosnippet>984</a>    };
 <a href=#985 id=985 data-nosnippet>985</a>}
 <a href=#986 id=986 data-nosnippet>986</a><span class="attr">#[doc(inline)]
-<a href=#987 id=987 data-nosnippet>987</a></span><span class="kw">pub use </span><span class="kw">crate</span>::shortcut_macro <span class="kw">as </span>shortcut;</code></pre></div></section></main></body></html>
+<a href=#987 id=987 data-nosnippet>987</a></span><span class="kw">pub use </span><span class="kw">crate</span>::shortcut_macro <span class="kw">as </span>shortcut;
+</code></pre></div></section></main></body></html>

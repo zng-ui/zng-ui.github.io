@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"static":["APP_INSTANCE_EVENT"],"struct":["AppInstanceArgs","SingleInstanceManager"]};
+window.SIDEBAR_ITEMS = {"static":["APP_INSTANCE_EVENT"],"struct":["AppInstanceArgs"]};

@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ClipboardData","ClipboardError","ClipboardType"]};
+window.SIDEBAR_ITEMS = {"enum":["ClipboardData","ClipboardError","ClipboardType"],"struct":["ClipboardTypes"]};

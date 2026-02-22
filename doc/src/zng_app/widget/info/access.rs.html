@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info/access.rs`."><title>access.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../../static.files/src-script-813739b1.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><script>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-app/src/widget/info/access.rs`."><title>access.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="zng_app" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../../../static.files/storage-e2aeef58.js"></script><script defer src="../../../../static.files/src-script-813739b1.js"></script><script defer src="../../../../src-files.js"></script><script defer src="../../../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><script>
 // Hides tagged `macro_rules!` macros from crate root.
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -1075,7 +1075,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1039 id=1039 data-nosnippet>1039</a>            <span class="kw">let </span>a = <span class="self">self</span>.access();
 <a href=#1040 id=1040 data-nosnippet>1040</a>            <span class="kw">let </span><span class="kw-2">mut </span>prev_bounds = a.view_bounds.lock();
 <a href=#1041 id=1041 data-nosnippet>1041</a>
-<a href=#1042 id=1042 data-nosnippet>1042</a>            bounds_changed = <span class="kw-2">*</span>prev_bounds != bounds;
+<a href=#1042 id=1042 data-nosnippet>1042</a>            bounds_changed = <span class="kw-2">*</span><span class="macro">prev_bounds !</span>= bounds;
 <a href=#1043 id=1043 data-nosnippet>1043</a>
 <a href=#1044 id=1044 data-nosnippet>1044</a>            <span class="kw">if </span>!bounds_changed {
 <a href=#1045 id=1045 data-nosnippet>1045</a>                <span class="kw">return</span>;
@@ -1095,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1059 id=1059 data-nosnippet>1059</a>                <span class="kw">if </span>bounds_changed || !prev.access().info_eq(<span class="self">self</span>.access()) || {
 <a href=#1060 id=1060 data-nosnippet>1060</a>                    <span class="comment">// check children and cache result
 <a href=#1061 id=1061 data-nosnippet>1061</a>                    </span><span class="kw">let </span>c = <span class="self">self</span>.info.access_children_ids(<span class="bool-val">false</span>);
-<a href=#1062 id=1062 data-nosnippet>1062</a>                    <span class="kw">let </span>changed = c != prev.info.access_children_ids(<span class="bool-val">true</span>);
+<a href=#1062 id=1062 data-nosnippet>1062</a>                    <span class="kw">let </span>changed = <span class="macro">c !</span>= prev.info.access_children_ids(<span class="bool-val">true</span>);
 <a href=#1063 id=1063 data-nosnippet>1063</a>                    children = <span class="prelude-val">Some</span>(c);
 <a href=#1064 id=1064 data-nosnippet>1064</a>                    changed
 <a href=#1065 id=1065 data-nosnippet>1065</a>                } {
@@ -1158,7 +1158,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1122 id=1122 data-nosnippet>1122</a>        <span class="kw">let </span>new_bounds = <span class="prelude-val">Some</span>(<span class="self">self</span>.bounds_info());
 <a href=#1123 id=1123 data-nosnippet>1123</a>        {
 <a href=#1124 id=1124 data-nosnippet>1124</a>            <span class="kw">let </span><span class="kw-2">mut </span>bounds = a.view_bounds.lock();
-<a href=#1125 id=1125 data-nosnippet>1125</a>            update = <span class="kw-2">*</span>bounds != new_bounds;
+<a href=#1125 id=1125 data-nosnippet>1125</a>            update = <span class="kw-2">*</span><span class="macro">bounds !</span>= new_bounds;
 <a href=#1126 id=1126 data-nosnippet>1126</a>            <span class="kw">if </span>update {
 <a href=#1127 id=1127 data-nosnippet>1127</a>                vis_changed = bounds.is_none();
 <a href=#1128 id=1128 data-nosnippet>1128</a>                <span class="kw-2">*</span>bounds = new_bounds;
@@ -1320,4 +1320,5 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1284 id=1284 data-nosnippet>1284</a>    </span><span class="kw">pub </span>widget: <span class="kw-2">&amp;</span><span class="lifetime">'a </span>WidgetAccessInfo,
 <a href=#1285 id=1285 data-nosnippet>1285</a>    <span class="doccomment">/// Partially build view info, does not include children info.
 <a href=#1286 id=1286 data-nosnippet>1286</a>    </span><span class="kw">pub </span>node: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>zng_view_api::access::AccessNode,
-<a href=#1287 id=1287 data-nosnippet>1287</a>}</code></pre></div></section></main></body></html>
+<a href=#1287 id=1287 data-nosnippet>1287</a>}
+</code></pre></div></section></main></body></html>

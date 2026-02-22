@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/types.rs`."><title>types.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>types.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{fmt, mem, sync::Arc, time::Duration};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/types.rs`."><title>types.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>types.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{fmt, mem, sync::Arc, time::Duration};
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>atomic::{Atomic, Ordering};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>bitflags::bitflags;
@@ -457,7 +457,7 @@
 <a href=#457 id=457 data-nosnippet>457</a>        }
 <a href=#458 id=458 data-nosnippet>458</a>
 <a href=#459 id=459 data-nosnippet>459</a>        scroll_offset_var.set(next);
-<a href=#460 id=460 data-nosnippet>460</a>        <span class="kw">if </span>overscroll != <span class="number">0</span>.fct() {
+<a href=#460 id=460 data-nosnippet>460</a>        <span class="kw">if </span><span class="macro">overscroll !</span>= <span class="number">0</span>.fct() {
 <a href=#461 id=461 data-nosnippet>461</a>            <span class="kw">let </span>new_handle = <span class="self">self</span>.increment_overscroll(overscroll_offset_var, overscroll);
 <a href=#462 id=462 data-nosnippet>462</a>
 <a href=#463 id=463 data-nosnippet>463</a>            <span class="kw">let </span>config = SCROLL_CONFIG.get();
@@ -571,7 +571,7 @@
 <a href=#571 id=571 data-nosnippet>571</a>
 <a href=#572 id=572 data-nosnippet>572</a>        <span class="kw">let </span>cfg = SCROLL_CONFIG.get();
 <a href=#573 id=573 data-nosnippet>573</a>        <span class="kw">let </span>easing = |t| easing::ease_out(easing::quad, t);
-<a href=#574 id=574 data-nosnippet>574</a>        <span class="kw-2">*</span>cfg.inertia[vertical <span class="kw">as </span>usize].lock() = <span class="kw">if </span>overscroll != <span class="number">0</span>.fct() {
+<a href=#574 id=574 data-nosnippet>574</a>        <span class="kw-2">*</span>cfg.inertia[vertical <span class="kw">as </span>usize].lock() = <span class="kw">if </span><span class="macro">overscroll !</span>= <span class="number">0</span>.fct() {
 <a href=#575 id=575 data-nosnippet>575</a>            <span class="kw">let </span>transition = Transition::new(current, next + overscroll);
 <a href=#576 id=576 data-nosnippet>576</a>
 <a href=#577 id=577 data-nosnippet>577</a>            <span class="kw">let </span>overscroll_var = overscroll_offset_var.current_context();
@@ -716,11 +716,11 @@
 <a href=#716 id=716 data-nosnippet>716</a>        </span><span class="kw">let </span>max_scroll = content_size - viewport_size;
 <a href=#717 id=717 data-nosnippet>717</a>        <span class="kw">let </span>offset = center_in_content - center_in_viewport;
 <a href=#718 id=718 data-nosnippet>718</a>
-<a href=#719 id=719 data-nosnippet>719</a>        <span class="kw">if </span>offset.y != Px(<span class="number">0</span>) &amp;&amp; max_scroll.height &gt; Px(<span class="number">0</span>) {
+<a href=#719 id=719 data-nosnippet>719</a>        <span class="kw">if </span>offset.<span class="macro">y !</span>= Px(<span class="number">0</span>) &amp;&amp; max_scroll.height &gt; Px(<span class="number">0</span>) {
 <a href=#720 id=720 data-nosnippet>720</a>            <span class="kw">let </span>offset_y = offset.y.<span class="number">0 </span><span class="kw">as </span>f32 / max_scroll.height.<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#721 id=721 data-nosnippet>721</a>            SCROLL.chase_vertical(|<span class="kw">_</span>| offset_y.fct());
 <a href=#722 id=722 data-nosnippet>722</a>        }
-<a href=#723 id=723 data-nosnippet>723</a>        <span class="kw">if </span>offset.x != Px(<span class="number">0</span>) &amp;&amp; max_scroll.width &gt; Px(<span class="number">0</span>) {
+<a href=#723 id=723 data-nosnippet>723</a>        <span class="kw">if </span>offset.<span class="macro">x !</span>= Px(<span class="number">0</span>) &amp;&amp; max_scroll.width &gt; Px(<span class="number">0</span>) {
 <a href=#724 id=724 data-nosnippet>724</a>            <span class="kw">let </span>offset_x = offset.x.<span class="number">0 </span><span class="kw">as </span>f32 / max_scroll.width.<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#725 id=725 data-nosnippet>725</a>            SCROLL.chase_horizontal(|<span class="kw">_</span>| offset_x.fct());
 <a href=#726 id=726 data-nosnippet>726</a>        }
@@ -800,11 +800,11 @@
 <a href=#800 id=800 data-nosnippet>800</a>
 <a href=#801 id=801 data-nosnippet>801</a>        SCROLL_SCALE_VAR.set(scale);
 <a href=#802 id=802 data-nosnippet>802</a>
-<a href=#803 id=803 data-nosnippet>803</a>        <span class="kw">if </span>offset.y != <span class="number">0.0 </span>&amp;&amp; max_scroll.height &gt; <span class="number">0.0 </span>{
+<a href=#803 id=803 data-nosnippet>803</a>        <span class="kw">if </span>offset.<span class="macro">y !</span>= <span class="number">0.0 </span>&amp;&amp; max_scroll.height &gt; <span class="number">0.0 </span>{
 <a href=#804 id=804 data-nosnippet>804</a>            <span class="kw">let </span>offset_y = offset.y / max_scroll.height;
 <a href=#805 id=805 data-nosnippet>805</a>            SCROLL_VERTICAL_OFFSET_VAR.set(offset_y.clamp(<span class="number">0.0</span>, <span class="number">1.0</span>));
 <a href=#806 id=806 data-nosnippet>806</a>        }
-<a href=#807 id=807 data-nosnippet>807</a>        <span class="kw">if </span>offset.x != <span class="number">0.0 </span>&amp;&amp; max_scroll.width &gt; <span class="number">0.0 </span>{
+<a href=#807 id=807 data-nosnippet>807</a>        <span class="kw">if </span>offset.<span class="macro">x !</span>= <span class="number">0.0 </span>&amp;&amp; max_scroll.width &gt; <span class="number">0.0 </span>{
 <a href=#808 id=808 data-nosnippet>808</a>            <span class="kw">let </span>offset_x = offset.x / max_scroll.width;
 <a href=#809 id=809 data-nosnippet>809</a>            SCROLL_HORIZONTAL_OFFSET_VAR.set(offset_x.clamp(<span class="number">0.0</span>, <span class="number">1.0</span>));
 <a href=#810 id=810 data-nosnippet>810</a>        }
@@ -920,8 +920,8 @@
 <a href=#920 id=920 data-nosnippet>920</a>            viewport = (info.viewport().size - info.joiner_size()).cast::&lt;f32&gt;();
 <a href=#921 id=921 data-nosnippet>921</a>        } <span class="kw">else </span>{
 <a href=#922 id=922 data-nosnippet>922</a>            content = SCROLL_CONTENT_ORIGINAL_SIZE_VAR.get().cast::&lt;f32&gt;();
-<a href=#923 id=923 data-nosnippet>923</a>            viewport = SCROLL_VIEWPORT_SIZE_VAR.get().cast::&lt;f32&gt;(); <span class="comment">// TODO missing JOINER_SIZE
-<a href=#924 id=924 data-nosnippet>924</a>        </span>}
+<a href=#923 id=923 data-nosnippet>923</a>            viewport = SCROLL_VIEWPORT_SIZE_VAR.get().cast::&lt;f32&gt;();
+<a href=#924 id=924 data-nosnippet>924</a>        }
 <a href=#925 id=925 data-nosnippet>925</a>
 <a href=#926 id=926 data-nosnippet>926</a>        <span class="kw">if </span>content.width &lt; <span class="number">0.1 </span>|| content.height &lt; <span class="number">0.1 </span>{
 <a href=#927 id=927 data-nosnippet>927</a>            <span class="kw">return </span>min;
@@ -1175,4 +1175,5 @@
 <a href=#1175 id=1175 data-nosnippet>1175</a>    </span>Contain,
 <a href=#1176 id=1176 data-nosnippet>1176</a>    <span class="doccomment">/// The content is only scaled down to fit the viewport. If the content is smaller them the viewport the scale is set to 100%.
 <a href=#1177 id=1177 data-nosnippet>1177</a>    </span>ScaleDown,
-<a href=#1178 id=1178 data-nosnippet>1178</a>}</code></pre></div></section></main></body></html>
+<a href=#1178 id=1178 data-nosnippet>1178</a>}
+</code></pre></div></section></main></body></html>

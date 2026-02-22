@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-window/src/window_properties.rs`."><title>window_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0 (ded5c06cf 2025-12-08)" data-channel="1.92.0" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_window/</div>window_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg_attr(not(feature = <span class="string">"config"</span>), allow(unused))]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-window/src/window_properties.rs`."><title>window_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_window" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.1 (01f6ddf75 2026-02-11)" data-channel="1.93.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-a3946164.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-a410ff4d.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_window/</div>window_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![cfg_attr(not(feature = <span class="string">"config"</span>), allow(unused))]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::time::Duration;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -243,7 +243,7 @@
 <a href=#243 id=243 data-nosnippet>243</a>        </span>Disabled,
 <a href=#244 id=244 data-nosnippet>244</a>        <span class="doccomment">/// Awaiting config or window load
 <a href=#245 id=245 data-nosnippet>245</a>        </span>AwaitingLoad {
-<a href=#246 id=246 data-nosnippet>246</a>            _window_load_handle: EventHandle,
+<a href=#246 id=246 data-nosnippet>246</a>            _window_load_handle: VarHandle,
 <a href=#247 id=247 data-nosnippet>247</a>            _config_status_handle: VarHandle,
 <a href=#248 id=248 data-nosnippet>248</a>        },
 <a href=#249 id=249 data-nosnippet>249</a>        <span class="doccomment">/// Loaded, there was no config entry for the key (using default values)
@@ -255,7 +255,7 @@
 <a href=#255 id=255 data-nosnippet>255</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
 <a href=#256 id=256 data-nosnippet>256</a>        UiNodeOp::Init =&gt; {
 <a href=#257 id=257 data-nosnippet>257</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
-<a href=#258 id=258 data-nosnippet>258</a>                <span class="kw">let </span>is_loaded = WINDOW.is_loaded();
+<a href=#258 id=258 data-nosnippet>258</a>                <span class="kw">let </span>is_loaded = WINDOW.vars().instance_state().get().is_loaded();
 <a href=#259 id=259 data-nosnippet>259</a>                <span class="kw">let </span>status = CONFIG.status();
 <a href=#260 id=260 data-nosnippet>260</a>                <span class="kw">let </span>is_idle = status.get().is_idle();
 <a href=#261 id=261 data-nosnippet>261</a>                <span class="kw">if </span>is_idle || is_loaded {
@@ -272,9 +272,9 @@
 <a href=#272 id=272 data-nosnippet>272</a>                } <span class="kw">else </span>{
 <a href=#273 id=273 data-nosnippet>273</a>                    <span class="kw">let </span>id = WIDGET.id();
 <a href=#274 id=274 data-nosnippet>274</a>                    <span class="kw">let </span>_window_load_handle = <span class="kw">if </span>!is_loaded {
-<a href=#275 id=275 data-nosnippet>275</a>                        WINDOW_LOAD_EVENT.subscribe(id)
+<a href=#275 id=275 data-nosnippet>275</a>                        WINDOW_LOAD_EVENT.subscribe(UpdateOp::Update, id)
 <a href=#276 id=276 data-nosnippet>276</a>                    } <span class="kw">else </span>{
-<a href=#277 id=277 data-nosnippet>277</a>                        EventHandle::dummy()
+<a href=#277 id=277 data-nosnippet>277</a>                        VarHandle::dummy()
 <a href=#278 id=278 data-nosnippet>278</a>                    };
 <a href=#279 id=279 data-nosnippet>279</a>                    <span class="kw">let </span>_config_status_handle = <span class="kw">if </span>!is_idle {
 <a href=#280 id=280 data-nosnippet>280</a>                        status.subscribe(UpdateOp::Update, id)
@@ -293,57 +293,57 @@
 <a href=#293 id=293 data-nosnippet>293</a>        UiNodeOp::Deinit =&gt; {
 <a href=#294 id=294 data-nosnippet>294</a>            state = State::Disabled;
 <a href=#295 id=295 data-nosnippet>295</a>        }
-<a href=#296 id=296 data-nosnippet>296</a>        UiNodeOp::Event { update } =&gt; {
-<a href=#297 id=297 data-nosnippet>297</a>            <span class="kw">if </span><span class="macro">matches!</span>(<span class="kw-2">&amp;</span>state, State::AwaitingLoad { .. }) &amp;&amp; WINDOW_LOAD_EVENT.has(update) {
-<a href=#298 id=298 data-nosnippet>298</a>                <span class="comment">// window loaded, can't await for config anymore
-<a href=#299 id=299 data-nosnippet>299</a>
-<a href=#300 id=300 data-nosnippet>300</a>                </span><span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
-<a href=#301 id=301 data-nosnippet>301</a>                    <span class="kw">if </span>CONFIG.contains_key(key.clone()).get() {
-<a href=#302 id=302 data-nosnippet>302</a>                        <span class="kw">let </span>cfg = CONFIG.get(key, on_update_save(<span class="bool-val">true</span>).unwrap());
-<a href=#303 id=303 data-nosnippet>303</a>                        on_load_restore(<span class="prelude-val">Some</span>(cfg.get()));
-<a href=#304 id=304 data-nosnippet>304</a>                        state = State::LoadedWithCfg(cfg);
-<a href=#305 id=305 data-nosnippet>305</a>                    } <span class="kw">else </span>{
-<a href=#306 id=306 data-nosnippet>306</a>                        on_load_restore(<span class="prelude-val">None</span>);
-<a href=#307 id=307 data-nosnippet>307</a>                        state = State::Loaded;
-<a href=#308 id=308 data-nosnippet>308</a>                    }
-<a href=#309 id=309 data-nosnippet>309</a>                } <span class="kw">else </span>{
-<a href=#310 id=310 data-nosnippet>310</a>                    <span class="comment">// this can happen if the parent widget node is not properly implemented (changed context)
-<a href=#311 id=311 data-nosnippet>311</a>                    </span>state = State::Disabled;
-<a href=#312 id=312 data-nosnippet>312</a>                }
-<a href=#313 id=313 data-nosnippet>313</a>            }
-<a href=#314 id=314 data-nosnippet>314</a>        }
-<a href=#315 id=315 data-nosnippet>315</a>        UiNodeOp::Update { .. } =&gt; <span class="kw">match </span><span class="kw-2">&amp;mut </span>state {
-<a href=#316 id=316 data-nosnippet>316</a>            State::LoadedWithCfg(cfg) =&gt; {
-<a href=#317 id=317 data-nosnippet>317</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(new) = on_update_save(<span class="bool-val">false</span>) {
-<a href=#318 id=318 data-nosnippet>318</a>                    cfg.set(new);
-<a href=#319 id=319 data-nosnippet>319</a>                }
-<a href=#320 id=320 data-nosnippet>320</a>            }
-<a href=#321 id=321 data-nosnippet>321</a>            State::Loaded =&gt; {
-<a href=#322 id=322 data-nosnippet>322</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(new) = on_update_save(<span class="bool-val">false</span>) {
-<a href=#323 id=323 data-nosnippet>323</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
-<a href=#324 id=324 data-nosnippet>324</a>                        <span class="kw">let </span>cfg = CONFIG.insert(key, new.clone());
-<a href=#325 id=325 data-nosnippet>325</a>                        state = State::LoadedWithCfg(cfg);
-<a href=#326 id=326 data-nosnippet>326</a>                    } <span class="kw">else </span>{
-<a href=#327 id=327 data-nosnippet>327</a>                        state = State::Disabled;
+<a href=#296 id=296 data-nosnippet>296</a>        UiNodeOp::Update { .. } =&gt; <span class="kw">match </span><span class="kw-2">&amp;mut </span>state {
+<a href=#297 id=297 data-nosnippet>297</a>            State::LoadedWithCfg(cfg) =&gt; {
+<a href=#298 id=298 data-nosnippet>298</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(new) = on_update_save(<span class="bool-val">false</span>) {
+<a href=#299 id=299 data-nosnippet>299</a>                    cfg.set(new);
+<a href=#300 id=300 data-nosnippet>300</a>                }
+<a href=#301 id=301 data-nosnippet>301</a>            }
+<a href=#302 id=302 data-nosnippet>302</a>            State::Loaded =&gt; {
+<a href=#303 id=303 data-nosnippet>303</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(new) = on_update_save(<span class="bool-val">false</span>) {
+<a href=#304 id=304 data-nosnippet>304</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
+<a href=#305 id=305 data-nosnippet>305</a>                        <span class="kw">let </span>cfg = CONFIG.insert(key, new.clone());
+<a href=#306 id=306 data-nosnippet>306</a>                        state = State::LoadedWithCfg(cfg);
+<a href=#307 id=307 data-nosnippet>307</a>                    } <span class="kw">else </span>{
+<a href=#308 id=308 data-nosnippet>308</a>                        state = State::Disabled;
+<a href=#309 id=309 data-nosnippet>309</a>                    }
+<a href=#310 id=310 data-nosnippet>310</a>                }
+<a href=#311 id=311 data-nosnippet>311</a>            }
+<a href=#312 id=312 data-nosnippet>312</a>            State::AwaitingLoad { .. } =&gt; {
+<a href=#313 id=313 data-nosnippet>313</a>                <span class="kw">if </span>CONFIG.status().get().is_idle() {
+<a href=#314 id=314 data-nosnippet>314</a>                    <span class="comment">// config finished loading, restore state
+<a href=#315 id=315 data-nosnippet>315</a>
+<a href=#316 id=316 data-nosnippet>316</a>                    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
+<a href=#317 id=317 data-nosnippet>317</a>                        <span class="kw">if </span>CONFIG.contains_key(key.clone()).get() {
+<a href=#318 id=318 data-nosnippet>318</a>                            <span class="kw">let </span>cfg = CONFIG.get(key, on_update_save(<span class="bool-val">true</span>).unwrap());
+<a href=#319 id=319 data-nosnippet>319</a>                            on_load_restore(<span class="prelude-val">Some</span>(cfg.get()));
+<a href=#320 id=320 data-nosnippet>320</a>                            state = State::LoadedWithCfg(cfg);
+<a href=#321 id=321 data-nosnippet>321</a>                        } <span class="kw">else </span>{
+<a href=#322 id=322 data-nosnippet>322</a>                            on_load_restore(<span class="prelude-val">None</span>);
+<a href=#323 id=323 data-nosnippet>323</a>                            state = State::Loaded;
+<a href=#324 id=324 data-nosnippet>324</a>                        }
+<a href=#325 id=325 data-nosnippet>325</a>                    } <span class="kw">else </span>{
+<a href=#326 id=326 data-nosnippet>326</a>                        <span class="comment">// this can happen if the parent widget node is not properly implemented (changed context)
+<a href=#327 id=327 data-nosnippet>327</a>                        </span>state = State::Disabled;
 <a href=#328 id=328 data-nosnippet>328</a>                    }
-<a href=#329 id=329 data-nosnippet>329</a>                }
-<a href=#330 id=330 data-nosnippet>330</a>            }
-<a href=#331 id=331 data-nosnippet>331</a>            State::AwaitingLoad { .. } =&gt; {
-<a href=#332 id=332 data-nosnippet>332</a>                <span class="kw">if </span>CONFIG.status().get().is_idle() {
-<a href=#333 id=333 data-nosnippet>333</a>                    <span class="comment">// config finished loading, restore state
-<a href=#334 id=334 data-nosnippet>334</a>
-<a href=#335 id=335 data-nosnippet>335</a>                    </span><span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
-<a href=#336 id=336 data-nosnippet>336</a>                        <span class="kw">if </span>CONFIG.contains_key(key.clone()).get() {
-<a href=#337 id=337 data-nosnippet>337</a>                            <span class="kw">let </span>cfg = CONFIG.get(key, on_update_save(<span class="bool-val">true</span>).unwrap());
-<a href=#338 id=338 data-nosnippet>338</a>                            on_load_restore(<span class="prelude-val">Some</span>(cfg.get()));
-<a href=#339 id=339 data-nosnippet>339</a>                            state = State::LoadedWithCfg(cfg);
-<a href=#340 id=340 data-nosnippet>340</a>                        } <span class="kw">else </span>{
-<a href=#341 id=341 data-nosnippet>341</a>                            on_load_restore(<span class="prelude-val">None</span>);
-<a href=#342 id=342 data-nosnippet>342</a>                            state = State::Loaded;
-<a href=#343 id=343 data-nosnippet>343</a>                        }
-<a href=#344 id=344 data-nosnippet>344</a>                    } <span class="kw">else </span>{
-<a href=#345 id=345 data-nosnippet>345</a>                        <span class="comment">// this can happen if the parent widget node is not properly implemented (changed context)
-<a href=#346 id=346 data-nosnippet>346</a>                        </span>state = State::Disabled;
+<a href=#329 id=329 data-nosnippet>329</a>                } <span class="kw">else </span>{
+<a href=#330 id=330 data-nosnippet>330</a>                    <span class="kw">let </span>win_id = WINDOW.id();
+<a href=#331 id=331 data-nosnippet>331</a>                    <span class="kw">if </span>WINDOW_LOAD_EVENT.any_update(<span class="bool-val">true</span>, |a| a.window_id == win_id) {
+<a href=#332 id=332 data-nosnippet>332</a>                        <span class="comment">// window loaded, can't await for config anymore
+<a href=#333 id=333 data-nosnippet>333</a>
+<a href=#334 id=334 data-nosnippet>334</a>                        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(key) = enabled.enabled_key() {
+<a href=#335 id=335 data-nosnippet>335</a>                            <span class="kw">if </span>CONFIG.contains_key(key.clone()).get() {
+<a href=#336 id=336 data-nosnippet>336</a>                                <span class="kw">let </span>cfg = CONFIG.get(key, on_update_save(<span class="bool-val">true</span>).unwrap());
+<a href=#337 id=337 data-nosnippet>337</a>                                on_load_restore(<span class="prelude-val">Some</span>(cfg.get()));
+<a href=#338 id=338 data-nosnippet>338</a>                                state = State::LoadedWithCfg(cfg);
+<a href=#339 id=339 data-nosnippet>339</a>                            } <span class="kw">else </span>{
+<a href=#340 id=340 data-nosnippet>340</a>                                on_load_restore(<span class="prelude-val">None</span>);
+<a href=#341 id=341 data-nosnippet>341</a>                                state = State::Loaded;
+<a href=#342 id=342 data-nosnippet>342</a>                            }
+<a href=#343 id=343 data-nosnippet>343</a>                        } <span class="kw">else </span>{
+<a href=#344 id=344 data-nosnippet>344</a>                            <span class="comment">// this can happen if the parent widget node is not properly implemented (changed context)
+<a href=#345 id=345 data-nosnippet>345</a>                            </span>state = State::Disabled;
+<a href=#346 id=346 data-nosnippet>346</a>                        }
 <a href=#347 id=347 data-nosnippet>347</a>                    }
 <a href=#348 id=348 data-nosnippet>348</a>                }
 <a href=#349 id=349 data-nosnippet>349</a>            }
@@ -495,7 +495,7 @@
 <a href=#495 id=495 data-nosnippet>495</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(delay) = enabled.deadline() {
 <a href=#496 id=496 data-nosnippet>496</a>                <span class="kw">let </span>cfg = CONFIG.status();
 <a href=#497 id=497 data-nosnippet>497</a>                <span class="kw">if </span>!cfg.get().is_idle()
-<a href=#498 id=498 data-nosnippet>498</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(_handle) = WINDOW.loading_handle(delay)
+<a href=#498 id=498 data-nosnippet>498</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(_handle) = WINDOW.loading_handle(delay, <span class="string">"config_block_window_load"</span>)
 <a href=#499 id=499 data-nosnippet>499</a>                {
 <a href=#500 id=500 data-nosnippet>500</a>                    <span class="kw">let </span>_cfg_handle = cfg.subscribe(UpdateOp::Update, WIDGET.id());
 <a href=#501 id=501 data-nosnippet>501</a>                    WIDGET.sub_var(<span class="kw-2">&amp;</span>cfg);
@@ -517,58 +517,51 @@
 <a href=#517 id=517 data-nosnippet>517</a>    })
 <a href=#518 id=518 data-nosnippet>518</a>}
 <a href=#519 id=519 data-nosnippet>519</a>
-<a href=#520 id=520 data-nosnippet>520</a><span class="doccomment">/// Gets if is not headless, [`chrome`] is `true`, [`state`] is not fullscreen but [`WINDOWS.system_chrome`]
-<a href=#521 id=521 data-nosnippet>521</a>/// reports the system does not provide window decorations.
-<a href=#522 id=522 data-nosnippet>522</a>///
-<a href=#523 id=523 data-nosnippet>523</a>/// [`chrome`]: fn@chrome
-<a href=#524 id=524 data-nosnippet>524</a>/// [`state`]: fn@state
-<a href=#525 id=525 data-nosnippet>525</a>/// [`WINDOWS.system_chrome`]: WINDOWS::system_chrome
-<a href=#526 id=526 data-nosnippet>526</a></span><span class="attr">#[property(EVENT, default(var_state()), widget_impl(Window))]
-<a href=#527 id=527 data-nosnippet>527</a></span><span class="kw">pub fn </span>needs_fallback_chrome(child: <span class="kw">impl </span>IntoUiNode, needs: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#528 id=528 data-nosnippet>528</a>    zng_wgt::node::bind_state_init(
-<a href=#529 id=529 data-nosnippet>529</a>        child,
-<a href=#530 id=530 data-nosnippet>530</a>        || {
-<a href=#531 id=531 data-nosnippet>531</a>            <span class="kw">if </span>WINDOW.mode().is_headless() {
-<a href=#532 id=532 data-nosnippet>532</a>                const_var(<span class="bool-val">false</span>)
-<a href=#533 id=533 data-nosnippet>533</a>            } <span class="kw">else </span>{
-<a href=#534 id=534 data-nosnippet>534</a>                <span class="kw">let </span>vars = WINDOW.vars();
-<a href=#535 id=535 data-nosnippet>535</a>                <span class="macro">expr_var!</span> {
-<a href=#536 id=536 data-nosnippet>536</a>                    <span class="kw-2">*</span>#{vars.chrome()} &amp;&amp; #{WINDOWS.system_chrome()}.needs_custom() &amp;&amp; !#{vars.state()}.is_fullscreen()
-<a href=#537 id=537 data-nosnippet>537</a>                }
-<a href=#538 id=538 data-nosnippet>538</a>            }
-<a href=#539 id=539 data-nosnippet>539</a>        },
-<a href=#540 id=540 data-nosnippet>540</a>        needs,
-<a href=#541 id=541 data-nosnippet>541</a>    )
-<a href=#542 id=542 data-nosnippet>542</a>}
-<a href=#543 id=543 data-nosnippet>543</a>
-<a href=#544 id=544 data-nosnippet>544</a><span class="doccomment">/// Gets if [`WINDOWS.system_chrome`] prefers custom chrome.
-<a href=#545 id=545 data-nosnippet>545</a>///
-<a href=#546 id=546 data-nosnippet>546</a>/// Note that you must set [`chrome`] to `false` when using this to provide a custom chrome.
-<a href=#547 id=547 data-nosnippet>547</a>///
-<a href=#548 id=548 data-nosnippet>548</a>/// [`chrome`]: fn@chrome
-<a href=#549 id=549 data-nosnippet>549</a>/// [`WINDOWS.system_chrome`]: WINDOWS::system_chrome
-<a href=#550 id=550 data-nosnippet>550</a></span><span class="attr">#[property(EVENT, default(var_state()), widget_impl(Window, DefaultStyle))]
-<a href=#551 id=551 data-nosnippet>551</a></span><span class="kw">pub fn </span>prefer_custom_chrome(child: <span class="kw">impl </span>IntoUiNode, prefer: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#552 id=552 data-nosnippet>552</a>    zng_wgt::node::bind_state(child, WINDOWS.system_chrome().map(|c| c.prefer_custom), prefer)
-<a href=#553 id=553 data-nosnippet>553</a>}
-<a href=#554 id=554 data-nosnippet>554</a>
-<a href=#555 id=555 data-nosnippet>555</a><span class="doccomment">/// Adorner property specific for custom chrome overlays.
-<a href=#556 id=556 data-nosnippet>556</a>///
-<a href=#557 id=557 data-nosnippet>557</a>/// This property behaves exactly like [`adorner_fn`]. Using it instead of adorner frees the adorner property
-<a href=#558 id=558 data-nosnippet>558</a>/// for other usage in the window instance or in derived window types.
-<a href=#559 id=559 data-nosnippet>559</a>///
-<a href=#560 id=560 data-nosnippet>560</a>/// Note that you can also set the `custom_chrome_padding_fn` to ensure that the content is not hidden behind the adorner.
+<a href=#520 id=520 data-nosnippet>520</a><span class="doccomment">/// Gets if a custom window chrome must be rendered.
+<a href=#521 id=521 data-nosnippet>521</a>///
+<a href=#522 id=522 data-nosnippet>522</a>/// This is `true` when is running in a desktop OS and [`chrome`] is `true` and [`state`] is not fullscreen and
+<a href=#523 id=523 data-nosnippet>523</a>/// [`WINDOWS.system_chrome`] is `false`.
+<a href=#524 id=524 data-nosnippet>524</a>///
+<a href=#525 id=525 data-nosnippet>525</a>/// [`chrome`]: fn@chrome
+<a href=#526 id=526 data-nosnippet>526</a>/// [`state`]: fn@state
+<a href=#527 id=527 data-nosnippet>527</a>/// [`WINDOWS.system_chrome`]: WINDOWS::system_chrome
+<a href=#528 id=528 data-nosnippet>528</a></span><span class="attr">#[property(EVENT, default(var_state()), widget_impl(Window))]
+<a href=#529 id=529 data-nosnippet>529</a></span><span class="kw">pub fn </span>needs_fallback_chrome(child: <span class="kw">impl </span>IntoUiNode, needs: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
+<a href=#530 id=530 data-nosnippet>530</a>    zng_wgt::node::bind_state_init(child, needs, |n| {
+<a href=#531 id=531 data-nosnippet>531</a>        <span class="kw">if </span><span class="macro">cfg!</span>(any(windows, target_os = <span class="string">"macos"</span>, target_os = <span class="string">"android"</span>)) || WINDOW.mode().is_headless() {
+<a href=#532 id=532 data-nosnippet>532</a>            <span class="comment">// optimization, as of the current release only Wayland does not provide chrome so we
+<a href=#533 id=533 data-nosnippet>533</a>            // can avoid an `expr_var!` for most cases
+<a href=#534 id=534 data-nosnippet>534</a>            </span>n.set(<span class="bool-val">false</span>);
+<a href=#535 id=535 data-nosnippet>535</a>            VarHandle::dummy()
+<a href=#536 id=536 data-nosnippet>536</a>        } <span class="kw">else </span>{
+<a href=#537 id=537 data-nosnippet>537</a>            <span class="kw">let </span>vars = WINDOW.vars();
+<a href=#538 id=538 data-nosnippet>538</a>            <span class="kw">let </span>state = <span class="macro">expr_var!</span> {
+<a href=#539 id=539 data-nosnippet>539</a>                <span class="kw-2">*</span>#{vars.chrome()} &amp;&amp; !#{WINDOWS.system_chrome()} &amp;&amp; !#{vars.state()}.is_fullscreen()
+<a href=#540 id=540 data-nosnippet>540</a>            };
+<a href=#541 id=541 data-nosnippet>541</a>            state.set_bind(n).perm();
+<a href=#542 id=542 data-nosnippet>542</a>            n.hold(state)
+<a href=#543 id=543 data-nosnippet>543</a>        }
+<a href=#544 id=544 data-nosnippet>544</a>    })
+<a href=#545 id=545 data-nosnippet>545</a>}
+<a href=#546 id=546 data-nosnippet>546</a>
+<a href=#547 id=547 data-nosnippet>547</a><span class="doccomment">/// Adorner property specific for custom chrome overlays.
+<a href=#548 id=548 data-nosnippet>548</a>///
+<a href=#549 id=549 data-nosnippet>549</a>/// This property behaves exactly like [`adorner_fn`]. Using it instead of adorner frees the adorner property
+<a href=#550 id=550 data-nosnippet>550</a>/// for other usage in the window instance or in derived window types.
+<a href=#551 id=551 data-nosnippet>551</a>///
+<a href=#552 id=552 data-nosnippet>552</a>/// Note that you can also set the `custom_chrome_padding_fn` to ensure that the content is not hidden behind the adorner.
+<a href=#553 id=553 data-nosnippet>553</a>///
+<a href=#554 id=554 data-nosnippet>554</a>/// [`adorner_fn`]: fn@adorner_fn
+<a href=#555 id=555 data-nosnippet>555</a></span><span class="attr">#[property(FILL, default(WidgetFn::nil()), widget_impl(Window, DefaultStyle))]
+<a href=#556 id=556 data-nosnippet>556</a></span><span class="kw">pub fn </span>custom_chrome_adorner_fn(child: <span class="kw">impl </span>IntoUiNode, custom_chrome: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; UiNode {
+<a href=#557 id=557 data-nosnippet>557</a>    adorner_fn(child, custom_chrome)
+<a href=#558 id=558 data-nosnippet>558</a>}
+<a href=#559 id=559 data-nosnippet>559</a>
+<a href=#560 id=560 data-nosnippet>560</a><span class="doccomment">/// Extra padding for window content in windows that display a [`custom_chrome_adorner_fn`].
 <a href=#561 id=561 data-nosnippet>561</a>///
-<a href=#562 id=562 data-nosnippet>562</a>/// [`adorner_fn`]: fn@adorner_fn
-<a href=#563 id=563 data-nosnippet>563</a></span><span class="attr">#[property(FILL, default(WidgetFn::nil()), widget_impl(Window, DefaultStyle))]
-<a href=#564 id=564 data-nosnippet>564</a></span><span class="kw">pub fn </span>custom_chrome_adorner_fn(child: <span class="kw">impl </span>IntoUiNode, custom_chrome: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;()&gt;&gt;) -&gt; UiNode {
-<a href=#565 id=565 data-nosnippet>565</a>    adorner_fn(child, custom_chrome)
+<a href=#562 id=562 data-nosnippet>562</a>/// [`custom_chrome_adorner_fn`]: fn@custom_chrome_adorner_fn
+<a href=#563 id=563 data-nosnippet>563</a></span><span class="attr">#[property(CHILD_LAYOUT, default(<span class="number">0</span>), widget_impl(Window, DefaultStyle))]
+<a href=#564 id=564 data-nosnippet>564</a></span><span class="kw">pub fn </span>custom_chrome_padding_fn(child: <span class="kw">impl </span>IntoUiNode, padding: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;) -&gt; UiNode {
+<a href=#565 id=565 data-nosnippet>565</a>    zng_wgt_container::padding(child, padding)
 <a href=#566 id=566 data-nosnippet>566</a>}
-<a href=#567 id=567 data-nosnippet>567</a>
-<a href=#568 id=568 data-nosnippet>568</a><span class="doccomment">/// Extra padding for window content in windows that display a [`custom_chrome_adorner_fn`].
-<a href=#569 id=569 data-nosnippet>569</a>///
-<a href=#570 id=570 data-nosnippet>570</a>/// [`custom_chrome_adorner_fn`]: fn@custom_chrome_adorner_fn
-<a href=#571 id=571 data-nosnippet>571</a></span><span class="attr">#[property(CHILD_LAYOUT, default(<span class="number">0</span>), widget_impl(Window, DefaultStyle))]
-<a href=#572 id=572 data-nosnippet>572</a></span><span class="kw">pub fn </span>custom_chrome_padding_fn(child: <span class="kw">impl </span>IntoUiNode, padding: <span class="kw">impl </span>IntoVar&lt;SideOffsets&gt;) -&gt; UiNode {
-<a href=#573 id=573 data-nosnippet>573</a>    zng_wgt_container::padding(child, padding)
-<a href=#574 id=574 data-nosnippet>574</a>}</code></pre></div></section></main></body></html>
+</code></pre></div></section></main></body></html>
