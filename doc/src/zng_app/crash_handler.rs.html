@@ -1050,7 +1050,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1014 id=1014 data-nosnippet>1014</a>                <span class="kw">let </span>uuid = uuid::Uuid::new_v4();
 <a href=#1015 id=1015 data-nosnippet>1015</a>                <span class="kw">let </span>dump_file = dump_dir.join(<span class="macro">format!</span>(<span class="string">"{}.dmp"</span>, uuid.simple()));
 <a href=#1016 id=1016 data-nosnippet>1016</a>                <span class="kw">let </span>dump_channel = std::env::temp_dir().join(<span class="macro">format!</span>(<span class="string">"zng-crash-{}"</span>, uuid.simple()));
-<a href=#1017 id=1017 data-nosnippet>1017</a>                <span class="kw">match </span>minidumper::Server::with_name(dump_channel.as_path()) {
+<a href=#1017 id=1017 data-nosnippet>1017</a>                <span class="kw">match </span>minidumper::Server::with_name(minidumper::SocketName::Path(<span class="kw-2">&amp;</span>dump_channel)) {
 <a href=#1018 id=1018 data-nosnippet>1018</a>                    <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>s) =&gt; {
 <a href=#1019 id=1019 data-nosnippet>1019</a>                        command.env(DUMP_CHANNEL, <span class="kw-2">&amp;</span>dump_channel);
 <a href=#1020 id=1020 data-nosnippet>1020</a>                        <span class="kw">let </span>shutdown = Arc::new(AtomicBool::new(<span class="bool-val">false</span>));
@@ -1238,7 +1238,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#1202 id=1202 data-nosnippet>1202</a>            <span class="kw">return</span>;
 <a href=#1203 id=1203 data-nosnippet>1203</a>        }
 <a href=#1204 id=1204 data-nosnippet>1204</a>    };
-<a href=#1205 id=1205 data-nosnippet>1205</a>    <span class="kw">let </span>client = <span class="kw">match </span>minidumper::Client::with_name(channel_name.as_path()) {
+<a href=#1205 id=1205 data-nosnippet>1205</a>    <span class="kw">let </span>client = <span class="kw">match </span>minidumper::Client::with_name(minidumper::SocketName::Path(<span class="kw-2">&amp;</span>channel_name)) {
 <a href=#1206 id=1206 data-nosnippet>1206</a>        <span class="prelude-val">Ok</span>(c) =&gt; c,
 <a href=#1207 id=1207 data-nosnippet>1207</a>        <span class="prelude-val">Err</span>(e) =&gt; {
 <a href=#1208 id=1208 data-nosnippet>1208</a>            <span class="macro">eprintln!</span>(<span class="string">"failed to connect minidump client, this instance will not handle crashes, {e}"</span>);

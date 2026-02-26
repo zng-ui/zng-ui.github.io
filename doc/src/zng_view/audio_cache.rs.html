@@ -13,8 +13,8 @@
 <a href=#13 id=13 data-nosnippet>13</a>
 <a href=#14 id=14 data-nosnippet>14</a><span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
 <a href=#15 id=15 data-nosnippet>15</a></span><span class="kw">mod </span>rodio {
-<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">pub struct </span>OutputStream;
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">pub struct </span>Sink;
+<a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">pub struct </span>MixerDeviceSink;
+<a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">pub struct </span>Player;
 <a href=#18 id=18 data-nosnippet>18</a>}
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use crate</span>::{AppEvent, AppEventSender};
@@ -80,11 +80,11 @@
 <a href=#80 id=80 data-nosnippet>80</a>    id_gen: AudioId,
 <a href=#81 id=81 data-nosnippet>81</a>    play_id_gen: AudioPlayId,
 <a href=#82 id=82 data-nosnippet>82</a>    tracks: FxHashMap&lt;AudioId, AudioTrack&gt;,
-<a href=#83 id=83 data-nosnippet>83</a>    device_streams: Vec&lt;rodio::OutputStream&gt;,
+<a href=#83 id=83 data-nosnippet>83</a>    device_streams: Vec&lt;rodio::MixerDeviceSink&gt;,
 <a href=#84 id=84 data-nosnippet>84</a>    streams: FxHashMap&lt;AudioOutputId, VpOutput&gt;,
 <a href=#85 id=85 data-nosnippet>85</a>}
 <a href=#86 id=86 data-nosnippet>86</a><span class="kw">struct </span>VpOutput {
-<a href=#87 id=87 data-nosnippet>87</a>    sink: rodio::Sink,
+<a href=#87 id=87 data-nosnippet>87</a>    sink: rodio::Player,
 <a href=#88 id=88 data-nosnippet>88</a>    channel_count: u16,
 <a href=#89 id=89 data-nosnippet>89</a>    sample_rate: u32,
 <a href=#90 id=90 data-nosnippet>90</a>}
@@ -215,7 +215,7 @@
 <a href=#215 id=215 data-nosnippet>215</a>            }
 <a href=#216 id=216 data-nosnippet>216</a>        };
 <a href=#217 id=217 data-nosnippet>217</a>
-<a href=#218 id=218 data-nosnippet>218</a>        <span class="kw">let </span><span class="kw-2">mut </span>meta = AudioMetadata::new(id, decoder.channels(), decoder.sample_rate());
+<a href=#218 id=218 data-nosnippet>218</a>        <span class="kw">let </span><span class="kw-2">mut </span>meta = AudioMetadata::new(id, decoder.channels().get(), decoder.sample_rate().get());
 <a href=#219 id=219 data-nosnippet>219</a>        meta.total_duration = <span class="prelude-val">Some</span>(total_duration);
 <a href=#220 id=220 data-nosnippet>220</a>
 <a href=#221 id=221 data-nosnippet>221</a>        <span class="kw">let </span><span class="kw-2">mut </span>track = AudioTrack {
@@ -297,7 +297,7 @@
 <a href=#297 id=297 data-nosnippet>297</a>
 <a href=#298 id=298 data-nosnippet>298</a>        <span class="comment">// only supports the default stream for this release
 <a href=#299 id=299 data-nosnippet>299</a>        </span><span class="kw">if </span><span class="self">self</span>.device_streams.is_empty() {
-<a href=#300 id=300 data-nosnippet>300</a>            <span class="kw">match </span>rodio::OutputStreamBuilder::open_default_stream() {
+<a href=#300 id=300 data-nosnippet>300</a>            <span class="kw">match </span>rodio::DeviceSinkBuilder::open_default_sink() {
 <a href=#301 id=301 data-nosnippet>301</a>                <span class="prelude-val">Ok</span>(s) =&gt; {
 <a href=#302 id=302 data-nosnippet>302</a>                    <span class="self">self</span>.device_streams.push(s);
 <a href=#303 id=303 data-nosnippet>303</a>                }
@@ -312,159 +312,162 @@
 <a href=#312 id=312 data-nosnippet>312</a>        }
 <a href=#313 id=313 data-nosnippet>313</a>        <span class="kw">let </span>device_stream = <span class="kw-2">&amp;</span><span class="self">self</span>.device_streams[<span class="number">0</span>];
 <a href=#314 id=314 data-nosnippet>314</a>
-<a href=#315 id=315 data-nosnippet>315</a>        <span class="kw">let </span>data = AudioOutputOpenData::new(device_stream.config().channel_count(), device_stream.config().sample_rate());
-<a href=#316 id=316 data-nosnippet>316</a>
-<a href=#317 id=317 data-nosnippet>317</a>        <span class="kw">let </span>sink = rodio::Sink::connect_new(device_stream.mixer());
-<a href=#318 id=318 data-nosnippet>318</a>        sink.set_volume(output.config.volume.<span class="number">0</span>);
-<a href=#319 id=319 data-nosnippet>319</a>        sink.set_speed(output.config.speed.<span class="number">0</span>);
-<a href=#320 id=320 data-nosnippet>320</a>        <span class="kw">match </span>output.config.state {
-<a href=#321 id=321 data-nosnippet>321</a>            AudioOutputState::Paused | AudioOutputState::Stopped =&gt; sink.pause(),
-<a href=#322 id=322 data-nosnippet>322</a>            AudioOutputState::Playing =&gt; {}
-<a href=#323 id=323 data-nosnippet>323</a>            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
-<a href=#324 id=324 data-nosnippet>324</a>        }
-<a href=#325 id=325 data-nosnippet>325</a>
-<a href=#326 id=326 data-nosnippet>326</a>        <span class="kw">let </span>c = device_stream.config();
-<a href=#327 id=327 data-nosnippet>327</a>        <span class="self">self</span>.streams.insert(
-<a href=#328 id=328 data-nosnippet>328</a>            id,
-<a href=#329 id=329 data-nosnippet>329</a>            VpOutput {
-<a href=#330 id=330 data-nosnippet>330</a>                sink,
-<a href=#331 id=331 data-nosnippet>331</a>                channel_count: c.channel_count(),
-<a href=#332 id=332 data-nosnippet>332</a>                sample_rate: c.sample_rate(),
-<a href=#333 id=333 data-nosnippet>333</a>            },
-<a href=#334 id=334 data-nosnippet>334</a>        );
-<a href=#335 id=335 data-nosnippet>335</a>
-<a href=#336 id=336 data-nosnippet>336</a>        <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioOutputOpened(id, data)));
-<a href=#337 id=337 data-nosnippet>337</a>    }
+<a href=#315 id=315 data-nosnippet>315</a>        <span class="kw">let </span>data = AudioOutputOpenData::new(
+<a href=#316 id=316 data-nosnippet>316</a>            device_stream.config().channel_count().get(),
+<a href=#317 id=317 data-nosnippet>317</a>            device_stream.config().sample_rate().get(),
+<a href=#318 id=318 data-nosnippet>318</a>        );
+<a href=#319 id=319 data-nosnippet>319</a>
+<a href=#320 id=320 data-nosnippet>320</a>        <span class="kw">let </span>sink = rodio::Player::connect_new(device_stream.mixer());
+<a href=#321 id=321 data-nosnippet>321</a>        sink.set_volume(output.config.volume.<span class="number">0</span>);
+<a href=#322 id=322 data-nosnippet>322</a>        sink.set_speed(output.config.speed.<span class="number">0</span>);
+<a href=#323 id=323 data-nosnippet>323</a>        <span class="kw">match </span>output.config.state {
+<a href=#324 id=324 data-nosnippet>324</a>            AudioOutputState::Paused | AudioOutputState::Stopped =&gt; sink.pause(),
+<a href=#325 id=325 data-nosnippet>325</a>            AudioOutputState::Playing =&gt; {}
+<a href=#326 id=326 data-nosnippet>326</a>            <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+<a href=#327 id=327 data-nosnippet>327</a>        }
+<a href=#328 id=328 data-nosnippet>328</a>
+<a href=#329 id=329 data-nosnippet>329</a>        <span class="kw">let </span>c = device_stream.config();
+<a href=#330 id=330 data-nosnippet>330</a>        <span class="self">self</span>.streams.insert(
+<a href=#331 id=331 data-nosnippet>331</a>            id,
+<a href=#332 id=332 data-nosnippet>332</a>            VpOutput {
+<a href=#333 id=333 data-nosnippet>333</a>                sink,
+<a href=#334 id=334 data-nosnippet>334</a>                channel_count: c.channel_count().get(),
+<a href=#335 id=335 data-nosnippet>335</a>                sample_rate: c.sample_rate().get(),
+<a href=#336 id=336 data-nosnippet>336</a>            },
+<a href=#337 id=337 data-nosnippet>337</a>        );
 <a href=#338 id=338 data-nosnippet>338</a>
-<a href=#339 id=339 data-nosnippet>339</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
-<a href=#340 id=340 data-nosnippet>340</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>update_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: AudioOutputUpdateRequest) {}
+<a href=#339 id=339 data-nosnippet>339</a>        <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioOutputOpened(id, data)));
+<a href=#340 id=340 data-nosnippet>340</a>    }
 <a href=#341 id=341 data-nosnippet>341</a>
-<a href=#342 id=342 data-nosnippet>342</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
-<a href=#343 id=343 data-nosnippet>343</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>update_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioOutputUpdateRequest) {
-<a href=#344 id=344 data-nosnippet>344</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.get(<span class="kw-2">&amp;</span>request.id) {
-<a href=#345 id=345 data-nosnippet>345</a>            <span class="kw">match </span><span class="kw-2">&amp;</span>request.config.state {
-<a href=#346 id=346 data-nosnippet>346</a>                AudioOutputState::Playing =&gt; {}
-<a href=#347 id=347 data-nosnippet>347</a>                AudioOutputState::Paused =&gt; s.sink.pause(),
-<a href=#348 id=348 data-nosnippet>348</a>                AudioOutputState::Stopped =&gt; {
-<a href=#349 id=349 data-nosnippet>349</a>                    s.sink.pause();
-<a href=#350 id=350 data-nosnippet>350</a>                    s.sink.clear();
-<a href=#351 id=351 data-nosnippet>351</a>                }
-<a href=#352 id=352 data-nosnippet>352</a>                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
-<a href=#353 id=353 data-nosnippet>353</a>            }
-<a href=#354 id=354 data-nosnippet>354</a>            s.sink.set_volume(request.config.volume.<span class="number">0</span>);
-<a href=#355 id=355 data-nosnippet>355</a>            s.sink.set_speed(request.config.speed.<span class="number">0</span>);
-<a href=#356 id=356 data-nosnippet>356</a>            <span class="kw">if let </span>AudioOutputState::Playing = <span class="kw-2">&amp;</span>request.config.state {
-<a href=#357 id=357 data-nosnippet>357</a>                s.sink.play();
-<a href=#358 id=358 data-nosnippet>358</a>            }
-<a href=#359 id=359 data-nosnippet>359</a>        }
-<a href=#360 id=360 data-nosnippet>360</a>    }
-<a href=#361 id=361 data-nosnippet>361</a>
-<a href=#362 id=362 data-nosnippet>362</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
-<a href=#363 id=363 data-nosnippet>363</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>close_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: AudioOutputId) {}
+<a href=#342 id=342 data-nosnippet>342</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
+<a href=#343 id=343 data-nosnippet>343</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>update_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: AudioOutputUpdateRequest) {}
+<a href=#344 id=344 data-nosnippet>344</a>
+<a href=#345 id=345 data-nosnippet>345</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
+<a href=#346 id=346 data-nosnippet>346</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>update_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioOutputUpdateRequest) {
+<a href=#347 id=347 data-nosnippet>347</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.get(<span class="kw-2">&amp;</span>request.id) {
+<a href=#348 id=348 data-nosnippet>348</a>            <span class="kw">match </span><span class="kw-2">&amp;</span>request.config.state {
+<a href=#349 id=349 data-nosnippet>349</a>                AudioOutputState::Playing =&gt; {}
+<a href=#350 id=350 data-nosnippet>350</a>                AudioOutputState::Paused =&gt; s.sink.pause(),
+<a href=#351 id=351 data-nosnippet>351</a>                AudioOutputState::Stopped =&gt; {
+<a href=#352 id=352 data-nosnippet>352</a>                    s.sink.pause();
+<a href=#353 id=353 data-nosnippet>353</a>                    s.sink.clear();
+<a href=#354 id=354 data-nosnippet>354</a>                }
+<a href=#355 id=355 data-nosnippet>355</a>                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+<a href=#356 id=356 data-nosnippet>356</a>            }
+<a href=#357 id=357 data-nosnippet>357</a>            s.sink.set_volume(request.config.volume.<span class="number">0</span>);
+<a href=#358 id=358 data-nosnippet>358</a>            s.sink.set_speed(request.config.speed.<span class="number">0</span>);
+<a href=#359 id=359 data-nosnippet>359</a>            <span class="kw">if let </span>AudioOutputState::Playing = <span class="kw-2">&amp;</span>request.config.state {
+<a href=#360 id=360 data-nosnippet>360</a>                s.sink.play();
+<a href=#361 id=361 data-nosnippet>361</a>            }
+<a href=#362 id=362 data-nosnippet>362</a>        }
+<a href=#363 id=363 data-nosnippet>363</a>    }
 <a href=#364 id=364 data-nosnippet>364</a>
-<a href=#365 id=365 data-nosnippet>365</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
-<a href=#366 id=366 data-nosnippet>366</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>close_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: AudioOutputId) {
-<a href=#367 id=367 data-nosnippet>367</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.remove(<span class="kw-2">&amp;</span>id) {
-<a href=#368 id=368 data-nosnippet>368</a>            s.sink.stop();
-<a href=#369 id=369 data-nosnippet>369</a>        }
-<a href=#370 id=370 data-nosnippet>370</a>    }
-<a href=#371 id=371 data-nosnippet>371</a>
-<a href=#372 id=372 data-nosnippet>372</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
-<a href=#373 id=373 data-nosnippet>373</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioPlayRequest) -&gt; AudioPlayId {
-<a href=#374 id=374 data-nosnippet>374</a>        <span class="kw">let </span>id = <span class="self">self</span>.play_id_gen.incr();
-<a href=#375 id=375 data-nosnippet>375</a>
-<a href=#376 id=376 data-nosnippet>376</a>        <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError {
-<a href=#377 id=377 data-nosnippet>377</a>            play: id,
-<a href=#378 id=378 data-nosnippet>378</a>            error: <span class="macro">formatx!</span>(<span class="string">"output stream {:?} not found"</span>, request.output),
-<a href=#379 id=379 data-nosnippet>379</a>        }));
-<a href=#380 id=380 data-nosnippet>380</a>
-<a href=#381 id=381 data-nosnippet>381</a>        id
-<a href=#382 id=382 data-nosnippet>382</a>    }
+<a href=#365 id=365 data-nosnippet>365</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
+<a href=#366 id=366 data-nosnippet>366</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>close_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: AudioOutputId) {}
+<a href=#367 id=367 data-nosnippet>367</a>
+<a href=#368 id=368 data-nosnippet>368</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
+<a href=#369 id=369 data-nosnippet>369</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>close_output(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: AudioOutputId) {
+<a href=#370 id=370 data-nosnippet>370</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.remove(<span class="kw-2">&amp;</span>id) {
+<a href=#371 id=371 data-nosnippet>371</a>            s.sink.stop();
+<a href=#372 id=372 data-nosnippet>372</a>        }
+<a href=#373 id=373 data-nosnippet>373</a>    }
+<a href=#374 id=374 data-nosnippet>374</a>
+<a href=#375 id=375 data-nosnippet>375</a>    <span class="attr">#[cfg(not(feature = <span class="string">"audio_any"</span>))]
+<a href=#376 id=376 data-nosnippet>376</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioPlayRequest) -&gt; AudioPlayId {
+<a href=#377 id=377 data-nosnippet>377</a>        <span class="kw">let </span>id = <span class="self">self</span>.play_id_gen.incr();
+<a href=#378 id=378 data-nosnippet>378</a>
+<a href=#379 id=379 data-nosnippet>379</a>        <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError {
+<a href=#380 id=380 data-nosnippet>380</a>            play: id,
+<a href=#381 id=381 data-nosnippet>381</a>            error: <span class="macro">formatx!</span>(<span class="string">"output stream {:?} not found"</span>, request.output),
+<a href=#382 id=382 data-nosnippet>382</a>        }));
 <a href=#383 id=383 data-nosnippet>383</a>
-<a href=#384 id=384 data-nosnippet>384</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
-<a href=#385 id=385 data-nosnippet>385</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioPlayRequest) -&gt; AudioPlayId {
-<a href=#386 id=386 data-nosnippet>386</a>        <span class="kw">let </span>id = <span class="self">self</span>.play_id_gen.incr();
-<a href=#387 id=387 data-nosnippet>387</a>
-<a href=#388 id=388 data-nosnippet>388</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.get(<span class="kw-2">&amp;</span>request.output) {
-<a href=#389 id=389 data-nosnippet>389</a>            <span class="kw">match </span><span class="self">self</span>.vp_mix_to_source(request.mix, s.channel_count, s.sample_rate) {
-<a href=#390 id=390 data-nosnippet>390</a>                <span class="prelude-val">Ok</span>(source) =&gt; s.sink.append(source),
-<a href=#391 id=391 data-nosnippet>391</a>                <span class="prelude-val">Err</span>(e) =&gt; {
-<a href=#392 id=392 data-nosnippet>392</a>                    <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError { play: id, error: e }));
-<a href=#393 id=393 data-nosnippet>393</a>                }
-<a href=#394 id=394 data-nosnippet>394</a>            }
-<a href=#395 id=395 data-nosnippet>395</a>        } <span class="kw">else </span>{
-<a href=#396 id=396 data-nosnippet>396</a>            <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError {
-<a href=#397 id=397 data-nosnippet>397</a>                play: id,
-<a href=#398 id=398 data-nosnippet>398</a>                error: <span class="macro">formatx!</span>(<span class="string">"output stream {:?} not found"</span>, request.output),
-<a href=#399 id=399 data-nosnippet>399</a>            }));
-<a href=#400 id=400 data-nosnippet>400</a>        }
-<a href=#401 id=401 data-nosnippet>401</a>
-<a href=#402 id=402 data-nosnippet>402</a>        id
-<a href=#403 id=403 data-nosnippet>403</a>    }
+<a href=#384 id=384 data-nosnippet>384</a>        id
+<a href=#385 id=385 data-nosnippet>385</a>    }
+<a href=#386 id=386 data-nosnippet>386</a>
+<a href=#387 id=387 data-nosnippet>387</a>    <span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
+<a href=#388 id=388 data-nosnippet>388</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, request: AudioPlayRequest) -&gt; AudioPlayId {
+<a href=#389 id=389 data-nosnippet>389</a>        <span class="kw">let </span>id = <span class="self">self</span>.play_id_gen.incr();
+<a href=#390 id=390 data-nosnippet>390</a>
+<a href=#391 id=391 data-nosnippet>391</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.streams.get(<span class="kw-2">&amp;</span>request.output) {
+<a href=#392 id=392 data-nosnippet>392</a>            <span class="kw">match </span><span class="self">self</span>.vp_mix_to_source(request.mix, s.channel_count, s.sample_rate) {
+<a href=#393 id=393 data-nosnippet>393</a>                <span class="prelude-val">Ok</span>(source) =&gt; s.sink.append(source),
+<a href=#394 id=394 data-nosnippet>394</a>                <span class="prelude-val">Err</span>(e) =&gt; {
+<a href=#395 id=395 data-nosnippet>395</a>                    <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError { play: id, error: e }));
+<a href=#396 id=396 data-nosnippet>396</a>                }
+<a href=#397 id=397 data-nosnippet>397</a>            }
+<a href=#398 id=398 data-nosnippet>398</a>        } <span class="kw">else </span>{
+<a href=#399 id=399 data-nosnippet>399</a>            <span class="kw">let _ </span>= <span class="self">self</span>.app_sender.send(AppEvent::Notify(Event::AudioPlayError {
+<a href=#400 id=400 data-nosnippet>400</a>                play: id,
+<a href=#401 id=401 data-nosnippet>401</a>                error: <span class="macro">formatx!</span>(<span class="string">"output stream {:?} not found"</span>, request.output),
+<a href=#402 id=402 data-nosnippet>402</a>            }));
+<a href=#403 id=403 data-nosnippet>403</a>        }
 <a href=#404 id=404 data-nosnippet>404</a>
-<a href=#405 id=405 data-nosnippet>405</a>    <span class="doccomment">/// Called after receive and first chunk decode completes correctly.
-<a href=#406 id=406 data-nosnippet>406</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>on_audio_can_play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: AudioId, data: AudioTrack) {
-<a href=#407 id=407 data-nosnippet>407</a>        <span class="self">self</span>.tracks.insert(id, data);
-<a href=#408 id=408 data-nosnippet>408</a>    }
-<a href=#409 id=409 data-nosnippet>409</a>
-<a href=#410 id=410 data-nosnippet>410</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>on_low_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {}
-<a href=#411 id=411 data-nosnippet>411</a>}
+<a href=#405 id=405 data-nosnippet>405</a>        id
+<a href=#406 id=406 data-nosnippet>406</a>    }
+<a href=#407 id=407 data-nosnippet>407</a>
+<a href=#408 id=408 data-nosnippet>408</a>    <span class="doccomment">/// Called after receive and first chunk decode completes correctly.
+<a href=#409 id=409 data-nosnippet>409</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>on_audio_can_play(<span class="kw-2">&amp;mut </span><span class="self">self</span>, id: AudioId, data: AudioTrack) {
+<a href=#410 id=410 data-nosnippet>410</a>        <span class="self">self</span>.tracks.insert(id, data);
+<a href=#411 id=411 data-nosnippet>411</a>    }
 <a href=#412 id=412 data-nosnippet>412</a>
-<a href=#413 id=413 data-nosnippet>413</a><span class="kw">pub struct </span>AudioTrack {
-<a href=#414 id=414 data-nosnippet>414</a>    channel_count: u16,
-<a href=#415 id=415 data-nosnippet>415</a>    sample_rate: u32,
-<a href=#416 id=416 data-nosnippet>416</a>    total_duration: Duration,
-<a href=#417 id=417 data-nosnippet>417</a>    raw: IpcBytesCast&lt;f32&gt;,
-<a href=#418 id=418 data-nosnippet>418</a>}
-<a href=#419 id=419 data-nosnippet>419</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>AudioTrack {
-<a href=#420 id=420 data-nosnippet>420</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#421 id=421 data-nosnippet>421</a>        f.debug_struct(<span class="string">"AudioTrack"</span>).finish_non_exhaustive()
-<a href=#422 id=422 data-nosnippet>422</a>    }
-<a href=#423 id=423 data-nosnippet>423</a>}
-<a href=#424 id=424 data-nosnippet>424</a><span class="kw">impl </span>AudioTrack {
-<a href=#425 id=425 data-nosnippet>425</a>    <span class="kw">fn </span>play_source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AudioTrackPlay {
-<a href=#426 id=426 data-nosnippet>426</a>        AudioTrackPlay {
-<a href=#427 id=427 data-nosnippet>427</a>            channel_count: <span class="self">self</span>.channel_count,
-<a href=#428 id=428 data-nosnippet>428</a>            sample_rate: <span class="self">self</span>.sample_rate,
-<a href=#429 id=429 data-nosnippet>429</a>            total_duration: <span class="self">self</span>.total_duration,
-<a href=#430 id=430 data-nosnippet>430</a>            track: <span class="self">self</span>.raw.clone().into_iter(),
-<a href=#431 id=431 data-nosnippet>431</a>        }
-<a href=#432 id=432 data-nosnippet>432</a>    }
-<a href=#433 id=433 data-nosnippet>433</a>}
-<a href=#434 id=434 data-nosnippet>434</a>
-<a href=#435 id=435 data-nosnippet>435</a><span class="kw">struct </span>AudioTrackPlay {
-<a href=#436 id=436 data-nosnippet>436</a>    channel_count: u16,
-<a href=#437 id=437 data-nosnippet>437</a>    sample_rate: u32,
-<a href=#438 id=438 data-nosnippet>438</a>    total_duration: Duration,
-<a href=#439 id=439 data-nosnippet>439</a>    track: IpcBytesCastIntoIter&lt;f32&gt;,
-<a href=#440 id=440 data-nosnippet>440</a>}
-<a href=#441 id=441 data-nosnippet>441</a><span class="kw">impl </span>Iterator <span class="kw">for </span>AudioTrackPlay {
-<a href=#442 id=442 data-nosnippet>442</a>    <span class="kw">type </span>Item = f32;
-<a href=#443 id=443 data-nosnippet>443</a>
-<a href=#444 id=444 data-nosnippet>444</a>    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
-<a href=#445 id=445 data-nosnippet>445</a>        <span class="self">self</span>.track.next()
-<a href=#446 id=446 data-nosnippet>446</a>    }
-<a href=#447 id=447 data-nosnippet>447</a>
-<a href=#448 id=448 data-nosnippet>448</a>    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
-<a href=#449 id=449 data-nosnippet>449</a>        <span class="self">self</span>.track.size_hint()
-<a href=#450 id=450 data-nosnippet>450</a>    }
-<a href=#451 id=451 data-nosnippet>451</a>}
-<a href=#452 id=452 data-nosnippet>452</a><span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
-<a href=#453 id=453 data-nosnippet>453</a></span><span class="kw">impl </span>rodio::Source <span class="kw">for </span>AudioTrackPlay {
-<a href=#454 id=454 data-nosnippet>454</a>    <span class="kw">fn </span>current_span_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
-<a href=#455 id=455 data-nosnippet>455</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.track.rest().len())
-<a href=#456 id=456 data-nosnippet>456</a>    }
-<a href=#457 id=457 data-nosnippet>457</a>
-<a href=#458 id=458 data-nosnippet>458</a>    <span class="kw">fn </span>channels(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rodio::ChannelCount {
-<a href=#459 id=459 data-nosnippet>459</a>        <span class="self">self</span>.channel_count
-<a href=#460 id=460 data-nosnippet>460</a>    }
-<a href=#461 id=461 data-nosnippet>461</a>
-<a href=#462 id=462 data-nosnippet>462</a>    <span class="kw">fn </span>sample_rate(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rodio::SampleRate {
-<a href=#463 id=463 data-nosnippet>463</a>        <span class="self">self</span>.sample_rate
-<a href=#464 id=464 data-nosnippet>464</a>    }
-<a href=#465 id=465 data-nosnippet>465</a>
-<a href=#466 id=466 data-nosnippet>466</a>    <span class="kw">fn </span>total_duration(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Duration&gt; {
-<a href=#467 id=467 data-nosnippet>467</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.total_duration)
-<a href=#468 id=468 data-nosnippet>468</a>    }
-<a href=#469 id=469 data-nosnippet>469</a>}
+<a href=#413 id=413 data-nosnippet>413</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>on_low_memory(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {}
+<a href=#414 id=414 data-nosnippet>414</a>}
+<a href=#415 id=415 data-nosnippet>415</a>
+<a href=#416 id=416 data-nosnippet>416</a><span class="kw">pub struct </span>AudioTrack {
+<a href=#417 id=417 data-nosnippet>417</a>    channel_count: u16,
+<a href=#418 id=418 data-nosnippet>418</a>    sample_rate: u32,
+<a href=#419 id=419 data-nosnippet>419</a>    total_duration: Duration,
+<a href=#420 id=420 data-nosnippet>420</a>    raw: IpcBytesCast&lt;f32&gt;,
+<a href=#421 id=421 data-nosnippet>421</a>}
+<a href=#422 id=422 data-nosnippet>422</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>AudioTrack {
+<a href=#423 id=423 data-nosnippet>423</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#424 id=424 data-nosnippet>424</a>        f.debug_struct(<span class="string">"AudioTrack"</span>).finish_non_exhaustive()
+<a href=#425 id=425 data-nosnippet>425</a>    }
+<a href=#426 id=426 data-nosnippet>426</a>}
+<a href=#427 id=427 data-nosnippet>427</a><span class="kw">impl </span>AudioTrack {
+<a href=#428 id=428 data-nosnippet>428</a>    <span class="kw">fn </span>play_source(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; AudioTrackPlay {
+<a href=#429 id=429 data-nosnippet>429</a>        AudioTrackPlay {
+<a href=#430 id=430 data-nosnippet>430</a>            channel_count: <span class="self">self</span>.channel_count,
+<a href=#431 id=431 data-nosnippet>431</a>            sample_rate: <span class="self">self</span>.sample_rate,
+<a href=#432 id=432 data-nosnippet>432</a>            total_duration: <span class="self">self</span>.total_duration,
+<a href=#433 id=433 data-nosnippet>433</a>            track: <span class="self">self</span>.raw.clone().into_iter(),
+<a href=#434 id=434 data-nosnippet>434</a>        }
+<a href=#435 id=435 data-nosnippet>435</a>    }
+<a href=#436 id=436 data-nosnippet>436</a>}
+<a href=#437 id=437 data-nosnippet>437</a>
+<a href=#438 id=438 data-nosnippet>438</a><span class="kw">struct </span>AudioTrackPlay {
+<a href=#439 id=439 data-nosnippet>439</a>    channel_count: u16,
+<a href=#440 id=440 data-nosnippet>440</a>    sample_rate: u32,
+<a href=#441 id=441 data-nosnippet>441</a>    total_duration: Duration,
+<a href=#442 id=442 data-nosnippet>442</a>    track: IpcBytesCastIntoIter&lt;f32&gt;,
+<a href=#443 id=443 data-nosnippet>443</a>}
+<a href=#444 id=444 data-nosnippet>444</a><span class="kw">impl </span>Iterator <span class="kw">for </span>AudioTrackPlay {
+<a href=#445 id=445 data-nosnippet>445</a>    <span class="kw">type </span>Item = f32;
+<a href=#446 id=446 data-nosnippet>446</a>
+<a href=#447 id=447 data-nosnippet>447</a>    <span class="kw">fn </span>next(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;<span class="self">Self</span>::Item&gt; {
+<a href=#448 id=448 data-nosnippet>448</a>        <span class="self">self</span>.track.next()
+<a href=#449 id=449 data-nosnippet>449</a>    }
+<a href=#450 id=450 data-nosnippet>450</a>
+<a href=#451 id=451 data-nosnippet>451</a>    <span class="kw">fn </span>size_hint(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (usize, <span class="prelude-ty">Option</span>&lt;usize&gt;) {
+<a href=#452 id=452 data-nosnippet>452</a>        <span class="self">self</span>.track.size_hint()
+<a href=#453 id=453 data-nosnippet>453</a>    }
+<a href=#454 id=454 data-nosnippet>454</a>}
+<a href=#455 id=455 data-nosnippet>455</a><span class="attr">#[cfg(feature = <span class="string">"audio_any"</span>)]
+<a href=#456 id=456 data-nosnippet>456</a></span><span class="kw">impl </span>rodio::Source <span class="kw">for </span>AudioTrackPlay {
+<a href=#457 id=457 data-nosnippet>457</a>    <span class="kw">fn </span>current_span_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;usize&gt; {
+<a href=#458 id=458 data-nosnippet>458</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.track.rest().len())
+<a href=#459 id=459 data-nosnippet>459</a>    }
+<a href=#460 id=460 data-nosnippet>460</a>
+<a href=#461 id=461 data-nosnippet>461</a>    <span class="kw">fn </span>channels(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rodio::ChannelCount {
+<a href=#462 id=462 data-nosnippet>462</a>        <span class="self">self</span>.channel_count.try_into().unwrap()
+<a href=#463 id=463 data-nosnippet>463</a>    }
+<a href=#464 id=464 data-nosnippet>464</a>
+<a href=#465 id=465 data-nosnippet>465</a>    <span class="kw">fn </span>sample_rate(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; rodio::SampleRate {
+<a href=#466 id=466 data-nosnippet>466</a>        <span class="self">self</span>.sample_rate.try_into().unwrap()
+<a href=#467 id=467 data-nosnippet>467</a>    }
+<a href=#468 id=468 data-nosnippet>468</a>
+<a href=#469 id=469 data-nosnippet>469</a>    <span class="kw">fn </span>total_duration(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;Duration&gt; {
+<a href=#470 id=470 data-nosnippet>470</a>        <span class="prelude-val">Some</span>(<span class="self">self</span>.total_duration)
+<a href=#471 id=471 data-nosnippet>471</a>    }
+<a href=#472 id=472 data-nosnippet>472</a>}
 </code></pre></div></section></main></body></html>

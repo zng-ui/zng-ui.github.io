@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["attach_console","build_cli_com_proxy"]};

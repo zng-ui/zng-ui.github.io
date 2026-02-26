@@ -298,7 +298,7 @@
 <a href=#298 id=298 data-nosnippet>298</a>                  The working directory is the workspace root.
 <a href=#299 id=299 data-nosnippet>299</a>${!cmd:case}    — Replaces with the stdout, case converted. 
 <a href=#300 id=300 data-nosnippet>300</a>                  If the script contains ':' quote it with double quotes\"
-<a href=#301 id=301 data-nosnippet>301</a>$!{!cmd:?else}  — If script fails or ha no stdout, uses 'else' instead.
+<a href=#301 id=301 data-nosnippet>301</a>${!cmd:?else}  — If script fails or ha no stdout, uses 'else' instead.
 <a href=#302 id=302 data-nosnippet>302</a>
 <a href=#303 id=303 data-nosnippet>303</a>$${VAR}         — Escapes $, replaces with '${VAR}'.
 <a href=#304 id=304 data-nosnippet>304</a>
@@ -498,7 +498,7 @@
 <a href=#498 id=498 data-nosnippet>498</a>                        out.push_str(fallback);
 <a href=#499 id=499 data-nosnippet>499</a>                    }
 <a href=#500 id=500 data-nosnippet>500</a>                } <span class="kw">else </span>{
-<a href=#501 id=501 data-nosnippet>501</a>                    <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"${{{var}}} cannot be read or is empty"</span>));
+<a href=#501 id=501 data-nosnippet>501</a>                    <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"${{{var}}} output is empty"</span>));
 <a href=#502 id=502 data-nosnippet>502</a>                }
 <a href=#503 id=503 data-nosnippet>503</a>            }
 <a href=#504 id=504 data-nosnippet>504</a>        } <span class="kw">else </span>{
@@ -1197,9 +1197,9 @@
 <a href=#1197 id=1197 data-nosnippet>1197</a>        <span class="macro">assert_eq!</span>(<span class="string">"normal text"</span>, replace(<span class="string">"normal text"</span>, <span class="number">0</span>).unwrap());
 <a href=#1198 id=1198 data-nosnippet>1198</a>        <span class="macro">assert_eq!</span>(<span class="string">"escaped ${NOT}"</span>, replace(<span class="string">"escaped $${NOT}"</span>, <span class="number">0</span>).unwrap());
 <a href=#1199 id=1199 data-nosnippet>1199</a>        <span class="macro">assert_eq!</span>(<span class="string">"replace 'test value'"</span>, replace(<span class="string">"replace '${ZR_RP_TEST}'"</span>, <span class="number">0</span>).unwrap());
-<a href=#1200 id=1200 data-nosnippet>1200</a>        <span class="macro">assert_eq!</span>(<span class="string">"${} cannot be read or is empty"</span>, replace(<span class="string">"empty '${}'"</span>, <span class="number">0</span>).unwrap_err()); <span class="comment">// hmm
+<a href=#1200 id=1200 data-nosnippet>1200</a>        <span class="macro">assert_eq!</span>(<span class="string">"${} output is empty"</span>, replace(<span class="string">"empty '${}'"</span>, <span class="number">0</span>).unwrap_err()); <span class="comment">// hmm
 <a href=#1201 id=1201 data-nosnippet>1201</a>        </span><span class="macro">assert_eq!</span>(
-<a href=#1202 id=1202 data-nosnippet>1202</a>            <span class="string">"${ZR_RP_TEST_NOT_SET} cannot be read or is empty"</span>,
+<a href=#1202 id=1202 data-nosnippet>1202</a>            <span class="string">"${ZR_RP_TEST_NOT_SET} output is empty"</span>,
 <a href=#1203 id=1203 data-nosnippet>1203</a>            replace(<span class="string">"not set '${ZR_RP_TEST_NOT_SET}'"</span>, <span class="number">0</span>).unwrap_err()
 <a href=#1204 id=1204 data-nosnippet>1204</a>        );
 <a href=#1205 id=1205 data-nosnippet>1205</a>        <span class="macro">assert_eq!</span>(
