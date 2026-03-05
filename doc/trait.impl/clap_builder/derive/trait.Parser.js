@@ -1,9 +1,9 @@
 (function() {
-    var implementors = Object.fromEntries([["cargo_zng",[["impl Parser for <a class=\"enum\" href=\"cargo_zng/enum.CargoCli.html\" title=\"enum cargo_zng::CargoCli\">CargoCli</a>"]]]]);
+    const implementors = Object.fromEntries([["cargo_zng",[["impl Parser for <a class=\"enum\" href=\"cargo_zng/enum.CargoCli.html\" title=\"enum cargo_zng::CargoCli\">CargoCli</a>",0]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":57,"fragment_lengths":[139]}
+//{"start":59,"fragment_lengths":[141]}

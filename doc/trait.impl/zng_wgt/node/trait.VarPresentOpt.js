@@ -1,9 +1,9 @@
 (function() {
-    var implementors = Object.fromEntries([["zng_wgt",[]]]);
+    const implementors = Object.fromEntries([["zng_wgt",[]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":57,"fragment_lengths":[14]}
+//{"start":59,"fragment_lengths":[14]}
