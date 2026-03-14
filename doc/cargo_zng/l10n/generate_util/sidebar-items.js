@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["generate","generate_file","write_arguments","write_entry","write_expression","write_inline_expression","write_pattern"]};

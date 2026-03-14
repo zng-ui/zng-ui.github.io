@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["check_fluent_output","check_scrap_package","run","run_pseudo"],"mod":["pseudo","scraper"],"struct":["FluentParserErrors","L10nArgs"]};
+window.SIDEBAR_ITEMS = {"fn":["check_fluent_output","check_scrap_package","run","run_generators"],"mod":["generate_util","pseudo","scraper"],"struct":["FluentParserErrors","L10nArgs"]};
