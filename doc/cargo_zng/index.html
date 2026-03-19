@@ -198,29 +198,21 @@ See the docs for `l10n!` for more details about the expected format.
 Usage: cargo zng l10n [OPTIONS]
 
 Options:
-  -i, --input &lt;INPUT&gt;
+  -i, --input &lt;PATH&gt;
           Rust files glob or directory
 
-          [default: &quot;&quot;]
-
-  -o, --output &lt;OUTPUT&gt;
+  -o, --output &lt;DIR&gt;
           L10n resources dir
-
-          [default: &quot;&quot;]
 
   -p, --package &lt;PACKAGE&gt;
           Package to scrap and copy dependencies
 
           If set the --input and --output default is src/**.rs and l10n/
 
-          [default: &quot;&quot;]
-
       --manifest-path &lt;MANIFEST_PATH&gt;
           Path to Cargo.toml of crate to scrap and copy dependencies
 
           If set the --input and --output default to src/**.rs and l10n/
-
-          [default: &quot;&quot;]
 
       --no-deps
           Don&#39;t copy dependencies localization
@@ -249,29 +241,24 @@ Options:
   -m, --macros &lt;MACROS&gt;
           Custom l10n macro names, comma separated
 
-          [default: &quot;&quot;]
-
-      --pseudo &lt;PSEUDO&gt;
+      --pseudo &lt;PATH&gt;
           Generate pseudo locale from dir/lang
 
           EXAMPLE
 
           &quot;l10n/en&quot; generates pseudo from &quot;l10n/en.ftl&quot; and &quot;l10n/en/*.ftl&quot;
 
-          [default: &quot;&quot;]
-
-      --pseudo-m &lt;PSEUDO_M&gt;
+      --pseudo-m &lt;PATH&gt;
           Generate pseudo mirrored locale
 
-          [default: &quot;&quot;]
-
-      --pseudo-w &lt;PSEUDO_W&gt;
+      --pseudo-w &lt;PATH&gt;
           Generate pseudo wide locale
 
-          [default: &quot;&quot;]
-
       --check
-          Only verify that the generated files are the same
+          Verify that packages are scrapped and validate Fluent files
+
+      --check-strict
+          Require that all template keys be present in all localized files
 
   -v, --verbose
           Use verbose output

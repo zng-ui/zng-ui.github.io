@@ -6,31 +6,33 @@
 <a href=#5 id=5 data-nosnippet>5</a>//! This widget displays [`task::Progress`] values that track the status of a running task.
 <a href=#6 id=6 data-nosnippet>6</a>//!
 <a href=#7 id=7 data-nosnippet>7</a>//! ```
-<a href=#8 id=8 data-nosnippet>8</a>//! use zng::prelude::*;
-<a href=#9 id=9 data-nosnippet>9</a>//!
-<a href=#10 id=10 data-nosnippet>10</a>//! let p = var(task::Progress::indeterminate());
-<a href=#11 id=11 data-nosnippet>11</a>//!
-<a href=#12 id=12 data-nosnippet>12</a>//! // on the view
-<a href=#13 id=13 data-nosnippet>13</a>//! let view = zng::progress::ProgressView!(p.clone());
-<a href=#14 id=14 data-nosnippet>14</a>//!
-<a href=#15 id=15 data-nosnippet>15</a>//! // on the controller/view-model
-<a href=#16 id=16 data-nosnippet>16</a>//! task::spawn(async move {
-<a href=#17 id=17 data-nosnippet>17</a>//!     for n in 0..=10 {
-<a href=#18 id=18 data-nosnippet>18</a>//!         task::deadline(500.ms()).await;
-<a href=#19 id=19 data-nosnippet>19</a>//!         p.set(task::Progress::from_n_of(n, 10).with_msg(formatx!("sleeping {n} of 10")));
-<a href=#20 id=20 data-nosnippet>20</a>//!     }
-<a href=#21 id=21 data-nosnippet>21</a>//!     p.set(task::Progress::complete().with_msg("done sleeping"));
-<a href=#22 id=22 data-nosnippet>22</a>//! });
-<a href=#23 id=23 data-nosnippet>23</a>//! ```
-<a href=#24 id=24 data-nosnippet>24</a>//!
-<a href=#25 id=25 data-nosnippet>25</a>//! [`task::Progress`]: zng::task::Progress
+<a href=#8 id=8 data-nosnippet>8</a>//! # fn demo() {
+<a href=#9 id=9 data-nosnippet>9</a>//! use zng::prelude::*;
+<a href=#10 id=10 data-nosnippet>10</a>//!
+<a href=#11 id=11 data-nosnippet>11</a>//! let p = var(task::Progress::indeterminate());
+<a href=#12 id=12 data-nosnippet>12</a>//!
+<a href=#13 id=13 data-nosnippet>13</a>//! // on the view
+<a href=#14 id=14 data-nosnippet>14</a>//! let view = zng::progress::ProgressView!(p.clone());
+<a href=#15 id=15 data-nosnippet>15</a>//!
+<a href=#16 id=16 data-nosnippet>16</a>//! // on the controller/view-model
+<a href=#17 id=17 data-nosnippet>17</a>//! task::spawn(async move {
+<a href=#18 id=18 data-nosnippet>18</a>//!     for n in 0..=10 {
+<a href=#19 id=19 data-nosnippet>19</a>//!         task::deadline(500.ms()).await;
+<a href=#20 id=20 data-nosnippet>20</a>//!         p.set(task::Progress::from_n_of(n, 10).with_msg(formatx!("sleeping {n} of 10")));
+<a href=#21 id=21 data-nosnippet>21</a>//!     }
+<a href=#22 id=22 data-nosnippet>22</a>//!     p.set(task::Progress::complete().with_msg("done sleeping"));
+<a href=#23 id=23 data-nosnippet>23</a>//! });
+<a href=#24 id=24 data-nosnippet>24</a>//! # }
+<a href=#25 id=25 data-nosnippet>25</a>//! ```
 <a href=#26 id=26 data-nosnippet>26</a>//!
-<a href=#27 id=27 data-nosnippet>27</a>//! # Full API
+<a href=#27 id=27 data-nosnippet>27</a>//! [`task::Progress`]: zng::task::Progress
 <a href=#28 id=28 data-nosnippet>28</a>//!
-<a href=#29 id=29 data-nosnippet>29</a>//! See [`zng_wgt_progress`] and [`zng_task::Progress`] for the full widget API.
-<a href=#30 id=30 data-nosnippet>30</a>
-<a href=#31 id=31 data-nosnippet>31</a></span><span class="kw">pub use </span>zng_wgt_progress::{
-<a href=#32 id=32 data-nosnippet>32</a>    CircularStyle, DefaultStyle, PROGRESS_VAR, ProgressView, SimpleBarStyle, SimpleCircularStyle, circular_style_fn, is_indeterminate,
-<a href=#33 id=33 data-nosnippet>33</a>    on_complete, on_progress, simple_bar_style_fn, simple_circular_style_fn,
-<a href=#34 id=34 data-nosnippet>34</a>};
+<a href=#29 id=29 data-nosnippet>29</a>//! # Full API
+<a href=#30 id=30 data-nosnippet>30</a>//!
+<a href=#31 id=31 data-nosnippet>31</a>//! See [`zng_wgt_progress`] and [`zng_task::Progress`] for the full widget API.
+<a href=#32 id=32 data-nosnippet>32</a>
+<a href=#33 id=33 data-nosnippet>33</a></span><span class="kw">pub use </span>zng_wgt_progress::{
+<a href=#34 id=34 data-nosnippet>34</a>    CircularStyle, DefaultStyle, PROGRESS_VAR, ProgressView, SimpleBarStyle, SimpleCircularStyle, circular_style_fn, is_indeterminate,
+<a href=#35 id=35 data-nosnippet>35</a>    on_complete, on_progress, simple_bar_style_fn, simple_circular_style_fn,
+<a href=#36 id=36 data-nosnippet>36</a>};
 </code></pre></div></section></main></body></html>

@@ -24,7 +24,7 @@
 <a href=#23 id=23 data-nosnippet>23</a>//!
 <a href=#24 id=24 data-nosnippet>24</a>//! ```toml
 <a href=#25 id=25 data-nosnippet>25</a>//! [dependencies]
-<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.21.6", features = ["view_prebuilt"] }
+<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.21.7", features = ["view_prebuilt"] }
 <a href=#27 id=27 data-nosnippet>27</a>//! ```
 <a href=#28 id=28 data-nosnippet>28</a>//!
 <a href=#29 id=29 data-nosnippet>29</a>//! ```no_run
@@ -82,558 +82,559 @@
 <a href=#81 id=81 data-nosnippet>81</a>//! use zng::prelude::*;
 <a href=#82 id=82 data-nosnippet>82</a>//!
 <a href=#83 id=83 data-nosnippet>83</a>//! let mut app = APP.defaults().run_headless(/* with_renderer: */ false);
-<a href=#84 id=84 data-nosnippet>84</a>//! app.run_window("id", async {
-<a href=#85 id=85 data-nosnippet>85</a>//!     Window! {
-<a href=#86 id=86 data-nosnippet>86</a>//!         child = Text!("Some text");
-<a href=#87 id=87 data-nosnippet>87</a>//!         auto_size = true;
-<a href=#88 id=88 data-nosnippet>88</a>//!
-<a href=#89 id=89 data-nosnippet>89</a>//!         render_mode = window::RenderMode::Software;
-<a href=#90 id=90 data-nosnippet>90</a>//!         frame_capture_mode = window::FrameCaptureMode::Next;
-<a href=#91 id=91 data-nosnippet>91</a>//!
-<a href=#92 id=92 data-nosnippet>92</a>//!         on_frame_image_ready = async_hn!(|args| {
-<a href=#93 id=93 data-nosnippet>93</a>//!             if let Some(img) = args.frame_image.upgrade() {
-<a href=#94 id=94 data-nosnippet>94</a>//!                 // if the app runs with `run_headless(/* with_renderer: */ true)` an image is captured
-<a href=#95 id=95 data-nosnippet>95</a>//!                 // and saved here.
-<a href=#96 id=96 data-nosnippet>96</a>//!                 img.get().save("screenshot.png").await.ok();
-<a href=#97 id=97 data-nosnippet>97</a>//!             }
-<a href=#98 id=98 data-nosnippet>98</a>//!
-<a href=#99 id=99 data-nosnippet>99</a>//!             // close the window, causing the app to exit.
-<a href=#100 id=100 data-nosnippet>100</a>//!             WINDOW.close();
-<a href=#101 id=101 data-nosnippet>101</a>//!         });
-<a href=#102 id=102 data-nosnippet>102</a>//!     }
-<a href=#103 id=103 data-nosnippet>103</a>//! });
-<a href=#104 id=104 data-nosnippet>104</a>//! ```
-<a href=#105 id=105 data-nosnippet>105</a>//!
-<a href=#106 id=106 data-nosnippet>106</a>//! You can also run multiple headless apps in the same process, one per thread, if the crate is build using the `"multi_app"` feature.
-<a href=#107 id=107 data-nosnippet>107</a>//!
-<a href=#108 id=108 data-nosnippet>108</a>//! # App Extensions
-<a href=#109 id=109 data-nosnippet>109</a>//!
-<a href=#110 id=110 data-nosnippet>110</a>//! Services and events bundles are named *app extensions*. They are usually implemented in a crate with `zng-ext-` prefix and a
-<a href=#111 id=111 data-nosnippet>111</a>//! selection of the API is reexported in the `zng` crate in a module. Custom services and events can be declared using the same
-<a href=#112 id=112 data-nosnippet>112</a>//! API the built-in services use, these custom extensions have the same level of access and performance as the built-in extensions.
-<a href=#113 id=113 data-nosnippet>113</a>//!
-<a href=#114 id=114 data-nosnippet>114</a>//! ## Services
-<a href=#115 id=115 data-nosnippet>115</a>//!
-<a href=#116 id=116 data-nosnippet>116</a>//! App services are defined by convention, there is no service trait or struct. Proper service implementations follow
-<a href=#117 id=117 data-nosnippet>117</a>//! these rules:
-<a href=#118 id=118 data-nosnippet>118</a>//!
-<a href=#119 id=119 data-nosnippet>119</a>//! #### App services are an unit struct named like a static
-<a href=#120 id=120 data-nosnippet>120</a>//!
-<a href=#121 id=121 data-nosnippet>121</a>//! This is because services are a kind of *singleton*. The service API is implemented as methods on the service struct.
-<a href=#122 id=122 data-nosnippet>122</a>//!
-<a href=#123 id=123 data-nosnippet>123</a>//! ```
-<a href=#124 id=124 data-nosnippet>124</a>//! # use zng::var::*;
-<a href=#125 id=125 data-nosnippet>125</a>//! #[expect(non_camel_case_types)]
-<a href=#126 id=126 data-nosnippet>126</a>//! pub struct SCREAMING_CASE;
-<a href=#127 id=127 data-nosnippet>127</a>//! impl SCREAMING_CASE {
-<a href=#128 id=128 data-nosnippet>128</a>//!     pub fn state(&amp;self) -&gt; Var&lt;bool&gt; {
-<a href=#129 id=129 data-nosnippet>129</a>//!         # var(true)
-<a href=#130 id=130 data-nosnippet>130</a>//!     }
-<a href=#131 id=131 data-nosnippet>131</a>//! }
-<a href=#132 id=132 data-nosnippet>132</a>//! ```
-<a href=#133 id=133 data-nosnippet>133</a>//!
-<a href=#134 id=134 data-nosnippet>134</a>//! Note that you need to suppress a lint if the service name has more then one word.
-<a href=#135 id=135 data-nosnippet>135</a>//!
-<a href=#136 id=136 data-nosnippet>136</a>//! Service state and config methods should prefer variables over direct values. The use of variables allows the service state
-<a href=#137 id=137 data-nosnippet>137</a>//! to be plugged directly into the UI. Async operations should prefer using [`ResponseVar&lt;R&gt;`] over `async` methods for
-<a href=#138 id=138 data-nosnippet>138</a>//! the same reason.
-<a href=#139 id=139 data-nosnippet>139</a>//!
-<a href=#140 id=140 data-nosnippet>140</a>//! #### App services lifetime is the current app lifetime
-<a href=#141 id=141 data-nosnippet>141</a>//!
-<a href=#142 id=142 data-nosnippet>142</a>//! Unlike a simple singleton app services must only live for the duration of the app and must support
-<a href=#143 id=143 data-nosnippet>143</a>//! multiple parallel instances if built with the `"multi_app"` feature. You can use private
-<a href=#144 id=144 data-nosnippet>144</a>//! [`app_local!`] static variables as backing storage to fulfill this requirement.
-<a href=#145 id=145 data-nosnippet>145</a>//!
-<a href=#146 id=146 data-nosnippet>146</a>//! A common pattern in the zng services is to name the app locals with a `_SV` suffix.
-<a href=#147 id=147 data-nosnippet>147</a>//!
-<a href=#148 id=148 data-nosnippet>148</a>//! Services do not expose the app local locking, all state output is cloned the state is only locked
-<a href=#149 id=149 data-nosnippet>149</a>//! for the duration of the service method call.
-<a href=#150 id=150 data-nosnippet>150</a>//!
-<a href=#151 id=151 data-nosnippet>151</a>//! #### App services don't change public state mid update
-<a href=#152 id=152 data-nosnippet>152</a>//!
-<a href=#153 id=153 data-nosnippet>153</a>//! All widgets using the service during the same update see the same state. State change requests are scheduled
-<a href=#154 id=154 data-nosnippet>154</a>//! for the next update, just like variable updates or event notifications. Services can use the [`UPDATES.once_update`]
-<a href=#155 id=155 data-nosnippet>155</a>//! method to delegate requests to after the current update pass ends.
-<a href=#156 id=156 data-nosnippet>156</a>//!
-<a href=#157 id=157 data-nosnippet>157</a>//! This is even true for the [`INSTANT`] service, although this can be configured for this service using [`APP.pause_time_for_update`].
-<a href=#158 id=158 data-nosnippet>158</a>//!
-<a href=#159 id=159 data-nosnippet>159</a>//! [`APP.pause_time_for_update`]: zng_app::APP::pause_time_for_update
-<a href=#160 id=160 data-nosnippet>160</a>//!
-<a href=#161 id=161 data-nosnippet>161</a>//! ### Examples
-<a href=#162 id=162 data-nosnippet>162</a>//!
-<a href=#163 id=163 data-nosnippet>163</a>//! The example below demonstrates a service.
-<a href=#164 id=164 data-nosnippet>164</a>//!
-<a href=#165 id=165 data-nosnippet>165</a>//! ```
-<a href=#166 id=166 data-nosnippet>166</a>//! use zng::prelude_wgt::*;
-<a href=#167 id=167 data-nosnippet>167</a>//! # fn main() {}
-<a href=#168 id=168 data-nosnippet>168</a>//!
-<a href=#169 id=169 data-nosnippet>169</a>//! /// Foo service.
-<a href=#170 id=170 data-nosnippet>170</a>//! pub struct FOO;
-<a href=#171 id=171 data-nosnippet>171</a>//!
-<a href=#172 id=172 data-nosnippet>172</a>//! impl FOO {
-<a href=#173 id=173 data-nosnippet>173</a>//!     /// Foo read-write var.
-<a href=#174 id=174 data-nosnippet>174</a>//!     pub fn config(&amp;self) -&gt; Var&lt;bool&gt; {
-<a href=#175 id=175 data-nosnippet>175</a>//!         FOO_SV.read().config.clone()
-<a href=#176 id=176 data-nosnippet>176</a>//!     }
-<a href=#177 id=177 data-nosnippet>177</a>//!
-<a href=#178 id=178 data-nosnippet>178</a>//!     /// Foo request.
-<a href=#179 id=179 data-nosnippet>179</a>//!     pub fn request(&amp;self, request: char) -&gt; ResponseVar&lt;char&gt; {
-<a href=#180 id=180 data-nosnippet>180</a>//!         let (responder, response) = response_var();
-<a href=#181 id=181 data-nosnippet>181</a>//!         UPDATES.once_update("FOO.request", move || {
-<a href=#182 id=182 data-nosnippet>182</a>//!             let mut s = FOO_SV.write();
-<a href=#183 id=183 data-nosnippet>183</a>//!             if request == '\n' {
-<a href=#184 id=184 data-nosnippet>184</a>//!                 s.state = true;
-<a href=#185 id=185 data-nosnippet>185</a>//!             }
-<a href=#186 id=186 data-nosnippet>186</a>//!             let r = if s.config.get() {
-<a href=#187 id=187 data-nosnippet>187</a>//!                 request.to_ascii_uppercase()
-<a href=#188 id=188 data-nosnippet>188</a>//!             } else {
-<a href=#189 id=189 data-nosnippet>189</a>//!                 request.to_ascii_lowercase()
-<a href=#190 id=190 data-nosnippet>190</a>//!             };
-<a href=#191 id=191 data-nosnippet>191</a>//!             responder.respond(r);
-<a href=#192 id=192 data-nosnippet>192</a>//!         });
-<a href=#193 id=193 data-nosnippet>193</a>//!         response
-<a href=#194 id=194 data-nosnippet>194</a>//!     }
-<a href=#195 id=195 data-nosnippet>195</a>//! }
-<a href=#196 id=196 data-nosnippet>196</a>//!
-<a href=#197 id=197 data-nosnippet>197</a>//! struct FooService {
-<a href=#198 id=198 data-nosnippet>198</a>//!     config: Var&lt;bool&gt;,
-<a href=#199 id=199 data-nosnippet>199</a>//!     state: bool,
-<a href=#200 id=200 data-nosnippet>200</a>//! }
-<a href=#201 id=201 data-nosnippet>201</a>//!
-<a href=#202 id=202 data-nosnippet>202</a>//! app_local! {
-<a href=#203 id=203 data-nosnippet>203</a>//!     static FOO_SV: FooService = {
-<a href=#204 id=204 data-nosnippet>204</a>//!         foo_hooks();
-<a href=#205 id=205 data-nosnippet>205</a>//!         FooService {
-<a href=#206 id=206 data-nosnippet>206</a>//!             config: var(false),
-<a href=#207 id=207 data-nosnippet>207</a>//!             state: false,
-<a href=#208 id=208 data-nosnippet>208</a>//!         }
-<a href=#209 id=209 data-nosnippet>209</a>//!     };
-<a href=#210 id=210 data-nosnippet>210</a>//! }
-<a href=#211 id=211 data-nosnippet>211</a>//! fn foo_hooks() {
-<a href=#212 id=212 data-nosnippet>212</a>//!     // Event hooks can be setup here
-<a href=#213 id=213 data-nosnippet>213</a>//! }
-<a href=#214 id=214 data-nosnippet>214</a>//! ```
-<a href=#215 id=215 data-nosnippet>215</a>//!
-<a href=#216 id=216 data-nosnippet>216</a>//! Note that in the example requests are processed in the [`UPDATES.once_update`] update that is called
-<a href=#217 id=217 data-nosnippet>217</a>//! after all widgets have had a chance to make requests. Requests can also be made from parallel [`task`] threads,
-<a href=#218 id=218 data-nosnippet>218</a>//! that causes the app main loop to wake and immediately process the request.
-<a href=#219 id=219 data-nosnippet>219</a>//!
-<a href=#220 id=220 data-nosnippet>220</a>//! # Init &amp; Main Loop
-<a href=#221 id=221 data-nosnippet>221</a>//!
-<a href=#222 id=222 data-nosnippet>222</a>//! A headed app initializes in this sequence once run starts:
-<a href=#223 id=223 data-nosnippet>223</a>//!
-<a href=#224 id=224 data-nosnippet>224</a>//! 1. View-process spawns asynchronously.
-<a href=#225 id=225 data-nosnippet>225</a>//! 2. [`APP.on_init`] handlers are called.
-<a href=#226 id=226 data-nosnippet>226</a>//! 4. Schedule the app run future to run in the first preview update.
-<a href=#227 id=227 data-nosnippet>227</a>//! 5. Does [updates loop](#updates-loop).
-<a href=#228 id=228 data-nosnippet>228</a>//! 7. Does [main loop](#main-loop).
-<a href=#229 id=229 data-nosnippet>229</a>//!
-<a href=#230 id=230 data-nosnippet>230</a>//! #### Main Loop
-<a href=#231 id=231 data-nosnippet>231</a>//!
-<a href=#232 id=232 data-nosnippet>232</a>//! The main loop coordinates view-process events, timers, app events and updates. There is no scheduler, update and event requests
-<a href=#233 id=233 data-nosnippet>233</a>//! are captured and coalesced to various buffers that are drained in known sequential order. App level handlers update in the
-<a href=#234 id=234 data-nosnippet>234</a>//! register order, windows and widgets update in parallel by default, this is controlled by [`WINDOWS.parallel`] and [`parallel`].
-<a href=#235 id=235 data-nosnippet>235</a>//!
-<a href=#236 id=236 data-nosnippet>236</a>//! 1. Sleep if there are not pending events or updates.
-<a href=#237 id=237 data-nosnippet>237</a>//!    * If the view-process is busy blocks until it sends a message, this is a mechanism to stop the app-process
-<a href=#238 id=238 data-nosnippet>238</a>//!      from overwhelming the view-process.
-<a href=#239 id=239 data-nosnippet>239</a>//!    * Block until a message is received, from the view-process or from other app threads.
-<a href=#240 id=240 data-nosnippet>240</a>//!    * If there are [`TIMERS`] or [`VARS`] animations the message block has a deadline to the nearest timer or animation frame.
-<a href=#241 id=241 data-nosnippet>241</a>//!        * Animations have a fixed frame-rate defined in [`VARS.frame_duration`], by default it is set to the monitor refresh
-<a href=#242 id=242 data-nosnippet>242</a>//!          rate by the [`WINDOWS`] service.
-<a href=#243 id=243 data-nosnippet>243</a>//! 2. Calls elapsed timer handlers.
-<a href=#244 id=244 data-nosnippet>244</a>//! 3. Calls elapsed animation handlers.
-<a href=#245 id=245 data-nosnippet>245</a>//!     * These handlers mostly just request var updates that are applied in the updates loop.
-<a href=#246 id=246 data-nosnippet>246</a>//! 4. Does an [updates loop](#updates-loop).
-<a href=#247 id=247 data-nosnippet>247</a>//! 5. If the view-process is not busy does a [layout loop and render](#layout-loop-and-render).
-<a href=#248 id=248 data-nosnippet>248</a>//! 6. If exit was requested and not cancelled breaks the loop.
-<a href=#249 id=249 data-nosnippet>249</a>//!     * Exit is requested automatically when the last open window closes, this is controlled by [`WINDOWS.exit_on_last_close`].
-<a href=#250 id=250 data-nosnippet>250</a>//!     * Exit can also be requested using [`APP.exit`].
-<a href=#251 id=251 data-nosnippet>251</a>//!
-<a href=#252 id=252 data-nosnippet>252</a>//! #### Updates Loop
-<a href=#253 id=253 data-nosnippet>253</a>//!
-<a href=#254 id=254 data-nosnippet>254</a>//! The updates loop rebuilds info trees if needed, applies pending variable updates and hooks and collects event updates
-<a href=#255 id=255 data-nosnippet>255</a>//! requested by the app.
-<a href=#256 id=256 data-nosnippet>256</a>//!
-<a href=#257 id=257 data-nosnippet>257</a>//! 1. Takes info rebuild request flag.
-<a href=#258 id=258 data-nosnippet>258</a>//!     * Windows and widgets that requested info (re)build are called.
-<a href=#259 id=259 data-nosnippet>259</a>//!     * Info rebuild happens in parallel by default (between windows and widgets).
-<a href=#260 id=260 data-nosnippet>260</a>//! 2. Takes events, vars and other updates requests.
-<a href=#261 id=261 data-nosnippet>261</a>//!     1. [var updates loop](#var-updates-loop), note that includes events that are also vars.
-<a href=#262 id=262 data-nosnippet>262</a>//!     2. Calls [`UPDATES.on_pre_update`] handlers if needed.
-<a href=#263 id=263 data-nosnippet>263</a>//!         * Both [`Event::on_pre_event`] and [`Var::on_pre_new`] are implemented as pre updates too.
-<a href=#264 id=264 data-nosnippet>264</a>//!     3. Updates windows and widgets, in parallel by default.
-<a href=#265 id=265 data-nosnippet>265</a>//!         * Windows and widgets that requested update receive it here.
-<a href=#266 id=266 data-nosnippet>266</a>//!         * All the pending updates are processed in one pass, all targeted widgets are visited once, in parallel by default.
-<a href=#267 id=267 data-nosnippet>267</a>//!     4. Calls [`UPDATES.on_update`] handlers if needed.
-<a href=#268 id=268 data-nosnippet>268</a>//!         * Both [`Event::on_event`] and [`Var::on_new`] are implemented as updates too.
-<a href=#269 id=269 data-nosnippet>269</a>//! 3. The loop repeats immediately if any info rebuild or update was requested by update callbacks.
-<a href=#270 id=270 data-nosnippet>270</a>//!     * The loops breaks if it repeats over 1000 times.
-<a href=#271 id=271 data-nosnippet>271</a>//!     * An error is logged with a trace of the most frequent sources of update requests.
-<a href=#272 id=272 data-nosnippet>272</a>//!
-<a href=#273 id=273 data-nosnippet>273</a>//! #### Var Updates Loop
-<a href=#274 id=274 data-nosnippet>274</a>//!
-<a href=#275 id=275 data-nosnippet>275</a>//! The variable updates loop applies pending modifications, calls hooks to update variable and bindings.
-<a href=#276 id=276 data-nosnippet>276</a>//!
-<a href=#277 id=277 data-nosnippet>277</a>//! 1. Pending variable modifications are applied.
-<a href=#278 id=278 data-nosnippet>278</a>//! 2. Var hooks are called.
-<a href=#279 id=279 data-nosnippet>279</a>//!     * The mapping and binding mechanism is implemented using hooks.
-<a href=#280 id=280 data-nosnippet>280</a>//! 3. The loop repeats until hooks have stopped modifying variables.
-<a href=#281 id=281 data-nosnippet>281</a>//!     * The loop breaks if it repeats over 1000 times.
-<a href=#282 id=282 data-nosnippet>282</a>//!     * An error is logged if this happens.
-<a href=#283 id=283 data-nosnippet>283</a>//!
-<a href=#284 id=284 data-nosnippet>284</a>//! Note that events are just specialized variables, they update (notify) at the same time as variables modify,
-<a href=#285 id=285 data-nosnippet>285</a>//! the [`UPDATES.once_update`] closure is also called here.
-<a href=#286 id=286 data-nosnippet>286</a>//!
-<a href=#287 id=287 data-nosnippet>287</a>//! Think of this loop as a *staging loop* for the main update notifications, it should quickly prepare data that will
-<a href=#288 id=288 data-nosnippet>288</a>//! be immutable during the [updates loop](#updates-loop), affected hooks all run sequentially and **must not block**,
-<a href=#289 id=289 data-nosnippet>289</a>//! UI node methods also should never be called inside hooks.
-<a href=#290 id=290 data-nosnippet>290</a>//!
-<a href=#291 id=291 data-nosnippet>291</a>//! #### Layout Loop and Render
-<a href=#292 id=292 data-nosnippet>292</a>//!
-<a href=#293 id=293 data-nosnippet>293</a>//! Layout and render requests are coalesced, multiple layout requests for the same widget update it once, multiple
-<a href=#294 id=294 data-nosnippet>294</a>//! render requests become one frame, and if both `render` and `render_update` are requested for a window it will just fully `render`.
-<a href=#295 id=295 data-nosnippet>295</a>//!
-<a href=#296 id=296 data-nosnippet>296</a>//! 1. Take layout and render requests.
-<a href=#297 id=297 data-nosnippet>297</a>//! 2. Layout loop.
-<a href=#298 id=298 data-nosnippet>298</a>//!     1. Windows and widgets that requested layout update, in parallel by default.
-<a href=#299 id=299 data-nosnippet>299</a>//!     2. Does an [updates loop](#updates-loop).
-<a href=#300 id=300 data-nosnippet>300</a>//!     3. Take layout and render requests, the loop repeats immediately if layout was requested again.
-<a href=#301 id=301 data-nosnippet>301</a>//!         * The loop breaks if it repeats over 1000 times.
-<a href=#302 id=302 data-nosnippet>302</a>//!         * An error is logged with a trace the most frequent sources of update requests.
-<a href=#303 id=303 data-nosnippet>303</a>//! 3. Windows and widgets that requested render (or render_update) are rendered, in parallel by default.
-<a href=#304 id=304 data-nosnippet>304</a>//!     * The render pass updates widget transforms and hit-test, generates a display list and sends it to the view-process.
-<a href=#305 id=305 data-nosnippet>305</a>//!
-<a href=#306 id=306 data-nosnippet>306</a>//! [`APP.defaults()`]: crate::app::APP::defaults
-<a href=#307 id=307 data-nosnippet>307</a>//! [`APP.on_init`]: crate::app::APP::on_init
-<a href=#308 id=308 data-nosnippet>308</a>//! [`UPDATES.update`]: crate::update::UPDATES::update
-<a href=#309 id=309 data-nosnippet>309</a>//! [`task`]: crate::task
-<a href=#310 id=310 data-nosnippet>310</a>//! [`ResponseVar&lt;R&gt;`]: crate::var::ResponseVar
-<a href=#311 id=311 data-nosnippet>311</a>//! [`TIMERS`]: crate::timer::TIMERS
-<a href=#312 id=312 data-nosnippet>312</a>//! [`VARS`]: crate::var::VARS
-<a href=#313 id=313 data-nosnippet>313</a>//! [`VARS.frame_duration`]: crate::var::VARS::frame_duration
-<a href=#314 id=314 data-nosnippet>314</a>//! [`WINDOWS`]: crate::window::WINDOWS
-<a href=#315 id=315 data-nosnippet>315</a>//! [`WINDOWS.parallel`]: crate::window::WINDOWS::parallel
-<a href=#316 id=316 data-nosnippet>316</a>//! [`parallel`]: fn@crate::widget::parallel
-<a href=#317 id=317 data-nosnippet>317</a>//! [`UPDATES.on_pre_update`]: crate::update::UPDATES::on_pre_update
-<a href=#318 id=318 data-nosnippet>318</a>//! [`UPDATES.on_update`]: crate::update::UPDATES::on_update
-<a href=#319 id=319 data-nosnippet>319</a>//! [`Var::on_pre_new`]: crate::var::VarSubscribe::on_pre_new
-<a href=#320 id=320 data-nosnippet>320</a>//! [`Var::on_new`]: crate::var::VarSubscribe::on_new
-<a href=#321 id=321 data-nosnippet>321</a>//! [`Event::on_pre_event`]: crate::event::Event::on_pre_event
-<a href=#322 id=322 data-nosnippet>322</a>//! [`Event::on_event`]: crate::event::Event::on_event
-<a href=#323 id=323 data-nosnippet>323</a>//! [`WINDOWS.exit_on_last_close`]: crate::window::WINDOWS::exit_on_last_close
-<a href=#324 id=324 data-nosnippet>324</a>//! [`APP.exit`]: crate::app::APP#method.exit
-<a href=#325 id=325 data-nosnippet>325</a>//! [`UPDATES.once_update`]: zng::update::UPDATES::once_update
-<a href=#326 id=326 data-nosnippet>326</a>//!
-<a href=#327 id=327 data-nosnippet>327</a>//! # Full API
-<a href=#328 id=328 data-nosnippet>328</a>//!
-<a href=#329 id=329 data-nosnippet>329</a>//! This module provides most of the app API needed to make and extend apps, some more advanced or experimental API
-<a href=#330 id=330 data-nosnippet>330</a>//! may be available at the [`zng_app`], [`zng_app_context`] and [`zng_ext_single_instance`] base crates.
-<a href=#331 id=331 data-nosnippet>331</a>
-<a href=#332 id=332 data-nosnippet>332</a></span><span class="kw">pub use </span>zng_app::{
-<a href=#333 id=333 data-nosnippet>333</a>    APP, AppBuilder, AppControlFlow, DInstant, Deadline, EXIT_CMD, EXIT_REQUESTED_EVENT, ExitRequestedArgs, HeadlessApp, INSTANT,
-<a href=#334 id=334 data-nosnippet>334</a>    InstantMode, print_tracing, print_tracing_filter, spawn_deadlock_detection,
-<a href=#335 id=335 data-nosnippet>335</a>};
-<a href=#336 id=336 data-nosnippet>336</a>
-<a href=#337 id=337 data-nosnippet>337</a><span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
-<a href=#338 id=338 data-nosnippet>338</a></span><span class="kw">pub use </span>zng_app::test_log;
-<a href=#339 id=339 data-nosnippet>339</a>
-<a href=#340 id=340 data-nosnippet>340</a><span class="kw">pub use </span>zng_app_context::{
-<a href=#341 id=341 data-nosnippet>341</a>    AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, MappedRwLockReadGuardOwned,
-<a href=#342 id=342 data-nosnippet>342</a>    MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned, app_local, context_local,
-<a href=#343 id=343 data-nosnippet>343</a>};
-<a href=#344 id=344 data-nosnippet>344</a><span class="kw">pub use </span>zng_wgt_input::cmd::{
-<a href=#345 id=345 data-nosnippet>345</a>    NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD, can_new, can_open, can_save, can_save_as, on_new, on_open, on_pre_new, on_pre_open,
-<a href=#346 id=346 data-nosnippet>346</a>    on_pre_save, on_pre_save_as, on_save, on_save_as,
-<a href=#347 id=347 data-nosnippet>347</a>};
-<a href=#348 id=348 data-nosnippet>348</a>
-<a href=#349 id=349 data-nosnippet>349</a><span class="kw">pub use </span>zng_app::view_process::raw_events::{LOW_MEMORY_EVENT, LowMemoryArgs};
-<a href=#350 id=350 data-nosnippet>350</a>
-<a href=#351 id=351 data-nosnippet>351</a><span class="doccomment">/// Input device hardware ID and events.
-<a href=#352 id=352 data-nosnippet>352</a>///
-<a href=#353 id=353 data-nosnippet>353</a>/// # Full API
-<a href=#354 id=354 data-nosnippet>354</a>///
-<a href=#355 id=355 data-nosnippet>355</a>/// See [`zng_app::view_process::raw_device_events`] for the full API.
-<a href=#356 id=356 data-nosnippet>356</a></span><span class="kw">pub mod </span>raw_device_events {
-<a href=#357 id=357 data-nosnippet>357</a>    <span class="kw">pub use </span>zng_app::view_process::raw_device_events::{
-<a href=#358 id=358 data-nosnippet>358</a>        AXIS_MOTION_EVENT, AxisId, AxisMotionArgs, INPUT_DEVICES, INPUT_DEVICES_CHANGED_EVENT, InputDeviceCapability, InputDeviceId,
-<a href=#359 id=359 data-nosnippet>359</a>        InputDeviceInfo, InputDevicesChangedArgs,
-<a href=#360 id=360 data-nosnippet>360</a>    };
-<a href=#361 id=361 data-nosnippet>361</a>}
-<a href=#362 id=362 data-nosnippet>362</a>
-<a href=#363 id=363 data-nosnippet>363</a><span class="attr">#[cfg(single_instance)]
-<a href=#364 id=364 data-nosnippet>364</a></span><span class="kw">pub use </span>zng_ext_single_instance::{APP_INSTANCE_EVENT, AppInstanceArgs};
-<a href=#365 id=365 data-nosnippet>365</a>
-<a href=#366 id=366 data-nosnippet>366</a><span class="doccomment">/// App-process crash handler.
-<a href=#367 id=367 data-nosnippet>367</a>///
-<a href=#368 id=368 data-nosnippet>368</a>/// In builds with `"crash_handler"` feature the crash handler takes over the first "app-process" turning it into
-<a href=#369 id=369 data-nosnippet>369</a>/// the monitor-process, it spawns another process that is the monitored app-process. If the app-process crashes
-<a href=#370 id=370 data-nosnippet>370</a>/// the monitor-process spawns a dialog-process that calls the dialog handler to show an error message, upload crash reports, etc.
-<a href=#371 id=371 data-nosnippet>371</a>///
-<a href=#372 id=372 data-nosnippet>372</a>/// The dialog handler can be set using [`crash_handler_config!`].
-<a href=#373 id=373 data-nosnippet>373</a>///
-<a href=#374 id=374 data-nosnippet>374</a>/// [`crash_handler_config!`]: crate::app::crash_handler::crash_handler_config
-<a href=#375 id=375 data-nosnippet>375</a>///
-<a href=#376 id=376 data-nosnippet>376</a>/// # Examples
-<a href=#377 id=377 data-nosnippet>377</a>///
-<a href=#378 id=378 data-nosnippet>378</a>/// The example below demonstrates an app setup to show a custom crash dialog.
-<a href=#379 id=379 data-nosnippet>379</a>///
-<a href=#380 id=380 data-nosnippet>380</a>/// ```no_run
-<a href=#381 id=381 data-nosnippet>381</a>/// use zng::prelude::*;
-<a href=#382 id=382 data-nosnippet>382</a>///
-<a href=#383 id=383 data-nosnippet>383</a>/// fn main() {
-<a href=#384 id=384 data-nosnippet>384</a>///     // tracing applied to all processes.
-<a href=#385 id=385 data-nosnippet>385</a>///     zng::app::print_tracing(tracing::Level::INFO, false, |_| true);
-<a href=#386 id=386 data-nosnippet>386</a>///
-<a href=#387 id=387 data-nosnippet>387</a>///     // monitor-process spawns app-process and if needed dialog-process here.
-<a href=#388 id=388 data-nosnippet>388</a>///     zng::env::init!();
-<a href=#389 id=389 data-nosnippet>389</a>///
-<a href=#390 id=390 data-nosnippet>390</a>///     // app-process:
-<a href=#391 id=391 data-nosnippet>391</a>///     app_main();
-<a href=#392 id=392 data-nosnippet>392</a>/// }
-<a href=#393 id=393 data-nosnippet>393</a>///
-<a href=#394 id=394 data-nosnippet>394</a>/// fn app_main() {
-<a href=#395 id=395 data-nosnippet>395</a>///     APP.defaults().run_window("main", async {
-<a href=#396 id=396 data-nosnippet>396</a>///         Window! {
-<a href=#397 id=397 data-nosnippet>397</a>///             child_align = Align::CENTER;
-<a href=#398 id=398 data-nosnippet>398</a>///             child = Stack! {
-<a href=#399 id=399 data-nosnippet>399</a>///                 direction = StackDirection::top_to_bottom();
-<a href=#400 id=400 data-nosnippet>400</a>///                 spacing = 5;
-<a href=#401 id=401 data-nosnippet>401</a>///                 children = ui_vec![
-<a href=#402 id=402 data-nosnippet>402</a>///                     Button! {
-<a href=#403 id=403 data-nosnippet>403</a>///                         child = Text!("Crash (panic)");
-<a href=#404 id=404 data-nosnippet>404</a>///                         on_click = hn_once!(|_| {
-<a href=#405 id=405 data-nosnippet>405</a>///                             panic!("Test panic!");
-<a href=#406 id=406 data-nosnippet>406</a>///                         });
-<a href=#407 id=407 data-nosnippet>407</a>///                     },
-<a href=#408 id=408 data-nosnippet>408</a>///                     Button! {
-<a href=#409 id=409 data-nosnippet>409</a>///                         child = Text!("Crash (access violation)");
-<a href=#410 id=410 data-nosnippet>410</a>///                         on_click = hn_once!(|_| {
-<a href=#411 id=411 data-nosnippet>411</a>///                             // SAFETY: deliberate access violation
-<a href=#412 id=412 data-nosnippet>412</a>///                             #[expect(deref_nullptr)]
-<a href=#413 id=413 data-nosnippet>413</a>///                             unsafe {
-<a href=#414 id=414 data-nosnippet>414</a>///                                 *std::ptr::null_mut() = true;
-<a href=#415 id=415 data-nosnippet>415</a>///                             }
-<a href=#416 id=416 data-nosnippet>416</a>///                         });
-<a href=#417 id=417 data-nosnippet>417</a>///                     }
-<a href=#418 id=418 data-nosnippet>418</a>///                 ];
-<a href=#419 id=419 data-nosnippet>419</a>///             };
-<a href=#420 id=420 data-nosnippet>420</a>///         }
-<a href=#421 id=421 data-nosnippet>421</a>///     });
-<a href=#422 id=422 data-nosnippet>422</a>/// }
-<a href=#423 id=423 data-nosnippet>423</a>///
-<a href=#424 id=424 data-nosnippet>424</a>/// zng::app::crash_handler::crash_handler_config!(|cfg| {
-<a href=#425 id=425 data-nosnippet>425</a>///     // monitor-process and dialog-process
-<a href=#426 id=426 data-nosnippet>426</a>///
-<a href=#427 id=427 data-nosnippet>427</a>///     cfg.dialog(|args| {
-<a href=#428 id=428 data-nosnippet>428</a>///         // dialog-process
-<a href=#429 id=429 data-nosnippet>429</a>///         APP.defaults().run_window("crash-dialog", async move {
-<a href=#430 id=430 data-nosnippet>430</a>///             Window! {
-<a href=#431 id=431 data-nosnippet>431</a>///                 title = "App Crashed!";
-<a href=#432 id=432 data-nosnippet>432</a>///                 auto_size = true;
-<a href=#433 id=433 data-nosnippet>433</a>///                 min_size = (300, 100);
-<a href=#434 id=434 data-nosnippet>434</a>///                 start_position = window::StartPosition::CenterMonitor;
-<a href=#435 id=435 data-nosnippet>435</a>///                 on_load = hn_once!(|_| WINDOW.bring_to_top());
-<a href=#436 id=436 data-nosnippet>436</a>///                 padding = 10;
-<a href=#437 id=437 data-nosnippet>437</a>///                 child_spacing = 10;
-<a href=#438 id=438 data-nosnippet>438</a>///                 child = Text!(args.latest().message());
-<a href=#439 id=439 data-nosnippet>439</a>///                 child_bottom = Stack! {
-<a href=#440 id=440 data-nosnippet>440</a>///                     direction = StackDirection::start_to_end();
-<a href=#441 id=441 data-nosnippet>441</a>///                     layout::align = Align::BOTTOM_END;
-<a href=#442 id=442 data-nosnippet>442</a>///                     spacing = 5;
-<a href=#443 id=443 data-nosnippet>443</a>///                     children = ui_vec![
-<a href=#444 id=444 data-nosnippet>444</a>///                         Button! {
-<a href=#445 id=445 data-nosnippet>445</a>///                             child = Text!("Restart App");
-<a href=#446 id=446 data-nosnippet>446</a>///                             on_click = hn_once!(args, |_| {
-<a href=#447 id=447 data-nosnippet>447</a>///                                 args.restart();
-<a href=#448 id=448 data-nosnippet>448</a>///                             });
-<a href=#449 id=449 data-nosnippet>449</a>///                         },
-<a href=#450 id=450 data-nosnippet>450</a>///                         Button! {
-<a href=#451 id=451 data-nosnippet>451</a>///                             child = Text!("Exit App");
-<a href=#452 id=452 data-nosnippet>452</a>///                             on_click = hn_once!(|_| {
-<a href=#453 id=453 data-nosnippet>453</a>///                                 args.exit(0);
-<a href=#454 id=454 data-nosnippet>454</a>///                             });
-<a href=#455 id=455 data-nosnippet>455</a>///                         },
-<a href=#456 id=456 data-nosnippet>456</a>///                     ];
-<a href=#457 id=457 data-nosnippet>457</a>///                 };
-<a href=#458 id=458 data-nosnippet>458</a>///             }
-<a href=#459 id=459 data-nosnippet>459</a>///         });
-<a href=#460 id=460 data-nosnippet>460</a>///     });
-<a href=#461 id=461 data-nosnippet>461</a>/// });
-<a href=#462 id=462 data-nosnippet>462</a>/// ```
-<a href=#463 id=463 data-nosnippet>463</a>///
-<a href=#464 id=464 data-nosnippet>464</a>/// # Debugger
-<a href=#465 id=465 data-nosnippet>465</a>///
-<a href=#466 id=466 data-nosnippet>466</a>/// Note that because the crash handler spawns a different process for the app debuggers will not
-<a href=#467 id=467 data-nosnippet>467</a>/// stop at break points in the app code. You can configure your debugger to set the `NO_ZNG_CRASH_HANDLER` environment
-<a href=#468 id=468 data-nosnippet>468</a>/// variable to not use a crash handler in debug runs.
-<a href=#469 id=469 data-nosnippet>469</a>///
-<a href=#470 id=470 data-nosnippet>470</a>/// On VS Code with the CodeLLDB extension you can add this workspace configuration:
-<a href=#471 id=471 data-nosnippet>471</a>///
-<a href=#472 id=472 data-nosnippet>472</a>/// ```json
-<a href=#473 id=473 data-nosnippet>473</a>/// "lldb.launch.env": {
-<a href=#474 id=474 data-nosnippet>474</a>///    "ZNG_NO_CRASH_HANDLER": ""
-<a href=#475 id=475 data-nosnippet>475</a>/// }
-<a href=#476 id=476 data-nosnippet>476</a>/// ```
-<a href=#477 id=477 data-nosnippet>477</a>///
-<a href=#478 id=478 data-nosnippet>478</a>/// # Full API
-<a href=#479 id=479 data-nosnippet>479</a>///
-<a href=#480 id=480 data-nosnippet>480</a>/// See [`zng_app::crash_handler`] and [`zng_wgt_inspector::crash_handler`] for the full API.
-<a href=#481 id=481 data-nosnippet>481</a></span><span class="attr">#[cfg(crash_handler)]
-<a href=#482 id=482 data-nosnippet>482</a></span><span class="kw">pub mod </span>crash_handler {
-<a href=#483 id=483 data-nosnippet>483</a>    <span class="kw">pub use </span>zng_app::crash_handler::{BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic, crash_handler_config};
-<a href=#484 id=484 data-nosnippet>484</a>
-<a href=#485 id=485 data-nosnippet>485</a>    <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
-<a href=#486 id=486 data-nosnippet>486</a>    </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
-<a href=#487 id=487 data-nosnippet>487</a>
-<a href=#488 id=488 data-nosnippet>488</a>    <span class="macro">crash_handler_config!</span>(|cfg| {
-<a href=#489 id=489 data-nosnippet>489</a>        cfg.default_dialog(|args| {
-<a href=#490 id=490 data-nosnippet>490</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;</span>args.dialog_crash {
-<a href=#491 id=491 data-nosnippet>491</a>                <span class="macro">eprintln!</span>(<span class="string">"DEBUG CRASH DIALOG ALSO CRASHED"</span>);
-<a href=#492 id=492 data-nosnippet>492</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, c.message());
-<a href=#493 id=493 data-nosnippet>493</a>                <span class="macro">eprintln!</span>(<span class="string">"ORIGINAL APP CRASH"</span>);
-<a href=#494 id=494 data-nosnippet>494</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, args.latest().message());
-<a href=#495 id=495 data-nosnippet>495</a>                args.exit(<span class="number">0xBADC0DE</span>)
-<a href=#496 id=496 data-nosnippet>496</a>            } <span class="kw">else </span>{
-<a href=#497 id=497 data-nosnippet>497</a>                <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
-<a href=#498 id=498 data-nosnippet>498</a>                </span>{
-<a href=#499 id=499 data-nosnippet>499</a>                    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
-<a href=#500 id=500 data-nosnippet>500</a>                    APP.defaults().run_window(
-<a href=#501 id=501 data-nosnippet>501</a>                        <span class="string">"debug-crash-dialog"</span>,
-<a href=#502 id=502 data-nosnippet>502</a>                        <span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }),
-<a href=#503 id=503 data-nosnippet>503</a>                    );
-<a href=#504 id=504 data-nosnippet>504</a>                }
-<a href=#505 id=505 data-nosnippet>505</a>
-<a href=#506 id=506 data-nosnippet>506</a>                <span class="attr">#[cfg(not(feature = <span class="string">"crash_handler_debug"</span>))]
-<a href=#507 id=507 data-nosnippet>507</a>                </span>{
-<a href=#508 id=508 data-nosnippet>508</a>                    <span class="macro">eprintln!</span>(
-<a href=#509 id=509 data-nosnippet>509</a>                        <span class="string">"app crashed {}\n\nbuild with feature = \"crash_handler_debug\" to se the debug crash dialog"</span>,
-<a href=#510 id=510 data-nosnippet>510</a>                        args.latest().message()
-<a href=#511 id=511 data-nosnippet>511</a>                    );
-<a href=#512 id=512 data-nosnippet>512</a>                }
-<a href=#513 id=513 data-nosnippet>513</a>            }
-<a href=#514 id=514 data-nosnippet>514</a>            args.exit(<span class="number">0</span>)
-<a href=#515 id=515 data-nosnippet>515</a>        });
-<a href=#516 id=516 data-nosnippet>516</a>    });
-<a href=#517 id=517 data-nosnippet>517</a>}
-<a href=#518 id=518 data-nosnippet>518</a>
-<a href=#519 id=519 data-nosnippet>519</a><span class="doccomment">/// Trace recording and data model.
-<a href=#520 id=520 data-nosnippet>520</a>///
-<a href=#521 id=521 data-nosnippet>521</a>/// All tracing instrumentation in Zng projects is done using the `tracing` crate, trace recording is done using the `tracing-chrome` crate.
-<a href=#522 id=522 data-nosnippet>522</a>/// The recorded traces can be viewed in `chrome://tracing` or `ui.perfetto.dev` and can be parsed by the [`Trace`] data model.
-<a href=#523 id=523 data-nosnippet>523</a>///
-<a href=#524 id=524 data-nosnippet>524</a>/// Build the app with `"trace_recorder"` and run it with the `"ZNG_RECORD_TRACE"` env var to record all processes spawned by the app.
-<a href=#525 id=525 data-nosnippet>525</a>///
-<a href=#526 id=526 data-nosnippet>526</a>/// ```no_run
-<a href=#527 id=527 data-nosnippet>527</a>/// use zng::prelude::*;
-<a href=#528 id=528 data-nosnippet>528</a>///
-<a href=#529 id=529 data-nosnippet>529</a>/// fn main() {
-<a href=#530 id=530 data-nosnippet>530</a>///     unsafe {
-<a href=#531 id=531 data-nosnippet>531</a>///         std::env::set_var("ZNG_RECORD_TRACE", "");
-<a href=#532 id=532 data-nosnippet>532</a>///     }
-<a href=#533 id=533 data-nosnippet>533</a>///     unsafe {
-<a href=#534 id=534 data-nosnippet>534</a>///         std::env::set_var("ZNG_RECORD_TRACE_FILTER", "debug");
-<a href=#535 id=535 data-nosnippet>535</a>///     }
-<a href=#536 id=536 data-nosnippet>536</a>///
-<a href=#537 id=537 data-nosnippet>537</a>///     // recording start here for all app processes when ZNG_RECORD_TRACE is set.
-<a href=#538 id=538 data-nosnippet>538</a>///     zng::env::init!();
-<a href=#539 id=539 data-nosnippet>539</a>///
-<a href=#540 id=540 data-nosnippet>540</a>///     // .. app
-<a href=#541 id=541 data-nosnippet>541</a>/// }
-<a href=#542 id=542 data-nosnippet>542</a>/// ```
-<a href=#543 id=543 data-nosnippet>543</a>///
-<a href=#544 id=544 data-nosnippet>544</a>/// The example above hardcodes trace recording for all app processes by setting the `"ZNG_RECORD_TRACE"` environment
-<a href=#545 id=545 data-nosnippet>545</a>/// variable before the `init!()` call. It also sets `"ZNG_RECORD_TRACE_FILTER"` to a slightly less verbose level.
-<a href=#546 id=546 data-nosnippet>546</a>///
-<a href=#547 id=547 data-nosnippet>547</a>/// # Config
-<a href=#548 id=548 data-nosnippet>548</a>///
-<a href=#549 id=549 data-nosnippet>549</a>/// The `"ZNG_RECORD_TRACE_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
-<a href=#550 id=550 data-nosnippet>550</a>/// The default dir is `"./zng-trace/"`.
-<a href=#551 id=551 data-nosnippet>551</a>///
-<a href=#552 id=552 data-nosnippet>552</a>/// The `"ZNG_RECORD_TRACE_FILTER"` or `"RUST_LOG"` variables can be used to set custom tracing filters, see the [filter syntax] for details.
-<a href=#553 id=553 data-nosnippet>553</a>/// The default filter is `"trace"` that records all spans and events.
-<a href=#554 id=554 data-nosnippet>554</a>///
-<a href=#555 id=555 data-nosnippet>555</a>/// # Output
-<a href=#556 id=556 data-nosnippet>556</a>///
-<a href=#557 id=557 data-nosnippet>557</a>/// Raw trace files are saved to `"{ZNG_RECORD_TRACE_DIR}/{timestamp}/{pid}.json"`.
-<a href=#558 id=558 data-nosnippet>558</a>///
-<a href=#559 id=559 data-nosnippet>559</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are
-<a href=#560 id=560 data-nosnippet>560</a>/// recorded to the same *timestamp* folder.
-<a href=#561 id=561 data-nosnippet>561</a>///
-<a href=#562 id=562 data-nosnippet>562</a>/// The process name is defined by an event INFO message that reads `"pid: {pid}, name: {name}"`. See [`zng::env::process_name`] for more details.
-<a href=#563 id=563 data-nosnippet>563</a>///
-<a href=#564 id=564 data-nosnippet>564</a>/// The process record start timestamp is defined by an event INFO message that reads `"zng-record-start: {timestamp}"`. This timestamp is also
-<a href=#565 id=565 data-nosnippet>565</a>/// in microseconds from Unix epoch.
-<a href=#566 id=566 data-nosnippet>566</a>///
-<a href=#567 id=567 data-nosnippet>567</a>/// Fake *threads* can be defined to better track a *task span* by setting a `thread = "&lt;name&gt;"` argument in the span. Both fake threads and process
-<a href=#568 id=568 data-nosnippet>568</a>/// names are converted to real entries by `cargo zng trace`.
-<a href=#569 id=569 data-nosnippet>569</a>///
-<a href=#570 id=570 data-nosnippet>570</a>/// # Cargo Zng
-<a href=#571 id=571 data-nosnippet>571</a>///
-<a href=#572 id=572 data-nosnippet>572</a>/// You can also use the `cargo zng trace` subcommand to record traces, it handles setting the env variables, merges the multi
-<a href=#573 id=573 data-nosnippet>573</a>/// process traces into a single file and properly names the processes for better compatibility with trace viewers.
-<a href=#574 id=574 data-nosnippet>574</a>///
-<a href=#575 id=575 data-nosnippet>575</a>/// ```console
-<a href=#576 id=576 data-nosnippet>576</a>/// cargo zng trace --filter debug "path/my-exe"
-<a href=#577 id=577 data-nosnippet>577</a>/// ```
-<a href=#578 id=578 data-nosnippet>578</a>///
-<a href=#579 id=579 data-nosnippet>579</a>/// You can also run using custom commands after `--`:
-<a href=#580 id=580 data-nosnippet>580</a>///
-<a href=#581 id=581 data-nosnippet>581</a>/// ```console
-<a href=#582 id=582 data-nosnippet>582</a>/// cargo zng trace -- cargo run my-exe
-<a href=#583 id=583 data-nosnippet>583</a>/// ```
-<a href=#584 id=584 data-nosnippet>584</a>///
-<a href=#585 id=585 data-nosnippet>585</a>/// Call `cargo zng trace --help` for more details.
-<a href=#586 id=586 data-nosnippet>586</a>///
-<a href=#587 id=587 data-nosnippet>587</a>/// # Full API
-<a href=#588 id=588 data-nosnippet>588</a>///
-<a href=#589 id=589 data-nosnippet>589</a>/// See [`zng_app::trace_recorder`] for the full API.
-<a href=#590 id=590 data-nosnippet>590</a>///
-<a href=#591 id=591 data-nosnippet>591</a>/// [`Trace`]: zng::app::trace_recorder::Trace
-<a href=#592 id=592 data-nosnippet>592</a>/// [filter syntax]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables
-<a href=#593 id=593 data-nosnippet>593</a></span><span class="attr">#[cfg(trace_recorder)]
-<a href=#594 id=594 data-nosnippet>594</a></span><span class="kw">pub mod </span>trace_recorder {
-<a href=#595 id=595 data-nosnippet>595</a>    <span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, stop_recording};
-<a href=#596 id=596 data-nosnippet>596</a>}
-<a href=#597 id=597 data-nosnippet>597</a>
-<a href=#598 id=598 data-nosnippet>598</a><span class="doccomment">/// Heap memory usage profiling.
-<a href=#599 id=599 data-nosnippet>599</a>///
-<a href=#600 id=600 data-nosnippet>600</a>/// Build with debug symbols and `"memory_profiler"` feature to record heap allocations.
-<a href=#601 id=601 data-nosnippet>601</a>///
-<a href=#602 id=602 data-nosnippet>602</a>/// Instrumentation and recording is done with the `dhat` crate. Recorded profiles can be visualized using the
-<a href=#603 id=603 data-nosnippet>603</a>/// [online DHAT Viewer](https://nnethercote.github.io/dh_view/dh_view.html). Stack traces are captured for each significant allocation.
-<a href=#604 id=604 data-nosnippet>604</a>///
-<a href=#605 id=605 data-nosnippet>605</a>/// # Config
-<a href=#606 id=606 data-nosnippet>606</a>///
-<a href=#607 id=607 data-nosnippet>607</a>/// The `"ZNG_MEMORY_PROFILER_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
-<a href=#608 id=608 data-nosnippet>608</a>/// The default dir is `"./zng-dhat/"`.
-<a href=#609 id=609 data-nosnippet>609</a>///
-<a href=#610 id=610 data-nosnippet>610</a>/// # Output
-<a href=#611 id=611 data-nosnippet>611</a>///
-<a href=#612 id=612 data-nosnippet>612</a>/// The recorded data is saved to `"{ZNG_MEMORY_PROFILER_DIR}/{timestamp}/{pname}-{pid}.json"`.
-<a href=#613 id=613 data-nosnippet>613</a>///
-<a href=#614 id=614 data-nosnippet>614</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are recorded
-<a href=#615 id=615 data-nosnippet>615</a>/// to the same *timestamp* folder, even worker processes started later.
-<a href=#616 id=616 data-nosnippet>616</a>///
-<a href=#617 id=617 data-nosnippet>617</a>/// The primary process is named `"app-process"`. See [`zng::env::process_name`] for more details about the default processes.
-<a href=#618 id=618 data-nosnippet>618</a>///
-<a href=#619 id=619 data-nosnippet>619</a>/// # Limitations
-<a href=#620 id=620 data-nosnippet>620</a>///
-<a href=#621 id=621 data-nosnippet>621</a>/// Only heap allocations using the `#[global_allocator]` are captured, some dependencies can skip the allocator, for example, the view-process
-<a href=#622 id=622 data-nosnippet>622</a>/// only traces a fraction of allocations because most of its heap usage comes from the graphics driver.
-<a href=#623 id=623 data-nosnippet>623</a>///
-<a href=#624 id=624 data-nosnippet>624</a>/// Compiling with `"memory_profiler"` feature replaces the global allocator, so if you use a custom allocator you need to setup
-<a href=#625 id=625 data-nosnippet>625</a>/// a feature that disables it, otherwise it will not compile. The instrumented allocator also has an impact in performance so
-<a href=#626 id=626 data-nosnippet>626</a>/// it is only recommended for test builds.
-<a href=#627 id=627 data-nosnippet>627</a>///
-<a href=#628 id=628 data-nosnippet>628</a>/// As an alternative on Unix you can use the external [Valgrind DHAT tool](https://valgrind.org/docs/manual/dh-manual.html).
-<a href=#629 id=629 data-nosnippet>629</a>/// On Windows you can [Record a Heap Snapshot](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/record-heap-snapshot).
-<a href=#630 id=630 data-nosnippet>630</a>///
-<a href=#631 id=631 data-nosnippet>631</a>/// # Full API
-<a href=#632 id=632 data-nosnippet>632</a>///
-<a href=#633 id=633 data-nosnippet>633</a>/// See [`zng_app::memory_profiler`] for the full API.
-<a href=#634 id=634 data-nosnippet>634</a></span><span class="attr">#[cfg(memory_profiler)]
-<a href=#635 id=635 data-nosnippet>635</a></span><span class="kw">pub mod </span>memory_profiler {
-<a href=#636 id=636 data-nosnippet>636</a>    <span class="kw">pub use </span>zng_app::memory_profiler::stop_recording;
-<a href=#637 id=637 data-nosnippet>637</a>}
+<a href=#84 id=84 data-nosnippet>84</a>//! # app.doc_test_deadline();
+<a href=#85 id=85 data-nosnippet>85</a>//! app.run_window("id", async {
+<a href=#86 id=86 data-nosnippet>86</a>//!     Window! {
+<a href=#87 id=87 data-nosnippet>87</a>//!         child = Text!("Some text");
+<a href=#88 id=88 data-nosnippet>88</a>//!         auto_size = true;
+<a href=#89 id=89 data-nosnippet>89</a>//!
+<a href=#90 id=90 data-nosnippet>90</a>//!         render_mode = window::RenderMode::Software;
+<a href=#91 id=91 data-nosnippet>91</a>//!         frame_capture_mode = window::FrameCaptureMode::Next;
+<a href=#92 id=92 data-nosnippet>92</a>//!
+<a href=#93 id=93 data-nosnippet>93</a>//!         on_frame_image_ready = async_hn!(|args| {
+<a href=#94 id=94 data-nosnippet>94</a>//!             if let Some(img) = args.frame_image.upgrade() {
+<a href=#95 id=95 data-nosnippet>95</a>//!                 // if the app runs with `run_headless(/* with_renderer: */ true)` an image is captured
+<a href=#96 id=96 data-nosnippet>96</a>//!                 // and saved here.
+<a href=#97 id=97 data-nosnippet>97</a>//!                 img.get().save("screenshot.png").await.ok();
+<a href=#98 id=98 data-nosnippet>98</a>//!             }
+<a href=#99 id=99 data-nosnippet>99</a>//!
+<a href=#100 id=100 data-nosnippet>100</a>//!             // close the window, causing the app to exit.
+<a href=#101 id=101 data-nosnippet>101</a>//!             WINDOW.close();
+<a href=#102 id=102 data-nosnippet>102</a>//!         });
+<a href=#103 id=103 data-nosnippet>103</a>//!     }
+<a href=#104 id=104 data-nosnippet>104</a>//! });
+<a href=#105 id=105 data-nosnippet>105</a>//! ```
+<a href=#106 id=106 data-nosnippet>106</a>//!
+<a href=#107 id=107 data-nosnippet>107</a>//! You can also run multiple headless apps in the same process, one per thread, if the crate is build using the `"multi_app"` feature.
+<a href=#108 id=108 data-nosnippet>108</a>//!
+<a href=#109 id=109 data-nosnippet>109</a>//! # App Extensions
+<a href=#110 id=110 data-nosnippet>110</a>//!
+<a href=#111 id=111 data-nosnippet>111</a>//! Services and events bundles are named *app extensions*. They are usually implemented in a crate with `zng-ext-` prefix and a
+<a href=#112 id=112 data-nosnippet>112</a>//! selection of the API is reexported in the `zng` crate in a module. Custom services and events can be declared using the same
+<a href=#113 id=113 data-nosnippet>113</a>//! API the built-in services use, these custom extensions have the same level of access and performance as the built-in extensions.
+<a href=#114 id=114 data-nosnippet>114</a>//!
+<a href=#115 id=115 data-nosnippet>115</a>//! ## Services
+<a href=#116 id=116 data-nosnippet>116</a>//!
+<a href=#117 id=117 data-nosnippet>117</a>//! App services are defined by convention, there is no service trait or struct. Proper service implementations follow
+<a href=#118 id=118 data-nosnippet>118</a>//! these rules:
+<a href=#119 id=119 data-nosnippet>119</a>//!
+<a href=#120 id=120 data-nosnippet>120</a>//! #### App services are an unit struct named like a static
+<a href=#121 id=121 data-nosnippet>121</a>//!
+<a href=#122 id=122 data-nosnippet>122</a>//! This is because services are a kind of *singleton*. The service API is implemented as methods on the service struct.
+<a href=#123 id=123 data-nosnippet>123</a>//!
+<a href=#124 id=124 data-nosnippet>124</a>//! ```
+<a href=#125 id=125 data-nosnippet>125</a>//! # use zng::var::*;
+<a href=#126 id=126 data-nosnippet>126</a>//! #[expect(non_camel_case_types)]
+<a href=#127 id=127 data-nosnippet>127</a>//! pub struct SCREAMING_CASE;
+<a href=#128 id=128 data-nosnippet>128</a>//! impl SCREAMING_CASE {
+<a href=#129 id=129 data-nosnippet>129</a>//!     pub fn state(&amp;self) -&gt; Var&lt;bool&gt; {
+<a href=#130 id=130 data-nosnippet>130</a>//!         # var(true)
+<a href=#131 id=131 data-nosnippet>131</a>//!     }
+<a href=#132 id=132 data-nosnippet>132</a>//! }
+<a href=#133 id=133 data-nosnippet>133</a>//! ```
+<a href=#134 id=134 data-nosnippet>134</a>//!
+<a href=#135 id=135 data-nosnippet>135</a>//! Note that you need to suppress a lint if the service name has more then one word.
+<a href=#136 id=136 data-nosnippet>136</a>//!
+<a href=#137 id=137 data-nosnippet>137</a>//! Service state and config methods should prefer variables over direct values. The use of variables allows the service state
+<a href=#138 id=138 data-nosnippet>138</a>//! to be plugged directly into the UI. Async operations should prefer using [`ResponseVar&lt;R&gt;`] over `async` methods for
+<a href=#139 id=139 data-nosnippet>139</a>//! the same reason.
+<a href=#140 id=140 data-nosnippet>140</a>//!
+<a href=#141 id=141 data-nosnippet>141</a>//! #### App services lifetime is the current app lifetime
+<a href=#142 id=142 data-nosnippet>142</a>//!
+<a href=#143 id=143 data-nosnippet>143</a>//! Unlike a simple singleton app services must only live for the duration of the app and must support
+<a href=#144 id=144 data-nosnippet>144</a>//! multiple parallel instances if built with the `"multi_app"` feature. You can use private
+<a href=#145 id=145 data-nosnippet>145</a>//! [`app_local!`] static variables as backing storage to fulfill this requirement.
+<a href=#146 id=146 data-nosnippet>146</a>//!
+<a href=#147 id=147 data-nosnippet>147</a>//! A common pattern in the zng services is to name the app locals with a `_SV` suffix.
+<a href=#148 id=148 data-nosnippet>148</a>//!
+<a href=#149 id=149 data-nosnippet>149</a>//! Services do not expose the app local locking, all state output is cloned the state is only locked
+<a href=#150 id=150 data-nosnippet>150</a>//! for the duration of the service method call.
+<a href=#151 id=151 data-nosnippet>151</a>//!
+<a href=#152 id=152 data-nosnippet>152</a>//! #### App services don't change public state mid update
+<a href=#153 id=153 data-nosnippet>153</a>//!
+<a href=#154 id=154 data-nosnippet>154</a>//! All widgets using the service during the same update see the same state. State change requests are scheduled
+<a href=#155 id=155 data-nosnippet>155</a>//! for the next update, just like variable updates or event notifications. Services can use the [`UPDATES.once_update`]
+<a href=#156 id=156 data-nosnippet>156</a>//! method to delegate requests to after the current update pass ends.
+<a href=#157 id=157 data-nosnippet>157</a>//!
+<a href=#158 id=158 data-nosnippet>158</a>//! This is even true for the [`INSTANT`] service, although this can be configured for this service using [`APP.pause_time_for_update`].
+<a href=#159 id=159 data-nosnippet>159</a>//!
+<a href=#160 id=160 data-nosnippet>160</a>//! [`APP.pause_time_for_update`]: zng_app::APP::pause_time_for_update
+<a href=#161 id=161 data-nosnippet>161</a>//!
+<a href=#162 id=162 data-nosnippet>162</a>//! ### Examples
+<a href=#163 id=163 data-nosnippet>163</a>//!
+<a href=#164 id=164 data-nosnippet>164</a>//! The example below demonstrates a service.
+<a href=#165 id=165 data-nosnippet>165</a>//!
+<a href=#166 id=166 data-nosnippet>166</a>//! ```
+<a href=#167 id=167 data-nosnippet>167</a>//! use zng::prelude_wgt::*;
+<a href=#168 id=168 data-nosnippet>168</a>//! # fn main() {}
+<a href=#169 id=169 data-nosnippet>169</a>//!
+<a href=#170 id=170 data-nosnippet>170</a>//! /// Foo service.
+<a href=#171 id=171 data-nosnippet>171</a>//! pub struct FOO;
+<a href=#172 id=172 data-nosnippet>172</a>//!
+<a href=#173 id=173 data-nosnippet>173</a>//! impl FOO {
+<a href=#174 id=174 data-nosnippet>174</a>//!     /// Foo read-write var.
+<a href=#175 id=175 data-nosnippet>175</a>//!     pub fn config(&amp;self) -&gt; Var&lt;bool&gt; {
+<a href=#176 id=176 data-nosnippet>176</a>//!         FOO_SV.read().config.clone()
+<a href=#177 id=177 data-nosnippet>177</a>//!     }
+<a href=#178 id=178 data-nosnippet>178</a>//!
+<a href=#179 id=179 data-nosnippet>179</a>//!     /// Foo request.
+<a href=#180 id=180 data-nosnippet>180</a>//!     pub fn request(&amp;self, request: char) -&gt; ResponseVar&lt;char&gt; {
+<a href=#181 id=181 data-nosnippet>181</a>//!         let (responder, response) = response_var();
+<a href=#182 id=182 data-nosnippet>182</a>//!         UPDATES.once_update("FOO.request", move || {
+<a href=#183 id=183 data-nosnippet>183</a>//!             let mut s = FOO_SV.write();
+<a href=#184 id=184 data-nosnippet>184</a>//!             if request == '\n' {
+<a href=#185 id=185 data-nosnippet>185</a>//!                 s.state = true;
+<a href=#186 id=186 data-nosnippet>186</a>//!             }
+<a href=#187 id=187 data-nosnippet>187</a>//!             let r = if s.config.get() {
+<a href=#188 id=188 data-nosnippet>188</a>//!                 request.to_ascii_uppercase()
+<a href=#189 id=189 data-nosnippet>189</a>//!             } else {
+<a href=#190 id=190 data-nosnippet>190</a>//!                 request.to_ascii_lowercase()
+<a href=#191 id=191 data-nosnippet>191</a>//!             };
+<a href=#192 id=192 data-nosnippet>192</a>//!             responder.respond(r);
+<a href=#193 id=193 data-nosnippet>193</a>//!         });
+<a href=#194 id=194 data-nosnippet>194</a>//!         response
+<a href=#195 id=195 data-nosnippet>195</a>//!     }
+<a href=#196 id=196 data-nosnippet>196</a>//! }
+<a href=#197 id=197 data-nosnippet>197</a>//!
+<a href=#198 id=198 data-nosnippet>198</a>//! struct FooService {
+<a href=#199 id=199 data-nosnippet>199</a>//!     config: Var&lt;bool&gt;,
+<a href=#200 id=200 data-nosnippet>200</a>//!     state: bool,
+<a href=#201 id=201 data-nosnippet>201</a>//! }
+<a href=#202 id=202 data-nosnippet>202</a>//!
+<a href=#203 id=203 data-nosnippet>203</a>//! app_local! {
+<a href=#204 id=204 data-nosnippet>204</a>//!     static FOO_SV: FooService = {
+<a href=#205 id=205 data-nosnippet>205</a>//!         foo_hooks();
+<a href=#206 id=206 data-nosnippet>206</a>//!         FooService {
+<a href=#207 id=207 data-nosnippet>207</a>//!             config: var(false),
+<a href=#208 id=208 data-nosnippet>208</a>//!             state: false,
+<a href=#209 id=209 data-nosnippet>209</a>//!         }
+<a href=#210 id=210 data-nosnippet>210</a>//!     };
+<a href=#211 id=211 data-nosnippet>211</a>//! }
+<a href=#212 id=212 data-nosnippet>212</a>//! fn foo_hooks() {
+<a href=#213 id=213 data-nosnippet>213</a>//!     // Event hooks can be setup here
+<a href=#214 id=214 data-nosnippet>214</a>//! }
+<a href=#215 id=215 data-nosnippet>215</a>//! ```
+<a href=#216 id=216 data-nosnippet>216</a>//!
+<a href=#217 id=217 data-nosnippet>217</a>//! Note that in the example requests are processed in the [`UPDATES.once_update`] update that is called
+<a href=#218 id=218 data-nosnippet>218</a>//! after all widgets have had a chance to make requests. Requests can also be made from parallel [`task`] threads,
+<a href=#219 id=219 data-nosnippet>219</a>//! that causes the app main loop to wake and immediately process the request.
+<a href=#220 id=220 data-nosnippet>220</a>//!
+<a href=#221 id=221 data-nosnippet>221</a>//! # Init &amp; Main Loop
+<a href=#222 id=222 data-nosnippet>222</a>//!
+<a href=#223 id=223 data-nosnippet>223</a>//! A headed app initializes in this sequence once run starts:
+<a href=#224 id=224 data-nosnippet>224</a>//!
+<a href=#225 id=225 data-nosnippet>225</a>//! 1. View-process spawns asynchronously.
+<a href=#226 id=226 data-nosnippet>226</a>//! 2. [`APP.on_init`] handlers are called.
+<a href=#227 id=227 data-nosnippet>227</a>//! 4. Schedule the app run future to run in the first preview update.
+<a href=#228 id=228 data-nosnippet>228</a>//! 5. Does [updates loop](#updates-loop).
+<a href=#229 id=229 data-nosnippet>229</a>//! 7. Does [main loop](#main-loop).
+<a href=#230 id=230 data-nosnippet>230</a>//!
+<a href=#231 id=231 data-nosnippet>231</a>//! #### Main Loop
+<a href=#232 id=232 data-nosnippet>232</a>//!
+<a href=#233 id=233 data-nosnippet>233</a>//! The main loop coordinates view-process events, timers, app events and updates. There is no scheduler, update and event requests
+<a href=#234 id=234 data-nosnippet>234</a>//! are captured and coalesced to various buffers that are drained in known sequential order. App level handlers update in the
+<a href=#235 id=235 data-nosnippet>235</a>//! register order, windows and widgets update in parallel by default, this is controlled by [`WINDOWS.parallel`] and [`parallel`].
+<a href=#236 id=236 data-nosnippet>236</a>//!
+<a href=#237 id=237 data-nosnippet>237</a>//! 1. Sleep if there are not pending events or updates.
+<a href=#238 id=238 data-nosnippet>238</a>//!    * If the view-process is busy blocks until it sends a message, this is a mechanism to stop the app-process
+<a href=#239 id=239 data-nosnippet>239</a>//!      from overwhelming the view-process.
+<a href=#240 id=240 data-nosnippet>240</a>//!    * Block until a message is received, from the view-process or from other app threads.
+<a href=#241 id=241 data-nosnippet>241</a>//!    * If there are [`TIMERS`] or [`VARS`] animations the message block has a deadline to the nearest timer or animation frame.
+<a href=#242 id=242 data-nosnippet>242</a>//!        * Animations have a fixed frame-rate defined in [`VARS.frame_duration`], by default it is set to the monitor refresh
+<a href=#243 id=243 data-nosnippet>243</a>//!          rate by the [`WINDOWS`] service.
+<a href=#244 id=244 data-nosnippet>244</a>//! 2. Calls elapsed timer handlers.
+<a href=#245 id=245 data-nosnippet>245</a>//! 3. Calls elapsed animation handlers.
+<a href=#246 id=246 data-nosnippet>246</a>//!     * These handlers mostly just request var updates that are applied in the updates loop.
+<a href=#247 id=247 data-nosnippet>247</a>//! 4. Does an [updates loop](#updates-loop).
+<a href=#248 id=248 data-nosnippet>248</a>//! 5. If the view-process is not busy does a [layout loop and render](#layout-loop-and-render).
+<a href=#249 id=249 data-nosnippet>249</a>//! 6. If exit was requested and not cancelled breaks the loop.
+<a href=#250 id=250 data-nosnippet>250</a>//!     * Exit is requested automatically when the last open window closes, this is controlled by [`WINDOWS.exit_on_last_close`].
+<a href=#251 id=251 data-nosnippet>251</a>//!     * Exit can also be requested using [`APP.exit`].
+<a href=#252 id=252 data-nosnippet>252</a>//!
+<a href=#253 id=253 data-nosnippet>253</a>//! #### Updates Loop
+<a href=#254 id=254 data-nosnippet>254</a>//!
+<a href=#255 id=255 data-nosnippet>255</a>//! The updates loop rebuilds info trees if needed, applies pending variable updates and hooks and collects event updates
+<a href=#256 id=256 data-nosnippet>256</a>//! requested by the app.
+<a href=#257 id=257 data-nosnippet>257</a>//!
+<a href=#258 id=258 data-nosnippet>258</a>//! 1. Takes info rebuild request flag.
+<a href=#259 id=259 data-nosnippet>259</a>//!     * Windows and widgets that requested info (re)build are called.
+<a href=#260 id=260 data-nosnippet>260</a>//!     * Info rebuild happens in parallel by default (between windows and widgets).
+<a href=#261 id=261 data-nosnippet>261</a>//! 2. Takes events, vars and other updates requests.
+<a href=#262 id=262 data-nosnippet>262</a>//!     1. [var updates loop](#var-updates-loop), note that includes events that are also vars.
+<a href=#263 id=263 data-nosnippet>263</a>//!     2. Calls [`UPDATES.on_pre_update`] handlers if needed.
+<a href=#264 id=264 data-nosnippet>264</a>//!         * Both [`Event::on_pre_event`] and [`Var::on_pre_new`] are implemented as pre updates too.
+<a href=#265 id=265 data-nosnippet>265</a>//!     3. Updates windows and widgets, in parallel by default.
+<a href=#266 id=266 data-nosnippet>266</a>//!         * Windows and widgets that requested update receive it here.
+<a href=#267 id=267 data-nosnippet>267</a>//!         * All the pending updates are processed in one pass, all targeted widgets are visited once, in parallel by default.
+<a href=#268 id=268 data-nosnippet>268</a>//!     4. Calls [`UPDATES.on_update`] handlers if needed.
+<a href=#269 id=269 data-nosnippet>269</a>//!         * Both [`Event::on_event`] and [`Var::on_new`] are implemented as updates too.
+<a href=#270 id=270 data-nosnippet>270</a>//! 3. The loop repeats immediately if any info rebuild or update was requested by update callbacks.
+<a href=#271 id=271 data-nosnippet>271</a>//!     * The loops breaks if it repeats over 1000 times.
+<a href=#272 id=272 data-nosnippet>272</a>//!     * An error is logged with a trace of the most frequent sources of update requests.
+<a href=#273 id=273 data-nosnippet>273</a>//!
+<a href=#274 id=274 data-nosnippet>274</a>//! #### Var Updates Loop
+<a href=#275 id=275 data-nosnippet>275</a>//!
+<a href=#276 id=276 data-nosnippet>276</a>//! The variable updates loop applies pending modifications, calls hooks to update variable and bindings.
+<a href=#277 id=277 data-nosnippet>277</a>//!
+<a href=#278 id=278 data-nosnippet>278</a>//! 1. Pending variable modifications are applied.
+<a href=#279 id=279 data-nosnippet>279</a>//! 2. Var hooks are called.
+<a href=#280 id=280 data-nosnippet>280</a>//!     * The mapping and binding mechanism is implemented using hooks.
+<a href=#281 id=281 data-nosnippet>281</a>//! 3. The loop repeats until hooks have stopped modifying variables.
+<a href=#282 id=282 data-nosnippet>282</a>//!     * The loop breaks if it repeats over 1000 times.
+<a href=#283 id=283 data-nosnippet>283</a>//!     * An error is logged if this happens.
+<a href=#284 id=284 data-nosnippet>284</a>//!
+<a href=#285 id=285 data-nosnippet>285</a>//! Note that events are just specialized variables, they update (notify) at the same time as variables modify,
+<a href=#286 id=286 data-nosnippet>286</a>//! the [`UPDATES.once_update`] closure is also called here.
+<a href=#287 id=287 data-nosnippet>287</a>//!
+<a href=#288 id=288 data-nosnippet>288</a>//! Think of this loop as a *staging loop* for the main update notifications, it should quickly prepare data that will
+<a href=#289 id=289 data-nosnippet>289</a>//! be immutable during the [updates loop](#updates-loop), affected hooks all run sequentially and **must not block**,
+<a href=#290 id=290 data-nosnippet>290</a>//! UI node methods also should never be called inside hooks.
+<a href=#291 id=291 data-nosnippet>291</a>//!
+<a href=#292 id=292 data-nosnippet>292</a>//! #### Layout Loop and Render
+<a href=#293 id=293 data-nosnippet>293</a>//!
+<a href=#294 id=294 data-nosnippet>294</a>//! Layout and render requests are coalesced, multiple layout requests for the same widget update it once, multiple
+<a href=#295 id=295 data-nosnippet>295</a>//! render requests become one frame, and if both `render` and `render_update` are requested for a window it will just fully `render`.
+<a href=#296 id=296 data-nosnippet>296</a>//!
+<a href=#297 id=297 data-nosnippet>297</a>//! 1. Take layout and render requests.
+<a href=#298 id=298 data-nosnippet>298</a>//! 2. Layout loop.
+<a href=#299 id=299 data-nosnippet>299</a>//!     1. Windows and widgets that requested layout update, in parallel by default.
+<a href=#300 id=300 data-nosnippet>300</a>//!     2. Does an [updates loop](#updates-loop).
+<a href=#301 id=301 data-nosnippet>301</a>//!     3. Take layout and render requests, the loop repeats immediately if layout was requested again.
+<a href=#302 id=302 data-nosnippet>302</a>//!         * The loop breaks if it repeats over 1000 times.
+<a href=#303 id=303 data-nosnippet>303</a>//!         * An error is logged with a trace the most frequent sources of update requests.
+<a href=#304 id=304 data-nosnippet>304</a>//! 3. Windows and widgets that requested render (or render_update) are rendered, in parallel by default.
+<a href=#305 id=305 data-nosnippet>305</a>//!     * The render pass updates widget transforms and hit-test, generates a display list and sends it to the view-process.
+<a href=#306 id=306 data-nosnippet>306</a>//!
+<a href=#307 id=307 data-nosnippet>307</a>//! [`APP.defaults()`]: crate::app::APP::defaults
+<a href=#308 id=308 data-nosnippet>308</a>//! [`APP.on_init`]: crate::app::APP::on_init
+<a href=#309 id=309 data-nosnippet>309</a>//! [`UPDATES.update`]: crate::update::UPDATES::update
+<a href=#310 id=310 data-nosnippet>310</a>//! [`task`]: crate::task
+<a href=#311 id=311 data-nosnippet>311</a>//! [`ResponseVar&lt;R&gt;`]: crate::var::ResponseVar
+<a href=#312 id=312 data-nosnippet>312</a>//! [`TIMERS`]: crate::timer::TIMERS
+<a href=#313 id=313 data-nosnippet>313</a>//! [`VARS`]: crate::var::VARS
+<a href=#314 id=314 data-nosnippet>314</a>//! [`VARS.frame_duration`]: crate::var::VARS::frame_duration
+<a href=#315 id=315 data-nosnippet>315</a>//! [`WINDOWS`]: crate::window::WINDOWS
+<a href=#316 id=316 data-nosnippet>316</a>//! [`WINDOWS.parallel`]: crate::window::WINDOWS::parallel
+<a href=#317 id=317 data-nosnippet>317</a>//! [`parallel`]: fn@crate::widget::parallel
+<a href=#318 id=318 data-nosnippet>318</a>//! [`UPDATES.on_pre_update`]: crate::update::UPDATES::on_pre_update
+<a href=#319 id=319 data-nosnippet>319</a>//! [`UPDATES.on_update`]: crate::update::UPDATES::on_update
+<a href=#320 id=320 data-nosnippet>320</a>//! [`Var::on_pre_new`]: crate::var::VarSubscribe::on_pre_new
+<a href=#321 id=321 data-nosnippet>321</a>//! [`Var::on_new`]: crate::var::VarSubscribe::on_new
+<a href=#322 id=322 data-nosnippet>322</a>//! [`Event::on_pre_event`]: crate::event::Event::on_pre_event
+<a href=#323 id=323 data-nosnippet>323</a>//! [`Event::on_event`]: crate::event::Event::on_event
+<a href=#324 id=324 data-nosnippet>324</a>//! [`WINDOWS.exit_on_last_close`]: crate::window::WINDOWS::exit_on_last_close
+<a href=#325 id=325 data-nosnippet>325</a>//! [`APP.exit`]: crate::app::APP#method.exit
+<a href=#326 id=326 data-nosnippet>326</a>//! [`UPDATES.once_update`]: zng::update::UPDATES::once_update
+<a href=#327 id=327 data-nosnippet>327</a>//!
+<a href=#328 id=328 data-nosnippet>328</a>//! # Full API
+<a href=#329 id=329 data-nosnippet>329</a>//!
+<a href=#330 id=330 data-nosnippet>330</a>//! This module provides most of the app API needed to make and extend apps, some more advanced or experimental API
+<a href=#331 id=331 data-nosnippet>331</a>//! may be available at the [`zng_app`], [`zng_app_context`] and [`zng_ext_single_instance`] base crates.
+<a href=#332 id=332 data-nosnippet>332</a>
+<a href=#333 id=333 data-nosnippet>333</a></span><span class="kw">pub use </span>zng_app::{
+<a href=#334 id=334 data-nosnippet>334</a>    APP, AppBuilder, AppControlFlow, DInstant, Deadline, EXIT_CMD, EXIT_REQUESTED_EVENT, ExitRequestedArgs, HeadlessApp, INSTANT,
+<a href=#335 id=335 data-nosnippet>335</a>    InstantMode, print_tracing, print_tracing_filter, spawn_deadlock_detection,
+<a href=#336 id=336 data-nosnippet>336</a>};
+<a href=#337 id=337 data-nosnippet>337</a>
+<a href=#338 id=338 data-nosnippet>338</a><span class="attr">#[cfg(feature = <span class="string">"test_util"</span>)]
+<a href=#339 id=339 data-nosnippet>339</a></span><span class="kw">pub use </span>zng_app::test_log;
+<a href=#340 id=340 data-nosnippet>340</a>
+<a href=#341 id=341 data-nosnippet>341</a><span class="kw">pub use </span>zng_app_context::{
+<a href=#342 id=342 data-nosnippet>342</a>    AppId, AppLocal, AppScope, CaptureFilter, ContextLocal, ContextValueSet, LocalContext, MappedRwLockReadGuardOwned,
+<a href=#343 id=343 data-nosnippet>343</a>    MappedRwLockWriteGuardOwned, ReadOnlyRwLock, RunOnDrop, RwLockReadGuardOwned, RwLockWriteGuardOwned, app_local, context_local,
+<a href=#344 id=344 data-nosnippet>344</a>};
+<a href=#345 id=345 data-nosnippet>345</a><span class="kw">pub use </span>zng_wgt_input::cmd::{
+<a href=#346 id=346 data-nosnippet>346</a>    NEW_CMD, OPEN_CMD, SAVE_AS_CMD, SAVE_CMD, can_new, can_open, can_save, can_save_as, on_new, on_open, on_pre_new, on_pre_open,
+<a href=#347 id=347 data-nosnippet>347</a>    on_pre_save, on_pre_save_as, on_save, on_save_as,
+<a href=#348 id=348 data-nosnippet>348</a>};
+<a href=#349 id=349 data-nosnippet>349</a>
+<a href=#350 id=350 data-nosnippet>350</a><span class="kw">pub use </span>zng_app::view_process::raw_events::{LOW_MEMORY_EVENT, LowMemoryArgs};
+<a href=#351 id=351 data-nosnippet>351</a>
+<a href=#352 id=352 data-nosnippet>352</a><span class="doccomment">/// Input device hardware ID and events.
+<a href=#353 id=353 data-nosnippet>353</a>///
+<a href=#354 id=354 data-nosnippet>354</a>/// # Full API
+<a href=#355 id=355 data-nosnippet>355</a>///
+<a href=#356 id=356 data-nosnippet>356</a>/// See [`zng_app::view_process::raw_device_events`] for the full API.
+<a href=#357 id=357 data-nosnippet>357</a></span><span class="kw">pub mod </span>raw_device_events {
+<a href=#358 id=358 data-nosnippet>358</a>    <span class="kw">pub use </span>zng_app::view_process::raw_device_events::{
+<a href=#359 id=359 data-nosnippet>359</a>        AXIS_MOTION_EVENT, AxisId, AxisMotionArgs, INPUT_DEVICES, INPUT_DEVICES_CHANGED_EVENT, InputDeviceCapability, InputDeviceId,
+<a href=#360 id=360 data-nosnippet>360</a>        InputDeviceInfo, InputDevicesChangedArgs,
+<a href=#361 id=361 data-nosnippet>361</a>    };
+<a href=#362 id=362 data-nosnippet>362</a>}
+<a href=#363 id=363 data-nosnippet>363</a>
+<a href=#364 id=364 data-nosnippet>364</a><span class="attr">#[cfg(single_instance)]
+<a href=#365 id=365 data-nosnippet>365</a></span><span class="kw">pub use </span>zng_ext_single_instance::{APP_INSTANCE_EVENT, AppInstanceArgs};
+<a href=#366 id=366 data-nosnippet>366</a>
+<a href=#367 id=367 data-nosnippet>367</a><span class="doccomment">/// App-process crash handler.
+<a href=#368 id=368 data-nosnippet>368</a>///
+<a href=#369 id=369 data-nosnippet>369</a>/// In builds with `"crash_handler"` feature the crash handler takes over the first "app-process" turning it into
+<a href=#370 id=370 data-nosnippet>370</a>/// the monitor-process, it spawns another process that is the monitored app-process. If the app-process crashes
+<a href=#371 id=371 data-nosnippet>371</a>/// the monitor-process spawns a dialog-process that calls the dialog handler to show an error message, upload crash reports, etc.
+<a href=#372 id=372 data-nosnippet>372</a>///
+<a href=#373 id=373 data-nosnippet>373</a>/// The dialog handler can be set using [`crash_handler_config!`].
+<a href=#374 id=374 data-nosnippet>374</a>///
+<a href=#375 id=375 data-nosnippet>375</a>/// [`crash_handler_config!`]: crate::app::crash_handler::crash_handler_config
+<a href=#376 id=376 data-nosnippet>376</a>///
+<a href=#377 id=377 data-nosnippet>377</a>/// # Examples
+<a href=#378 id=378 data-nosnippet>378</a>///
+<a href=#379 id=379 data-nosnippet>379</a>/// The example below demonstrates an app setup to show a custom crash dialog.
+<a href=#380 id=380 data-nosnippet>380</a>///
+<a href=#381 id=381 data-nosnippet>381</a>/// ```no_run
+<a href=#382 id=382 data-nosnippet>382</a>/// use zng::prelude::*;
+<a href=#383 id=383 data-nosnippet>383</a>///
+<a href=#384 id=384 data-nosnippet>384</a>/// fn main() {
+<a href=#385 id=385 data-nosnippet>385</a>///     // tracing applied to all processes.
+<a href=#386 id=386 data-nosnippet>386</a>///     zng::app::print_tracing(tracing::Level::INFO, false, |_| true);
+<a href=#387 id=387 data-nosnippet>387</a>///
+<a href=#388 id=388 data-nosnippet>388</a>///     // monitor-process spawns app-process and if needed dialog-process here.
+<a href=#389 id=389 data-nosnippet>389</a>///     zng::env::init!();
+<a href=#390 id=390 data-nosnippet>390</a>///
+<a href=#391 id=391 data-nosnippet>391</a>///     // app-process:
+<a href=#392 id=392 data-nosnippet>392</a>///     app_main();
+<a href=#393 id=393 data-nosnippet>393</a>/// }
+<a href=#394 id=394 data-nosnippet>394</a>///
+<a href=#395 id=395 data-nosnippet>395</a>/// fn app_main() {
+<a href=#396 id=396 data-nosnippet>396</a>///     APP.defaults().run_window("main", async {
+<a href=#397 id=397 data-nosnippet>397</a>///         Window! {
+<a href=#398 id=398 data-nosnippet>398</a>///             child_align = Align::CENTER;
+<a href=#399 id=399 data-nosnippet>399</a>///             child = Stack! {
+<a href=#400 id=400 data-nosnippet>400</a>///                 direction = StackDirection::top_to_bottom();
+<a href=#401 id=401 data-nosnippet>401</a>///                 spacing = 5;
+<a href=#402 id=402 data-nosnippet>402</a>///                 children = ui_vec![
+<a href=#403 id=403 data-nosnippet>403</a>///                     Button! {
+<a href=#404 id=404 data-nosnippet>404</a>///                         child = Text!("Crash (panic)");
+<a href=#405 id=405 data-nosnippet>405</a>///                         on_click = hn_once!(|_| {
+<a href=#406 id=406 data-nosnippet>406</a>///                             panic!("Test panic!");
+<a href=#407 id=407 data-nosnippet>407</a>///                         });
+<a href=#408 id=408 data-nosnippet>408</a>///                     },
+<a href=#409 id=409 data-nosnippet>409</a>///                     Button! {
+<a href=#410 id=410 data-nosnippet>410</a>///                         child = Text!("Crash (access violation)");
+<a href=#411 id=411 data-nosnippet>411</a>///                         on_click = hn_once!(|_| {
+<a href=#412 id=412 data-nosnippet>412</a>///                             // SAFETY: deliberate access violation
+<a href=#413 id=413 data-nosnippet>413</a>///                             #[expect(deref_nullptr)]
+<a href=#414 id=414 data-nosnippet>414</a>///                             unsafe {
+<a href=#415 id=415 data-nosnippet>415</a>///                                 *std::ptr::null_mut() = true;
+<a href=#416 id=416 data-nosnippet>416</a>///                             }
+<a href=#417 id=417 data-nosnippet>417</a>///                         });
+<a href=#418 id=418 data-nosnippet>418</a>///                     }
+<a href=#419 id=419 data-nosnippet>419</a>///                 ];
+<a href=#420 id=420 data-nosnippet>420</a>///             };
+<a href=#421 id=421 data-nosnippet>421</a>///         }
+<a href=#422 id=422 data-nosnippet>422</a>///     });
+<a href=#423 id=423 data-nosnippet>423</a>/// }
+<a href=#424 id=424 data-nosnippet>424</a>///
+<a href=#425 id=425 data-nosnippet>425</a>/// zng::app::crash_handler::crash_handler_config!(|cfg| {
+<a href=#426 id=426 data-nosnippet>426</a>///     // monitor-process and dialog-process
+<a href=#427 id=427 data-nosnippet>427</a>///
+<a href=#428 id=428 data-nosnippet>428</a>///     cfg.dialog(|args| {
+<a href=#429 id=429 data-nosnippet>429</a>///         // dialog-process
+<a href=#430 id=430 data-nosnippet>430</a>///         APP.defaults().run_window("crash-dialog", async move {
+<a href=#431 id=431 data-nosnippet>431</a>///             Window! {
+<a href=#432 id=432 data-nosnippet>432</a>///                 title = "App Crashed!";
+<a href=#433 id=433 data-nosnippet>433</a>///                 auto_size = true;
+<a href=#434 id=434 data-nosnippet>434</a>///                 min_size = (300, 100);
+<a href=#435 id=435 data-nosnippet>435</a>///                 start_position = window::StartPosition::CenterMonitor;
+<a href=#436 id=436 data-nosnippet>436</a>///                 on_load = hn_once!(|_| WINDOW.bring_to_top());
+<a href=#437 id=437 data-nosnippet>437</a>///                 padding = 10;
+<a href=#438 id=438 data-nosnippet>438</a>///                 child_spacing = 10;
+<a href=#439 id=439 data-nosnippet>439</a>///                 child = Text!(args.latest().message());
+<a href=#440 id=440 data-nosnippet>440</a>///                 child_bottom = Stack! {
+<a href=#441 id=441 data-nosnippet>441</a>///                     direction = StackDirection::start_to_end();
+<a href=#442 id=442 data-nosnippet>442</a>///                     layout::align = Align::BOTTOM_END;
+<a href=#443 id=443 data-nosnippet>443</a>///                     spacing = 5;
+<a href=#444 id=444 data-nosnippet>444</a>///                     children = ui_vec![
+<a href=#445 id=445 data-nosnippet>445</a>///                         Button! {
+<a href=#446 id=446 data-nosnippet>446</a>///                             child = Text!("Restart App");
+<a href=#447 id=447 data-nosnippet>447</a>///                             on_click = hn_once!(args, |_| {
+<a href=#448 id=448 data-nosnippet>448</a>///                                 args.restart();
+<a href=#449 id=449 data-nosnippet>449</a>///                             });
+<a href=#450 id=450 data-nosnippet>450</a>///                         },
+<a href=#451 id=451 data-nosnippet>451</a>///                         Button! {
+<a href=#452 id=452 data-nosnippet>452</a>///                             child = Text!("Exit App");
+<a href=#453 id=453 data-nosnippet>453</a>///                             on_click = hn_once!(|_| {
+<a href=#454 id=454 data-nosnippet>454</a>///                                 args.exit(0);
+<a href=#455 id=455 data-nosnippet>455</a>///                             });
+<a href=#456 id=456 data-nosnippet>456</a>///                         },
+<a href=#457 id=457 data-nosnippet>457</a>///                     ];
+<a href=#458 id=458 data-nosnippet>458</a>///                 };
+<a href=#459 id=459 data-nosnippet>459</a>///             }
+<a href=#460 id=460 data-nosnippet>460</a>///         });
+<a href=#461 id=461 data-nosnippet>461</a>///     });
+<a href=#462 id=462 data-nosnippet>462</a>/// });
+<a href=#463 id=463 data-nosnippet>463</a>/// ```
+<a href=#464 id=464 data-nosnippet>464</a>///
+<a href=#465 id=465 data-nosnippet>465</a>/// # Debugger
+<a href=#466 id=466 data-nosnippet>466</a>///
+<a href=#467 id=467 data-nosnippet>467</a>/// Note that because the crash handler spawns a different process for the app debuggers will not
+<a href=#468 id=468 data-nosnippet>468</a>/// stop at break points in the app code. You can configure your debugger to set the `NO_ZNG_CRASH_HANDLER` environment
+<a href=#469 id=469 data-nosnippet>469</a>/// variable to not use a crash handler in debug runs.
+<a href=#470 id=470 data-nosnippet>470</a>///
+<a href=#471 id=471 data-nosnippet>471</a>/// On VS Code with the CodeLLDB extension you can add this workspace configuration:
+<a href=#472 id=472 data-nosnippet>472</a>///
+<a href=#473 id=473 data-nosnippet>473</a>/// ```json
+<a href=#474 id=474 data-nosnippet>474</a>/// "lldb.launch.env": {
+<a href=#475 id=475 data-nosnippet>475</a>///    "ZNG_NO_CRASH_HANDLER": ""
+<a href=#476 id=476 data-nosnippet>476</a>/// }
+<a href=#477 id=477 data-nosnippet>477</a>/// ```
+<a href=#478 id=478 data-nosnippet>478</a>///
+<a href=#479 id=479 data-nosnippet>479</a>/// # Full API
+<a href=#480 id=480 data-nosnippet>480</a>///
+<a href=#481 id=481 data-nosnippet>481</a>/// See [`zng_app::crash_handler`] and [`zng_wgt_inspector::crash_handler`] for the full API.
+<a href=#482 id=482 data-nosnippet>482</a></span><span class="attr">#[cfg(crash_handler)]
+<a href=#483 id=483 data-nosnippet>483</a></span><span class="kw">pub mod </span>crash_handler {
+<a href=#484 id=484 data-nosnippet>484</a>    <span class="kw">pub use </span>zng_app::crash_handler::{BacktraceFrame, CrashArgs, CrashConfig, CrashError, CrashPanic, crash_handler_config};
+<a href=#485 id=485 data-nosnippet>485</a>
+<a href=#486 id=486 data-nosnippet>486</a>    <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+<a href=#487 id=487 data-nosnippet>487</a>    </span><span class="kw">pub use </span>zng_wgt_inspector::crash_handler::debug_dialog;
+<a href=#488 id=488 data-nosnippet>488</a>
+<a href=#489 id=489 data-nosnippet>489</a>    <span class="macro">crash_handler_config!</span>(|cfg| {
+<a href=#490 id=490 data-nosnippet>490</a>        cfg.default_dialog(|args| {
+<a href=#491 id=491 data-nosnippet>491</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = <span class="kw-2">&amp;</span>args.dialog_crash {
+<a href=#492 id=492 data-nosnippet>492</a>                <span class="macro">eprintln!</span>(<span class="string">"DEBUG CRASH DIALOG ALSO CRASHED"</span>);
+<a href=#493 id=493 data-nosnippet>493</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, c.message());
+<a href=#494 id=494 data-nosnippet>494</a>                <span class="macro">eprintln!</span>(<span class="string">"ORIGINAL APP CRASH"</span>);
+<a href=#495 id=495 data-nosnippet>495</a>                <span class="macro">eprintln!</span>(<span class="string">"   {}"</span>, args.latest().message());
+<a href=#496 id=496 data-nosnippet>496</a>                args.exit(<span class="number">0xBADC0DE</span>)
+<a href=#497 id=497 data-nosnippet>497</a>            } <span class="kw">else </span>{
+<a href=#498 id=498 data-nosnippet>498</a>                <span class="attr">#[cfg(feature = <span class="string">"crash_handler_debug"</span>)]
+<a href=#499 id=499 data-nosnippet>499</a>                </span>{
+<a href=#500 id=500 data-nosnippet>500</a>                    <span class="kw">use </span><span class="kw">crate</span>::prelude::<span class="kw-2">*</span>;
+<a href=#501 id=501 data-nosnippet>501</a>                    APP.defaults().run_window(
+<a href=#502 id=502 data-nosnippet>502</a>                        <span class="string">"debug-crash-dialog"</span>,
+<a href=#503 id=503 data-nosnippet>503</a>                        <span class="macro">async_clmv!</span>(args, { zng_wgt_inspector::crash_handler::debug_dialog(args) }),
+<a href=#504 id=504 data-nosnippet>504</a>                    );
+<a href=#505 id=505 data-nosnippet>505</a>                }
+<a href=#506 id=506 data-nosnippet>506</a>
+<a href=#507 id=507 data-nosnippet>507</a>                <span class="attr">#[cfg(not(feature = <span class="string">"crash_handler_debug"</span>))]
+<a href=#508 id=508 data-nosnippet>508</a>                </span>{
+<a href=#509 id=509 data-nosnippet>509</a>                    <span class="macro">eprintln!</span>(
+<a href=#510 id=510 data-nosnippet>510</a>                        <span class="string">"app crashed {}\n\nbuild with feature = \"crash_handler_debug\" to se the debug crash dialog"</span>,
+<a href=#511 id=511 data-nosnippet>511</a>                        args.latest().message()
+<a href=#512 id=512 data-nosnippet>512</a>                    );
+<a href=#513 id=513 data-nosnippet>513</a>                }
+<a href=#514 id=514 data-nosnippet>514</a>            }
+<a href=#515 id=515 data-nosnippet>515</a>            args.exit(<span class="number">0</span>)
+<a href=#516 id=516 data-nosnippet>516</a>        });
+<a href=#517 id=517 data-nosnippet>517</a>    });
+<a href=#518 id=518 data-nosnippet>518</a>}
+<a href=#519 id=519 data-nosnippet>519</a>
+<a href=#520 id=520 data-nosnippet>520</a><span class="doccomment">/// Trace recording and data model.
+<a href=#521 id=521 data-nosnippet>521</a>///
+<a href=#522 id=522 data-nosnippet>522</a>/// All tracing instrumentation in Zng projects is done using the `tracing` crate, trace recording is done using the `tracing-chrome` crate.
+<a href=#523 id=523 data-nosnippet>523</a>/// The recorded traces can be viewed in `chrome://tracing` or `ui.perfetto.dev` and can be parsed by the [`Trace`] data model.
+<a href=#524 id=524 data-nosnippet>524</a>///
+<a href=#525 id=525 data-nosnippet>525</a>/// Build the app with `"trace_recorder"` and run it with the `"ZNG_RECORD_TRACE"` env var to record all processes spawned by the app.
+<a href=#526 id=526 data-nosnippet>526</a>///
+<a href=#527 id=527 data-nosnippet>527</a>/// ```no_run
+<a href=#528 id=528 data-nosnippet>528</a>/// use zng::prelude::*;
+<a href=#529 id=529 data-nosnippet>529</a>///
+<a href=#530 id=530 data-nosnippet>530</a>/// fn main() {
+<a href=#531 id=531 data-nosnippet>531</a>///     unsafe {
+<a href=#532 id=532 data-nosnippet>532</a>///         std::env::set_var("ZNG_RECORD_TRACE", "");
+<a href=#533 id=533 data-nosnippet>533</a>///     }
+<a href=#534 id=534 data-nosnippet>534</a>///     unsafe {
+<a href=#535 id=535 data-nosnippet>535</a>///         std::env::set_var("ZNG_RECORD_TRACE_FILTER", "debug");
+<a href=#536 id=536 data-nosnippet>536</a>///     }
+<a href=#537 id=537 data-nosnippet>537</a>///
+<a href=#538 id=538 data-nosnippet>538</a>///     // recording start here for all app processes when ZNG_RECORD_TRACE is set.
+<a href=#539 id=539 data-nosnippet>539</a>///     zng::env::init!();
+<a href=#540 id=540 data-nosnippet>540</a>///
+<a href=#541 id=541 data-nosnippet>541</a>///     // .. app
+<a href=#542 id=542 data-nosnippet>542</a>/// }
+<a href=#543 id=543 data-nosnippet>543</a>/// ```
+<a href=#544 id=544 data-nosnippet>544</a>///
+<a href=#545 id=545 data-nosnippet>545</a>/// The example above hardcodes trace recording for all app processes by setting the `"ZNG_RECORD_TRACE"` environment
+<a href=#546 id=546 data-nosnippet>546</a>/// variable before the `init!()` call. It also sets `"ZNG_RECORD_TRACE_FILTER"` to a slightly less verbose level.
+<a href=#547 id=547 data-nosnippet>547</a>///
+<a href=#548 id=548 data-nosnippet>548</a>/// # Config
+<a href=#549 id=549 data-nosnippet>549</a>///
+<a href=#550 id=550 data-nosnippet>550</a>/// The `"ZNG_RECORD_TRACE_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
+<a href=#551 id=551 data-nosnippet>551</a>/// The default dir is `"./zng-trace/"`.
+<a href=#552 id=552 data-nosnippet>552</a>///
+<a href=#553 id=553 data-nosnippet>553</a>/// The `"ZNG_RECORD_TRACE_FILTER"` or `"RUST_LOG"` variables can be used to set custom tracing filters, see the [filter syntax] for details.
+<a href=#554 id=554 data-nosnippet>554</a>/// The default filter is `"trace"` that records all spans and events.
+<a href=#555 id=555 data-nosnippet>555</a>///
+<a href=#556 id=556 data-nosnippet>556</a>/// # Output
+<a href=#557 id=557 data-nosnippet>557</a>///
+<a href=#558 id=558 data-nosnippet>558</a>/// Raw trace files are saved to `"{ZNG_RECORD_TRACE_DIR}/{timestamp}/{pid}.json"`.
+<a href=#559 id=559 data-nosnippet>559</a>///
+<a href=#560 id=560 data-nosnippet>560</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are
+<a href=#561 id=561 data-nosnippet>561</a>/// recorded to the same *timestamp* folder.
+<a href=#562 id=562 data-nosnippet>562</a>///
+<a href=#563 id=563 data-nosnippet>563</a>/// The process name is defined by an event INFO message that reads `"pid: {pid}, name: {name}"`. See [`zng::env::process_name`] for more details.
+<a href=#564 id=564 data-nosnippet>564</a>///
+<a href=#565 id=565 data-nosnippet>565</a>/// The process record start timestamp is defined by an event INFO message that reads `"zng-record-start: {timestamp}"`. This timestamp is also
+<a href=#566 id=566 data-nosnippet>566</a>/// in microseconds from Unix epoch.
+<a href=#567 id=567 data-nosnippet>567</a>///
+<a href=#568 id=568 data-nosnippet>568</a>/// Fake *threads* can be defined to better track a *task span* by setting a `thread = "&lt;name&gt;"` argument in the span. Both fake threads and process
+<a href=#569 id=569 data-nosnippet>569</a>/// names are converted to real entries by `cargo zng trace`.
+<a href=#570 id=570 data-nosnippet>570</a>///
+<a href=#571 id=571 data-nosnippet>571</a>/// # Cargo Zng
+<a href=#572 id=572 data-nosnippet>572</a>///
+<a href=#573 id=573 data-nosnippet>573</a>/// You can also use the `cargo zng trace` subcommand to record traces, it handles setting the env variables, merges the multi
+<a href=#574 id=574 data-nosnippet>574</a>/// process traces into a single file and properly names the processes for better compatibility with trace viewers.
+<a href=#575 id=575 data-nosnippet>575</a>///
+<a href=#576 id=576 data-nosnippet>576</a>/// ```console
+<a href=#577 id=577 data-nosnippet>577</a>/// cargo zng trace --filter debug "path/my-exe"
+<a href=#578 id=578 data-nosnippet>578</a>/// ```
+<a href=#579 id=579 data-nosnippet>579</a>///
+<a href=#580 id=580 data-nosnippet>580</a>/// You can also run using custom commands after `--`:
+<a href=#581 id=581 data-nosnippet>581</a>///
+<a href=#582 id=582 data-nosnippet>582</a>/// ```console
+<a href=#583 id=583 data-nosnippet>583</a>/// cargo zng trace -- cargo run my-exe
+<a href=#584 id=584 data-nosnippet>584</a>/// ```
+<a href=#585 id=585 data-nosnippet>585</a>///
+<a href=#586 id=586 data-nosnippet>586</a>/// Call `cargo zng trace --help` for more details.
+<a href=#587 id=587 data-nosnippet>587</a>///
+<a href=#588 id=588 data-nosnippet>588</a>/// # Full API
+<a href=#589 id=589 data-nosnippet>589</a>///
+<a href=#590 id=590 data-nosnippet>590</a>/// See [`zng_app::trace_recorder`] for the full API.
+<a href=#591 id=591 data-nosnippet>591</a>///
+<a href=#592 id=592 data-nosnippet>592</a>/// [`Trace`]: zng::app::trace_recorder::Trace
+<a href=#593 id=593 data-nosnippet>593</a>/// [filter syntax]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables
+<a href=#594 id=594 data-nosnippet>594</a></span><span class="attr">#[cfg(trace_recorder)]
+<a href=#595 id=595 data-nosnippet>595</a></span><span class="kw">pub mod </span>trace_recorder {
+<a href=#596 id=596 data-nosnippet>596</a>    <span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, stop_recording};
+<a href=#597 id=597 data-nosnippet>597</a>}
+<a href=#598 id=598 data-nosnippet>598</a>
+<a href=#599 id=599 data-nosnippet>599</a><span class="doccomment">/// Heap memory usage profiling.
+<a href=#600 id=600 data-nosnippet>600</a>///
+<a href=#601 id=601 data-nosnippet>601</a>/// Build with debug symbols and `"memory_profiler"` feature to record heap allocations.
+<a href=#602 id=602 data-nosnippet>602</a>///
+<a href=#603 id=603 data-nosnippet>603</a>/// Instrumentation and recording is done with the `dhat` crate. Recorded profiles can be visualized using the
+<a href=#604 id=604 data-nosnippet>604</a>/// [online DHAT Viewer](https://nnethercote.github.io/dh_view/dh_view.html). Stack traces are captured for each significant allocation.
+<a href=#605 id=605 data-nosnippet>605</a>///
+<a href=#606 id=606 data-nosnippet>606</a>/// # Config
+<a href=#607 id=607 data-nosnippet>607</a>///
+<a href=#608 id=608 data-nosnippet>608</a>/// The `"ZNG_MEMORY_PROFILER_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
+<a href=#609 id=609 data-nosnippet>609</a>/// The default dir is `"./zng-dhat/"`.
+<a href=#610 id=610 data-nosnippet>610</a>///
+<a href=#611 id=611 data-nosnippet>611</a>/// # Output
+<a href=#612 id=612 data-nosnippet>612</a>///
+<a href=#613 id=613 data-nosnippet>613</a>/// The recorded data is saved to `"{ZNG_MEMORY_PROFILER_DIR}/{timestamp}/{pname}-{pid}.json"`.
+<a href=#614 id=614 data-nosnippet>614</a>///
+<a href=#615 id=615 data-nosnippet>615</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are recorded
+<a href=#616 id=616 data-nosnippet>616</a>/// to the same *timestamp* folder, even worker processes started later.
+<a href=#617 id=617 data-nosnippet>617</a>///
+<a href=#618 id=618 data-nosnippet>618</a>/// The primary process is named `"app-process"`. See [`zng::env::process_name`] for more details about the default processes.
+<a href=#619 id=619 data-nosnippet>619</a>///
+<a href=#620 id=620 data-nosnippet>620</a>/// # Limitations
+<a href=#621 id=621 data-nosnippet>621</a>///
+<a href=#622 id=622 data-nosnippet>622</a>/// Only heap allocations using the `#[global_allocator]` are captured, some dependencies can skip the allocator, for example, the view-process
+<a href=#623 id=623 data-nosnippet>623</a>/// only traces a fraction of allocations because most of its heap usage comes from the graphics driver.
+<a href=#624 id=624 data-nosnippet>624</a>///
+<a href=#625 id=625 data-nosnippet>625</a>/// Compiling with `"memory_profiler"` feature replaces the global allocator, so if you use a custom allocator you need to setup
+<a href=#626 id=626 data-nosnippet>626</a>/// a feature that disables it, otherwise it will not compile. The instrumented allocator also has an impact in performance so
+<a href=#627 id=627 data-nosnippet>627</a>/// it is only recommended for test builds.
+<a href=#628 id=628 data-nosnippet>628</a>///
+<a href=#629 id=629 data-nosnippet>629</a>/// As an alternative on Unix you can use the external [Valgrind DHAT tool](https://valgrind.org/docs/manual/dh-manual.html).
+<a href=#630 id=630 data-nosnippet>630</a>/// On Windows you can [Record a Heap Snapshot](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/record-heap-snapshot).
+<a href=#631 id=631 data-nosnippet>631</a>///
+<a href=#632 id=632 data-nosnippet>632</a>/// # Full API
+<a href=#633 id=633 data-nosnippet>633</a>///
+<a href=#634 id=634 data-nosnippet>634</a>/// See [`zng_app::memory_profiler`] for the full API.
+<a href=#635 id=635 data-nosnippet>635</a></span><span class="attr">#[cfg(memory_profiler)]
+<a href=#636 id=636 data-nosnippet>636</a></span><span class="kw">pub mod </span>memory_profiler {
+<a href=#637 id=637 data-nosnippet>637</a>    <span class="kw">pub use </span>zng_app::memory_profiler::stop_recording;
+<a href=#638 id=638 data-nosnippet>638</a>}
 </code></pre></div></section></main></body></html>
