@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["e","translate"],"struct":["Candidate","Content","GeminiError","GeminiErrorResponse","GeminiRequest","GeminiResponse","InvalidResponse","Part","UnknownGeminiError"]};

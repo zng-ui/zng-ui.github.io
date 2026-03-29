@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["cache_clean","delete","get","get_bytes","get_json","get_txt","head","post","put","send","set_request_default"],"mod":["header","method","uri"],"struct":["Method","Request","Response","StatusCode","Uri"],"type":["Error"]};
+window.SIDEBAR_ITEMS = {"enum":["CacheMode"],"fn":["cache_clean","delete","get","get_bytes","get_json","get_txt","head","post","put","send","set_request_default"],"mod":["header","method","uri"],"struct":["Method","Request","Response","StatusCode","Uri"],"type":["Error"]};

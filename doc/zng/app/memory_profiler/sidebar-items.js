@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["stop_recording"]};
+window.SIDEBAR_ITEMS = {};
