@@ -493,17 +493,18 @@
 <a href=#493 id=493 data-nosnippet>493</a>        UiNodeOp::RenderUpdate { update } =&gt; {
 <a href=#494 id=494 data-nosnippet>494</a>            TEXT.layout().render_info.transform = <span class="kw-2">*</span>update.transform();
 <a href=#495 id=495 data-nosnippet>495</a>
-<a href=#496 id=496 data-nosnippet>496</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = color_key {
-<a href=#497 id=497 data-nosnippet>497</a>                <span class="kw">let </span>color = FONT_COLOR_VAR.get();
-<a href=#498 id=498 data-nosnippet>498</a>
-<a href=#499 id=499 data-nosnippet>499</a>                update.update_color(key.update(color, FONT_COLOR_VAR.is_animating()));
+<a href=#496 id=496 data-nosnippet>496</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(key) = color_key
+<a href=#497 id=497 data-nosnippet>497</a>                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>r) = rendered
+<a href=#498 id=498 data-nosnippet>498</a>            {
+<a href=#499 id=499 data-nosnippet>499</a>                <span class="kw">let </span>color = FONT_COLOR_VAR.get();
 <a href=#500 id=500 data-nosnippet>500</a>
-<a href=#501 id=501 data-nosnippet>501</a>                <span class="kw">let </span><span class="kw-2">mut </span>r = rendered.unwrap();
-<a href=#502 id=502 data-nosnippet>502</a>                r.color = color;
-<a href=#503 id=503 data-nosnippet>503</a>                rendered = <span class="prelude-val">Some</span>(r);
-<a href=#504 id=504 data-nosnippet>504</a>            }
-<a href=#505 id=505 data-nosnippet>505</a>        }
-<a href=#506 id=506 data-nosnippet>506</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#507 id=507 data-nosnippet>507</a>    })
-<a href=#508 id=508 data-nosnippet>508</a>}
+<a href=#501 id=501 data-nosnippet>501</a>                update.update_color(key.update(color, FONT_COLOR_VAR.is_animating()));
+<a href=#502 id=502 data-nosnippet>502</a>
+<a href=#503 id=503 data-nosnippet>503</a>                r.color = color;
+<a href=#504 id=504 data-nosnippet>504</a>                rendered = <span class="prelude-val">Some</span>(r);
+<a href=#505 id=505 data-nosnippet>505</a>            }
+<a href=#506 id=506 data-nosnippet>506</a>        }
+<a href=#507 id=507 data-nosnippet>507</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#508 id=508 data-nosnippet>508</a>    })
+<a href=#509 id=509 data-nosnippet>509</a>}
 </code></pre></div></section></main></body></html>
