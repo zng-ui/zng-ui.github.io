@@ -170,7 +170,7 @@
 <a href=#170 id=170 data-nosnippet>170</a>    <span class="kw">type </span>Output = Px;
 <a href=#171 id=171 data-nosnippet>171</a>
 <a href=#172 id=172 data-nosnippet>172</a>    <span class="kw">fn </span>mul(<span class="self">self</span>, rhs: f32) -&gt; <span class="self">Self</span>::Output {
-<a href=#173 id=173 data-nosnippet>173</a>        Px((<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f32 * rhs).round() <span class="kw">as </span>i32)
+<a href=#173 id=173 data-nosnippet>173</a>        Px((<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f32 * rhs).round().min(i32::MAX <span class="kw">as _</span>) <span class="kw">as </span>i32)
 <a href=#174 id=174 data-nosnippet>174</a>    }
 <a href=#175 id=175 data-nosnippet>175</a>}
 <a href=#176 id=176 data-nosnippet>176</a><span class="kw">impl </span>ops::MulAssign&lt;f32&gt; <span class="kw">for </span>Px {
@@ -182,7 +182,7 @@
 <a href=#182 id=182 data-nosnippet>182</a>    <span class="kw">type </span>Output = Px;
 <a href=#183 id=183 data-nosnippet>183</a>
 <a href=#184 id=184 data-nosnippet>184</a>    <span class="kw">fn </span>mul(<span class="self">self</span>, rhs: i32) -&gt; <span class="self">Self</span>::Output {
-<a href=#185 id=185 data-nosnippet>185</a>        Px(<span class="self">self</span>.<span class="number">0 </span>* rhs)
+<a href=#185 id=185 data-nosnippet>185</a>        Px(<span class="self">self</span>.<span class="number">0</span>.saturating_mul(rhs))
 <a href=#186 id=186 data-nosnippet>186</a>    }
 <a href=#187 id=187 data-nosnippet>187</a>}
 <a href=#188 id=188 data-nosnippet>188</a><span class="kw">impl </span>ops::MulAssign&lt;i32&gt; <span class="kw">for </span>Px {

@@ -534,11 +534,11 @@
 <a href=#534 id=534 data-nosnippet>534</a>            std::fs::copy(<span class="kw-2">&amp;</span>build_path, <span class="kw-2">&amp;</span>unique_path)<span class="question-mark">?</span>;
 <a href=#535 id=535 data-nosnippet>535</a>
 <a href=#536 id=536 data-nosnippet>536</a>            <span class="kw">let </span>dylib = zng_task::wait(<span class="kw">move </span>|| HotLib::new(<span class="kw-2">&amp;</span>static_patch, manifest_dir, unique_path));
-<a href=#537 id=537 data-nosnippet>537</a>            <span class="kw">match </span>zng_task::with_deadline(dylib, <span class="number">10</span>.secs()).<span class="kw">await </span>{
+<a href=#537 id=537 data-nosnippet>537</a>            <span class="kw">match </span>zng_task::with_deadline(dylib, <span class="number">20</span>.secs()).<span class="kw">await </span>{
 <a href=#538 id=538 data-nosnippet>538</a>                <span class="prelude-val">Ok</span>(r) =&gt; r.map_err(Into::into),
 <a href=#539 id=539 data-nosnippet>539</a>                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(BuildError::Io(Arc::new(io::Error::new(
 <a href=#540 id=540 data-nosnippet>540</a>                    io::ErrorKind::TimedOut,
-<a href=#541 id=541 data-nosnippet>541</a>                    <span class="string">"hot dylib did not init after 10s"</span>,
+<a href=#541 id=541 data-nosnippet>541</a>                    <span class="string">"hot dylib did not init after 20s"</span>,
 <a href=#542 id=542 data-nosnippet>542</a>                )))),
 <a href=#543 id=543 data-nosnippet>543</a>            }
 <a href=#544 id=544 data-nosnippet>544</a>        }));
