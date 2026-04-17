@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/progress.rs`."><title>progress.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>progress.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>core::fmt;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/progress.rs`."><title>progress.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>progress.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>core::fmt;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::sync::Arc;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>parking_lot::RwLock;
@@ -34,7 +34,7 @@
 <a href=#34 id=34 data-nosnippet>34</a>    }
 <a href=#35 id=35 data-nosnippet>35</a>
 <a href=#36 id=36 data-nosnippet>36</a>    <span class="doccomment">/// New with completed `n` of `total`.
-<a href=#37 id=37 data-nosnippet>37</a>    </span><span class="kw">pub fn </span>from_n_of(n: usize, total: usize) -&gt; <span class="self">Self </span>{
+<a href=#37 id=37 data-nosnippet>37</a>    </span><span class="kw">pub fn </span>from_n_of(n: u64, total: u64) -&gt; <span class="self">Self </span>{
 <a href=#38 id=38 data-nosnippet>38</a>        <span class="self">Self</span>::new(<span class="self">Self</span>::normalize_n_of(n, total))
 <a href=#39 id=39 data-nosnippet>39</a>    }
 <a href=#40 id=40 data-nosnippet>40</a>
@@ -72,7 +72,7 @@
 <a href=#72 id=72 data-nosnippet>72</a>    <span class="doccomment">/// Combine the factor completed [`fct`] with another factor computed from `n` of `total`.
 <a href=#73 id=73 data-nosnippet>73</a>    ///
 <a href=#74 id=74 data-nosnippet>74</a>    /// [`fct`]: Self::fct
-<a href=#75 id=75 data-nosnippet>75</a>    </span><span class="kw">pub fn </span>and_n_of(<span class="self">self</span>, n: usize, total: usize) -&gt; <span class="self">Self </span>{
+<a href=#75 id=75 data-nosnippet>75</a>    </span><span class="kw">pub fn </span>and_n_of(<span class="self">self</span>, n: u64, total: u64) -&gt; <span class="self">Self </span>{
 <a href=#76 id=76 data-nosnippet>76</a>        <span class="self">self</span>.and_fct(<span class="self">Self</span>::normalize_n_of(n, total))
 <a href=#77 id=77 data-nosnippet>77</a>    }
 <a href=#78 id=78 data-nosnippet>78</a>
@@ -87,7 +87,7 @@
 <a href=#87 id=87 data-nosnippet>87</a>    <span class="doccomment">/// Replace the [`fct`] value with a new factor computed from `n` of `total`.
 <a href=#88 id=88 data-nosnippet>88</a>    ///
 <a href=#89 id=89 data-nosnippet>89</a>    /// [`fct`]: Self::fct
-<a href=#90 id=90 data-nosnippet>90</a>    </span><span class="kw">pub fn </span>with_n_of(<span class="kw-2">mut </span><span class="self">self</span>, n: usize, total: usize) -&gt; <span class="self">Self </span>{
+<a href=#90 id=90 data-nosnippet>90</a>    </span><span class="kw">pub fn </span>with_n_of(<span class="kw-2">mut </span><span class="self">self</span>, n: u64, total: u64) -&gt; <span class="self">Self </span>{
 <a href=#91 id=91 data-nosnippet>91</a>        <span class="self">self</span>.factor = <span class="self">Self</span>::normalize_n_of(n, total);
 <a href=#92 id=92 data-nosnippet>92</a>        <span class="self">self
 <a href=#93 id=93 data-nosnippet>93</a>    </span>}
@@ -139,13 +139,13 @@
 <a href=#139 id=139 data-nosnippet>139</a>        value
 <a href=#140 id=140 data-nosnippet>140</a>    }
 <a href=#141 id=141 data-nosnippet>141</a>
-<a href=#142 id=142 data-nosnippet>142</a>    <span class="kw">fn </span>normalize_n_of(n: usize, total: usize) -&gt; Factor {
+<a href=#142 id=142 data-nosnippet>142</a>    <span class="kw">fn </span>normalize_n_of(n: u64, total: u64) -&gt; Factor {
 <a href=#143 id=143 data-nosnippet>143</a>        <span class="kw">if </span>n &gt; total {
 <a href=#144 id=144 data-nosnippet>144</a>            -<span class="number">1</span>.fct() <span class="comment">// invalid, indeterminate
 <a href=#145 id=145 data-nosnippet>145</a>        </span>} <span class="kw">else if </span>total == <span class="number">0 </span>{
 <a href=#146 id=146 data-nosnippet>146</a>            <span class="number">1</span>.fct() <span class="comment">// 0 of 0, complete
 <a href=#147 id=147 data-nosnippet>147</a>        </span>} <span class="kw">else </span>{
-<a href=#148 id=148 data-nosnippet>148</a>            <span class="self">Self</span>::normalize_factor(Factor(n <span class="kw">as </span>f32 / total <span class="kw">as </span>f32))
+<a href=#148 id=148 data-nosnippet>148</a>            <span class="self">Self</span>::normalize_factor(Factor((n <span class="kw">as </span>f64 / total <span class="kw">as </span>f64) <span class="kw">as </span>f32))
 <a href=#149 id=149 data-nosnippet>149</a>        }
 <a href=#150 id=150 data-nosnippet>150</a>    }
 <a href=#151 id=151 data-nosnippet>151</a>
@@ -212,7 +212,7 @@
 <a href=#212 id=212 data-nosnippet>212</a>    <span class="kw">fn </span>from(status: Progress) -&gt; f32 {
 <a href=#213 id=213 data-nosnippet>213</a>        status.fct().<span class="number">0
 <a href=#214 id=214 data-nosnippet>214</a>    </span>}
-<a href=#215 id=215 data-nosnippet>215</a>    <span class="kw">fn </span>from(n_total: (usize, usize)) -&gt; Progress {
+<a href=#215 id=215 data-nosnippet>215</a>    <span class="kw">fn </span>from(n_total: (u64, u64)) -&gt; Progress {
 <a href=#216 id=216 data-nosnippet>216</a>        Progress::from_n_of(n_total.<span class="number">0</span>, n_total.<span class="number">1</span>)
 <a href=#217 id=217 data-nosnippet>217</a>    }
 <a href=#218 id=218 data-nosnippet>218</a>    <span class="kw">fn </span>from(indeterminate_message: Txt) -&gt; Progress {

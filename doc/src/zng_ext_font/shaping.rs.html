@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/shaping.rs`."><title>shaping.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>shaping.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    cmp, fmt,
 <a href=#3 id=3 data-nosnippet>3</a>    hash::{BuildHasher, Hash},
 <a href=#4 id=4 data-nosnippet>4</a>    mem, ops,
@@ -820,7 +820,7 @@
 <a href=#820 id=820 data-nosnippet>820</a>        };
 <a href=#821 id=821 data-nosnippet>821</a>
 <a href=#822 id=822 data-nosnippet>822</a>        <span class="kw">if </span>!<span class="self">self</span>.lines.<span class="number">0</span>.is_empty() {
-<a href=#823 id=823 data-nosnippet>823</a>            <span class="kw">if </span><span class="self">self</span>.<span class="macro">first_line !</span>= first {
+<a href=#823 id=823 data-nosnippet>823</a>            <span class="kw">if </span><span class="self">self</span>.first_line != first {
 <a href=#824 id=824 data-nosnippet>824</a>                <span class="kw">let </span>first_offset = (first.origin - <span class="self">self</span>.first_line.origin).cast::&lt;f32&gt;().cast_unit();
 <a href=#825 id=825 data-nosnippet>825</a>
 <a href=#826 id=826 data-nosnippet>826</a>                <span class="kw">let </span>first_range = <span class="self">self</span>.lines.segs(<span class="number">0</span>);
@@ -858,7 +858,7 @@
 <a href=#858 id=858 data-nosnippet>858</a>        }
 <a href=#859 id=859 data-nosnippet>859</a>
 <a href=#860 id=860 data-nosnippet>860</a>        <span class="kw">if </span><span class="self">self</span>.lines.<span class="number">0</span>.len() &gt; <span class="number">1 </span>{
-<a href=#861 id=861 data-nosnippet>861</a>            <span class="kw">if </span><span class="self">self</span>.<span class="macro">last_line !</span>= last {
+<a href=#861 id=861 data-nosnippet>861</a>            <span class="kw">if </span><span class="self">self</span>.last_line != last {
 <a href=#862 id=862 data-nosnippet>862</a>                <span class="comment">// last changed and it is not first
 <a href=#863 id=863 data-nosnippet>863</a>
 <a href=#864 id=864 data-nosnippet>864</a>                </span><span class="kw">let </span>last_offset = (last.origin - <span class="self">self</span>.last_line.origin).cast::&lt;f32&gt;().cast_unit();
@@ -951,7 +951,7 @@
 <a href=#951 id=951 data-nosnippet>951</a>        <span class="comment">// apply baseline to the content only,
 <a href=#952 id=952 data-nosnippet>952</a>        </span><span class="kw">let </span>baseline_offset =
 <a href=#953 id=953 data-nosnippet>953</a>            <span class="kw">if </span><span class="self">self</span>.align.is_baseline() { -<span class="self">self</span>.baseline } <span class="kw">else </span>{ Px(<span class="number">0</span>) } + <span class="kw">if </span>args.align.is_baseline() { <span class="self">self</span>.baseline } <span class="kw">else </span>{ Px(<span class="number">0</span>) };
-<a href=#954 id=954 data-nosnippet>954</a>        <span class="kw">if </span><span class="macro">baseline_offset !</span>= Px(<span class="number">0</span>) {
+<a href=#954 id=954 data-nosnippet>954</a>        <span class="kw">if </span>baseline_offset != Px(<span class="number">0</span>) {
 <a href=#955 id=955 data-nosnippet>955</a>            <span class="kw">let </span>baseline_offset = baseline_offset.<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#956 id=956 data-nosnippet>956</a>            <span class="kw">for </span>g <span class="kw">in </span><span class="kw-2">&amp;mut </span><span class="self">self</span>.glyphs {
 <a href=#957 id=957 data-nosnippet>957</a>                g.point.y += baseline_offset;
@@ -968,7 +968,7 @@
 <a href=#968 id=968 data-nosnippet>968</a>    <span class="kw">fn </span>reshape_line_height_and_spacing(<span class="kw-2">&amp;mut </span><span class="self">self</span>, line_height: Px, line_spacing: Px) {
 <a href=#969 id=969 data-nosnippet>969</a>        <span class="kw">let </span><span class="kw-2">mut </span>update_height = <span class="bool-val">false</span>;
 <a href=#970 id=970 data-nosnippet>970</a>
-<a href=#971 id=971 data-nosnippet>971</a>        <span class="kw">if </span><span class="self">self</span>.<span class="macro">line_height !</span>= line_height {
+<a href=#971 id=971 data-nosnippet>971</a>        <span class="kw">if </span><span class="self">self</span>.line_height != line_height {
 <a href=#972 id=972 data-nosnippet>972</a>            <span class="kw">let </span>offset_y = (line_height - <span class="self">self</span>.line_height).<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#973 id=973 data-nosnippet>973</a>            <span class="kw">let </span><span class="kw-2">mut </span>offset = <span class="number">0.0</span>;
 <a href=#974 id=974 data-nosnippet>974</a>            <span class="kw">let </span>center = offset_y / <span class="number">2.0</span>;
@@ -988,7 +988,7 @@
 <a href=#988 id=988 data-nosnippet>988</a>            update_height = <span class="bool-val">true</span>;
 <a href=#989 id=989 data-nosnippet>989</a>        }
 <a href=#990 id=990 data-nosnippet>990</a>
-<a href=#991 id=991 data-nosnippet>991</a>        <span class="kw">if </span><span class="self">self</span>.<span class="macro">line_spacing !</span>= line_spacing {
+<a href=#991 id=991 data-nosnippet>991</a>        <span class="kw">if </span><span class="self">self</span>.line_spacing != line_spacing {
 <a href=#992 id=992 data-nosnippet>992</a>            <span class="kw">if </span><span class="self">self</span>.lines.is_multi() {
 <a href=#993 id=993 data-nosnippet>993</a>                <span class="kw">let </span>offset_y = (line_spacing - <span class="self">self</span>.line_spacing).<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#994 id=994 data-nosnippet>994</a>                <span class="kw">let </span><span class="kw-2">mut </span>offset = offset_y;
@@ -1840,7 +1840,7 @@
 <a href=#1840 id=1840 data-nosnippet>1840</a>                            <span class="kw">let </span>seg_range = seg.glyphs_range().iter();
 <a href=#1841 id=1841 data-nosnippet>1841</a>                            <span class="kw">let </span><span class="kw-2">mut </span>o = r.origin.cast().cast_unit();
 <a href=#1842 id=1842 data-nosnippet>1842</a>                            <span class="kw">let </span><span class="kw-2">mut </span>w = r.width();
-<a href=#1843 id=1843 data-nosnippet>1843</a>                            <span class="kw">if </span><span class="macro">seg_range !</span>= glyphs_range
+<a href=#1843 id=1843 data-nosnippet>1843</a>                            <span class="kw">if </span>seg_range != glyphs_range
 <a href=#1844 id=1844 data-nosnippet>1844</a>                                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(g) = seg.glyph(glyphs_range.end - seg_range.start)
 <a href=#1845 id=1845 data-nosnippet>1845</a>                            {
 <a href=#1846 id=1846 data-nosnippet>1846</a>                                o.x = g.<span class="number">1</span>.point.x;
@@ -1858,7 +1858,7 @@
 <a href=#1858 id=1858 data-nosnippet>1858</a>                            <span class="kw">let </span>r = seg.rect();
 <a href=#1859 id=1859 data-nosnippet>1859</a>                            <span class="kw">let </span><span class="kw-2">mut </span>o = r.origin.cast().cast_unit();
 <a href=#1860 id=1860 data-nosnippet>1860</a>                            <span class="kw">let </span>seg_range = seg.glyphs_range().iter();
-<a href=#1861 id=1861 data-nosnippet>1861</a>                            <span class="kw">if </span><span class="macro">seg_range !</span>= glyphs_range
+<a href=#1861 id=1861 data-nosnippet>1861</a>                            <span class="kw">if </span>seg_range != glyphs_range
 <a href=#1862 id=1862 data-nosnippet>1862</a>                                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(g) = seg.glyph(glyphs_range.start - seg_range.start)
 <a href=#1863 id=1863 data-nosnippet>1863</a>                            {
 <a href=#1864 id=1864 data-nosnippet>1864</a>                                o.x = g.<span class="number">1</span>.point.x;
@@ -2272,7 +2272,7 @@
 <a href=#2272 id=2272 data-nosnippet>2272</a>        <span class="kw">let </span>last = <span class="self">self</span>.len() - <span class="number">1</span>;
 <a href=#2273 id=2273 data-nosnippet>2273</a>        <span class="kw">for </span>font <span class="kw">in </span><span class="kw-2">&amp;</span><span class="self">self</span>[..last] {
 <a href=#2274 id=2274 data-nosnippet>2274</a>            <span class="kw">let </span>r = font.shape_segment(seg, word_ctx_key, features, |seg| {
-<a href=#2275 id=2275 data-nosnippet>2275</a>                <span class="kw">if </span>seg.glyphs.iter().all(|g| g.<span class="macro">index !</span>= <span class="number">0</span>) {
+<a href=#2275 id=2275 data-nosnippet>2275</a>                <span class="kw">if </span>seg.glyphs.iter().all(|g| g.index != <span class="number">0</span>) {
 <a href=#2276 id=2276 data-nosnippet>2276</a>                    <span class="prelude-val">Some</span>(out.take().unwrap()(seg, font))
 <a href=#2277 id=2277 data-nosnippet>2277</a>                } <span class="kw">else </span>{
 <a href=#2278 id=2278 data-nosnippet>2278</a>                    <span class="prelude-val">None
@@ -2522,7 +2522,7 @@
 <a href=#2522 id=2522 data-nosnippet>2522</a>            <span class="kw">let </span><span class="kw-2">mut </span>start = <span class="number">0</span>;
 <a href=#2523 id=2523 data-nosnippet>2523</a>            <span class="kw">let </span><span class="kw-2">mut </span>words_start = <span class="prelude-val">None</span>;
 <a href=#2524 id=2524 data-nosnippet>2524</a>            <span class="kw">for </span>(i, info) <span class="kw">in </span>text.segs().iter().enumerate() {
-<a href=#2525 id=2525 data-nosnippet>2525</a>                <span class="kw">if </span>info.kind.is_word() &amp;&amp; info.<span class="macro">kind !</span>= TextSegmentKind::Emoji {
+<a href=#2525 id=2525 data-nosnippet>2525</a>                <span class="kw">if </span>info.kind.is_word() &amp;&amp; info.kind != TextSegmentKind::Emoji {
 <a href=#2526 id=2526 data-nosnippet>2526</a>                    <span class="kw">if </span>words_start.is_none() {
 <a href=#2527 id=2527 data-nosnippet>2527</a>                        words_start = <span class="prelude-val">Some</span>(i);
 <a href=#2528 id=2528 data-nosnippet>2528</a>                    }
@@ -2959,7 +2959,7 @@
 <a href=#2959 id=2959 data-nosnippet>2959</a>            <span class="comment">// find the first glyph in the cluster at the char byte index `point`
 <a href=#2960 id=2960 data-nosnippet>2960</a>            </span><span class="kw">for </span>(i, g) <span class="kw">in </span>shaped_seg.glyphs.iter().enumerate() {
 <a href=#2961 id=2961 data-nosnippet>2961</a>                width = g.point.<span class="number">0</span>;
-<a href=#2962 id=2962 data-nosnippet>2962</a>                <span class="kw">if </span>g.<span class="macro">cluster !</span>= c {
+<a href=#2962 id=2962 data-nosnippet>2962</a>                <span class="kw">if </span>g.cluster != c {
 <a href=#2963 id=2963 data-nosnippet>2963</a>                    <span class="comment">// advanced cluster, advance point
 <a href=#2964 id=2964 data-nosnippet>2964</a>                    </span><span class="kw">if </span>point == <span class="number">0 </span>{
 <a href=#2965 id=2965 data-nosnippet>2965</a>                        <span class="kw">break</span>;
@@ -3820,7 +3820,7 @@
 <a href=#3820 id=3820 data-nosnippet>3820</a>        <span class="kw">let </span><span class="kw-2">mut </span>c = u32::MAX;
 <a href=#3821 id=3821 data-nosnippet>3821</a>        <span class="kw">let </span><span class="kw-2">mut </span>count = <span class="number">0</span>;
 <a href=#3822 id=3822 data-nosnippet>3822</a>        <span class="kw">for </span><span class="kw-2">&amp;</span>i <span class="kw">in </span><span class="self">self</span>.clusters() {
-<a href=#3823 id=3823 data-nosnippet>3823</a>            <span class="kw">if </span><span class="macro">i !</span>= c {
+<a href=#3823 id=3823 data-nosnippet>3823</a>            <span class="kw">if </span>i != c {
 <a href=#3824 id=3824 data-nosnippet>3824</a>                c = i;
 <a href=#3825 id=3825 data-nosnippet>3825</a>                count += <span class="number">1</span>;
 <a href=#3826 id=3826 data-nosnippet>3826</a>            }
@@ -4576,7 +4576,7 @@
 <a href=#4576 id=4576 data-nosnippet>4576</a>            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
 <a href=#4577 id=4577 data-nosnippet>4577</a>                <span class="kw">let </span>under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
 <a href=#4578 id=4578 data-nosnippet>4578</a>
-<a href=#4579 id=4579 data-nosnippet>4579</a>                <span class="kw">if </span><span class="self">self</span>.<span class="macro">under !</span>= under || under == (<span class="bool-val">true</span>, <span class="bool-val">false</span>) {
+<a href=#4579 id=4579 data-nosnippet>4579</a>                <span class="kw">if </span><span class="self">self</span>.under != under || under == (<span class="bool-val">true</span>, <span class="bool-val">false</span>) {
 <a href=#4580 id=4580 data-nosnippet>4580</a>                    <span class="comment">// crossed one or two y-range boundaries or both points are inside
 <a href=#4581 id=4581 data-nosnippet>4581</a>                    </span><span class="self">self</span>.under = under;
 <a href=#4582 id=4582 data-nosnippet>4582</a>
@@ -4607,7 +4607,7 @@
 <a href=#4607 id=4607 data-nosnippet>4607</a>
 <a href=#4608 id=4608 data-nosnippet>4608</a>            <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
 <a href=#4609 id=4609 data-nosnippet>4609</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.start.take()
-<a href=#4610 id=4610 data-nosnippet>4610</a>                    &amp;&amp; <span class="macro">s !</span>= <span class="self">self</span>.current
+<a href=#4610 id=4610 data-nosnippet>4610</a>                    &amp;&amp; s != <span class="self">self</span>.current
 <a href=#4611 id=4611 data-nosnippet>4611</a>                {
 <a href=#4612 id=4612 data-nosnippet>4612</a>                    <span class="self">self</span>.line_to(s);
 <a href=#4613 id=4613 data-nosnippet>4613</a>                }

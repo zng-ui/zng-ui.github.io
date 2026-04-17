@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>node.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! UI nodes used for building the scroll widget.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/node.rs`."><title>node.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>node.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! UI nodes used for building the scroll widget.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a></span><span class="kw">use </span>std::sync::Arc;
@@ -166,7 +166,7 @@
 <a href=#166 id=166 data-nosnippet>166</a>            <span class="kw">let </span>content_scale = content_scale;
 <a href=#167 id=167 data-nosnippet>167</a>
 <a href=#168 id=168 data-nosnippet>168</a>            <span class="kw">let </span>vp_size = constraints.fill_size_or(content_size);
-<a href=#169 id=169 data-nosnippet>169</a>            <span class="kw">if </span><span class="macro">viewport_size !</span>= vp_size {
+<a href=#169 id=169 data-nosnippet>169</a>            <span class="kw">if </span>viewport_size != vp_size {
 <a href=#170 id=170 data-nosnippet>170</a>                viewport_size = vp_size;
 <a href=#171 id=171 data-nosnippet>171</a>                SCROLL_VIEWPORT_SIZE_VAR.set(vp_size);
 <a href=#172 id=172 data-nosnippet>172</a>                WIDGET.render();
@@ -201,7 +201,7 @@
 <a href=#201 id=201 data-nosnippet>201</a>                ct_offset.x = align_offset.x;
 <a href=#202 id=202 data-nosnippet>202</a>            }
 <a href=#203 id=203 data-nosnippet>203</a>
-<a href=#204 id=204 data-nosnippet>204</a>            <span class="kw">if </span><span class="macro">ct_offset !</span>= content_offset {
+<a href=#204 id=204 data-nosnippet>204</a>            <span class="kw">if </span>ct_offset != content_offset {
 <a href=#205 id=205 data-nosnippet>205</a>                content_offset = ct_offset;
 <a href=#206 id=206 data-nosnippet>206</a>
 <a href=#207 id=207 data-nosnippet>207</a>                <span class="comment">// check if scrolled using only `render_update` to the end of the `auto_hide_extra` space.
@@ -255,7 +255,7 @@
 <a href=#255 id=255 data-nosnippet>255</a>            culling_rect.min.x -= auto_hide_extra.left;
 <a href=#256 id=256 data-nosnippet>256</a>            <span class="kw">let </span>culling_rect = frame.transform().outer_transformed(culling_rect).unwrap_or(culling_rect).to_rect();
 <a href=#257 id=257 data-nosnippet>257</a>
-<a href=#258 id=258 data-nosnippet>258</a>            <span class="kw">let </span>transform = <span class="kw">if </span><span class="macro">content_scale !</span>= <span class="number">1</span>.fct() {
+<a href=#258 id=258 data-nosnippet>258</a>            <span class="kw">let </span>transform = <span class="kw">if </span>content_scale != <span class="number">1</span>.fct() {
 <a href=#259 id=259 data-nosnippet>259</a>                PxTransform::scale(content_scale.<span class="number">0</span>, content_scale.<span class="number">0</span>).then_translate(content_offset.cast())
 <a href=#260 id=260 data-nosnippet>260</a>            } <span class="kw">else </span>{
 <a href=#261 id=261 data-nosnippet>261</a>                content_offset.into()
@@ -269,7 +269,7 @@
 <a href=#269 id=269 data-nosnippet>269</a>        UiNodeOp::RenderUpdate { update } =&gt; {
 <a href=#270 id=270 data-nosnippet>270</a>            scroll_info().set_viewport_transform(<span class="kw-2">*</span>update.transform());
 <a href=#271 id=271 data-nosnippet>271</a>
-<a href=#272 id=272 data-nosnippet>272</a>            <span class="kw">let </span>transform = <span class="kw">if </span><span class="macro">content_scale !</span>= <span class="number">1</span>.fct() {
+<a href=#272 id=272 data-nosnippet>272</a>            <span class="kw">let </span>transform = <span class="kw">if </span>content_scale != <span class="number">1</span>.fct() {
 <a href=#273 id=273 data-nosnippet>273</a>                PxTransform::scale(content_scale.<span class="number">0</span>, content_scale.<span class="number">0</span>).then_translate(content_offset.cast())
 <a href=#274 id=274 data-nosnippet>274</a>            } <span class="kw">else </span>{
 <a href=#275 id=275 data-nosnippet>275</a>                content_offset.into()
@@ -714,10 +714,10 @@
 <a href=#714 id=714 data-nosnippet>714</a>            zoom_in.enabled().set(SCROLL.can_zoom_in());
 <a href=#715 id=715 data-nosnippet>715</a>            zoom_out.enabled().set(SCROLL.can_zoom_out());
 <a href=#716 id=716 data-nosnippet>716</a>            <span class="kw">let </span>scale = SCROLL.zoom_scale().get();
-<a href=#717 id=717 data-nosnippet>717</a>            zoom_to_fit.enabled().set(<span class="macro">scale !</span>= fit_scale());
-<a href=#718 id=718 data-nosnippet>718</a>            zoom_reset.enabled().set(<span class="macro">scale !</span>= <span class="number">1</span>.fct());
+<a href=#717 id=717 data-nosnippet>717</a>            zoom_to_fit.enabled().set(scale != fit_scale());
+<a href=#718 id=718 data-nosnippet>718</a>            zoom_reset.enabled().set(scale != <span class="number">1</span>.fct());
 <a href=#719 id=719 data-nosnippet>719</a>
-<a href=#720 id=720 data-nosnippet>720</a>            <span class="kw">if </span><span class="macro">scale_delta !</span>= <span class="number">0</span>.fct() {
+<a href=#720 id=720 data-nosnippet>720</a>            <span class="kw">if </span>scale_delta != <span class="number">0</span>.fct() {
 <a href=#721 id=721 data-nosnippet>721</a>                <span class="kw">let </span>scroll_info = WIDGET.info().scroll_info().unwrap();
 <a href=#722 id=722 data-nosnippet>722</a>                <span class="kw">let </span>viewport_size = scroll_info.viewport_size();
 <a href=#723 id=723 data-nosnippet>723</a>
@@ -1033,11 +1033,11 @@
 <a href=#1033 id=1033 data-nosnippet>1033</a>                            <span class="kw">if let </span><span class="prelude-val">Some</span>(scale) = zoom {
 <a href=#1034 id=1034 data-nosnippet>1034</a>                        SCROLL.chase_zoom(|<span class="kw">_</span>| scale);
 <a href=#1035 id=1035 data-nosnippet>1035</a>                    }
-<a href=#1036 id=1036 data-nosnippet>1036</a>                    <span class="kw">if </span>offset.<span class="macro">y !</span>= Px::MAX &amp;&amp; max_scroll.height &gt; Px(<span class="number">0</span>) {
+<a href=#1036 id=1036 data-nosnippet>1036</a>                    <span class="kw">if </span>offset.y != Px::MAX &amp;&amp; max_scroll.height &gt; Px(<span class="number">0</span>) {
 <a href=#1037 id=1037 data-nosnippet>1037</a>                        <span class="kw">let </span>offset_y = offset.y.<span class="number">0 </span><span class="kw">as </span>f32 / max_scroll.height.<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#1038 id=1038 data-nosnippet>1038</a>                        SCROLL.chase_vertical(|<span class="kw">_</span>| offset_y.fct());
 <a href=#1039 id=1039 data-nosnippet>1039</a>                    }
-<a href=#1040 id=1040 data-nosnippet>1040</a>                    <span class="kw">if </span>offset.<span class="macro">x !</span>= Px::MAX &amp;&amp; max_scroll.width &gt; Px(<span class="number">0</span>) {
+<a href=#1040 id=1040 data-nosnippet>1040</a>                    <span class="kw">if </span>offset.x != Px::MAX &amp;&amp; max_scroll.width &gt; Px(<span class="number">0</span>) {
 <a href=#1041 id=1041 data-nosnippet>1041</a>                        <span class="kw">let </span>offset_x = offset.x.<span class="number">0 </span><span class="kw">as </span>f32 / max_scroll.width.<span class="number">0 </span><span class="kw">as </span>f32;
 <a href=#1042 id=1042 data-nosnippet>1042</a>                        SCROLL.chase_horizontal(|<span class="kw">_</span>| offset_x.fct());
 <a href=#1043 id=1043 data-nosnippet>1043</a>                    }
@@ -1072,7 +1072,7 @@
 <a href=#1072 id=1072 data-nosnippet>1072</a>
 <a href=#1073 id=1073 data-nosnippet>1073</a>                <span class="kw">if </span>SCROLL.mode().get().contains(ScrollMode::ZOOM) {
 <a href=#1074 id=1074 data-nosnippet>1074</a>                    <span class="kw">let </span>f = args.scale();
-<a href=#1075 id=1075 data-nosnippet>1075</a>                    <span class="kw">if </span><span class="macro">f !</span>= <span class="number">1</span>.fct() {
+<a href=#1075 id=1075 data-nosnippet>1075</a>                    <span class="kw">if </span>f != <span class="number">1</span>.fct() {
 <a href=#1076 id=1076 data-nosnippet>1076</a>                        <span class="kw">let </span>center = WIDGET
 <a href=#1077 id=1077 data-nosnippet>1077</a>                            .info()
 <a href=#1078 id=1078 data-nosnippet>1078</a>                            .scroll_info()
@@ -1092,10 +1092,10 @@
 <a href=#1092 id=1092 data-nosnippet>1092</a>                    <span class="kw">let </span>delta = new_offset - applied_offset;
 <a href=#1093 id=1093 data-nosnippet>1093</a>                    applied_offset = new_offset;
 <a href=#1094 id=1094 data-nosnippet>1094</a>
-<a href=#1095 id=1095 data-nosnippet>1095</a>                    <span class="kw">if </span>delta.<span class="macro">y !</span>= Px(<span class="number">0</span>) {
+<a href=#1095 id=1095 data-nosnippet>1095</a>                    <span class="kw">if </span>delta.y != Px(<span class="number">0</span>) {
 <a href=#1096 id=1096 data-nosnippet>1096</a>                        SCROLL.scroll_vertical_touch(-delta.y);
 <a href=#1097 id=1097 data-nosnippet>1097</a>                    }
-<a href=#1098 id=1098 data-nosnippet>1098</a>                    <span class="kw">if </span>delta.<span class="macro">x !</span>= Px(<span class="number">0</span>) {
+<a href=#1098 id=1098 data-nosnippet>1098</a>                    <span class="kw">if </span>delta.x != Px(<span class="number">0</span>) {
 <a href=#1099 id=1099 data-nosnippet>1099</a>                        SCROLL.scroll_horizontal_touch(-delta.x);
 <a href=#1100 id=1100 data-nosnippet>1100</a>                    }
 <a href=#1101 id=1101 data-nosnippet>1101</a>                }
@@ -1111,14 +1111,14 @@
 <a href=#1111 id=1111 data-nosnippet>1111</a>                        <span class="kw">if </span>mode.contains(ScrollMode::VERTICAL) {
 <a href=#1112 id=1112 data-nosnippet>1112</a>                            <span class="kw">let </span>(delta, duration) = args.translation_inertia_y(friction);
 <a href=#1113 id=1113 data-nosnippet>1113</a>
-<a href=#1114 id=1114 data-nosnippet>1114</a>                            <span class="kw">if </span><span class="macro">delta !</span>= Px(<span class="number">0</span>) {
+<a href=#1114 id=1114 data-nosnippet>1114</a>                            <span class="kw">if </span>delta != Px(<span class="number">0</span>) {
 <a href=#1115 id=1115 data-nosnippet>1115</a>                                SCROLL.scroll_vertical_touch_inertia(-delta, duration);
 <a href=#1116 id=1116 data-nosnippet>1116</a>                            }
 <a href=#1117 id=1117 data-nosnippet>1117</a>                            SCROLL.clear_vertical_overscroll();
 <a href=#1118 id=1118 data-nosnippet>1118</a>                        }
 <a href=#1119 id=1119 data-nosnippet>1119</a>                        <span class="kw">if </span>mode.contains(ScrollMode::HORIZONTAL) {
 <a href=#1120 id=1120 data-nosnippet>1120</a>                            <span class="kw">let </span>(delta, duration) = args.translation_inertia_x(friction);
-<a href=#1121 id=1121 data-nosnippet>1121</a>                            <span class="kw">if </span><span class="macro">delta !</span>= Px(<span class="number">0</span>) {
+<a href=#1121 id=1121 data-nosnippet>1121</a>                            <span class="kw">if </span>delta != Px(<span class="number">0</span>) {
 <a href=#1122 id=1122 data-nosnippet>1122</a>                                SCROLL.scroll_horizontal_touch_inertia(-delta, duration);
 <a href=#1123 id=1123 data-nosnippet>1123</a>                            }
 <a href=#1124 id=1124 data-nosnippet>1124</a>                            SCROLL.clear_horizontal_overscroll();
@@ -1255,23 +1255,23 @@
 <a href=#1255 id=1255 data-nosnippet>1255</a>        UiNodeOp::Layout { wl, final_size } =&gt; {
 <a href=#1256 id=1256 data-nosnippet>1256</a>            <span class="kw-2">*</span>final_size = child.layout(wl);
 <a href=#1257 id=1257 data-nosnippet>1257</a>
-<a href=#1258 id=1258 data-nosnippet>1258</a>            <span class="kw">if </span><span class="macro">offset !</span>= Vector::zero() {
+<a href=#1258 id=1258 data-nosnippet>1258</a>            <span class="kw">if </span>offset != Vector::zero() {
 <a href=#1259 id=1259 data-nosnippet>1259</a>                <span class="kw">let </span>viewport = SCROLL_VIEWPORT_SIZE_VAR.get();
 <a href=#1260 id=1260 data-nosnippet>1260</a>
 <a href=#1261 id=1261 data-nosnippet>1261</a>                LAYOUT.with_constraints(PxConstraints2d::new_fill_size(viewport), || {
 <a href=#1262 id=1262 data-nosnippet>1262</a>                    <span class="kw">let </span>o = offset.layout_dft(viewport.to_vector());
 <a href=#1263 id=1263 data-nosnippet>1263</a>                    offset = Vector::zero();
 <a href=#1264 id=1264 data-nosnippet>1264</a>
-<a href=#1265 id=1265 data-nosnippet>1265</a>                    <span class="kw">if </span>o.<span class="macro">y !</span>= Px(<span class="number">0</span>) {
+<a href=#1265 id=1265 data-nosnippet>1265</a>                    <span class="kw">if </span>o.y != Px(<span class="number">0</span>) {
 <a href=#1266 id=1266 data-nosnippet>1266</a>                        SCROLL.scroll_vertical(ScrollFrom::VarTarget(o.y));
 <a href=#1267 id=1267 data-nosnippet>1267</a>                    }
-<a href=#1268 id=1268 data-nosnippet>1268</a>                    <span class="kw">if </span>o.<span class="macro">x !</span>= Px(<span class="number">0</span>) {
+<a href=#1268 id=1268 data-nosnippet>1268</a>                    <span class="kw">if </span>o.x != Px(<span class="number">0</span>) {
 <a href=#1269 id=1269 data-nosnippet>1269</a>                        SCROLL.scroll_horizontal(ScrollFrom::VarTarget(o.x));
 <a href=#1270 id=1270 data-nosnippet>1270</a>                    }
 <a href=#1271 id=1271 data-nosnippet>1271</a>                });
 <a href=#1272 id=1272 data-nosnippet>1272</a>            }
 <a href=#1273 id=1273 data-nosnippet>1273</a>
-<a href=#1274 id=1274 data-nosnippet>1274</a>            <span class="kw">if </span><span class="macro">scale_delta !</span>= <span class="number">0</span>.fct() {
+<a href=#1274 id=1274 data-nosnippet>1274</a>            <span class="kw">if </span>scale_delta != <span class="number">0</span>.fct() {
 <a href=#1275 id=1275 data-nosnippet>1275</a>                <span class="kw">let </span>scroll_info = WIDGET.info().scroll_info().unwrap();
 <a href=#1276 id=1276 data-nosnippet>1276</a>                <span class="kw">let </span>default = scale_position.to_px(LAYOUT.scale_factor());
 <a href=#1277 id=1277 data-nosnippet>1277</a>                <span class="kw">let </span>default = scroll_info
@@ -1342,7 +1342,7 @@
 <a href=#1342 id=1342 data-nosnippet>1342</a>                h_center.x = new_h_rect.size.width;
 <a href=#1343 id=1343 data-nosnippet>1343</a>            }
 <a href=#1344 id=1344 data-nosnippet>1344</a>
-<a href=#1345 id=1345 data-nosnippet>1345</a>            <span class="kw">if </span><span class="macro">new_v_rect !</span>= v_rect {
+<a href=#1345 id=1345 data-nosnippet>1345</a>            <span class="kw">if </span>new_v_rect != v_rect {
 <a href=#1346 id=1346 data-nosnippet>1346</a>                v_rect = new_v_rect;
 <a href=#1347 id=1347 data-nosnippet>1347</a>                <span class="comment">// 50%
 <a href=#1348 id=1348 data-nosnippet>1348</a>                </span>v_center.x = v_rect.size.width / Px(<span class="number">2</span>);
@@ -1352,7 +1352,7 @@
 <a href=#1352 id=1352 data-nosnippet>1352</a>
 <a href=#1353 id=1353 data-nosnippet>1353</a>                WIDGET.render();
 <a href=#1354 id=1354 data-nosnippet>1354</a>            }
-<a href=#1355 id=1355 data-nosnippet>1355</a>            <span class="kw">if </span><span class="macro">new_h_rect !</span>= h_rect {
+<a href=#1355 id=1355 data-nosnippet>1355</a>            <span class="kw">if </span>new_h_rect != h_rect {
 <a href=#1356 id=1356 data-nosnippet>1356</a>                h_rect = new_h_rect;
 <a href=#1357 id=1357 data-nosnippet>1357</a>                h_center.y = h_rect.size.height / Px(<span class="number">2</span>);
 <a href=#1358 id=1358 data-nosnippet>1358</a>                <span class="kw">let </span>radius = h_center.y;
@@ -1634,7 +1634,7 @@
 <a href=#1634 id=1634 data-nosnippet>1634</a>        }
 <a href=#1635 id=1635 data-nosnippet>1635</a>        UiNodeOp::Update { .. } =&gt; {
 <a href=#1636 id=1636 data-nosnippet>1636</a>            RAW_MOUSE_MOVED_EVENT.each_update(<span class="bool-val">true</span>, |args| {
-<a href=#1637 id=1637 data-nosnippet>1637</a>                <span class="kw">if </span>args.<span class="macro">window_id !</span>= WINDOW.id() {
+<a href=#1637 id=1637 data-nosnippet>1637</a>                <span class="kw">if </span>args.window_id != WINDOW.id() {
 <a href=#1638 id=1638 data-nosnippet>1638</a>                    <span class="kw">return</span>;
 <a href=#1639 id=1639 data-nosnippet>1639</a>                }
 <a href=#1640 id=1640 data-nosnippet>1640</a>
@@ -1660,7 +1660,7 @@
 <a href=#1660 id=1660 data-nosnippet>1660</a>                }
 <a href=#1661 id=1661 data-nosnippet>1661</a>                vel <span class="kw-2">*</span>= <span class="number">6</span>.fct();
 <a href=#1662 id=1662 data-nosnippet>1662</a>
-<a href=#1663 id=1663 data-nosnippet>1663</a>                <span class="kw">if </span><span class="macro">vel !</span>= requested_vel {
+<a href=#1663 id=1663 data-nosnippet>1663</a>                <span class="kw">if </span>vel != requested_vel {
 <a href=#1664 id=1664 data-nosnippet>1664</a>                    SCROLL.auto_scroll(vel);
 <a href=#1665 id=1665 data-nosnippet>1665</a>                    requested_vel = vel;
 <a href=#1666 id=1666 data-nosnippet>1666</a>                }

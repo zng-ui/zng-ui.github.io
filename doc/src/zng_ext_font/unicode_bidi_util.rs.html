@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/unicode_bidi_util.rs`."><title>unicode_bidi_util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>unicode_bidi_util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! This module contains copies of `unicode_bidi` code, with the dependency on text strings removed.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-font/src/unicode_bidi_util.rs`."><title>unicode_bidi_util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_font" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_ext_font/</div>unicode_bidi_util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! This module contains copies of `unicode_bidi` code, with the dependency on text strings removed.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Text is only used in the source crate to handle character with multiple bytes, but we do bidi sorting at
 <a href=#4 id=4 data-nosnippet>4</a>//! the "segment" level.
@@ -75,7 +75,7 @@
 <a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">let </span><span class="kw-2">mut </span>max_level = run_level;
 <a href=#76 id=76 data-nosnippet>76</a>
 <a href=#77 id=77 data-nosnippet>77</a>    <span class="kw">for </span>(i, <span class="kw-2">&amp;</span>new_level) <span class="kw">in </span>levels.iter().enumerate().skip(<span class="number">1</span>) {
-<a href=#78 id=78 data-nosnippet>78</a>        <span class="kw">if </span><span class="macro">new_level !</span>= run_level {
+<a href=#78 id=78 data-nosnippet>78</a>        <span class="kw">if </span>new_level != run_level {
 <a href=#79 id=79 data-nosnippet>79</a>            <span class="comment">// End of the previous run, start of a new one.
 <a href=#80 id=80 data-nosnippet>80</a>            </span>runs.push(start..i);
 <a href=#81 id=81 data-nosnippet>81</a>            start = i;
@@ -233,7 +233,7 @@
 <a href=#233 id=233 data-nosnippet>233</a>                    <span class="comment">// do nothing
 <a href=#234 id=234 data-nosnippet>234</a>                </span>} <span class="kw">else if </span>overflow_embedding_count &gt; <span class="number">0 </span>{
 <a href=#235 id=235 data-nosnippet>235</a>                    overflow_embedding_count -= <span class="number">1</span>;
-<a href=#236 id=236 data-nosnippet>236</a>                } <span class="kw">else if </span>stack.last().<span class="macro">status !</span>= OverrideStatus::Isolate &amp;&amp; stack.vec.len() &gt;= <span class="number">2 </span>{
+<a href=#236 id=236 data-nosnippet>236</a>                } <span class="kw">else if </span>stack.last().status != OverrideStatus::Isolate &amp;&amp; stack.vec.len() &gt;= <span class="number">2 </span>{
 <a href=#237 id=237 data-nosnippet>237</a>                    stack.vec.pop();
 <a href=#238 id=238 data-nosnippet>238</a>                }
 <a href=#239 id=239 data-nosnippet>239</a>                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
@@ -555,487 +555,485 @@
 <a href=#555 id=555 data-nosnippet>555</a>            // &lt;http://www.unicode.org/reports/tr9/#W3&gt;
 <a href=#556 id=556 data-nosnippet>556</a>            //
 <a href=#557 id=557 data-nosnippet>557</a>            </span><span class="kw">match </span>processing_classes[i] {
-<a href=#558 id=558 data-nosnippet>558</a>                EN =&gt; {
-<a href=#559 id=559 data-nosnippet>559</a>                    <span class="kw">if </span>last_strong_is_al {
-<a href=#560 id=560 data-nosnippet>560</a>                        <span class="comment">// W2. If previous strong char was AL, change EN to AN.
-<a href=#561 id=561 data-nosnippet>561</a>                        </span>processing_classes[i] = AN;
-<a href=#562 id=562 data-nosnippet>562</a>                    }
-<a href=#563 id=563 data-nosnippet>563</a>                }
-<a href=#564 id=564 data-nosnippet>564</a>                <span class="comment">// W3.
-<a href=#565 id=565 data-nosnippet>565</a>                </span>AL =&gt; processing_classes[i] = R,
-<a href=#566 id=566 data-nosnippet>566</a>                <span class="kw">_ </span>=&gt; {}
-<a href=#567 id=567 data-nosnippet>567</a>            }
-<a href=#568 id=568 data-nosnippet>568</a>
-<a href=#569 id=569 data-nosnippet>569</a>            <span class="comment">// update last_strong_is_al.
-<a href=#570 id=570 data-nosnippet>570</a>            </span><span class="kw">match </span>w2_processing_class {
-<a href=#571 id=571 data-nosnippet>571</a>                L | R =&gt; {
-<a href=#572 id=572 data-nosnippet>572</a>                    last_strong_is_al = <span class="bool-val">false</span>;
-<a href=#573 id=573 data-nosnippet>573</a>                }
-<a href=#574 id=574 data-nosnippet>574</a>                AL =&gt; {
-<a href=#575 id=575 data-nosnippet>575</a>                    last_strong_is_al = <span class="bool-val">true</span>;
-<a href=#576 id=576 data-nosnippet>576</a>                }
-<a href=#577 id=577 data-nosnippet>577</a>                <span class="kw">_ </span>=&gt; {}
-<a href=#578 id=578 data-nosnippet>578</a>            }
+<a href=#558 id=558 data-nosnippet>558</a>                EN <span class="kw">if </span>last_strong_is_al =&gt; {
+<a href=#559 id=559 data-nosnippet>559</a>                    <span class="comment">// W2. If previous strong char was AL, change EN to AN.
+<a href=#560 id=560 data-nosnippet>560</a>                    </span>processing_classes[i] = AN;
+<a href=#561 id=561 data-nosnippet>561</a>                }
+<a href=#562 id=562 data-nosnippet>562</a>                <span class="comment">// W3.
+<a href=#563 id=563 data-nosnippet>563</a>                </span>AL =&gt; processing_classes[i] = R,
+<a href=#564 id=564 data-nosnippet>564</a>                <span class="kw">_ </span>=&gt; {}
+<a href=#565 id=565 data-nosnippet>565</a>            }
+<a href=#566 id=566 data-nosnippet>566</a>
+<a href=#567 id=567 data-nosnippet>567</a>            <span class="comment">// update last_strong_is_al.
+<a href=#568 id=568 data-nosnippet>568</a>            </span><span class="kw">match </span>w2_processing_class {
+<a href=#569 id=569 data-nosnippet>569</a>                L | R =&gt; {
+<a href=#570 id=570 data-nosnippet>570</a>                    last_strong_is_al = <span class="bool-val">false</span>;
+<a href=#571 id=571 data-nosnippet>571</a>                }
+<a href=#572 id=572 data-nosnippet>572</a>                AL =&gt; {
+<a href=#573 id=573 data-nosnippet>573</a>                    last_strong_is_al = <span class="bool-val">true</span>;
+<a href=#574 id=574 data-nosnippet>574</a>                }
+<a href=#575 id=575 data-nosnippet>575</a>                <span class="kw">_ </span>=&gt; {}
+<a href=#576 id=576 data-nosnippet>576</a>            }
+<a href=#577 id=577 data-nosnippet>577</a>
+<a href=#578 id=578 data-nosnippet>578</a>            <span class="kw">let </span>class_before_w456 = processing_classes[i];
 <a href=#579 id=579 data-nosnippet>579</a>
-<a href=#580 id=580 data-nosnippet>580</a>            <span class="kw">let </span>class_before_w456 = processing_classes[i];
-<a href=#581 id=581 data-nosnippet>581</a>
-<a href=#582 id=582 data-nosnippet>582</a>            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;
-<a href=#583 id=583 data-nosnippet>583</a>            // &lt;http://www.unicode.org/reports/tr9/#W5&gt;
-<a href=#584 id=584 data-nosnippet>584</a>            // &lt;http://www.unicode.org/reports/tr9/#W6&gt; (separators only)
-<a href=#585 id=585 data-nosnippet>585</a>            // (see below for W6 terminator code)
-<a href=#586 id=586 data-nosnippet>586</a>            //
-<a href=#587 id=587 data-nosnippet>587</a>            </span><span class="kw">match </span>processing_classes[i] {
-<a href=#588 id=588 data-nosnippet>588</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt;
-<a href=#589 id=589 data-nosnippet>589</a>                </span>EN =&gt; {
-<a href=#590 id=590 data-nosnippet>590</a>                    <span class="comment">// W5. If a run of ETs is adjacent to an EN, change the ETs to EN.
-<a href=#591 id=591 data-nosnippet>591</a>                    </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
-<a href=#592 id=592 data-nosnippet>592</a>                        processing_classes[<span class="kw-2">*</span>j] = EN;
-<a href=#593 id=593 data-nosnippet>593</a>                    }
-<a href=#594 id=594 data-nosnippet>594</a>                    et_run_indices.clear();
-<a href=#595 id=595 data-nosnippet>595</a>                }
-<a href=#596 id=596 data-nosnippet>596</a>
-<a href=#597 id=597 data-nosnippet>597</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;
-<a href=#598 id=598 data-nosnippet>598</a>                // &lt;http://www.unicode.org/reports/tr9/#W6&gt;
-<a href=#599 id=599 data-nosnippet>599</a>                </span>ES | CS =&gt; {
-<a href=#600 id=600 data-nosnippet>600</a>                    <span class="kw">let </span><span class="kw-2">mut </span>next_class = sequence
-<a href=#601 id=601 data-nosnippet>601</a>                        .iter_forwards_from(i, run_index)
-<a href=#602 id=602 data-nosnippet>602</a>                        .map(|j| processing_classes[j])
-<a href=#603 id=603 data-nosnippet>603</a>                        <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#604 id=604 data-nosnippet>604</a>                        </span>.find(not_removed_by_x9)
-<a href=#605 id=605 data-nosnippet>605</a>                        .unwrap_or(sequence.eos);
-<a href=#606 id=606 data-nosnippet>606</a>                    <span class="kw">if </span>next_class == EN &amp;&amp; last_strong_is_al {
-<a href=#607 id=607 data-nosnippet>607</a>                        <span class="comment">// Apply W2 to next_class. We know that last_strong_is_al
-<a href=#608 id=608 data-nosnippet>608</a>                        // has no chance of changing on this character so we can still assume its value
-<a href=#609 id=609 data-nosnippet>609</a>                        // will be the same by the time we get to it.
-<a href=#610 id=610 data-nosnippet>610</a>                        </span>next_class = AN;
-<a href=#611 id=611 data-nosnippet>611</a>                    }
-<a href=#612 id=612 data-nosnippet>612</a>                    processing_classes[i] = <span class="kw">match </span>(prev_class_before_w4, processing_classes[i], next_class) {
+<a href=#580 id=580 data-nosnippet>580</a>            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;
+<a href=#581 id=581 data-nosnippet>581</a>            // &lt;http://www.unicode.org/reports/tr9/#W5&gt;
+<a href=#582 id=582 data-nosnippet>582</a>            // &lt;http://www.unicode.org/reports/tr9/#W6&gt; (separators only)
+<a href=#583 id=583 data-nosnippet>583</a>            // (see below for W6 terminator code)
+<a href=#584 id=584 data-nosnippet>584</a>            //
+<a href=#585 id=585 data-nosnippet>585</a>            </span><span class="kw">match </span>processing_classes[i] {
+<a href=#586 id=586 data-nosnippet>586</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt;
+<a href=#587 id=587 data-nosnippet>587</a>                </span>EN =&gt; {
+<a href=#588 id=588 data-nosnippet>588</a>                    <span class="comment">// W5. If a run of ETs is adjacent to an EN, change the ETs to EN.
+<a href=#589 id=589 data-nosnippet>589</a>                    </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
+<a href=#590 id=590 data-nosnippet>590</a>                        processing_classes[<span class="kw-2">*</span>j] = EN;
+<a href=#591 id=591 data-nosnippet>591</a>                    }
+<a href=#592 id=592 data-nosnippet>592</a>                    et_run_indices.clear();
+<a href=#593 id=593 data-nosnippet>593</a>                }
+<a href=#594 id=594 data-nosnippet>594</a>
+<a href=#595 id=595 data-nosnippet>595</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W4&gt;
+<a href=#596 id=596 data-nosnippet>596</a>                // &lt;http://www.unicode.org/reports/tr9/#W6&gt;
+<a href=#597 id=597 data-nosnippet>597</a>                </span>ES | CS =&gt; {
+<a href=#598 id=598 data-nosnippet>598</a>                    <span class="kw">let </span><span class="kw-2">mut </span>next_class = sequence
+<a href=#599 id=599 data-nosnippet>599</a>                        .iter_forwards_from(i, run_index)
+<a href=#600 id=600 data-nosnippet>600</a>                        .map(|j| processing_classes[j])
+<a href=#601 id=601 data-nosnippet>601</a>                        <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#602 id=602 data-nosnippet>602</a>                        </span>.find(not_removed_by_x9)
+<a href=#603 id=603 data-nosnippet>603</a>                        .unwrap_or(sequence.eos);
+<a href=#604 id=604 data-nosnippet>604</a>                    <span class="kw">if </span>next_class == EN &amp;&amp; last_strong_is_al {
+<a href=#605 id=605 data-nosnippet>605</a>                        <span class="comment">// Apply W2 to next_class. We know that last_strong_is_al
+<a href=#606 id=606 data-nosnippet>606</a>                        // has no chance of changing on this character so we can still assume its value
+<a href=#607 id=607 data-nosnippet>607</a>                        // will be the same by the time we get to it.
+<a href=#608 id=608 data-nosnippet>608</a>                        </span>next_class = AN;
+<a href=#609 id=609 data-nosnippet>609</a>                    }
+<a href=#610 id=610 data-nosnippet>610</a>                    processing_classes[i] = <span class="kw">match </span>(prev_class_before_w4, processing_classes[i], next_class) {
+<a href=#611 id=611 data-nosnippet>611</a>                        <span class="comment">// W4
+<a href=#612 id=612 data-nosnippet>612</a>                        </span>(EN, ES, EN) | (EN, CS, EN) =&gt; EN,
 <a href=#613 id=613 data-nosnippet>613</a>                        <span class="comment">// W4
-<a href=#614 id=614 data-nosnippet>614</a>                        </span>(EN, ES, EN) | (EN, CS, EN) =&gt; EN,
-<a href=#615 id=615 data-nosnippet>615</a>                        <span class="comment">// W4
-<a href=#616 id=616 data-nosnippet>616</a>                        </span>(AN, CS, AN) =&gt; AN,
-<a href=#617 id=617 data-nosnippet>617</a>                        <span class="comment">// W6 (separators only)
-<a href=#618 id=618 data-nosnippet>618</a>                        </span>(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; ON,
-<a href=#619 id=619 data-nosnippet>619</a>                    };
-<a href=#620 id=620 data-nosnippet>620</a>
-<a href=#621 id=621 data-nosnippet>621</a>                    <span class="comment">// W6 + &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#622 id=622 data-nosnippet>622</a>                    // We have to do this before W5 gets its grubby hands on these characters and thinks
-<a href=#623 id=623 data-nosnippet>623</a>                    // they're part of an ET run.
-<a href=#624 id=624 data-nosnippet>624</a>                    // We check for ON to ensure that we had hit the W6 branch above, since this `ES | CS` match
-<a href=#625 id=625 data-nosnippet>625</a>                    // arm handles both W4 and W6.
-<a href=#626 id=626 data-nosnippet>626</a>                    </span><span class="kw">if </span>processing_classes[i] == ON {
-<a href=#627 id=627 data-nosnippet>627</a>                        <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_backwards_from(i, run_index) {
-<a href=#628 id=628 data-nosnippet>628</a>                            <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
-<a href=#629 id=629 data-nosnippet>629</a>                            <span class="kw">if </span><span class="kw-2">*</span><span class="macro">class !</span>= BN {
-<a href=#630 id=630 data-nosnippet>630</a>                                <span class="kw">break</span>;
-<a href=#631 id=631 data-nosnippet>631</a>                            }
-<a href=#632 id=632 data-nosnippet>632</a>                            <span class="kw-2">*</span>class = ON;
-<a href=#633 id=633 data-nosnippet>633</a>                        }
-<a href=#634 id=634 data-nosnippet>634</a>                        <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(i, run_index) {
-<a href=#635 id=635 data-nosnippet>635</a>                            <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
-<a href=#636 id=636 data-nosnippet>636</a>                            <span class="kw">if </span><span class="kw-2">*</span><span class="macro">class !</span>= BN {
-<a href=#637 id=637 data-nosnippet>637</a>                                <span class="kw">break</span>;
-<a href=#638 id=638 data-nosnippet>638</a>                            }
-<a href=#639 id=639 data-nosnippet>639</a>                            <span class="kw-2">*</span>class = ON;
-<a href=#640 id=640 data-nosnippet>640</a>                        }
-<a href=#641 id=641 data-nosnippet>641</a>                    }
-<a href=#642 id=642 data-nosnippet>642</a>                }
-<a href=#643 id=643 data-nosnippet>643</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W5&gt;
-<a href=#644 id=644 data-nosnippet>644</a>                </span>ET =&gt; {
-<a href=#645 id=645 data-nosnippet>645</a>                    <span class="kw">match </span>prev_class_before_w5 {
-<a href=#646 id=646 data-nosnippet>646</a>                        EN =&gt; processing_classes[i] = EN,
-<a href=#647 id=647 data-nosnippet>647</a>                        <span class="kw">_ </span>=&gt; {
-<a href=#648 id=648 data-nosnippet>648</a>                            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#649 id=649 data-nosnippet>649</a>                            // If there was a BN run before this, that's now a part of this ET run.
-<a href=#650 id=650 data-nosnippet>650</a>                            </span>et_run_indices.extend(<span class="kw-2">&amp;</span>bn_run_indices);
-<a href=#651 id=651 data-nosnippet>651</a>
-<a href=#652 id=652 data-nosnippet>652</a>                            <span class="comment">// In case this is followed by an EN.
-<a href=#653 id=653 data-nosnippet>653</a>                            </span>et_run_indices.push(i);
-<a href=#654 id=654 data-nosnippet>654</a>                        }
-<a href=#655 id=655 data-nosnippet>655</a>                    }
-<a href=#656 id=656 data-nosnippet>656</a>                }
-<a href=#657 id=657 data-nosnippet>657</a>                <span class="kw">_ </span>=&gt; {}
-<a href=#658 id=658 data-nosnippet>658</a>            }
-<a href=#659 id=659 data-nosnippet>659</a>
-<a href=#660 id=660 data-nosnippet>660</a>            <span class="comment">// Common loop iteration code
-<a href=#661 id=661 data-nosnippet>661</a>            //
-<a href=#662 id=662 data-nosnippet>662</a>
-<a href=#663 id=663 data-nosnippet>663</a>            // &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#664 id=664 data-nosnippet>664</a>            // BN runs would have already continued the loop, clear them before we get to the next one.
-<a href=#665 id=665 data-nosnippet>665</a>            </span>bn_run_indices.clear();
-<a href=#666 id=666 data-nosnippet>666</a>
-<a href=#667 id=667 data-nosnippet>667</a>            <span class="comment">// W6 above only deals with separators, so it doesn't change anything W5 cares about,
-<a href=#668 id=668 data-nosnippet>668</a>            // so we still can update this after running that part of W6.
-<a href=#669 id=669 data-nosnippet>669</a>            </span>prev_class_before_w5 = processing_classes[i];
-<a href=#670 id=670 data-nosnippet>670</a>
-<a href=#671 id=671 data-nosnippet>671</a>            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt; (terminators only)
-<a href=#672 id=672 data-nosnippet>672</a>            // (see above for W6 separator code)
-<a href=#673 id=673 data-nosnippet>673</a>            //
-<a href=#674 id=674 data-nosnippet>674</a>            </span><span class="kw">if </span><span class="macro">prev_class_before_w5 !</span>= ET {
-<a href=#675 id=675 data-nosnippet>675</a>                <span class="comment">// W6. If we didn't find an adjacent EN, turn any ETs into ON instead.
-<a href=#676 id=676 data-nosnippet>676</a>                </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
-<a href=#677 id=677 data-nosnippet>677</a>                    processing_classes[<span class="kw-2">*</span>j] = ON;
-<a href=#678 id=678 data-nosnippet>678</a>                }
-<a href=#679 id=679 data-nosnippet>679</a>                et_run_indices.clear();
-<a href=#680 id=680 data-nosnippet>680</a>            }
-<a href=#681 id=681 data-nosnippet>681</a>
-<a href=#682 id=682 data-nosnippet>682</a>            <span class="comment">// We stashed this before W4/5/6 could get their grubby hands on it, and it's not
-<a href=#683 id=683 data-nosnippet>683</a>            // used in the W6 terminator code below so we can update it now.
-<a href=#684 id=684 data-nosnippet>684</a>            </span>prev_class_before_w4 = class_before_w456;
-<a href=#685 id=685 data-nosnippet>685</a>        }
-<a href=#686 id=686 data-nosnippet>686</a>    }
-<a href=#687 id=687 data-nosnippet>687</a>    <span class="comment">// Rerun this check in case we ended with a sequence of BNs (i.e., we'd never
-<a href=#688 id=688 data-nosnippet>688</a>    // hit the end of the for loop above).
-<a href=#689 id=689 data-nosnippet>689</a>    // W6. If we didn't find an adjacent EN, turn any ETs into ON instead.
-<a href=#690 id=690 data-nosnippet>690</a>    </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
-<a href=#691 id=691 data-nosnippet>691</a>        processing_classes[<span class="kw-2">*</span>j] = ON;
-<a href=#692 id=692 data-nosnippet>692</a>    }
-<a href=#693 id=693 data-nosnippet>693</a>    et_run_indices.clear();
-<a href=#694 id=694 data-nosnippet>694</a>
-<a href=#695 id=695 data-nosnippet>695</a>    <span class="comment">// W7. If the previous strong char was L, change EN to L.
-<a href=#696 id=696 data-nosnippet>696</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>last_strong_is_l = sequence.sos == L;
-<a href=#697 id=697 data-nosnippet>697</a>    <span class="kw">for </span>run <span class="kw">in </span><span class="kw-2">&amp;</span>sequence.runs {
-<a href=#698 id=698 data-nosnippet>698</a>        <span class="kw">for </span>i <span class="kw">in </span>run.clone() {
-<a href=#699 id=699 data-nosnippet>699</a>            <span class="kw">match </span>processing_classes[i] {
-<a href=#700 id=700 data-nosnippet>700</a>                EN <span class="kw">if </span>last_strong_is_l =&gt; {
-<a href=#701 id=701 data-nosnippet>701</a>                    processing_classes[i] = L;
-<a href=#702 id=702 data-nosnippet>702</a>                }
-<a href=#703 id=703 data-nosnippet>703</a>                L =&gt; {
-<a href=#704 id=704 data-nosnippet>704</a>                    last_strong_is_l = <span class="bool-val">true</span>;
-<a href=#705 id=705 data-nosnippet>705</a>                }
-<a href=#706 id=706 data-nosnippet>706</a>                R | AL =&gt; {
-<a href=#707 id=707 data-nosnippet>707</a>                    last_strong_is_l = <span class="bool-val">false</span>;
-<a href=#708 id=708 data-nosnippet>708</a>                }
-<a href=#709 id=709 data-nosnippet>709</a>                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#710 id=710 data-nosnippet>710</a>                // Already scanning past BN here.
-<a href=#711 id=711 data-nosnippet>711</a>                </span><span class="kw">_ </span>=&gt; {}
-<a href=#712 id=712 data-nosnippet>712</a>            }
-<a href=#713 id=713 data-nosnippet>713</a>        }
-<a href=#714 id=714 data-nosnippet>714</a>    }
-<a href=#715 id=715 data-nosnippet>715</a>}
-<a href=#716 id=716 data-nosnippet>716</a>
-<a href=#717 id=717 data-nosnippet>717</a><span class="doccomment">/// 3.3.5 Resolving Neutral Types
-<a href=#718 id=718 data-nosnippet>718</a>///
-<a href=#719 id=719 data-nosnippet>719</a>/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Neutral_Types&gt;
-<a href=#720 id=720 data-nosnippet>720</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>implicit_resolve_neutral(
-<a href=#721 id=721 data-nosnippet>721</a>    sequence: <span class="kw-2">&amp;</span>IsolatingRunSequence,
-<a href=#722 id=722 data-nosnippet>722</a>    levels: <span class="kw-2">&amp;</span>[Level],
-<a href=#723 id=723 data-nosnippet>723</a>    original_classes: <span class="kw-2">&amp;</span>[BidiClass],
-<a href=#724 id=724 data-nosnippet>724</a>    processing_classes: <span class="kw-2">&amp;mut </span>[BidiClass],
-<a href=#725 id=725 data-nosnippet>725</a>    brackets: <span class="kw-2">&amp;</span>HashMap&lt;usize, char&gt;,
-<a href=#726 id=726 data-nosnippet>726</a>) {
-<a href=#727 id=727 data-nosnippet>727</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
-<a href=#728 id=728 data-nosnippet>728</a>
-<a href=#729 id=729 data-nosnippet>729</a>    <span class="comment">// e = embedding direction
-<a href=#730 id=730 data-nosnippet>730</a>    </span><span class="kw">let </span>e: BidiClass = levels[sequence.runs[<span class="number">0</span>].start].bidi_class();
-<a href=#731 id=731 data-nosnippet>731</a>    <span class="kw">let </span>not_e = <span class="kw">if </span>e == BidiClass::L { BidiClass::R } <span class="kw">else </span>{ BidiClass::L };
-<a href=#732 id=732 data-nosnippet>732</a>    <span class="comment">// N0. Process bracket pairs.
-<a href=#733 id=733 data-nosnippet>733</a>
-<a href=#734 id=734 data-nosnippet>734</a>    // &gt; Identify the bracket pairs in the current isolating run sequence according to BD16.
-<a href=#735 id=735 data-nosnippet>735</a>    // We use processing_classes, not original_classes, due to BD14/BD15
-<a href=#736 id=736 data-nosnippet>736</a>    </span><span class="kw">let </span>bracket_pairs = identify_bracket_pairs(sequence, processing_classes, brackets);
-<a href=#737 id=737 data-nosnippet>737</a>
-<a href=#738 id=738 data-nosnippet>738</a>    <span class="comment">// &gt; For each bracket-pair element in the list of pairs of text positions
-<a href=#739 id=739 data-nosnippet>739</a>    //
-<a href=#740 id=740 data-nosnippet>740</a>    // Note: Rust ranges are interpreted as [start..end), be careful using `pair` directly
-<a href=#741 id=741 data-nosnippet>741</a>    // for indexing as it will include the opening bracket pair but not the closing one.
-<a href=#742 id=742 data-nosnippet>742</a>    </span><span class="kw">for </span>pair <span class="kw">in </span>bracket_pairs {
-<a href=#743 id=743 data-nosnippet>743</a>        <span class="macro">debug_assert!</span>(
-<a href=#744 id=744 data-nosnippet>744</a>            pair.start &lt; processing_classes.len(),
-<a href=#745 id=745 data-nosnippet>745</a>            <span class="string">"identify_bracket_pairs returned a range that is out of bounds!"
-<a href=#746 id=746 data-nosnippet>746</a>        </span>);
-<a href=#747 id=747 data-nosnippet>747</a>        <span class="macro">debug_assert!</span>(
-<a href=#748 id=748 data-nosnippet>748</a>            pair.end &lt; processing_classes.len(),
-<a href=#749 id=749 data-nosnippet>749</a>            <span class="string">"identify_bracket_pairs returned a range that is out of bounds!"
-<a href=#750 id=750 data-nosnippet>750</a>        </span>);
-<a href=#751 id=751 data-nosnippet>751</a>        <span class="kw">let </span><span class="kw-2">mut </span>found_e = <span class="bool-val">false</span>;
-<a href=#752 id=752 data-nosnippet>752</a>        <span class="kw">let </span><span class="kw-2">mut </span>found_not_e = <span class="bool-val">false</span>;
-<a href=#753 id=753 data-nosnippet>753</a>        <span class="kw">let </span><span class="kw-2">mut </span>class_to_set = <span class="prelude-val">None</span>;
-<a href=#754 id=754 data-nosnippet>754</a>
-<a href=#755 id=755 data-nosnippet>755</a>        <span class="comment">// &gt; Inspect the bidirectional types of the characters enclosed within the bracket pair.
+<a href=#614 id=614 data-nosnippet>614</a>                        </span>(AN, CS, AN) =&gt; AN,
+<a href=#615 id=615 data-nosnippet>615</a>                        <span class="comment">// W6 (separators only)
+<a href=#616 id=616 data-nosnippet>616</a>                        </span>(<span class="kw">_</span>, <span class="kw">_</span>, <span class="kw">_</span>) =&gt; ON,
+<a href=#617 id=617 data-nosnippet>617</a>                    };
+<a href=#618 id=618 data-nosnippet>618</a>
+<a href=#619 id=619 data-nosnippet>619</a>                    <span class="comment">// W6 + &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#620 id=620 data-nosnippet>620</a>                    // We have to do this before W5 gets its grubby hands on these characters and thinks
+<a href=#621 id=621 data-nosnippet>621</a>                    // they're part of an ET run.
+<a href=#622 id=622 data-nosnippet>622</a>                    // We check for ON to ensure that we had hit the W6 branch above, since this `ES | CS` match
+<a href=#623 id=623 data-nosnippet>623</a>                    // arm handles both W4 and W6.
+<a href=#624 id=624 data-nosnippet>624</a>                    </span><span class="kw">if </span>processing_classes[i] == ON {
+<a href=#625 id=625 data-nosnippet>625</a>                        <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_backwards_from(i, run_index) {
+<a href=#626 id=626 data-nosnippet>626</a>                            <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
+<a href=#627 id=627 data-nosnippet>627</a>                            <span class="kw">if </span><span class="kw-2">*</span>class != BN {
+<a href=#628 id=628 data-nosnippet>628</a>                                <span class="kw">break</span>;
+<a href=#629 id=629 data-nosnippet>629</a>                            }
+<a href=#630 id=630 data-nosnippet>630</a>                            <span class="kw-2">*</span>class = ON;
+<a href=#631 id=631 data-nosnippet>631</a>                        }
+<a href=#632 id=632 data-nosnippet>632</a>                        <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(i, run_index) {
+<a href=#633 id=633 data-nosnippet>633</a>                            <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
+<a href=#634 id=634 data-nosnippet>634</a>                            <span class="kw">if </span><span class="kw-2">*</span>class != BN {
+<a href=#635 id=635 data-nosnippet>635</a>                                <span class="kw">break</span>;
+<a href=#636 id=636 data-nosnippet>636</a>                            }
+<a href=#637 id=637 data-nosnippet>637</a>                            <span class="kw-2">*</span>class = ON;
+<a href=#638 id=638 data-nosnippet>638</a>                        }
+<a href=#639 id=639 data-nosnippet>639</a>                    }
+<a href=#640 id=640 data-nosnippet>640</a>                }
+<a href=#641 id=641 data-nosnippet>641</a>                <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W5&gt;
+<a href=#642 id=642 data-nosnippet>642</a>                </span>ET =&gt; {
+<a href=#643 id=643 data-nosnippet>643</a>                    <span class="kw">match </span>prev_class_before_w5 {
+<a href=#644 id=644 data-nosnippet>644</a>                        EN =&gt; processing_classes[i] = EN,
+<a href=#645 id=645 data-nosnippet>645</a>                        <span class="kw">_ </span>=&gt; {
+<a href=#646 id=646 data-nosnippet>646</a>                            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#647 id=647 data-nosnippet>647</a>                            // If there was a BN run before this, that's now a part of this ET run.
+<a href=#648 id=648 data-nosnippet>648</a>                            </span>et_run_indices.extend(<span class="kw-2">&amp;</span>bn_run_indices);
+<a href=#649 id=649 data-nosnippet>649</a>
+<a href=#650 id=650 data-nosnippet>650</a>                            <span class="comment">// In case this is followed by an EN.
+<a href=#651 id=651 data-nosnippet>651</a>                            </span>et_run_indices.push(i);
+<a href=#652 id=652 data-nosnippet>652</a>                        }
+<a href=#653 id=653 data-nosnippet>653</a>                    }
+<a href=#654 id=654 data-nosnippet>654</a>                }
+<a href=#655 id=655 data-nosnippet>655</a>                <span class="kw">_ </span>=&gt; {}
+<a href=#656 id=656 data-nosnippet>656</a>            }
+<a href=#657 id=657 data-nosnippet>657</a>
+<a href=#658 id=658 data-nosnippet>658</a>            <span class="comment">// Common loop iteration code
+<a href=#659 id=659 data-nosnippet>659</a>            //
+<a href=#660 id=660 data-nosnippet>660</a>
+<a href=#661 id=661 data-nosnippet>661</a>            // &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#662 id=662 data-nosnippet>662</a>            // BN runs would have already continued the loop, clear them before we get to the next one.
+<a href=#663 id=663 data-nosnippet>663</a>            </span>bn_run_indices.clear();
+<a href=#664 id=664 data-nosnippet>664</a>
+<a href=#665 id=665 data-nosnippet>665</a>            <span class="comment">// W6 above only deals with separators, so it doesn't change anything W5 cares about,
+<a href=#666 id=666 data-nosnippet>666</a>            // so we still can update this after running that part of W6.
+<a href=#667 id=667 data-nosnippet>667</a>            </span>prev_class_before_w5 = processing_classes[i];
+<a href=#668 id=668 data-nosnippet>668</a>
+<a href=#669 id=669 data-nosnippet>669</a>            <span class="comment">// &lt;http://www.unicode.org/reports/tr9/#W6&gt; (terminators only)
+<a href=#670 id=670 data-nosnippet>670</a>            // (see above for W6 separator code)
+<a href=#671 id=671 data-nosnippet>671</a>            //
+<a href=#672 id=672 data-nosnippet>672</a>            </span><span class="kw">if </span>prev_class_before_w5 != ET {
+<a href=#673 id=673 data-nosnippet>673</a>                <span class="comment">// W6. If we didn't find an adjacent EN, turn any ETs into ON instead.
+<a href=#674 id=674 data-nosnippet>674</a>                </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
+<a href=#675 id=675 data-nosnippet>675</a>                    processing_classes[<span class="kw-2">*</span>j] = ON;
+<a href=#676 id=676 data-nosnippet>676</a>                }
+<a href=#677 id=677 data-nosnippet>677</a>                et_run_indices.clear();
+<a href=#678 id=678 data-nosnippet>678</a>            }
+<a href=#679 id=679 data-nosnippet>679</a>
+<a href=#680 id=680 data-nosnippet>680</a>            <span class="comment">// We stashed this before W4/5/6 could get their grubby hands on it, and it's not
+<a href=#681 id=681 data-nosnippet>681</a>            // used in the W6 terminator code below so we can update it now.
+<a href=#682 id=682 data-nosnippet>682</a>            </span>prev_class_before_w4 = class_before_w456;
+<a href=#683 id=683 data-nosnippet>683</a>        }
+<a href=#684 id=684 data-nosnippet>684</a>    }
+<a href=#685 id=685 data-nosnippet>685</a>    <span class="comment">// Rerun this check in case we ended with a sequence of BNs (i.e., we'd never
+<a href=#686 id=686 data-nosnippet>686</a>    // hit the end of the for loop above).
+<a href=#687 id=687 data-nosnippet>687</a>    // W6. If we didn't find an adjacent EN, turn any ETs into ON instead.
+<a href=#688 id=688 data-nosnippet>688</a>    </span><span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>et_run_indices {
+<a href=#689 id=689 data-nosnippet>689</a>        processing_classes[<span class="kw-2">*</span>j] = ON;
+<a href=#690 id=690 data-nosnippet>690</a>    }
+<a href=#691 id=691 data-nosnippet>691</a>    et_run_indices.clear();
+<a href=#692 id=692 data-nosnippet>692</a>
+<a href=#693 id=693 data-nosnippet>693</a>    <span class="comment">// W7. If the previous strong char was L, change EN to L.
+<a href=#694 id=694 data-nosnippet>694</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>last_strong_is_l = sequence.sos == L;
+<a href=#695 id=695 data-nosnippet>695</a>    <span class="kw">for </span>run <span class="kw">in </span><span class="kw-2">&amp;</span>sequence.runs {
+<a href=#696 id=696 data-nosnippet>696</a>        <span class="kw">for </span>i <span class="kw">in </span>run.clone() {
+<a href=#697 id=697 data-nosnippet>697</a>            <span class="kw">match </span>processing_classes[i] {
+<a href=#698 id=698 data-nosnippet>698</a>                EN <span class="kw">if </span>last_strong_is_l =&gt; {
+<a href=#699 id=699 data-nosnippet>699</a>                    processing_classes[i] = L;
+<a href=#700 id=700 data-nosnippet>700</a>                }
+<a href=#701 id=701 data-nosnippet>701</a>                L =&gt; {
+<a href=#702 id=702 data-nosnippet>702</a>                    last_strong_is_l = <span class="bool-val">true</span>;
+<a href=#703 id=703 data-nosnippet>703</a>                }
+<a href=#704 id=704 data-nosnippet>704</a>                R | AL =&gt; {
+<a href=#705 id=705 data-nosnippet>705</a>                    last_strong_is_l = <span class="bool-val">false</span>;
+<a href=#706 id=706 data-nosnippet>706</a>                }
+<a href=#707 id=707 data-nosnippet>707</a>                <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#708 id=708 data-nosnippet>708</a>                // Already scanning past BN here.
+<a href=#709 id=709 data-nosnippet>709</a>                </span><span class="kw">_ </span>=&gt; {}
+<a href=#710 id=710 data-nosnippet>710</a>            }
+<a href=#711 id=711 data-nosnippet>711</a>        }
+<a href=#712 id=712 data-nosnippet>712</a>    }
+<a href=#713 id=713 data-nosnippet>713</a>}
+<a href=#714 id=714 data-nosnippet>714</a>
+<a href=#715 id=715 data-nosnippet>715</a><span class="doccomment">/// 3.3.5 Resolving Neutral Types
+<a href=#716 id=716 data-nosnippet>716</a>///
+<a href=#717 id=717 data-nosnippet>717</a>/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Neutral_Types&gt;
+<a href=#718 id=718 data-nosnippet>718</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>implicit_resolve_neutral(
+<a href=#719 id=719 data-nosnippet>719</a>    sequence: <span class="kw-2">&amp;</span>IsolatingRunSequence,
+<a href=#720 id=720 data-nosnippet>720</a>    levels: <span class="kw-2">&amp;</span>[Level],
+<a href=#721 id=721 data-nosnippet>721</a>    original_classes: <span class="kw-2">&amp;</span>[BidiClass],
+<a href=#722 id=722 data-nosnippet>722</a>    processing_classes: <span class="kw-2">&amp;mut </span>[BidiClass],
+<a href=#723 id=723 data-nosnippet>723</a>    brackets: <span class="kw-2">&amp;</span>HashMap&lt;usize, char&gt;,
+<a href=#724 id=724 data-nosnippet>724</a>) {
+<a href=#725 id=725 data-nosnippet>725</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
+<a href=#726 id=726 data-nosnippet>726</a>
+<a href=#727 id=727 data-nosnippet>727</a>    <span class="comment">// e = embedding direction
+<a href=#728 id=728 data-nosnippet>728</a>    </span><span class="kw">let </span>e: BidiClass = levels[sequence.runs[<span class="number">0</span>].start].bidi_class();
+<a href=#729 id=729 data-nosnippet>729</a>    <span class="kw">let </span>not_e = <span class="kw">if </span>e == BidiClass::L { BidiClass::R } <span class="kw">else </span>{ BidiClass::L };
+<a href=#730 id=730 data-nosnippet>730</a>    <span class="comment">// N0. Process bracket pairs.
+<a href=#731 id=731 data-nosnippet>731</a>
+<a href=#732 id=732 data-nosnippet>732</a>    // &gt; Identify the bracket pairs in the current isolating run sequence according to BD16.
+<a href=#733 id=733 data-nosnippet>733</a>    // We use processing_classes, not original_classes, due to BD14/BD15
+<a href=#734 id=734 data-nosnippet>734</a>    </span><span class="kw">let </span>bracket_pairs = identify_bracket_pairs(sequence, processing_classes, brackets);
+<a href=#735 id=735 data-nosnippet>735</a>
+<a href=#736 id=736 data-nosnippet>736</a>    <span class="comment">// &gt; For each bracket-pair element in the list of pairs of text positions
+<a href=#737 id=737 data-nosnippet>737</a>    //
+<a href=#738 id=738 data-nosnippet>738</a>    // Note: Rust ranges are interpreted as [start..end), be careful using `pair` directly
+<a href=#739 id=739 data-nosnippet>739</a>    // for indexing as it will include the opening bracket pair but not the closing one.
+<a href=#740 id=740 data-nosnippet>740</a>    </span><span class="kw">for </span>pair <span class="kw">in </span>bracket_pairs {
+<a href=#741 id=741 data-nosnippet>741</a>        <span class="macro">debug_assert!</span>(
+<a href=#742 id=742 data-nosnippet>742</a>            pair.start &lt; processing_classes.len(),
+<a href=#743 id=743 data-nosnippet>743</a>            <span class="string">"identify_bracket_pairs returned a range that is out of bounds!"
+<a href=#744 id=744 data-nosnippet>744</a>        </span>);
+<a href=#745 id=745 data-nosnippet>745</a>        <span class="macro">debug_assert!</span>(
+<a href=#746 id=746 data-nosnippet>746</a>            pair.end &lt; processing_classes.len(),
+<a href=#747 id=747 data-nosnippet>747</a>            <span class="string">"identify_bracket_pairs returned a range that is out of bounds!"
+<a href=#748 id=748 data-nosnippet>748</a>        </span>);
+<a href=#749 id=749 data-nosnippet>749</a>        <span class="kw">let </span><span class="kw-2">mut </span>found_e = <span class="bool-val">false</span>;
+<a href=#750 id=750 data-nosnippet>750</a>        <span class="kw">let </span><span class="kw-2">mut </span>found_not_e = <span class="bool-val">false</span>;
+<a href=#751 id=751 data-nosnippet>751</a>        <span class="kw">let </span><span class="kw-2">mut </span>class_to_set = <span class="prelude-val">None</span>;
+<a href=#752 id=752 data-nosnippet>752</a>
+<a href=#753 id=753 data-nosnippet>753</a>        <span class="comment">// &gt; Inspect the bidirectional types of the characters enclosed within the bracket pair.
+<a href=#754 id=754 data-nosnippet>754</a>        //
+<a href=#755 id=755 data-nosnippet>755</a>        // `pair` is [start, end) so we will end up processing the opening character but not the closing one.
 <a href=#756 id=756 data-nosnippet>756</a>        //
-<a href=#757 id=757 data-nosnippet>757</a>        // `pair` is [start, end) so we will end up processing the opening character but not the closing one.
-<a href=#758 id=758 data-nosnippet>758</a>        //
-<a href=#759 id=759 data-nosnippet>759</a>        </span><span class="kw">for </span>enclosed_i <span class="kw">in </span>sequence.iter_forwards_from(pair.start + <span class="number">1</span>, pair.start_run) {
-<a href=#760 id=760 data-nosnippet>760</a>            <span class="kw">if </span>enclosed_i &gt;= pair.end {
-<a href=#761 id=761 data-nosnippet>761</a>                <span class="macro">debug_assert!</span>(enclosed_i == pair.end, <span class="string">"If we skipped past this, the iterator is broken"</span>);
-<a href=#762 id=762 data-nosnippet>762</a>                <span class="kw">break</span>;
-<a href=#763 id=763 data-nosnippet>763</a>            }
-<a href=#764 id=764 data-nosnippet>764</a>            <span class="kw">let </span>class = processing_classes[enclosed_i];
-<a href=#765 id=765 data-nosnippet>765</a>            <span class="kw">if </span>class == e {
-<a href=#766 id=766 data-nosnippet>766</a>                found_e = <span class="bool-val">true</span>;
-<a href=#767 id=767 data-nosnippet>767</a>            } <span class="kw">else if </span>class == not_e {
-<a href=#768 id=768 data-nosnippet>768</a>                found_not_e = <span class="bool-val">true</span>;
-<a href=#769 id=769 data-nosnippet>769</a>            } <span class="kw">else if </span>class == BidiClass::EN || class == BidiClass::AN {
-<a href=#770 id=770 data-nosnippet>770</a>                <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.
-<a href=#771 id=771 data-nosnippet>771</a>                </span><span class="kw">if </span>e == BidiClass::L {
-<a href=#772 id=772 data-nosnippet>772</a>                    found_not_e = <span class="bool-val">true</span>;
-<a href=#773 id=773 data-nosnippet>773</a>                } <span class="kw">else </span>{
-<a href=#774 id=774 data-nosnippet>774</a>                    found_e = <span class="bool-val">true</span>;
-<a href=#775 id=775 data-nosnippet>775</a>                }
-<a href=#776 id=776 data-nosnippet>776</a>            }
-<a href=#777 id=777 data-nosnippet>777</a>
-<a href=#778 id=778 data-nosnippet>778</a>            <span class="comment">// If we have found a character with the class of the embedding direction
-<a href=#779 id=779 data-nosnippet>779</a>            // we can bail early.
-<a href=#780 id=780 data-nosnippet>780</a>            </span><span class="kw">if </span>found_e {
-<a href=#781 id=781 data-nosnippet>781</a>                <span class="kw">break</span>;
-<a href=#782 id=782 data-nosnippet>782</a>            }
-<a href=#783 id=783 data-nosnippet>783</a>        }
-<a href=#784 id=784 data-nosnippet>784</a>        <span class="comment">// &gt; If any strong type (either L or R) matching the embedding direction is found
-<a href=#785 id=785 data-nosnippet>785</a>        </span><span class="kw">if </span>found_e {
-<a href=#786 id=786 data-nosnippet>786</a>            <span class="comment">// &gt; .. set the type for both brackets in the pair to match the embedding direction
-<a href=#787 id=787 data-nosnippet>787</a>            </span>class_to_set = <span class="prelude-val">Some</span>(e);
-<a href=#788 id=788 data-nosnippet>788</a>        <span class="comment">// &gt; Otherwise, if there is a strong type it must be opposite the embedding direction
-<a href=#789 id=789 data-nosnippet>789</a>        </span>} <span class="kw">else if </span>found_not_e {
-<a href=#790 id=790 data-nosnippet>790</a>            <span class="comment">// &gt; Therefore, test for an established context with a preceding strong type by
-<a href=#791 id=791 data-nosnippet>791</a>            // &gt; checking backwards before the opening paired bracket
-<a href=#792 id=792 data-nosnippet>792</a>            // &gt; until the first strong type (L, R, or sos) is found.
-<a href=#793 id=793 data-nosnippet>793</a>            // (see note above about processing_classes and character boundaries)
-<a href=#794 id=794 data-nosnippet>794</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>previous_strong = sequence
-<a href=#795 id=795 data-nosnippet>795</a>                .iter_backwards_from(pair.start, pair.start_run)
-<a href=#796 id=796 data-nosnippet>796</a>                .map(|i| processing_classes[i])
-<a href=#797 id=797 data-nosnippet>797</a>                .find(|class| <span class="kw-2">*</span>class == BidiClass::L || <span class="kw-2">*</span>class == BidiClass::R || <span class="kw-2">*</span>class == BidiClass::EN || <span class="kw-2">*</span>class == BidiClass::AN)
-<a href=#798 id=798 data-nosnippet>798</a>                .unwrap_or(sequence.sos);
-<a href=#799 id=799 data-nosnippet>799</a>
-<a href=#800 id=800 data-nosnippet>800</a>            <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.
-<a href=#801 id=801 data-nosnippet>801</a>            </span><span class="kw">if </span>previous_strong == BidiClass::EN || previous_strong == BidiClass::AN {
-<a href=#802 id=802 data-nosnippet>802</a>                previous_strong = BidiClass::R;
-<a href=#803 id=803 data-nosnippet>803</a>            }
-<a href=#804 id=804 data-nosnippet>804</a>
-<a href=#805 id=805 data-nosnippet>805</a>            <span class="comment">// &gt; If the preceding strong type is also opposite the embedding direction,
-<a href=#806 id=806 data-nosnippet>806</a>            // &gt; context is established,
-<a href=#807 id=807 data-nosnippet>807</a>            // &gt; so set the type for both brackets in the pair to that direction.
-<a href=#808 id=808 data-nosnippet>808</a>            // AND
-<a href=#809 id=809 data-nosnippet>809</a>            // &gt; Otherwise set the type for both brackets in the pair to the embedding direction.
-<a href=#810 id=810 data-nosnippet>810</a>            // &gt; Either way it gets set to previous_strong
-<a href=#811 id=811 data-nosnippet>811</a>            //
-<a href=#812 id=812 data-nosnippet>812</a>            // Both branches amount to setting the type to the strong type.
-<a href=#813 id=813 data-nosnippet>813</a>            </span>class_to_set = <span class="prelude-val">Some</span>(previous_strong);
-<a href=#814 id=814 data-nosnippet>814</a>        }
-<a href=#815 id=815 data-nosnippet>815</a>
-<a href=#816 id=816 data-nosnippet>816</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(class_to_set) = class_to_set {
-<a href=#817 id=817 data-nosnippet>817</a>            <span class="comment">// Update all processing classes corresponding to the start and end elements, as requested.
-<a href=#818 id=818 data-nosnippet>818</a>            // We should include all bytes of the character, not the first one.
-<a href=#819 id=819 data-nosnippet>819</a>            </span><span class="kw">for </span>class <span class="kw">in </span><span class="kw-2">&amp;mut </span>processing_classes[pair.start..pair.start + <span class="number">1</span>] {
-<a href=#820 id=820 data-nosnippet>820</a>                <span class="kw-2">*</span>class = class_to_set;
-<a href=#821 id=821 data-nosnippet>821</a>            }
-<a href=#822 id=822 data-nosnippet>822</a>            <span class="kw">for </span>class <span class="kw">in </span><span class="kw-2">&amp;mut </span>processing_classes[pair.end..pair.end + <span class="number">1</span>] {
-<a href=#823 id=823 data-nosnippet>823</a>                <span class="kw-2">*</span>class = class_to_set;
-<a href=#824 id=824 data-nosnippet>824</a>            }
-<a href=#825 id=825 data-nosnippet>825</a>            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#826 id=826 data-nosnippet>826</a>            </span><span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_backwards_from(pair.start, pair.start_run) {
-<a href=#827 id=827 data-nosnippet>827</a>                <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
-<a href=#828 id=828 data-nosnippet>828</a>                <span class="kw">if </span><span class="kw-2">*</span><span class="macro">class !</span>= BN {
-<a href=#829 id=829 data-nosnippet>829</a>                    <span class="kw">break</span>;
-<a href=#830 id=830 data-nosnippet>830</a>                }
-<a href=#831 id=831 data-nosnippet>831</a>                <span class="kw-2">*</span>class = class_to_set;
-<a href=#832 id=832 data-nosnippet>832</a>            }
-<a href=#833 id=833 data-nosnippet>833</a>            <span class="comment">// &gt; Any number of characters that had original bidirectional character type NSM prior to the application of
-<a href=#834 id=834 data-nosnippet>834</a>            // &gt; W1 that immediately follow a paired bracket which changed to L or R under N0 should change to match the type of their preceding bracket.
-<a href=#835 id=835 data-nosnippet>835</a>
-<a href=#836 id=836 data-nosnippet>836</a>            // This rule deals with sequences of NSMs, so we can just update them all at once, we don't need to worry
-<a href=#837 id=837 data-nosnippet>837</a>            // about character boundaries. We do need to be careful to skip the full set of bytes for the parentheses characters.
-<a href=#838 id=838 data-nosnippet>838</a>            </span><span class="kw">let </span>nsm_start = pair.start + <span class="number">1</span>;
-<a href=#839 id=839 data-nosnippet>839</a>            <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(nsm_start, pair.start_run) {
-<a href=#840 id=840 data-nosnippet>840</a>                <span class="kw">let </span>class = original_classes[idx];
-<a href=#841 id=841 data-nosnippet>841</a>                <span class="kw">if </span>class == BidiClass::NSM || processing_classes[idx] == BN {
-<a href=#842 id=842 data-nosnippet>842</a>                    processing_classes[idx] = class_to_set;
-<a href=#843 id=843 data-nosnippet>843</a>                } <span class="kw">else </span>{
-<a href=#844 id=844 data-nosnippet>844</a>                    <span class="kw">break</span>;
-<a href=#845 id=845 data-nosnippet>845</a>                }
-<a href=#846 id=846 data-nosnippet>846</a>            }
-<a href=#847 id=847 data-nosnippet>847</a>            <span class="kw">let </span>nsm_end = pair.end + <span class="number">1</span>;
-<a href=#848 id=848 data-nosnippet>848</a>            <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(nsm_end, pair.end_run) {
-<a href=#849 id=849 data-nosnippet>849</a>                <span class="kw">let </span>class = original_classes[idx];
-<a href=#850 id=850 data-nosnippet>850</a>                <span class="kw">if </span>class == BidiClass::NSM || processing_classes[idx] == BN {
-<a href=#851 id=851 data-nosnippet>851</a>                    processing_classes[idx] = class_to_set;
-<a href=#852 id=852 data-nosnippet>852</a>                } <span class="kw">else </span>{
-<a href=#853 id=853 data-nosnippet>853</a>                    <span class="kw">break</span>;
-<a href=#854 id=854 data-nosnippet>854</a>                }
-<a href=#855 id=855 data-nosnippet>855</a>            }
-<a href=#856 id=856 data-nosnippet>856</a>        }
-<a href=#857 id=857 data-nosnippet>857</a>        <span class="comment">// &gt; Otherwise, there are no strong types within the bracket pair
-<a href=#858 id=858 data-nosnippet>858</a>        // &gt; Therefore, do not set the type for that bracket pair
-<a href=#859 id=859 data-nosnippet>859</a>    </span>}
-<a href=#860 id=860 data-nosnippet>860</a>
-<a href=#861 id=861 data-nosnippet>861</a>    <span class="comment">// N1 and N2.
-<a href=#862 id=862 data-nosnippet>862</a>    // Indices of every byte in this isolating run sequence
-<a href=#863 id=863 data-nosnippet>863</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>indices = sequence.runs.iter().flat_map(Clone::clone);
-<a href=#864 id=864 data-nosnippet>864</a>    <span class="kw">let </span><span class="kw-2">mut </span>prev_class = sequence.sos;
-<a href=#865 id=865 data-nosnippet>865</a>    <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>i) = indices.next() {
-<a href=#866 id=866 data-nosnippet>866</a>        <span class="comment">// Process sequences of NI characters.
-<a href=#867 id=867 data-nosnippet>867</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>ni_run = Vec::new();
-<a href=#868 id=868 data-nosnippet>868</a>        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#869 id=869 data-nosnippet>869</a>        </span><span class="kw">if </span>is_NI(processing_classes[i]) || processing_classes[i] == BN {
-<a href=#870 id=870 data-nosnippet>870</a>            <span class="comment">// Consume a run of consecutive NI characters.
-<a href=#871 id=871 data-nosnippet>871</a>            </span>ni_run.push(i);
-<a href=#872 id=872 data-nosnippet>872</a>            <span class="kw">let </span><span class="kw-2">mut </span>next_class;
-<a href=#873 id=873 data-nosnippet>873</a>            <span class="kw">loop </span>{
-<a href=#874 id=874 data-nosnippet>874</a>                <span class="kw">match </span>indices.next() {
-<a href=#875 id=875 data-nosnippet>875</a>                    <span class="prelude-val">Some</span>(j) =&gt; {
-<a href=#876 id=876 data-nosnippet>876</a>                        i = j;
-<a href=#877 id=877 data-nosnippet>877</a>                        next_class = processing_classes[j];
-<a href=#878 id=878 data-nosnippet>878</a>                        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
-<a href=#879 id=879 data-nosnippet>879</a>                        </span><span class="kw">if </span>is_NI(next_class) || next_class == BN {
-<a href=#880 id=880 data-nosnippet>880</a>                            ni_run.push(i);
-<a href=#881 id=881 data-nosnippet>881</a>                        } <span class="kw">else </span>{
-<a href=#882 id=882 data-nosnippet>882</a>                            <span class="kw">break</span>;
-<a href=#883 id=883 data-nosnippet>883</a>                        }
-<a href=#884 id=884 data-nosnippet>884</a>                    }
-<a href=#885 id=885 data-nosnippet>885</a>                    <span class="prelude-val">None </span>=&gt; {
-<a href=#886 id=886 data-nosnippet>886</a>                        next_class = sequence.eos;
-<a href=#887 id=887 data-nosnippet>887</a>                        <span class="kw">break</span>;
-<a href=#888 id=888 data-nosnippet>888</a>                    }
-<a href=#889 id=889 data-nosnippet>889</a>                };
-<a href=#890 id=890 data-nosnippet>890</a>            }
-<a href=#891 id=891 data-nosnippet>891</a>            <span class="comment">// N1-N2.
-<a href=#892 id=892 data-nosnippet>892</a>            //
-<a href=#893 id=893 data-nosnippet>893</a>            // &lt;http://www.unicode.org/reports/tr9/#N1&gt;
-<a href=#894 id=894 data-nosnippet>894</a>            // &lt;http://www.unicode.org/reports/tr9/#N2&gt;
-<a href=#895 id=895 data-nosnippet>895</a>            </span><span class="kw">let </span>new_class = <span class="kw">match </span>(prev_class, next_class) {
-<a href=#896 id=896 data-nosnippet>896</a>                (L, L) =&gt; L,
-<a href=#897 id=897 data-nosnippet>897</a>                (R, R) | (R, AN) | (R, EN) | (AN, R) | (AN, AN) | (AN, EN) | (EN, R) | (EN, AN) | (EN, EN) =&gt; R,
-<a href=#898 id=898 data-nosnippet>898</a>                (<span class="kw">_</span>, <span class="kw">_</span>) =&gt; e,
-<a href=#899 id=899 data-nosnippet>899</a>            };
-<a href=#900 id=900 data-nosnippet>900</a>            <span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>ni_run {
-<a href=#901 id=901 data-nosnippet>901</a>                processing_classes[<span class="kw-2">*</span>j] = new_class;
-<a href=#902 id=902 data-nosnippet>902</a>            }
-<a href=#903 id=903 data-nosnippet>903</a>            ni_run.clear();
-<a href=#904 id=904 data-nosnippet>904</a>        }
-<a href=#905 id=905 data-nosnippet>905</a>        prev_class = processing_classes[i];
-<a href=#906 id=906 data-nosnippet>906</a>    }
-<a href=#907 id=907 data-nosnippet>907</a>}
-<a href=#908 id=908 data-nosnippet>908</a>
-<a href=#909 id=909 data-nosnippet>909</a><span class="kw">struct </span>BracketPair {
-<a href=#910 id=910 data-nosnippet>910</a>    <span class="doccomment">/// The text-relative index of the opening bracket.
-<a href=#911 id=911 data-nosnippet>911</a>    </span>start: usize,
-<a href=#912 id=912 data-nosnippet>912</a>    <span class="doccomment">/// The text-relative index of the closing bracket.
-<a href=#913 id=913 data-nosnippet>913</a>    </span>end: usize,
-<a href=#914 id=914 data-nosnippet>914</a>    <span class="doccomment">/// The index of the run (in the run sequence) that the opening bracket is in.
-<a href=#915 id=915 data-nosnippet>915</a>    </span>start_run: usize,
-<a href=#916 id=916 data-nosnippet>916</a>    <span class="doccomment">/// The index of the run (in the run sequence) that the closing bracket is in.
-<a href=#917 id=917 data-nosnippet>917</a>    </span>end_run: usize,
-<a href=#918 id=918 data-nosnippet>918</a>}
-<a href=#919 id=919 data-nosnippet>919</a><span class="doccomment">/// 3.1.3 Identifying Bracket Pairs
-<a href=#920 id=920 data-nosnippet>920</a>///
-<a href=#921 id=921 data-nosnippet>921</a>/// Returns all paired brackets in the source, as indices into the
-<a href=#922 id=922 data-nosnippet>922</a>/// text source.
-<a href=#923 id=923 data-nosnippet>923</a>///
-<a href=#924 id=924 data-nosnippet>924</a>/// &lt;https://www.unicode.org/reports/tr9/#BD16&gt;
-<a href=#925 id=925 data-nosnippet>925</a></span><span class="kw">fn </span>identify_bracket_pairs(
-<a href=#926 id=926 data-nosnippet>926</a>    run_sequence: <span class="kw-2">&amp;</span>IsolatingRunSequence,
-<a href=#927 id=927 data-nosnippet>927</a>    original_classes: <span class="kw-2">&amp;</span>[BidiClass],
-<a href=#928 id=928 data-nosnippet>928</a>    brackets: <span class="kw-2">&amp;</span>HashMap&lt;usize, char&gt;,
-<a href=#929 id=929 data-nosnippet>929</a>) -&gt; Vec&lt;BracketPair&gt; {
-<a href=#930 id=930 data-nosnippet>930</a>    <span class="kw">let </span>data_source = <span class="kw-2">&amp;</span>unicode_bidi::HardcodedBidiData;
-<a href=#931 id=931 data-nosnippet>931</a>
-<a href=#932 id=932 data-nosnippet>932</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
-<a href=#933 id=933 data-nosnippet>933</a>    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
-<a href=#934 id=934 data-nosnippet>934</a>
-<a href=#935 id=935 data-nosnippet>935</a>    <span class="kw">for </span>(run_index, level_run) <span class="kw">in </span>run_sequence.runs.iter().enumerate() {
-<a href=#936 id=936 data-nosnippet>936</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..level_run.len() {
-<a href=#937 id=937 data-nosnippet>937</a>            <span class="kw">let </span>actual_index = level_run.start + i;
-<a href=#938 id=938 data-nosnippet>938</a>            <span class="comment">// All bracket characters are ON.
-<a href=#939 id=939 data-nosnippet>939</a>            // From BidiBrackets.txt:
-<a href=#940 id=940 data-nosnippet>940</a>            // &gt; The Unicode property value stability policy guarantees that characters
-<a href=#941 id=941 data-nosnippet>941</a>            // &gt; which have bpt=o or bpt=c also have bc=ON and Bidi_M=Y
-<a href=#942 id=942 data-nosnippet>942</a>            </span><span class="kw">if </span>original_classes[actual_index] != BidiClass::ON {
-<a href=#943 id=943 data-nosnippet>943</a>                <span class="kw">continue</span>;
-<a href=#944 id=944 data-nosnippet>944</a>            }
-<a href=#945 id=945 data-nosnippet>945</a>
-<a href=#946 id=946 data-nosnippet>946</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(matched) = brackets
-<a href=#947 id=947 data-nosnippet>947</a>                .get(<span class="kw-2">&amp;</span>actual_index)
-<a href=#948 id=948 data-nosnippet>948</a>                .and_then(|c| data_source.bidi_matched_opening_bracket(<span class="kw-2">*</span>c))
-<a href=#949 id=949 data-nosnippet>949</a>            {
-<a href=#950 id=950 data-nosnippet>950</a>                <span class="kw">if </span>matched.is_open {
-<a href=#951 id=951 data-nosnippet>951</a>                    <span class="comment">// &gt; If an opening paired bracket is found ...
-<a href=#952 id=952 data-nosnippet>952</a>
-<a href=#953 id=953 data-nosnippet>953</a>                    // &gt; ... and there is no room in the stack,
-<a href=#954 id=954 data-nosnippet>954</a>                    // &gt; stop processing BD16 for the remainder of the isolating run sequence.
-<a href=#955 id=955 data-nosnippet>955</a>                    </span><span class="kw">if </span>stack.len() &gt;= <span class="number">63 </span>{
-<a href=#956 id=956 data-nosnippet>956</a>                        <span class="kw">break</span>;
-<a href=#957 id=957 data-nosnippet>957</a>                    }
-<a href=#958 id=958 data-nosnippet>958</a>                    <span class="comment">// &gt; ... push its Bidi_Paired_Bracket property value and its text position onto the stack
-<a href=#959 id=959 data-nosnippet>959</a>                    </span>stack.push((matched.opening, actual_index, run_index))
-<a href=#960 id=960 data-nosnippet>960</a>                } <span class="kw">else </span>{
-<a href=#961 id=961 data-nosnippet>961</a>                    <span class="comment">// &gt; If a closing paired bracket is found, do the following
-<a href=#962 id=962 data-nosnippet>962</a>
-<a href=#963 id=963 data-nosnippet>963</a>                    // &gt; Declare a variable that holds a reference to the current stack element
-<a href=#964 id=964 data-nosnippet>964</a>                    // &gt; and initialize it with the top element of the stack.
-<a href=#965 id=965 data-nosnippet>965</a>                    // AND
-<a href=#966 id=966 data-nosnippet>966</a>                    // &gt; Else, if the current stack element is not at the bottom of the stack
-<a href=#967 id=967 data-nosnippet>967</a>                    </span><span class="kw">for </span>(stack_index, element) <span class="kw">in </span>stack.iter().enumerate().rev() {
-<a href=#968 id=968 data-nosnippet>968</a>                        <span class="comment">// &gt; Compare the closing paired bracket being inspected or its canonical
-<a href=#969 id=969 data-nosnippet>969</a>                        // &gt; equivalent to the bracket in the current stack element.
-<a href=#970 id=970 data-nosnippet>970</a>                        </span><span class="kw">if </span>element.<span class="number">0 </span>== matched.opening {
-<a href=#971 id=971 data-nosnippet>971</a>                            <span class="comment">// &gt; If the values match, meaning the two characters form a bracket pair, then
-<a href=#972 id=972 data-nosnippet>972</a>
-<a href=#973 id=973 data-nosnippet>973</a>                            // &gt; Append the text position in the current stack element together with the
-<a href=#974 id=974 data-nosnippet>974</a>                            // &gt; text position of the closing paired bracket to the list.
-<a href=#975 id=975 data-nosnippet>975</a>                            </span><span class="kw">let </span>pair = BracketPair {
-<a href=#976 id=976 data-nosnippet>976</a>                                start: element.<span class="number">1</span>,
-<a href=#977 id=977 data-nosnippet>977</a>                                end: actual_index,
-<a href=#978 id=978 data-nosnippet>978</a>                                start_run: element.<span class="number">2</span>,
-<a href=#979 id=979 data-nosnippet>979</a>                                end_run: run_index,
-<a href=#980 id=980 data-nosnippet>980</a>                            };
-<a href=#981 id=981 data-nosnippet>981</a>                            ret.push(pair);
-<a href=#982 id=982 data-nosnippet>982</a>
-<a href=#983 id=983 data-nosnippet>983</a>                            <span class="comment">// &gt; Pop the stack through the current stack element inclusively.
-<a href=#984 id=984 data-nosnippet>984</a>                            </span>stack.truncate(stack_index);
-<a href=#985 id=985 data-nosnippet>985</a>                            <span class="kw">break</span>;
-<a href=#986 id=986 data-nosnippet>986</a>                        }
-<a href=#987 id=987 data-nosnippet>987</a>                    }
-<a href=#988 id=988 data-nosnippet>988</a>                }
-<a href=#989 id=989 data-nosnippet>989</a>            }
-<a href=#990 id=990 data-nosnippet>990</a>        }
-<a href=#991 id=991 data-nosnippet>991</a>    }
-<a href=#992 id=992 data-nosnippet>992</a>    <span class="comment">// &gt; Sort the list of pairs of text positions in ascending order based on
-<a href=#993 id=993 data-nosnippet>993</a>    // &gt; the text position of the opening paired bracket.
-<a href=#994 id=994 data-nosnippet>994</a>    </span>ret.sort_by_key(|r| r.start);
-<a href=#995 id=995 data-nosnippet>995</a>    ret
-<a href=#996 id=996 data-nosnippet>996</a>}
-<a href=#997 id=997 data-nosnippet>997</a>
-<a href=#998 id=998 data-nosnippet>998</a><span class="doccomment">/// Neutral or Isolate formatting character (B, S, WS, ON, FSI, LRI, RLI, PDI)
-<a href=#999 id=999 data-nosnippet>999</a>///
-<a href=#1000 id=1000 data-nosnippet>1000</a>/// &lt;http://www.unicode.org/reports/tr9/#NI&gt;
-<a href=#1001 id=1001 data-nosnippet>1001</a></span><span class="attr">#[expect(non_snake_case)]
-<a href=#1002 id=1002 data-nosnippet>1002</a></span><span class="kw">fn </span>is_NI(class: BidiClass) -&gt; bool {
-<a href=#1003 id=1003 data-nosnippet>1003</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
-<a href=#1004 id=1004 data-nosnippet>1004</a>    <span class="macro">matches!</span>(class, B | S | WS | ON | FSI | LRI | RLI | PDI)
-<a href=#1005 id=1005 data-nosnippet>1005</a>}
-<a href=#1006 id=1006 data-nosnippet>1006</a>
-<a href=#1007 id=1007 data-nosnippet>1007</a><span class="doccomment">/// 3.3.6 Resolving Implicit Levels
+<a href=#757 id=757 data-nosnippet>757</a>        </span><span class="kw">for </span>enclosed_i <span class="kw">in </span>sequence.iter_forwards_from(pair.start + <span class="number">1</span>, pair.start_run) {
+<a href=#758 id=758 data-nosnippet>758</a>            <span class="kw">if </span>enclosed_i &gt;= pair.end {
+<a href=#759 id=759 data-nosnippet>759</a>                <span class="macro">debug_assert!</span>(enclosed_i == pair.end, <span class="string">"If we skipped past this, the iterator is broken"</span>);
+<a href=#760 id=760 data-nosnippet>760</a>                <span class="kw">break</span>;
+<a href=#761 id=761 data-nosnippet>761</a>            }
+<a href=#762 id=762 data-nosnippet>762</a>            <span class="kw">let </span>class = processing_classes[enclosed_i];
+<a href=#763 id=763 data-nosnippet>763</a>            <span class="kw">if </span>class == e {
+<a href=#764 id=764 data-nosnippet>764</a>                found_e = <span class="bool-val">true</span>;
+<a href=#765 id=765 data-nosnippet>765</a>            } <span class="kw">else if </span>class == not_e {
+<a href=#766 id=766 data-nosnippet>766</a>                found_not_e = <span class="bool-val">true</span>;
+<a href=#767 id=767 data-nosnippet>767</a>            } <span class="kw">else if </span>class == BidiClass::EN || class == BidiClass::AN {
+<a href=#768 id=768 data-nosnippet>768</a>                <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.
+<a href=#769 id=769 data-nosnippet>769</a>                </span><span class="kw">if </span>e == BidiClass::L {
+<a href=#770 id=770 data-nosnippet>770</a>                    found_not_e = <span class="bool-val">true</span>;
+<a href=#771 id=771 data-nosnippet>771</a>                } <span class="kw">else </span>{
+<a href=#772 id=772 data-nosnippet>772</a>                    found_e = <span class="bool-val">true</span>;
+<a href=#773 id=773 data-nosnippet>773</a>                }
+<a href=#774 id=774 data-nosnippet>774</a>            }
+<a href=#775 id=775 data-nosnippet>775</a>
+<a href=#776 id=776 data-nosnippet>776</a>            <span class="comment">// If we have found a character with the class of the embedding direction
+<a href=#777 id=777 data-nosnippet>777</a>            // we can bail early.
+<a href=#778 id=778 data-nosnippet>778</a>            </span><span class="kw">if </span>found_e {
+<a href=#779 id=779 data-nosnippet>779</a>                <span class="kw">break</span>;
+<a href=#780 id=780 data-nosnippet>780</a>            }
+<a href=#781 id=781 data-nosnippet>781</a>        }
+<a href=#782 id=782 data-nosnippet>782</a>        <span class="comment">// &gt; If any strong type (either L or R) matching the embedding direction is found
+<a href=#783 id=783 data-nosnippet>783</a>        </span><span class="kw">if </span>found_e {
+<a href=#784 id=784 data-nosnippet>784</a>            <span class="comment">// &gt; .. set the type for both brackets in the pair to match the embedding direction
+<a href=#785 id=785 data-nosnippet>785</a>            </span>class_to_set = <span class="prelude-val">Some</span>(e);
+<a href=#786 id=786 data-nosnippet>786</a>        <span class="comment">// &gt; Otherwise, if there is a strong type it must be opposite the embedding direction
+<a href=#787 id=787 data-nosnippet>787</a>        </span>} <span class="kw">else if </span>found_not_e {
+<a href=#788 id=788 data-nosnippet>788</a>            <span class="comment">// &gt; Therefore, test for an established context with a preceding strong type by
+<a href=#789 id=789 data-nosnippet>789</a>            // &gt; checking backwards before the opening paired bracket
+<a href=#790 id=790 data-nosnippet>790</a>            // &gt; until the first strong type (L, R, or sos) is found.
+<a href=#791 id=791 data-nosnippet>791</a>            // (see note above about processing_classes and character boundaries)
+<a href=#792 id=792 data-nosnippet>792</a>            </span><span class="kw">let </span><span class="kw-2">mut </span>previous_strong = sequence
+<a href=#793 id=793 data-nosnippet>793</a>                .iter_backwards_from(pair.start, pair.start_run)
+<a href=#794 id=794 data-nosnippet>794</a>                .map(|i| processing_classes[i])
+<a href=#795 id=795 data-nosnippet>795</a>                .find(|class| <span class="kw-2">*</span>class == BidiClass::L || <span class="kw-2">*</span>class == BidiClass::R || <span class="kw-2">*</span>class == BidiClass::EN || <span class="kw-2">*</span>class == BidiClass::AN)
+<a href=#796 id=796 data-nosnippet>796</a>                .unwrap_or(sequence.sos);
+<a href=#797 id=797 data-nosnippet>797</a>
+<a href=#798 id=798 data-nosnippet>798</a>            <span class="comment">// &gt; Within this scope, bidirectional types EN and AN are treated as R.
+<a href=#799 id=799 data-nosnippet>799</a>            </span><span class="kw">if </span>previous_strong == BidiClass::EN || previous_strong == BidiClass::AN {
+<a href=#800 id=800 data-nosnippet>800</a>                previous_strong = BidiClass::R;
+<a href=#801 id=801 data-nosnippet>801</a>            }
+<a href=#802 id=802 data-nosnippet>802</a>
+<a href=#803 id=803 data-nosnippet>803</a>            <span class="comment">// &gt; If the preceding strong type is also opposite the embedding direction,
+<a href=#804 id=804 data-nosnippet>804</a>            // &gt; context is established,
+<a href=#805 id=805 data-nosnippet>805</a>            // &gt; so set the type for both brackets in the pair to that direction.
+<a href=#806 id=806 data-nosnippet>806</a>            // AND
+<a href=#807 id=807 data-nosnippet>807</a>            // &gt; Otherwise set the type for both brackets in the pair to the embedding direction.
+<a href=#808 id=808 data-nosnippet>808</a>            // &gt; Either way it gets set to previous_strong
+<a href=#809 id=809 data-nosnippet>809</a>            //
+<a href=#810 id=810 data-nosnippet>810</a>            // Both branches amount to setting the type to the strong type.
+<a href=#811 id=811 data-nosnippet>811</a>            </span>class_to_set = <span class="prelude-val">Some</span>(previous_strong);
+<a href=#812 id=812 data-nosnippet>812</a>        }
+<a href=#813 id=813 data-nosnippet>813</a>
+<a href=#814 id=814 data-nosnippet>814</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(class_to_set) = class_to_set {
+<a href=#815 id=815 data-nosnippet>815</a>            <span class="comment">// Update all processing classes corresponding to the start and end elements, as requested.
+<a href=#816 id=816 data-nosnippet>816</a>            // We should include all bytes of the character, not the first one.
+<a href=#817 id=817 data-nosnippet>817</a>            </span><span class="kw">for </span>class <span class="kw">in </span><span class="kw-2">&amp;mut </span>processing_classes[pair.start..pair.start + <span class="number">1</span>] {
+<a href=#818 id=818 data-nosnippet>818</a>                <span class="kw-2">*</span>class = class_to_set;
+<a href=#819 id=819 data-nosnippet>819</a>            }
+<a href=#820 id=820 data-nosnippet>820</a>            <span class="kw">for </span>class <span class="kw">in </span><span class="kw-2">&amp;mut </span>processing_classes[pair.end..pair.end + <span class="number">1</span>] {
+<a href=#821 id=821 data-nosnippet>821</a>                <span class="kw-2">*</span>class = class_to_set;
+<a href=#822 id=822 data-nosnippet>822</a>            }
+<a href=#823 id=823 data-nosnippet>823</a>            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#824 id=824 data-nosnippet>824</a>            </span><span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_backwards_from(pair.start, pair.start_run) {
+<a href=#825 id=825 data-nosnippet>825</a>                <span class="kw">let </span>class = <span class="kw-2">&amp;mut </span>processing_classes[idx];
+<a href=#826 id=826 data-nosnippet>826</a>                <span class="kw">if </span><span class="kw-2">*</span>class != BN {
+<a href=#827 id=827 data-nosnippet>827</a>                    <span class="kw">break</span>;
+<a href=#828 id=828 data-nosnippet>828</a>                }
+<a href=#829 id=829 data-nosnippet>829</a>                <span class="kw-2">*</span>class = class_to_set;
+<a href=#830 id=830 data-nosnippet>830</a>            }
+<a href=#831 id=831 data-nosnippet>831</a>            <span class="comment">// &gt; Any number of characters that had original bidirectional character type NSM prior to the application of
+<a href=#832 id=832 data-nosnippet>832</a>            // &gt; W1 that immediately follow a paired bracket which changed to L or R under N0 should change to match the type of their preceding bracket.
+<a href=#833 id=833 data-nosnippet>833</a>
+<a href=#834 id=834 data-nosnippet>834</a>            // This rule deals with sequences of NSMs, so we can just update them all at once, we don't need to worry
+<a href=#835 id=835 data-nosnippet>835</a>            // about character boundaries. We do need to be careful to skip the full set of bytes for the parentheses characters.
+<a href=#836 id=836 data-nosnippet>836</a>            </span><span class="kw">let </span>nsm_start = pair.start + <span class="number">1</span>;
+<a href=#837 id=837 data-nosnippet>837</a>            <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(nsm_start, pair.start_run) {
+<a href=#838 id=838 data-nosnippet>838</a>                <span class="kw">let </span>class = original_classes[idx];
+<a href=#839 id=839 data-nosnippet>839</a>                <span class="kw">if </span>class == BidiClass::NSM || processing_classes[idx] == BN {
+<a href=#840 id=840 data-nosnippet>840</a>                    processing_classes[idx] = class_to_set;
+<a href=#841 id=841 data-nosnippet>841</a>                } <span class="kw">else </span>{
+<a href=#842 id=842 data-nosnippet>842</a>                    <span class="kw">break</span>;
+<a href=#843 id=843 data-nosnippet>843</a>                }
+<a href=#844 id=844 data-nosnippet>844</a>            }
+<a href=#845 id=845 data-nosnippet>845</a>            <span class="kw">let </span>nsm_end = pair.end + <span class="number">1</span>;
+<a href=#846 id=846 data-nosnippet>846</a>            <span class="kw">for </span>idx <span class="kw">in </span>sequence.iter_forwards_from(nsm_end, pair.end_run) {
+<a href=#847 id=847 data-nosnippet>847</a>                <span class="kw">let </span>class = original_classes[idx];
+<a href=#848 id=848 data-nosnippet>848</a>                <span class="kw">if </span>class == BidiClass::NSM || processing_classes[idx] == BN {
+<a href=#849 id=849 data-nosnippet>849</a>                    processing_classes[idx] = class_to_set;
+<a href=#850 id=850 data-nosnippet>850</a>                } <span class="kw">else </span>{
+<a href=#851 id=851 data-nosnippet>851</a>                    <span class="kw">break</span>;
+<a href=#852 id=852 data-nosnippet>852</a>                }
+<a href=#853 id=853 data-nosnippet>853</a>            }
+<a href=#854 id=854 data-nosnippet>854</a>        }
+<a href=#855 id=855 data-nosnippet>855</a>        <span class="comment">// &gt; Otherwise, there are no strong types within the bracket pair
+<a href=#856 id=856 data-nosnippet>856</a>        // &gt; Therefore, do not set the type for that bracket pair
+<a href=#857 id=857 data-nosnippet>857</a>    </span>}
+<a href=#858 id=858 data-nosnippet>858</a>
+<a href=#859 id=859 data-nosnippet>859</a>    <span class="comment">// N1 and N2.
+<a href=#860 id=860 data-nosnippet>860</a>    // Indices of every byte in this isolating run sequence
+<a href=#861 id=861 data-nosnippet>861</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>indices = sequence.runs.iter().flat_map(Clone::clone);
+<a href=#862 id=862 data-nosnippet>862</a>    <span class="kw">let </span><span class="kw-2">mut </span>prev_class = sequence.sos;
+<a href=#863 id=863 data-nosnippet>863</a>    <span class="kw">while let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>i) = indices.next() {
+<a href=#864 id=864 data-nosnippet>864</a>        <span class="comment">// Process sequences of NI characters.
+<a href=#865 id=865 data-nosnippet>865</a>        </span><span class="kw">let </span><span class="kw-2">mut </span>ni_run = Vec::new();
+<a href=#866 id=866 data-nosnippet>866</a>        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#867 id=867 data-nosnippet>867</a>        </span><span class="kw">if </span>is_NI(processing_classes[i]) || processing_classes[i] == BN {
+<a href=#868 id=868 data-nosnippet>868</a>            <span class="comment">// Consume a run of consecutive NI characters.
+<a href=#869 id=869 data-nosnippet>869</a>            </span>ni_run.push(i);
+<a href=#870 id=870 data-nosnippet>870</a>            <span class="kw">let </span><span class="kw-2">mut </span>next_class;
+<a href=#871 id=871 data-nosnippet>871</a>            <span class="kw">loop </span>{
+<a href=#872 id=872 data-nosnippet>872</a>                <span class="kw">match </span>indices.next() {
+<a href=#873 id=873 data-nosnippet>873</a>                    <span class="prelude-val">Some</span>(j) =&gt; {
+<a href=#874 id=874 data-nosnippet>874</a>                        i = j;
+<a href=#875 id=875 data-nosnippet>875</a>                        next_class = processing_classes[j];
+<a href=#876 id=876 data-nosnippet>876</a>                        <span class="comment">// The BN is for &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt;
+<a href=#877 id=877 data-nosnippet>877</a>                        </span><span class="kw">if </span>is_NI(next_class) || next_class == BN {
+<a href=#878 id=878 data-nosnippet>878</a>                            ni_run.push(i);
+<a href=#879 id=879 data-nosnippet>879</a>                        } <span class="kw">else </span>{
+<a href=#880 id=880 data-nosnippet>880</a>                            <span class="kw">break</span>;
+<a href=#881 id=881 data-nosnippet>881</a>                        }
+<a href=#882 id=882 data-nosnippet>882</a>                    }
+<a href=#883 id=883 data-nosnippet>883</a>                    <span class="prelude-val">None </span>=&gt; {
+<a href=#884 id=884 data-nosnippet>884</a>                        next_class = sequence.eos;
+<a href=#885 id=885 data-nosnippet>885</a>                        <span class="kw">break</span>;
+<a href=#886 id=886 data-nosnippet>886</a>                    }
+<a href=#887 id=887 data-nosnippet>887</a>                };
+<a href=#888 id=888 data-nosnippet>888</a>            }
+<a href=#889 id=889 data-nosnippet>889</a>            <span class="comment">// N1-N2.
+<a href=#890 id=890 data-nosnippet>890</a>            //
+<a href=#891 id=891 data-nosnippet>891</a>            // &lt;http://www.unicode.org/reports/tr9/#N1&gt;
+<a href=#892 id=892 data-nosnippet>892</a>            // &lt;http://www.unicode.org/reports/tr9/#N2&gt;
+<a href=#893 id=893 data-nosnippet>893</a>            </span><span class="kw">let </span>new_class = <span class="kw">match </span>(prev_class, next_class) {
+<a href=#894 id=894 data-nosnippet>894</a>                (L, L) =&gt; L,
+<a href=#895 id=895 data-nosnippet>895</a>                (R, R) | (R, AN) | (R, EN) | (AN, R) | (AN, AN) | (AN, EN) | (EN, R) | (EN, AN) | (EN, EN) =&gt; R,
+<a href=#896 id=896 data-nosnippet>896</a>                (<span class="kw">_</span>, <span class="kw">_</span>) =&gt; e,
+<a href=#897 id=897 data-nosnippet>897</a>            };
+<a href=#898 id=898 data-nosnippet>898</a>            <span class="kw">for </span>j <span class="kw">in </span><span class="kw-2">&amp;</span>ni_run {
+<a href=#899 id=899 data-nosnippet>899</a>                processing_classes[<span class="kw-2">*</span>j] = new_class;
+<a href=#900 id=900 data-nosnippet>900</a>            }
+<a href=#901 id=901 data-nosnippet>901</a>            ni_run.clear();
+<a href=#902 id=902 data-nosnippet>902</a>        }
+<a href=#903 id=903 data-nosnippet>903</a>        prev_class = processing_classes[i];
+<a href=#904 id=904 data-nosnippet>904</a>    }
+<a href=#905 id=905 data-nosnippet>905</a>}
+<a href=#906 id=906 data-nosnippet>906</a>
+<a href=#907 id=907 data-nosnippet>907</a><span class="kw">struct </span>BracketPair {
+<a href=#908 id=908 data-nosnippet>908</a>    <span class="doccomment">/// The text-relative index of the opening bracket.
+<a href=#909 id=909 data-nosnippet>909</a>    </span>start: usize,
+<a href=#910 id=910 data-nosnippet>910</a>    <span class="doccomment">/// The text-relative index of the closing bracket.
+<a href=#911 id=911 data-nosnippet>911</a>    </span>end: usize,
+<a href=#912 id=912 data-nosnippet>912</a>    <span class="doccomment">/// The index of the run (in the run sequence) that the opening bracket is in.
+<a href=#913 id=913 data-nosnippet>913</a>    </span>start_run: usize,
+<a href=#914 id=914 data-nosnippet>914</a>    <span class="doccomment">/// The index of the run (in the run sequence) that the closing bracket is in.
+<a href=#915 id=915 data-nosnippet>915</a>    </span>end_run: usize,
+<a href=#916 id=916 data-nosnippet>916</a>}
+<a href=#917 id=917 data-nosnippet>917</a><span class="doccomment">/// 3.1.3 Identifying Bracket Pairs
+<a href=#918 id=918 data-nosnippet>918</a>///
+<a href=#919 id=919 data-nosnippet>919</a>/// Returns all paired brackets in the source, as indices into the
+<a href=#920 id=920 data-nosnippet>920</a>/// text source.
+<a href=#921 id=921 data-nosnippet>921</a>///
+<a href=#922 id=922 data-nosnippet>922</a>/// &lt;https://www.unicode.org/reports/tr9/#BD16&gt;
+<a href=#923 id=923 data-nosnippet>923</a></span><span class="kw">fn </span>identify_bracket_pairs(
+<a href=#924 id=924 data-nosnippet>924</a>    run_sequence: <span class="kw-2">&amp;</span>IsolatingRunSequence,
+<a href=#925 id=925 data-nosnippet>925</a>    original_classes: <span class="kw-2">&amp;</span>[BidiClass],
+<a href=#926 id=926 data-nosnippet>926</a>    brackets: <span class="kw-2">&amp;</span>HashMap&lt;usize, char&gt;,
+<a href=#927 id=927 data-nosnippet>927</a>) -&gt; Vec&lt;BracketPair&gt; {
+<a href=#928 id=928 data-nosnippet>928</a>    <span class="kw">let </span>data_source = <span class="kw-2">&amp;</span>unicode_bidi::HardcodedBidiData;
+<a href=#929 id=929 data-nosnippet>929</a>
+<a href=#930 id=930 data-nosnippet>930</a>    <span class="kw">let </span><span class="kw-2">mut </span>ret = <span class="macro">vec!</span>[];
+<a href=#931 id=931 data-nosnippet>931</a>    <span class="kw">let </span><span class="kw-2">mut </span>stack = <span class="macro">vec!</span>[];
+<a href=#932 id=932 data-nosnippet>932</a>
+<a href=#933 id=933 data-nosnippet>933</a>    <span class="kw">for </span>(run_index, level_run) <span class="kw">in </span>run_sequence.runs.iter().enumerate() {
+<a href=#934 id=934 data-nosnippet>934</a>        <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..level_run.len() {
+<a href=#935 id=935 data-nosnippet>935</a>            <span class="kw">let </span>actual_index = level_run.start + i;
+<a href=#936 id=936 data-nosnippet>936</a>            <span class="comment">// All bracket characters are ON.
+<a href=#937 id=937 data-nosnippet>937</a>            // From BidiBrackets.txt:
+<a href=#938 id=938 data-nosnippet>938</a>            // &gt; The Unicode property value stability policy guarantees that characters
+<a href=#939 id=939 data-nosnippet>939</a>            // &gt; which have bpt=o or bpt=c also have bc=ON and Bidi_M=Y
+<a href=#940 id=940 data-nosnippet>940</a>            </span><span class="kw">if </span>original_classes[actual_index] != BidiClass::ON {
+<a href=#941 id=941 data-nosnippet>941</a>                <span class="kw">continue</span>;
+<a href=#942 id=942 data-nosnippet>942</a>            }
+<a href=#943 id=943 data-nosnippet>943</a>
+<a href=#944 id=944 data-nosnippet>944</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(matched) = brackets
+<a href=#945 id=945 data-nosnippet>945</a>                .get(<span class="kw-2">&amp;</span>actual_index)
+<a href=#946 id=946 data-nosnippet>946</a>                .and_then(|c| data_source.bidi_matched_opening_bracket(<span class="kw-2">*</span>c))
+<a href=#947 id=947 data-nosnippet>947</a>            {
+<a href=#948 id=948 data-nosnippet>948</a>                <span class="kw">if </span>matched.is_open {
+<a href=#949 id=949 data-nosnippet>949</a>                    <span class="comment">// &gt; If an opening paired bracket is found ...
+<a href=#950 id=950 data-nosnippet>950</a>
+<a href=#951 id=951 data-nosnippet>951</a>                    // &gt; ... and there is no room in the stack,
+<a href=#952 id=952 data-nosnippet>952</a>                    // &gt; stop processing BD16 for the remainder of the isolating run sequence.
+<a href=#953 id=953 data-nosnippet>953</a>                    </span><span class="kw">if </span>stack.len() &gt;= <span class="number">63 </span>{
+<a href=#954 id=954 data-nosnippet>954</a>                        <span class="kw">break</span>;
+<a href=#955 id=955 data-nosnippet>955</a>                    }
+<a href=#956 id=956 data-nosnippet>956</a>                    <span class="comment">// &gt; ... push its Bidi_Paired_Bracket property value and its text position onto the stack
+<a href=#957 id=957 data-nosnippet>957</a>                    </span>stack.push((matched.opening, actual_index, run_index))
+<a href=#958 id=958 data-nosnippet>958</a>                } <span class="kw">else </span>{
+<a href=#959 id=959 data-nosnippet>959</a>                    <span class="comment">// &gt; If a closing paired bracket is found, do the following
+<a href=#960 id=960 data-nosnippet>960</a>
+<a href=#961 id=961 data-nosnippet>961</a>                    // &gt; Declare a variable that holds a reference to the current stack element
+<a href=#962 id=962 data-nosnippet>962</a>                    // &gt; and initialize it with the top element of the stack.
+<a href=#963 id=963 data-nosnippet>963</a>                    // AND
+<a href=#964 id=964 data-nosnippet>964</a>                    // &gt; Else, if the current stack element is not at the bottom of the stack
+<a href=#965 id=965 data-nosnippet>965</a>                    </span><span class="kw">for </span>(stack_index, element) <span class="kw">in </span>stack.iter().enumerate().rev() {
+<a href=#966 id=966 data-nosnippet>966</a>                        <span class="comment">// &gt; Compare the closing paired bracket being inspected or its canonical
+<a href=#967 id=967 data-nosnippet>967</a>                        // &gt; equivalent to the bracket in the current stack element.
+<a href=#968 id=968 data-nosnippet>968</a>                        </span><span class="kw">if </span>element.<span class="number">0 </span>== matched.opening {
+<a href=#969 id=969 data-nosnippet>969</a>                            <span class="comment">// &gt; If the values match, meaning the two characters form a bracket pair, then
+<a href=#970 id=970 data-nosnippet>970</a>
+<a href=#971 id=971 data-nosnippet>971</a>                            // &gt; Append the text position in the current stack element together with the
+<a href=#972 id=972 data-nosnippet>972</a>                            // &gt; text position of the closing paired bracket to the list.
+<a href=#973 id=973 data-nosnippet>973</a>                            </span><span class="kw">let </span>pair = BracketPair {
+<a href=#974 id=974 data-nosnippet>974</a>                                start: element.<span class="number">1</span>,
+<a href=#975 id=975 data-nosnippet>975</a>                                end: actual_index,
+<a href=#976 id=976 data-nosnippet>976</a>                                start_run: element.<span class="number">2</span>,
+<a href=#977 id=977 data-nosnippet>977</a>                                end_run: run_index,
+<a href=#978 id=978 data-nosnippet>978</a>                            };
+<a href=#979 id=979 data-nosnippet>979</a>                            ret.push(pair);
+<a href=#980 id=980 data-nosnippet>980</a>
+<a href=#981 id=981 data-nosnippet>981</a>                            <span class="comment">// &gt; Pop the stack through the current stack element inclusively.
+<a href=#982 id=982 data-nosnippet>982</a>                            </span>stack.truncate(stack_index);
+<a href=#983 id=983 data-nosnippet>983</a>                            <span class="kw">break</span>;
+<a href=#984 id=984 data-nosnippet>984</a>                        }
+<a href=#985 id=985 data-nosnippet>985</a>                    }
+<a href=#986 id=986 data-nosnippet>986</a>                }
+<a href=#987 id=987 data-nosnippet>987</a>            }
+<a href=#988 id=988 data-nosnippet>988</a>        }
+<a href=#989 id=989 data-nosnippet>989</a>    }
+<a href=#990 id=990 data-nosnippet>990</a>    <span class="comment">// &gt; Sort the list of pairs of text positions in ascending order based on
+<a href=#991 id=991 data-nosnippet>991</a>    // &gt; the text position of the opening paired bracket.
+<a href=#992 id=992 data-nosnippet>992</a>    </span>ret.sort_by_key(|r| r.start);
+<a href=#993 id=993 data-nosnippet>993</a>    ret
+<a href=#994 id=994 data-nosnippet>994</a>}
+<a href=#995 id=995 data-nosnippet>995</a>
+<a href=#996 id=996 data-nosnippet>996</a><span class="doccomment">/// Neutral or Isolate formatting character (B, S, WS, ON, FSI, LRI, RLI, PDI)
+<a href=#997 id=997 data-nosnippet>997</a>///
+<a href=#998 id=998 data-nosnippet>998</a>/// &lt;http://www.unicode.org/reports/tr9/#NI&gt;
+<a href=#999 id=999 data-nosnippet>999</a></span><span class="attr">#[expect(non_snake_case)]
+<a href=#1000 id=1000 data-nosnippet>1000</a></span><span class="kw">fn </span>is_NI(class: BidiClass) -&gt; bool {
+<a href=#1001 id=1001 data-nosnippet>1001</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
+<a href=#1002 id=1002 data-nosnippet>1002</a>    <span class="macro">matches!</span>(class, B | S | WS | ON | FSI | LRI | RLI | PDI)
+<a href=#1003 id=1003 data-nosnippet>1003</a>}
+<a href=#1004 id=1004 data-nosnippet>1004</a>
+<a href=#1005 id=1005 data-nosnippet>1005</a><span class="doccomment">/// 3.3.6 Resolving Implicit Levels
+<a href=#1006 id=1006 data-nosnippet>1006</a>///
+<a href=#1007 id=1007 data-nosnippet>1007</a>/// Returns the maximum embedding level in the paragraph.
 <a href=#1008 id=1008 data-nosnippet>1008</a>///
-<a href=#1009 id=1009 data-nosnippet>1009</a>/// Returns the maximum embedding level in the paragraph.
-<a href=#1010 id=1010 data-nosnippet>1010</a>///
-<a href=#1011 id=1011 data-nosnippet>1011</a>/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Implicit_Levels&gt;
-<a href=#1012 id=1012 data-nosnippet>1012</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>implicit_resolve_levels(original_classes: <span class="kw-2">&amp;</span>[BidiClass], levels: <span class="kw-2">&amp;mut </span>[Level]) -&gt; Level {
-<a href=#1013 id=1013 data-nosnippet>1013</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
-<a href=#1014 id=1014 data-nosnippet>1014</a>
-<a href=#1015 id=1015 data-nosnippet>1015</a>    <span class="kw">let </span><span class="kw-2">mut </span>max_level = Level::ltr();
-<a href=#1016 id=1016 data-nosnippet>1016</a>    <span class="macro">assert_eq!</span>(original_classes.len(), levels.len());
-<a href=#1017 id=1017 data-nosnippet>1017</a>    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..levels.len() {
-<a href=#1018 id=1018 data-nosnippet>1018</a>        <span class="kw">match </span>(levels[i].is_rtl(), original_classes[i]) {
-<a href=#1019 id=1019 data-nosnippet>1019</a>            (<span class="bool-val">false</span>, AN) | (<span class="bool-val">false</span>, EN) =&gt; levels[i].raise(<span class="number">2</span>).expect(<span class="string">"Level number error"</span>),
-<a href=#1020 id=1020 data-nosnippet>1020</a>            (<span class="bool-val">false</span>, R) | (<span class="bool-val">true</span>, L) | (<span class="bool-val">true</span>, EN) | (<span class="bool-val">true</span>, AN) =&gt; levels[i].raise(<span class="number">1</span>).expect(<span class="string">"Level number error"</span>),
-<a href=#1021 id=1021 data-nosnippet>1021</a>            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt; handled here
-<a href=#1022 id=1022 data-nosnippet>1022</a>            </span>(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {}
-<a href=#1023 id=1023 data-nosnippet>1023</a>        }
-<a href=#1024 id=1024 data-nosnippet>1024</a>        max_level = std::cmp::max(max_level, levels[i]);
-<a href=#1025 id=1025 data-nosnippet>1025</a>    }
-<a href=#1026 id=1026 data-nosnippet>1026</a>
-<a href=#1027 id=1027 data-nosnippet>1027</a>    max_level
-<a href=#1028 id=1028 data-nosnippet>1028</a>}
-<a href=#1029 id=1029 data-nosnippet>1029</a>
-<a href=#1030 id=1030 data-nosnippet>1030</a><span class="doccomment">/// Assign levels to characters removed by rule X9.
-<a href=#1031 id=1031 data-nosnippet>1031</a>///
-<a href=#1032 id=1032 data-nosnippet>1032</a>/// The levels assigned to these characters are not specified by the algorithm. This function
-<a href=#1033 id=1033 data-nosnippet>1033</a>/// assigns each one the level of the previous character, to avoid breaking level runs.
-<a href=#1034 id=1034 data-nosnippet>1034</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>assign_levels_to_removed_chars(para_level: Level, classes: <span class="kw-2">&amp;</span>[BidiClass], levels: <span class="kw-2">&amp;mut </span>[Level]) {
-<a href=#1035 id=1035 data-nosnippet>1035</a>    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..levels.len() {
-<a href=#1036 id=1036 data-nosnippet>1036</a>        <span class="kw">if </span>removed_by_x9(classes[i]) {
-<a href=#1037 id=1037 data-nosnippet>1037</a>            levels[i] = <span class="kw">if </span>i &gt; <span class="number">0 </span>{ levels[i - <span class="number">1</span>] } <span class="kw">else </span>{ para_level };
-<a href=#1038 id=1038 data-nosnippet>1038</a>        }
-<a href=#1039 id=1039 data-nosnippet>1039</a>    }
-<a href=#1040 id=1040 data-nosnippet>1040</a>}
+<a href=#1009 id=1009 data-nosnippet>1009</a>/// &lt;http://www.unicode.org/reports/tr9/#Resolving_Implicit_Levels&gt;
+<a href=#1010 id=1010 data-nosnippet>1010</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>implicit_resolve_levels(original_classes: <span class="kw-2">&amp;</span>[BidiClass], levels: <span class="kw-2">&amp;mut </span>[Level]) -&gt; Level {
+<a href=#1011 id=1011 data-nosnippet>1011</a>    <span class="kw">use </span>BidiClass::<span class="kw-2">*</span>;
+<a href=#1012 id=1012 data-nosnippet>1012</a>
+<a href=#1013 id=1013 data-nosnippet>1013</a>    <span class="kw">let </span><span class="kw-2">mut </span>max_level = Level::ltr();
+<a href=#1014 id=1014 data-nosnippet>1014</a>    <span class="macro">assert_eq!</span>(original_classes.len(), levels.len());
+<a href=#1015 id=1015 data-nosnippet>1015</a>    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..levels.len() {
+<a href=#1016 id=1016 data-nosnippet>1016</a>        <span class="kw">match </span>(levels[i].is_rtl(), original_classes[i]) {
+<a href=#1017 id=1017 data-nosnippet>1017</a>            (<span class="bool-val">false</span>, AN) | (<span class="bool-val">false</span>, EN) =&gt; levels[i].raise(<span class="number">2</span>).expect(<span class="string">"Level number error"</span>),
+<a href=#1018 id=1018 data-nosnippet>1018</a>            (<span class="bool-val">false</span>, R) | (<span class="bool-val">true</span>, L) | (<span class="bool-val">true</span>, EN) | (<span class="bool-val">true</span>, AN) =&gt; levels[i].raise(<span class="number">1</span>).expect(<span class="string">"Level number error"</span>),
+<a href=#1019 id=1019 data-nosnippet>1019</a>            <span class="comment">// &lt;https://www.unicode.org/reports/tr9/#Retaining_Explicit_Formatting_Characters&gt; handled here
+<a href=#1020 id=1020 data-nosnippet>1020</a>            </span>(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; {}
+<a href=#1021 id=1021 data-nosnippet>1021</a>        }
+<a href=#1022 id=1022 data-nosnippet>1022</a>        max_level = std::cmp::max(max_level, levels[i]);
+<a href=#1023 id=1023 data-nosnippet>1023</a>    }
+<a href=#1024 id=1024 data-nosnippet>1024</a>
+<a href=#1025 id=1025 data-nosnippet>1025</a>    max_level
+<a href=#1026 id=1026 data-nosnippet>1026</a>}
+<a href=#1027 id=1027 data-nosnippet>1027</a>
+<a href=#1028 id=1028 data-nosnippet>1028</a><span class="doccomment">/// Assign levels to characters removed by rule X9.
+<a href=#1029 id=1029 data-nosnippet>1029</a>///
+<a href=#1030 id=1030 data-nosnippet>1030</a>/// The levels assigned to these characters are not specified by the algorithm. This function
+<a href=#1031 id=1031 data-nosnippet>1031</a>/// assigns each one the level of the previous character, to avoid breaking level runs.
+<a href=#1032 id=1032 data-nosnippet>1032</a></span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>assign_levels_to_removed_chars(para_level: Level, classes: <span class="kw-2">&amp;</span>[BidiClass], levels: <span class="kw-2">&amp;mut </span>[Level]) {
+<a href=#1033 id=1033 data-nosnippet>1033</a>    <span class="kw">for </span>i <span class="kw">in </span><span class="number">0</span>..levels.len() {
+<a href=#1034 id=1034 data-nosnippet>1034</a>        <span class="kw">if </span>removed_by_x9(classes[i]) {
+<a href=#1035 id=1035 data-nosnippet>1035</a>            levels[i] = <span class="kw">if </span>i &gt; <span class="number">0 </span>{ levels[i - <span class="number">1</span>] } <span class="kw">else </span>{ para_level };
+<a href=#1036 id=1036 data-nosnippet>1036</a>        }
+<a href=#1037 id=1037 data-nosnippet>1037</a>    }
+<a href=#1038 id=1038 data-nosnippet>1038</a>}
 </code></pre></div></section></main></body></html>

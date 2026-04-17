@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">crate</span>::node::CONTEXT_IMAGE_REDUCED_VAR;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-image/src/image_properties.rs`."><title>image_properties.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_image" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_image/</div>image_properties.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">crate</span>::node::CONTEXT_IMAGE_REDUCED_VAR;
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>super::<span class="kw-2">*</span>;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::fmt;
@@ -572,7 +572,7 @@
 <a href=#572 id=572 data-nosnippet>572</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
 <a href=#573 id=573 data-nosnippet>573</a>                first_update = <span class="bool-val">false</span>;
 <a href=#574 id=574 data-nosnippet>574</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(e) = new_img.error() {
-<a href=#575 id=575 data-nosnippet>575</a>                    <span class="kw">if </span><span class="macro">error !</span>= e {
+<a href=#575 id=575 data-nosnippet>575</a>                    <span class="kw">if </span>error != e {
 <a href=#576 id=576 data-nosnippet>576</a>                        error = e;
 <a href=#577 id=577 data-nosnippet>577</a>                        handler.event(<span class="kw-2">&amp;</span>ImgErrorArgs { error: error.clone() });
 <a href=#578 id=578 data-nosnippet>578</a>                    }
@@ -696,7 +696,7 @@
 <a href=#696 id=696 data-nosnippet>696</a>        UiNodeOp::Update { .. } =&gt; {
 <a href=#697 id=697 data-nosnippet>697</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
 <a href=#698 id=698 data-nosnippet>698</a>                <span class="kw">let </span>s = new_img.size();
-<a href=#699 id=699 data-nosnippet>699</a>                <span class="kw">if </span><span class="macro">s !</span>= size {
+<a href=#699 id=699 data-nosnippet>699</a>                <span class="kw">if </span>s != size {
 <a href=#700 id=700 data-nosnippet>700</a>                    update = <span class="bool-val">true</span>;
 <a href=#701 id=701 data-nosnippet>701</a>                    size = s;
 <a href=#702 id=702 data-nosnippet>702</a>                    WIDGET.layout();
@@ -705,149 +705,135 @@
 <a href=#705 id=705 data-nosnippet>705</a>
 <a href=#706 id=706 data-nosnippet>706</a>            handler.update();
 <a href=#707 id=707 data-nosnippet>707</a>        }
-<a href=#708 id=708 data-nosnippet>708</a>        UiNodeOp::Layout { .. } =&gt; {
-<a href=#709 id=709 data-nosnippet>709</a>            <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) {
-<a href=#710 id=710 data-nosnippet>710</a>                <span class="kw">let </span>win_state = WINDOW.vars().instance_state();
-<a href=#711 id=711 data-nosnippet>711</a>                <span class="kw">let </span>has_renderer = WINDOW.mode().has_renderer();
-<a href=#712 id=712 data-nosnippet>712</a>                <span class="kw">if let </span>WindowInstanceState::Loaded { has_view } = win_state.get()
-<a href=#713 id=713 data-nosnippet>713</a>                    &amp;&amp; (!has_renderer || has_view)
-<a href=#714 id=714 data-nosnippet>714</a>                {
-<a href=#715 id=715 data-nosnippet>715</a>                    handler.event(<span class="kw-2">&amp;</span>ImgLoadingArgs {});
-<a href=#716 id=716 data-nosnippet>716</a>                } <span class="kw">else if </span>window_load.is_dummy() {
-<a href=#717 id=717 data-nosnippet>717</a>                    <span class="comment">// wait window load, this is because its common for window to change size
-<a href=#718 id=718 data-nosnippet>718</a>                    // on open as the OS sets the state and `on_load_size_layout` primary use is getting
-<a href=#719 id=719 data-nosnippet>719</a>                    // an "initial" presentation state for scale to fit for example
-<a href=#720 id=720 data-nosnippet>720</a>                    </span>update = <span class="bool-val">true</span>;
-<a href=#721 id=721 data-nosnippet>721</a>                    <span class="kw">let </span>id = WIDGET.id();
-<a href=#722 id=722 data-nosnippet>722</a>                    window_load = win_state.hook(<span class="kw">move </span>|a| <span class="kw">match </span>a.value() {
-<a href=#723 id=723 data-nosnippet>723</a>                        zng_ext_window::WindowInstanceState::Loaded { has_view } =&gt; {
-<a href=#724 id=724 data-nosnippet>724</a>                            <span class="kw">if </span>!has_renderer || <span class="kw-2">*</span>has_view {
-<a href=#725 id=725 data-nosnippet>725</a>                                UPDATES.layout(id);
-<a href=#726 id=726 data-nosnippet>726</a>                                <span class="bool-val">false
-<a href=#727 id=727 data-nosnippet>727</a>                            </span>} <span class="kw">else </span>{
-<a href=#728 id=728 data-nosnippet>728</a>                                <span class="bool-val">true
-<a href=#729 id=729 data-nosnippet>729</a>                            </span>}
-<a href=#730 id=730 data-nosnippet>730</a>                        }
-<a href=#731 id=731 data-nosnippet>731</a>                        zng_ext_window::WindowInstanceState::Closed =&gt; <span class="bool-val">false</span>,
-<a href=#732 id=732 data-nosnippet>732</a>                        <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
-<a href=#733 id=733 data-nosnippet>733</a>                    });
-<a href=#734 id=734 data-nosnippet>734</a>                }
-<a href=#735 id=735 data-nosnippet>735</a>            }
-<a href=#736 id=736 data-nosnippet>736</a>        }
-<a href=#737 id=737 data-nosnippet>737</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#738 id=738 data-nosnippet>738</a>    })
-<a href=#739 id=739 data-nosnippet>739</a>}
-<a href=#740 id=740 data-nosnippet>740</a>
-<a href=#741 id=741 data-nosnippet>741</a><span class="doccomment">/// Image loaded and layout event.
-<a href=#742 id=742 data-nosnippet>742</a>///
-<a href=#743 id=743 data-nosnippet>743</a>/// This property calls `handler` every first layout after [`on_load`] in a loaded window. If the window
-<a href=#744 id=744 data-nosnippet>744</a>/// is loading the call is delayed until it is loaded.
-<a href=#745 id=745 data-nosnippet>745</a>///
-<a href=#746 id=746 data-nosnippet>746</a>/// See also [`on_load_size_layout`] that notifies as soon as the image size metadata decodes.
-<a href=#747 id=747 data-nosnippet>747</a>///
-<a href=#748 id=748 data-nosnippet>748</a>/// # Handlers
-<a href=#749 id=749 data-nosnippet>749</a>///
-<a href=#750 id=750 data-nosnippet>750</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
-<a href=#751 id=751 data-nosnippet>751</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
-<a href=#752 id=752 data-nosnippet>752</a>///
-<a href=#753 id=753 data-nosnippet>753</a>/// # Route
-<a href=#754 id=754 data-nosnippet>754</a>///
-<a href=#755 id=755 data-nosnippet>755</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
-<a href=#756 id=756 data-nosnippet>756</a>///
-<a href=#757 id=757 data-nosnippet>757</a>/// [`Handler`]: zng_wgt::prelude::Handler
-<a href=#758 id=758 data-nosnippet>758</a>/// [`hn!`]: zng_wgt::prelude::hn!
-<a href=#759 id=759 data-nosnippet>759</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
-<a href=#760 id=760 data-nosnippet>760</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
-<a href=#761 id=761 data-nosnippet>761</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
-<a href=#762 id=762 data-nosnippet>762</a>/// [`on_load`]: fn@on_load
-<a href=#763 id=763 data-nosnippet>763</a>/// [`on_load_size_layout`]: fn@on_load_size_layout
-<a href=#764 id=764 data-nosnippet>764</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
-<a href=#765 id=765 data-nosnippet>765</a></span><span class="kw">pub fn </span>on_load_layout(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
-<a href=#766 id=766 data-nosnippet>766</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
-<a href=#767 id=767 data-nosnippet>767</a>    <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
-<a href=#768 id=768 data-nosnippet>768</a>    <span class="kw">let </span><span class="kw-2">mut </span>window_load = VarHandle::dummy();
-<a href=#769 id=769 data-nosnippet>769</a>
-<a href=#770 id=770 data-nosnippet>770</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#771 id=771 data-nosnippet>771</a>        UiNodeOp::Init =&gt; {
-<a href=#772 id=772 data-nosnippet>772</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
-<a href=#773 id=773 data-nosnippet>773</a>
-<a href=#774 id=774 data-nosnippet>774</a>            update = CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded);
-<a href=#775 id=775 data-nosnippet>775</a>            <span class="kw">if </span>update {
-<a href=#776 id=776 data-nosnippet>776</a>                WIDGET.layout();
-<a href=#777 id=777 data-nosnippet>777</a>            }
-<a href=#778 id=778 data-nosnippet>778</a>        }
-<a href=#779 id=779 data-nosnippet>779</a>        UiNodeOp::Deinit =&gt; {
-<a href=#780 id=780 data-nosnippet>780</a>            handler.deinit();
-<a href=#781 id=781 data-nosnippet>781</a>            window_load = VarHandle::dummy();
-<a href=#782 id=782 data-nosnippet>782</a>        }
-<a href=#783 id=783 data-nosnippet>783</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#784 id=784 data-nosnippet>784</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
-<a href=#785 id=785 data-nosnippet>785</a>                update = new_img.is_loaded();
-<a href=#786 id=786 data-nosnippet>786</a>                <span class="kw">if </span>update {
-<a href=#787 id=787 data-nosnippet>787</a>                    WIDGET.layout();
-<a href=#788 id=788 data-nosnippet>788</a>                }
-<a href=#789 id=789 data-nosnippet>789</a>            }
-<a href=#790 id=790 data-nosnippet>790</a>
-<a href=#791 id=791 data-nosnippet>791</a>            handler.update();
-<a href=#792 id=792 data-nosnippet>792</a>        }
-<a href=#793 id=793 data-nosnippet>793</a>        UiNodeOp::Layout { .. } =&gt; {
-<a href=#794 id=794 data-nosnippet>794</a>            <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) &amp;&amp; CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded) {
-<a href=#795 id=795 data-nosnippet>795</a>                <span class="kw">let </span>win_state = WINDOW.vars().instance_state();
-<a href=#796 id=796 data-nosnippet>796</a>                <span class="kw">let </span>has_renderer = WINDOW.mode().has_renderer();
-<a href=#797 id=797 data-nosnippet>797</a>                <span class="kw">if let </span>WindowInstanceState::Loaded { has_view } = win_state.get()
-<a href=#798 id=798 data-nosnippet>798</a>                    &amp;&amp; (!has_renderer || has_view)
-<a href=#799 id=799 data-nosnippet>799</a>                {
-<a href=#800 id=800 data-nosnippet>800</a>                    handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
-<a href=#801 id=801 data-nosnippet>801</a>                } <span class="kw">else if </span>window_load.is_dummy() {
-<a href=#802 id=802 data-nosnippet>802</a>                    <span class="comment">// wait window load, this is because its common for window to change size
-<a href=#803 id=803 data-nosnippet>803</a>                    // on open as the OS sets the state and `on_load_layout` primary use is getting
-<a href=#804 id=804 data-nosnippet>804</a>                    // an "initial" presentation state for scale to fit for example
-<a href=#805 id=805 data-nosnippet>805</a>                    </span>update = <span class="bool-val">true</span>;
-<a href=#806 id=806 data-nosnippet>806</a>                    <span class="kw">let </span>id = WIDGET.id();
-<a href=#807 id=807 data-nosnippet>807</a>                    window_load = win_state.hook(<span class="kw">move </span>|a| <span class="kw">match </span>a.value() {
-<a href=#808 id=808 data-nosnippet>808</a>                        zng_ext_window::WindowInstanceState::Loaded { has_view } =&gt; {
-<a href=#809 id=809 data-nosnippet>809</a>                            <span class="kw">if </span>!has_renderer || <span class="kw-2">*</span>has_view {
-<a href=#810 id=810 data-nosnippet>810</a>                                UPDATES.layout(id);
-<a href=#811 id=811 data-nosnippet>811</a>                                <span class="bool-val">false
-<a href=#812 id=812 data-nosnippet>812</a>                            </span>} <span class="kw">else </span>{
-<a href=#813 id=813 data-nosnippet>813</a>                                <span class="bool-val">true
-<a href=#814 id=814 data-nosnippet>814</a>                            </span>}
-<a href=#815 id=815 data-nosnippet>815</a>                        }
-<a href=#816 id=816 data-nosnippet>816</a>                        zng_ext_window::WindowInstanceState::Closed =&gt; <span class="bool-val">false</span>,
-<a href=#817 id=817 data-nosnippet>817</a>                        <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
-<a href=#818 id=818 data-nosnippet>818</a>                    });
-<a href=#819 id=819 data-nosnippet>819</a>                }
-<a href=#820 id=820 data-nosnippet>820</a>            }
-<a href=#821 id=821 data-nosnippet>821</a>        }
-<a href=#822 id=822 data-nosnippet>822</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#823 id=823 data-nosnippet>823</a>    })
-<a href=#824 id=824 data-nosnippet>824</a>}
-<a href=#825 id=825 data-nosnippet>825</a>
-<a href=#826 id=826 data-nosnippet>826</a><span class="doccomment">/// Block window load until image is loaded.
-<a href=#827 id=827 data-nosnippet>827</a>///
-<a href=#828 id=828 data-nosnippet>828</a>/// If the image widget is in the initial window content a [`WindowLoadingHandle`] is used to delay the window
-<a href=#829 id=829 data-nosnippet>829</a>/// visually opening until the source loads, fails to load or a timeout elapses. By default `true` sets the timeout to 1 second.
-<a href=#830 id=830 data-nosnippet>830</a>///
-<a href=#831 id=831 data-nosnippet>831</a>/// [`WindowLoadingHandle`]: zng_ext_window::WindowLoadingHandle
-<a href=#832 id=832 data-nosnippet>832</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Image))]
-<a href=#833 id=833 data-nosnippet>833</a></span><span class="kw">pub fn </span>img_block_window_load(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoValue&lt;BlockWindowLoad&gt;) -&gt; UiNode {
-<a href=#834 id=834 data-nosnippet>834</a>    <span class="kw">let </span>enabled = enabled.into();
-<a href=#835 id=835 data-nosnippet>835</a>    <span class="kw">let </span><span class="kw-2">mut </span>block = <span class="prelude-val">None</span>;
-<a href=#836 id=836 data-nosnippet>836</a>
-<a href=#837 id=837 data-nosnippet>837</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
-<a href=#838 id=838 data-nosnippet>838</a>        UiNodeOp::Init =&gt; {
-<a href=#839 id=839 data-nosnippet>839</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
-<a href=#840 id=840 data-nosnippet>840</a>
-<a href=#841 id=841 data-nosnippet>841</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(delay) = enabled.deadline() {
-<a href=#842 id=842 data-nosnippet>842</a>                block = WINDOW.loading_handle(delay, <span class="string">"img_block_window_load"</span>);
-<a href=#843 id=843 data-nosnippet>843</a>            }
-<a href=#844 id=844 data-nosnippet>844</a>        }
-<a href=#845 id=845 data-nosnippet>845</a>        UiNodeOp::Update { .. } =&gt; {
-<a href=#846 id=846 data-nosnippet>846</a>            <span class="kw">if </span>block.is_some() &amp;&amp; !CONTEXT_IMAGE_VAR.with(ImageEntry::is_loading) {
-<a href=#847 id=847 data-nosnippet>847</a>                block = <span class="prelude-val">None</span>;
-<a href=#848 id=848 data-nosnippet>848</a>            }
-<a href=#849 id=849 data-nosnippet>849</a>        }
-<a href=#850 id=850 data-nosnippet>850</a>        <span class="kw">_ </span>=&gt; {}
-<a href=#851 id=851 data-nosnippet>851</a>    })
-<a href=#852 id=852 data-nosnippet>852</a>}
+<a href=#708 id=708 data-nosnippet>708</a>        UiNodeOp::Layout { .. } <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) =&gt; {
+<a href=#709 id=709 data-nosnippet>709</a>            <span class="kw">let </span>win_state = WINDOW.vars().instance_state();
+<a href=#710 id=710 data-nosnippet>710</a>            <span class="kw">let </span>has_renderer = WINDOW.mode().has_renderer();
+<a href=#711 id=711 data-nosnippet>711</a>            <span class="kw">if let </span>WindowInstanceState::Loaded { has_view } = win_state.get()
+<a href=#712 id=712 data-nosnippet>712</a>                &amp;&amp; (!has_renderer || has_view)
+<a href=#713 id=713 data-nosnippet>713</a>            {
+<a href=#714 id=714 data-nosnippet>714</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadingArgs {});
+<a href=#715 id=715 data-nosnippet>715</a>            } <span class="kw">else if </span>window_load.is_dummy() {
+<a href=#716 id=716 data-nosnippet>716</a>                <span class="comment">// wait window load, this is because its common for window to change size
+<a href=#717 id=717 data-nosnippet>717</a>                // on open as the OS sets the state and `on_load_size_layout` primary use is getting
+<a href=#718 id=718 data-nosnippet>718</a>                // an "initial" presentation state for scale to fit for example
+<a href=#719 id=719 data-nosnippet>719</a>                </span>update = <span class="bool-val">true</span>;
+<a href=#720 id=720 data-nosnippet>720</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#721 id=721 data-nosnippet>721</a>                window_load = win_state.hook(<span class="kw">move </span>|a| <span class="kw">match </span>a.value() {
+<a href=#722 id=722 data-nosnippet>722</a>                    zng_ext_window::WindowInstanceState::Loaded { has_view } <span class="kw">if </span>(!has_renderer || <span class="kw-2">*</span>has_view) =&gt; {
+<a href=#723 id=723 data-nosnippet>723</a>                        UPDATES.layout(id);
+<a href=#724 id=724 data-nosnippet>724</a>                        <span class="bool-val">false
+<a href=#725 id=725 data-nosnippet>725</a>                    </span>}
+<a href=#726 id=726 data-nosnippet>726</a>                    zng_ext_window::WindowInstanceState::Closed =&gt; <span class="bool-val">false</span>,
+<a href=#727 id=727 data-nosnippet>727</a>                    <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
+<a href=#728 id=728 data-nosnippet>728</a>                });
+<a href=#729 id=729 data-nosnippet>729</a>            }
+<a href=#730 id=730 data-nosnippet>730</a>        }
+<a href=#731 id=731 data-nosnippet>731</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#732 id=732 data-nosnippet>732</a>    })
+<a href=#733 id=733 data-nosnippet>733</a>}
+<a href=#734 id=734 data-nosnippet>734</a>
+<a href=#735 id=735 data-nosnippet>735</a><span class="doccomment">/// Image loaded and layout event.
+<a href=#736 id=736 data-nosnippet>736</a>///
+<a href=#737 id=737 data-nosnippet>737</a>/// This property calls `handler` every first layout after [`on_load`] in a loaded window. If the window
+<a href=#738 id=738 data-nosnippet>738</a>/// is loading the call is delayed until it is loaded.
+<a href=#739 id=739 data-nosnippet>739</a>///
+<a href=#740 id=740 data-nosnippet>740</a>/// See also [`on_load_size_layout`] that notifies as soon as the image size metadata decodes.
+<a href=#741 id=741 data-nosnippet>741</a>///
+<a href=#742 id=742 data-nosnippet>742</a>/// # Handlers
+<a href=#743 id=743 data-nosnippet>743</a>///
+<a href=#744 id=744 data-nosnippet>744</a>/// This property accepts any [`Handler`], including the async handlers. Use one of the handler macros, [`hn!`],
+<a href=#745 id=745 data-nosnippet>745</a>/// [`hn_once!`], [`async_hn!`] or [`async_hn_once!`], to declare a handler closure.
+<a href=#746 id=746 data-nosnippet>746</a>///
+<a href=#747 id=747 data-nosnippet>747</a>/// # Route
+<a href=#748 id=748 data-nosnippet>748</a>///
+<a href=#749 id=749 data-nosnippet>749</a>/// This property is not routed, it works only inside a widget that loads images. There is also no *preview* event.
+<a href=#750 id=750 data-nosnippet>750</a>///
+<a href=#751 id=751 data-nosnippet>751</a>/// [`Handler`]: zng_wgt::prelude::Handler
+<a href=#752 id=752 data-nosnippet>752</a>/// [`hn!`]: zng_wgt::prelude::hn!
+<a href=#753 id=753 data-nosnippet>753</a>/// [`hn_once!`]: zng_wgt::prelude::hn_once!
+<a href=#754 id=754 data-nosnippet>754</a>/// [`async_hn!`]: zng_wgt::prelude::async_hn!
+<a href=#755 id=755 data-nosnippet>755</a>/// [`async_hn_once!`]: zng_wgt::prelude::async_hn_once!
+<a href=#756 id=756 data-nosnippet>756</a>/// [`on_load`]: fn@on_load
+<a href=#757 id=757 data-nosnippet>757</a>/// [`on_load_size_layout`]: fn@on_load_size_layout
+<a href=#758 id=758 data-nosnippet>758</a></span><span class="attr">#[property(EVENT, widget_impl(Image))]
+<a href=#759 id=759 data-nosnippet>759</a></span><span class="kw">pub fn </span>on_load_layout(child: <span class="kw">impl </span>IntoUiNode, handler: Handler&lt;ImgLoadArgs&gt;) -&gt; UiNode {
+<a href=#760 id=760 data-nosnippet>760</a>    <span class="kw">let </span><span class="kw-2">mut </span>handler = handler.into_wgt_runner();
+<a href=#761 id=761 data-nosnippet>761</a>    <span class="kw">let </span><span class="kw-2">mut </span>update = <span class="bool-val">false</span>;
+<a href=#762 id=762 data-nosnippet>762</a>    <span class="kw">let </span><span class="kw-2">mut </span>window_load = VarHandle::dummy();
+<a href=#763 id=763 data-nosnippet>763</a>
+<a href=#764 id=764 data-nosnippet>764</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#765 id=765 data-nosnippet>765</a>        UiNodeOp::Init =&gt; {
+<a href=#766 id=766 data-nosnippet>766</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#767 id=767 data-nosnippet>767</a>
+<a href=#768 id=768 data-nosnippet>768</a>            update = CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded);
+<a href=#769 id=769 data-nosnippet>769</a>            <span class="kw">if </span>update {
+<a href=#770 id=770 data-nosnippet>770</a>                WIDGET.layout();
+<a href=#771 id=771 data-nosnippet>771</a>            }
+<a href=#772 id=772 data-nosnippet>772</a>        }
+<a href=#773 id=773 data-nosnippet>773</a>        UiNodeOp::Deinit =&gt; {
+<a href=#774 id=774 data-nosnippet>774</a>            handler.deinit();
+<a href=#775 id=775 data-nosnippet>775</a>            window_load = VarHandle::dummy();
+<a href=#776 id=776 data-nosnippet>776</a>        }
+<a href=#777 id=777 data-nosnippet>777</a>        UiNodeOp::Update { .. } =&gt; {
+<a href=#778 id=778 data-nosnippet>778</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(new_img) = CONTEXT_IMAGE_VAR.get_new() {
+<a href=#779 id=779 data-nosnippet>779</a>                update = new_img.is_loaded();
+<a href=#780 id=780 data-nosnippet>780</a>                <span class="kw">if </span>update {
+<a href=#781 id=781 data-nosnippet>781</a>                    WIDGET.layout();
+<a href=#782 id=782 data-nosnippet>782</a>                }
+<a href=#783 id=783 data-nosnippet>783</a>            }
+<a href=#784 id=784 data-nosnippet>784</a>
+<a href=#785 id=785 data-nosnippet>785</a>            handler.update();
+<a href=#786 id=786 data-nosnippet>786</a>        }
+<a href=#787 id=787 data-nosnippet>787</a>        UiNodeOp::Layout { .. } <span class="kw">if </span>std::mem::take(<span class="kw-2">&amp;mut </span>update) &amp;&amp; CONTEXT_IMAGE_VAR.with(ImageEntry::is_loaded) =&gt; {
+<a href=#788 id=788 data-nosnippet>788</a>            <span class="kw">let </span>win_state = WINDOW.vars().instance_state();
+<a href=#789 id=789 data-nosnippet>789</a>            <span class="kw">let </span>has_renderer = WINDOW.mode().has_renderer();
+<a href=#790 id=790 data-nosnippet>790</a>            <span class="kw">if let </span>WindowInstanceState::Loaded { has_view } = win_state.get()
+<a href=#791 id=791 data-nosnippet>791</a>                &amp;&amp; (!has_renderer || has_view)
+<a href=#792 id=792 data-nosnippet>792</a>            {
+<a href=#793 id=793 data-nosnippet>793</a>                handler.event(<span class="kw-2">&amp;</span>ImgLoadArgs {});
+<a href=#794 id=794 data-nosnippet>794</a>            } <span class="kw">else if </span>window_load.is_dummy() {
+<a href=#795 id=795 data-nosnippet>795</a>                <span class="comment">// wait window load, this is because its common for window to change size
+<a href=#796 id=796 data-nosnippet>796</a>                // on open as the OS sets the state and `on_load_layout` primary use is getting
+<a href=#797 id=797 data-nosnippet>797</a>                // an "initial" presentation state for scale to fit for example
+<a href=#798 id=798 data-nosnippet>798</a>                </span>update = <span class="bool-val">true</span>;
+<a href=#799 id=799 data-nosnippet>799</a>                <span class="kw">let </span>id = WIDGET.id();
+<a href=#800 id=800 data-nosnippet>800</a>                window_load = win_state.hook(<span class="kw">move </span>|a| <span class="kw">match </span>a.value() {
+<a href=#801 id=801 data-nosnippet>801</a>                    zng_ext_window::WindowInstanceState::Loaded { has_view } <span class="kw">if </span>!has_renderer || <span class="kw-2">*</span>has_view =&gt; {
+<a href=#802 id=802 data-nosnippet>802</a>                        UPDATES.layout(id);
+<a href=#803 id=803 data-nosnippet>803</a>                        <span class="bool-val">false
+<a href=#804 id=804 data-nosnippet>804</a>                    </span>}
+<a href=#805 id=805 data-nosnippet>805</a>                    zng_ext_window::WindowInstanceState::Closed =&gt; <span class="bool-val">false</span>,
+<a href=#806 id=806 data-nosnippet>806</a>                    <span class="kw">_ </span>=&gt; <span class="bool-val">true</span>,
+<a href=#807 id=807 data-nosnippet>807</a>                });
+<a href=#808 id=808 data-nosnippet>808</a>            }
+<a href=#809 id=809 data-nosnippet>809</a>        }
+<a href=#810 id=810 data-nosnippet>810</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#811 id=811 data-nosnippet>811</a>    })
+<a href=#812 id=812 data-nosnippet>812</a>}
+<a href=#813 id=813 data-nosnippet>813</a>
+<a href=#814 id=814 data-nosnippet>814</a><span class="doccomment">/// Block window load until image is loaded.
+<a href=#815 id=815 data-nosnippet>815</a>///
+<a href=#816 id=816 data-nosnippet>816</a>/// If the image widget is in the initial window content a [`WindowLoadingHandle`] is used to delay the window
+<a href=#817 id=817 data-nosnippet>817</a>/// visually opening until the source loads, fails to load or a timeout elapses. By default `true` sets the timeout to 1 second.
+<a href=#818 id=818 data-nosnippet>818</a>///
+<a href=#819 id=819 data-nosnippet>819</a>/// [`WindowLoadingHandle`]: zng_ext_window::WindowLoadingHandle
+<a href=#820 id=820 data-nosnippet>820</a></span><span class="attr">#[property(LAYOUT, default(<span class="bool-val">false</span>), widget_impl(Image))]
+<a href=#821 id=821 data-nosnippet>821</a></span><span class="kw">pub fn </span>img_block_window_load(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoValue&lt;BlockWindowLoad&gt;) -&gt; UiNode {
+<a href=#822 id=822 data-nosnippet>822</a>    <span class="kw">let </span>enabled = enabled.into();
+<a href=#823 id=823 data-nosnippet>823</a>    <span class="kw">let </span><span class="kw-2">mut </span>block = <span class="prelude-val">None</span>;
+<a href=#824 id=824 data-nosnippet>824</a>
+<a href=#825 id=825 data-nosnippet>825</a>    match_node(child, <span class="kw">move </span>|<span class="kw">_</span>, op| <span class="kw">match </span>op {
+<a href=#826 id=826 data-nosnippet>826</a>        UiNodeOp::Init =&gt; {
+<a href=#827 id=827 data-nosnippet>827</a>            WIDGET.sub_var(<span class="kw-2">&amp;</span>CONTEXT_IMAGE_VAR);
+<a href=#828 id=828 data-nosnippet>828</a>
+<a href=#829 id=829 data-nosnippet>829</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(delay) = enabled.deadline() {
+<a href=#830 id=830 data-nosnippet>830</a>                block = WINDOW.loading_handle(delay, <span class="string">"img_block_window_load"</span>);
+<a href=#831 id=831 data-nosnippet>831</a>            }
+<a href=#832 id=832 data-nosnippet>832</a>        }
+<a href=#833 id=833 data-nosnippet>833</a>        UiNodeOp::Update { .. } <span class="kw">if </span>block.is_some() &amp;&amp; !CONTEXT_IMAGE_VAR.with(ImageEntry::is_loading) =&gt; {
+<a href=#834 id=834 data-nosnippet>834</a>            block = <span class="prelude-val">None</span>;
+<a href=#835 id=835 data-nosnippet>835</a>        }
+<a href=#836 id=836 data-nosnippet>836</a>        <span class="kw">_ </span>=&gt; {}
+<a href=#837 id=837 data-nosnippet>837</a>    })
+<a href=#838 id=838 data-nosnippet>838</a>}
 </code></pre></div></section></main></body></html>

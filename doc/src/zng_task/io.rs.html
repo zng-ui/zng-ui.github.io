@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/io.rs`."><title>io.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>io.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! IO tasks.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-task/src/io.rs`."><title>io.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_task" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_task/</div>io.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! IO tasks.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! Most of the types in this module are re-exported from [`futures_lite::io`].
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -50,7 +50,7 @@
 <a href=#50 id=50 data-nosnippet>50</a>        }
 <a href=#51 id=51 data-nosnippet>51</a>    }
 <a href=#52 id=52 data-nosnippet>52</a>
-<a href=#53 id=53 data-nosnippet>53</a>    <span class="kw">fn </span>on_read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bytes: usize) {
+<a href=#53 id=53 data-nosnippet>53</a>    <span class="kw">fn </span>on_read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bytes: u64) {
 <a href=#54 id=54 data-nosnippet>54</a>        <span class="kw">if </span>bytes == <span class="number">0 </span>{
 <a href=#55 id=55 data-nosnippet>55</a>            <span class="kw">return</span>;
 <a href=#56 id=56 data-nosnippet>56</a>        }
@@ -72,7 +72,7 @@
 <a href=#72 id=72 data-nosnippet>72</a>        });
 <a href=#73 id=73 data-nosnippet>73</a>    }
 <a href=#74 id=74 data-nosnippet>74</a>
-<a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">fn </span>on_write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bytes: usize) {
+<a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">fn </span>on_write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, bytes: u64) {
 <a href=#76 id=76 data-nosnippet>76</a>        <span class="kw">if </span>bytes == <span class="number">0 </span>{
 <a href=#77 id=77 data-nosnippet>77</a>            <span class="kw">return</span>;
 <a href=#78 id=78 data-nosnippet>78</a>        }
@@ -134,7 +134,7 @@
 <a href=#134 id=134 data-nosnippet>134</a>
 <a href=#135 id=135 data-nosnippet>135</a><span class="kw">fn </span>bytes_per_sec(bytes: ByteLength, elapsed: Duration) -&gt; ByteLength {
 <a href=#136 id=136 data-nosnippet>136</a>    <span class="kw">let </span>bytes_per_sec = bytes.<span class="number">0 </span><span class="kw">as </span>u128 / elapsed.as_nanos() / Duration::from_secs(<span class="number">1</span>).as_nanos();
-<a href=#137 id=137 data-nosnippet>137</a>    ByteLength(bytes_per_sec <span class="kw">as </span>usize)
+<a href=#137 id=137 data-nosnippet>137</a>    ByteLength(bytes_per_sec <span class="kw">as </span>u64)
 <a href=#138 id=138 data-nosnippet>138</a>}
 <a href=#139 id=139 data-nosnippet>139</a>
 <a href=#140 id=140 data-nosnippet>140</a><span class="kw">impl</span>&lt;T: AsyncRead&gt; AsyncRead <span class="kw">for </span>Measure&lt;T&gt; {
@@ -145,7 +145,7 @@
 <a href=#145 id=145 data-nosnippet>145</a>        <span class="comment">// SAFETY: we don't move task
 <a href=#146 id=146 data-nosnippet>146</a>        </span><span class="kw">match unsafe </span>{ Pin::new_unchecked(<span class="kw-2">&amp;mut </span>self_.task) }.poll_read(cx, buf) {
 <a href=#147 id=147 data-nosnippet>147</a>            Poll::Ready(<span class="prelude-val">Ok</span>(bytes)) =&gt; {
-<a href=#148 id=148 data-nosnippet>148</a>                self_.inner.on_read(bytes);
+<a href=#148 id=148 data-nosnippet>148</a>                self_.inner.on_read(bytes <span class="kw">as </span>u64);
 <a href=#149 id=149 data-nosnippet>149</a>                Poll::Ready(<span class="prelude-val">Ok</span>(bytes))
 <a href=#150 id=150 data-nosnippet>150</a>            }
 <a href=#151 id=151 data-nosnippet>151</a>            p =&gt; p,
@@ -160,7 +160,7 @@
 <a href=#160 id=160 data-nosnippet>160</a>        <span class="comment">// SAFETY: we don't move task
 <a href=#161 id=161 data-nosnippet>161</a>        </span><span class="kw">match unsafe </span>{ Pin::new_unchecked(<span class="kw-2">&amp;mut </span>self_.task) }.poll_write(cx, buf) {
 <a href=#162 id=162 data-nosnippet>162</a>            Poll::Ready(<span class="prelude-val">Ok</span>(bytes)) =&gt; {
-<a href=#163 id=163 data-nosnippet>163</a>                self_.inner.on_write(bytes);
+<a href=#163 id=163 data-nosnippet>163</a>                self_.inner.on_write(bytes <span class="kw">as </span>u64);
 <a href=#164 id=164 data-nosnippet>164</a>                Poll::Ready(<span class="prelude-val">Ok</span>(bytes))
 <a href=#165 id=165 data-nosnippet>165</a>            }
 <a href=#166 id=166 data-nosnippet>166</a>            p =&gt; p,
@@ -197,14 +197,14 @@
 <a href=#197 id=197 data-nosnippet>197</a>        </span><span class="kw">let </span>self_ = <span class="kw">unsafe </span>{ <span class="self">self</span>.get_unchecked_mut() };
 <a href=#198 id=198 data-nosnippet>198</a>        <span class="comment">// SAFETY: we don't move task
 <a href=#199 id=199 data-nosnippet>199</a>        </span><span class="kw">unsafe </span>{ Pin::new_unchecked(<span class="kw-2">&amp;mut </span>self_.task) }.consume(amt);
-<a href=#200 id=200 data-nosnippet>200</a>        self_.inner.on_read(amt);
+<a href=#200 id=200 data-nosnippet>200</a>        self_.inner.on_read(amt <span class="kw">as </span>u64);
 <a href=#201 id=201 data-nosnippet>201</a>    }
 <a href=#202 id=202 data-nosnippet>202</a>}
 <a href=#203 id=203 data-nosnippet>203</a><span class="kw">impl</span>&lt;T: Read&gt; Read <span class="kw">for </span>Measure&lt;T&gt; {
 <a href=#204 id=204 data-nosnippet>204</a>    <span class="kw">fn </span>read(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;mut </span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;usize&gt; {
 <a href=#205 id=205 data-nosnippet>205</a>        <span class="kw">match </span><span class="self">self</span>.task.read(buf) {
 <a href=#206 id=206 data-nosnippet>206</a>            <span class="prelude-val">Ok</span>(bytes) =&gt; {
-<a href=#207 id=207 data-nosnippet>207</a>                <span class="self">self</span>.inner.on_read(bytes);
+<a href=#207 id=207 data-nosnippet>207</a>                <span class="self">self</span>.inner.on_read(bytes <span class="kw">as </span>u64);
 <a href=#208 id=208 data-nosnippet>208</a>                <span class="prelude-val">Ok</span>(bytes)
 <a href=#209 id=209 data-nosnippet>209</a>            }
 <a href=#210 id=210 data-nosnippet>210</a>            r =&gt; r,
@@ -215,7 +215,7 @@
 <a href=#215 id=215 data-nosnippet>215</a>    <span class="kw">fn </span>write(<span class="kw-2">&amp;mut </span><span class="self">self</span>, buf: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;usize&gt; {
 <a href=#216 id=216 data-nosnippet>216</a>        <span class="kw">match </span><span class="self">self</span>.task.write(buf) {
 <a href=#217 id=217 data-nosnippet>217</a>            <span class="prelude-val">Ok</span>(bytes) =&gt; {
-<a href=#218 id=218 data-nosnippet>218</a>                <span class="self">self</span>.inner.on_write(bytes);
+<a href=#218 id=218 data-nosnippet>218</a>                <span class="self">self</span>.inner.on_write(bytes <span class="kw">as </span>u64);
 <a href=#219 id=219 data-nosnippet>219</a>                <span class="prelude-val">Ok</span>(bytes)
 <a href=#220 id=220 data-nosnippet>220</a>            }
 <a href=#221 id=221 data-nosnippet>221</a>            r =&gt; r,
@@ -233,7 +233,7 @@
 <a href=#233 id=233 data-nosnippet>233</a>
 <a href=#234 id=234 data-nosnippet>234</a>    <span class="kw">fn </span>consume(<span class="kw-2">&amp;mut </span><span class="self">self</span>, amount: usize) {
 <a href=#235 id=235 data-nosnippet>235</a>        <span class="self">self</span>.task.consume(amount);
-<a href=#236 id=236 data-nosnippet>236</a>        <span class="self">self</span>.inner.on_read(amount);
+<a href=#236 id=236 data-nosnippet>236</a>        <span class="self">self</span>.inner.on_read(amount <span class="kw">as </span>u64);
 <a href=#237 id=237 data-nosnippet>237</a>    }
 <a href=#238 id=238 data-nosnippet>238</a>}
 <a href=#239 id=239 data-nosnippet>239</a>
@@ -389,7 +389,7 @@
 <a href=#389 id=389 data-nosnippet>389</a>                waker: McWaker::empty(),
 <a href=#390 id=390 data-nosnippet>390</a>                lazy_wakers: <span class="macro">vec!</span>[],
 <a href=#391 id=391 data-nosnippet>391</a>
-<a href=#392 id=392 data-nosnippet>392</a>                buf: Vec::with_capacity(<span class="number">10</span>.kilobytes().<span class="number">0</span>),
+<a href=#392 id=392 data-nosnippet>392</a>                buf: Vec::with_capacity(<span class="number">10</span>.kilobytes().<span class="number">0 </span><span class="kw">as </span>usize),
 <a href=#393 id=393 data-nosnippet>393</a>
 <a href=#394 id=394 data-nosnippet>394</a>                clones,
 <a href=#395 id=395 data-nosnippet>395</a>                non_lazy_count: <span class="number">1</span>,
@@ -412,7 +412,7 @@
 <a href=#412 id=412 data-nosnippet>412</a>    ///
 <a href=#413 id=413 data-nosnippet>413</a>    /// [`is_lazy`]: Self::is_lazy
 <a href=#414 id=414 data-nosnippet>414</a>    </span><span class="kw">pub fn </span>set_lazy(<span class="kw-2">&amp;mut </span><span class="self">self</span>, lazy: bool) {
-<a href=#415 id=415 data-nosnippet>415</a>        <span class="kw">if </span><span class="self">self</span>.<span class="macro">lazy !</span>= lazy {
+<a href=#415 id=415 data-nosnippet>415</a>        <span class="kw">if </span><span class="self">self</span>.lazy != lazy {
 <a href=#416 id=416 data-nosnippet>416</a>            <span class="kw">if </span>lazy {
 <a href=#417 id=417 data-nosnippet>417</a>                <span class="self">self</span>.inner.lock().non_lazy_count -= <span class="number">1</span>;
 <a href=#418 id=418 data-nosnippet>418</a>            } <span class="kw">else </span>{
@@ -512,7 +512,7 @@
 <a href=#512 id=512 data-nosnippet>512</a>
 <a href=#513 id=513 data-nosnippet>513</a>                    <span class="kw">let </span>new_start = inner.buf.len();
 <a href=#514 id=514 data-nosnippet>514</a>
-<a href=#515 id=515 data-nosnippet>515</a>                    inner.buf.resize(inner.buf.len() + buf.len().max(<span class="number">10</span>.kilobytes().<span class="number">0</span>), <span class="number">0</span>);
+<a href=#515 id=515 data-nosnippet>515</a>                    inner.buf.resize(inner.buf.len() + buf.len().max(<span class="number">10</span>.kilobytes().<span class="number">0 </span><span class="kw">as </span>usize), <span class="number">0</span>);
 <a href=#516 id=516 data-nosnippet>516</a>
 <a href=#517 id=517 data-nosnippet>517</a>                    <span class="kw">let </span><span class="kw-2">mut </span>inner_cx = task::Context::from_waker(<span class="kw-2">&amp;</span>waker);
 <a href=#518 id=518 data-nosnippet>518</a>
@@ -647,7 +647,7 @@
 <a href=#647 id=647 data-nosnippet>647</a>    </span><span class="kw">pub fn </span>new(source: S, limit: ByteLength, on_limit: <span class="kw">fn</span>() -&gt; std::io::Error) -&gt; <span class="self">Self </span>{
 <a href=#648 id=648 data-nosnippet>648</a>        <span class="self">Self </span>{
 <a href=#649 id=649 data-nosnippet>649</a>            source,
-<a href=#650 id=650 data-nosnippet>650</a>            limit: limit.<span class="number">0</span>,
+<a href=#650 id=650 data-nosnippet>650</a>            limit: limit.<span class="number">0</span>.try_into().unwrap_or(usize::MAX),
 <a href=#651 id=651 data-nosnippet>651</a>            on_limit,
 <a href=#652 id=652 data-nosnippet>652</a>        }
 <a href=#653 id=653 data-nosnippet>653</a>    }
@@ -767,7 +767,7 @@
 <a href=#767 id=767 data-nosnippet>767</a>
 <a href=#768 id=768 data-nosnippet>768</a>    <span class="attr">#[test]
 <a href=#769 id=769 data-nosnippet>769</a>    </span><span class="kw">pub fn </span>mc_buf_reader_parallel() {
-<a href=#770 id=770 data-nosnippet>770</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#770 id=770 data-nosnippet>770</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#771 id=771 data-nosnippet>771</a>
 <a href=#772 id=772 data-nosnippet>772</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
 <a href=#773 id=773 data-nosnippet>773</a>        <span class="kw">let _ </span>= data.clone().blocking_read(<span class="kw-2">&amp;mut </span>expected[..]);
@@ -803,7 +803,7 @@
 <a href=#803 id=803 data-nosnippet>803</a>
 <a href=#804 id=804 data-nosnippet>804</a>    <span class="attr">#[test]
 <a href=#805 id=805 data-nosnippet>805</a>    </span><span class="kw">pub fn </span>mc_buf_reader_single() {
-<a href=#806 id=806 data-nosnippet>806</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#806 id=806 data-nosnippet>806</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#807 id=807 data-nosnippet>807</a>
 <a href=#808 id=808 data-nosnippet>808</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
 <a href=#809 id=809 data-nosnippet>809</a>        <span class="kw">let _ </span>= data.clone().blocking_read(<span class="kw-2">&amp;mut </span>expected[..]);
@@ -825,7 +825,7 @@
 <a href=#825 id=825 data-nosnippet>825</a>
 <a href=#826 id=826 data-nosnippet>826</a>    <span class="attr">#[test]
 <a href=#827 id=827 data-nosnippet>827</a>    </span><span class="kw">pub fn </span>mc_buf_reader_sequential() {
-<a href=#828 id=828 data-nosnippet>828</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#828 id=828 data-nosnippet>828</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#829 id=829 data-nosnippet>829</a>
 <a href=#830 id=830 data-nosnippet>830</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
 <a href=#831 id=831 data-nosnippet>831</a>        <span class="kw">let _ </span>= data.clone().blocking_read(<span class="kw-2">&amp;mut </span>expected[..]);
@@ -854,7 +854,7 @@
 <a href=#854 id=854 data-nosnippet>854</a>
 <a href=#855 id=855 data-nosnippet>855</a>    <span class="attr">#[test]
 <a href=#856 id=856 data-nosnippet>856</a>    </span><span class="kw">pub fn </span>mc_buf_reader_completed() {
-<a href=#857 id=857 data-nosnippet>857</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#857 id=857 data-nosnippet>857</a>        <span class="kw">let </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#858 id=858 data-nosnippet>858</a>        <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::with_capacity(data.len);
 <a href=#859 id=859 data-nosnippet>859</a>        <span class="kw">let </span><span class="kw-2">mut </span>a = McBufReader::new(data);
 <a href=#860 id=860 data-nosnippet>860</a>
@@ -873,7 +873,7 @@
 <a href=#873 id=873 data-nosnippet>873</a>
 <a href=#874 id=874 data-nosnippet>874</a>    <span class="attr">#[test]
 <a href=#875 id=875 data-nosnippet>875</a>    </span><span class="kw">pub fn </span>mc_buf_reader_error() {
-<a href=#876 id=876 data-nosnippet>876</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">20</span>.kilobytes().<span class="number">0</span>);
+<a href=#876 id=876 data-nosnippet>876</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">20</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#877 id=877 data-nosnippet>877</a>        data.set_error();
 <a href=#878 id=878 data-nosnippet>878</a>
 <a href=#879 id=879 data-nosnippet>879</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
@@ -901,7 +901,7 @@
 <a href=#901 id=901 data-nosnippet>901</a>
 <a href=#902 id=902 data-nosnippet>902</a>    <span class="attr">#[test]
 <a href=#903 id=903 data-nosnippet>903</a>    </span><span class="kw">pub fn </span>mc_buf_reader_error_completed() {
-<a href=#904 id=904 data-nosnippet>904</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">20</span>.kilobytes().<span class="number">0</span>);
+<a href=#904 id=904 data-nosnippet>904</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">20</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#905 id=905 data-nosnippet>905</a>        data.set_error();
 <a href=#906 id=906 data-nosnippet>906</a>
 <a href=#907 id=907 data-nosnippet>907</a>        <span class="kw">let </span><span class="kw-2">mut </span>buf = Vec::with_capacity(data.len);
@@ -924,7 +924,7 @@
 <a href=#924 id=924 data-nosnippet>924</a>
 <a href=#925 id=925 data-nosnippet>925</a>    <span class="attr">#[test]
 <a href=#926 id=926 data-nosnippet>926</a>    </span><span class="kw">pub fn </span>mc_buf_reader_parallel_with_delay1() {
-<a href=#927 id=927 data-nosnippet>927</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#927 id=927 data-nosnippet>927</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#928 id=928 data-nosnippet>928</a>        data.enable_pending();
 <a href=#929 id=929 data-nosnippet>929</a>
 <a href=#930 id=930 data-nosnippet>930</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
@@ -961,7 +961,7 @@
 <a href=#961 id=961 data-nosnippet>961</a>
 <a href=#962 id=962 data-nosnippet>962</a>    <span class="attr">#[test]
 <a href=#963 id=963 data-nosnippet>963</a>    </span><span class="kw">pub fn </span>mc_buf_reader_parallel_with_delay2() {
-<a href=#964 id=964 data-nosnippet>964</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0</span>);
+<a href=#964 id=964 data-nosnippet>964</a>        <span class="kw">let </span><span class="kw-2">mut </span>data = Data::new(<span class="number">60</span>.kilobytes().<span class="number">0 </span><span class="kw">as _</span>);
 <a href=#965 id=965 data-nosnippet>965</a>        data.enable_pending();
 <a href=#966 id=966 data-nosnippet>966</a>
 <a href=#967 id=967 data-nosnippet>967</a>        <span class="kw">let </span><span class="kw-2">mut </span>expected = <span class="macro">vec!</span>[<span class="number">0</span>; data.len];
@@ -1076,7 +1076,7 @@
 <a href=#1076 id=1076 data-nosnippet>1076</a>                    <span class="kw">let </span>len_not_eq = a.len() != b.len();
 <a href=#1077 id=1077 data-nosnippet>1077</a>                    <span class="kw">let </span><span class="kw-2">mut </span>data_not_eq = <span class="prelude-val">None</span>;
 <a href=#1078 id=1078 data-nosnippet>1078</a>                    <span class="kw">for </span>(i, (a, b)) <span class="kw">in </span>a.iter().zip(b.iter()).enumerate() {
-<a href=#1079 id=1079 data-nosnippet>1079</a>                        <span class="kw">if </span><span class="macro">a !</span>= b {
+<a href=#1079 id=1079 data-nosnippet>1079</a>                        <span class="kw">if </span>a != b {
 <a href=#1080 id=1080 data-nosnippet>1080</a>                            data_not_eq = <span class="prelude-val">Some</span>(i);
 <a href=#1081 id=1081 data-nosnippet>1081</a>                            <span class="kw">break</span>;
 <a href=#1082 id=1082 data-nosnippet>1082</a>                        }

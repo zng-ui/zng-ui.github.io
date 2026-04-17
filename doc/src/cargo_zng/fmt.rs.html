@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/fmt.rs`."><title>fmt.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">cargo_zng/</div>fmt.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/cargo-zng/src/fmt.rs`."><title>fmt.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">cargo_zng/</div>fmt.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    borrow::Cow,
 <a href=#3 id=3 data-nosnippet>3</a>    collections::{HashMap, HashSet},
 <a href=#4 id=4 data-nosnippet>4</a>    fs,
@@ -188,7 +188,7 @@
 <a href=#188 id=188 data-nosnippet>188</a>        .collect();
 <a href=#189 id=189 data-nosnippet>189</a>
 <a href=#190 id=190 data-nosnippet>190</a>    <span class="comment">// latest modified first
-<a href=#191 id=191 data-nosnippet>191</a>    </span>files.sort_by(|a, b| b.<span class="number">1</span>.cmp(<span class="kw-2">&amp;</span>a.<span class="number">1</span>));
+<a href=#191 id=191 data-nosnippet>191</a>    </span>files.sort_by_key(|f| std::cmp::Reverse(f.<span class="number">1</span>));
 <a href=#192 id=192 data-nosnippet>192</a>
 <a href=#193 id=193 data-nosnippet>193</a>    <span class="kw">let </span>files: Vec&lt;<span class="kw">_</span>&gt; = files.into_iter().map(|(p, <span class="kw">_</span>)| p).collect();
 <a href=#194 id=194 data-nosnippet>194</a>
@@ -296,11 +296,11 @@
 <a href=#296 id=296 data-nosnippet>296</a>
 <a href=#297 id=297 data-nosnippet>297</a>    <span class="kw">let </span>formatted_code = custom_fmt_docs(<span class="kw-2">&amp;</span>formatted_code, <span class="kw-2">&amp;</span>fmt, <span class="kw-2">&amp;</span>rs_file).<span class="kw">await</span>;
 <a href=#298 id=298 data-nosnippet>298</a>
-<a href=#299 id=299 data-nosnippet>299</a>    <span class="kw">if </span><span class="macro">formatted_code !</span>= file {
+<a href=#299 id=299 data-nosnippet>299</a>    <span class="kw">if </span>formatted_code != file {
 <a href=#300 id=300 data-nosnippet>300</a>        <span class="kw">if </span>check {
 <a href=#301 id=301 data-nosnippet>301</a>            <span class="comment">// reformat early for check
 <a href=#302 id=302 data-nosnippet>302</a>            </span><span class="kw">let </span>formatted_code = fmt.format(formatted_code.clone()).<span class="kw">await</span>.unwrap_or(formatted_code);
-<a href=#303 id=303 data-nosnippet>303</a>            <span class="kw">if </span><span class="macro">formatted_code !</span>= file {
+<a href=#303 id=303 data-nosnippet>303</a>            <span class="kw">if </span>formatted_code != file {
 <a href=#304 id=304 data-nosnippet>304</a>                <span class="kw">let </span>diff = similar::TextDiff::from_lines(<span class="kw-2">&amp;</span>file, <span class="kw-2">&amp;</span>formatted_code);
 <a href=#305 id=305 data-nosnippet>305</a>                <span class="macro">fatal!</span>(<span class="string">"Diff in {}:\n{}"</span>, rs_file.display(), diff.unified_diff().context_radius(<span class="number">2</span>));
 <a href=#306 id=306 data-nosnippet>306</a>            }
@@ -511,7 +511,7 @@
 <a href=#511 id=511 data-nosnippet>511</a>        }
 <a href=#512 id=512 data-nosnippet>512</a>    }
 <a href=#513 id=513 data-nosnippet>513</a>
-<a href=#514 id=514 data-nosnippet>514</a>    <span class="kw">if </span><span class="macro">formatted !</span>= file {
+<a href=#514 id=514 data-nosnippet>514</a>    <span class="kw">if </span>formatted != file {
 <a href=#515 id=515 data-nosnippet>515</a>        <span class="kw">if </span>check {
 <a href=#516 id=516 data-nosnippet>516</a>            <span class="kw">let </span>diff = similar::TextDiff::from_lines(<span class="kw-2">&amp;</span>file, <span class="kw-2">&amp;</span>formatted);
 <a href=#517 id=517 data-nosnippet>517</a>            <span class="macro">fatal!</span>(<span class="string">"Diff in {}:\n{}"</span>, md_file.display(), diff.unified_diff().context_radius(<span class="number">2</span>));
@@ -565,7 +565,7 @@
 <a href=#565 id=565 data-nosnippet>565</a>                    <span class="kw">let </span>line_start = code[..bang].rfind(<span class="string">'\n'</span>).unwrap_or(<span class="number">0</span>);
 <a href=#566 id=566 data-nosnippet>566</a>                    <span class="kw">let </span>base_indent = code[line_start..bang]
 <a href=#567 id=567 data-nosnippet>567</a>                        .chars()
-<a href=#568 id=568 data-nosnippet>568</a>                        .skip_while(|<span class="kw-2">&amp;</span>c| <span class="macro">c !</span>= <span class="string">' '</span>)
+<a href=#568 id=568 data-nosnippet>568</a>                        .skip_while(|<span class="kw-2">&amp;</span>c| c != <span class="string">' '</span>)
 <a href=#569 id=569 data-nosnippet>569</a>                        .take_while(|<span class="kw-2">&amp;</span>c| c == <span class="string">' '</span>)
 <a href=#570 id=570 data-nosnippet>570</a>                        .count();
 <a href=#571 id=571 data-nosnippet>571</a>
@@ -573,7 +573,7 @@
 <a href=#573 id=573 data-nosnippet>573</a>                    <span class="kw">let </span>group_code = <span class="kw-2">&amp;</span>code[group_bytes.clone()];
 <a href=#574 id=574 data-nosnippet>574</a>
 <a href=#575 id=575 data-nosnippet>575</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(formatted) = try_fmt_macro(base_indent, group_code, fmt).<span class="kw">await
-<a href=#576 id=576 data-nosnippet>576</a>                        </span>&amp;&amp; <span class="macro">formatted !</span>= group_code
+<a href=#576 id=576 data-nosnippet>576</a>                        </span>&amp;&amp; formatted != group_code
 <a href=#577 id=577 data-nosnippet>577</a>                    {
 <a href=#578 id=578 data-nosnippet>578</a>                        <span class="comment">// changed by custom format
 <a href=#579 id=579 data-nosnippet>579</a>                        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(stable) = try_fmt_macro(base_indent, <span class="kw-2">&amp;</span>formatted, fmt).<span class="kw">await </span>{
@@ -1518,7 +1518,7 @@
 <a href=#1518 id=1518 data-nosnippet>1518</a>            } <span class="kw">else if let </span><span class="prelude-val">Some</span>(line) = line.strip_prefix(<span class="kw-2">&amp;</span>strip_tabs) {
 <a href=#1519 id=1519 data-nosnippet>1519</a>                item.push_str(line);
 <a href=#1520 id=1520 data-nosnippet>1520</a>                item.push(<span class="string">'\n'</span>);
-<a href=#1521 id=1521 data-nosnippet>1521</a>            } <span class="kw">else if </span><span class="macro">line !</span>= <span class="string">"}" </span>{
+<a href=#1521 id=1521 data-nosnippet>1521</a>            } <span class="kw">else if </span>line != <span class="string">"}" </span>{
 <a href=#1522 id=1522 data-nosnippet>1522</a>                item.push_str(line);
 <a href=#1523 id=1523 data-nosnippet>1523</a>                item.push(<span class="string">'\n'</span>);
 <a href=#1524 id=1524 data-nosnippet>1524</a>            }
@@ -1647,7 +1647,7 @@
 <a href=#1647 id=1647 data-nosnippet>1647</a>        }
 <a href=#1648 id=1648 data-nosnippet>1648</a>        <span class="kw">let </span>rustfmt_version = String::from_utf8_lossy(<span class="kw-2">&amp;</span>rustfmt_version.stdout);
 <a href=#1649 id=1649 data-nosnippet>1649</a>        args_key.update(rustfmt_version.as_bytes());
-<a href=#1650 id=1650 data-nosnippet>1650</a>        <span class="kw">let </span>args_key = <span class="macro">format!</span>(<span class="string">"{FMT_VERSION}:{:x}"</span>, args_key.finalize());
+<a href=#1650 id=1650 data-nosnippet>1650</a>        <span class="kw">let </span>args_key = <span class="macro">format!</span>(<span class="string">"{FMT_VERSION}:{:x}"</span>, base16ct::HexDisplay(<span class="kw-2">&amp;</span>args_key.finalize()));
 <a href=#1651 id=1651 data-nosnippet>1651</a>
 <a href=#1652 id=1652 data-nosnippet>1652</a>        <span class="kw">for </span>(key, t) <span class="kw">in </span><span class="self">self</span>.entries.iter_mut() {
 <a href=#1653 id=1653 data-nosnippet>1653</a>            <span class="kw">if </span>key == <span class="kw-2">&amp;</span>args_key {

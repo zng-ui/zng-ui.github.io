@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/mouse.rs`."><title>mouse.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/</div>mouse.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Mouse events and service.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-ext-input/src/mouse.rs`."><title>mouse.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_ext_input" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_ext_input/</div>mouse.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Mouse events and service.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! # Events
 <a href=#4 id=4 data-nosnippet>4</a>//!
@@ -329,7 +329,7 @@
 <a href=#329 id=329 data-nosnippet>329</a>
 <a href=#330 id=330 data-nosnippet>330</a>    <span class="doccomment">/// Event caused by a pointer capture change.
 <a href=#331 id=331 data-nosnippet>331</a>    </span><span class="kw">pub fn </span>is_capture_change(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#332 id=332 data-nosnippet>332</a>        <span class="self">self</span>.<span class="macro">prev_capture !</span>= <span class="self">self</span>.capture
+<a href=#332 id=332 data-nosnippet>332</a>        <span class="self">self</span>.prev_capture != <span class="self">self</span>.capture
 <a href=#333 id=333 data-nosnippet>333</a>    }
 <a href=#334 id=334 data-nosnippet>334</a>
 <a href=#335 id=335 data-nosnippet>335</a>    <span class="doccomment">/// Returns `true` if the `wgt` was not hovered, but now is.
@@ -1128,7 +1128,7 @@
 <a href=#1128 id=1128 data-nosnippet>1128</a>            repeat_count: <span class="number">0</span>,
 <a href=#1129 id=1129 data-nosnippet>1129</a>        });
 <a href=#1130 id=1130 data-nosnippet>1130</a>
-<a href=#1131 id=1131 data-nosnippet>1131</a>        <span class="kw">if </span>entry.<span class="macro">path !</span>= wgt_path {
+<a href=#1131 id=1131 data-nosnippet>1131</a>        <span class="kw">if </span>entry.path != wgt_path {
 <a href=#1132 id=1132 data-nosnippet>1132</a>            <span class="kw">let </span>actual_change = entry.path.as_path() != wgt_path.as_path();
 <a href=#1133 id=1133 data-nosnippet>1133</a>            <span class="comment">// else only interactivity change mid-click
 <a href=#1134 id=1134 data-nosnippet>1134</a>
@@ -1253,7 +1253,7 @@
 <a href=#1253 id=1253 data-nosnippet>1253</a>            <span class="self">self</span>.pos_device = <span class="prelude-val">Some</span>(device_id);
 <a href=#1254 id=1254 data-nosnippet>1254</a>        }
 <a href=#1255 id=1255 data-nosnippet>1255</a>
-<a href=#1256 id=1256 data-nosnippet>1256</a>        moved |= <span class="macro">position !</span>= <span class="self">self</span>.pos;
+<a href=#1256 id=1256 data-nosnippet>1256</a>        moved |= position != <span class="self">self</span>.pos;
 <a href=#1257 id=1257 data-nosnippet>1257</a>
 <a href=#1258 id=1258 data-nosnippet>1258</a>        <span class="kw">if </span>moved {
 <a href=#1259 id=1259 data-nosnippet>1259</a>            <span class="comment">// if moved to another window or within the same window.
@@ -1323,7 +1323,7 @@
 <a href=#1323 id=1323 data-nosnippet>1323</a>            <span class="kw">let </span>capture = POINTER_CAPTURE.current_capture().get();
 <a href=#1324 id=1324 data-nosnippet>1324</a>
 <a href=#1325 id=1325 data-nosnippet>1325</a>            <span class="comment">// mouse_enter/mouse_leave.
-<a href=#1326 id=1326 data-nosnippet>1326</a>            </span><span class="kw">let </span>hovered_args = <span class="kw">if </span><span class="self">self</span>.<span class="macro">hovered_value !</span>= target {
+<a href=#1326 id=1326 data-nosnippet>1326</a>            </span><span class="kw">let </span>hovered_args = <span class="kw">if </span><span class="self">self</span>.hovered_value != target {
 <a href=#1327 id=1327 data-nosnippet>1327</a>                <span class="self">self</span>.hovered.set(target.clone());
 <a href=#1328 id=1328 data-nosnippet>1328</a>                <span class="kw">let </span>prev_target = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.hovered_value, target.clone());
 <a href=#1329 id=1329 data-nosnippet>1329</a>                <span class="kw">let </span>args = MouseHoverArgs::now(
@@ -1411,7 +1411,7 @@
 <a href=#1411 id=1411 data-nosnippet>1411</a>        <span class="kw">if </span>new_window.is_some() {
 <a href=#1412 id=1412 data-nosnippet>1412</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = <span class="self">self</span>.pos_window {
 <a href=#1413 id=1413 data-nosnippet>1413</a>                <span class="comment">// last hovered window losing focus, and is not just focusing a nested window
-<a href=#1414 id=1414 data-nosnippet>1414</a>                </span><span class="kw">if </span>p == prev_window &amp;&amp; (new_window.is_none() || <span class="macro">new_window !</span>= <span class="self">self</span>.hits.as_ref().map(|h| h.window_id())) {
+<a href=#1414 id=1414 data-nosnippet>1414</a>                </span><span class="kw">if </span>p == prev_window &amp;&amp; (new_window.is_none() || new_window != <span class="self">self</span>.hits.as_ref().map(|h| h.window_id())) {
 <a href=#1415 id=1415 data-nosnippet>1415</a>                    <span class="self">self</span>.clean_all_state();
 <a href=#1416 id=1416 data-nosnippet>1416</a>                }
 <a href=#1417 id=1417 data-nosnippet>1417</a>            }
@@ -1461,7 +1461,7 @@
 <a href=#1461 id=1461 data-nosnippet>1461</a>            .unblocked();
 <a href=#1462 id=1462 data-nosnippet>1462</a>            <span class="self">self</span>.hits = <span class="prelude-val">Some</span>(pos_hits.clone());
 <a href=#1463 id=1463 data-nosnippet>1463</a>
-<a href=#1464 id=1464 data-nosnippet>1464</a>            <span class="kw">if </span><span class="self">self</span>.<span class="macro">hovered_value !</span>= target {
+<a href=#1464 id=1464 data-nosnippet>1464</a>            <span class="kw">if </span><span class="self">self</span>.hovered_value != target {
 <a href=#1465 id=1465 data-nosnippet>1465</a>                <span class="kw">let </span>capture = POINTER_CAPTURE.current_capture().get();
 <a href=#1466 id=1466 data-nosnippet>1466</a>                <span class="kw">let </span>prev = mem::replace(<span class="kw-2">&amp;mut </span><span class="self">self</span>.hovered_value, target.clone());
 <a href=#1467 id=1467 data-nosnippet>1467</a>                <span class="kw">let </span>args = MouseHoverArgs::now(window_id, <span class="prelude-val">None</span>, position, pos_hits, prev, target, capture.clone(), capture);

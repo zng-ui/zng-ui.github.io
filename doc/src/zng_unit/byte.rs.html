@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-unit/src/byte.rs`."><title>byte.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_unit" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_unit/</div>byte.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{fmt, ops};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-unit/src/byte.rs`."><title>byte.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_unit" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_unit/</div>byte.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{fmt, ops};
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span><span class="kw">super</span>::Factor;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -44,7 +44,7 @@
 <a href=#44 id=44 data-nosnippet>44</a>    /// See [`ByteLength::from_tera`] for more details.
 <a href=#45 id=45 data-nosnippet>45</a>    </span><span class="kw">fn </span>terabytes(<span class="self">self</span>) -&gt; ByteLength;
 <a href=#46 id=46 data-nosnippet>46</a>}
-<a href=#47 id=47 data-nosnippet>47</a><span class="kw">impl </span>ByteUnits <span class="kw">for </span>usize {
+<a href=#47 id=47 data-nosnippet>47</a><span class="kw">impl </span>ByteUnits <span class="kw">for </span>u64 {
 <a href=#48 id=48 data-nosnippet>48</a>    <span class="kw">fn </span>bytes(<span class="self">self</span>) -&gt; ByteLength {
 <a href=#49 id=49 data-nosnippet>49</a>        ByteLength(<span class="self">self</span>)
 <a href=#50 id=50 data-nosnippet>50</a>    }
@@ -125,9 +125,9 @@
 <a href=#125 id=125 data-nosnippet>125</a>/// you can use the [`ByteUnits`] extension methods to initialize from an integer literal.
 <a href=#126 id=126 data-nosnippet>126</a></span><span class="attr">#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Default, serde::Serialize, serde::Deserialize)]
 <a href=#127 id=127 data-nosnippet>127</a>#[serde(transparent)]
-<a href=#128 id=128 data-nosnippet>128</a></span><span class="kw">pub struct </span>ByteLength(<span class="kw">pub </span>usize);
-<a href=#129 id=129 data-nosnippet>129</a><span class="kw">impl </span>From&lt;usize&gt; <span class="kw">for </span>ByteLength {
-<a href=#130 id=130 data-nosnippet>130</a>    <span class="kw">fn </span>from(value: usize) -&gt; <span class="self">Self </span>{
+<a href=#128 id=128 data-nosnippet>128</a></span><span class="kw">pub struct </span>ByteLength(<span class="kw">pub </span>u64);
+<a href=#129 id=129 data-nosnippet>129</a><span class="kw">impl </span>From&lt;u64&gt; <span class="kw">for </span>ByteLength {
+<a href=#130 id=130 data-nosnippet>130</a>    <span class="kw">fn </span>from(value: u64) -&gt; <span class="self">Self </span>{
 <a href=#131 id=131 data-nosnippet>131</a>        <span class="self">Self</span>(value)
 <a href=#132 id=132 data-nosnippet>132</a>    }
 <a href=#133 id=133 data-nosnippet>133</a>}
@@ -159,7 +159,7 @@
 <a href=#159 id=159 data-nosnippet>159</a>    <span class="doccomment">/// Length in bytes.
 <a href=#160 id=160 data-nosnippet>160</a>    ///
 <a href=#161 id=161 data-nosnippet>161</a>    /// This is the same as `.0`.
-<a href=#162 id=162 data-nosnippet>162</a>    </span><span class="kw">pub fn </span>bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+<a href=#162 id=162 data-nosnippet>162</a>    </span><span class="kw">pub fn </span>bytes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; u64 {
 <a href=#163 id=163 data-nosnippet>163</a>        <span class="self">self</span>.<span class="number">0
 <a href=#164 id=164 data-nosnippet>164</a>    </span>}
 <a href=#165 id=165 data-nosnippet>165</a>
@@ -208,7 +208,7 @@
 <a href=#208 id=208 data-nosnippet>208</a>    }
 <a href=#209 id=209 data-nosnippet>209</a>
 <a href=#210 id=210 data-nosnippet>210</a>    <span class="doccomment">/// Maximum representable byte length.
-<a href=#211 id=211 data-nosnippet>211</a>    </span><span class="kw">pub const </span>MAX: ByteLength = ByteLength(usize::MAX);
+<a href=#211 id=211 data-nosnippet>211</a>    </span><span class="kw">pub const </span>MAX: ByteLength = ByteLength(u64::MAX);
 <a href=#212 id=212 data-nosnippet>212</a>
 <a href=#213 id=213 data-nosnippet>213</a>    <span class="doccomment">/// Adds the two lengths without overflowing or wrapping.
 <a href=#214 id=214 data-nosnippet>214</a>    </span><span class="kw">pub const fn </span>saturating_add(<span class="self">self</span>, rhs: ByteLength) -&gt; ByteLength {
@@ -277,7 +277,7 @@
 <a href=#277 id=277 data-nosnippet>277</a>    <span class="doccomment">/// From bytes.
 <a href=#278 id=278 data-nosnippet>278</a>    ///
 <a href=#279 id=279 data-nosnippet>279</a>    /// This is the same as `ByteLength(bytes)`.
-<a href=#280 id=280 data-nosnippet>280</a>    </span><span class="kw">pub const fn </span>from_byte(bytes: usize) -&gt; <span class="self">Self </span>{
+<a href=#280 id=280 data-nosnippet>280</a>    </span><span class="kw">pub const fn </span>from_byte(bytes: u64) -&gt; <span class="self">Self </span>{
 <a href=#281 id=281 data-nosnippet>281</a>        ByteLength(bytes)
 <a href=#282 id=282 data-nosnippet>282</a>    }
 <a href=#283 id=283 data-nosnippet>283</a>
@@ -288,7 +288,7 @@
 <a href=#288 id=288 data-nosnippet>288</a>        ByteLength(bytes.round() <span class="kw">as _</span>)
 <a href=#289 id=289 data-nosnippet>289</a>    }
 <a href=#290 id=290 data-nosnippet>290</a>
-<a href=#291 id=291 data-nosnippet>291</a>    <span class="kw">const fn </span>new(value: usize, scale: usize) -&gt; <span class="self">Self </span>{
+<a href=#291 id=291 data-nosnippet>291</a>    <span class="kw">const fn </span>new(value: u64, scale: u64) -&gt; <span class="self">Self </span>{
 <a href=#292 id=292 data-nosnippet>292</a>        ByteLength(value.saturating_mul(scale))
 <a href=#293 id=293 data-nosnippet>293</a>    }
 <a href=#294 id=294 data-nosnippet>294</a>
@@ -299,7 +299,7 @@
 <a href=#299 id=299 data-nosnippet>299</a>    <span class="doccomment">/// From kibi-bytes.
 <a href=#300 id=300 data-nosnippet>300</a>    ///
 <a href=#301 id=301 data-nosnippet>301</a>    /// 1 kibi-byte equals 1024 bytes.
-<a href=#302 id=302 data-nosnippet>302</a>    </span><span class="kw">pub const fn </span>from_kibi(kibi_bytes: usize) -&gt; <span class="self">Self </span>{
+<a href=#302 id=302 data-nosnippet>302</a>    </span><span class="kw">pub const fn </span>from_kibi(kibi_bytes: u64) -&gt; <span class="self">Self </span>{
 <a href=#303 id=303 data-nosnippet>303</a>        <span class="self">Self</span>::new(kibi_bytes, <span class="number">1024</span>)
 <a href=#304 id=304 data-nosnippet>304</a>    }
 <a href=#305 id=305 data-nosnippet>305</a>    <span class="doccomment">/// From kibi-bytes.
@@ -312,7 +312,7 @@
 <a href=#312 id=312 data-nosnippet>312</a>    <span class="doccomment">/// From kilo-bytes.
 <a href=#313 id=313 data-nosnippet>313</a>    ///
 <a href=#314 id=314 data-nosnippet>314</a>    /// 1 kilo-byte equals 1000 bytes.
-<a href=#315 id=315 data-nosnippet>315</a>    </span><span class="kw">pub const fn </span>from_kilo(kilo_bytes: usize) -&gt; <span class="self">Self </span>{
+<a href=#315 id=315 data-nosnippet>315</a>    </span><span class="kw">pub const fn </span>from_kilo(kilo_bytes: u64) -&gt; <span class="self">Self </span>{
 <a href=#316 id=316 data-nosnippet>316</a>        <span class="self">Self</span>::new(kilo_bytes, <span class="number">1000</span>)
 <a href=#317 id=317 data-nosnippet>317</a>    }
 <a href=#318 id=318 data-nosnippet>318</a>    <span class="doccomment">/// From kilo-bytes.
@@ -325,8 +325,8 @@
 <a href=#325 id=325 data-nosnippet>325</a>    <span class="doccomment">/// From mebi-bytes.
 <a href=#326 id=326 data-nosnippet>326</a>    ///
 <a href=#327 id=327 data-nosnippet>327</a>    /// 1 mebi-byte equals 1024² bytes.
-<a href=#328 id=328 data-nosnippet>328</a>    </span><span class="kw">pub const fn </span>from_mebi(mebi_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#329 id=329 data-nosnippet>329</a>        <span class="self">Self</span>::new(mebi_bytes, <span class="number">1024usize</span>.pow(<span class="number">2</span>))
+<a href=#328 id=328 data-nosnippet>328</a>    </span><span class="kw">pub const fn </span>from_mebi(mebi_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#329 id=329 data-nosnippet>329</a>        <span class="self">Self</span>::new(mebi_bytes, <span class="number">1024u64</span>.pow(<span class="number">2</span>))
 <a href=#330 id=330 data-nosnippet>330</a>    }
 <a href=#331 id=331 data-nosnippet>331</a>    <span class="doccomment">/// From mebi-bytes.
 <a href=#332 id=332 data-nosnippet>332</a>    ///
@@ -338,8 +338,8 @@
 <a href=#338 id=338 data-nosnippet>338</a>    <span class="doccomment">/// From mega-bytes.
 <a href=#339 id=339 data-nosnippet>339</a>    ///
 <a href=#340 id=340 data-nosnippet>340</a>    /// 1 mega-byte equals 1000² bytes.
-<a href=#341 id=341 data-nosnippet>341</a>    </span><span class="kw">pub const fn </span>from_mega(mega_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#342 id=342 data-nosnippet>342</a>        <span class="self">Self</span>::new(mega_bytes, <span class="number">1000usize</span>.pow(<span class="number">2</span>))
+<a href=#341 id=341 data-nosnippet>341</a>    </span><span class="kw">pub const fn </span>from_mega(mega_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#342 id=342 data-nosnippet>342</a>        <span class="self">Self</span>::new(mega_bytes, <span class="number">1000u64</span>.pow(<span class="number">2</span>))
 <a href=#343 id=343 data-nosnippet>343</a>    }
 <a href=#344 id=344 data-nosnippet>344</a>    <span class="doccomment">/// From mega-bytes.
 <a href=#345 id=345 data-nosnippet>345</a>    ///
@@ -351,8 +351,8 @@
 <a href=#351 id=351 data-nosnippet>351</a>    <span class="doccomment">/// From gibi-bytes.
 <a href=#352 id=352 data-nosnippet>352</a>    ///
 <a href=#353 id=353 data-nosnippet>353</a>    /// 1 gibi-byte equals 1024³ bytes.
-<a href=#354 id=354 data-nosnippet>354</a>    </span><span class="kw">pub const fn </span>from_gibi(gibi_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#355 id=355 data-nosnippet>355</a>        <span class="self">Self</span>::new(gibi_bytes, <span class="number">1024usize</span>.pow(<span class="number">3</span>))
+<a href=#354 id=354 data-nosnippet>354</a>    </span><span class="kw">pub const fn </span>from_gibi(gibi_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#355 id=355 data-nosnippet>355</a>        <span class="self">Self</span>::new(gibi_bytes, <span class="number">1024u64</span>.pow(<span class="number">3</span>))
 <a href=#356 id=356 data-nosnippet>356</a>    }
 <a href=#357 id=357 data-nosnippet>357</a>    <span class="doccomment">/// From gibi-bytes.
 <a href=#358 id=358 data-nosnippet>358</a>    ///
@@ -364,8 +364,8 @@
 <a href=#364 id=364 data-nosnippet>364</a>    <span class="doccomment">/// From giga-bytes.
 <a href=#365 id=365 data-nosnippet>365</a>    ///
 <a href=#366 id=366 data-nosnippet>366</a>    /// 1 giga-byte equals 1000³ bytes.
-<a href=#367 id=367 data-nosnippet>367</a>    </span><span class="kw">pub const fn </span>from_giga(giga_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#368 id=368 data-nosnippet>368</a>        <span class="self">Self</span>::new(giga_bytes, <span class="number">1000usize</span>.pow(<span class="number">3</span>))
+<a href=#367 id=367 data-nosnippet>367</a>    </span><span class="kw">pub const fn </span>from_giga(giga_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#368 id=368 data-nosnippet>368</a>        <span class="self">Self</span>::new(giga_bytes, <span class="number">1000u64</span>.pow(<span class="number">3</span>))
 <a href=#369 id=369 data-nosnippet>369</a>    }
 <a href=#370 id=370 data-nosnippet>370</a>    <span class="doccomment">/// From giga-bytes.
 <a href=#371 id=371 data-nosnippet>371</a>    ///
@@ -377,8 +377,8 @@
 <a href=#377 id=377 data-nosnippet>377</a>    <span class="doccomment">/// From tebi-bytes.
 <a href=#378 id=378 data-nosnippet>378</a>    ///
 <a href=#379 id=379 data-nosnippet>379</a>    /// 1 tebi-byte equals 1024^4 bytes.
-<a href=#380 id=380 data-nosnippet>380</a>    </span><span class="kw">pub const fn </span>from_tebi(tebi_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#381 id=381 data-nosnippet>381</a>        <span class="self">Self</span>::new(tebi_bytes, <span class="number">1024usize</span>.pow(<span class="number">4</span>))
+<a href=#380 id=380 data-nosnippet>380</a>    </span><span class="kw">pub const fn </span>from_tebi(tebi_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#381 id=381 data-nosnippet>381</a>        <span class="self">Self</span>::new(tebi_bytes, <span class="number">1024u64</span>.pow(<span class="number">4</span>))
 <a href=#382 id=382 data-nosnippet>382</a>    }
 <a href=#383 id=383 data-nosnippet>383</a>    <span class="doccomment">/// From tebi-bytes.
 <a href=#384 id=384 data-nosnippet>384</a>    ///
@@ -390,8 +390,8 @@
 <a href=#390 id=390 data-nosnippet>390</a>    <span class="doccomment">/// From tera-bytes.
 <a href=#391 id=391 data-nosnippet>391</a>    ///
 <a href=#392 id=392 data-nosnippet>392</a>    /// 1 tera-byte equals 1000^4 bytes.
-<a href=#393 id=393 data-nosnippet>393</a>    </span><span class="kw">pub const fn </span>from_tera(tera_bytes: usize) -&gt; <span class="self">Self </span>{
-<a href=#394 id=394 data-nosnippet>394</a>        <span class="self">Self</span>::new(tera_bytes, <span class="number">1000usize</span>.pow(<span class="number">4</span>))
+<a href=#393 id=393 data-nosnippet>393</a>    </span><span class="kw">pub const fn </span>from_tera(tera_bytes: u64) -&gt; <span class="self">Self </span>{
+<a href=#394 id=394 data-nosnippet>394</a>        <span class="self">Self</span>::new(tera_bytes, <span class="number">1000u64</span>.pow(<span class="number">4</span>))
 <a href=#395 id=395 data-nosnippet>395</a>    }
 <a href=#396 id=396 data-nosnippet>396</a>    <span class="doccomment">/// From tera-bytes.
 <a href=#397 id=397 data-nosnippet>397</a>    ///
@@ -427,22 +427,22 @@
 <a href=#427 id=427 data-nosnippet>427</a></span><span class="kw">impl </span>fmt::Display <span class="kw">for </span>ByteLength {
 <a href=#428 id=428 data-nosnippet>428</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
 <a href=#429 id=429 data-nosnippet>429</a>        <span class="kw">if </span>f.alternate() {
-<a href=#430 id=430 data-nosnippet>430</a>            <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">4</span>) {
+<a href=#430 id=430 data-nosnippet>430</a>            <span class="kw">if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024u64</span>.pow(<span class="number">4</span>) {
 <a href=#431 id=431 data-nosnippet>431</a>                <span class="macro">write!</span>(f, <span class="string">"{:.2}TiB"</span>, <span class="self">self</span>.tebis())
-<a href=#432 id=432 data-nosnippet>432</a>            } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">3</span>) {
+<a href=#432 id=432 data-nosnippet>432</a>            } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024u64</span>.pow(<span class="number">3</span>) {
 <a href=#433 id=433 data-nosnippet>433</a>                <span class="macro">write!</span>(f, <span class="string">"{:.2}GiB"</span>, <span class="self">self</span>.gibis())
-<a href=#434 id=434 data-nosnippet>434</a>            } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024usize</span>.pow(<span class="number">2</span>) {
+<a href=#434 id=434 data-nosnippet>434</a>            } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024u64</span>.pow(<span class="number">2</span>) {
 <a href=#435 id=435 data-nosnippet>435</a>                <span class="macro">write!</span>(f, <span class="string">"{:.2}MiB"</span>, <span class="self">self</span>.mebis())
 <a href=#436 id=436 data-nosnippet>436</a>            } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1024 </span>{
 <a href=#437 id=437 data-nosnippet>437</a>                <span class="macro">write!</span>(f, <span class="string">"{:.2}KiB"</span>, <span class="self">self</span>.kibis())
 <a href=#438 id=438 data-nosnippet>438</a>            } <span class="kw">else </span>{
 <a href=#439 id=439 data-nosnippet>439</a>                <span class="macro">write!</span>(f, <span class="string">"{}B"</span>, <span class="self">self</span>.bytes())
 <a href=#440 id=440 data-nosnippet>440</a>            }
-<a href=#441 id=441 data-nosnippet>441</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">4</span>) {
+<a href=#441 id=441 data-nosnippet>441</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000u64</span>.pow(<span class="number">4</span>) {
 <a href=#442 id=442 data-nosnippet>442</a>            <span class="macro">write!</span>(f, <span class="string">"{:.2}TB"</span>, <span class="self">self</span>.teras())
-<a href=#443 id=443 data-nosnippet>443</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">3</span>) {
+<a href=#443 id=443 data-nosnippet>443</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000u64</span>.pow(<span class="number">3</span>) {
 <a href=#444 id=444 data-nosnippet>444</a>            <span class="macro">write!</span>(f, <span class="string">"{:.2}GB"</span>, <span class="self">self</span>.gigas())
-<a href=#445 id=445 data-nosnippet>445</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000usize</span>.pow(<span class="number">2</span>) {
+<a href=#445 id=445 data-nosnippet>445</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000u64</span>.pow(<span class="number">2</span>) {
 <a href=#446 id=446 data-nosnippet>446</a>            <span class="macro">write!</span>(f, <span class="string">"{:.2}MB"</span>, <span class="self">self</span>.megas())
 <a href=#447 id=447 data-nosnippet>447</a>        } <span class="kw">else if </span><span class="self">self</span>.<span class="number">0 </span>&gt;= <span class="number">1000 </span>{
 <a href=#448 id=448 data-nosnippet>448</a>            <span class="macro">write!</span>(f, <span class="string">"{:.2}kB"</span>, <span class="self">self</span>.kilos())
@@ -451,7 +451,7 @@
 <a href=#451 id=451 data-nosnippet>451</a>        }
 <a href=#452 id=452 data-nosnippet>452</a>    }
 <a href=#453 id=453 data-nosnippet>453</a>}
-<a href=#454 id=454 data-nosnippet>454</a><span class="doccomment">/// Parses `"##"`, `"##TiB"`, `"##GiB"`, `"##MiB"`, `"##KiB"`, `"##B"`, `"##TB"`, `"##GB"`, `"##MB"`, `"##kB"` and `"##B"` where `##` is an `usize`.
+<a href=#454 id=454 data-nosnippet>454</a><span class="doccomment">/// Parses `"##"`, `"##TiB"`, `"##GiB"`, `"##MiB"`, `"##KiB"`, `"##B"`, `"##TB"`, `"##GB"`, `"##MB"`, `"##kB"` and `"##B"` where `##` is an `u64`.
 <a href=#455 id=455 data-nosnippet>455</a></span><span class="kw">impl </span>std::str::FromStr <span class="kw">for </span>ByteLength {
 <a href=#456 id=456 data-nosnippet>456</a>    <span class="kw">type </span><span class="prelude-val">Err </span>= std::num::ParseFloatError;
 <a href=#457 id=457 data-nosnippet>457</a>
@@ -483,7 +483,7 @@
 <a href=#483 id=483 data-nosnippet>483</a>    <span class="kw">type </span>Output = <span class="self">Self</span>;
 <a href=#484 id=484 data-nosnippet>484</a>
 <a href=#485 id=485 data-nosnippet>485</a>    <span class="kw">fn </span>mul(<span class="kw-2">mut </span><span class="self">self</span>, rhs: S) -&gt; <span class="self">Self </span>{
-<a href=#486 id=486 data-nosnippet>486</a>        <span class="self">self</span>.<span class="number">0 </span>= (<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f64 * rhs.into().<span class="number">0 </span><span class="kw">as </span>f64) <span class="kw">as </span>usize;
+<a href=#486 id=486 data-nosnippet>486</a>        <span class="self">self</span>.<span class="number">0 </span>= (<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f64 * rhs.into().<span class="number">0 </span><span class="kw">as </span>f64) <span class="kw">as </span>u64;
 <a href=#487 id=487 data-nosnippet>487</a>        <span class="self">self
 <a href=#488 id=488 data-nosnippet>488</a>    </span>}
 <a href=#489 id=489 data-nosnippet>489</a>}
@@ -496,7 +496,7 @@
 <a href=#496 id=496 data-nosnippet>496</a>    <span class="kw">type </span>Output = <span class="self">Self</span>;
 <a href=#497 id=497 data-nosnippet>497</a>
 <a href=#498 id=498 data-nosnippet>498</a>    <span class="kw">fn </span>div(<span class="kw-2">mut </span><span class="self">self</span>, rhs: S) -&gt; <span class="self">Self </span>{
-<a href=#499 id=499 data-nosnippet>499</a>        <span class="self">self</span>.<span class="number">0 </span>= (<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f64 / rhs.into().<span class="number">0 </span><span class="kw">as </span>f64) <span class="kw">as </span>usize;
+<a href=#499 id=499 data-nosnippet>499</a>        <span class="self">self</span>.<span class="number">0 </span>= (<span class="self">self</span>.<span class="number">0 </span><span class="kw">as </span>f64 / rhs.into().<span class="number">0 </span><span class="kw">as </span>f64) <span class="kw">as </span>u64;
 <a href=#500 id=500 data-nosnippet>500</a>        <span class="self">self
 <a href=#501 id=501 data-nosnippet>501</a>    </span>}
 <a href=#502 id=502 data-nosnippet>502</a>}

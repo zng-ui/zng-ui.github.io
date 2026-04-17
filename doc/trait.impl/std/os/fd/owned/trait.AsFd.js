@@ -1,0 +1,9 @@
+(function() {
+    const implementors = Object.fromEntries([["zng_task",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.95.0/std/os/fd/owned/trait.AsFd.html\" title=\"trait std::os::fd::owned::AsFd\">AsFd</a> for <a class=\"struct\" href=\"zng_task/fs/struct.File.html\" title=\"struct zng_task::fs::File\">File</a>",0]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":59,"fragment_lengths":[275]}

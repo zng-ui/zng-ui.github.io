@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/cmd.rs`."><title>cmd.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-77263533.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.94.1 (e408947bf 2026-03-25)" data-channel="1.94.1" data-search-js="search-9e2438ea.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7bab91a1.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-ffcac47a.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>cmd.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Commands that control the scoped scroll widget.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-wgt-scroll/src/cmd.rs`."><title>cmd.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-b7b9f40b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_wgt_scroll" data-themes="" data-resource-suffix="" data-rustdoc-version="1.95.0 (59807616e 2026-04-14)" data-channel="1.95.0" data-search-js="search-63369b7b.js" data-stringdex-js="stringdex-b897f86f.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_wgt_scroll/</div>cmd.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Commands that control the scoped scroll widget.
 <a href=#2 id=2 data-nosnippet>2</a>//!
 <a href=#3 id=3 data-nosnippet>3</a>//! The scroll widget implements all of this commands scoped to its widget ID.
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -17,7 +17,7 @@
 <a href=#17 id=17 data-nosnippet>17</a>    ///
 <a href=#18 id=18 data-nosnippet>18</a>    /// [`v_line_unit`]: fn@crate::v_line_unit
 <a href=#19 id=19 data-nosnippet>19</a>    </span><span class="kw">pub static </span>SCROLL_UP_CMD {
-<a href=#20 id=20 data-nosnippet>20</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#20 id=20 data-nosnippet>20</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#21 id=21 data-nosnippet>21</a>        name: <span class="string">"Scroll Up"</span>,
 <a href=#22 id=22 data-nosnippet>22</a>        info: <span class="string">"Scroll Up by one scroll unit"</span>,
 <a href=#23 id=23 data-nosnippet>23</a>        shortcut: <span class="macro">shortcut!</span>(ArrowUp),
@@ -33,7 +33,7 @@
 <a href=#33 id=33 data-nosnippet>33</a>    ///
 <a href=#34 id=34 data-nosnippet>34</a>    /// [`v_line_unit`]: fn@crate::v_line_unit
 <a href=#35 id=35 data-nosnippet>35</a>    </span><span class="kw">pub static </span>SCROLL_DOWN_CMD {
-<a href=#36 id=36 data-nosnippet>36</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#36 id=36 data-nosnippet>36</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#37 id=37 data-nosnippet>37</a>        name: <span class="string">"Scroll Down"</span>,
 <a href=#38 id=38 data-nosnippet>38</a>        info: <span class="string">"Scroll Down by one scroll unit"</span>,
 <a href=#39 id=39 data-nosnippet>39</a>        shortcut: <span class="macro">shortcut!</span>(ArrowDown),
@@ -49,7 +49,7 @@
 <a href=#49 id=49 data-nosnippet>49</a>    ///
 <a href=#50 id=50 data-nosnippet>50</a>    /// [`h_line_unit`]: fn@crate::h_line_unit
 <a href=#51 id=51 data-nosnippet>51</a>    </span><span class="kw">pub static </span>SCROLL_LEFT_CMD {
-<a href=#52 id=52 data-nosnippet>52</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#52 id=52 data-nosnippet>52</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#53 id=53 data-nosnippet>53</a>        name: <span class="string">"Scroll Left"</span>,
 <a href=#54 id=54 data-nosnippet>54</a>        info: <span class="string">"Scroll Left by one scroll unit"</span>,
 <a href=#55 id=55 data-nosnippet>55</a>        shortcut: <span class="macro">shortcut!</span>(ArrowLeft),
@@ -65,7 +65,7 @@
 <a href=#65 id=65 data-nosnippet>65</a>    ///
 <a href=#66 id=66 data-nosnippet>66</a>    /// [`h_line_unit`]: fn@crate::h_line_unit
 <a href=#67 id=67 data-nosnippet>67</a>    </span><span class="kw">pub static </span>SCROLL_RIGHT_CMD {
-<a href=#68 id=68 data-nosnippet>68</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#68 id=68 data-nosnippet>68</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#69 id=69 data-nosnippet>69</a>        name: <span class="string">"Scroll Right"</span>,
 <a href=#70 id=70 data-nosnippet>70</a>        info: <span class="string">"Scroll Right by one scroll unit"</span>,
 <a href=#71 id=71 data-nosnippet>71</a>        shortcut: <span class="macro">shortcut!</span>(ArrowRight),
@@ -84,7 +84,7 @@
 <a href=#84 id=84 data-nosnippet>84</a>    /// [`shortcut`]: CommandShortcutExt
 <a href=#85 id=85 data-nosnippet>85</a>    /// [`v_page_unit`]: fn@crate::v_page_unit
 <a href=#86 id=86 data-nosnippet>86</a>    </span><span class="kw">pub static </span>PAGE_UP_CMD {
-<a href=#87 id=87 data-nosnippet>87</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#87 id=87 data-nosnippet>87</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#88 id=88 data-nosnippet>88</a>        name: <span class="string">"Page Up"</span>,
 <a href=#89 id=89 data-nosnippet>89</a>        info: <span class="string">"Scroll Up by one page unit"</span>,
 <a href=#90 id=90 data-nosnippet>90</a>        shortcut: <span class="macro">shortcut!</span>(PageUp),
@@ -100,7 +100,7 @@
 <a href=#100 id=100 data-nosnippet>100</a>    ///
 <a href=#101 id=101 data-nosnippet>101</a>    /// [`v_page_unit`]: fn@crate::v_page_unit
 <a href=#102 id=102 data-nosnippet>102</a>    </span><span class="kw">pub static </span>PAGE_DOWN_CMD {
-<a href=#103 id=103 data-nosnippet>103</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#103 id=103 data-nosnippet>103</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#104 id=104 data-nosnippet>104</a>        name: <span class="string">"Page Down"</span>,
 <a href=#105 id=105 data-nosnippet>105</a>        info: <span class="string">"Scroll down by one page unit"</span>,
 <a href=#106 id=106 data-nosnippet>106</a>        shortcut: <span class="macro">shortcut!</span>(PageDown),
@@ -116,7 +116,7 @@
 <a href=#116 id=116 data-nosnippet>116</a>    ///
 <a href=#117 id=117 data-nosnippet>117</a>    /// [`h_page_unit`]: fn@crate::h_page_unit
 <a href=#118 id=118 data-nosnippet>118</a>    </span><span class="kw">pub static </span>PAGE_LEFT_CMD {
-<a href=#119 id=119 data-nosnippet>119</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#119 id=119 data-nosnippet>119</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#120 id=120 data-nosnippet>120</a>        name: <span class="string">"Page Left"</span>,
 <a href=#121 id=121 data-nosnippet>121</a>        info: <span class="string">"Scroll Left by one page unit"</span>,
 <a href=#122 id=122 data-nosnippet>122</a>        shortcut: <span class="macro">shortcut!</span>(SHIFT + PageUp),
@@ -132,7 +132,7 @@
 <a href=#132 id=132 data-nosnippet>132</a>    ///
 <a href=#133 id=133 data-nosnippet>133</a>    /// [`h_page_unit`]: fn@crate::h_page_unit
 <a href=#134 id=134 data-nosnippet>134</a>    </span><span class="kw">pub static </span>PAGE_RIGHT_CMD {
-<a href=#135 id=135 data-nosnippet>135</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#135 id=135 data-nosnippet>135</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#136 id=136 data-nosnippet>136</a>        name: <span class="string">"Page Right"</span>,
 <a href=#137 id=137 data-nosnippet>137</a>        info: <span class="string">"Scroll Right by one page unit"</span>,
 <a href=#138 id=138 data-nosnippet>138</a>        shortcut: <span class="macro">shortcut!</span>(SHIFT + PageDown),
@@ -141,7 +141,7 @@
 <a href=#141 id=141 data-nosnippet>141</a>
 <a href=#142 id=142 data-nosnippet>142</a>    <span class="doccomment">/// Represents the **scroll to top** action.
 <a href=#143 id=143 data-nosnippet>143</a>    </span><span class="kw">pub static </span>SCROLL_TO_TOP_CMD {
-<a href=#144 id=144 data-nosnippet>144</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#144 id=144 data-nosnippet>144</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#145 id=145 data-nosnippet>145</a>        name: <span class="string">"Scroll to Top"</span>,
 <a href=#146 id=146 data-nosnippet>146</a>        info: <span class="string">"Scroll up to the content top"</span>,
 <a href=#147 id=147 data-nosnippet>147</a>        shortcut: [<span class="macro">shortcut!</span>(Home), <span class="macro">shortcut!</span>(CTRL + Home)],
@@ -151,7 +151,7 @@
 <a href=#151 id=151 data-nosnippet>151</a>
 <a href=#152 id=152 data-nosnippet>152</a>    <span class="doccomment">/// Represents the **scroll to bottom** action.
 <a href=#153 id=153 data-nosnippet>153</a>    </span><span class="kw">pub static </span>SCROLL_TO_BOTTOM_CMD {
-<a href=#154 id=154 data-nosnippet>154</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#154 id=154 data-nosnippet>154</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#155 id=155 data-nosnippet>155</a>        name: <span class="string">"Scroll to Bottom"</span>,
 <a href=#156 id=156 data-nosnippet>156</a>        info: <span class="string">"Scroll down to the content bottom."</span>,
 <a href=#157 id=157 data-nosnippet>157</a>        shortcut: [<span class="macro">shortcut!</span>(End), <span class="macro">shortcut!</span>(CTRL + End)],
@@ -161,7 +161,7 @@
 <a href=#161 id=161 data-nosnippet>161</a>
 <a href=#162 id=162 data-nosnippet>162</a>    <span class="doccomment">/// Represents the **scroll to leftmost** action.
 <a href=#163 id=163 data-nosnippet>163</a>    </span><span class="kw">pub static </span>SCROLL_TO_LEFTMOST_CMD {
-<a href=#164 id=164 data-nosnippet>164</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#164 id=164 data-nosnippet>164</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#165 id=165 data-nosnippet>165</a>        name: <span class="string">"Scroll to Leftmost"</span>,
 <a href=#166 id=166 data-nosnippet>166</a>        info: <span class="string">"Scroll left to the content left edge"</span>,
 <a href=#167 id=167 data-nosnippet>167</a>        shortcut: [<span class="macro">shortcut!</span>(SHIFT + Home), <span class="macro">shortcut!</span>(CTRL | SHIFT + Home)],
@@ -170,7 +170,7 @@
 <a href=#170 id=170 data-nosnippet>170</a>
 <a href=#171 id=171 data-nosnippet>171</a>    <span class="doccomment">/// Represents the **scroll to rightmost** action.
 <a href=#172 id=172 data-nosnippet>172</a>    </span><span class="kw">pub static </span>SCROLL_TO_RIGHTMOST_CMD {
-<a href=#173 id=173 data-nosnippet>173</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#173 id=173 data-nosnippet>173</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#174 id=174 data-nosnippet>174</a>        name: <span class="string">"Scroll to Rightmost"</span>,
 <a href=#175 id=175 data-nosnippet>175</a>        info: <span class="string">"Scroll right to the content right edge"</span>,
 <a href=#176 id=176 data-nosnippet>176</a>        shortcut: [<span class="macro">shortcut!</span>(SHIFT + End), <span class="macro">shortcut!</span>(CTRL | SHIFT + End)],
@@ -205,7 +205,7 @@
 <a href=#205 id=205 data-nosnippet>205</a>    ///
 <a href=#206 id=206 data-nosnippet>206</a>    /// [`Point`]: zng_wgt::prelude::Point
 <a href=#207 id=207 data-nosnippet>207</a>    </span><span class="kw">pub static </span>ZOOM_IN_CMD {
-<a href=#208 id=208 data-nosnippet>208</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#208 id=208 data-nosnippet>208</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#209 id=209 data-nosnippet>209</a>        name: <span class="string">"Zoom In"</span>,
 <a href=#210 id=210 data-nosnippet>210</a>        shortcut: <span class="macro">shortcut!</span>(CTRL + <span class="string">'+'</span>),
 <a href=#211 id=211 data-nosnippet>211</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
@@ -222,7 +222,7 @@
 <a href=#222 id=222 data-nosnippet>222</a>    ///
 <a href=#223 id=223 data-nosnippet>223</a>    /// [`Point`]: zng_wgt::prelude::Point
 <a href=#224 id=224 data-nosnippet>224</a>    </span><span class="kw">pub static </span>ZOOM_OUT_CMD {
-<a href=#225 id=225 data-nosnippet>225</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#225 id=225 data-nosnippet>225</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#226 id=226 data-nosnippet>226</a>        name: <span class="string">"Zoom Out"</span>,
 <a href=#227 id=227 data-nosnippet>227</a>        shortcut: <span class="macro">shortcut!</span>(CTRL + <span class="string">'-'</span>),
 <a href=#228 id=228 data-nosnippet>228</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
@@ -237,7 +237,7 @@
 <a href=#237 id=237 data-nosnippet>237</a>    ///
 <a href=#238 id=238 data-nosnippet>238</a>    /// This command accepts an optional [`ZoomToFitRequest`] parameter with configuration.
 <a href=#239 id=239 data-nosnippet>239</a>    </span><span class="kw">pub static </span>ZOOM_TO_FIT_CMD {
-<a href=#240 id=240 data-nosnippet>240</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#240 id=240 data-nosnippet>240</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#241 id=241 data-nosnippet>241</a>        name: <span class="string">"Zoom to Fit"</span>,
 <a href=#242 id=242 data-nosnippet>242</a>        shortcut: <span class="macro">shortcut!</span>(CTRL + <span class="string">'0'</span>),
 <a href=#243 id=243 data-nosnippet>243</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
@@ -248,7 +248,7 @@
 <a href=#248 id=248 data-nosnippet>248</a>    ///
 <a href=#249 id=249 data-nosnippet>249</a>    /// The content is scaled back to 100%, without adjusting the scroll.
 <a href=#250 id=250 data-nosnippet>250</a>    </span><span class="kw">pub static </span>ZOOM_RESET_CMD {
-<a href=#251 id=251 data-nosnippet>251</a>        <span class="macro">l10n!</span>: <span class="bool-val">true</span>,
+<a href=#251 id=251 data-nosnippet>251</a>        l10n!: <span class="bool-val">true</span>,
 <a href=#252 id=252 data-nosnippet>252</a>        name: <span class="string">"Reset Zoom"</span>,
 <a href=#253 id=253 data-nosnippet>253</a>        shortcut_filter: ShortcutFilter::FOCUSED | ShortcutFilter::CMD_ENABLED,
 <a href=#254 id=254 data-nosnippet>254</a>    };
