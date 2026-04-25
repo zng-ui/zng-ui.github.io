@@ -2121,10 +2121,10 @@
 <a href=#2121 id=2121 data-nosnippet>2121</a>/// clipping the caret.
 <a href=#2122 id=2122 data-nosnippet>2122</a>///
 <a href=#2123 id=2123 data-nosnippet>2123</a>/// When enabled and not nested the widget will handle text commands, it also broadcasts focus change events to all text descendants.
-<a href=#2124 id=2124 data-nosnippet>2124</a></span><span class="attr">#[property(CONTEXT, default(<span class="bool-val">false</span>), widget_impl(RichTextMix&lt;P&gt;))]
+<a href=#2124 id=2124 data-nosnippet>2124</a></span><span class="attr">#[property(CONTEXT + <span class="number">1</span>, default(<span class="bool-val">false</span>), widget_impl(RichTextMix&lt;P&gt;))] </span><span class="comment">// + 1 because it needs to read TEXT_SELECTABLE_VAR
 <a href=#2125 id=2125 data-nosnippet>2125</a></span><span class="kw">pub fn </span>rich_text(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#2126 id=2126 data-nosnippet>2126</a>    <span class="kw">crate</span>::node::rich_text_node(child, enabled)
-<a href=#2127 id=2127 data-nosnippet>2127</a>}
+<a href=#2126 id=2126 data-nosnippet>2126</a>    <span class="kw">crate</span>::node::rich_text_node(child, enabled) <span class="comment">// TODO(breaking) refactor into a build action property
+<a href=#2127 id=2127 data-nosnippet>2127</a></span>}
 <a href=#2128 id=2128 data-nosnippet>2128</a>
 <a href=#2129 id=2129 data-nosnippet>2129</a><span class="doccomment">/// Defines the Z-index set on inner text (and nested rich text) widgets when focus is within.
 <a href=#2130 id=2130 data-nosnippet>2130</a>///
