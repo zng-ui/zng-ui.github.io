@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["style_fn","target"],"static":["STYLE_FN_VAR"],"struct":["DefaultStyle","Label"]};
+window.SIDEBAR_ITEMS = {"fn":["mnemonic_underline","style_fn","target"],"static":["MNEMONIC_UNDERLINE_VAR","STYLE_FN_VAR"],"struct":["DefaultStyle","Label"]};

@@ -16,4 +16,25 @@
 <a href=#16 id=16 data-nosnippet>16</a>
 <a href=#17 id=17 data-nosnippet>17</a><span class="kw">mod </span>text_input;
 <a href=#18 id=18 data-nosnippet>18</a><span class="kw">pub use </span>text_input::<span class="kw-2">*</span>;
+<a href=#19 id=19 data-nosnippet>19</a>
+<a href=#20 id=20 data-nosnippet>20</a><span class="macro">zng_env::on_process_start!</span>(|args| {
+<a href=#21 id=21 data-nosnippet>21</a>    <span class="kw">if </span>args.yield_until_app() {
+<a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">return</span>;
+<a href=#23 id=23 data-nosnippet>23</a>    }
+<a href=#24 id=24 data-nosnippet>24</a>    zng_wgt_menu::MENU_TEXT_INPUT.init_label(menu_label, set_menu_label_style);
+<a href=#25 id=25 data-nosnippet>25</a>});
+<a href=#26 id=26 data-nosnippet>26</a><span class="kw">fn </span>menu_label(txt: zng_var::Var&lt;zng_wgt::prelude::Txt&gt;) -&gt; zng_app::widget::node::UiNode {
+<a href=#27 id=27 data-nosnippet>27</a>    <span class="macro">label::Label!</span> {
+<a href=#28 id=28 data-nosnippet>28</a>        txt;
+<a href=#29 id=29 data-nosnippet>29</a>    }
+<a href=#30 id=30 data-nosnippet>30</a>}
+<a href=#31 id=31 data-nosnippet>31</a><span class="kw">fn </span>set_menu_label_style(wgt: <span class="kw-2">&amp;mut </span>zng_wgt_style::Style) {
+<a href=#32 id=32 data-nosnippet>32</a>    <span class="macro">zng_app::widget_set!</span> {
+<a href=#33 id=33 data-nosnippet>33</a>        wgt;
+<a href=#34 id=34 data-nosnippet>34</a>        label::style_fn = <span class="macro">zng_wgt_style::style_fn!</span>(|<span class="kw">_</span>| <span class="macro">label::DefaultStyle!</span> {
+<a href=#35 id=35 data-nosnippet>35</a>            label::mnemonic_underline = <span class="bool-val">true</span>;
+<a href=#36 id=36 data-nosnippet>36</a>            zng_wgt_text::underline = <span class="number">1</span>, zng_app::widget::border::LineStyle::Solid;
+<a href=#37 id=37 data-nosnippet>37</a>        });
+<a href=#38 id=38 data-nosnippet>38</a>    }
+<a href=#39 id=39 data-nosnippet>39</a>}
 </code></pre></div></section></main></body></html>
