@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["start_recording","stop_recording"],"struct":["EventTrace","Info","ProcessTrace","SpanTrace","ThreadTrace","Trace"]};
+window.SIDEBAR_ITEMS = {"fn":["is_enabled","start_recording","stop_recording"],"struct":["EventTrace","Info","ProcessTrace","SpanTrace","ThreadTrace","Trace"]};

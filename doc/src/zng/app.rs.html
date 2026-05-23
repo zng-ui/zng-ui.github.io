@@ -24,7 +24,7 @@
 <a href=#23 id=23 data-nosnippet>23</a>//!
 <a href=#24 id=24 data-nosnippet>24</a>//! ```toml
 <a href=#25 id=25 data-nosnippet>25</a>//! [dependencies]
-<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.22.4", features = ["view_prebuilt"] }
+<a href=#26 id=26 data-nosnippet>26</a>//! zng = { version = "0.22.5", features = ["view_prebuilt"] }
 <a href=#27 id=27 data-nosnippet>27</a>//! ```
 <a href=#28 id=28 data-nosnippet>28</a>//!
 <a href=#29 id=29 data-nosnippet>29</a>//! ```no_run
@@ -592,59 +592,65 @@
 <a href=#591 id=591 data-nosnippet>591</a>///
 <a href=#592 id=592 data-nosnippet>592</a>/// [`Trace`]: zng::app::trace_recorder::Trace
 <a href=#593 id=593 data-nosnippet>593</a>/// [filter syntax]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#filtering-events-with-environment-variables
-<a href=#594 id=594 data-nosnippet>594</a></span><span class="attr">#[cfg(trace_recorder)]
-<a href=#595 id=595 data-nosnippet>595</a></span><span class="kw">pub mod </span>trace_recorder {
-<a href=#596 id=596 data-nosnippet>596</a>    <span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, stop_recording};
-<a href=#597 id=597 data-nosnippet>597</a>}
-<a href=#598 id=598 data-nosnippet>598</a>
-<a href=#599 id=599 data-nosnippet>599</a><span class="doccomment">/// Heap memory usage profiling.
-<a href=#600 id=600 data-nosnippet>600</a>///
-<a href=#601 id=601 data-nosnippet>601</a>/// Build with debug symbols and `"memory_profiler"` feature to record heap allocations.
-<a href=#602 id=602 data-nosnippet>602</a>///
-<a href=#603 id=603 data-nosnippet>603</a>/// Instrumentation and recording is done with the `dhat` crate. Recorded profiles can be visualized using the
-<a href=#604 id=604 data-nosnippet>604</a>/// [online DHAT Viewer](https://nnethercote.github.io/dh_view/dh_view.html). Stack traces are captured for each significant allocation.
-<a href=#605 id=605 data-nosnippet>605</a>///
-<a href=#606 id=606 data-nosnippet>606</a>/// # Config
-<a href=#607 id=607 data-nosnippet>607</a>///
-<a href=#608 id=608 data-nosnippet>608</a>/// The `"ZNG_MEMORY_PROFILER_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
-<a href=#609 id=609 data-nosnippet>609</a>/// The default dir is `"./zng-dhat/"`.
-<a href=#610 id=610 data-nosnippet>610</a>///
-<a href=#611 id=611 data-nosnippet>611</a>/// # Output
-<a href=#612 id=612 data-nosnippet>612</a>///
-<a href=#613 id=613 data-nosnippet>613</a>/// The recorded data is saved to `"{ZNG_MEMORY_PROFILER_DIR}/{timestamp}/{pname}-{pid}.json"`.
-<a href=#614 id=614 data-nosnippet>614</a>///
-<a href=#615 id=615 data-nosnippet>615</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are recorded
-<a href=#616 id=616 data-nosnippet>616</a>/// to the same *timestamp* folder, even worker processes started later.
-<a href=#617 id=617 data-nosnippet>617</a>///
-<a href=#618 id=618 data-nosnippet>618</a>/// The primary process is named `"app-process"`. See [`zng::env::process_name`] for more details about the default processes.
-<a href=#619 id=619 data-nosnippet>619</a>///
-<a href=#620 id=620 data-nosnippet>620</a>/// # Limitations
-<a href=#621 id=621 data-nosnippet>621</a>///
-<a href=#622 id=622 data-nosnippet>622</a>/// Only heap allocations using the `#[global_allocator]` are captured, some dependencies can skip the allocator, for example, the view-process
-<a href=#623 id=623 data-nosnippet>623</a>/// only traces a fraction of allocations because most of its heap usage comes from the graphics driver.
-<a href=#624 id=624 data-nosnippet>624</a>///
-<a href=#625 id=625 data-nosnippet>625</a>/// Compiling with `"memory_profiler"` feature replaces the global allocator, so if you use a custom allocator you need to setup
-<a href=#626 id=626 data-nosnippet>626</a>/// a feature that disables it, otherwise it will not compile. The instrumented allocator also has an impact in performance so
-<a href=#627 id=627 data-nosnippet>627</a>/// it is only recommended for test builds.
-<a href=#628 id=628 data-nosnippet>628</a>///
-<a href=#629 id=629 data-nosnippet>629</a>/// As an alternative on Unix you can use the external [Valgrind DHAT tool](https://valgrind.org/docs/manual/dh-manual.html).
-<a href=#630 id=630 data-nosnippet>630</a>/// On Windows you can [Record a Heap Snapshot](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/record-heap-snapshot).
-<a href=#631 id=631 data-nosnippet>631</a>///
-<a href=#632 id=632 data-nosnippet>632</a>/// # Full API
-<a href=#633 id=633 data-nosnippet>633</a>///
-<a href=#634 id=634 data-nosnippet>634</a>/// See `zng_app::memory_profiler` for the full API.
-<a href=#635 id=635 data-nosnippet>635</a></span><span class="kw">pub mod </span>memory_profiler {
-<a href=#636 id=636 data-nosnippet>636</a>    <span class="attr">#[cfg(all(
-<a href=#637 id=637 data-nosnippet>637</a>        feature = <span class="string">"memory_profiler"</span>,
-<a href=#638 id=638 data-nosnippet>638</a>        not(any(
-<a href=#639 id=639 data-nosnippet>639</a>            target_arch = <span class="string">"wasm32"</span>,
-<a href=#640 id=640 data-nosnippet>640</a>            target_os = <span class="string">"android"</span>,
-<a href=#641 id=641 data-nosnippet>641</a>            target_os = <span class="string">"ios"</span>,
-<a href=#642 id=642 data-nosnippet>642</a>            test,
-<a href=#643 id=643 data-nosnippet>643</a>            feature = <span class="string">"test_util"</span>,
-<a href=#644 id=644 data-nosnippet>644</a>            doctest
-<a href=#645 id=645 data-nosnippet>645</a>        ))
-<a href=#646 id=646 data-nosnippet>646</a>    ))]
-<a href=#647 id=647 data-nosnippet>647</a>    </span><span class="kw">pub use </span>zng_app::memory_profiler::stop_recording;
-<a href=#648 id=648 data-nosnippet>648</a>}
+<a href=#594 id=594 data-nosnippet>594</a></span><span class="kw">pub mod </span>trace_recorder {
+<a href=#595 id=595 data-nosnippet>595</a>    <span class="attr">#[cfg(trace_recorder)]
+<a href=#596 id=596 data-nosnippet>596</a>    </span><span class="kw">pub use </span>zng_app::trace_recorder::{EventTrace, ProcessTrace, ThreadTrace, Trace, is_enabled, stop_recording};
+<a href=#597 id=597 data-nosnippet>597</a>
+<a href=#598 id=598 data-nosnippet>598</a>    <span class="doccomment">/// Not enabled.
+<a href=#599 id=599 data-nosnippet>599</a>    </span><span class="attr">#[cfg(not(trace_recorder))]
+<a href=#600 id=600 data-nosnippet>600</a>    </span><span class="kw">pub fn </span>is_enabled() -&gt; bool {
+<a href=#601 id=601 data-nosnippet>601</a>        <span class="bool-val">false
+<a href=#602 id=602 data-nosnippet>602</a>    </span>}
+<a href=#603 id=603 data-nosnippet>603</a>}
+<a href=#604 id=604 data-nosnippet>604</a>
+<a href=#605 id=605 data-nosnippet>605</a><span class="doccomment">/// Heap memory usage profiling.
+<a href=#606 id=606 data-nosnippet>606</a>///
+<a href=#607 id=607 data-nosnippet>607</a>/// Build with debug symbols and `"memory_profiler"` feature to record heap allocations.
+<a href=#608 id=608 data-nosnippet>608</a>///
+<a href=#609 id=609 data-nosnippet>609</a>/// Instrumentation and recording is done with the `dhat` crate. Recorded profiles can be visualized using the
+<a href=#610 id=610 data-nosnippet>610</a>/// [online DHAT Viewer](https://nnethercote.github.io/dh_view/dh_view.html). Stack traces are captured for each significant allocation.
+<a href=#611 id=611 data-nosnippet>611</a>///
+<a href=#612 id=612 data-nosnippet>612</a>/// # Config
+<a href=#613 id=613 data-nosnippet>613</a>///
+<a href=#614 id=614 data-nosnippet>614</a>/// The `"ZNG_MEMORY_PROFILER_DIR"` variable can be set to define a custom output directory path, relative to the current dir.
+<a href=#615 id=615 data-nosnippet>615</a>/// The default dir is `"./zng-dhat/"`.
+<a href=#616 id=616 data-nosnippet>616</a>///
+<a href=#617 id=617 data-nosnippet>617</a>/// # Output
+<a href=#618 id=618 data-nosnippet>618</a>///
+<a href=#619 id=619 data-nosnippet>619</a>/// The recorded data is saved to `"{ZNG_MEMORY_PROFILER_DIR}/{timestamp}/{pname}-{pid}.json"`.
+<a href=#620 id=620 data-nosnippet>620</a>///
+<a href=#621 id=621 data-nosnippet>621</a>/// The timestamp is in microseconds from Unix epoch and is defined by the first process that runs. All processes are recorded
+<a href=#622 id=622 data-nosnippet>622</a>/// to the same *timestamp* folder, even worker processes started later.
+<a href=#623 id=623 data-nosnippet>623</a>///
+<a href=#624 id=624 data-nosnippet>624</a>/// The primary process is named `"app-process"`. See [`zng::env::process_name`] for more details about the default processes.
+<a href=#625 id=625 data-nosnippet>625</a>///
+<a href=#626 id=626 data-nosnippet>626</a>/// # Limitations
+<a href=#627 id=627 data-nosnippet>627</a>///
+<a href=#628 id=628 data-nosnippet>628</a>/// Only heap allocations using the `#[global_allocator]` are captured, some dependencies can skip the allocator, for example, the view-process
+<a href=#629 id=629 data-nosnippet>629</a>/// only traces a fraction of allocations because most of its heap usage comes from the graphics driver.
+<a href=#630 id=630 data-nosnippet>630</a>///
+<a href=#631 id=631 data-nosnippet>631</a>/// Compiling with `"memory_profiler"` feature replaces the global allocator, so if you use a custom allocator you need to setup
+<a href=#632 id=632 data-nosnippet>632</a>/// a feature that disables it, otherwise it will not compile. The instrumented allocator also has an impact in performance so
+<a href=#633 id=633 data-nosnippet>633</a>/// it is only recommended for test builds.
+<a href=#634 id=634 data-nosnippet>634</a>///
+<a href=#635 id=635 data-nosnippet>635</a>/// As an alternative on Unix you can use the external [Valgrind DHAT tool](https://valgrind.org/docs/manual/dh-manual.html).
+<a href=#636 id=636 data-nosnippet>636</a>/// On Windows you can [Record a Heap Snapshot](https://learn.microsoft.com/en-us/windows-hardware/test/wpt/record-heap-snapshot).
+<a href=#637 id=637 data-nosnippet>637</a>///
+<a href=#638 id=638 data-nosnippet>638</a>/// # Full API
+<a href=#639 id=639 data-nosnippet>639</a>///
+<a href=#640 id=640 data-nosnippet>640</a>/// See `zng_app::memory_profiler` for the full API.
+<a href=#641 id=641 data-nosnippet>641</a></span><span class="kw">pub mod </span>memory_profiler {
+<a href=#642 id=642 data-nosnippet>642</a>    <span class="attr">#[cfg(all(
+<a href=#643 id=643 data-nosnippet>643</a>        feature = <span class="string">"memory_profiler"</span>,
+<a href=#644 id=644 data-nosnippet>644</a>        not(any(
+<a href=#645 id=645 data-nosnippet>645</a>            target_arch = <span class="string">"wasm32"</span>,
+<a href=#646 id=646 data-nosnippet>646</a>            target_os = <span class="string">"android"</span>,
+<a href=#647 id=647 data-nosnippet>647</a>            target_os = <span class="string">"ios"</span>,
+<a href=#648 id=648 data-nosnippet>648</a>            test,
+<a href=#649 id=649 data-nosnippet>649</a>            feature = <span class="string">"test_util"</span>,
+<a href=#650 id=650 data-nosnippet>650</a>            doctest
+<a href=#651 id=651 data-nosnippet>651</a>        ))
+<a href=#652 id=652 data-nosnippet>652</a>    ))]
+<a href=#653 id=653 data-nosnippet>653</a>    </span><span class="kw">pub use </span>zng_app::memory_profiler::stop_recording;
+<a href=#654 id=654 data-nosnippet>654</a>}
 </code></pre></div></section></main></body></html>
