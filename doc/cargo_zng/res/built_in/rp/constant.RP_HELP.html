@@ -1,0 +1,77 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `RP_HELP` constant in crate `cargo_zng`."><title>RP_HELP in cargo_zng::res::built_in::rp - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.96.0 (ac68faa20 2026-05-25)" data-channel="1.96.0" data-search-js="search-b5634cc7.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../../static.files/storage-41dd4d93.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../../static.files/main-5013f961.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc constant"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">RP_HELP</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../../cargo_zng/index.html"><img src="https://zng-ui.github.io/res/zng-logo.png" alt="logo"></a><h2><a href="../../../../cargo_zng/index.html">cargo_<wbr>zng</a><span class="version">0.12.3</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"><h2><a href="index.html">In cargo_<wbr>zng::<wbr>res::<wbr>built_<wbr>in::<wbr>rp</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../../index.html">cargo_zng</a>::<wbr><a href="../../index.html">res</a>::<wbr><a href="../index.html">built_in</a>::<wbr><a href="index.html">rp</a></div><h1>Constant <span class="constant">RP_HELP</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../../src/cargo_zng/res/built_in/rp.rs.html#7-83">Source</a> </span></div><pre class="rust item-decl"><code>const RP_HELP: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.96.0/std/primitive.str.html">str</a> = r#&quot;
+Replace ${VAR|&lt;file|!cmd} occurrences in the content
+
+The request file:
+  source/greetings.txt.zr-rp
+   | Thanks for using ${ZR_APP}!
+
+Writes the text content with ZR_APP replaced:
+  target/greetings.txt
+  | Thanks for using Foo App!
+
+The parameters syntax is ${VAR|!|&lt;[:[case]][?else]}:
+
+${VAR}          — Replaces with the env var value, or fails if it is not set.
+${VAR:case}     — Replaces with the env var value, case converted.
+${VAR:?else}    — If VAR is not set or is empty uses &#39;else&#39; instead.
+
+${&lt;file.txt}    — Replaces with the &#39;file.txt&#39; content. 
+                  Paths are relative to the workspace root.
+${&lt;file:case}   — Replaces with the &#39;file.txt&#39; content, case converted.
+${&lt;file:?else}  — If file cannot be read or is empty uses &#39;else&#39; instead.
+
+${!cmd -h}      — Replaces with the stdout of the bash script line. 
+                  The script runs the same bash used by &#39;.zr-sh&#39;.
+                  The script must be defined all in one line.
+                  A separate bash instance is used for each occurrence.
+                  The working directory is the workspace root.
+${!cmd:case}    — Replaces with the stdout, case converted. 
+                  If the script contains &#39;:&#39; quote it with double quotes\&quot;
+${!cmd:?else}  — If script fails or ha no stdout, uses &#39;else&#39; instead.
+
+$${VAR}         — Escapes $, replaces with &#39;${VAR}&#39;.
+
+The :case functions are:
+
+:k or :kebab  — kebab-case (cleaned)
+:K or :KEBAB  — UPPER-KEBAB-CASE (cleaned)
+:s or :snake  — snake_case (cleaned)
+:S or :SNAKE  — UPPER_SNAKE_CASE (cleaned)
+:l or :lower  — lower case
+:U or :UPPER  — UPPER CASE
+:T or :Title  — Title Case
+:c or :camel  — camelCase (cleaned)
+:P or :Pascal — PascalCase (cleaned)
+:Tr or :Train — Train-Case (cleaned)
+:           — Unchanged
+:clean      — Cleaned
+:f or :file — Sanitize file name
+
+Cleaned values only keep ascii alphabetic first char and ascii alphanumerics, &#39; &#39;, &#39;-&#39; and &#39;_&#39; other chars.
+More then one case function can be used, separated by pipe &#39;:T|f&#39; converts to title case and sanitize for file name. 
+
+
+The fallback(:?else) can have nested ${...} patterns. 
+You can set both case and else: &#39;${VAR:case?else}&#39;.
+
+Variables:
+
+All env variables can be used, of particular use with this tool are:
+
+ZR_APP_ID — package.metadata.zng.about.app_id or &quot;qualifier.org.app&quot; in snake_case
+ZR_APP — package.metadata.zng.about.app or package.name
+ZR_ORG — package.metadata.zng.about.org or the first package.authors
+ZR_VERSION — package.version
+ZR_DESCRIPTION — package.description
+ZR_HOMEPAGE — package.homepage
+ZR_LICENSE — package.license
+ZR_PKG_NAME — package.name
+ZR_PKG_AUTHORS — package.authors
+ZR_CRATE_NAME — package.name in snake_case
+ZR_QUALIFIER — package.metadata.zng.about.qualifier or the first components `ZR_APP_ID` except the last two
+ZR_META_*` — any other custom string value in package.metadata.zng.about.*
+
+See `zng::env::about` for more details about metadata vars.
+See the cargo-zng crate docs for a full list of ZR vars.
+
+&quot;#;</code></pre></section></div></main></body></html>
