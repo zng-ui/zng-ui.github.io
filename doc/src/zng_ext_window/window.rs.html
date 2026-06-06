@@ -618,533 +618,534 @@
 <a href=#618 id=618 data-nosnippet>618</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.global_position, a.data.state.global_position);
 <a href=#619 id=619 data-nosnippet>619</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.restore_rect, a.data.state.restore_rect);
 <a href=#620 id=620 data-nosnippet>620</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.restore_state, a.data.state.restore_state);
-<a href=#621 id=621 data-nosnippet>621</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.chrome, a.data.state.chrome_visible);
-<a href=#622 id=622 data-nosnippet>622</a>
-<a href=#623 id=623 data-nosnippet>623</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_monitor, a.data.monitor);
-<a href=#624 id=624 data-nosnippet>624</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_position, a.data.position.<span class="number">1</span>);
-<a href=#625 id=625 data-nosnippet>625</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.global_position, a.data.position.<span class="number">0</span>);
-<a href=#626 id=626 data-nosnippet>626</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_size, a.data.size);
-<a href=#627 id=627 data-nosnippet>627</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.scale_factor, a.data.scale_factor);
-<a href=#628 id=628 data-nosnippet>628</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.refresh_rate, a.data.refresh_rate);
-<a href=#629 id=629 data-nosnippet>629</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.render_mode, a.data.render_mode);
-<a href=#630 id=630 data-nosnippet>630</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.safe_padding, a.data.safe_padding);
-<a href=#631 id=631 data-nosnippet>631</a>
-<a href=#632 id=632 data-nosnippet>632</a>                        s.set_frame_duration();
-<a href=#633 id=633 data-nosnippet>633</a>
-<a href=#634 id=634 data-nosnippet>634</a>                        <span class="macro">tracing::trace!</span>(
-<a href=#635 id=635 data-nosnippet>635</a>                            <span class="string">"open window {:?} in {:?}, {:?}"</span>,
-<a href=#636 id=636 data-nosnippet>636</a>                            id,
-<a href=#637 id=637 data-nosnippet>637</a>                            a.data.monitor,
-<a href=#638 id=638 data-nosnippet>638</a>                            (<span class="kw-2">&amp;</span>a.data.state.global_position, a.data.size)
-<a href=#639 id=639 data-nosnippet>639</a>                        );
-<a href=#640 id=640 data-nosnippet>640</a>                    }
-<a href=#641 id=641 data-nosnippet>641</a>
-<a href=#642 id=642 data-nosnippet>642</a>                    <span class="bool-val">false
-<a href=#643 id=643 data-nosnippet>643</a>                </span>});
-<a href=#644 id=644 data-nosnippet>644</a>
-<a href=#645 id=645 data-nosnippet>645</a>                <span class="comment">// Layout initial position in the monitor space.
-<a href=#646 id=646 data-nosnippet>646</a>                </span><span class="kw">let </span><span class="kw-2">mut </span>system_pos = <span class="bool-val">false</span>;
-<a href=#647 id=647 data-nosnippet>647</a>                <span class="kw">let </span><span class="kw-2">mut </span>global_position = PxPoint::zero();
-<a href=#648 id=648 data-nosnippet>648</a>                <span class="kw">let </span><span class="kw-2">mut </span>position = DipPoint::zero();
-<a href=#649 id=649 data-nosnippet>649</a>                <span class="kw">if </span>a.node.view_spawned {
-<a href=#650 id=650 data-nosnippet>650</a>                    <span class="comment">// is respawning view
-<a href=#651 id=651 data-nosnippet>651</a>                    </span>global_position = vars.<span class="number">0</span>.global_position.get();
-<a href=#652 id=652 data-nosnippet>652</a>                    position = vars.<span class="number">0</span>.actual_position.get();
-<a href=#653 id=653 data-nosnippet>653</a>                } <span class="kw">else </span>{
-<a href=#654 id=654 data-nosnippet>654</a>                    <span class="kw">match </span>a.node.root.get_mut().start_position {
-<a href=#655 id=655 data-nosnippet>655</a>                        StartPosition::Default =&gt; {
-<a href=#656 id=656 data-nosnippet>656</a>                            <span class="kw">let </span>pos = vars.<span class="number">0</span>.position.get();
-<a href=#657 id=657 data-nosnippet>657</a>                            system_pos = pos.x.is_default() || pos.y.is_default();
-<a href=#658 id=658 data-nosnippet>658</a>                            <span class="kw">if </span>!system_pos {
-<a href=#659 id=659 data-nosnippet>659</a>                                LAYOUT.with_root_context(a.node.layout_pass, monitor_metrics(), || {
-<a href=#660 id=660 data-nosnippet>660</a>                                    <span class="kw">let </span>pos = pos.layout();
-<a href=#661 id=661 data-nosnippet>661</a>                                    position = pos.to_dip(scale_factor);
-<a href=#662 id=662 data-nosnippet>662</a>                                    global_position = monitor_rect.origin + pos.to_vector();
-<a href=#663 id=663 data-nosnippet>663</a>                                });
-<a href=#664 id=664 data-nosnippet>664</a>                            } <span class="kw">else </span>{
-<a href=#665 id=665 data-nosnippet>665</a>                                <span class="comment">// in case system does not implement position
-<a href=#666 id=666 data-nosnippet>666</a>                                </span>position = DipPoint::splat(Dip::new(<span class="number">60</span>));
-<a href=#667 id=667 data-nosnippet>667</a>                                global_position = monitor_rect.origin + position.to_px(scale_factor).to_vector();
-<a href=#668 id=668 data-nosnippet>668</a>                            }
-<a href=#669 id=669 data-nosnippet>669</a>                        }
-<a href=#670 id=670 data-nosnippet>670</a>                        start_position =&gt; {
-<a href=#671 id=671 data-nosnippet>671</a>                            <span class="kw">let </span>center_rect = <span class="kw">match </span>start_position {
-<a href=#672 id=672 data-nosnippet>672</a>                                StartPosition::CenterMonitor =&gt; monitor_rect,
-<a href=#673 id=673 data-nosnippet>673</a>                                StartPosition::CenterParent =&gt; {
-<a href=#674 id=674 data-nosnippet>674</a>                                    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent_id) = vars.<span class="number">0</span>.parent.get()
-<a href=#675 id=675 data-nosnippet>675</a>                                        &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(parent_vars) = WINDOWS.vars(parent_id)
-<a href=#676 id=676 data-nosnippet>676</a>                                        &amp;&amp; <span class="macro">matches!</span>(parent_vars.<span class="number">0</span>.instance_state.get(), WindowInstanceState::Loaded { has_view: <span class="bool-val">true </span>})
-<a href=#677 id=677 data-nosnippet>677</a>                                    {
-<a href=#678 id=678 data-nosnippet>678</a>                                        PxRect::new(parent_vars.<span class="number">0</span>.global_position.get(), parent_vars.actual_size_px().get())
-<a href=#679 id=679 data-nosnippet>679</a>                                    } <span class="kw">else </span>{
-<a href=#680 id=680 data-nosnippet>680</a>                                        monitor_rect
-<a href=#681 id=681 data-nosnippet>681</a>                                    }
-<a href=#682 id=682 data-nosnippet>682</a>                                }
-<a href=#683 id=683 data-nosnippet>683</a>                                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
-<a href=#684 id=684 data-nosnippet>684</a>                            };
-<a href=#685 id=685 data-nosnippet>685</a>                            <span class="kw">let </span>center_point = center_rect.origin + center_rect.size.to_vector() / Px(<span class="number">2</span>);
-<a href=#686 id=686 data-nosnippet>686</a>
-<a href=#687 id=687 data-nosnippet>687</a>                            global_position = center_point - final_size.to_vector() / Px(<span class="number">2</span>);
-<a href=#688 id=688 data-nosnippet>688</a>
-<a href=#689 id=689 data-nosnippet>689</a>                            <span class="comment">// snap title bar inside monitor area
-<a href=#690 id=690 data-nosnippet>690</a>                            </span><span class="kw">let </span>title_height = Dip::new(<span class="number">30</span>).to_px(scale_factor);
-<a href=#691 id=691 data-nosnippet>691</a>                            <span class="kw">let </span>correction_y = (monitor_rect.origin.y + title_height - global_position.y).max(Px(<span class="number">0</span>));
-<a href=#692 id=692 data-nosnippet>692</a>                            global_position.y += correction_y;
-<a href=#693 id=693 data-nosnippet>693</a>
-<a href=#694 id=694 data-nosnippet>694</a>                            <span class="kw">let </span>pos = (global_position - monitor_rect.origin).to_point();
-<a href=#695 id=695 data-nosnippet>695</a>                            position = pos.to_dip(scale_factor);
-<a href=#696 id=696 data-nosnippet>696</a>                        }
-<a href=#697 id=697 data-nosnippet>697</a>                    }
-<a href=#698 id=698 data-nosnippet>698</a>                }
-<a href=#699 id=699 data-nosnippet>699</a>
-<a href=#700 id=700 data-nosnippet>700</a>                <span class="kw">let </span><span class="kw-2">mut </span>state_all = vars.window_state_all();
-<a href=#701 id=701 data-nosnippet>701</a>                state_all.global_position = global_position;
-<a href=#702 id=702 data-nosnippet>702</a>                state_all.restore_rect.origin = position;
-<a href=#703 id=703 data-nosnippet>703</a>                state_all.restore_rect.size = size_dip;
-<a href=#704 id=704 data-nosnippet>704</a>                state_all.min_size = min_size_dip;
-<a href=#705 id=705 data-nosnippet>705</a>                state_all.max_size = max_size_dip;
-<a href=#706 id=706 data-nosnippet>706</a>
-<a href=#707 id=707 data-nosnippet>707</a>                <span class="kw">let </span><span class="kw-2">mut </span>ime_area = <span class="prelude-val">None</span>;
-<a href=#708 id=708 data-nosnippet>708</a>                {
-<a href=#709 id=709 data-nosnippet>709</a>                    <span class="kw">let </span>s = WINDOWS_SV.read();
-<a href=#710 id=710 data-nosnippet>710</a>                    s.focused.with(|f| {
-<a href=#711 id=711 data-nosnippet>711</a>                        <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = f
-<a href=#712 id=712 data-nosnippet>712</a>                            &amp;&amp; f.window_id() == id
-<a href=#713 id=713 data-nosnippet>713</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(w) = s.windows.get(<span class="kw-2">&amp;</span>id)
-<a href=#714 id=714 data-nosnippet>714</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(i) = <span class="kw-2">&amp;</span>w.info
-<a href=#715 id=715 data-nosnippet>715</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(i) = i.get(f.widget_id())
-<a href=#716 id=716 data-nosnippet>716</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(r) = i.ime_area()
-<a href=#717 id=717 data-nosnippet>717</a>                        {
-<a href=#718 id=718 data-nosnippet>718</a>                            ime_area = <span class="prelude-val">Some</span>(r.to_dip(scale_factor));
-<a href=#719 id=719 data-nosnippet>719</a>                        }
-<a href=#720 id=720 data-nosnippet>720</a>                    });
-<a href=#721 id=721 data-nosnippet>721</a>                }
-<a href=#722 id=722 data-nosnippet>722</a>                <span class="kw">let </span><span class="kw-2">mut </span>args = WindowRequest::new(
-<a href=#723 id=723 data-nosnippet>723</a>                    zng_view_api::window::WindowId::from_raw(id.get()),
-<a href=#724 id=724 data-nosnippet>724</a>                    vars.<span class="number">0</span>.title.get(),
-<a href=#725 id=725 data-nosnippet>725</a>                    state_all,
-<a href=#726 id=726 data-nosnippet>726</a>                    a.node.root.get_mut().kiosk,
-<a href=#727 id=727 data-nosnippet>727</a>                    system_pos,
-<a href=#728 id=728 data-nosnippet>728</a>                    vars.<span class="number">0</span>.video_mode.get(),
-<a href=#729 id=729 data-nosnippet>729</a>                    vars.<span class="number">0</span>.visible.get(),
-<a href=#730 id=730 data-nosnippet>730</a>                    vars.<span class="number">0</span>.taskbar_visible.get(),
-<a href=#731 id=731 data-nosnippet>731</a>                    vars.<span class="number">0</span>.always_on_top.get(),
-<a href=#732 id=732 data-nosnippet>732</a>                    vars.<span class="number">0</span>.movable.get(),
-<a href=#733 id=733 data-nosnippet>733</a>                    vars.<span class="number">0</span>.resizable.get(),
-<a href=#734 id=734 data-nosnippet>734</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
-<a href=#735 id=735 data-nosnippet>735</a>                    </span>vars.<span class="number">0</span>.actual_icon.with(|w| w.as_ref().map(|w| w.view_handle().image_id())),
-<a href=#736 id=736 data-nosnippet>736</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
-<a href=#737 id=737 data-nosnippet>737</a>                    </span><span class="prelude-val">None</span>,
-<a href=#738 id=738 data-nosnippet>738</a>                    vars.<span class="number">0</span>.cursor.with(|c| c.icon()),
-<a href=#739 id=739 data-nosnippet>739</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
-<a href=#740 id=740 data-nosnippet>740</a>                    </span>vars.<span class="number">0
-<a href=#741 id=741 data-nosnippet>741</a>                        </span>.actual_cursor_img
-<a href=#742 id=742 data-nosnippet>742</a>                        .with(|i| i.as_ref().map(|(i, p)| (i.view_handle().image_id(), <span class="kw-2">*</span>p))),
-<a href=#743 id=743 data-nosnippet>743</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
-<a href=#744 id=744 data-nosnippet>744</a>                    </span><span class="prelude-val">None</span>,
-<a href=#745 id=745 data-nosnippet>745</a>                    a.node.root.get_mut().transparent,
-<a href=#746 id=746 data-nosnippet>746</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
-<a href=#747 id=747 data-nosnippet>747</a>                    </span><span class="macro">matches!</span>(vars.<span class="number">0</span>.frame_capture_mode.get(), <span class="kw">crate</span>::FrameCaptureMode::All),
-<a href=#748 id=748 data-nosnippet>748</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
-<a href=#749 id=749 data-nosnippet>749</a>                    </span><span class="bool-val">false</span>,
-<a href=#750 id=750 data-nosnippet>750</a>                    a.node
-<a href=#751 id=751 data-nosnippet>751</a>                        .root
-<a href=#752 id=752 data-nosnippet>752</a>                        .get_mut()
-<a href=#753 id=753 data-nosnippet>753</a>                        .render_mode
-<a href=#754 id=754 data-nosnippet>754</a>                        .unwrap_or_else(|| WINDOWS.default_render_mode().get()),
-<a href=#755 id=755 data-nosnippet>755</a>                    vars.<span class="number">0</span>.focus_indicator.get(),
-<a href=#756 id=756 data-nosnippet>756</a>                    vars.<span class="number">0</span>.focused.get(),
-<a href=#757 id=757 data-nosnippet>757</a>                    ime_area,
-<a href=#758 id=758 data-nosnippet>758</a>                    vars.<span class="number">0</span>.enabled_buttons.get(),
-<a href=#759 id=759 data-nosnippet>759</a>                    vars.<span class="number">0</span>.system_shutdown_warn.get(),
-<a href=#760 id=760 data-nosnippet>760</a>                    WINDOWS_EXTENSIONS.take_view_extensions_init(id),
-<a href=#761 id=761 data-nosnippet>761</a>                );
-<a href=#762 id=762 data-nosnippet>762</a>                args.cache_shaders = a
-<a href=#763 id=763 data-nosnippet>763</a>                    .node
-<a href=#764 id=764 data-nosnippet>764</a>                    .root
-<a href=#765 id=765 data-nosnippet>765</a>                    .get_mut()
-<a href=#766 id=766 data-nosnippet>766</a>                    .cache_shaders
-<a href=#767 id=767 data-nosnippet>767</a>                    .unwrap_or_else(|| WINDOWS.default_cache_shaders().get());
-<a href=#768 id=768 data-nosnippet>768</a>                <span class="kw">let </span>r = VIEW_PROCESS.open_window(args);
-<a href=#769 id=769 data-nosnippet>769</a>                <span class="kw">if </span>r.is_err() {
-<a href=#770 id=770 data-nosnippet>770</a>                    <span class="macro">tracing::error!</span>(<span class="string">"view-process window {id:?} open request failed, will retry on respawn"</span>);
-<a href=#771 id=771 data-nosnippet>771</a>                    a.node.view_opening = VarHandle::dummy();
-<a href=#772 id=772 data-nosnippet>772</a>                }
-<a href=#773 id=773 data-nosnippet>773</a>            }
-<a href=#774 id=774 data-nosnippet>774</a>        }
-<a href=#775 id=775 data-nosnippet>775</a>        WindowMode::HeadlessWithRenderer =&gt; {
-<a href=#776 id=776 data-nosnippet>776</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(view) = <span class="kw-2">&amp;</span>a.view_headless {
-<a href=#777 id=777 data-nosnippet>777</a>                <span class="kw">if </span>!auto_size.is_empty() {
-<a href=#778 id=778 data-nosnippet>778</a>                    <span class="kw">let _ </span>= view.set_size(size_dip, scale_factor);
-<a href=#779 id=779 data-nosnippet>779</a>                }
-<a href=#780 id=780 data-nosnippet>780</a>            } <span class="kw">else if </span>a.node.view_opening.is_dummy() {
-<a href=#781 id=781 data-nosnippet>781</a>                <span class="kw">if </span>APP.window_mode().is_headless() &amp;&amp; !vars.<span class="number">0</span>.instance_state.get().is_loaded() {
-<a href=#782 id=782 data-nosnippet>782</a>                    <span class="comment">// simulate focus, for tests mostly
-<a href=#783 id=783 data-nosnippet>783</a>                    </span><span class="kw">let </span>args = RawWindowFocusArgs::now(WINDOWS_SV.read().focused.with(|p| p.as_ref().map(|p| p.window_id())), <span class="prelude-val">Some</span>(a.id));
-<a href=#784 id=784 data-nosnippet>784</a>                    RAW_WINDOW_FOCUS_EVENT.notify(args);
-<a href=#785 id=785 data-nosnippet>785</a>                }
-<a href=#786 id=786 data-nosnippet>786</a>
-<a href=#787 id=787 data-nosnippet>787</a>                <span class="kw">if </span>!VIEW_PROCESS.is_connected() {
-<a href=#788 id=788 data-nosnippet>788</a>                    <span class="macro">tracing::debug!</span>(<span class="string">"skipping view-process open headless {:?}, no view-process connected"</span>, a.id);
-<a href=#789 id=789 data-nosnippet>789</a>                    <span class="kw">return</span>;
-<a href=#790 id=790 data-nosnippet>790</a>                }
-<a href=#791 id=791 data-nosnippet>791</a>
-<a href=#792 id=792 data-nosnippet>792</a>                <span class="comment">// start opening view-process renderer
-<a href=#793 id=793 data-nosnippet>793</a>                </span><span class="kw">let </span>id = a.node.win_ctx.id();
-<a href=#794 id=794 data-nosnippet>794</a>                a.node.view_opening = RAW_HEADLESS_OPEN_EVENT.hook(<span class="kw">move </span>|a| {
-<a href=#795 id=795 data-nosnippet>795</a>                    <span class="kw">if </span>a.window_id != id {
-<a href=#796 id=796 data-nosnippet>796</a>                        <span class="kw">return </span><span class="bool-val">true</span>;
-<a href=#797 id=797 data-nosnippet>797</a>                    }
-<a href=#798 id=798 data-nosnippet>798</a>
-<a href=#799 id=799 data-nosnippet>799</a>                    <span class="kw">let </span><span class="kw-2">mut </span>s = WINDOWS_SV.write();
-<a href=#800 id=800 data-nosnippet>800</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = s.windows.get_mut(<span class="kw-2">&amp;</span>id) {
-<a href=#801 id=801 data-nosnippet>801</a>                        w.vars
-<a href=#802 id=802 data-nosnippet>802</a>                            .as_ref()
-<a href=#803 id=803 data-nosnippet>803</a>                            .unwrap()
-<a href=#804 id=804 data-nosnippet>804</a>                            .<span class="number">0
-<a href=#805 id=805 data-nosnippet>805</a>                            </span>.instance_state
-<a href=#806 id=806 data-nosnippet>806</a>                            .set(WindowInstanceState::Loaded { has_view: <span class="bool-val">true </span>});
-<a href=#807 id=807 data-nosnippet>807</a>                        WINDOW_LOAD_EVENT.notify(WindowOpenArgs::now(id));
-<a href=#808 id=808 data-nosnippet>808</a>
-<a href=#809 id=809 data-nosnippet>809</a>                        <span class="kw">let </span>r = w.root.as_mut().unwrap();
-<a href=#810 id=810 data-nosnippet>810</a>                        <span class="kw">let </span>surface = a.surface.upgrade().unwrap();
-<a href=#811 id=811 data-nosnippet>811</a>                        w.view_generation = surface.generation();
-<a href=#812 id=812 data-nosnippet>812</a>                        w.renderer = <span class="prelude-val">Some</span>(surface.renderer());
-<a href=#813 id=813 data-nosnippet>813</a>                        w.view_headless = <span class="prelude-val">Some</span>(surface);
-<a href=#814 id=814 data-nosnippet>814</a>                        r.view_opening = VarHandle::dummy();
-<a href=#815 id=815 data-nosnippet>815</a>                        r.view_spawned = <span class="bool-val">true</span>;
-<a href=#816 id=816 data-nosnippet>816</a>
-<a href=#817 id=817 data-nosnippet>817</a>                        UPDATES.render_window(id);
-<a href=#818 id=818 data-nosnippet>818</a>                    }
-<a href=#819 id=819 data-nosnippet>819</a>
-<a href=#820 id=820 data-nosnippet>820</a>                    <span class="bool-val">false
-<a href=#821 id=821 data-nosnippet>821</a>                </span>});
-<a href=#822 id=822 data-nosnippet>822</a>
-<a href=#823 id=823 data-nosnippet>823</a>                <span class="kw">let </span><span class="kw-2">mut </span>args = HeadlessRequest::new(
-<a href=#824 id=824 data-nosnippet>824</a>                    zng_view_api::window::WindowId::from_raw(id.get()),
-<a href=#825 id=825 data-nosnippet>825</a>                    scale_factor,
-<a href=#826 id=826 data-nosnippet>826</a>                    size_dip,
-<a href=#827 id=827 data-nosnippet>827</a>                    a.node
-<a href=#828 id=828 data-nosnippet>828</a>                        .root
-<a href=#829 id=829 data-nosnippet>829</a>                        .get_mut()
-<a href=#830 id=830 data-nosnippet>830</a>                        .render_mode
-<a href=#831 id=831 data-nosnippet>831</a>                        .unwrap_or_else(|| WINDOWS.default_render_mode().get()),
-<a href=#832 id=832 data-nosnippet>832</a>                    WINDOWS_EXTENSIONS.take_view_extensions_init(id),
-<a href=#833 id=833 data-nosnippet>833</a>                );
-<a href=#834 id=834 data-nosnippet>834</a>                args.cache_shaders = a
-<a href=#835 id=835 data-nosnippet>835</a>                    .node
-<a href=#836 id=836 data-nosnippet>836</a>                    .root
-<a href=#837 id=837 data-nosnippet>837</a>                    .get_mut()
-<a href=#838 id=838 data-nosnippet>838</a>                    .cache_shaders
-<a href=#839 id=839 data-nosnippet>839</a>                    .unwrap_or_else(|| WINDOWS.default_cache_shaders().get());
-<a href=#840 id=840 data-nosnippet>840</a>                <span class="kw">let </span>r = VIEW_PROCESS.open_headless(args);
-<a href=#841 id=841 data-nosnippet>841</a>                <span class="kw">if </span>r.is_err() {
-<a href=#842 id=842 data-nosnippet>842</a>                    <span class="macro">tracing::error!</span>(<span class="string">"view-process headless surface {id:?} open request failed, will retry on respawn"</span>);
-<a href=#843 id=843 data-nosnippet>843</a>                    a.node.view_opening = VarHandle::dummy();
-<a href=#844 id=844 data-nosnippet>844</a>                }
-<a href=#845 id=845 data-nosnippet>845</a>            }
-<a href=#846 id=846 data-nosnippet>846</a>        }
-<a href=#847 id=847 data-nosnippet>847</a>        WindowMode::Headless =&gt; {
-<a href=#848 id=848 data-nosnippet>848</a>            <span class="kw">if </span>APP.window_mode().is_headless() &amp;&amp; !vars.<span class="number">0</span>.instance_state.get().is_loaded() {
-<a href=#849 id=849 data-nosnippet>849</a>                <span class="comment">// simulate focus, for tests mostly
-<a href=#850 id=850 data-nosnippet>850</a>                </span><span class="kw">let </span>args = RawWindowFocusArgs::now(WINDOWS_SV.read().focused.with(|p| p.as_ref().map(|p| p.window_id())), <span class="prelude-val">Some</span>(a.id));
-<a href=#851 id=851 data-nosnippet>851</a>                RAW_WINDOW_FOCUS_EVENT.notify(args);
-<a href=#852 id=852 data-nosnippet>852</a>            }
-<a href=#853 id=853 data-nosnippet>853</a>        }
-<a href=#854 id=854 data-nosnippet>854</a>    }
-<a href=#855 id=855 data-nosnippet>855</a>}
-<a href=#856 id=856 data-nosnippet>856</a>
-<a href=#857 id=857 data-nosnippet>857</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>render(a: <span class="kw-2">&amp;mut </span>WidgetUpdateArgs, render_widgets: <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt;, render_update_widgets: <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt;) {
-<a href=#858 id=858 data-nosnippet>858</a>    <span class="kw">if </span>render_widgets.delivery_list().enter_window(a.id)
-<a href=#859 id=859 data-nosnippet>859</a>        || (a.node.frame_id == FrameId::INVALID &amp;&amp; render_update_widgets.delivery_list().enter_window(a.id))
-<a href=#860 id=860 data-nosnippet>860</a>    {
-<a href=#861 id=861 data-nosnippet>861</a>        <span class="comment">// if is pending render or is first frame and is pending render_update
-<a href=#862 id=862 data-nosnippet>862</a>
-<a href=#863 id=863 data-nosnippet>863</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(n) = <span class="kw-2">&amp;mut </span>a.node.nested {
-<a href=#864 id=864 data-nosnippet>864</a>            <span class="comment">// if is nested redirect to parent window
-<a href=#865 id=865 data-nosnippet>865</a>            </span>n.pending_render = <span class="prelude-val">Some</span>([render_widgets.clone(), render_update_widgets.clone()]);
-<a href=#866 id=866 data-nosnippet>866</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = a.vars.take().unwrap().<span class="number">0</span>.nest_parent.get() {
-<a href=#867 id=867 data-nosnippet>867</a>                UPDATES.render(t);
-<a href=#868 id=868 data-nosnippet>868</a>            }
-<a href=#869 id=869 data-nosnippet>869</a>            <span class="kw">return</span>;
-<a href=#870 id=870 data-nosnippet>870</a>        }
-<a href=#871 id=871 data-nosnippet>871</a>
-<a href=#872 id=872 data-nosnippet>872</a>        <span class="kw">if </span><span class="macro">matches!</span>(a.node.win_ctx.mode(), WindowMode::Headed | WindowMode::HeadlessWithRenderer) &amp;&amp; a.renderer.is_none() {
-<a href=#873 id=873 data-nosnippet>873</a>            <span class="comment">// skip until there is a window.
-<a href=#874 id=874 data-nosnippet>874</a>            </span><span class="macro">tracing::debug!</span>(<span class="string">"skipping render {:?}, no renderer connected"</span>, a.id);
-<a href=#875 id=875 data-nosnippet>875</a>            <span class="kw">return</span>;
-<a href=#876 id=876 data-nosnippet>876</a>        }
-<a href=#877 id=877 data-nosnippet>877</a>
-<a href=#878 id=878 data-nosnippet>878</a>        <span class="kw">let </span>vars = a.vars.take().unwrap();
-<a href=#879 id=879 data-nosnippet>879</a>        <span class="kw">let </span>info = a.node.win_ctx.widget_tree();
-<a href=#880 id=880 data-nosnippet>880</a>
-<a href=#881 id=881 data-nosnippet>881</a>        <span class="comment">// render
-<a href=#882 id=882 data-nosnippet>882</a>        </span>a.node.frame_id = a.node.frame_id.next();
-<a href=#883 id=883 data-nosnippet>883</a>        <span class="kw">let </span><span class="kw-2">mut </span>frame = FrameBuilder::new(
-<a href=#884 id=884 data-nosnippet>884</a>            render_widgets.clone(),
-<a href=#885 id=885 data-nosnippet>885</a>            render_update_widgets.clone(),
-<a href=#886 id=886 data-nosnippet>886</a>            a.node.frame_id,
-<a href=#887 id=887 data-nosnippet>887</a>            a.node.wgt_ctx.id(),
-<a href=#888 id=888 data-nosnippet>888</a>            <span class="kw-2">&amp;</span>a.node.wgt_ctx.bounds(),
-<a href=#889 id=889 data-nosnippet>889</a>            <span class="kw-2">&amp;</span>info,
-<a href=#890 id=890 data-nosnippet>890</a>            a.renderer.clone(),
-<a href=#891 id=891 data-nosnippet>891</a>            vars.<span class="number">0</span>.scale_factor.get(),
-<a href=#892 id=892 data-nosnippet>892</a>            FontAntiAliasing::Default,
-<a href=#893 id=893 data-nosnippet>893</a>        );
-<a href=#894 id=894 data-nosnippet>894</a>        a.node.with_root(|n| {
-<a href=#895 id=895 data-nosnippet>895</a>            n.render(<span class="kw-2">&amp;mut </span>frame);
-<a href=#896 id=896 data-nosnippet>896</a>        });
-<a href=#897 id=897 data-nosnippet>897</a>        <span class="kw">let </span>frame = frame.finalize(<span class="kw-2">&amp;</span>info);
-<a href=#898 id=898 data-nosnippet>898</a>        a.node.clear_color = frame.clear_color;
-<a href=#899 id=899 data-nosnippet>899</a>
-<a href=#900 id=900 data-nosnippet>900</a>        <span class="kw">let </span>capture = vars.take_frame_capture();
-<a href=#901 id=901 data-nosnippet>901</a>        <span class="kw">let </span>wait_id = a.node.frame_wait_id.take();
-<a href=#902 id=902 data-nosnippet>902</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="kw-2">&amp;</span>a.renderer {
-<a href=#903 id=903 data-nosnippet>903</a>            <span class="comment">// send frame to view-process
-<a href=#904 id=904 data-nosnippet>904</a>            </span><span class="kw">let _ </span>= r.render(FrameRequest::new(
-<a href=#905 id=905 data-nosnippet>905</a>                a.node.frame_id,
-<a href=#906 id=906 data-nosnippet>906</a>                a.node.clear_color,
-<a href=#907 id=907 data-nosnippet>907</a>                frame.display_list,
-<a href=#908 id=908 data-nosnippet>908</a>                capture,
-<a href=#909 id=909 data-nosnippet>909</a>                wait_id,
-<a href=#910 id=910 data-nosnippet>910</a>            ));
-<a href=#911 id=911 data-nosnippet>911</a>        } <span class="kw">else </span>{
-<a href=#912 id=912 data-nosnippet>912</a>            <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
-<a href=#913 id=913 data-nosnippet>913</a>            </span>{
-<a href=#914 id=914 data-nosnippet>914</a>                <span class="kw">let </span>error = <span class="kw">match </span>capture {
-<a href=#915 id=915 data-nosnippet>915</a>                    zng_view_api::window::FrameCapture::None =&gt; <span class="string">""</span>,
-<a href=#916 id=916 data-nosnippet>916</a>                    zng_view_api::window::FrameCapture::Full =&gt; <span class="string">"cannot capture frame, no renderer"</span>,
-<a href=#917 id=917 data-nosnippet>917</a>                    zng_view_api::window::FrameCapture::Mask(<span class="kw">_</span>) =&gt; <span class="string">"cannot capture frame mask, no renderer"</span>,
-<a href=#918 id=918 data-nosnippet>918</a>                    <span class="kw">_ </span>=&gt; <span class="string">""</span>,
-<a href=#919 id=919 data-nosnippet>919</a>                };
-<a href=#920 id=920 data-nosnippet>920</a>                <span class="kw">if </span>!error.is_empty() {
-<a href=#921 id=921 data-nosnippet>921</a>                    <span class="kw">let </span>frame_image = zng_var::VarEq(zng_var::var(zng_ext_image::ImageEntry::new_error(error.into())));
-<a href=#922 id=922 data-nosnippet>922</a>                    <span class="kw">crate</span>::FRAME_IMAGE_READY_EVENT.notify(<span class="kw">crate</span>::FrameImageReadyArgs::now(a.id, a.node.frame_id, frame_image.downgrade()));
-<a href=#923 id=923 data-nosnippet>923</a>                    UPDATES.once_next_update(<span class="string">""</span>, <span class="kw">move </span>|| {
-<a href=#924 id=924 data-nosnippet>924</a>                        <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>frame_image;
-<a href=#925 id=925 data-nosnippet>925</a>                    });
-<a href=#926 id=926 data-nosnippet>926</a>                }
-<a href=#927 id=927 data-nosnippet>927</a>            }
-<a href=#928 id=928 data-nosnippet>928</a>        }
-<a href=#929 id=929 data-nosnippet>929</a>
-<a href=#930 id=930 data-nosnippet>930</a>        <span class="kw">if </span>a.node.wgt_ctx.is_pending_reinit() {
-<a href=#931 id=931 data-nosnippet>931</a>            a.node.with_root(|<span class="kw">_</span>| WIDGET.update());
-<a href=#932 id=932 data-nosnippet>932</a>        }
-<a href=#933 id=933 data-nosnippet>933</a>    } <span class="kw">else if </span>render_update_widgets.delivery_list().enter_window(a.id) {
-<a href=#934 id=934 data-nosnippet>934</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = <span class="kw-2">&amp;mut </span>a.node.nested {
-<a href=#935 id=935 data-nosnippet>935</a>            n.pending_render = <span class="prelude-val">Some</span>([render_widgets.clone(), render_update_widgets.clone()]);
-<a href=#936 id=936 data-nosnippet>936</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = a.vars.take().unwrap().<span class="number">0</span>.nest_parent.get() {
-<a href=#937 id=937 data-nosnippet>937</a>                UPDATES.render_update(t);
-<a href=#938 id=938 data-nosnippet>938</a>            }
-<a href=#939 id=939 data-nosnippet>939</a>            <span class="kw">return</span>;
-<a href=#940 id=940 data-nosnippet>940</a>        }
-<a href=#941 id=941 data-nosnippet>941</a>
-<a href=#942 id=942 data-nosnippet>942</a>        <span class="comment">// update
-<a href=#943 id=943 data-nosnippet>943</a>        </span>a.node.frame_id = a.node.frame_id.next_update();
-<a href=#944 id=944 data-nosnippet>944</a>        <span class="kw">let </span><span class="kw-2">mut </span>update = FrameUpdate::new(
-<a href=#945 id=945 data-nosnippet>945</a>            render_update_widgets.clone(),
-<a href=#946 id=946 data-nosnippet>946</a>            a.node.frame_id,
-<a href=#947 id=947 data-nosnippet>947</a>            a.node.wgt_ctx.id(),
-<a href=#948 id=948 data-nosnippet>948</a>            a.node.wgt_ctx.bounds(),
-<a href=#949 id=949 data-nosnippet>949</a>            a.node.clear_color,
-<a href=#950 id=950 data-nosnippet>950</a>        );
-<a href=#951 id=951 data-nosnippet>951</a>        a.node.with_root(|n| {
-<a href=#952 id=952 data-nosnippet>952</a>            n.render_update(<span class="kw-2">&amp;mut </span>update);
-<a href=#953 id=953 data-nosnippet>953</a>        });
-<a href=#954 id=954 data-nosnippet>954</a>        <span class="kw">let </span>update = update.finalize(<span class="kw-2">&amp;</span>a.node.win_ctx.widget_tree());
-<a href=#955 id=955 data-nosnippet>955</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = update.clear_color {
-<a href=#956 id=956 data-nosnippet>956</a>            a.node.clear_color = c;
-<a href=#957 id=957 data-nosnippet>957</a>        }
-<a href=#958 id=958 data-nosnippet>958</a>        <span class="kw">let </span>vars = a.vars.take().unwrap();
-<a href=#959 id=959 data-nosnippet>959</a>        <span class="kw">let </span>capture = vars.take_frame_capture();
-<a href=#960 id=960 data-nosnippet>960</a>        <span class="kw">let </span>wait_id = a.node.frame_wait_id.take();
-<a href=#961 id=961 data-nosnippet>961</a>
-<a href=#962 id=962 data-nosnippet>962</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="kw-2">&amp;</span>a.renderer {
-<a href=#963 id=963 data-nosnippet>963</a>            <span class="comment">// send updates to view-process
-<a href=#964 id=964 data-nosnippet>964</a>            </span><span class="kw">let _ </span>= r.render_update(FrameUpdateRequest::new(
-<a href=#965 id=965 data-nosnippet>965</a>                a.node.frame_id,
-<a href=#966 id=966 data-nosnippet>966</a>                update.transforms,
-<a href=#967 id=967 data-nosnippet>967</a>                update.floats,
-<a href=#968 id=968 data-nosnippet>968</a>                update.colors,
-<a href=#969 id=969 data-nosnippet>969</a>                update.clear_color,
-<a href=#970 id=970 data-nosnippet>970</a>                capture,
-<a href=#971 id=971 data-nosnippet>971</a>                wait_id,
-<a href=#972 id=972 data-nosnippet>972</a>                update.extensions,
-<a href=#973 id=973 data-nosnippet>973</a>            ));
-<a href=#974 id=974 data-nosnippet>974</a>        }
-<a href=#975 id=975 data-nosnippet>975</a>
-<a href=#976 id=976 data-nosnippet>976</a>        <span class="kw">if </span>a.node.wgt_ctx.is_pending_reinit() {
-<a href=#977 id=977 data-nosnippet>977</a>            a.node.with_root(|<span class="kw">_</span>| WIDGET.update());
-<a href=#978 id=978 data-nosnippet>978</a>        }
-<a href=#979 id=979 data-nosnippet>979</a>    }
-<a href=#980 id=980 data-nosnippet>980</a>}
-<a href=#981 id=981 data-nosnippet>981</a>
-<a href=#982 id=982 data-nosnippet>982</a><span class="doccomment">/// UI node that hosts a nested window as defined by [`WINDOWS_EXTENSIONS.register_open_nested_handler`] handler.
-<a href=#983 id=983 data-nosnippet>983</a>///
-<a href=#984 id=984 data-nosnippet>984</a>/// [`WINDOWS_EXTENSIONS.register_open_nested_handler`]: WINDOWS_EXTENSIONS::register_open_nested_handler
-<a href=#985 id=985 data-nosnippet>985</a></span><span class="kw">pub struct </span>NestedWindowNode {
-<a href=#986 id=986 data-nosnippet>986</a>    window_id: WindowId,
-<a href=#987 id=987 data-nosnippet>987</a>    close_deadline: DeadlineHandle,
-<a href=#988 id=988 data-nosnippet>988</a>}
-<a href=#989 id=989 data-nosnippet>989</a><span class="kw">impl </span>NestedWindowNode {
-<a href=#990 id=990 data-nosnippet>990</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(window_id: WindowId) -&gt; <span class="self">Self </span>{
-<a href=#991 id=991 data-nosnippet>991</a>        <span class="self">Self </span>{
-<a href=#992 id=992 data-nosnippet>992</a>            window_id,
-<a href=#993 id=993 data-nosnippet>993</a>            close_deadline: DeadlineHandle::dummy(),
-<a href=#994 id=994 data-nosnippet>994</a>        }
-<a href=#995 id=995 data-nosnippet>995</a>    }
-<a href=#996 id=996 data-nosnippet>996</a>
-<a href=#997 id=997 data-nosnippet>997</a>    <span class="kw">fn </span>take_node(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowNode&gt; {
-<a href=#998 id=998 data-nosnippet>998</a>        WINDOWS_SV.write().windows.get_mut(<span class="kw-2">&amp;</span><span class="self">self</span>.window_id)<span class="question-mark">?</span>.root.take()
-<a href=#999 id=999 data-nosnippet>999</a>    }
-<a href=#1000 id=1000 data-nosnippet>1000</a>
-<a href=#1001 id=1001 data-nosnippet>1001</a>    <span class="kw">fn </span>restore_node(<span class="kw-2">&amp;</span><span class="self">self</span>, node: WindowNode) {
-<a href=#1002 id=1002 data-nosnippet>1002</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = WINDOWS_SV.write().windows.get_mut(<span class="kw-2">&amp;</span><span class="self">self</span>.window_id) {
-<a href=#1003 id=1003 data-nosnippet>1003</a>            w.root = <span class="prelude-val">Some</span>(node);
-<a href=#1004 id=1004 data-nosnippet>1004</a>        }
-<a href=#1005 id=1005 data-nosnippet>1005</a>    }
-<a href=#1006 id=1006 data-nosnippet>1006</a>}
-<a href=#1007 id=1007 data-nosnippet>1007</a><span class="comment">// layout and render happens during parent window pass, other updates/info are disconnected
-<a href=#1008 id=1008 data-nosnippet>1008</a></span><span class="kw">impl </span>UiNodeImpl <span class="kw">for </span>NestedWindowNode {
-<a href=#1009 id=1009 data-nosnippet>1009</a>    <span class="kw">fn </span>children_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
-<a href=#1010 id=1010 data-nosnippet>1010</a>        <span class="number">0
-<a href=#1011 id=1011 data-nosnippet>1011</a>    </span>}
-<a href=#1012 id=1012 data-nosnippet>1012</a>    <span class="kw">fn </span>with_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: usize, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span>UiNode)) {}
-<a href=#1013 id=1013 data-nosnippet>1013</a>
-<a href=#1014 id=1014 data-nosnippet>1014</a>    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1015 id=1015 data-nosnippet>1015</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
-<a href=#1016 id=1016 data-nosnippet>1016</a>            <span class="comment">// net parent and nest vars
-<a href=#1017 id=1017 data-nosnippet>1017</a>
-<a href=#1018 id=1018 data-nosnippet>1018</a>            </span><span class="kw">let </span>inner_vars = WINDOW.with_context(<span class="kw-2">&amp;mut </span>n.win_ctx, || WINDOW.vars());
-<a href=#1019 id=1019 data-nosnippet>1019</a>            <span class="kw">let </span>parent_id = WINDOW.id();
-<a href=#1020 id=1020 data-nosnippet>1020</a>            <span class="kw">let </span>nest_id = WIDGET.id();
-<a href=#1021 id=1021 data-nosnippet>1021</a>            inner_vars.<span class="number">0</span>.parent.set(<span class="prelude-val">Some</span>(parent_id));
-<a href=#1022 id=1022 data-nosnippet>1022</a>            inner_vars.<span class="number">0</span>.nest_parent.set(<span class="prelude-val">Some</span>(nest_id));
-<a href=#1023 id=1023 data-nosnippet>1023</a>
-<a href=#1024 id=1024 data-nosnippet>1024</a>            <span class="comment">// parent var allows modify, lock it
-<a href=#1025 id=1025 data-nosnippet>1025</a>            </span><span class="kw">let </span>this = inner_vars.<span class="number">0</span>.parent.downgrade();
-<a href=#1026 id=1026 data-nosnippet>1026</a>            inner_vars
-<a href=#1027 id=1027 data-nosnippet>1027</a>                .<span class="number">0
-<a href=#1028 id=1028 data-nosnippet>1028</a>                </span>.parent
-<a href=#1029 id=1029 data-nosnippet>1029</a>                .hook(<span class="kw">move </span>|a| {
-<a href=#1030 id=1030 data-nosnippet>1030</a>                    <span class="kw">if </span><span class="kw-2">*</span>a.value() != <span class="prelude-val">Some</span>(parent_id) {
-<a href=#1031 id=1031 data-nosnippet>1031</a>                        this.upgrade().unwrap().set(<span class="prelude-val">Some</span>(parent_id));
-<a href=#1032 id=1032 data-nosnippet>1032</a>                    }
-<a href=#1033 id=1033 data-nosnippet>1033</a>                    <span class="bool-val">true
-<a href=#1034 id=1034 data-nosnippet>1034</a>                </span>})
-<a href=#1035 id=1035 data-nosnippet>1035</a>                .perm();
-<a href=#1036 id=1036 data-nosnippet>1036</a>
-<a href=#1037 id=1037 data-nosnippet>1037</a>            <span class="self">self</span>.restore_node(n);
-<a href=#1038 id=1038 data-nosnippet>1038</a>        }
-<a href=#1039 id=1039 data-nosnippet>1039</a>
-<a href=#1040 id=1040 data-nosnippet>1040</a>        <span class="comment">// cancel close in case of reinit
-<a href=#1041 id=1041 data-nosnippet>1041</a>        </span><span class="self">self</span>.close_deadline = DeadlineHandle::dummy();
-<a href=#1042 id=1042 data-nosnippet>1042</a>    }
-<a href=#1043 id=1043 data-nosnippet>1043</a>
-<a href=#1044 id=1044 data-nosnippet>1044</a>    <span class="kw">fn </span>deinit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1045 id=1045 data-nosnippet>1045</a>        <span class="comment">// can be a temporary deinit (for reinit), wait 100ms before closing window
-<a href=#1046 id=1046 data-nosnippet>1046</a>        </span><span class="kw">let </span>id = <span class="self">self</span>.window_id;
-<a href=#1047 id=1047 data-nosnippet>1047</a>        <span class="self">self</span>.close_deadline = TIMERS.on_deadline(
-<a href=#1048 id=1048 data-nosnippet>1048</a>            <span class="number">100</span>.ms(),
-<a href=#1049 id=1049 data-nosnippet>1049</a>            <span class="macro">async_hn_once!</span>(|<span class="kw">_</span>| {
-<a href=#1050 id=1050 data-nosnippet>1050</a>                <span class="kw">let </span>r = WINDOWS.close(id).wait_rsp().<span class="kw">await</span>;
-<a href=#1051 id=1051 data-nosnippet>1051</a>                <span class="kw">if </span><span class="macro">matches!</span>(r, CloseWindowResult::Cancel) {
-<a href=#1052 id=1052 data-nosnippet>1052</a>                    <span class="comment">// did not close ok, force close
-<a href=#1053 id=1053 data-nosnippet>1053</a>                    </span><span class="macro">tracing::error!</span>(<span class="string">"nested window {id} already deinited, cannot cancel close"</span>);
-<a href=#1054 id=1054 data-nosnippet>1054</a>                    <span class="kw">let </span><span class="kw-2">mut </span>s = WINDOWS_SV.write();
-<a href=#1055 id=1055 data-nosnippet>1055</a>                    <span class="kw">let </span><span class="kw-2">mut </span>windows = IdSet::new();
-<a href=#1056 id=1056 data-nosnippet>1056</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>w) = s.windows.remove(<span class="kw-2">&amp;</span>id) {
-<a href=#1057 id=1057 data-nosnippet>1057</a>                        <span class="kw">let </span>vars = w.vars.take().unwrap();
-<a href=#1058 id=1058 data-nosnippet>1058</a>                        vars.<span class="number">0</span>.instance_state.set(WindowInstanceState::Closed);
-<a href=#1059 id=1059 data-nosnippet>1059</a>                        windows.insert(id);
-<a href=#1060 id=1060 data-nosnippet>1060</a>
-<a href=#1061 id=1061 data-nosnippet>1061</a>                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>r) = w.root.take() {
-<a href=#1062 id=1062 data-nosnippet>1062</a>                            r.with_root(|n| n.deinit());
-<a href=#1063 id=1063 data-nosnippet>1063</a>                        }
-<a href=#1064 id=1064 data-nosnippet>1064</a>                    }
-<a href=#1065 id=1065 data-nosnippet>1065</a>                    WINDOW_CLOSE_EVENT.notify(WindowCloseArgs::now(windows));
-<a href=#1066 id=1066 data-nosnippet>1066</a>                }
-<a href=#1067 id=1067 data-nosnippet>1067</a>            }),
-<a href=#1068 id=1068 data-nosnippet>1068</a>        );
-<a href=#1069 id=1069 data-nosnippet>1069</a>    }
-<a href=#1070 id=1070 data-nosnippet>1070</a>
-<a href=#1071 id=1071 data-nosnippet>1071</a>    <span class="kw">fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>WidgetInfoBuilder) {
-<a href=#1072 id=1072 data-nosnippet>1072</a>        info.set_meta(<span class="kw-2">*</span>NESTED_WINDOW_INFO_ID, <span class="self">self</span>.window_id);
-<a href=#1073 id=1073 data-nosnippet>1073</a>    }
-<a href=#1074 id=1074 data-nosnippet>1074</a>
-<a href=#1075 id=1075 data-nosnippet>1075</a>    <span class="kw">fn </span>measure(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wm: <span class="kw-2">&amp;mut </span>zng_wgt::prelude::WidgetMeasure) -&gt; PxSize {
-<a href=#1076 id=1076 data-nosnippet>1076</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = PxSize::zero();
-<a href=#1077 id=1077 data-nosnippet>1077</a>        <span class="comment">// reset context to app level, only parent layout constraints should affect the nested window
-<a href=#1078 id=1078 data-nosnippet>1078</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
-<a href=#1079 id=1079 data-nosnippet>1079</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
-<a href=#1080 id=1080 data-nosnippet>1080</a>            ctx.with_context(|| {
-<a href=#1081 id=1081 data-nosnippet>1081</a>                n.with_root(|n| {
-<a href=#1082 id=1082 data-nosnippet>1082</a>                    r = wm.with_widget(|wm| n.measure(wm));
-<a href=#1083 id=1083 data-nosnippet>1083</a>                })
-<a href=#1084 id=1084 data-nosnippet>1084</a>            });
-<a href=#1085 id=1085 data-nosnippet>1085</a>            <span class="self">self</span>.restore_node(n);
-<a href=#1086 id=1086 data-nosnippet>1086</a>        }
-<a href=#1087 id=1087 data-nosnippet>1087</a>        r
-<a href=#1088 id=1088 data-nosnippet>1088</a>    }
-<a href=#1089 id=1089 data-nosnippet>1089</a>
-<a href=#1090 id=1090 data-nosnippet>1090</a>    <span class="kw">fn </span>layout(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wl: <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize {
-<a href=#1091 id=1091 data-nosnippet>1091</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = PxSize::zero();
-<a href=#1092 id=1092 data-nosnippet>1092</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
-<a href=#1093 id=1093 data-nosnippet>1093</a>            <span class="kw">let </span>pending = n.nested.as_mut().unwrap().pending_layout.take();
-<a href=#1094 id=1094 data-nosnippet>1094</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
-<a href=#1095 id=1095 data-nosnippet>1095</a>            ctx.with_context(|| {
-<a href=#1096 id=1096 data-nosnippet>1096</a>                n.with_root(|n| {
-<a href=#1097 id=1097 data-nosnippet>1097</a>                    r = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = pending {
-<a href=#1098 id=1098 data-nosnippet>1098</a>                        wl.with_layout_updates(p, |wl| n.layout(wl))
-<a href=#1099 id=1099 data-nosnippet>1099</a>                    } <span class="kw">else </span>{
-<a href=#1100 id=1100 data-nosnippet>1100</a>                        wl.with_widget(|wl| n.layout(wl))
-<a href=#1101 id=1101 data-nosnippet>1101</a>                    };
-<a href=#1102 id=1102 data-nosnippet>1102</a>                });
-<a href=#1103 id=1103 data-nosnippet>1103</a>            });
-<a href=#1104 id=1104 data-nosnippet>1104</a>            <span class="self">self</span>.restore_node(n);
-<a href=#1105 id=1105 data-nosnippet>1105</a>        }
-<a href=#1106 id=1106 data-nosnippet>1106</a>        r
-<a href=#1107 id=1107 data-nosnippet>1107</a>    }
-<a href=#1108 id=1108 data-nosnippet>1108</a>
-<a href=#1109 id=1109 data-nosnippet>1109</a>    <span class="kw">fn </span>render(<span class="kw-2">&amp;mut </span><span class="self">self</span>, frame: <span class="kw-2">&amp;mut </span>FrameBuilder) {
-<a href=#1110 id=1110 data-nosnippet>1110</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
-<a href=#1111 id=1111 data-nosnippet>1111</a>            <span class="kw">let </span>[render_widgets, render_update_widgets] = n.nested.as_mut().unwrap().pending_render.take().unwrap_or_default();
-<a href=#1112 id=1112 data-nosnippet>1112</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
-<a href=#1113 id=1113 data-nosnippet>1113</a>            ctx.with_context(|| {
-<a href=#1114 id=1114 data-nosnippet>1114</a>                <span class="kw">let </span>root_id = n.wgt_ctx.id();
-<a href=#1115 id=1115 data-nosnippet>1115</a>                <span class="kw">let </span>root_bounds = n.wgt_ctx.bounds();
-<a href=#1116 id=1116 data-nosnippet>1116</a>                <span class="kw">let </span>info = n.win_ctx.widget_tree();
-<a href=#1117 id=1117 data-nosnippet>1117</a>                n.with_root(|n| {
-<a href=#1118 id=1118 data-nosnippet>1118</a>                    frame.with_nested_window(
-<a href=#1119 id=1119 data-nosnippet>1119</a>                        render_widgets,
-<a href=#1120 id=1120 data-nosnippet>1120</a>                        render_update_widgets,
-<a href=#1121 id=1121 data-nosnippet>1121</a>                        root_id,
-<a href=#1122 id=1122 data-nosnippet>1122</a>                        <span class="kw-2">&amp;</span>root_bounds,
-<a href=#1123 id=1123 data-nosnippet>1123</a>                        <span class="kw-2">&amp;</span>info,
-<a href=#1124 id=1124 data-nosnippet>1124</a>                        FontAntiAliasing::Default,
-<a href=#1125 id=1125 data-nosnippet>1125</a>                        |frame| n.render(frame),
-<a href=#1126 id=1126 data-nosnippet>1126</a>                    );
-<a href=#1127 id=1127 data-nosnippet>1127</a>                });
-<a href=#1128 id=1128 data-nosnippet>1128</a>            });
-<a href=#1129 id=1129 data-nosnippet>1129</a>            <span class="self">self</span>.restore_node(n);
-<a href=#1130 id=1130 data-nosnippet>1130</a>        }
-<a href=#1131 id=1131 data-nosnippet>1131</a>    }
-<a href=#1132 id=1132 data-nosnippet>1132</a>
-<a href=#1133 id=1133 data-nosnippet>1133</a>    <span class="kw">fn </span>render_update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;mut </span>FrameUpdate) {
-<a href=#1134 id=1134 data-nosnippet>1134</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
-<a href=#1135 id=1135 data-nosnippet>1135</a>            <span class="kw">let </span>[<span class="kw">_</span>, render_update_widgets] = n.nested.as_mut().unwrap().pending_render.take().unwrap_or_default();
-<a href=#1136 id=1136 data-nosnippet>1136</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
-<a href=#1137 id=1137 data-nosnippet>1137</a>            ctx.with_context(|| {
-<a href=#1138 id=1138 data-nosnippet>1138</a>                <span class="kw">let </span>root_id = n.wgt_ctx.id();
-<a href=#1139 id=1139 data-nosnippet>1139</a>                <span class="kw">let </span>root_bounds = n.wgt_ctx.bounds();
-<a href=#1140 id=1140 data-nosnippet>1140</a>                n.with_root(|n| {
-<a href=#1141 id=1141 data-nosnippet>1141</a>                    update.with_nested_window(render_update_widgets, root_id, root_bounds, |update| {
-<a href=#1142 id=1142 data-nosnippet>1142</a>                        n.render_update(update);
-<a href=#1143 id=1143 data-nosnippet>1143</a>                    });
-<a href=#1144 id=1144 data-nosnippet>1144</a>                })
-<a href=#1145 id=1145 data-nosnippet>1145</a>            });
-<a href=#1146 id=1146 data-nosnippet>1146</a>            <span class="self">self</span>.restore_node(n);
-<a href=#1147 id=1147 data-nosnippet>1147</a>        }
-<a href=#1148 id=1148 data-nosnippet>1148</a>    }
-<a href=#1149 id=1149 data-nosnippet>1149</a>}
+<a href=#621 id=621 data-nosnippet>621</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.restore_state_fullscreen, a.data.state.restore_state_fullscreen);
+<a href=#622 id=622 data-nosnippet>622</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.chrome, a.data.state.chrome_visible);
+<a href=#623 id=623 data-nosnippet>623</a>
+<a href=#624 id=624 data-nosnippet>624</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_monitor, a.data.monitor);
+<a href=#625 id=625 data-nosnippet>625</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_position, a.data.position.<span class="number">1</span>);
+<a href=#626 id=626 data-nosnippet>626</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.global_position, a.data.position.<span class="number">0</span>);
+<a href=#627 id=627 data-nosnippet>627</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.actual_size, a.data.size);
+<a href=#628 id=628 data-nosnippet>628</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.scale_factor, a.data.scale_factor);
+<a href=#629 id=629 data-nosnippet>629</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.refresh_rate, a.data.refresh_rate);
+<a href=#630 id=630 data-nosnippet>630</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.render_mode, a.data.render_mode);
+<a href=#631 id=631 data-nosnippet>631</a>                        vars.set_from_view(|v| <span class="kw-2">&amp;</span>v.<span class="number">0</span>.safe_padding, a.data.safe_padding);
+<a href=#632 id=632 data-nosnippet>632</a>
+<a href=#633 id=633 data-nosnippet>633</a>                        s.set_frame_duration();
+<a href=#634 id=634 data-nosnippet>634</a>
+<a href=#635 id=635 data-nosnippet>635</a>                        <span class="macro">tracing::trace!</span>(
+<a href=#636 id=636 data-nosnippet>636</a>                            <span class="string">"open window {:?} in {:?}, {:?}"</span>,
+<a href=#637 id=637 data-nosnippet>637</a>                            id,
+<a href=#638 id=638 data-nosnippet>638</a>                            a.data.monitor,
+<a href=#639 id=639 data-nosnippet>639</a>                            (<span class="kw-2">&amp;</span>a.data.state.global_position, a.data.size)
+<a href=#640 id=640 data-nosnippet>640</a>                        );
+<a href=#641 id=641 data-nosnippet>641</a>                    }
+<a href=#642 id=642 data-nosnippet>642</a>
+<a href=#643 id=643 data-nosnippet>643</a>                    <span class="bool-val">false
+<a href=#644 id=644 data-nosnippet>644</a>                </span>});
+<a href=#645 id=645 data-nosnippet>645</a>
+<a href=#646 id=646 data-nosnippet>646</a>                <span class="comment">// Layout initial position in the monitor space.
+<a href=#647 id=647 data-nosnippet>647</a>                </span><span class="kw">let </span><span class="kw-2">mut </span>system_pos = <span class="bool-val">false</span>;
+<a href=#648 id=648 data-nosnippet>648</a>                <span class="kw">let </span><span class="kw-2">mut </span>global_position = PxPoint::zero();
+<a href=#649 id=649 data-nosnippet>649</a>                <span class="kw">let </span><span class="kw-2">mut </span>position = DipPoint::zero();
+<a href=#650 id=650 data-nosnippet>650</a>                <span class="kw">if </span>a.node.view_spawned {
+<a href=#651 id=651 data-nosnippet>651</a>                    <span class="comment">// is respawning view
+<a href=#652 id=652 data-nosnippet>652</a>                    </span>global_position = vars.<span class="number">0</span>.global_position.get();
+<a href=#653 id=653 data-nosnippet>653</a>                    position = vars.<span class="number">0</span>.actual_position.get();
+<a href=#654 id=654 data-nosnippet>654</a>                } <span class="kw">else </span>{
+<a href=#655 id=655 data-nosnippet>655</a>                    <span class="kw">match </span>a.node.root.get_mut().start_position {
+<a href=#656 id=656 data-nosnippet>656</a>                        StartPosition::Default =&gt; {
+<a href=#657 id=657 data-nosnippet>657</a>                            <span class="kw">let </span>pos = vars.<span class="number">0</span>.position.get();
+<a href=#658 id=658 data-nosnippet>658</a>                            system_pos = pos.x.is_default() || pos.y.is_default();
+<a href=#659 id=659 data-nosnippet>659</a>                            <span class="kw">if </span>!system_pos {
+<a href=#660 id=660 data-nosnippet>660</a>                                LAYOUT.with_root_context(a.node.layout_pass, monitor_metrics(), || {
+<a href=#661 id=661 data-nosnippet>661</a>                                    <span class="kw">let </span>pos = pos.layout();
+<a href=#662 id=662 data-nosnippet>662</a>                                    position = pos.to_dip(scale_factor);
+<a href=#663 id=663 data-nosnippet>663</a>                                    global_position = monitor_rect.origin + pos.to_vector();
+<a href=#664 id=664 data-nosnippet>664</a>                                });
+<a href=#665 id=665 data-nosnippet>665</a>                            } <span class="kw">else </span>{
+<a href=#666 id=666 data-nosnippet>666</a>                                <span class="comment">// in case system does not implement position
+<a href=#667 id=667 data-nosnippet>667</a>                                </span>position = DipPoint::splat(Dip::new(<span class="number">60</span>));
+<a href=#668 id=668 data-nosnippet>668</a>                                global_position = monitor_rect.origin + position.to_px(scale_factor).to_vector();
+<a href=#669 id=669 data-nosnippet>669</a>                            }
+<a href=#670 id=670 data-nosnippet>670</a>                        }
+<a href=#671 id=671 data-nosnippet>671</a>                        start_position =&gt; {
+<a href=#672 id=672 data-nosnippet>672</a>                            <span class="kw">let </span>center_rect = <span class="kw">match </span>start_position {
+<a href=#673 id=673 data-nosnippet>673</a>                                StartPosition::CenterMonitor =&gt; monitor_rect,
+<a href=#674 id=674 data-nosnippet>674</a>                                StartPosition::CenterParent =&gt; {
+<a href=#675 id=675 data-nosnippet>675</a>                                    <span class="kw">if let </span><span class="prelude-val">Some</span>(parent_id) = vars.<span class="number">0</span>.parent.get()
+<a href=#676 id=676 data-nosnippet>676</a>                                        &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(parent_vars) = WINDOWS.vars(parent_id)
+<a href=#677 id=677 data-nosnippet>677</a>                                        &amp;&amp; <span class="macro">matches!</span>(parent_vars.<span class="number">0</span>.instance_state.get(), WindowInstanceState::Loaded { has_view: <span class="bool-val">true </span>})
+<a href=#678 id=678 data-nosnippet>678</a>                                    {
+<a href=#679 id=679 data-nosnippet>679</a>                                        PxRect::new(parent_vars.<span class="number">0</span>.global_position.get(), parent_vars.actual_size_px().get())
+<a href=#680 id=680 data-nosnippet>680</a>                                    } <span class="kw">else </span>{
+<a href=#681 id=681 data-nosnippet>681</a>                                        monitor_rect
+<a href=#682 id=682 data-nosnippet>682</a>                                    }
+<a href=#683 id=683 data-nosnippet>683</a>                                }
+<a href=#684 id=684 data-nosnippet>684</a>                                <span class="kw">_ </span>=&gt; <span class="macro">unreachable!</span>(),
+<a href=#685 id=685 data-nosnippet>685</a>                            };
+<a href=#686 id=686 data-nosnippet>686</a>                            <span class="kw">let </span>center_point = center_rect.origin + center_rect.size.to_vector() / Px(<span class="number">2</span>);
+<a href=#687 id=687 data-nosnippet>687</a>
+<a href=#688 id=688 data-nosnippet>688</a>                            global_position = center_point - final_size.to_vector() / Px(<span class="number">2</span>);
+<a href=#689 id=689 data-nosnippet>689</a>
+<a href=#690 id=690 data-nosnippet>690</a>                            <span class="comment">// snap title bar inside monitor area
+<a href=#691 id=691 data-nosnippet>691</a>                            </span><span class="kw">let </span>title_height = Dip::new(<span class="number">30</span>).to_px(scale_factor);
+<a href=#692 id=692 data-nosnippet>692</a>                            <span class="kw">let </span>correction_y = (monitor_rect.origin.y + title_height - global_position.y).max(Px(<span class="number">0</span>));
+<a href=#693 id=693 data-nosnippet>693</a>                            global_position.y += correction_y;
+<a href=#694 id=694 data-nosnippet>694</a>
+<a href=#695 id=695 data-nosnippet>695</a>                            <span class="kw">let </span>pos = (global_position - monitor_rect.origin).to_point();
+<a href=#696 id=696 data-nosnippet>696</a>                            position = pos.to_dip(scale_factor);
+<a href=#697 id=697 data-nosnippet>697</a>                        }
+<a href=#698 id=698 data-nosnippet>698</a>                    }
+<a href=#699 id=699 data-nosnippet>699</a>                }
+<a href=#700 id=700 data-nosnippet>700</a>
+<a href=#701 id=701 data-nosnippet>701</a>                <span class="kw">let </span><span class="kw-2">mut </span>state_all = vars.window_state_all();
+<a href=#702 id=702 data-nosnippet>702</a>                state_all.global_position = global_position;
+<a href=#703 id=703 data-nosnippet>703</a>                state_all.restore_rect.origin = position;
+<a href=#704 id=704 data-nosnippet>704</a>                state_all.restore_rect.size = size_dip;
+<a href=#705 id=705 data-nosnippet>705</a>                state_all.min_size = min_size_dip;
+<a href=#706 id=706 data-nosnippet>706</a>                state_all.max_size = max_size_dip;
+<a href=#707 id=707 data-nosnippet>707</a>
+<a href=#708 id=708 data-nosnippet>708</a>                <span class="kw">let </span><span class="kw-2">mut </span>ime_area = <span class="prelude-val">None</span>;
+<a href=#709 id=709 data-nosnippet>709</a>                {
+<a href=#710 id=710 data-nosnippet>710</a>                    <span class="kw">let </span>s = WINDOWS_SV.read();
+<a href=#711 id=711 data-nosnippet>711</a>                    s.focused.with(|f| {
+<a href=#712 id=712 data-nosnippet>712</a>                        <span class="kw">if let </span><span class="prelude-val">Some</span>(f) = f
+<a href=#713 id=713 data-nosnippet>713</a>                            &amp;&amp; f.window_id() == id
+<a href=#714 id=714 data-nosnippet>714</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(w) = s.windows.get(<span class="kw-2">&amp;</span>id)
+<a href=#715 id=715 data-nosnippet>715</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(i) = <span class="kw-2">&amp;</span>w.info
+<a href=#716 id=716 data-nosnippet>716</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(i) = i.get(f.widget_id())
+<a href=#717 id=717 data-nosnippet>717</a>                            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(r) = i.ime_area()
+<a href=#718 id=718 data-nosnippet>718</a>                        {
+<a href=#719 id=719 data-nosnippet>719</a>                            ime_area = <span class="prelude-val">Some</span>(r.to_dip(scale_factor));
+<a href=#720 id=720 data-nosnippet>720</a>                        }
+<a href=#721 id=721 data-nosnippet>721</a>                    });
+<a href=#722 id=722 data-nosnippet>722</a>                }
+<a href=#723 id=723 data-nosnippet>723</a>                <span class="kw">let </span><span class="kw-2">mut </span>args = WindowRequest::new(
+<a href=#724 id=724 data-nosnippet>724</a>                    zng_view_api::window::WindowId::from_raw(id.get()),
+<a href=#725 id=725 data-nosnippet>725</a>                    vars.<span class="number">0</span>.title.get(),
+<a href=#726 id=726 data-nosnippet>726</a>                    state_all,
+<a href=#727 id=727 data-nosnippet>727</a>                    a.node.root.get_mut().kiosk,
+<a href=#728 id=728 data-nosnippet>728</a>                    system_pos,
+<a href=#729 id=729 data-nosnippet>729</a>                    vars.<span class="number">0</span>.video_mode.get(),
+<a href=#730 id=730 data-nosnippet>730</a>                    vars.<span class="number">0</span>.visible.get(),
+<a href=#731 id=731 data-nosnippet>731</a>                    vars.<span class="number">0</span>.taskbar_visible.get(),
+<a href=#732 id=732 data-nosnippet>732</a>                    vars.<span class="number">0</span>.always_on_top.get(),
+<a href=#733 id=733 data-nosnippet>733</a>                    vars.<span class="number">0</span>.movable.get(),
+<a href=#734 id=734 data-nosnippet>734</a>                    vars.<span class="number">0</span>.resizable.get(),
+<a href=#735 id=735 data-nosnippet>735</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#736 id=736 data-nosnippet>736</a>                    </span>vars.<span class="number">0</span>.actual_icon.with(|w| w.as_ref().map(|w| w.view_handle().image_id())),
+<a href=#737 id=737 data-nosnippet>737</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
+<a href=#738 id=738 data-nosnippet>738</a>                    </span><span class="prelude-val">None</span>,
+<a href=#739 id=739 data-nosnippet>739</a>                    vars.<span class="number">0</span>.cursor.with(|c| c.icon()),
+<a href=#740 id=740 data-nosnippet>740</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#741 id=741 data-nosnippet>741</a>                    </span>vars.<span class="number">0
+<a href=#742 id=742 data-nosnippet>742</a>                        </span>.actual_cursor_img
+<a href=#743 id=743 data-nosnippet>743</a>                        .with(|i| i.as_ref().map(|(i, p)| (i.view_handle().image_id(), <span class="kw-2">*</span>p))),
+<a href=#744 id=744 data-nosnippet>744</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
+<a href=#745 id=745 data-nosnippet>745</a>                    </span><span class="prelude-val">None</span>,
+<a href=#746 id=746 data-nosnippet>746</a>                    a.node.root.get_mut().transparent,
+<a href=#747 id=747 data-nosnippet>747</a>                    <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#748 id=748 data-nosnippet>748</a>                    </span><span class="macro">matches!</span>(vars.<span class="number">0</span>.frame_capture_mode.get(), <span class="kw">crate</span>::FrameCaptureMode::All),
+<a href=#749 id=749 data-nosnippet>749</a>                    <span class="attr">#[cfg(not(feature = <span class="string">"image"</span>))]
+<a href=#750 id=750 data-nosnippet>750</a>                    </span><span class="bool-val">false</span>,
+<a href=#751 id=751 data-nosnippet>751</a>                    a.node
+<a href=#752 id=752 data-nosnippet>752</a>                        .root
+<a href=#753 id=753 data-nosnippet>753</a>                        .get_mut()
+<a href=#754 id=754 data-nosnippet>754</a>                        .render_mode
+<a href=#755 id=755 data-nosnippet>755</a>                        .unwrap_or_else(|| WINDOWS.default_render_mode().get()),
+<a href=#756 id=756 data-nosnippet>756</a>                    vars.<span class="number">0</span>.focus_indicator.get(),
+<a href=#757 id=757 data-nosnippet>757</a>                    vars.<span class="number">0</span>.focused.get(),
+<a href=#758 id=758 data-nosnippet>758</a>                    ime_area,
+<a href=#759 id=759 data-nosnippet>759</a>                    vars.<span class="number">0</span>.enabled_buttons.get(),
+<a href=#760 id=760 data-nosnippet>760</a>                    vars.<span class="number">0</span>.system_shutdown_warn.get(),
+<a href=#761 id=761 data-nosnippet>761</a>                    WINDOWS_EXTENSIONS.take_view_extensions_init(id),
+<a href=#762 id=762 data-nosnippet>762</a>                );
+<a href=#763 id=763 data-nosnippet>763</a>                args.cache_shaders = a
+<a href=#764 id=764 data-nosnippet>764</a>                    .node
+<a href=#765 id=765 data-nosnippet>765</a>                    .root
+<a href=#766 id=766 data-nosnippet>766</a>                    .get_mut()
+<a href=#767 id=767 data-nosnippet>767</a>                    .cache_shaders
+<a href=#768 id=768 data-nosnippet>768</a>                    .unwrap_or_else(|| WINDOWS.default_cache_shaders().get());
+<a href=#769 id=769 data-nosnippet>769</a>                <span class="kw">let </span>r = VIEW_PROCESS.open_window(args);
+<a href=#770 id=770 data-nosnippet>770</a>                <span class="kw">if </span>r.is_err() {
+<a href=#771 id=771 data-nosnippet>771</a>                    <span class="macro">tracing::error!</span>(<span class="string">"view-process window {id:?} open request failed, will retry on respawn"</span>);
+<a href=#772 id=772 data-nosnippet>772</a>                    a.node.view_opening = VarHandle::dummy();
+<a href=#773 id=773 data-nosnippet>773</a>                }
+<a href=#774 id=774 data-nosnippet>774</a>            }
+<a href=#775 id=775 data-nosnippet>775</a>        }
+<a href=#776 id=776 data-nosnippet>776</a>        WindowMode::HeadlessWithRenderer =&gt; {
+<a href=#777 id=777 data-nosnippet>777</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(view) = <span class="kw-2">&amp;</span>a.view_headless {
+<a href=#778 id=778 data-nosnippet>778</a>                <span class="kw">if </span>!auto_size.is_empty() {
+<a href=#779 id=779 data-nosnippet>779</a>                    <span class="kw">let _ </span>= view.set_size(size_dip, scale_factor);
+<a href=#780 id=780 data-nosnippet>780</a>                }
+<a href=#781 id=781 data-nosnippet>781</a>            } <span class="kw">else if </span>a.node.view_opening.is_dummy() {
+<a href=#782 id=782 data-nosnippet>782</a>                <span class="kw">if </span>APP.window_mode().is_headless() &amp;&amp; !vars.<span class="number">0</span>.instance_state.get().is_loaded() {
+<a href=#783 id=783 data-nosnippet>783</a>                    <span class="comment">// simulate focus, for tests mostly
+<a href=#784 id=784 data-nosnippet>784</a>                    </span><span class="kw">let </span>args = RawWindowFocusArgs::now(WINDOWS_SV.read().focused.with(|p| p.as_ref().map(|p| p.window_id())), <span class="prelude-val">Some</span>(a.id));
+<a href=#785 id=785 data-nosnippet>785</a>                    RAW_WINDOW_FOCUS_EVENT.notify(args);
+<a href=#786 id=786 data-nosnippet>786</a>                }
+<a href=#787 id=787 data-nosnippet>787</a>
+<a href=#788 id=788 data-nosnippet>788</a>                <span class="kw">if </span>!VIEW_PROCESS.is_connected() {
+<a href=#789 id=789 data-nosnippet>789</a>                    <span class="macro">tracing::debug!</span>(<span class="string">"skipping view-process open headless {:?}, no view-process connected"</span>, a.id);
+<a href=#790 id=790 data-nosnippet>790</a>                    <span class="kw">return</span>;
+<a href=#791 id=791 data-nosnippet>791</a>                }
+<a href=#792 id=792 data-nosnippet>792</a>
+<a href=#793 id=793 data-nosnippet>793</a>                <span class="comment">// start opening view-process renderer
+<a href=#794 id=794 data-nosnippet>794</a>                </span><span class="kw">let </span>id = a.node.win_ctx.id();
+<a href=#795 id=795 data-nosnippet>795</a>                a.node.view_opening = RAW_HEADLESS_OPEN_EVENT.hook(<span class="kw">move </span>|a| {
+<a href=#796 id=796 data-nosnippet>796</a>                    <span class="kw">if </span>a.window_id != id {
+<a href=#797 id=797 data-nosnippet>797</a>                        <span class="kw">return </span><span class="bool-val">true</span>;
+<a href=#798 id=798 data-nosnippet>798</a>                    }
+<a href=#799 id=799 data-nosnippet>799</a>
+<a href=#800 id=800 data-nosnippet>800</a>                    <span class="kw">let </span><span class="kw-2">mut </span>s = WINDOWS_SV.write();
+<a href=#801 id=801 data-nosnippet>801</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = s.windows.get_mut(<span class="kw-2">&amp;</span>id) {
+<a href=#802 id=802 data-nosnippet>802</a>                        w.vars
+<a href=#803 id=803 data-nosnippet>803</a>                            .as_ref()
+<a href=#804 id=804 data-nosnippet>804</a>                            .unwrap()
+<a href=#805 id=805 data-nosnippet>805</a>                            .<span class="number">0
+<a href=#806 id=806 data-nosnippet>806</a>                            </span>.instance_state
+<a href=#807 id=807 data-nosnippet>807</a>                            .set(WindowInstanceState::Loaded { has_view: <span class="bool-val">true </span>});
+<a href=#808 id=808 data-nosnippet>808</a>                        WINDOW_LOAD_EVENT.notify(WindowOpenArgs::now(id));
+<a href=#809 id=809 data-nosnippet>809</a>
+<a href=#810 id=810 data-nosnippet>810</a>                        <span class="kw">let </span>r = w.root.as_mut().unwrap();
+<a href=#811 id=811 data-nosnippet>811</a>                        <span class="kw">let </span>surface = a.surface.upgrade().unwrap();
+<a href=#812 id=812 data-nosnippet>812</a>                        w.view_generation = surface.generation();
+<a href=#813 id=813 data-nosnippet>813</a>                        w.renderer = <span class="prelude-val">Some</span>(surface.renderer());
+<a href=#814 id=814 data-nosnippet>814</a>                        w.view_headless = <span class="prelude-val">Some</span>(surface);
+<a href=#815 id=815 data-nosnippet>815</a>                        r.view_opening = VarHandle::dummy();
+<a href=#816 id=816 data-nosnippet>816</a>                        r.view_spawned = <span class="bool-val">true</span>;
+<a href=#817 id=817 data-nosnippet>817</a>
+<a href=#818 id=818 data-nosnippet>818</a>                        UPDATES.render_window(id);
+<a href=#819 id=819 data-nosnippet>819</a>                    }
+<a href=#820 id=820 data-nosnippet>820</a>
+<a href=#821 id=821 data-nosnippet>821</a>                    <span class="bool-val">false
+<a href=#822 id=822 data-nosnippet>822</a>                </span>});
+<a href=#823 id=823 data-nosnippet>823</a>
+<a href=#824 id=824 data-nosnippet>824</a>                <span class="kw">let </span><span class="kw-2">mut </span>args = HeadlessRequest::new(
+<a href=#825 id=825 data-nosnippet>825</a>                    zng_view_api::window::WindowId::from_raw(id.get()),
+<a href=#826 id=826 data-nosnippet>826</a>                    scale_factor,
+<a href=#827 id=827 data-nosnippet>827</a>                    size_dip,
+<a href=#828 id=828 data-nosnippet>828</a>                    a.node
+<a href=#829 id=829 data-nosnippet>829</a>                        .root
+<a href=#830 id=830 data-nosnippet>830</a>                        .get_mut()
+<a href=#831 id=831 data-nosnippet>831</a>                        .render_mode
+<a href=#832 id=832 data-nosnippet>832</a>                        .unwrap_or_else(|| WINDOWS.default_render_mode().get()),
+<a href=#833 id=833 data-nosnippet>833</a>                    WINDOWS_EXTENSIONS.take_view_extensions_init(id),
+<a href=#834 id=834 data-nosnippet>834</a>                );
+<a href=#835 id=835 data-nosnippet>835</a>                args.cache_shaders = a
+<a href=#836 id=836 data-nosnippet>836</a>                    .node
+<a href=#837 id=837 data-nosnippet>837</a>                    .root
+<a href=#838 id=838 data-nosnippet>838</a>                    .get_mut()
+<a href=#839 id=839 data-nosnippet>839</a>                    .cache_shaders
+<a href=#840 id=840 data-nosnippet>840</a>                    .unwrap_or_else(|| WINDOWS.default_cache_shaders().get());
+<a href=#841 id=841 data-nosnippet>841</a>                <span class="kw">let </span>r = VIEW_PROCESS.open_headless(args);
+<a href=#842 id=842 data-nosnippet>842</a>                <span class="kw">if </span>r.is_err() {
+<a href=#843 id=843 data-nosnippet>843</a>                    <span class="macro">tracing::error!</span>(<span class="string">"view-process headless surface {id:?} open request failed, will retry on respawn"</span>);
+<a href=#844 id=844 data-nosnippet>844</a>                    a.node.view_opening = VarHandle::dummy();
+<a href=#845 id=845 data-nosnippet>845</a>                }
+<a href=#846 id=846 data-nosnippet>846</a>            }
+<a href=#847 id=847 data-nosnippet>847</a>        }
+<a href=#848 id=848 data-nosnippet>848</a>        WindowMode::Headless =&gt; {
+<a href=#849 id=849 data-nosnippet>849</a>            <span class="kw">if </span>APP.window_mode().is_headless() &amp;&amp; !vars.<span class="number">0</span>.instance_state.get().is_loaded() {
+<a href=#850 id=850 data-nosnippet>850</a>                <span class="comment">// simulate focus, for tests mostly
+<a href=#851 id=851 data-nosnippet>851</a>                </span><span class="kw">let </span>args = RawWindowFocusArgs::now(WINDOWS_SV.read().focused.with(|p| p.as_ref().map(|p| p.window_id())), <span class="prelude-val">Some</span>(a.id));
+<a href=#852 id=852 data-nosnippet>852</a>                RAW_WINDOW_FOCUS_EVENT.notify(args);
+<a href=#853 id=853 data-nosnippet>853</a>            }
+<a href=#854 id=854 data-nosnippet>854</a>        }
+<a href=#855 id=855 data-nosnippet>855</a>    }
+<a href=#856 id=856 data-nosnippet>856</a>}
+<a href=#857 id=857 data-nosnippet>857</a>
+<a href=#858 id=858 data-nosnippet>858</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>render(a: <span class="kw-2">&amp;mut </span>WidgetUpdateArgs, render_widgets: <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt;, render_update_widgets: <span class="kw-2">&amp;</span>Arc&lt;RenderUpdates&gt;) {
+<a href=#859 id=859 data-nosnippet>859</a>    <span class="kw">if </span>render_widgets.delivery_list().enter_window(a.id)
+<a href=#860 id=860 data-nosnippet>860</a>        || (a.node.frame_id == FrameId::INVALID &amp;&amp; render_update_widgets.delivery_list().enter_window(a.id))
+<a href=#861 id=861 data-nosnippet>861</a>    {
+<a href=#862 id=862 data-nosnippet>862</a>        <span class="comment">// if is pending render or is first frame and is pending render_update
+<a href=#863 id=863 data-nosnippet>863</a>
+<a href=#864 id=864 data-nosnippet>864</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(n) = <span class="kw-2">&amp;mut </span>a.node.nested {
+<a href=#865 id=865 data-nosnippet>865</a>            <span class="comment">// if is nested redirect to parent window
+<a href=#866 id=866 data-nosnippet>866</a>            </span>n.pending_render = <span class="prelude-val">Some</span>([render_widgets.clone(), render_update_widgets.clone()]);
+<a href=#867 id=867 data-nosnippet>867</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = a.vars.take().unwrap().<span class="number">0</span>.nest_parent.get() {
+<a href=#868 id=868 data-nosnippet>868</a>                UPDATES.render(t);
+<a href=#869 id=869 data-nosnippet>869</a>            }
+<a href=#870 id=870 data-nosnippet>870</a>            <span class="kw">return</span>;
+<a href=#871 id=871 data-nosnippet>871</a>        }
+<a href=#872 id=872 data-nosnippet>872</a>
+<a href=#873 id=873 data-nosnippet>873</a>        <span class="kw">if </span><span class="macro">matches!</span>(a.node.win_ctx.mode(), WindowMode::Headed | WindowMode::HeadlessWithRenderer) &amp;&amp; a.renderer.is_none() {
+<a href=#874 id=874 data-nosnippet>874</a>            <span class="comment">// skip until there is a window.
+<a href=#875 id=875 data-nosnippet>875</a>            </span><span class="macro">tracing::debug!</span>(<span class="string">"skipping render {:?}, no renderer connected"</span>, a.id);
+<a href=#876 id=876 data-nosnippet>876</a>            <span class="kw">return</span>;
+<a href=#877 id=877 data-nosnippet>877</a>        }
+<a href=#878 id=878 data-nosnippet>878</a>
+<a href=#879 id=879 data-nosnippet>879</a>        <span class="kw">let </span>vars = a.vars.take().unwrap();
+<a href=#880 id=880 data-nosnippet>880</a>        <span class="kw">let </span>info = a.node.win_ctx.widget_tree();
+<a href=#881 id=881 data-nosnippet>881</a>
+<a href=#882 id=882 data-nosnippet>882</a>        <span class="comment">// render
+<a href=#883 id=883 data-nosnippet>883</a>        </span>a.node.frame_id = a.node.frame_id.next();
+<a href=#884 id=884 data-nosnippet>884</a>        <span class="kw">let </span><span class="kw-2">mut </span>frame = FrameBuilder::new(
+<a href=#885 id=885 data-nosnippet>885</a>            render_widgets.clone(),
+<a href=#886 id=886 data-nosnippet>886</a>            render_update_widgets.clone(),
+<a href=#887 id=887 data-nosnippet>887</a>            a.node.frame_id,
+<a href=#888 id=888 data-nosnippet>888</a>            a.node.wgt_ctx.id(),
+<a href=#889 id=889 data-nosnippet>889</a>            <span class="kw-2">&amp;</span>a.node.wgt_ctx.bounds(),
+<a href=#890 id=890 data-nosnippet>890</a>            <span class="kw-2">&amp;</span>info,
+<a href=#891 id=891 data-nosnippet>891</a>            a.renderer.clone(),
+<a href=#892 id=892 data-nosnippet>892</a>            vars.<span class="number">0</span>.scale_factor.get(),
+<a href=#893 id=893 data-nosnippet>893</a>            FontAntiAliasing::Default,
+<a href=#894 id=894 data-nosnippet>894</a>        );
+<a href=#895 id=895 data-nosnippet>895</a>        a.node.with_root(|n| {
+<a href=#896 id=896 data-nosnippet>896</a>            n.render(<span class="kw-2">&amp;mut </span>frame);
+<a href=#897 id=897 data-nosnippet>897</a>        });
+<a href=#898 id=898 data-nosnippet>898</a>        <span class="kw">let </span>frame = frame.finalize(<span class="kw-2">&amp;</span>info);
+<a href=#899 id=899 data-nosnippet>899</a>        a.node.clear_color = frame.clear_color;
+<a href=#900 id=900 data-nosnippet>900</a>
+<a href=#901 id=901 data-nosnippet>901</a>        <span class="kw">let </span>capture = vars.take_frame_capture();
+<a href=#902 id=902 data-nosnippet>902</a>        <span class="kw">let </span>wait_id = a.node.frame_wait_id.take();
+<a href=#903 id=903 data-nosnippet>903</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="kw-2">&amp;</span>a.renderer {
+<a href=#904 id=904 data-nosnippet>904</a>            <span class="comment">// send frame to view-process
+<a href=#905 id=905 data-nosnippet>905</a>            </span><span class="kw">let _ </span>= r.render(FrameRequest::new(
+<a href=#906 id=906 data-nosnippet>906</a>                a.node.frame_id,
+<a href=#907 id=907 data-nosnippet>907</a>                a.node.clear_color,
+<a href=#908 id=908 data-nosnippet>908</a>                frame.display_list,
+<a href=#909 id=909 data-nosnippet>909</a>                capture,
+<a href=#910 id=910 data-nosnippet>910</a>                wait_id,
+<a href=#911 id=911 data-nosnippet>911</a>            ));
+<a href=#912 id=912 data-nosnippet>912</a>        } <span class="kw">else </span>{
+<a href=#913 id=913 data-nosnippet>913</a>            <span class="attr">#[cfg(feature = <span class="string">"image"</span>)]
+<a href=#914 id=914 data-nosnippet>914</a>            </span>{
+<a href=#915 id=915 data-nosnippet>915</a>                <span class="kw">let </span>error = <span class="kw">match </span>capture {
+<a href=#916 id=916 data-nosnippet>916</a>                    zng_view_api::window::FrameCapture::None =&gt; <span class="string">""</span>,
+<a href=#917 id=917 data-nosnippet>917</a>                    zng_view_api::window::FrameCapture::Full =&gt; <span class="string">"cannot capture frame, no renderer"</span>,
+<a href=#918 id=918 data-nosnippet>918</a>                    zng_view_api::window::FrameCapture::Mask(<span class="kw">_</span>) =&gt; <span class="string">"cannot capture frame mask, no renderer"</span>,
+<a href=#919 id=919 data-nosnippet>919</a>                    <span class="kw">_ </span>=&gt; <span class="string">""</span>,
+<a href=#920 id=920 data-nosnippet>920</a>                };
+<a href=#921 id=921 data-nosnippet>921</a>                <span class="kw">if </span>!error.is_empty() {
+<a href=#922 id=922 data-nosnippet>922</a>                    <span class="kw">let </span>frame_image = zng_var::VarEq(zng_var::var(zng_ext_image::ImageEntry::new_error(error.into())));
+<a href=#923 id=923 data-nosnippet>923</a>                    <span class="kw">crate</span>::FRAME_IMAGE_READY_EVENT.notify(<span class="kw">crate</span>::FrameImageReadyArgs::now(a.id, a.node.frame_id, frame_image.downgrade()));
+<a href=#924 id=924 data-nosnippet>924</a>                    UPDATES.once_next_update(<span class="string">""</span>, <span class="kw">move </span>|| {
+<a href=#925 id=925 data-nosnippet>925</a>                        <span class="kw">let </span>_hold = <span class="kw-2">&amp;</span>frame_image;
+<a href=#926 id=926 data-nosnippet>926</a>                    });
+<a href=#927 id=927 data-nosnippet>927</a>                }
+<a href=#928 id=928 data-nosnippet>928</a>            }
+<a href=#929 id=929 data-nosnippet>929</a>        }
+<a href=#930 id=930 data-nosnippet>930</a>
+<a href=#931 id=931 data-nosnippet>931</a>        <span class="kw">if </span>a.node.wgt_ctx.is_pending_reinit() {
+<a href=#932 id=932 data-nosnippet>932</a>            a.node.with_root(|<span class="kw">_</span>| WIDGET.update());
+<a href=#933 id=933 data-nosnippet>933</a>        }
+<a href=#934 id=934 data-nosnippet>934</a>    } <span class="kw">else if </span>render_update_widgets.delivery_list().enter_window(a.id) {
+<a href=#935 id=935 data-nosnippet>935</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(n) = <span class="kw-2">&amp;mut </span>a.node.nested {
+<a href=#936 id=936 data-nosnippet>936</a>            n.pending_render = <span class="prelude-val">Some</span>([render_widgets.clone(), render_update_widgets.clone()]);
+<a href=#937 id=937 data-nosnippet>937</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(t) = a.vars.take().unwrap().<span class="number">0</span>.nest_parent.get() {
+<a href=#938 id=938 data-nosnippet>938</a>                UPDATES.render_update(t);
+<a href=#939 id=939 data-nosnippet>939</a>            }
+<a href=#940 id=940 data-nosnippet>940</a>            <span class="kw">return</span>;
+<a href=#941 id=941 data-nosnippet>941</a>        }
+<a href=#942 id=942 data-nosnippet>942</a>
+<a href=#943 id=943 data-nosnippet>943</a>        <span class="comment">// update
+<a href=#944 id=944 data-nosnippet>944</a>        </span>a.node.frame_id = a.node.frame_id.next_update();
+<a href=#945 id=945 data-nosnippet>945</a>        <span class="kw">let </span><span class="kw-2">mut </span>update = FrameUpdate::new(
+<a href=#946 id=946 data-nosnippet>946</a>            render_update_widgets.clone(),
+<a href=#947 id=947 data-nosnippet>947</a>            a.node.frame_id,
+<a href=#948 id=948 data-nosnippet>948</a>            a.node.wgt_ctx.id(),
+<a href=#949 id=949 data-nosnippet>949</a>            a.node.wgt_ctx.bounds(),
+<a href=#950 id=950 data-nosnippet>950</a>            a.node.clear_color,
+<a href=#951 id=951 data-nosnippet>951</a>        );
+<a href=#952 id=952 data-nosnippet>952</a>        a.node.with_root(|n| {
+<a href=#953 id=953 data-nosnippet>953</a>            n.render_update(<span class="kw-2">&amp;mut </span>update);
+<a href=#954 id=954 data-nosnippet>954</a>        });
+<a href=#955 id=955 data-nosnippet>955</a>        <span class="kw">let </span>update = update.finalize(<span class="kw-2">&amp;</span>a.node.win_ctx.widget_tree());
+<a href=#956 id=956 data-nosnippet>956</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(c) = update.clear_color {
+<a href=#957 id=957 data-nosnippet>957</a>            a.node.clear_color = c;
+<a href=#958 id=958 data-nosnippet>958</a>        }
+<a href=#959 id=959 data-nosnippet>959</a>        <span class="kw">let </span>vars = a.vars.take().unwrap();
+<a href=#960 id=960 data-nosnippet>960</a>        <span class="kw">let </span>capture = vars.take_frame_capture();
+<a href=#961 id=961 data-nosnippet>961</a>        <span class="kw">let </span>wait_id = a.node.frame_wait_id.take();
+<a href=#962 id=962 data-nosnippet>962</a>
+<a href=#963 id=963 data-nosnippet>963</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(r) = <span class="kw-2">&amp;</span>a.renderer {
+<a href=#964 id=964 data-nosnippet>964</a>            <span class="comment">// send updates to view-process
+<a href=#965 id=965 data-nosnippet>965</a>            </span><span class="kw">let _ </span>= r.render_update(FrameUpdateRequest::new(
+<a href=#966 id=966 data-nosnippet>966</a>                a.node.frame_id,
+<a href=#967 id=967 data-nosnippet>967</a>                update.transforms,
+<a href=#968 id=968 data-nosnippet>968</a>                update.floats,
+<a href=#969 id=969 data-nosnippet>969</a>                update.colors,
+<a href=#970 id=970 data-nosnippet>970</a>                update.clear_color,
+<a href=#971 id=971 data-nosnippet>971</a>                capture,
+<a href=#972 id=972 data-nosnippet>972</a>                wait_id,
+<a href=#973 id=973 data-nosnippet>973</a>                update.extensions,
+<a href=#974 id=974 data-nosnippet>974</a>            ));
+<a href=#975 id=975 data-nosnippet>975</a>        }
+<a href=#976 id=976 data-nosnippet>976</a>
+<a href=#977 id=977 data-nosnippet>977</a>        <span class="kw">if </span>a.node.wgt_ctx.is_pending_reinit() {
+<a href=#978 id=978 data-nosnippet>978</a>            a.node.with_root(|<span class="kw">_</span>| WIDGET.update());
+<a href=#979 id=979 data-nosnippet>979</a>        }
+<a href=#980 id=980 data-nosnippet>980</a>    }
+<a href=#981 id=981 data-nosnippet>981</a>}
+<a href=#982 id=982 data-nosnippet>982</a>
+<a href=#983 id=983 data-nosnippet>983</a><span class="doccomment">/// UI node that hosts a nested window as defined by [`WINDOWS_EXTENSIONS.register_open_nested_handler`] handler.
+<a href=#984 id=984 data-nosnippet>984</a>///
+<a href=#985 id=985 data-nosnippet>985</a>/// [`WINDOWS_EXTENSIONS.register_open_nested_handler`]: WINDOWS_EXTENSIONS::register_open_nested_handler
+<a href=#986 id=986 data-nosnippet>986</a></span><span class="kw">pub struct </span>NestedWindowNode {
+<a href=#987 id=987 data-nosnippet>987</a>    window_id: WindowId,
+<a href=#988 id=988 data-nosnippet>988</a>    close_deadline: DeadlineHandle,
+<a href=#989 id=989 data-nosnippet>989</a>}
+<a href=#990 id=990 data-nosnippet>990</a><span class="kw">impl </span>NestedWindowNode {
+<a href=#991 id=991 data-nosnippet>991</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>new(window_id: WindowId) -&gt; <span class="self">Self </span>{
+<a href=#992 id=992 data-nosnippet>992</a>        <span class="self">Self </span>{
+<a href=#993 id=993 data-nosnippet>993</a>            window_id,
+<a href=#994 id=994 data-nosnippet>994</a>            close_deadline: DeadlineHandle::dummy(),
+<a href=#995 id=995 data-nosnippet>995</a>        }
+<a href=#996 id=996 data-nosnippet>996</a>    }
+<a href=#997 id=997 data-nosnippet>997</a>
+<a href=#998 id=998 data-nosnippet>998</a>    <span class="kw">fn </span>take_node(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;WindowNode&gt; {
+<a href=#999 id=999 data-nosnippet>999</a>        WINDOWS_SV.write().windows.get_mut(<span class="kw-2">&amp;</span><span class="self">self</span>.window_id)<span class="question-mark">?</span>.root.take()
+<a href=#1000 id=1000 data-nosnippet>1000</a>    }
+<a href=#1001 id=1001 data-nosnippet>1001</a>
+<a href=#1002 id=1002 data-nosnippet>1002</a>    <span class="kw">fn </span>restore_node(<span class="kw-2">&amp;</span><span class="self">self</span>, node: WindowNode) {
+<a href=#1003 id=1003 data-nosnippet>1003</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = WINDOWS_SV.write().windows.get_mut(<span class="kw-2">&amp;</span><span class="self">self</span>.window_id) {
+<a href=#1004 id=1004 data-nosnippet>1004</a>            w.root = <span class="prelude-val">Some</span>(node);
+<a href=#1005 id=1005 data-nosnippet>1005</a>        }
+<a href=#1006 id=1006 data-nosnippet>1006</a>    }
+<a href=#1007 id=1007 data-nosnippet>1007</a>}
+<a href=#1008 id=1008 data-nosnippet>1008</a><span class="comment">// layout and render happens during parent window pass, other updates/info are disconnected
+<a href=#1009 id=1009 data-nosnippet>1009</a></span><span class="kw">impl </span>UiNodeImpl <span class="kw">for </span>NestedWindowNode {
+<a href=#1010 id=1010 data-nosnippet>1010</a>    <span class="kw">fn </span>children_len(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; usize {
+<a href=#1011 id=1011 data-nosnippet>1011</a>        <span class="number">0
+<a href=#1012 id=1012 data-nosnippet>1012</a>    </span>}
+<a href=#1013 id=1013 data-nosnippet>1013</a>    <span class="kw">fn </span>with_child(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: usize, <span class="kw">_</span>: <span class="kw-2">&amp;mut </span><span class="kw">dyn </span>FnMut(<span class="kw-2">&amp;mut </span>UiNode)) {}
+<a href=#1014 id=1014 data-nosnippet>1014</a>
+<a href=#1015 id=1015 data-nosnippet>1015</a>    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1016 id=1016 data-nosnippet>1016</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
+<a href=#1017 id=1017 data-nosnippet>1017</a>            <span class="comment">// net parent and nest vars
+<a href=#1018 id=1018 data-nosnippet>1018</a>
+<a href=#1019 id=1019 data-nosnippet>1019</a>            </span><span class="kw">let </span>inner_vars = WINDOW.with_context(<span class="kw-2">&amp;mut </span>n.win_ctx, || WINDOW.vars());
+<a href=#1020 id=1020 data-nosnippet>1020</a>            <span class="kw">let </span>parent_id = WINDOW.id();
+<a href=#1021 id=1021 data-nosnippet>1021</a>            <span class="kw">let </span>nest_id = WIDGET.id();
+<a href=#1022 id=1022 data-nosnippet>1022</a>            inner_vars.<span class="number">0</span>.parent.set(<span class="prelude-val">Some</span>(parent_id));
+<a href=#1023 id=1023 data-nosnippet>1023</a>            inner_vars.<span class="number">0</span>.nest_parent.set(<span class="prelude-val">Some</span>(nest_id));
+<a href=#1024 id=1024 data-nosnippet>1024</a>
+<a href=#1025 id=1025 data-nosnippet>1025</a>            <span class="comment">// parent var allows modify, lock it
+<a href=#1026 id=1026 data-nosnippet>1026</a>            </span><span class="kw">let </span>this = inner_vars.<span class="number">0</span>.parent.downgrade();
+<a href=#1027 id=1027 data-nosnippet>1027</a>            inner_vars
+<a href=#1028 id=1028 data-nosnippet>1028</a>                .<span class="number">0
+<a href=#1029 id=1029 data-nosnippet>1029</a>                </span>.parent
+<a href=#1030 id=1030 data-nosnippet>1030</a>                .hook(<span class="kw">move </span>|a| {
+<a href=#1031 id=1031 data-nosnippet>1031</a>                    <span class="kw">if </span><span class="kw-2">*</span>a.value() != <span class="prelude-val">Some</span>(parent_id) {
+<a href=#1032 id=1032 data-nosnippet>1032</a>                        this.upgrade().unwrap().set(<span class="prelude-val">Some</span>(parent_id));
+<a href=#1033 id=1033 data-nosnippet>1033</a>                    }
+<a href=#1034 id=1034 data-nosnippet>1034</a>                    <span class="bool-val">true
+<a href=#1035 id=1035 data-nosnippet>1035</a>                </span>})
+<a href=#1036 id=1036 data-nosnippet>1036</a>                .perm();
+<a href=#1037 id=1037 data-nosnippet>1037</a>
+<a href=#1038 id=1038 data-nosnippet>1038</a>            <span class="self">self</span>.restore_node(n);
+<a href=#1039 id=1039 data-nosnippet>1039</a>        }
+<a href=#1040 id=1040 data-nosnippet>1040</a>
+<a href=#1041 id=1041 data-nosnippet>1041</a>        <span class="comment">// cancel close in case of reinit
+<a href=#1042 id=1042 data-nosnippet>1042</a>        </span><span class="self">self</span>.close_deadline = DeadlineHandle::dummy();
+<a href=#1043 id=1043 data-nosnippet>1043</a>    }
+<a href=#1044 id=1044 data-nosnippet>1044</a>
+<a href=#1045 id=1045 data-nosnippet>1045</a>    <span class="kw">fn </span>deinit(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1046 id=1046 data-nosnippet>1046</a>        <span class="comment">// can be a temporary deinit (for reinit), wait 100ms before closing window
+<a href=#1047 id=1047 data-nosnippet>1047</a>        </span><span class="kw">let </span>id = <span class="self">self</span>.window_id;
+<a href=#1048 id=1048 data-nosnippet>1048</a>        <span class="self">self</span>.close_deadline = TIMERS.on_deadline(
+<a href=#1049 id=1049 data-nosnippet>1049</a>            <span class="number">100</span>.ms(),
+<a href=#1050 id=1050 data-nosnippet>1050</a>            <span class="macro">async_hn_once!</span>(|<span class="kw">_</span>| {
+<a href=#1051 id=1051 data-nosnippet>1051</a>                <span class="kw">let </span>r = WINDOWS.close(id).wait_rsp().<span class="kw">await</span>;
+<a href=#1052 id=1052 data-nosnippet>1052</a>                <span class="kw">if </span><span class="macro">matches!</span>(r, CloseWindowResult::Cancel) {
+<a href=#1053 id=1053 data-nosnippet>1053</a>                    <span class="comment">// did not close ok, force close
+<a href=#1054 id=1054 data-nosnippet>1054</a>                    </span><span class="macro">tracing::error!</span>(<span class="string">"nested window {id} already deinited, cannot cancel close"</span>);
+<a href=#1055 id=1055 data-nosnippet>1055</a>                    <span class="kw">let </span><span class="kw-2">mut </span>s = WINDOWS_SV.write();
+<a href=#1056 id=1056 data-nosnippet>1056</a>                    <span class="kw">let </span><span class="kw-2">mut </span>windows = IdSet::new();
+<a href=#1057 id=1057 data-nosnippet>1057</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>w) = s.windows.remove(<span class="kw-2">&amp;</span>id) {
+<a href=#1058 id=1058 data-nosnippet>1058</a>                        <span class="kw">let </span>vars = w.vars.take().unwrap();
+<a href=#1059 id=1059 data-nosnippet>1059</a>                        vars.<span class="number">0</span>.instance_state.set(WindowInstanceState::Closed);
+<a href=#1060 id=1060 data-nosnippet>1060</a>                        windows.insert(id);
+<a href=#1061 id=1061 data-nosnippet>1061</a>
+<a href=#1062 id=1062 data-nosnippet>1062</a>                        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>r) = w.root.take() {
+<a href=#1063 id=1063 data-nosnippet>1063</a>                            r.with_root(|n| n.deinit());
+<a href=#1064 id=1064 data-nosnippet>1064</a>                        }
+<a href=#1065 id=1065 data-nosnippet>1065</a>                    }
+<a href=#1066 id=1066 data-nosnippet>1066</a>                    WINDOW_CLOSE_EVENT.notify(WindowCloseArgs::now(windows));
+<a href=#1067 id=1067 data-nosnippet>1067</a>                }
+<a href=#1068 id=1068 data-nosnippet>1068</a>            }),
+<a href=#1069 id=1069 data-nosnippet>1069</a>        );
+<a href=#1070 id=1070 data-nosnippet>1070</a>    }
+<a href=#1071 id=1071 data-nosnippet>1071</a>
+<a href=#1072 id=1072 data-nosnippet>1072</a>    <span class="kw">fn </span>info(<span class="kw-2">&amp;mut </span><span class="self">self</span>, info: <span class="kw-2">&amp;mut </span>WidgetInfoBuilder) {
+<a href=#1073 id=1073 data-nosnippet>1073</a>        info.set_meta(<span class="kw-2">*</span>NESTED_WINDOW_INFO_ID, <span class="self">self</span>.window_id);
+<a href=#1074 id=1074 data-nosnippet>1074</a>    }
+<a href=#1075 id=1075 data-nosnippet>1075</a>
+<a href=#1076 id=1076 data-nosnippet>1076</a>    <span class="kw">fn </span>measure(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wm: <span class="kw-2">&amp;mut </span>zng_wgt::prelude::WidgetMeasure) -&gt; PxSize {
+<a href=#1077 id=1077 data-nosnippet>1077</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = PxSize::zero();
+<a href=#1078 id=1078 data-nosnippet>1078</a>        <span class="comment">// reset context to app level, only parent layout constraints should affect the nested window
+<a href=#1079 id=1079 data-nosnippet>1079</a>        </span><span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
+<a href=#1080 id=1080 data-nosnippet>1080</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
+<a href=#1081 id=1081 data-nosnippet>1081</a>            ctx.with_context(|| {
+<a href=#1082 id=1082 data-nosnippet>1082</a>                n.with_root(|n| {
+<a href=#1083 id=1083 data-nosnippet>1083</a>                    r = wm.with_widget(|wm| n.measure(wm));
+<a href=#1084 id=1084 data-nosnippet>1084</a>                })
+<a href=#1085 id=1085 data-nosnippet>1085</a>            });
+<a href=#1086 id=1086 data-nosnippet>1086</a>            <span class="self">self</span>.restore_node(n);
+<a href=#1087 id=1087 data-nosnippet>1087</a>        }
+<a href=#1088 id=1088 data-nosnippet>1088</a>        r
+<a href=#1089 id=1089 data-nosnippet>1089</a>    }
+<a href=#1090 id=1090 data-nosnippet>1090</a>
+<a href=#1091 id=1091 data-nosnippet>1091</a>    <span class="kw">fn </span>layout(<span class="kw-2">&amp;mut </span><span class="self">self</span>, wl: <span class="kw-2">&amp;mut </span>WidgetLayout) -&gt; PxSize {
+<a href=#1092 id=1092 data-nosnippet>1092</a>        <span class="kw">let </span><span class="kw-2">mut </span>r = PxSize::zero();
+<a href=#1093 id=1093 data-nosnippet>1093</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
+<a href=#1094 id=1094 data-nosnippet>1094</a>            <span class="kw">let </span>pending = n.nested.as_mut().unwrap().pending_layout.take();
+<a href=#1095 id=1095 data-nosnippet>1095</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
+<a href=#1096 id=1096 data-nosnippet>1096</a>            ctx.with_context(|| {
+<a href=#1097 id=1097 data-nosnippet>1097</a>                n.with_root(|n| {
+<a href=#1098 id=1098 data-nosnippet>1098</a>                    r = <span class="kw">if let </span><span class="prelude-val">Some</span>(p) = pending {
+<a href=#1099 id=1099 data-nosnippet>1099</a>                        wl.with_layout_updates(p, |wl| n.layout(wl))
+<a href=#1100 id=1100 data-nosnippet>1100</a>                    } <span class="kw">else </span>{
+<a href=#1101 id=1101 data-nosnippet>1101</a>                        wl.with_widget(|wl| n.layout(wl))
+<a href=#1102 id=1102 data-nosnippet>1102</a>                    };
+<a href=#1103 id=1103 data-nosnippet>1103</a>                });
+<a href=#1104 id=1104 data-nosnippet>1104</a>            });
+<a href=#1105 id=1105 data-nosnippet>1105</a>            <span class="self">self</span>.restore_node(n);
+<a href=#1106 id=1106 data-nosnippet>1106</a>        }
+<a href=#1107 id=1107 data-nosnippet>1107</a>        r
+<a href=#1108 id=1108 data-nosnippet>1108</a>    }
+<a href=#1109 id=1109 data-nosnippet>1109</a>
+<a href=#1110 id=1110 data-nosnippet>1110</a>    <span class="kw">fn </span>render(<span class="kw-2">&amp;mut </span><span class="self">self</span>, frame: <span class="kw-2">&amp;mut </span>FrameBuilder) {
+<a href=#1111 id=1111 data-nosnippet>1111</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
+<a href=#1112 id=1112 data-nosnippet>1112</a>            <span class="kw">let </span>[render_widgets, render_update_widgets] = n.nested.as_mut().unwrap().pending_render.take().unwrap_or_default();
+<a href=#1113 id=1113 data-nosnippet>1113</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
+<a href=#1114 id=1114 data-nosnippet>1114</a>            ctx.with_context(|| {
+<a href=#1115 id=1115 data-nosnippet>1115</a>                <span class="kw">let </span>root_id = n.wgt_ctx.id();
+<a href=#1116 id=1116 data-nosnippet>1116</a>                <span class="kw">let </span>root_bounds = n.wgt_ctx.bounds();
+<a href=#1117 id=1117 data-nosnippet>1117</a>                <span class="kw">let </span>info = n.win_ctx.widget_tree();
+<a href=#1118 id=1118 data-nosnippet>1118</a>                n.with_root(|n| {
+<a href=#1119 id=1119 data-nosnippet>1119</a>                    frame.with_nested_window(
+<a href=#1120 id=1120 data-nosnippet>1120</a>                        render_widgets,
+<a href=#1121 id=1121 data-nosnippet>1121</a>                        render_update_widgets,
+<a href=#1122 id=1122 data-nosnippet>1122</a>                        root_id,
+<a href=#1123 id=1123 data-nosnippet>1123</a>                        <span class="kw-2">&amp;</span>root_bounds,
+<a href=#1124 id=1124 data-nosnippet>1124</a>                        <span class="kw-2">&amp;</span>info,
+<a href=#1125 id=1125 data-nosnippet>1125</a>                        FontAntiAliasing::Default,
+<a href=#1126 id=1126 data-nosnippet>1126</a>                        |frame| n.render(frame),
+<a href=#1127 id=1127 data-nosnippet>1127</a>                    );
+<a href=#1128 id=1128 data-nosnippet>1128</a>                });
+<a href=#1129 id=1129 data-nosnippet>1129</a>            });
+<a href=#1130 id=1130 data-nosnippet>1130</a>            <span class="self">self</span>.restore_node(n);
+<a href=#1131 id=1131 data-nosnippet>1131</a>        }
+<a href=#1132 id=1132 data-nosnippet>1132</a>    }
+<a href=#1133 id=1133 data-nosnippet>1133</a>
+<a href=#1134 id=1134 data-nosnippet>1134</a>    <span class="kw">fn </span>render_update(<span class="kw-2">&amp;mut </span><span class="self">self</span>, update: <span class="kw-2">&amp;mut </span>FrameUpdate) {
+<a href=#1135 id=1135 data-nosnippet>1135</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(<span class="kw-2">mut </span>n) = <span class="self">self</span>.take_node() {
+<a href=#1136 id=1136 data-nosnippet>1136</a>            <span class="kw">let </span>[<span class="kw">_</span>, render_update_widgets] = n.nested.as_mut().unwrap().pending_render.take().unwrap_or_default();
+<a href=#1137 id=1137 data-nosnippet>1137</a>            <span class="kw">let </span><span class="kw-2">mut </span>ctx = LocalContext::capture_filtered(zng_app_context::CaptureFilter::app_only());
+<a href=#1138 id=1138 data-nosnippet>1138</a>            ctx.with_context(|| {
+<a href=#1139 id=1139 data-nosnippet>1139</a>                <span class="kw">let </span>root_id = n.wgt_ctx.id();
+<a href=#1140 id=1140 data-nosnippet>1140</a>                <span class="kw">let </span>root_bounds = n.wgt_ctx.bounds();
+<a href=#1141 id=1141 data-nosnippet>1141</a>                n.with_root(|n| {
+<a href=#1142 id=1142 data-nosnippet>1142</a>                    update.with_nested_window(render_update_widgets, root_id, root_bounds, |update| {
+<a href=#1143 id=1143 data-nosnippet>1143</a>                        n.render_update(update);
+<a href=#1144 id=1144 data-nosnippet>1144</a>                    });
+<a href=#1145 id=1145 data-nosnippet>1145</a>                })
+<a href=#1146 id=1146 data-nosnippet>1146</a>            });
+<a href=#1147 id=1147 data-nosnippet>1147</a>            <span class="self">self</span>.restore_node(n);
+<a href=#1148 id=1148 data-nosnippet>1148</a>        }
+<a href=#1149 id=1149 data-nosnippet>1149</a>    }
+<a href=#1150 id=1150 data-nosnippet>1150</a>}
 </code></pre></div></section></main></body></html>

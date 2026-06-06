@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["L10N_HELP"],"fn":["allow_subset","l10n","l10n_filter_copy","read_subset"],"type":["SubsetMap"]};
+window.SIDEBAR_ITEMS = {"constant":["L10N_HELP"],"fn":["allow_subset","l10n","l10n_filter_copy","read_subset","release_langs"],"type":["SubsetMap"]};

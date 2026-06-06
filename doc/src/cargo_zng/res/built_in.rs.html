@@ -172,16 +172,24 @@
 <a href=#172 id=172 data-nosnippet>172</a>}
 <a href=#173 id=173 data-nosnippet>173</a><span class="macro">built_in!</span> { copy, glob, rp, sh, shf, warn, fail, apk, l10n }
 <a href=#174 id=174 data-nosnippet>174</a>
-<a href=#175 id=175 data-nosnippet>175</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>sh::sh_run;
-<a href=#176 id=176 data-nosnippet>176</a>
-<a href=#177 id=177 data-nosnippet>177</a><span class="kw">pub fn </span>run() {
-<a href=#178 id=178 data-nosnippet>178</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(tool) = env::var(ENV_TOOL) {
-<a href=#179 id=179 data-nosnippet>179</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = BUILT_INS.iter().position(|n| <span class="kw-2">*</span>n == tool.as_str()) {
-<a href=#180 id=180 data-nosnippet>180</a>            (BUILT_IN_FNS[i])();
-<a href=#181 id=181 data-nosnippet>181</a>            std::process::exit(<span class="number">0</span>);
-<a href=#182 id=182 data-nosnippet>182</a>        } <span class="kw">else </span>{
-<a href=#183 id=183 data-nosnippet>183</a>            <span class="macro">fatal!</span>(<span class="string">"`tool` is not a built-in tool"</span>);
-<a href=#184 id=184 data-nosnippet>184</a>        }
-<a href=#185 id=185 data-nosnippet>185</a>    }
-<a href=#186 id=186 data-nosnippet>186</a>}
+<a href=#175 id=175 data-nosnippet>175</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>l10n::release_langs;
+<a href=#176 id=176 data-nosnippet>176</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>sh::sh_run;
+<a href=#177 id=177 data-nosnippet>177</a>
+<a href=#178 id=178 data-nosnippet>178</a><span class="kw">pub fn </span>run() {
+<a href=#179 id=179 data-nosnippet>179</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(tool) = env::var(ENV_TOOL) {
+<a href=#180 id=180 data-nosnippet>180</a>        <span class="comment">// SAFETY: cargo-zng is single threaded
+<a href=#181 id=181 data-nosnippet>181</a>        //
+<a href=#182 id=182 data-nosnippet>182</a>        // Remove in case the tool calls cargo-zng again
+<a href=#183 id=183 data-nosnippet>183</a>        </span><span class="kw">unsafe </span>{
+<a href=#184 id=184 data-nosnippet>184</a>            env::remove_var(ENV_TOOL);
+<a href=#185 id=185 data-nosnippet>185</a>        }
+<a href=#186 id=186 data-nosnippet>186</a>
+<a href=#187 id=187 data-nosnippet>187</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = BUILT_INS.iter().position(|n| <span class="kw-2">*</span>n == tool.as_str()) {
+<a href=#188 id=188 data-nosnippet>188</a>            (BUILT_IN_FNS[i])();
+<a href=#189 id=189 data-nosnippet>189</a>            std::process::exit(<span class="number">0</span>);
+<a href=#190 id=190 data-nosnippet>190</a>        } <span class="kw">else </span>{
+<a href=#191 id=191 data-nosnippet>191</a>            <span class="macro">fatal!</span>(<span class="string">"`tool` is not a built-in tool"</span>);
+<a href=#192 id=192 data-nosnippet>192</a>        }
+<a href=#193 id=193 data-nosnippet>193</a>    }
+<a href=#194 id=194 data-nosnippet>194</a>}
 </code></pre></div></section></main></body></html>
