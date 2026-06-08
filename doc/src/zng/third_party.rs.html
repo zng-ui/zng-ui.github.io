@@ -5,19 +5,19 @@
 <a href=#4 id=4 data-nosnippet>4</a>//!
 <a href=#5 id=5 data-nosnippet>5</a>//! Rust projects depend on many crated with a variety of licenses, some of these licenses require that they must be
 <a href=#6 id=6 data-nosnippet>6</a>//! displayed in the app binary, usually in an "about" screen. This module can be used together with the [`zng_tp_licenses`]
-<a href=#7 id=7 data-nosnippet>7</a>//! crate to collect and bundle licenses of all used crates in your project.
+<a href=#7 id=7 data-nosnippet>7</a>//! crate to collect and embed licenses of all used crates in your project.
 <a href=#8 id=8 data-nosnippet>8</a>//!
 <a href=#9 id=9 data-nosnippet>9</a>//! The [`LICENSES`] service serves as an aggregation center for licenses of multiple sources, the [`OPEN_LICENSES_CMD`]
 <a href=#10 id=10 data-nosnippet>10</a>//! can be implemented [`on_pre_event`] to show a custom licenses screen, or it can just be used to show the default
 <a href=#11 id=11 data-nosnippet>11</a>//! screen provided by the default app.
 <a href=#12 id=12 data-nosnippet>12</a>//!
-<a href=#13 id=13 data-nosnippet>13</a>//! # Bundle Setup
+<a href=#13 id=13 data-nosnippet>13</a>//! # Embedding Setup
 <a href=#14 id=14 data-nosnippet>14</a>//!
-<a href=#15 id=15 data-nosnippet>15</a>//! Follow these steps to configure your crate and build workflow to collect and bundle crate licenses.
+<a href=#15 id=15 data-nosnippet>15</a>//! Follow these steps to configure your crate and build workflow to collect and embed crate licenses.
 <a href=#16 id=16 data-nosnippet>16</a>//!
 <a href=#17 id=17 data-nosnippet>17</a>//! ### Install `cargo about`
 <a href=#18 id=18 data-nosnippet>18</a>//!
-<a href=#19 id=19 data-nosnippet>19</a>//! To collect and bundle licenses in your project you must have [`cargo-about`] installed:
+<a href=#19 id=19 data-nosnippet>19</a>//! To collect and embed licenses in your project you must have [`cargo-about`] installed:
 <a href=#20 id=20 data-nosnippet>20</a>//!
 <a href=#21 id=21 data-nosnippet>21</a>//! ```console
 <a href=#22 id=22 data-nosnippet>22</a>//! cargo install cargo-about
@@ -64,45 +64,45 @@
 <a href=#63 id=63 data-nosnippet>63</a>//! resolver = "2" # recommended, to not include "build" feature in the normal dependency.
 <a href=#64 id=64 data-nosnippet>64</a>//!
 <a href=#65 id=65 data-nosnippet>65</a>//! [features]
-<a href=#66 id=66 data-nosnippet>66</a>//! # Recommended, so you only bundle in release builds.
+<a href=#66 id=66 data-nosnippet>66</a>//! # Recommended, so you only embed in release builds.
 <a href=#67 id=67 data-nosnippet>67</a>//! #
-<a href=#68 id=68 data-nosnippet>68</a>//! # Note that if you use a feature, don't forget to build with `--features bundle_licenses`.
-<a href=#69 id=69 data-nosnippet>69</a>//! bundle_licenses = ["dep:zng-tp-licenses"]
+<a href=#68 id=68 data-nosnippet>68</a>//! # Note that if you use a feature, don't forget to build with `--features embed_licenses`.
+<a href=#69 id=69 data-nosnippet>69</a>//! embed_licenses = ["dep:zng-tp-licenses"]
 <a href=#70 id=70 data-nosnippet>70</a>//!
 <a href=#71 id=71 data-nosnippet>71</a>//! [dependencies]
-<a href=#72 id=72 data-nosnippet>72</a>//! zng-tp-licenses = { version = "0.9.1", features = ["bundle"], optional = true }
+<a href=#72 id=72 data-nosnippet>72</a>//! zng-tp-licenses = { version = "0.9.2", features = ["embed"], optional = true }
 <a href=#73 id=73 data-nosnippet>73</a>//!
 <a href=#74 id=74 data-nosnippet>74</a>//! [build-dependencies]
 <a href=#75 id=75 data-nosnippet>75</a>//! zng-tp-licenses = { version = "0.2.0", features = ["build"], optional = true }
 <a href=#76 id=76 data-nosnippet>76</a>//! ```
 <a href=#77 id=77 data-nosnippet>77</a>//!
-<a href=#78 id=78 data-nosnippet>78</a>//! ### Implement Bundle
+<a href=#78 id=78 data-nosnippet>78</a>//! ### Implement Embed
 <a href=#79 id=79 data-nosnippet>79</a>//!
 <a href=#80 id=80 data-nosnippet>80</a>//! Next, in your crates build script (`build.rs`) add:
 <a href=#81 id=81 data-nosnippet>81</a>//!
 <a href=#82 id=82 data-nosnippet>82</a>//! ```
 <a href=#83 id=83 data-nosnippet>83</a>//! fn main() {
-<a href=#84 id=84 data-nosnippet>84</a>//!     #[cfg(feature = "bundle_licenses")]
+<a href=#84 id=84 data-nosnippet>84</a>//!     #[cfg(feature = "embed_licenses")]
 <a href=#85 id=85 data-nosnippet>85</a>//!     {
 <a href=#86 id=86 data-nosnippet>86</a>//!         let licenses = zng_tp_licenses::collect_cargo_about("../.cargo/about.toml");
-<a href=#87 id=87 data-nosnippet>87</a>//!         zng_tp_licenses::write_bundle(&amp;licenses);
+<a href=#87 id=87 data-nosnippet>87</a>//!         zng_tp_licenses::write_embedding(&amp;licenses);
 <a href=#88 id=88 data-nosnippet>88</a>//!     }
 <a href=#89 id=89 data-nosnippet>89</a>//! }
 <a href=#90 id=90 data-nosnippet>90</a>//! ```
 <a href=#91 id=91 data-nosnippet>91</a>//!
-<a href=#92 id=92 data-nosnippet>92</a>//! Implement a function that includes the bundle and decodes it. Register the function it in your app init code:
+<a href=#92 id=92 data-nosnippet>92</a>//! Implement a function that includes the embedding and decodes it. Register the function it in your app init code:
 <a href=#93 id=93 data-nosnippet>93</a>//!
 <a href=#94 id=94 data-nosnippet>94</a>//! ```
-<a href=#95 id=95 data-nosnippet>95</a>//! #[cfg(feature = "bundle_licenses")]
-<a href=#96 id=96 data-nosnippet>96</a>//! fn bundled_licenses() -&gt; Vec&lt;zng::third_party::LicenseUsed&gt; {
-<a href=#97 id=97 data-nosnippet>97</a>//!     zng_tp_licenses::include_bundle!()
+<a href=#95 id=95 data-nosnippet>95</a>//! #[cfg(feature = "embed_licenses")]
+<a href=#96 id=96 data-nosnippet>96</a>//! fn embedded_licenses() -&gt; Vec&lt;zng::third_party::LicenseUsed&gt; {
+<a href=#97 id=97 data-nosnippet>97</a>//!     zng_tp_licenses::include_embedding!()
 <a href=#98 id=98 data-nosnippet>98</a>//! }
 <a href=#99 id=99 data-nosnippet>99</a>//!
 <a href=#100 id=100 data-nosnippet>100</a>//! # fn demo() {
 <a href=#101 id=101 data-nosnippet>101</a>//! # use zng::prelude::*;
 <a href=#102 id=102 data-nosnippet>102</a>//! APP.defaults().run(async {
-<a href=#103 id=103 data-nosnippet>103</a>//!     #[cfg(feature = "bundle_licenses")]
-<a href=#104 id=104 data-nosnippet>104</a>//!     zng::third_party::LICENSES.register(bundled_licenses);
+<a href=#103 id=103 data-nosnippet>103</a>//!     #[cfg(feature = "embed_licenses")]
+<a href=#104 id=104 data-nosnippet>104</a>//!     zng::third_party::LICENSES.register(embedded_licenses);
 <a href=#105 id=105 data-nosnippet>105</a>//! });
 <a href=#106 id=106 data-nosnippet>106</a>//! # }
 <a href=#107 id=107 data-nosnippet>107</a>//! # fn main() { }
@@ -127,9 +127,9 @@
 <a href=#126 id=126 data-nosnippet>126</a>//! #### Limitations
 <a href=#127 id=127 data-nosnippet>127</a>//!
 <a href=#128 id=128 data-nosnippet>128</a>//! Only crate licenses reachable thought cargo metadata are included. Static linked libraries in `-sys` crates may
-<a href=#129 id=129 data-nosnippet>129</a>//! have required licenses that are not included. Other bundled resources such as fonts and images may also be licensed.
+<a href=#129 id=129 data-nosnippet>129</a>//! have required licenses that are not included. Other resources such as fonts and images may also be licensed.
 <a href=#130 id=130 data-nosnippet>130</a>//!
-<a href=#131 id=131 data-nosnippet>131</a>//! The [`LICENSES`] service accepts multiple sources, so you can implement your own custom bundle, the [`zng_tp_licenses`]
+<a href=#131 id=131 data-nosnippet>131</a>//! The [`LICENSES`] service accepts multiple sources, so you can implement your own custom embedding, the [`zng_tp_licenses`]
 <a href=#132 id=132 data-nosnippet>132</a>//! crate provides helpers for manually encoding (compressing) licenses. See the `zng-view` build script for an example of
 <a href=#133 id=133 data-nosnippet>133</a>//! how to include more licenses.
 <a href=#134 id=134 data-nosnippet>134</a>//!
