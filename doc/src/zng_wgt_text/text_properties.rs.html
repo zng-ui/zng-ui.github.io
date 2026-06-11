@@ -2121,19 +2121,23 @@
 <a href=#2121 id=2121 data-nosnippet>2121</a>/// clipping the caret.
 <a href=#2122 id=2122 data-nosnippet>2122</a>///
 <a href=#2123 id=2123 data-nosnippet>2123</a>/// When enabled and not nested the widget will handle text commands, it also broadcasts focus change events to all text descendants.
-<a href=#2124 id=2124 data-nosnippet>2124</a></span><span class="attr">#[property(CONTEXT + <span class="number">1</span>, default(<span class="bool-val">false</span>), widget_impl(RichTextMix&lt;P&gt;))] </span><span class="comment">// + 1 because it needs to read TEXT_SELECTABLE_VAR
-<a href=#2125 id=2125 data-nosnippet>2125</a></span><span class="kw">pub fn </span>rich_text(child: <span class="kw">impl </span>IntoUiNode, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) -&gt; UiNode {
-<a href=#2126 id=2126 data-nosnippet>2126</a>    <span class="kw">crate</span>::node::rich_text_node(child, enabled) <span class="comment">// TODO(breaking) refactor into a build action property
-<a href=#2127 id=2127 data-nosnippet>2127</a></span>}
-<a href=#2128 id=2128 data-nosnippet>2128</a>
-<a href=#2129 id=2129 data-nosnippet>2129</a><span class="doccomment">/// Defines the Z-index set on inner text (and nested rich text) widgets when focus is within.
-<a href=#2130 id=2130 data-nosnippet>2130</a>///
-<a href=#2131 id=2131 data-nosnippet>2131</a>/// Is [`ZIndex::FRONT`] by default, so that the caret visual is not clipped when the insert point is at
-<a href=#2132 id=2132 data-nosnippet>2132</a>/// an edge between texts. Set to `None` to not change the Z-index on focus.
-<a href=#2133 id=2133 data-nosnippet>2133</a>///
-<a href=#2134 id=2134 data-nosnippet>2134</a>/// Sets the [`RICH_TEXT_FOCUSED_Z_VAR`].
-<a href=#2135 id=2135 data-nosnippet>2135</a></span><span class="attr">#[property(CONTEXT, default(RICH_TEXT_FOCUSED_Z_VAR), widget_impl(RichTextMix&lt;P&gt;))]
-<a href=#2136 id=2136 data-nosnippet>2136</a></span><span class="kw">pub fn </span>rich_text_focused_z(child: <span class="kw">impl </span>IntoUiNode, z_index: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ZIndex&gt;&gt;) -&gt; UiNode {
-<a href=#2137 id=2137 data-nosnippet>2137</a>    with_context_var(child, RICH_TEXT_FOCUSED_Z_VAR, z_index)
-<a href=#2138 id=2138 data-nosnippet>2138</a>}
+<a href=#2124 id=2124 data-nosnippet>2124</a></span><span class="attr">#[property(CONTEXT, default(<span class="bool-val">false</span>), widget_impl(RichTextMix&lt;P&gt;))]
+<a href=#2125 id=2125 data-nosnippet>2125</a></span><span class="kw">pub fn </span>rich_text(wgt: <span class="kw-2">&amp;mut </span>WidgetBuilding, enabled: <span class="kw">impl </span>IntoVar&lt;bool&gt;) {
+<a href=#2126 id=2126 data-nosnippet>2126</a>    <span class="kw">let </span>enabled = enabled.into_var();
+<a href=#2127 id=2127 data-nosnippet>2127</a>    <span class="comment">// CONTEXT to stablish the `TEXT.rich` context
+<a href=#2128 id=2128 data-nosnippet>2128</a>    </span>wgt.push_intrinsic(NestGroup::CONTEXT, <span class="string">"rich_text"</span>, <span class="kw">move </span>|c| <span class="kw">crate</span>::node::rich_text_node(c, enabled));
+<a href=#2129 id=2129 data-nosnippet>2129</a>    <span class="comment">// EVENT to access TEXT_SELECTABLE_VAR context reliably
+<a href=#2130 id=2130 data-nosnippet>2130</a>    </span>wgt.push_intrinsic(NestGroup::EVENT, <span class="string">"rich_text_broadcast"</span>, <span class="kw">crate</span>::node::rich_text_events_broadcast);
+<a href=#2131 id=2131 data-nosnippet>2131</a>}
+<a href=#2132 id=2132 data-nosnippet>2132</a>
+<a href=#2133 id=2133 data-nosnippet>2133</a><span class="doccomment">/// Defines the Z-index set on inner text (and nested rich text) widgets when focus is within.
+<a href=#2134 id=2134 data-nosnippet>2134</a>///
+<a href=#2135 id=2135 data-nosnippet>2135</a>/// Is [`ZIndex::FRONT`] by default, so that the caret visual is not clipped when the insert point is at
+<a href=#2136 id=2136 data-nosnippet>2136</a>/// an edge between texts. Set to `None` to not change the Z-index on focus.
+<a href=#2137 id=2137 data-nosnippet>2137</a>///
+<a href=#2138 id=2138 data-nosnippet>2138</a>/// Sets the [`RICH_TEXT_FOCUSED_Z_VAR`].
+<a href=#2139 id=2139 data-nosnippet>2139</a></span><span class="attr">#[property(CONTEXT, default(RICH_TEXT_FOCUSED_Z_VAR), widget_impl(RichTextMix&lt;P&gt;))]
+<a href=#2140 id=2140 data-nosnippet>2140</a></span><span class="kw">pub fn </span>rich_text_focused_z(child: <span class="kw">impl </span>IntoUiNode, z_index: <span class="kw">impl </span>IntoVar&lt;<span class="prelude-ty">Option</span>&lt;ZIndex&gt;&gt;) -&gt; UiNode {
+<a href=#2141 id=2141 data-nosnippet>2141</a>    with_context_var(child, RICH_TEXT_FOCUSED_Z_VAR, z_index)
+<a href=#2142 id=2142 data-nosnippet>2142</a>}
 </code></pre></div></section></main></body></html>

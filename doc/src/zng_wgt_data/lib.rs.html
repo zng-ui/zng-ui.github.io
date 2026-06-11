@@ -743,7 +743,7 @@
 <a href=#743 id=743 data-nosnippet>743</a>
 <a href=#744 id=744 data-nosnippet>744</a>            <span class="kw">let </span>cleaned = notes.notes.cleanup();
 <a href=#745 id=745 data-nosnippet>745</a>            <span class="kw">if </span>mem::take(<span class="kw-2">&amp;mut </span>notes.changed) || cleaned {
-<a href=#746 id=746 data-nosnippet>746</a>                <span class="kw">let </span>notes = task::parking_lot::lock_api::RwLockWriteGuard::downgrade(notes);
+<a href=#746 id=746 data-nosnippet>746</a>                <span class="kw">let </span>notes = task::parking_lot::RwLockWriteGuard::downgrade(notes);
 <a href=#747 id=747 data-nosnippet>747</a>                <span class="kw">let </span>notes = <span class="kw-2">&amp;</span>notes.notes;
 <a href=#748 id=748 data-nosnippet>748</a>
 <a href=#749 id=749 data-nosnippet>749</a>                <span class="kw">if </span>!DATA_NOTES_CTX.is_default() {

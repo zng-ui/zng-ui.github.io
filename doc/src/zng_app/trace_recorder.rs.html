@@ -52,9 +52,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#16 id=16 data-nosnippet>16</a>    time::{Duration, SystemTime},
 <a href=#17 id=17 data-nosnippet>17</a>};
 <a href=#18 id=18 data-nosnippet>18</a>
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>parking_lot::Mutex;
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>serde::Deserialize <span class="kw">as _</span>;
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>tracing_subscriber::{filter::EnvFilter, layer::SubscriberExt <span class="kw">as _</span>, util::SubscriberInitExt <span class="kw">as _</span>};
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>serde::Deserialize <span class="kw">as _</span>;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>tracing_subscriber::{filter::EnvFilter, layer::SubscriberExt <span class="kw">as _</span>, util::SubscriberInitExt <span class="kw">as _</span>};
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_task::parking_lot::Mutex;
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_txt::{ToTxt <span class="kw">as _</span>, Txt};
 <a href=#23 id=23 data-nosnippet>23</a>
 <a href=#24 id=24 data-nosnippet>24</a><span class="doccomment">/// Represents a recorded trace.
@@ -667,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#631 id=631 data-nosnippet>631</a><span class="macro">zng_app_context::hot_static!</span> {
 <a href=#632 id=632 data-nosnippet>632</a>    <span class="kw">static </span>RECORDING: Mutex&lt;<span class="prelude-ty">Option</span>&lt;tracing_chrome::FlushGuard&gt;&gt; = Mutex::new(<span class="prelude-val">None</span>);
 <a href=#633 id=633 data-nosnippet>633</a>}
-<a href=#634 id=634 data-nosnippet>634</a><span class="kw">fn </span>recording() -&gt; parking_lot::MutexGuard&lt;<span class="lifetime">'static</span>, <span class="prelude-ty">Option</span>&lt;tracing_chrome::FlushGuard&gt;&gt; {
+<a href=#634 id=634 data-nosnippet>634</a><span class="kw">fn </span>recording() -&gt; zng_task::parking_lot::MutexGuard&lt;<span class="lifetime">'static</span>, <span class="prelude-ty">Option</span>&lt;tracing_chrome::FlushGuard&gt;&gt; {
 <a href=#635 id=635 data-nosnippet>635</a>    <span class="macro">zng_app_context::hot_static_ref!</span>(RECORDING).lock()
 <a href=#636 id=636 data-nosnippet>636</a>}
 </code></pre></div></section></main></body></html>

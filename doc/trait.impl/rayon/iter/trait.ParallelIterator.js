@@ -1,9 +1,9 @@
 (function() {
-    const implementors = Object.fromEntries([["zng_task",[["impl&lt;T, I&gt; ParallelIterator for <a class=\"struct\" href=\"zng_task/struct.ParallelIteratorWithCtx.html\" title=\"struct zng_task::ParallelIteratorWithCtx\">ParallelIteratorWithCtx</a>&lt;I&gt;<div class=\"where\">where\n    T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.96.0/core/marker/trait.Send.html\" title=\"trait core::marker::Send\">Send</a>,\n    I: ParallelIterator&lt;Item = T&gt;,</div>",0]]]]);
+    const implementors = Object.fromEntries([["zng_task",[["impl&lt;T, I&gt; ParallelIterator for <a class=\"struct\" href=\"zng_task/rayon/struct.ParallelIteratorWithCtx.html\" title=\"struct zng_task::rayon::ParallelIteratorWithCtx\">ParallelIteratorWithCtx</a>&lt;I&gt;<div class=\"where\">where\n    T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.96.0/core/marker/trait.Send.html\" title=\"trait core::marker::Send\">Send</a>,\n    I: ParallelIterator&lt;Item = T&gt;,</div>",0]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":59,"fragment_lengths":[436]}
+//{"start":59,"fragment_lengths":[449]}
