@@ -12,7 +12,7 @@
 <a href=#12 id=12 data-nosnippet>12</a>//!
 <a href=#13 id=13 data-nosnippet>13</a>//! ```toml
 <a href=#14 id=14 data-nosnippet>14</a>//! [target.'cfg(windows)'.dependencies]
-<a href=#15 id=15 data-nosnippet>15</a>//! zng-view-angle = { version = "0.2.0", features = ["download"] }
+<a href=#15 id=15 data-nosnippet>15</a>//! zng-view-angle = { version = "0.2.1", features = ["download"] }
 <a href=#16 id=16 data-nosnippet>16</a>//! ```
 <a href=#17 id=17 data-nosnippet>17</a>//!
 <a href=#18 id=18 data-nosnippet>18</a>//! With the `"download"` feature enabled the crate will download the required ANGLE DLLs from [zng-ui/build-angle]
@@ -63,113 +63,115 @@
 <a href=#63 id=63 data-nosnippet>63</a><span class="kw">use </span>zng_wgt::prelude::<span class="kw-2">*</span>;
 <a href=#64 id=64 data-nosnippet>64</a>
 <a href=#65 id=65 data-nosnippet>65</a><span class="kw">fn </span>init(win_id: WindowId) {
-<a href=#66 id=66 data-nosnippet>66</a>    <span class="kw">const </span>EXT_NAME: <span class="kw-2">&amp;</span>str = <span class="string">"zng-view.prefer_angle"</span>;
-<a href=#67 id=67 data-nosnippet>67</a>    <span class="kw">let </span>ext_id = VIEW_PROCESS
-<a href=#68 id=68 data-nosnippet>68</a>        .extension_id(EXT_NAME)
-<a href=#69 id=69 data-nosnippet>69</a>        .ok()
-<a href=#70 id=70 data-nosnippet>70</a>        .flatten()
-<a href=#71 id=71 data-nosnippet>71</a>        .unwrap_or(ApiExtensionId::INVALID);
-<a href=#72 id=72 data-nosnippet>72</a>    <span class="kw">if </span>ext_id == ApiExtensionId::INVALID {
-<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">return </span><span class="macro">tracing::error!</span>(<span class="string">"view-process does not support {EXT_NAME:?}"</span>);
-<a href=#74 id=74 data-nosnippet>74</a>    }
-<a href=#75 id=75 data-nosnippet>75</a>
-<a href=#76 id=76 data-nosnippet>76</a>    WINDOWS_EXTENSIONS
-<a href=#77 id=77 data-nosnippet>77</a>        .view_extensions_init(win_id, ext_id, ApiExtensionPayload::serialize(<span class="kw-2">&amp;</span><span class="bool-val">true</span>).unwrap())
-<a href=#78 id=78 data-nosnippet>78</a>        .unwrap();
-<a href=#79 id=79 data-nosnippet>79</a>}
-<a href=#80 id=80 data-nosnippet>80</a>
-<a href=#81 id=81 data-nosnippet>81</a><span class="doccomment">/// Signal the view-process to try and use EGL for this window when the ANGLE DLLs can be found and the render mode is not software.
-<a href=#82 id=82 data-nosnippet>82</a>///
-<a href=#83 id=83 data-nosnippet>83</a>/// Note that the `libEGL.dll` and `libGLESv2.dll` files must be distributed with the executable.
+<a href=#66 id=66 data-nosnippet>66</a>    <span class="macro">debug_assert!</span>(VIEW_PROCESS.is_connected());
+<a href=#67 id=67 data-nosnippet>67</a>
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">const </span>EXT_NAME: <span class="kw-2">&amp;</span>str = <span class="string">"zng-view.prefer_angle"</span>;
+<a href=#69 id=69 data-nosnippet>69</a>    <span class="kw">let </span>ext_id = VIEW_PROCESS
+<a href=#70 id=70 data-nosnippet>70</a>        .extension_id(EXT_NAME)
+<a href=#71 id=71 data-nosnippet>71</a>        .ok()
+<a href=#72 id=72 data-nosnippet>72</a>        .flatten()
+<a href=#73 id=73 data-nosnippet>73</a>        .unwrap_or(ApiExtensionId::INVALID);
+<a href=#74 id=74 data-nosnippet>74</a>    <span class="kw">if </span>ext_id == ApiExtensionId::INVALID {
+<a href=#75 id=75 data-nosnippet>75</a>        <span class="kw">return </span><span class="macro">tracing::error!</span>(<span class="string">"view-process does not support {EXT_NAME:?}"</span>);
+<a href=#76 id=76 data-nosnippet>76</a>    }
+<a href=#77 id=77 data-nosnippet>77</a>
+<a href=#78 id=78 data-nosnippet>78</a>    WINDOWS_EXTENSIONS
+<a href=#79 id=79 data-nosnippet>79</a>        .view_extensions_init(win_id, ext_id, ApiExtensionPayload::serialize(<span class="kw-2">&amp;</span><span class="bool-val">true</span>).unwrap())
+<a href=#80 id=80 data-nosnippet>80</a>        .unwrap();
+<a href=#81 id=81 data-nosnippet>81</a>}
+<a href=#82 id=82 data-nosnippet>82</a>
+<a href=#83 id=83 data-nosnippet>83</a><span class="doccomment">/// Signal the view-process to try and use EGL for this window when the ANGLE DLLs can be found and the render mode is not software.
 <a href=#84 id=84 data-nosnippet>84</a>///
-<a href=#85 id=85 data-nosnippet>85</a>/// Note that this will enable ANGLE just for this window, use [`register_root_extender`] to enable angle for all windows.
+<a href=#85 id=85 data-nosnippet>85</a>/// Note that the `libEGL.dll` and `libGLESv2.dll` files must be distributed with the executable.
 <a href=#86 id=86 data-nosnippet>86</a>///
-<a href=#87 id=87 data-nosnippet>87</a>/// This does nothing when app is not running on Windows.
-<a href=#88 id=88 data-nosnippet>88</a></span><span class="attr">#[property(CONTEXT)]
-<a href=#89 id=89 data-nosnippet>89</a></span><span class="kw">pub fn </span>prefer_angle_egl(child: <span class="kw">impl </span>IntoUiNode, enable: <span class="kw">impl </span>IntoValue&lt;bool&gt;) -&gt; UiNode {
-<a href=#90 id=90 data-nosnippet>90</a>    <span class="kw">if </span>enable.into() &amp;&amp; <span class="macro">cfg!</span>(windows) {
-<a href=#91 id=91 data-nosnippet>91</a>        match_node(child, <span class="kw">move </span>|_c, op| {
-<a href=#92 id=92 data-nosnippet>92</a>            <span class="kw">if let </span>UiNodeOp::Init = op {
-<a href=#93 id=93 data-nosnippet>93</a>                <span class="kw">let </span>win_id = WINDOW.id();
-<a href=#94 id=94 data-nosnippet>94</a>
-<a href=#95 id=95 data-nosnippet>95</a>                <span class="kw">let </span><span class="kw-2">mut </span>loading_handle = <span class="prelude-val">None</span>;
-<a href=#96 id=96 data-nosnippet>96</a>                <span class="kw">if </span>VIEW_PROCESS.is_connected() {
-<a href=#97 id=97 data-nosnippet>97</a>                    init(win_id);
-<a href=#98 id=98 data-nosnippet>98</a>                } <span class="kw">else </span>{
-<a href=#99 id=99 data-nosnippet>99</a>                    loading_handle = WINDOW.loading_handle(<span class="number">5</span>.secs(), <span class="string">"prefer_angle_egl"</span>);
-<a href=#100 id=100 data-nosnippet>100</a>                }
-<a href=#101 id=101 data-nosnippet>101</a>                <span class="kw">let </span>handle = VIEW_PROCESS_INITED_EVENT.hook(<span class="kw">move </span>|<span class="kw">_</span>| {
-<a href=#102 id=102 data-nosnippet>102</a>                    <span class="kw">let _ </span>= loading_handle.take();
-<a href=#103 id=103 data-nosnippet>103</a>                    init(win_id);
-<a href=#104 id=104 data-nosnippet>104</a>                    <span class="comment">// retain in case of respawn
-<a href=#105 id=105 data-nosnippet>105</a>                    </span><span class="bool-val">true
-<a href=#106 id=106 data-nosnippet>106</a>                </span>});
-<a href=#107 id=107 data-nosnippet>107</a>                WIDGET.push_var_handle(handle);
-<a href=#108 id=108 data-nosnippet>108</a>            }
-<a href=#109 id=109 data-nosnippet>109</a>        })
-<a href=#110 id=110 data-nosnippet>110</a>    } <span class="kw">else </span>{
-<a href=#111 id=111 data-nosnippet>111</a>        child.into_node()
-<a href=#112 id=112 data-nosnippet>112</a>    }
-<a href=#113 id=113 data-nosnippet>113</a>}
-<a href=#114 id=114 data-nosnippet>114</a>
-<a href=#115 id=115 data-nosnippet>115</a><span class="doccomment">/// Enable ANGLE for all subsequent open windows.
-<a href=#116 id=116 data-nosnippet>116</a>///
-<a href=#117 id=117 data-nosnippet>117</a>/// This uses a [`WINDOWS_EXTENSIONS::register_root_extender`] to set [`prefer_angle_egl`] in all windows.
+<a href=#87 id=87 data-nosnippet>87</a>/// Note that this will enable ANGLE just for this window, use [`register_root_extender`] to enable angle for all windows.
+<a href=#88 id=88 data-nosnippet>88</a>///
+<a href=#89 id=89 data-nosnippet>89</a>/// This does nothing when app is not running on Windows.
+<a href=#90 id=90 data-nosnippet>90</a></span><span class="attr">#[property(CONTEXT)]
+<a href=#91 id=91 data-nosnippet>91</a></span><span class="kw">pub fn </span>prefer_angle_egl(child: <span class="kw">impl </span>IntoUiNode, enable: <span class="kw">impl </span>IntoValue&lt;bool&gt;) -&gt; UiNode {
+<a href=#92 id=92 data-nosnippet>92</a>    <span class="kw">if </span>enable.into() &amp;&amp; <span class="macro">cfg!</span>(windows) {
+<a href=#93 id=93 data-nosnippet>93</a>        match_node(child, <span class="kw">move </span>|_c, op| {
+<a href=#94 id=94 data-nosnippet>94</a>            <span class="kw">if let </span>UiNodeOp::Init = op {
+<a href=#95 id=95 data-nosnippet>95</a>                <span class="kw">let </span>win_id = WINDOW.id();
+<a href=#96 id=96 data-nosnippet>96</a>
+<a href=#97 id=97 data-nosnippet>97</a>                <span class="kw">let </span><span class="kw-2">mut </span>loading_handle = <span class="prelude-val">None</span>;
+<a href=#98 id=98 data-nosnippet>98</a>                <span class="kw">if </span>VIEW_PROCESS.is_connected() {
+<a href=#99 id=99 data-nosnippet>99</a>                    init(win_id);
+<a href=#100 id=100 data-nosnippet>100</a>                } <span class="kw">else </span>{
+<a href=#101 id=101 data-nosnippet>101</a>                    loading_handle = WINDOW.loading_handle(<span class="number">5</span>.secs(), <span class="string">"prefer_angle_egl"</span>);
+<a href=#102 id=102 data-nosnippet>102</a>                }
+<a href=#103 id=103 data-nosnippet>103</a>                <span class="kw">let </span>handle = VIEW_PROCESS_INITED_EVENT.hook(<span class="kw">move </span>|<span class="kw">_</span>| {
+<a href=#104 id=104 data-nosnippet>104</a>                    <span class="kw">let _ </span>= loading_handle.take();
+<a href=#105 id=105 data-nosnippet>105</a>                    init(win_id);
+<a href=#106 id=106 data-nosnippet>106</a>                    <span class="comment">// retain in case of respawn
+<a href=#107 id=107 data-nosnippet>107</a>                    </span><span class="bool-val">true
+<a href=#108 id=108 data-nosnippet>108</a>                </span>});
+<a href=#109 id=109 data-nosnippet>109</a>                WIDGET.push_var_handle(handle);
+<a href=#110 id=110 data-nosnippet>110</a>            }
+<a href=#111 id=111 data-nosnippet>111</a>        })
+<a href=#112 id=112 data-nosnippet>112</a>    } <span class="kw">else </span>{
+<a href=#113 id=113 data-nosnippet>113</a>        child.into_node()
+<a href=#114 id=114 data-nosnippet>114</a>    }
+<a href=#115 id=115 data-nosnippet>115</a>}
+<a href=#116 id=116 data-nosnippet>116</a>
+<a href=#117 id=117 data-nosnippet>117</a><span class="doccomment">/// Enable ANGLE for all subsequent open windows.
 <a href=#118 id=118 data-nosnippet>118</a>///
-<a href=#119 id=119 data-nosnippet>119</a>/// [`prefer_angle_egl`]: fn@prefer_angle_egl
-<a href=#120 id=120 data-nosnippet>120</a></span><span class="kw">pub fn </span>register_root_extender() {
-<a href=#121 id=121 data-nosnippet>121</a>    WINDOWS_EXTENSIONS.register_root_extender(|a| prefer_angle_egl(a.root, <span class="bool-val">true</span>));
-<a href=#122 id=122 data-nosnippet>122</a>}
-<a href=#123 id=123 data-nosnippet>123</a>
-<a href=#124 id=124 data-nosnippet>124</a><span class="doccomment">/// Register the ANGLE license with the [`LICENSES`] service.
-<a href=#125 id=125 data-nosnippet>125</a>///
-<a href=#126 id=126 data-nosnippet>126</a>/// The license is a [BSD3-Clause type license](https://github.com/google/angle/blob/fca8ca8a87c387515e0d2901916e4fae6b97e83f/LICENSE).
-<a href=#127 id=127 data-nosnippet>127</a></span><span class="kw">pub fn </span>register_license() {
-<a href=#128 id=128 data-nosnippet>128</a>    <span class="kw">fn </span>l() -&gt; Vec&lt;LicenseUsed&gt; {
-<a href=#129 id=129 data-nosnippet>129</a>        <span class="macro">vec!</span>[LicenseUsed {
-<a href=#130 id=130 data-nosnippet>130</a>            license: License::new(<span class="string">"BSD3-Clause"</span>, <span class="string">r#"BSD 3-Clause "Revised" License"#</span>, LICENSE),
-<a href=#131 id=131 data-nosnippet>131</a>            used_by: <span class="macro">vec!</span>[User::new(
-<a href=#132 id=132 data-nosnippet>132</a>                <span class="string">"ANGLE"</span>,
-<a href=#133 id=133 data-nosnippet>133</a>                <span class="string">"fca8ca8"</span>,
-<a href=#134 id=134 data-nosnippet>134</a>                <span class="string">"https://github.com/zng-ui/build-angle/releases/tag/2026-05-17"</span>,
-<a href=#135 id=135 data-nosnippet>135</a>            )],
-<a href=#136 id=136 data-nosnippet>136</a>        }]
-<a href=#137 id=137 data-nosnippet>137</a>    }
-<a href=#138 id=138 data-nosnippet>138</a>    LICENSES.register(l);
-<a href=#139 id=139 data-nosnippet>139</a>}
-<a href=#140 id=140 data-nosnippet>140</a>
-<a href=#141 id=141 data-nosnippet>141</a><span class="kw">const </span>LICENSE: <span class="kw-2">&amp;</span>str = <span class="string">r#"
-<a href=#142 id=142 data-nosnippet>142</a>// Copyright 2018 The ANGLE Project Authors.
-<a href=#143 id=143 data-nosnippet>143</a>// All rights reserved.
-<a href=#144 id=144 data-nosnippet>144</a>//
-<a href=#145 id=145 data-nosnippet>145</a>// Redistribution and use in source and binary forms, with or without
-<a href=#146 id=146 data-nosnippet>146</a>// modification, are permitted provided that the following conditions
-<a href=#147 id=147 data-nosnippet>147</a>// are met:
-<a href=#148 id=148 data-nosnippet>148</a>//
-<a href=#149 id=149 data-nosnippet>149</a>//     Redistributions of source code must retain the above copyright
-<a href=#150 id=150 data-nosnippet>150</a>//     notice, this list of conditions and the following disclaimer.
-<a href=#151 id=151 data-nosnippet>151</a>//
-<a href=#152 id=152 data-nosnippet>152</a>//     Redistributions in binary form must reproduce the above
-<a href=#153 id=153 data-nosnippet>153</a>//     copyright notice, this list of conditions and the following
-<a href=#154 id=154 data-nosnippet>154</a>//     disclaimer in the documentation and/or other materials provided
-<a href=#155 id=155 data-nosnippet>155</a>//     with the distribution.
-<a href=#156 id=156 data-nosnippet>156</a>//
-<a href=#157 id=157 data-nosnippet>157</a>//     Neither the name of TransGaming Inc., Google Inc., 3DLabs Inc.
-<a href=#158 id=158 data-nosnippet>158</a>//     Ltd., nor the names of their contributors may be used to endorse
-<a href=#159 id=159 data-nosnippet>159</a>//     or promote products derived from this software without specific
-<a href=#160 id=160 data-nosnippet>160</a>//     prior written permission.
-<a href=#161 id=161 data-nosnippet>161</a>//
-<a href=#162 id=162 data-nosnippet>162</a>// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-<a href=#163 id=163 data-nosnippet>163</a>// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-<a href=#164 id=164 data-nosnippet>164</a>// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-<a href=#165 id=165 data-nosnippet>165</a>// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
-<a href=#166 id=166 data-nosnippet>166</a>// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
-<a href=#167 id=167 data-nosnippet>167</a>// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
-<a href=#168 id=168 data-nosnippet>168</a>// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
-<a href=#169 id=169 data-nosnippet>169</a>// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-<a href=#170 id=170 data-nosnippet>170</a>// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-<a href=#171 id=171 data-nosnippet>171</a>// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
-<a href=#172 id=172 data-nosnippet>172</a>// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-<a href=#173 id=173 data-nosnippet>173</a>// POSSIBILITY OF SUCH DAMAGE.
-<a href=#174 id=174 data-nosnippet>174</a>"#</span>;
+<a href=#119 id=119 data-nosnippet>119</a>/// This uses a [`WINDOWS_EXTENSIONS::register_root_extender`] to set [`prefer_angle_egl`] in all windows.
+<a href=#120 id=120 data-nosnippet>120</a>///
+<a href=#121 id=121 data-nosnippet>121</a>/// [`prefer_angle_egl`]: fn@prefer_angle_egl
+<a href=#122 id=122 data-nosnippet>122</a></span><span class="kw">pub fn </span>register_root_extender() {
+<a href=#123 id=123 data-nosnippet>123</a>    WINDOWS_EXTENSIONS.register_root_extender(|a| prefer_angle_egl(a.root, <span class="bool-val">true</span>));
+<a href=#124 id=124 data-nosnippet>124</a>}
+<a href=#125 id=125 data-nosnippet>125</a>
+<a href=#126 id=126 data-nosnippet>126</a><span class="doccomment">/// Register the ANGLE license with the [`LICENSES`] service.
+<a href=#127 id=127 data-nosnippet>127</a>///
+<a href=#128 id=128 data-nosnippet>128</a>/// The license is a [BSD3-Clause type license](https://github.com/google/angle/blob/fca8ca8a87c387515e0d2901916e4fae6b97e83f/LICENSE).
+<a href=#129 id=129 data-nosnippet>129</a></span><span class="kw">pub fn </span>register_license() {
+<a href=#130 id=130 data-nosnippet>130</a>    <span class="kw">fn </span>l() -&gt; Vec&lt;LicenseUsed&gt; {
+<a href=#131 id=131 data-nosnippet>131</a>        <span class="macro">vec!</span>[LicenseUsed {
+<a href=#132 id=132 data-nosnippet>132</a>            license: License::new(<span class="string">"BSD3-Clause"</span>, <span class="string">r#"BSD 3-Clause "Revised" License"#</span>, LICENSE),
+<a href=#133 id=133 data-nosnippet>133</a>            used_by: <span class="macro">vec!</span>[User::new(
+<a href=#134 id=134 data-nosnippet>134</a>                <span class="string">"ANGLE"</span>,
+<a href=#135 id=135 data-nosnippet>135</a>                <span class="string">"fca8ca8"</span>,
+<a href=#136 id=136 data-nosnippet>136</a>                <span class="string">"https://github.com/zng-ui/build-angle/releases/tag/2026-05-17"</span>,
+<a href=#137 id=137 data-nosnippet>137</a>            )],
+<a href=#138 id=138 data-nosnippet>138</a>        }]
+<a href=#139 id=139 data-nosnippet>139</a>    }
+<a href=#140 id=140 data-nosnippet>140</a>    LICENSES.register(l);
+<a href=#141 id=141 data-nosnippet>141</a>}
+<a href=#142 id=142 data-nosnippet>142</a>
+<a href=#143 id=143 data-nosnippet>143</a><span class="kw">const </span>LICENSE: <span class="kw-2">&amp;</span>str = <span class="string">r#"
+<a href=#144 id=144 data-nosnippet>144</a>// Copyright 2018 The ANGLE Project Authors.
+<a href=#145 id=145 data-nosnippet>145</a>// All rights reserved.
+<a href=#146 id=146 data-nosnippet>146</a>//
+<a href=#147 id=147 data-nosnippet>147</a>// Redistribution and use in source and binary forms, with or without
+<a href=#148 id=148 data-nosnippet>148</a>// modification, are permitted provided that the following conditions
+<a href=#149 id=149 data-nosnippet>149</a>// are met:
+<a href=#150 id=150 data-nosnippet>150</a>//
+<a href=#151 id=151 data-nosnippet>151</a>//     Redistributions of source code must retain the above copyright
+<a href=#152 id=152 data-nosnippet>152</a>//     notice, this list of conditions and the following disclaimer.
+<a href=#153 id=153 data-nosnippet>153</a>//
+<a href=#154 id=154 data-nosnippet>154</a>//     Redistributions in binary form must reproduce the above
+<a href=#155 id=155 data-nosnippet>155</a>//     copyright notice, this list of conditions and the following
+<a href=#156 id=156 data-nosnippet>156</a>//     disclaimer in the documentation and/or other materials provided
+<a href=#157 id=157 data-nosnippet>157</a>//     with the distribution.
+<a href=#158 id=158 data-nosnippet>158</a>//
+<a href=#159 id=159 data-nosnippet>159</a>//     Neither the name of TransGaming Inc., Google Inc., 3DLabs Inc.
+<a href=#160 id=160 data-nosnippet>160</a>//     Ltd., nor the names of their contributors may be used to endorse
+<a href=#161 id=161 data-nosnippet>161</a>//     or promote products derived from this software without specific
+<a href=#162 id=162 data-nosnippet>162</a>//     prior written permission.
+<a href=#163 id=163 data-nosnippet>163</a>//
+<a href=#164 id=164 data-nosnippet>164</a>// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+<a href=#165 id=165 data-nosnippet>165</a>// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+<a href=#166 id=166 data-nosnippet>166</a>// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
+<a href=#167 id=167 data-nosnippet>167</a>// FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+<a href=#168 id=168 data-nosnippet>168</a>// COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
+<a href=#169 id=169 data-nosnippet>169</a>// INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+<a href=#170 id=170 data-nosnippet>170</a>// BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+<a href=#171 id=171 data-nosnippet>171</a>// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+<a href=#172 id=172 data-nosnippet>172</a>// CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+<a href=#173 id=173 data-nosnippet>173</a>// LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
+<a href=#174 id=174 data-nosnippet>174</a>// ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+<a href=#175 id=175 data-nosnippet>175</a>// POSSIBILITY OF SUCH DAMAGE.
+<a href=#176 id=176 data-nosnippet>176</a>"#</span>;
 </code></pre></div></section></main></body></html>
