@@ -20,12 +20,12 @@
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>zng_unit::{ByteLength, ByteUnits <span class="kw">as _</span>, Px, PxDensity2d, PxDensityUnits <span class="kw">as _</span>, PxSize};
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_var::const_var;
 <a href=#22 id=22 data-nosnippet>22</a>
-<a href=#23 id=23 data-nosnippet>23</a><span class="macro">zng_env::on_process_start!</span>(|args| {
-<a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">if </span>args.yield_until_app() {
-<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">return</span>;
-<a href=#26 id=26 data-nosnippet>26</a>    }
-<a href=#27 id=27 data-nosnippet>27</a>
-<a href=#28 id=28 data-nosnippet>28</a>    APP.on_init(<span class="macro">hn!</span>(|<span class="kw">_</span>| {
+<a href=#23 id=23 data-nosnippet>23</a><span class="macro">zng_env::on_process_start!</span>(|<span class="kw">_</span>| {
+<a href=#24 id=24 data-nosnippet>24</a>    APP.on_init(<span class="macro">hn!</span>(|args| {
+<a href=#25 id=25 data-nosnippet>25</a>        <span class="kw">if </span>args.is_minimal {
+<a href=#26 id=26 data-nosnippet>26</a>            <span class="kw">return</span>;
+<a href=#27 id=27 data-nosnippet>27</a>        }
+<a href=#28 id=28 data-nosnippet>28</a>
 <a href=#29 id=29 data-nosnippet>29</a>        <span class="macro">tracing::trace!</span>(<span class="string">"register SVG extension"</span>);
 <a href=#30 id=30 data-nosnippet>30</a>        IMAGES.extend(Box::new(SvgRenderExtension::default()));
 <a href=#31 id=31 data-nosnippet>31</a>    }));

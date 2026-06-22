@@ -55,12 +55,12 @@
 <a href=#55 id=55 data-nosnippet>55</a><span class="doccomment">/// Localization service.
 <a href=#56 id=56 data-nosnippet>56</a></span><span class="kw">pub struct </span>L10N;
 <a href=#57 id=57 data-nosnippet>57</a>
-<a href=#58 id=58 data-nosnippet>58</a><span class="macro">on_process_start!</span>(|args: <span class="kw-2">&amp;</span>zng_env::ProcessStartArgs| {
-<a href=#59 id=59 data-nosnippet>59</a>    <span class="kw">if </span>args.yield_until_app() {
-<a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">return</span>;
-<a href=#61 id=61 data-nosnippet>61</a>    }
-<a href=#62 id=62 data-nosnippet>62</a>
-<a href=#63 id=63 data-nosnippet>63</a>    APP.on_init(<span class="macro">hn!</span>(|<span class="kw">_</span>| {
+<a href=#58 id=58 data-nosnippet>58</a><span class="macro">on_process_start!</span>(|<span class="kw">_</span>| {
+<a href=#59 id=59 data-nosnippet>59</a>    APP.on_init(<span class="macro">hn!</span>(|args| {
+<a href=#60 id=60 data-nosnippet>60</a>        <span class="kw">if </span>args.is_minimal {
+<a href=#61 id=61 data-nosnippet>61</a>            <span class="kw">return</span>;
+<a href=#62 id=62 data-nosnippet>62</a>        }
+<a href=#63 id=63 data-nosnippet>63</a>
 <a href=#64 id=64 data-nosnippet>64</a>        <span class="attr">#[cfg(feature = <span class="string">"usage_recorder"</span>)]
 <a href=#65 id=65 data-nosnippet>65</a>        </span>usage_recorder::on_init();
 <a href=#66 id=66 data-nosnippet>66</a>

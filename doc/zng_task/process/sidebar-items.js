@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["worker"]};
+window.SIDEBAR_ITEMS = {"mod":["tap","worker"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["contains_ansi_csi","remove_ansi_csi"],"struct":["BacktraceFrame","PanicInfo","StderrTap","StdoutTap"]};
