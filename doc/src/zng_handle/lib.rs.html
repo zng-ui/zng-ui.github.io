@@ -70,7 +70,7 @@
 <a href=#70 id=70 data-nosnippet>70</a>    ///
 <a href=#71 id=71 data-nosnippet>71</a>    /// Note that a clone can still force drop a perm handle and perm does nothing if the handle is already force dropped.
 <a href=#72 id=72 data-nosnippet>72</a>    </span><span class="kw">pub fn </span>perm(<span class="self">self</span>) {
-<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">let _ </span>= <span class="self">self</span>.<span class="number">0</span>.state.fetch_update(Ordering::Relaxed, Ordering::Relaxed, |s| {
+<a href=#73 id=73 data-nosnippet>73</a>        <span class="kw">let _ </span>= <span class="self">self</span>.<span class="number">0</span>.state.try_update(Ordering::Relaxed, Ordering::Relaxed, |s| {
 <a href=#74 id=74 data-nosnippet>74</a>            <span class="kw">if </span>s != State::ForceDrop <span class="kw">as </span>u8 {
 <a href=#75 id=75 data-nosnippet>75</a>                <span class="prelude-val">Some</span>(State::Permanent <span class="kw">as </span>u8)
 <a href=#76 id=76 data-nosnippet>76</a>            } <span class="kw">else </span>{
