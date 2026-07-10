@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["async_clmv","async_clmv_fn","async_clmv_fn_once","clmv"]};
+window.SIDEBAR_ITEMS = {"macro":[["async_clmv",1],["async_clmv_fn",1],["async_clmv_fn_once",1],["clmv",1]]};

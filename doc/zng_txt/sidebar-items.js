@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["TxtRepr"],"macro":["formatx"],"struct":["Txt"],"trait":["ToTxt"]};
+window.SIDEBAR_ITEMS = {"enum":["TxtRepr"],"macro":[["formatx",1]],"struct":["Txt"],"trait":["ToTxt"]};

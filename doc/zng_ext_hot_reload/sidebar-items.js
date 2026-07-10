@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":["hot_node"],"enum":["BuildError"],"macro":["hot_static","hot_static_ref","lazy_static","zng_hot_entry"],"static":["HOT_RELOAD_EVENT"],"struct":["BuildArgs","HOT_RELOAD","HotReloadArgs","HotStatus"]};
+window.SIDEBAR_ITEMS = {"attr":["hot_node"],"enum":["BuildError"],"macro":[["hot_static",1],["hot_static_ref",1],["lazy_static",1],["zng_hot_entry",1]],"static":["HOT_RELOAD_EVENT"],"struct":["BuildArgs","HOT_RELOAD","HotReloadArgs","HotStatus"]};

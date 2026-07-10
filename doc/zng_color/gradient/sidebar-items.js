@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ExtendMode","GradientRadiusBase","GradientStop","LinearGradientAxis"],"macro":["stops"],"struct":["ColorStop","GradientRadius","GradientStops"],"type":["RenderExtendMode","RenderGradientStop"]};
+window.SIDEBAR_ITEMS = {"enum":["ExtendMode","GradientRadiusBase","GradientStop","LinearGradientAxis"],"macro":[["stops",1]],"struct":["ColorStop","GradientRadius","GradientStops"],"type":["RenderExtendMode","RenderGradientStop"]};

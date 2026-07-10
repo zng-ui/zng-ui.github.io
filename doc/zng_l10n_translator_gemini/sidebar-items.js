@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["main"],"macro":["fatal"],"mod":["gemini"],"struct":["Cli"]};
+window.SIDEBAR_ITEMS = {"fn":["main"],"macro":[["fatal",1]],"mod":["gemini"],"struct":["Cli"]};

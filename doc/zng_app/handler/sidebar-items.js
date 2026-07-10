@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["HandlerResult"],"macro":["async_hn","async_hn_once","hn","hn_once"],"struct":["APP_HANDLER","ArcHandler","WidgetRunner"],"trait":["AppWeakHandle","HandlerExt"],"type":["Handler"]};
+window.SIDEBAR_ITEMS = {"enum":["HandlerResult"],"macro":[["async_hn",1],["async_hn_once",1],["hn",1],["hn_once",1]],"struct":["APP_HANDLER","ArcHandler","WidgetRunner"],"trait":["AppWeakHandle","HandlerExt"],"type":["Handler"]};

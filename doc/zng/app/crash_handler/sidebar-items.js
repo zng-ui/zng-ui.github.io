@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["debug_dialog"],"macro":["crash_handler_config"],"struct":["BacktraceFrame","CrashArgs","CrashConfig","CrashError","CrashPanic"]};
+window.SIDEBAR_ITEMS = {"fn":["debug_dialog"],"macro":[["crash_handler_config",1]],"struct":["BacktraceFrame","CrashArgs","CrashConfig","CrashError","CrashPanic"]};

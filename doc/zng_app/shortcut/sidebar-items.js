@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["GestureKey","ModifierGesture","Shortcut"],"macro":["shortcut"],"struct":["KeyChord","KeyGesture","ModifiersState","ParseError","ShortcutFilter","Shortcuts"],"trait":["CommandShortcutExt"]};
+window.SIDEBAR_ITEMS = {"enum":["GestureKey","ModifierGesture","Shortcut"],"macro":[["shortcut",1]],"struct":["KeyChord","KeyGesture","ModifiersState","ParseError","ShortcutFilter","Shortcuts"],"trait":["CommandShortcutExt"]};
