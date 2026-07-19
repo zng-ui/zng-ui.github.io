@@ -1,5 +1,5 @@
 (function() {
-    const implementors = Object.fromEntries([["zng_task",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.97.0/std/os/fd/raw/trait.AsRawFd.html\" title=\"trait std::os::fd::raw::AsRawFd\">AsRawFd</a> for <a class=\"struct\" href=\"zng_task/fs/struct.File.html\" title=\"struct zng_task::fs::File\">File</a>",0]]]]);
+    const implementors = Object.fromEntries([["zng_task",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.97.1/std/os/fd/raw/trait.AsRawFd.html\" title=\"trait std::os::fd::raw::AsRawFd\">AsRawFd</a> for <a class=\"struct\" href=\"zng_task/fs/struct.File.html\" title=\"struct zng_task::fs::File\">File</a>",0]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
