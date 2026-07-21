@@ -37,7 +37,7 @@
 <a href=#37 id=37 data-nosnippet>37</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(async_) = <span class="kw-2">&amp;</span>item.sig.asyncness {
 <a href=#38 id=38 data-nosnippet>38</a>        errors.push(<span class="string">"hot node functions cannot be `async`"</span>, async_.span());
 <a href=#39 id=39 data-nosnippet>39</a>    }
-<a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(unsafe_) = <span class="kw-2">&amp;</span>item.sig.unsafety {
+<a href=#40 id=40 data-nosnippet>40</a>    <span class="kw">if let </span>syn::Safety::Unsafe(unsafe_) = <span class="kw-2">&amp;</span>item.sig.safety {
 <a href=#41 id=41 data-nosnippet>41</a>        errors.push(<span class="string">"hot node functions cannot be `unsafe`"</span>, unsafe_.span());
 <a href=#42 id=42 data-nosnippet>42</a>    }
 <a href=#43 id=43 data-nosnippet>43</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(abi) = <span class="kw-2">&amp;</span>item.sig.abi {
@@ -261,7 +261,7 @@
 <a href=#261 id=261 data-nosnippet>261</a>
 <a href=#262 id=262 data-nosnippet>262</a>                <span class="kw">match </span><span class="kw-2">*</span>t.ty.clone() {
 <a href=#263 id=263 data-nosnippet>263</a>                    Type::ImplTrait(<span class="kw-2">mut </span>it) <span class="kw">if </span>it.bounds.len() == <span class="number">1 </span>=&gt; {
-<a href=#264 id=264 data-nosnippet>264</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap().into_value();
+<a href=#264 id=264 data-nosnippet>264</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap();
 <a href=#265 id=265 data-nosnippet>265</a>                        <span class="kw">match </span>bounds {
 <a href=#266 id=266 data-nosnippet>266</a>                            TypeParamBound::Trait(tra) <span class="kw">if </span>tra.lifetimes.is_none() &amp;&amp; tra.paren_token.is_none() =&gt; {
 <a href=#267 id=267 data-nosnippet>267</a>                                <span class="kw">let </span>path = tra.path;
@@ -309,7 +309,7 @@
 <a href=#309 id=309 data-nosnippet>309</a>                        input.kind = InputKind::TryClone;
 <a href=#310 id=310 data-nosnippet>310</a>                        input.gen_ty = a.to_token_stream();
 <a href=#311 id=311 data-nosnippet>311</a>                    }
-<a href=#312 id=312 data-nosnippet>312</a>                    Type::BareFn(f) =&gt; {
+<a href=#312 id=312 data-nosnippet>312</a>                    Type::FnPtr(f) =&gt; {
 <a href=#313 id=313 data-nosnippet>313</a>                        input.kind = InputKind::TryClone;
 <a href=#314 id=314 data-nosnippet>314</a>                        input.gen_ty = f.to_token_stream();
 <a href=#315 id=315 data-nosnippet>315</a>                    }

@@ -84,7 +84,7 @@
 <a href=#84 id=84 data-nosnippet>84</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(async_) = <span class="kw-2">&amp;</span>item.sig.asyncness {
 <a href=#85 id=85 data-nosnippet>85</a>        errors.push(<span class="string">"property functions cannot be `async`"</span>, async_.span());
 <a href=#86 id=86 data-nosnippet>86</a>    }
-<a href=#87 id=87 data-nosnippet>87</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(unsafe_) = <span class="kw-2">&amp;</span>item.sig.unsafety {
+<a href=#87 id=87 data-nosnippet>87</a>    <span class="kw">if let </span>syn::Safety::Unsafe(unsafe_) = <span class="kw-2">&amp;</span>item.sig.safety {
 <a href=#88 id=88 data-nosnippet>88</a>        errors.push(<span class="string">"property functions cannot be `unsafe`"</span>, unsafe_.span());
 <a href=#89 id=89 data-nosnippet>89</a>    }
 <a href=#90 id=90 data-nosnippet>90</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(abi) = <span class="kw-2">&amp;</span>item.sig.abi {
@@ -855,7 +855,7 @@
 <a href=#855 id=855 data-nosnippet>855</a>                }
 <a href=#856 id=856 data-nosnippet>856</a>                <span class="kw">match </span>ty {
 <a href=#857 id=857 data-nosnippet>857</a>                    Type::ImplTrait(<span class="kw-2">mut </span>it) <span class="kw">if </span>it.bounds.len() == <span class="number">1 </span>=&gt; {
-<a href=#858 id=858 data-nosnippet>858</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap().into_value();
+<a href=#858 id=858 data-nosnippet>858</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap();
 <a href=#859 id=859 data-nosnippet>859</a>                        <span class="kw">match </span>bounds {
 <a href=#860 id=860 data-nosnippet>860</a>                            TypeParamBound::Trait(tra) <span class="kw">if </span>tra.lifetimes.is_none() &amp;&amp; tra.paren_token.is_none() =&gt; {
 <a href=#861 id=861 data-nosnippet>861</a>                                <span class="kw">let </span>path = tra.path;
@@ -958,7 +958,7 @@
 <a href=#958 id=958 data-nosnippet>958</a>
 <a href=#959 id=959 data-nosnippet>959</a>                <span class="kw">match </span><span class="kw-2">*</span>t.ty.clone() {
 <a href=#960 id=960 data-nosnippet>960</a>                    Type::ImplTrait(<span class="kw-2">mut </span>it) <span class="kw">if </span>it.bounds.len() == <span class="number">1 </span>=&gt; {
-<a href=#961 id=961 data-nosnippet>961</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap().into_value();
+<a href=#961 id=961 data-nosnippet>961</a>                        <span class="kw">let </span>bounds = it.bounds.pop().unwrap();
 <a href=#962 id=962 data-nosnippet>962</a>                        <span class="kw">match </span>bounds {
 <a href=#963 id=963 data-nosnippet>963</a>                            TypeParamBound::Trait(tra) <span class="kw">if </span>tra.lifetimes.is_none() &amp;&amp; tra.paren_token.is_none() =&gt; {
 <a href=#964 id=964 data-nosnippet>964</a>                                <span class="kw">let </span>path = tra.path;
