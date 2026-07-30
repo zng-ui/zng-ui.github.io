@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="API documentation for the Rust `SFX_HELP` constant in crate `cargo_zng`."><title>SFX_HELP in cargo_zng::res::built_in::sfx - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../../" data-static-root-path="../../../../static.files/" data-current-crate="cargo_zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.97.1 (8bab26f4f 2026-07-14)" data-channel="1.97.1" data-search-js="search-fd9372ac.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../../static.files/storage-41dd4d93.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../../../static.files/main-fcd733ba.js"></script><noscript><link rel="stylesheet" href="../../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc constant"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">SFX_HELP</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../../../cargo_zng/index.html"><img src="https://zng-ui.github.io/res/zng-logo.png" alt="logo"></a><h2><a href="../../../../cargo_zng/index.html">cargo_<wbr>zng</a><span class="version">0.13.1</span></h2></div><div class="sidebar-elems"><div id="rustdoc-modnav"><h2><a href="index.html">In cargo_<wbr>zng::<wbr>res::<wbr>built_<wbr>in::<wbr>sfx</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../../../index.html">cargo_zng</a>::<wbr><a href="../../index.html">res</a>::<wbr><a href="../index.html">built_in</a>::<wbr><a href="index.html">sfx</a></div><h1>Constant <span class="constant">SFX_<wbr>HELP</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../../../src/cargo_zng/res/built_in/sfx.rs.html#11-121">Source</a> </span></div><pre class="rust item-decl"><code>const SFX_HELP: &amp;<a class="primitive" href="https://doc.rust-lang.org/1.97.1/std/primitive.str.html">str</a> = r#&quot;
+Compile a self-extracting executable
+
+The request file:
+  source/sfx-package.zr-sfx
+   | [sfx]
+   | # executable to run, required
+   | run = &quot;target/release/run&quot;
+   |
+   | # Embedded icon for the sfx executable (Windows only)
+   | icon = &quot;res/sfx.ico&quot;
+   |
+   | # optional args for &#39;run&#39;
+   | args = [&quot;--foo&quot;]
+   | # optional extra env for &#39;run&#39;
+   | env = {
+   |     FOO = &quot;bar&quot;,
+   | }
+   |
+   | # rustc target triple, default is the host triple
+   | # rustc-target = &quot;x86_64-pc-windows-msvc&quot;
+   | # build a console exe on Windows, default is true (build a GUI exe)
+   | windows-subsystem = false
+   |
+   | # compression to use for &#39;run&#39;, default is &quot;zstd-bcj&quot;
+   | # compress = &quot;none&quot;
+   |
+   | # data the sfx can serve the &#39;run&#39;
+   | [[data]]
+   | # name must be unique and not include &#39;:&#39;, default is &quot;&quot;, for single data
+   | name = &quot;payload&quot;
+   | # compress data on build, default is &quot;zstd&quot;
+   | compress = &quot;zstd&quot;
+   | # file to include
+   | file = &quot;./data.tar&quot;
+   | 
+   | [sign]
+   | # optional, code sign the sfx exe
+   | tool = &quot;signtool sign /v /f $PFX /tr http://timestamp.sectigo.com /td SHA256 /fd SHA256 $SIGN_TARGET&quot;
+   | # only sign the sfx exe, default &#39;false&#39; signs the &#39;run&#39; exe too
+   | # sfx-only = true
+
+Compiles and signs a &#39;sfx-package.exe&#39; with custom icon on Windows, or a &#39;sfx-package&#39; on Unix.
+
+Run:
+
+When sfx runs it extracts the &#39;run&#39; executable to a temp dir and runs it.
+
+The optional &#39;env&#39; variables override the system env. The SFX_ARGS and SFX_DATA var is always set. 
+
+The SFX_ARGS is set to the sfx command line args, &#39;\n&#39; separated. The first arg is the path to the sfx exe.
+
+On build, also searches for &quot;$run.exe&quot; if &quot;$run&quot; is not found and has no extension.
+
+Data:
+
+To read data the &#39;run&#39; exe must spawn another instance of the sfx with the &quot;SFX_GET_DATA&quot; set
+to the entry name. It will serve the data to stdout. The data may be decompressed on demand.
+
+File Paths:
+
+Paths are relative to the Cargo workspace root, you can also use .zr-rp to select files in the
+resource target dir.
+
+This request file:
+  source/sfx-package.zr-sfxf.zr-rp
+   | [[data]]
+   | file = &quot;${ZR_TARGET_DD}/res.txt&quot;
+
+Compiles a &#39;sfx-package&#39; that includes the &#39;res.txt&#39; copied to the target dir by `cargo zng res`.
+
+Compress:
+
+The sfx exe includes a zstd decompressor that is used to extract the &#39;run&#39; exe.
+
+The decompressor code can be used to read data too. The &#39;compress&#39; field values are:
+
+- &quot;none&quot; — No compression on build. Data is served as is.
+- &quot;zstd&quot; — Compress on build unless file extension is &quot;.zst&quot;. Decompress on demand while reading.
+- &quot;zstd-[filter]&quot; — Transform data to improve compression, unless file extension is &quot;.zst&quot;. Reverses
+  transform on demand while reading.
+
+Sfx is optimized for small number of large data entries. Use a container format to
+package many small entries.
+
+Filter:
+
+Currently only BCJ (Branch/Call/Jump) filters are supported, identified by CPU instruction set:
+
+- &quot;zstd-bcj-[set]&quot; where [set] is: &quot;x86&quot;, &quot;arm&quot;, &quot;arm64&quot;, &quot;arm-thumb&quot;, &quot;ppc&quot;, &quot;sparc&quot;, &quot;ia64&quot;, &quot;riscv&quot;.
+- &quot;zstd-bcj&quot; — Select filter from &#39;rustc-target&#39; arch, or zstd unfiltered for no matches.
+
+The target file must be a binary (exe or lib) or a container (like tar) with only binary entries. The filters
+are non-destructive but if the wrong filter is selected it will have negative impact on the compression level.
+
+Signing:
+
+Code signing must be applied to both the run exe and sfx exe, to facilitate this you can set the &#39;sign.tool&#39;.
+
+The sign-tool command will run twice, with $SIGN_TARGET set to &quot;./run.exe&quot; and &quot;package.exe&quot;.
+
+In the example above The $PFX var is an example of how to set the the private key. 
+Keep the private key file outside the repository and set an env var to it. In CI use
+secure variables.
+
+Icon:
+
+On Windows the sfx executable icon can be set with &#39;icon&#39; field. Note that this requires the build
+to run on a Windows machine with MSVC Toolkit installed. Cross-compilation from other systems will not work.
+
+&quot;#;</code></pre></section></div></main></body></html>

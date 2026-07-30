@@ -734,7 +734,7 @@
 <a href=#734 id=734 data-nosnippet>734</a>}
 <a href=#735 id=735 data-nosnippet>735</a><span class="kw">impl </span>zng_app::render::Img <span class="kw">for </span>ImageEntry {
 <a href=#736 id=736 data-nosnippet>736</a>    <span class="kw">fn </span>renderer_id(<span class="kw-2">&amp;</span><span class="self">self</span>, renderer: <span class="kw-2">&amp;</span>ViewRenderer) -&gt; ImageTextureId {
-<a href=#737 id=737 data-nosnippet>737</a>        <span class="kw">if </span><span class="self">self</span>.is_loaded() {
+<a href=#737 id=737 data-nosnippet>737</a>        <span class="kw">if </span><span class="self">self</span>.is_loaded() &amp;&amp; !<span class="self">self</span>.is_error() {
 <a href=#738 id=738 data-nosnippet>738</a>            <span class="kw">let </span><span class="kw-2">mut </span>img = <span class="self">self</span>.img_mut.lock();
 <a href=#739 id=739 data-nosnippet>739</a>            <span class="kw">let </span>rms = <span class="kw-2">&amp;mut </span>img.render_ids;
 <a href=#740 id=740 data-nosnippet>740</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(rm) = rms.iter().find(|k| <span class="kw-2">&amp;</span>k.renderer == renderer) {

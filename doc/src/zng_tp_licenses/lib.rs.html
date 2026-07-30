@@ -311,37 +311,43 @@
 <a href=#311 id=311 data-nosnippet>311</a>/// Panics in case of any error.
 <a href=#312 id=312 data-nosnippet>312</a></span><span class="attr">#[cfg(feature = <span class="string">"build"</span>)]
 <a href=#313 id=313 data-nosnippet>313</a></span><span class="kw">pub fn </span>encode_licenses(licenses: <span class="kw-2">&amp;</span>[LicenseUsed]) -&gt; Vec&lt;u8&gt; {
-<a href=#314 id=314 data-nosnippet>314</a>    deflate::deflate_bytes(<span class="kw-2">&amp;</span>postcard::to_allocvec(licenses).expect(<span class="string">"postard error"</span>))
-<a href=#315 id=315 data-nosnippet>315</a>}
-<a href=#316 id=316 data-nosnippet>316</a>
-<a href=#317 id=317 data-nosnippet>317</a><span class="doccomment">/// Encode licenses and write to the output file that is included by [`decode_embedding!`].
-<a href=#318 id=318 data-nosnippet>318</a>///
-<a href=#319 id=319 data-nosnippet>319</a>/// # Panics
-<a href=#320 id=320 data-nosnippet>320</a>///
-<a href=#321 id=321 data-nosnippet>321</a>/// Panics in case of any error.
-<a href=#322 id=322 data-nosnippet>322</a></span><span class="attr">#[cfg(feature = <span class="string">"build"</span>)]
-<a href=#323 id=323 data-nosnippet>323</a></span><span class="kw">pub fn </span>write_embedding(licenses: <span class="kw-2">&amp;</span>[LicenseUsed]) {
-<a href=#324 id=324 data-nosnippet>324</a>    <span class="kw">let </span>bin = encode_licenses(licenses);
-<a href=#325 id=325 data-nosnippet>325</a>    std::fs::write(<span class="macro">format!</span>(<span class="string">"{}/zng-tp-licenses.bin"</span>, std::env::var(<span class="string">"OUT_DIR"</span>).unwrap()), bin).expect(<span class="string">"error writing file"</span>);
-<a href=#326 id=326 data-nosnippet>326</a>}
-<a href=#327 id=327 data-nosnippet>327</a>
-<a href=#328 id=328 data-nosnippet>328</a><span class="doccomment">/// Embed the file generated using [`write_embedding`] and expands to a [`decode_licenses`] that decodes the embedding.
-<a href=#329 id=329 data-nosnippet>329</a>///
-<a href=#330 id=330 data-nosnippet>330</a>/// This macro output is a `Vec&lt;LicenseUsed&gt;`.
-<a href=#331 id=331 data-nosnippet>331</a></span><span class="attr">#[macro_export]
-<a href=#332 id=332 data-nosnippet>332</a>#[cfg(feature = <span class="string">"embed"</span>)]
-<a href=#333 id=333 data-nosnippet>333</a></span><span class="macro">macro_rules!</span> decode_embedding {
-<a href=#334 id=334 data-nosnippet>334</a>    () =&gt; {
-<a href=#335 id=335 data-nosnippet>335</a>        <span class="macro-nonterminal">$crate::decode_embedding</span>!(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/zng-tp-licenses.bin"</span>))
-<a href=#336 id=336 data-nosnippet>336</a>    };
-<a href=#337 id=337 data-nosnippet>337</a>    (<span class="macro-nonterminal">$custom_name</span>:expr) =&gt; {{ <span class="macro-nonterminal">$crate::decode_licenses</span>(<span class="macro">include_bytes!</span>(<span class="macro-nonterminal">$custom_name</span>)) }};
-<a href=#338 id=338 data-nosnippet>338</a>}
-<a href=#339 id=339 data-nosnippet>339</a>
-<a href=#340 id=340 data-nosnippet>340</a><span class="doccomment">/// Decode licenses encoded with [`encode_licenses`]. Note that the encoded format is only guaranteed to work
-<a href=#341 id=341 data-nosnippet>341</a>/// if both encoding and decoding is made with the same `Cargo.lock` dependencies.
-<a href=#342 id=342 data-nosnippet>342</a></span><span class="attr">#[cfg(feature = <span class="string">"embed"</span>)]
-<a href=#343 id=343 data-nosnippet>343</a></span><span class="kw">pub fn </span>decode_licenses(bin: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;LicenseUsed&gt; {
-<a href=#344 id=344 data-nosnippet>344</a>    <span class="kw">let </span>bin = inflate::inflate_bytes(bin).expect(<span class="string">"invalid deflate binary"</span>);
-<a href=#345 id=345 data-nosnippet>345</a>    postcard::from_bytes(<span class="kw-2">&amp;</span>bin).expect(<span class="string">"invalid postard binary"</span>)
-<a href=#346 id=346 data-nosnippet>346</a>}
+<a href=#314 id=314 data-nosnippet>314</a>    <span class="kw">let </span><span class="kw-2">mut </span>r = <span class="macro">vec!</span>[];
+<a href=#315 id=315 data-nosnippet>315</a>    {
+<a href=#316 id=316 data-nosnippet>316</a>        <span class="kw">let </span><span class="kw-2">mut </span>encoder = flate2::write::DeflateEncoder::new(<span class="kw-2">&amp;mut </span>r, flate2::Compression::default());
+<a href=#317 id=317 data-nosnippet>317</a>        postcard::to_io(licenses, <span class="kw-2">&amp;mut </span>encoder).expect(<span class="string">"postcard error"</span>);
+<a href=#318 id=318 data-nosnippet>318</a>    }
+<a href=#319 id=319 data-nosnippet>319</a>    r
+<a href=#320 id=320 data-nosnippet>320</a>}
+<a href=#321 id=321 data-nosnippet>321</a>
+<a href=#322 id=322 data-nosnippet>322</a><span class="doccomment">/// Encode licenses and write to the output file that is included by [`decode_embedding!`].
+<a href=#323 id=323 data-nosnippet>323</a>///
+<a href=#324 id=324 data-nosnippet>324</a>/// # Panics
+<a href=#325 id=325 data-nosnippet>325</a>///
+<a href=#326 id=326 data-nosnippet>326</a>/// Panics in case of any error.
+<a href=#327 id=327 data-nosnippet>327</a></span><span class="attr">#[cfg(feature = <span class="string">"build"</span>)]
+<a href=#328 id=328 data-nosnippet>328</a></span><span class="kw">pub fn </span>write_embedding(licenses: <span class="kw-2">&amp;</span>[LicenseUsed]) {
+<a href=#329 id=329 data-nosnippet>329</a>    <span class="kw">let </span>bin = encode_licenses(licenses);
+<a href=#330 id=330 data-nosnippet>330</a>    std::fs::write(<span class="macro">format!</span>(<span class="string">"{}/zng-tp-licenses.bin"</span>, std::env::var(<span class="string">"OUT_DIR"</span>).unwrap()), bin).expect(<span class="string">"error writing file"</span>);
+<a href=#331 id=331 data-nosnippet>331</a>}
+<a href=#332 id=332 data-nosnippet>332</a>
+<a href=#333 id=333 data-nosnippet>333</a><span class="doccomment">/// Embed the file generated using [`write_embedding`] and expands to a [`decode_licenses`] that decodes the embedding.
+<a href=#334 id=334 data-nosnippet>334</a>///
+<a href=#335 id=335 data-nosnippet>335</a>/// This macro output is a `Vec&lt;LicenseUsed&gt;`.
+<a href=#336 id=336 data-nosnippet>336</a></span><span class="attr">#[macro_export]
+<a href=#337 id=337 data-nosnippet>337</a>#[cfg(feature = <span class="string">"embed"</span>)]
+<a href=#338 id=338 data-nosnippet>338</a></span><span class="macro">macro_rules!</span> decode_embedding {
+<a href=#339 id=339 data-nosnippet>339</a>    () =&gt; {
+<a href=#340 id=340 data-nosnippet>340</a>        <span class="macro-nonterminal">$crate::decode_embedding</span>!(<span class="macro">concat!</span>(<span class="macro">env!</span>(<span class="string">"OUT_DIR"</span>), <span class="string">"/zng-tp-licenses.bin"</span>))
+<a href=#341 id=341 data-nosnippet>341</a>    };
+<a href=#342 id=342 data-nosnippet>342</a>    (<span class="macro-nonterminal">$custom_name</span>:expr) =&gt; {{ <span class="macro-nonterminal">$crate::decode_licenses</span>(<span class="macro">include_bytes!</span>(<span class="macro-nonterminal">$custom_name</span>)) }};
+<a href=#343 id=343 data-nosnippet>343</a>}
+<a href=#344 id=344 data-nosnippet>344</a>
+<a href=#345 id=345 data-nosnippet>345</a><span class="doccomment">/// Decode licenses encoded with [`encode_licenses`]. Note that the encoded format is only guaranteed to work
+<a href=#346 id=346 data-nosnippet>346</a>/// if both encoding and decoding is made with the same `Cargo.lock` dependencies.
+<a href=#347 id=347 data-nosnippet>347</a></span><span class="attr">#[cfg(feature = <span class="string">"embed"</span>)]
+<a href=#348 id=348 data-nosnippet>348</a></span><span class="kw">pub fn </span>decode_licenses(bin: <span class="kw-2">&amp;</span>[u8]) -&gt; Vec&lt;LicenseUsed&gt; {
+<a href=#349 id=349 data-nosnippet>349</a>    <span class="kw">let </span>bin = flate2::read::DeflateDecoder::new(bin);
+<a href=#350 id=350 data-nosnippet>350</a>    <span class="kw">let </span><span class="kw-2">mut </span>scratch = [<span class="number">0u8</span>; <span class="number">1024</span>];
+<a href=#351 id=351 data-nosnippet>351</a>    postcard::from_io((bin, <span class="kw-2">&amp;mut </span>scratch)).expect(<span class="string">"invalid postard binary"</span>).<span class="number">0
+<a href=#352 id=352 data-nosnippet>352</a></span>}
 </code></pre></div></section></main></body></html>
