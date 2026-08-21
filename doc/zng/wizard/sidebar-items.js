@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["content_fn","footer_extra_fn","footer_fn","header_background_fn","header_fn","panel_fn","side_background_fn","side_extra_fn","side_fn"],"static":["BACK_CMD","CANCEL_CMD","FINISH_CMD","NEXT_CMD"],"struct":["ContentFnArgs","FooterFnArgs","HeaderFnArgs","Page","PageArgs","PanelFnArgs","SideFnArgs","Wizard"]};

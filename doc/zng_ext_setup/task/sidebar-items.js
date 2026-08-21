@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["CreateShortcut","ExtractTar","SetupTaskError"],"struct":["CancelInstallArgs","CreateShortcutConfig","ExtractTarConfig","InstallArgs","InstallTaskError","PrepareInstallArgs","TaskTypeId","UninstallArgs","ValidateUninstallArgs"],"trait":["SetupTask"]};

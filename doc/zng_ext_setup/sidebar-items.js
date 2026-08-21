@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["SetupErrorState","SetupStatus"],"mod":["task"],"struct":["InstallConfig","PreparedInstallConfig","SETUP","SetupError","SetupOpStatus","UninstallConfig"]};
