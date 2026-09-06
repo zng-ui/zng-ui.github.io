@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["SetupOp"],"fn":["app_id","app_name","app_org","app_version","installed_version","setup_op"],"mod":["page"],"static":["APP_ID_VAR","APP_NAME_VAR","APP_ORG_VAR","APP_VERSION_VAR","INSTALLED_VERSION_VAR","SETUP_OP_VAR"],"struct":["SetupWizard"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["TAR_HELP"],"fn":["collect_tar_entries","default_gzip_level","default_zstd_level","sum_tar_len","tar"],"struct":["Entry","Filter","GZip","Request","TarEntry","ZStd"],"trait":["WriteFinish"]};

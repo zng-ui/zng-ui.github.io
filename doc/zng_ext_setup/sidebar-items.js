@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["SetupErrorState","SetupStatus"],"mod":["task"],"struct":["InstallConfig","PreparedInstallConfig","SETUP","SetupError","SetupOpStatus","UninstallConfig"]};
+window.SIDEBAR_ITEMS = {"enum":["SetupErrorState","SetupStatus","SfxError"],"mod":["task"],"struct":["InstallConfig","PreparedInstallConfig","SETUP","SetupError","SetupOpStatus","SfxClient","SfxDataInfo","SfxRead","SfxReadBlocking","UninstallConfig"]};

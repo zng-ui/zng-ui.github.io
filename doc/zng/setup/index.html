@@ -1,0 +1,130 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Widgets for setup UI and a service for implementing it."><title>zng::setup - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1ed95124.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.98.1 (48a229cea 2026-09-01)" data-channel="1.98.1" data-search-js="search-9944d736.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../sidebar-items.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc mod"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">Module setup</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://zng-ui.github.io/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.24.4</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">Module setup</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#sfx-setup" title="SFX Setup">SFX Setup</a><ul><li><a href="#pack" title="Pack">Pack</a></li><li><a href="#setup-app" title="Setup App">Setup App</a></li></ul></li><li><a href="#full-api" title="Full API">Full API</a></li></ul><h3><a href="#modules">Module Items</a></h3><ul class="block"><li><a href="#modules" title="Modules">Modules</a></li><li><a href="#structs" title="Structs">Structs</a></li><li><a href="#enums" title="Enums">Enums</a></li><li><a href="#statics" title="Statics">Statics</a></li></ul></section><div id="rustdoc-modnav"><h2 class="in-crate"><a href="../index.html">In crate zng</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng</a></div><h1>Module <span>setup</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng/setup.rs.html#1-209">Source</a> </span></div><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Widgets for setup UI and a service for implementing it.</p>
+<p>The <a href="struct.SETUP.html" title="struct zng::setup::SETUP"><code>SETUP</code></a> service manages running setup operations. Operations are
+composed of <a href="task/trait.SetupTask.html" title="trait zng::setup::task::SetupTask"><code>task::SetupTask</code></a> that are the building blocks of installing, updating
+and uninstalling an app or resource on the operating system. To start, a list of
+tasks is grouped into an <a href="struct.InstallConfig.html" title="struct zng::setup::InstallConfig"><code>InstallConfig</code></a> that runs in <a href="struct.SETUP.html#method.install" title="method zng::setup::SETUP::install"><code>SETUP.install</code></a>.</p>
+<p>The <a href="struct.SetupWizard.html" title="struct zng::setup::SetupWizard"><code>SetupWizard!</code></a> widget can be used together with <a href="page/index.html" title="mod zng::setup::page"><code>page</code></a> builders to create the
+classic Windows setup experience. Usually the wizard starts with a set of config pages,
+once these pages are finished an <a href="struct.InstallConfig.html" title="struct zng::setup::InstallConfig"><code>InstallConfig</code></a> is built and started, the set of pages
+is replaced with a progress page, once the operation is done the pages are replaced again
+with a a results page.</p>
+<p>Note that the wizard widget is not required, a completely custom UI could also build an <a href="struct.InstallConfig.html" title="struct zng::setup::InstallConfig"><code>InstallConfig</code></a>,
+the <a href="struct.SETUP.html" title="struct zng::setup::SETUP"><code>SETUP</code></a> service has no connection with what UI is using it, it can even be operated from a command
+line interface (CLI) in a headless app.</p>
+<p>Note that this module is only tested on Windows, it should work in other operating systems, some
+tasks make a minimal effort to be cross platform, but Windows is the only OS without a standard way
+of installing apps, so it is the focus of this API.</p>
+<h2 id="sfx-setup"><a class="doc-anchor" href="#sfx-setup">§</a>SFX Setup</h2>
+<p>The <code>cargo zng res --tool sfx</code> tool can be used to build a self-extracting executable
+that extracts and runs a setup program implemented using this module. The examples that follow
+show how to implement a setup app in the same executable as the app that will be installed.</p>
+<p>The reasons for implementing on the same executable are:</p>
+<ul>
+<li>Reduced payload size. All the heavy dependencies like the renderer are shared with the setup app.</li>
+<li>Consistent visual identity. Any themes applied to the app are naturally used in the setup app.</li>
+<li>Shared config. Settings like language preference selected during setup naturally apply to the installed app.</li>
+<li>Shared metadata. The <a href="../env/fn.about.html" title="fn zng::env::about"><code>zng::env::about</code></a> metadata is used by default in <a href="struct.SetupWizard.html" title="struct zng::setup::SetupWizard"><code>SetupWizard!</code></a> pages.</li>
+</ul>
+<h3 id="pack"><a class="doc-anchor" href="#pack">§</a>Pack</h3>
+<p>Before implementing the setup app lets overview how the <code>cargo zng res</code> command will be used to package
+it and the rest of the app data in a single setup executable.</p>
+<p>The <code>pack/windows/my-app-setup.exe.zr-sfxf</code> file:</p>
+<div class="example-wrap"><pre class="language-toml"><code>[sfx]
+run = &quot;target/release/my-app.exe&quot;
+
+[[data]]
+name = &quot;data&quot;
+compress = &quot;zstd&quot;
+file = &quot;target/pack/windows/setup/data.tar&quot;</code></pre></div>
+<p>The command <code>cargo zng res --pack "pack/windows" "target/pack/windows"</code> will generate a <code>target/pack/windows/my-app-setup.exe</code>
+file that contains the executable and data, both compressed. Note that the data is pre-packed into a <code>tar</code>, this can be
+done using the <code>.zr-tar</code> tool, outside of the scope of this example.</p>
+<p>When the <code>my-app-setup.exe</code> runs it extracts the <code>my-app.exe</code> and runs it with the <code>SFX_ARGS</code> environment variable set.
+Inside the <code>my-app.exe</code> this variable causes the setup app to run, instead of the normal app.</p>
+<p>The <code>my-app.exe</code> will run from a temp dir, without any accompanying files. It must use the <code>SFX_ARGS</code> to call
+the <code>my-app-setup.exe</code> in server mode to read any extra file it requires to run, and also to extract the install
+payload.</p>
+<p>Call <code>cargo zng res --tool sfx</code> to read detailed docs about this tool.</p>
+<h3 id="setup-app"><a class="doc-anchor" href="#setup-app">§</a>Setup App</h3>
+<p>In this example the setup app is implemented on the same crate as the installed app.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+
+<span class="kw">fn </span>main() {
+    <span class="macro">zng::env::init!</span>();
+
+    <span class="comment">// if "SFX_ARGS" is set intercept and run setup app
+    </span><span class="attr">#[cfg(windows)]
+    </span>windows_setup::setup_main();
+    <span class="comment">// if not, run normal app
+    </span>app_main();
+}
+
+<span class="attr">#[cfg(windows)]
+</span><span class="kw">mod </span>windows_setup {
+    <span class="kw">use </span>zng::prelude::<span class="kw-2">*</span>;
+    <span class="kw">use </span>zng::setup::{task <span class="kw">as </span>setup_task, <span class="kw-2">*</span>};
+
+    <span class="kw">pub fn </span>setup_main() {
+        <span class="comment">// connect if a valid SFX_ARGS is set.
+        </span><span class="kw">let </span>sfx = <span class="kw">match </span>SfxClient::connect_blocking() {
+            <span class="prelude-val">Ok</span>(c) =&gt; c,
+            <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">return </span><span class="macro">assert!</span>(e.is_no_sfx(), <span class="string">"{e}"</span>),
+        };
+
+        <span class="comment">// basic CLI parsing
+        </span><span class="kw">let </span>destination = <span class="kw">match </span>sfx.sfx_args().get(<span class="number">1</span>) {
+            <span class="prelude-val">Some</span>(d) =&gt; d.clone(),
+            <span class="comment">// print CLI help, SFX replicates all stdout/err
+            </span><span class="prelude-val">None </span>=&gt; <span class="kw">return </span><span class="macro">println!</span>(<span class="string">"{} DESTINATION"</span>, sfx.sfx_args()[<span class="number">0</span>]),
+        };
+
+        <span class="kw">let </span><span class="kw-2">mut </span>app = APP.defaults().run_headless(<span class="bool-val">false</span>);
+        app.run_task(<span class="kw">async move </span>{
+            <span class="comment">// define install operation
+            </span><span class="kw">let </span><span class="kw-2">mut </span>install_cfg = InstallConfig::new();
+
+            <span class="comment">// first task, extract TAR read from SFX
+            </span><span class="kw">let </span>data = sfx.read(<span class="string">"data"</span>).<span class="kw">await</span>.unwrap().into_blocking().<span class="kw">await</span>;
+            <span class="kw">let </span>extract_cfg = setup_task::ExtractTarConfig::from_sfx(data, destination.into());
+            install_cfg.push::&lt;setup_task::ExtractTar&gt;(<span class="string">"extract"</span>, extract_cfg);
+
+            <span class="comment">// install
+            </span><span class="kw">let </span>uninstall_cfg = SETUP.install(install_cfg, <span class="prelude-val">None</span>).wait_rsp().<span class="kw">await</span>.unwrap();
+        });
+
+        <span class="comment">// interrupt normal app
+        </span>zng::env::exit(<span class="number">0</span>);
+    }
+}</code></pre></div>
+<p>In the example above a headless app is used to run a very simple install operation configured directly
+from CLI. In a full setup app both CLI and UI modes should be provided, with a CLI parsed by something
+more robust like <a href="https://docs.rs/clap/latest/clap/trait.Parser.html#method.parse_from"><code>clap::Parser::parse_from</code></a>.</p>
+<p>The following example shows a <a href="struct.SetupWizard.html" title="struct zng::setup::SetupWizard"><code>SetupWizard!</code></a> that does the same simple install operation, configured
+by the user using a GUI.</p>
+
+<div class="example-wrap"><pre class="rust rust-example-rendered"><code><span class="kw">let </span>destination_page = page::InstallDirPage::new();
+<span class="kw">let </span>destination = destination_page.install_dir.clone();
+<span class="macro">SetupWizard!</span> {
+    <span class="comment">// Set window title from page
+    </span>get_title = WINDOW.vars().title();
+
+    pages = <span class="macro">vec!</span>[page::WelcomePage::new(<span class="string">""</span>).build(), destination_page.build()];
+    setup_op = SetupOp::Install;
+
+    on_finish = <span class="macro">async_hn!</span>(destination, sfx, |args| {
+        args.propagation.stop();
+
+        <span class="kw">let </span><span class="kw-2">mut </span>cfg = InstallConfig::new();
+
+        <span class="kw">let </span>data = sfx.read(<span class="string">"data"</span>).<span class="kw">await</span>.unwrap().into_blocking().<span class="kw">await</span>;
+        cfg.push::&lt;setup_task::ExtractTar&gt;(<span class="string">"extract"</span>, setup_task::ExtractTarConfig::from_sfx(data, destination.get()));
+
+        <span class="kw">let </span>r = SETUP.install(cfg, <span class="prelude-val">None</span>);
+
+        <span class="kw">let </span>uninstall = r.wait_rsp().<span class="kw">await</span>.unwrap();
+    });
+}</code></pre></div><h2 id="full-api"><a class="doc-anchor" href="#full-api">§</a>Full API</h2>
+<p>See <a href="../../zng_ext_setup/index.html" title="mod zng_ext_setup"><code>zng_ext_setup</code></a> and <a href="../../zng_wgt_setup/index.html" title="mod zng_wgt_setup"><code>zng_wgt_setup</code></a> for the full API.</p>
+</div></details><h2 id="modules" class="section-header">Modules<a href="#modules" class="anchor">§</a></h2><dl class="item-table"><dt><a class="mod" href="page/index.html" title="mod zng::setup::page">page</a></dt><dd>Common setup wizard pages.</dd><dt><a class="mod" href="task/index.html" title="mod zng::setup::task">task</a></dt><dd>Common setup tasks and custom task API.</dd></dl><h2 id="structs" class="section-header">Structs<a href="#structs" class="anchor">§</a></h2><dl class="item-table"><dt><a class="struct" href="struct.InstallConfig.html" title="struct zng::setup::InstallConfig">Install<wbr>Config</a></dt><dd>Represents a list of tasks for a <a href="struct.SETUP.html#method.install" title="method zng::setup::SETUP::install"><code>SETUP.install</code></a> operation.</dd><dt><a class="struct" href="struct.PreparedInstallConfig.html" title="struct zng::setup::PreparedInstallConfig">Prepared<wbr>Install<wbr>Config</a></dt><dd>Represents data generated  by <a href="struct.SETUP.html#method.prepare_install" title="method zng::setup::SETUP::prepare_install"><code>SETUP.prepare_install</code></a> that can be used to run a <a href="struct.SETUP.html#method.commit_install" title="method zng::setup::SETUP::commit_install"><code>SETUP.commit_install</code></a> operation.</dd><dt><a class="struct" href="struct.SETUP.html" title="struct zng::setup::SETUP">SETUP</a></dt><dd>Setup service.</dd><dt><a class="struct" href="struct.SetupError.html" title="struct zng::setup::SetupError">Setup<wbr>Error</a></dt><dd>Represents a <a href="struct.SETUP.html" title="struct zng::setup::SETUP"><code>SETUP</code></a> operation error.</dd><dt><a class="struct" href="struct.SetupOpStatus.html" title="struct zng::setup::SetupOpStatus">Setup<wbr>OpStatus</a></dt><dd>Represents status of a <a href="struct.SETUP.html" title="struct zng::setup::SETUP"><code>SETUP</code></a> install or uninstall operation.</dd><dt><a class="struct" href="struct.SetupWizard.html" title="struct zng::setup::SetupWizard">Setup<wbr>Wizard</a></dt><dd><strong title='Widget struct and macro' data-tag='W'><code>W</code></strong>  Represents a setup operation wizard.</dd><dt><a class="struct" href="struct.SfxClient.html" title="struct zng::setup::SfxClient">SfxClient</a></dt><dd>Connection with a self-extracting executable generated by <code>cargo zng res --tool sfx</code>.</dd><dt><a class="struct" href="struct.SfxDataInfo.html" title="struct zng::setup::SfxDataInfo">SfxData<wbr>Info</a></dt><dd>Represents a data entry that can be served from a <a href="struct.SfxClient.html" title="struct zng::setup::SfxClient"><code>SfxClient</code></a>.</dd><dt><a class="struct" href="struct.UninstallConfig.html" title="struct zng::setup::UninstallConfig">Uninstall<wbr>Config</a></dt><dd>Represents data generated by <a href="struct.SETUP.html#method.install" title="method zng::setup::SETUP::install"><code>SETUP.install</code></a> that can be used to run a <a href="struct.SETUP.html#method.uninstall" title="method zng::setup::SETUP::uninstall"><code>SETUP.uninstall</code></a> operation.</dd></dl><h2 id="enums" class="section-header">Enums<a href="#enums" class="anchor">§</a></h2><dl class="item-table"><dt><a class="enum" href="enum.SetupErrorState.html" title="enum zng::setup::SetupErrorState">Setup<wbr>Error<wbr>State</a></dt><dd>Represents state of a setup operation that ended in a <a href="struct.SetupError.html" title="struct zng::setup::SetupError"><code>SetupError</code></a>.</dd><dt><a class="enum" href="enum.SetupOp.html" title="enum zng::setup::SetupOp">SetupOp</a></dt><dd>Represents the operation a <a href="struct.SetupWizard.html" title="struct zng::setup::SetupWizard"><code>SetupWizard!</code></a> is managing.</dd><dt><a class="enum" href="enum.SfxError.html" title="enum zng::setup::SfxError">SfxError</a></dt><dd>Error connecting or requesting data using <a href="struct.SfxClient.html" title="struct zng::setup::SfxClient"><code>SfxClient</code></a>.</dd></dl><h2 id="statics" class="section-header">Statics<a href="#statics" class="anchor">§</a></h2><dl class="item-table"><dt><a class="static" href="static.APP_ID_VAR.html" title="static zng::setup::APP_ID_VAR">APP_<wbr>ID_<wbr>VAR</a></dt><dd>Unique identifier of the product being setup.</dd><dt><a class="static" href="static.APP_NAME_VAR.html" title="static zng::setup::APP_NAME_VAR">APP_<wbr>NAME_<wbr>VAR</a></dt><dd>Display name of the product being setup.</dd><dt><a class="static" href="static.APP_ORG_VAR.html" title="static zng::setup::APP_ORG_VAR">APP_<wbr>ORG_<wbr>VAR</a></dt><dd>Display name of the app producer.</dd><dt><a class="static" href="static.APP_VERSION_VAR.html" title="static zng::setup::APP_VERSION_VAR">APP_<wbr>VERSION_<wbr>VAR</a></dt><dd>Display version of the product being setup.</dd><dt><a class="static" href="static.SETUP_OP_VAR.html" title="static zng::setup::SETUP_OP_VAR">SETUP_<wbr>OP_<wbr>VAR</a></dt><dd>Operation the setup wizard is managing.</dd></dl></section></div></main></body></html>
