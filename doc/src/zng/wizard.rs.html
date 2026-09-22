@@ -15,7 +15,7 @@
 <a href=#14 id=14 data-nosnippet>14</a>//! ```
 <a href=#15 id=15 data-nosnippet>15</a>//! use zng::focus::{TabIndex, tab_index};
 <a href=#16 id=16 data-nosnippet>16</a>//! use zng::prelude::*;
-<a href=#17 id=17 data-nosnippet>17</a>//! use zng::wizard::{self, Wizard};
+<a href=#17 id=17 data-nosnippet>17</a>//! use zng::wizard::{self, WIZARD, Wizard};
 <a href=#18 id=18 data-nosnippet>18</a>//! # let _scope = zng::APP.defaults();
 <a href=#19 id=19 data-nosnippet>19</a>//!
 <a href=#20 id=20 data-nosnippet>20</a>//! let wizard_id = WidgetId::new_unique();
@@ -33,11 +33,11 @@
 <a href=#32 id=32 data-nosnippet>32</a>//!
 <a href=#33 id=33 data-nosnippet>33</a>//! // more customized page, with wizard commands control
 <a href=#34 id=34 data-nosnippet>34</a>//! let can_cancel = var(true);
-<a href=#35 id=35 data-nosnippet>35</a>//! let can_finish = var(true);
+<a href=#35 id=35 data-nosnippet>35</a>//! let can_begin = var(true);
 <a href=#36 id=36 data-nosnippet>36</a>//! let mut page = wizard::Page::new(
 <a href=#37 id=37 data-nosnippet>37</a>//!     "Commands",
 <a href=#38 id=38 data-nosnippet>38</a>//!     "What wizard commands are enabled?",
-<a href=#39 id=39 data-nosnippet>39</a>//!     wgt_fn!(can_cancel, can_finish, |args: wizard::PageArgs| {
+<a href=#39 id=39 data-nosnippet>39</a>//!     wgt_fn!(can_cancel, can_begin, |args: wizard::PageArgs| {
 <a href=#40 id=40 data-nosnippet>40</a>//!         Stack! {
 <a href=#41 id=41 data-nosnippet>41</a>//!             // on enter page
 <a href=#42 id=42 data-nosnippet>42</a>//!             widget::on_init = hn!(can_cancel, |_| {
@@ -57,8 +57,8 @@
 <a href=#56 id=56 data-nosnippet>56</a>//!                     child = Text!("CANCEL_CMD");
 <a href=#57 id=57 data-nosnippet>57</a>//!                 },
 <a href=#58 id=58 data-nosnippet>58</a>//!                 Toggle! {
-<a href=#59 id=59 data-nosnippet>59</a>//!                     checked = can_finish.clone();
-<a href=#60 id=60 data-nosnippet>60</a>//!                     child = Text!("FINISH_CMD");
+<a href=#59 id=59 data-nosnippet>59</a>//!                     checked = can_begin.clone();
+<a href=#60 id=60 data-nosnippet>60</a>//!                     child = Text!("BEGIN_CMD");
 <a href=#61 id=61 data-nosnippet>61</a>//!                 },
 <a href=#62 id=62 data-nosnippet>62</a>//!                 Text!("Also wizard navigation commands:"),
 <a href=#63 id=63 data-nosnippet>63</a>//!                 Toggle! {
@@ -69,7 +69,7 @@
 <a href=#68 id=68 data-nosnippet>68</a>//!         }
 <a href=#69 id=69 data-nosnippet>69</a>//!     }),
 <a href=#70 id=70 data-nosnippet>70</a>//! );
-<a href=#71 id=71 data-nosnippet>71</a>//! // by default the last page only has BACK and FINISH buttons
+<a href=#71 id=71 data-nosnippet>71</a>//! // by default the last page only has BACK and BEGIN buttons
 <a href=#72 id=72 data-nosnippet>72</a>//! page.footer = wgt_fn!(|_| {
 <a href=#73 id=73 data-nosnippet>73</a>//!     ui_vec![
 <a href=#74 id=74 data-nosnippet>74</a>//!         Button! {
@@ -77,7 +77,7 @@
 <a href=#76 id=76 data-nosnippet>76</a>//!             tab_index = TabIndex::FIRST - 1;
 <a href=#77 id=77 data-nosnippet>77</a>//!         },
 <a href=#78 id=78 data-nosnippet>78</a>//!         Button! {
-<a href=#79 id=79 data-nosnippet>79</a>//!             cmd = wizard::FINISH_CMD.scoped(wizard_id);
+<a href=#79 id=79 data-nosnippet>79</a>//!             cmd = wizard::BEGIN_CMD.scoped(wizard_id);
 <a href=#80 id=80 data-nosnippet>80</a>//!             tab_index = TabIndex::FIRST;
 <a href=#81 id=81 data-nosnippet>81</a>//!             style_fn = style_fn!(|_| zng::button::PrimaryStyle!());
 <a href=#82 id=82 data-nosnippet>82</a>//!         },
@@ -89,33 +89,45 @@
 <a href=#88 id=88 data-nosnippet>88</a>//!     .into_node()
 <a href=#89 id=89 data-nosnippet>89</a>//! });
 <a href=#90 id=90 data-nosnippet>90</a>//!
-<a href=#91 id=91 data-nosnippet>91</a>//! # let _ =
-<a href=#92 id=92 data-nosnippet>92</a>//! Wizard! {
-<a href=#93 id=93 data-nosnippet>93</a>//!     id = wizard_id;
-<a href=#94 id=94 data-nosnippet>94</a>//!     // side_background_fn = wgt_fn!(|_| flood(colors::RED));
-<a href=#95 id=95 data-nosnippet>95</a>//!     // header_background_fn = wgt_fn!(|_| flood(colors::BLUE));
-<a href=#96 id=96 data-nosnippet>96</a>//!     pages = vec![basic_page, page];
-<a href=#97 id=97 data-nosnippet>97</a>//!     can_cancel;
-<a href=#98 id=98 data-nosnippet>98</a>//!     on_cancel = hn!(|a| {
-<a href=#99 id=99 data-nosnippet>99</a>//!         println!("Cancel!");
-<a href=#100 id=100 data-nosnippet>100</a>//!         WINDOW.close();
-<a href=#101 id=101 data-nosnippet>101</a>//!     });
-<a href=#102 id=102 data-nosnippet>102</a>//!     finish_cmd_name = "Apply";
-<a href=#103 id=103 data-nosnippet>103</a>//!     can_finish;
-<a href=#104 id=104 data-nosnippet>104</a>//!     on_finish = hn!(|a| {
-<a href=#105 id=105 data-nosnippet>105</a>//!         println!("Finish!");
-<a href=#106 id=106 data-nosnippet>106</a>//!         WINDOW.close();
-<a href=#107 id=107 data-nosnippet>107</a>//!     });
-<a href=#108 id=108 data-nosnippet>108</a>//! }
-<a href=#109 id=109 data-nosnippet>109</a>//! # ;
-<a href=#110 id=110 data-nosnippet>110</a>//! ```
-<a href=#111 id=111 data-nosnippet>111</a>//!
-<a href=#112 id=112 data-nosnippet>112</a>//! # Full API
-<a href=#113 id=113 data-nosnippet>113</a>//!
-<a href=#114 id=114 data-nosnippet>114</a>//! See [`zng_wgt_wizard`] for the full API.
-<a href=#115 id=115 data-nosnippet>115</a>
-<a href=#116 id=116 data-nosnippet>116</a></span><span class="kw">pub use </span>zng_wgt_wizard::{
-<a href=#117 id=117 data-nosnippet>117</a>    BACK_CMD, CANCEL_CMD, ContentFnArgs, FINISH_CMD, FooterFnArgs, HeaderFnArgs, NEXT_CMD, Page, PageArgs, PanelFnArgs, SideFnArgs, Wizard,
-<a href=#118 id=118 data-nosnippet>118</a>    content_fn, footer_extra_fn, footer_fn, header_background_fn, header_fn, panel_fn, side_background_fn, side_extra_fn, side_fn,
-<a href=#119 id=119 data-nosnippet>119</a>};
+<a href=#91 id=91 data-nosnippet>91</a>//! # fn some_status_page() -&gt; wizard::Page { wizard::Page::nil() }
+<a href=#92 id=92 data-nosnippet>92</a>//! # async fn some_task() { task::deadline(500.ms()).await }
+<a href=#93 id=93 data-nosnippet>93</a>//! # fn some_results_page() -&gt; wizard::Page { wizard::Page::nil() }
+<a href=#94 id=94 data-nosnippet>94</a>//! # let _ =
+<a href=#95 id=95 data-nosnippet>95</a>//! Wizard! {
+<a href=#96 id=96 data-nosnippet>96</a>//!     id = wizard_id;
+<a href=#97 id=97 data-nosnippet>97</a>//!     // side_background_fn = wgt_fn!(|_| flood(colors::RED));
+<a href=#98 id=98 data-nosnippet>98</a>//!     // header_background_fn = wgt_fn!(|_| flood(colors::BLUE));
+<a href=#99 id=99 data-nosnippet>99</a>//!     pages = vec![basic_page, page];
+<a href=#100 id=100 data-nosnippet>100</a>//!     can_cancel;
+<a href=#101 id=101 data-nosnippet>101</a>//!     on_cancel = hn!(|a| {
+<a href=#102 id=102 data-nosnippet>102</a>//!         println!("Cancel!");
+<a href=#103 id=103 data-nosnippet>103</a>//!         WINDOW.close();
+<a href=#104 id=104 data-nosnippet>104</a>//!     });
+<a href=#105 id=105 data-nosnippet>105</a>//!     begin_cmd_name = "Apply";
+<a href=#106 id=106 data-nosnippet>106</a>//!     can_begin;
+<a href=#107 id=107 data-nosnippet>107</a>//!     on_begin = async_hn!(|a| {
+<a href=#108 id=108 data-nosnippet>108</a>//!         // go to custom page
+<a href=#109 id=109 data-nosnippet>109</a>//!         WIZARD.selected_page().set(some_status_page());
+<a href=#110 id=110 data-nosnippet>110</a>//!         // run task
+<a href=#111 id=111 data-nosnippet>111</a>//!         some_task().await;
+<a href=#112 id=112 data-nosnippet>112</a>//!         // go to results page with the finish button
+<a href=#113 id=113 data-nosnippet>113</a>//!         WIZARD.selected_page().set(some_results_page());
+<a href=#114 id=114 data-nosnippet>114</a>//!     });
+<a href=#115 id=115 data-nosnippet>115</a>//!     on_finish = hn!(|a| {
+<a href=#116 id=116 data-nosnippet>116</a>//!         println!("Finish!");
+<a href=#117 id=117 data-nosnippet>117</a>//!         WINDOW.close();
+<a href=#118 id=118 data-nosnippet>118</a>//!     });
+<a href=#119 id=119 data-nosnippet>119</a>//! }
+<a href=#120 id=120 data-nosnippet>120</a>//! # ;
+<a href=#121 id=121 data-nosnippet>121</a>//! ```
+<a href=#122 id=122 data-nosnippet>122</a>//!
+<a href=#123 id=123 data-nosnippet>123</a>//! # Full API
+<a href=#124 id=124 data-nosnippet>124</a>//!
+<a href=#125 id=125 data-nosnippet>125</a>//! See [`zng_wgt_wizard`] for the full API.
+<a href=#126 id=126 data-nosnippet>126</a>
+<a href=#127 id=127 data-nosnippet>127</a></span><span class="kw">pub use </span>zng_wgt_wizard::{
+<a href=#128 id=128 data-nosnippet>128</a>    BACK_CMD, BEGIN_CMD, CANCEL_CMD, ContentFnArgs, FINISH_CMD, FooterFnArgs, HeaderFnArgs, NEXT_CMD, Page, PageArgs, PanelFnArgs,
+<a href=#129 id=129 data-nosnippet>129</a>    SideFnArgs, WIZARD, Wizard, content_fn, footer_extra_fn, footer_fn, header_background_fn, header_fn, panel_fn, side_background_fn,
+<a href=#130 id=130 data-nosnippet>130</a>    side_extra_fn, side_fn,
+<a href=#131 id=131 data-nosnippet>131</a>};
 </code></pre></div></section></main></body></html>
