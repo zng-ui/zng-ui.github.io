@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["EulaTxt"],"struct":["EulaPage","FinishAction","FinishPage","InstallDirPage","StatusPage","StatusTaskInfoFnArgs","TaskInfo","WelcomePage"]};
+window.SIDEBAR_ITEMS = {"enum":["EulaTxt"],"struct":["EulaPage","FailedPage","FailedTaskInfoFnArgs","FinishAction","FinishPage","InstallDirPage","StatusPage","StatusTaskInfoFnArgs","TaskInfo","WelcomePage"]};

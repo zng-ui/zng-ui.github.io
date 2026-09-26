@@ -92,17 +92,17 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#56 id=56 data-nosnippet>56</a>        EVENTS_SV.read().commands.clone()
 <a href=#57 id=57 data-nosnippet>57</a>    }
 <a href=#58 id=58 data-nosnippet>58</a>
-<a href=#59 id=59 data-nosnippet>59</a>    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>register_command(<span class="kw-2">&amp;</span><span class="self">self</span>, cmd: Command) {
-<a href=#60 id=60 data-nosnippet>60</a>        <span class="macro">tracing::trace!</span>(<span class="string">"register {cmd:?}"</span>);
+<a href=#59 id=59 data-nosnippet>59</a>    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>register_command(<span class="kw-2">&amp;</span><span class="self">self</span>, cmd: Command, static_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) {
+<a href=#60 id=60 data-nosnippet>60</a>        <span class="macro">tracing::trace!</span>(<span class="string">"register {static_name}"</span>);
 <a href=#61 id=61 data-nosnippet>61</a>        UPDATES.once_update(<span class="string">"register_command"</span>, <span class="kw">move </span>|| {
 <a href=#62 id=62 data-nosnippet>62</a>            <span class="kw">let </span><span class="kw-2">mut </span>ev = EVENTS_SV.write();
 <a href=#63 id=63 data-nosnippet>63</a>            <span class="kw">if </span>!ev.commands.insert(cmd) {
-<a href=#64 id=64 data-nosnippet>64</a>                <span class="macro">tracing::error!</span>(<span class="string">"command `{cmd:?}` is already registered"</span>);
+<a href=#64 id=64 data-nosnippet>64</a>                <span class="macro">tracing::error!</span>(<span class="string">"command `{static_name}` is already registered"</span>);
 <a href=#65 id=65 data-nosnippet>65</a>            }
 <a href=#66 id=66 data-nosnippet>66</a>        });
 <a href=#67 id=67 data-nosnippet>67</a>    }
-<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>unregister_command(<span class="kw-2">&amp;</span><span class="self">self</span>, cmd: Command) {
-<a href=#69 id=69 data-nosnippet>69</a>        <span class="macro">tracing::trace!</span>(<span class="string">"unregister {cmd:?}"</span>);
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">fn </span>unregister_command(<span class="kw-2">&amp;</span><span class="self">self</span>, cmd: Command, static_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str) {
+<a href=#69 id=69 data-nosnippet>69</a>        <span class="macro">tracing::trace!</span>(<span class="string">"unregister {static_name}"</span>);
 <a href=#70 id=70 data-nosnippet>70</a>        UPDATES.once_update(<span class="string">"unregister_command"</span>, <span class="kw">move </span>|| {
 <a href=#71 id=71 data-nosnippet>71</a>            EVENTS_SV.write().commands.remove(<span class="kw-2">&amp;</span>cmd);
 <a href=#72 id=72 data-nosnippet>72</a>        });
