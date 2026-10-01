@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["main"],"macro":[["fatal",1]],"mod":["local"],"struct":["Cli"]};

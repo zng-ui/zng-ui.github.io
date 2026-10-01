@@ -1,0 +1,9 @@
+(function() {
+    const implementors = Object.fromEntries([["zng_ext_setup",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a> for <a class=\"struct\" href=\"zng_ext_setup/struct.SfxReadBlocking.html\" title=\"struct zng_ext_setup::SfxReadBlocking\">SfxReadBlocking</a>",0]]],["zng_task",[["impl <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a> for <a class=\"enum\" href=\"zng_task/channel/enum.IpcReadBlocking.html\" title=\"enum zng_task::channel::IpcReadBlocking\">IpcReadBlocking</a>",0],["impl&lt;S&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a> for <a class=\"struct\" href=\"zng_task/io/struct.ReadLimited.html\" title=\"struct zng_task::io::ReadLimited\">ReadLimited</a>&lt;S&gt;<div class=\"where\">where\n    S: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a>,</div>",0],["impl&lt;T: <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a>&gt; <a class=\"trait\" href=\"https://doc.rust-lang.org/1.99.0/alloc/io/read/trait.Read.html\" title=\"trait alloc::io::read::Read\">Read</a> for <a class=\"struct\" href=\"zng_task/io/struct.Measure.html\" title=\"struct zng_task::io::Measure\">Measure</a>&lt;T&gt;",0]]]]);
+    if (window.register_implementors) {
+        window.register_implementors(implementors);
+    } else {
+        window.pending_implementors = implementors;
+    }
+})()
+//{"start":59,"fragment_lengths":[311,1204]}

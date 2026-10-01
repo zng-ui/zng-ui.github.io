@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["translate"],"struct":["Choice","InvalidResponse","Message","OpenAiRequest","OpenAiResponse"]};
