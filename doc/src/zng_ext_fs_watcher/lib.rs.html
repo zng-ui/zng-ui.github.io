@@ -1394,9 +1394,9 @@
 <a href=#1394 id=1394 data-nosnippet>1394</a>    </span>}
 <a href=#1395 id=1395 data-nosnippet>1395</a>
 <a href=#1396 id=1396 data-nosnippet>1396</a>    <span class="doccomment">/// If the change affects any path matched by the glob pattern.
-<a href=#1397 id=1397 data-nosnippet>1397</a>    </span><span class="kw">pub fn </span>is_for_glob(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: <span class="kw-2">&amp;</span>glob::Pattern) -&gt; bool {
+<a href=#1397 id=1397 data-nosnippet>1397</a>    </span><span class="kw">pub fn </span>is_for_glob(<span class="kw-2">&amp;</span><span class="self">self</span>, pattern: <span class="kw-2">&amp;</span>globset::GlobMatcher) -&gt; bool {
 <a href=#1398 id=1398 data-nosnippet>1398</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(ev) = <span class="kw-2">&amp;</span><span class="self">self</span>.event {
-<a href=#1399 id=1399 data-nosnippet>1399</a>            <span class="kw">return </span>ev.paths.iter().any(|p| pattern.matches_path(p));
+<a href=#1399 id=1399 data-nosnippet>1399</a>            <span class="kw">return </span>ev.paths.iter().any(|p| pattern.is_match(p));
 <a href=#1400 id=1400 data-nosnippet>1400</a>        }
 <a href=#1401 id=1401 data-nosnippet>1401</a>        <span class="bool-val">false
 <a href=#1402 id=1402 data-nosnippet>1402</a>    </span>}
@@ -1445,8 +1445,8 @@
 <a href=#1445 id=1445 data-nosnippet>1445</a>    }
 <a href=#1446 id=1446 data-nosnippet>1446</a>
 <a href=#1447 id=1447 data-nosnippet>1447</a>    <span class="doccomment">/// Iterate over all changes that affects paths selected by the `glob` pattern.
-<a href=#1448 id=1448 data-nosnippet>1448</a>    </span><span class="kw">pub fn </span>changes_for(<span class="kw-2">&amp;</span><span class="self">self</span>, glob: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>FsChange&gt; + <span class="lifetime">'_</span>, glob::PatternError&gt; {
-<a href=#1449 id=1449 data-nosnippet>1449</a>        <span class="kw">let </span>glob = glob::Pattern::new(glob)<span class="question-mark">?</span>;
+<a href=#1448 id=1448 data-nosnippet>1448</a>    </span><span class="kw">pub fn </span>changes_for(<span class="kw-2">&amp;</span><span class="self">self</span>, glob: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>FsChange&gt; + <span class="lifetime">'_</span>, globset::Error&gt; {
+<a href=#1449 id=1449 data-nosnippet>1449</a>        <span class="kw">let </span>glob = globset::Glob::new(glob)<span class="question-mark">?</span>.compile_matcher();
 <a href=#1450 id=1450 data-nosnippet>1450</a>        <span class="prelude-val">Ok</span>(<span class="self">self</span>.changes.iter().filter(<span class="kw">move </span>|c| c.is_for_glob(<span class="kw-2">&amp;</span>glob)))
 <a href=#1451 id=1451 data-nosnippet>1451</a>    }
 <a href=#1452 id=1452 data-nosnippet>1452</a>
@@ -1456,9 +1456,9 @@
 <a href=#1456 id=1456 data-nosnippet>1456</a>    }
 <a href=#1457 id=1457 data-nosnippet>1457</a>
 <a href=#1458 id=1458 data-nosnippet>1458</a>    <span class="doccomment">/// Iterate over all change events that affects that are equal to `path` or inside it.
-<a href=#1459 id=1459 data-nosnippet>1459</a>    </span><span class="kw">pub fn </span>events_for(<span class="kw-2">&amp;</span><span class="self">self</span>, glob: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>fs_event::Event&gt; + <span class="lifetime">'_</span>, glob::PatternError&gt; {
-<a href=#1460 id=1460 data-nosnippet>1460</a>        <span class="kw">let </span>glob = glob::Pattern::new(glob)<span class="question-mark">?</span>;
-<a href=#1461 id=1461 data-nosnippet>1461</a>        <span class="prelude-val">Ok</span>(<span class="self">self</span>.events().filter(<span class="kw">move </span>|ev| ev.paths.iter().any(|p| glob.matches_path(p))))
+<a href=#1459 id=1459 data-nosnippet>1459</a>    </span><span class="kw">pub fn </span>events_for(<span class="kw-2">&amp;</span><span class="self">self</span>, glob: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="kw">impl </span>Iterator&lt;Item = <span class="kw-2">&amp;</span>fs_event::Event&gt; + <span class="lifetime">'_</span>, globset::Error&gt; {
+<a href=#1460 id=1460 data-nosnippet>1460</a>        <span class="kw">let </span>glob = globset::Glob::new(glob)<span class="question-mark">?</span>.compile_matcher();
+<a href=#1461 id=1461 data-nosnippet>1461</a>        <span class="prelude-val">Ok</span>(<span class="self">self</span>.events().filter(<span class="kw">move </span>|ev| ev.paths.iter().any(|p| glob.is_match(p))))
 <a href=#1462 id=1462 data-nosnippet>1462</a>    }
 <a href=#1463 id=1463 data-nosnippet>1463</a>
 <a href=#1464 id=1464 data-nosnippet>1464</a>    <span class="doccomment">/// Iterate over all change events that affects paths that are equal to `path` or inside it.

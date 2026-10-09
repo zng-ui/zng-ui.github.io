@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["SFXF_HELP"],"fn":["sfxf"]};

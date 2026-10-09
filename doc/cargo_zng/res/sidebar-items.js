@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["build","canonicalize","display_tool_path","run","source_to_target_pass","target_to_target_pass","tool_help","tools_help"],"mod":["about","built_in","tool"],"struct":["ResArgs"]};
+window.SIDEBAR_ITEMS = {"fn":["build","canonicalize","display_tool_path","run","source_to_target_pass","take_tool","target_to_target_pass","tool_help","tools_help","z_passes"],"mod":["about","built_in","tool","upgrade"],"struct":["ResArgs"]};

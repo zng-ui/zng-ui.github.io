@@ -2828,7 +2828,7 @@
 <a href=#2828 id=2828 data-nosnippet>2828</a>                    <span class="self">self</span>.push_glyph_raster(glyphs_i <span class="kw">as _</span>, img);
 <a href=#2829 id=2829 data-nosnippet>2829</a>                } <span class="kw">else if </span><span class="macro">cfg!</span>(feature = <span class="string">"svg"</span>)
 <a href=#2830 id=2830 data-nosnippet>2830</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Ok</span>(img) = ttf.svg()
-<a href=#2831 id=2831 data-nosnippet>2831</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(img)) = img.glyph_data(id)
+<a href=#2831 id=2831 data-nosnippet>2831</a>                    &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(img) = img.glyph_data(id)
 <a href=#2832 id=2832 data-nosnippet>2832</a>                {
 <a href=#2833 id=2833 data-nosnippet>2833</a>                    <span class="self">self</span>.push_glyph_svg(glyphs_i <span class="kw">as _</span>, img);
 <a href=#2834 id=2834 data-nosnippet>2834</a>                }
@@ -4307,16 +4307,16 @@
 <a href=#4307 id=4307 data-nosnippet>4307</a>}
 <a href=#4308 id=4308 data-nosnippet>4308</a>
 <a href=#4309 id=4309 data-nosnippet>4309</a><span class="kw">impl </span>Font {
-<a href=#4310 id=4310 data-nosnippet>4310</a>    <span class="kw">fn </span>buffer_segment(<span class="kw-2">&amp;</span><span class="self">self</span>, segment: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey) -&gt; harfrust::UnicodeBuffer {
-<a href=#4311 id=4311 data-nosnippet>4311</a>        <span class="kw">let </span><span class="kw-2">mut </span>buffer = harfrust::UnicodeBuffer::new();
+<a href=#4310 id=4310 data-nosnippet>4310</a>    <span class="kw">fn </span>buffer_segment(<span class="kw-2">&amp;</span><span class="self">self</span>, segment: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey) -&gt; harfrust::Buffer {
+<a href=#4311 id=4311 data-nosnippet>4311</a>        <span class="kw">let </span><span class="kw-2">mut </span>buffer = harfrust::Buffer::new();
 <a href=#4312 id=4312 data-nosnippet>4312</a>        buffer.set_direction(key.harfbuzz_direction());
-<a href=#4313 id=4313 data-nosnippet>4313</a>        buffer.set_cluster_level(harfrust::BufferClusterLevel::MonotoneCharacters);
+<a href=#4313 id=4313 data-nosnippet>4313</a>        buffer.set_cluster_level(harfrust::ClusterLevel::MonotoneCharacters);
 <a href=#4314 id=4314 data-nosnippet>4314</a>
 <a href=#4315 id=4315 data-nosnippet>4315</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(lang) = key.harfbuzz_lang() {
-<a href=#4316 id=4316 data-nosnippet>4316</a>            buffer.set_language(lang);
+<a href=#4316 id=4316 data-nosnippet>4316</a>            buffer.set_language(<span class="prelude-val">Some</span>(lang));
 <a href=#4317 id=4317 data-nosnippet>4317</a>        }
 <a href=#4318 id=4318 data-nosnippet>4318</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(script) = key.harfbuzz_script() {
-<a href=#4319 id=4319 data-nosnippet>4319</a>            buffer.set_script(script);
+<a href=#4319 id=4319 data-nosnippet>4319</a>            buffer.set_script(<span class="prelude-val">Some</span>(script));
 <a href=#4320 id=4320 data-nosnippet>4320</a>        }
 <a href=#4321 id=4321 data-nosnippet>4321</a>
 <a href=#4322 id=4322 data-nosnippet>4322</a>        buffer.push_str(segment);
@@ -4324,576 +4324,583 @@
 <a href=#4324 id=4324 data-nosnippet>4324</a>    }
 <a href=#4325 id=4325 data-nosnippet>4325</a>
 <a href=#4326 id=4326 data-nosnippet>4326</a>    <span class="kw">fn </span>shape_segment_no_cache(<span class="kw-2">&amp;</span><span class="self">self</span>, seg: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey, features: <span class="kw-2">&amp;</span>[harfrust::Feature]) -&gt; ShapedSegmentData {
-<a href=#4327 id=4327 data-nosnippet>4327</a>        <span class="kw">let </span>buffer = <span class="kw">if let </span><span class="prelude-val">Some</span>(font) = <span class="self">self</span>.face().raw()
-<a href=#4328 id=4328 data-nosnippet>4328</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(shaper_data) = <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>.shaper_cache
-<a href=#4329 id=4329 data-nosnippet>4329</a>        {
-<a href=#4330 id=4330 data-nosnippet>4330</a>            <span class="kw">let </span>buffer = <span class="self">self</span>.buffer_segment(seg, key);
-<a href=#4331 id=4331 data-nosnippet>4331</a>            <span class="kw">let </span>shaper_builder = shaper_data.shaper(<span class="kw-2">&amp;</span>font);
-<a href=#4332 id=4332 data-nosnippet>4332</a>            <span class="kw">let </span>shaper = shaper_builder.build();
-<a href=#4333 id=4333 data-nosnippet>4333</a>            shaper.shape(buffer, harfrust::ShapeOptions::new().features(features))
-<a href=#4334 id=4334 data-nosnippet>4334</a>        } <span class="kw">else </span>{
-<a href=#4335 id=4335 data-nosnippet>4335</a>            <span class="kw">return </span>ShapedSegmentData {
-<a href=#4336 id=4336 data-nosnippet>4336</a>                glyphs: <span class="macro">vec!</span>[],
-<a href=#4337 id=4337 data-nosnippet>4337</a>                x_advance: <span class="number">0.0</span>,
-<a href=#4338 id=4338 data-nosnippet>4338</a>                y_advance: <span class="number">0.0</span>,
-<a href=#4339 id=4339 data-nosnippet>4339</a>            };
-<a href=#4340 id=4340 data-nosnippet>4340</a>        };
-<a href=#4341 id=4341 data-nosnippet>4341</a>
-<a href=#4342 id=4342 data-nosnippet>4342</a>        <span class="kw">let </span>size_scale = <span class="self">self</span>.<span class="number">0</span>.size.<span class="number">0 </span><span class="kw">as </span>f32 / <span class="self">self</span>.<span class="number">0</span>.metrics.units_per_em <span class="kw">as </span>f32;
-<a href=#4343 id=4343 data-nosnippet>4343</a>        <span class="kw">let </span>to_layout = |p: i32| p <span class="kw">as </span>f32 * size_scale;
-<a href=#4344 id=4344 data-nosnippet>4344</a>
-<a href=#4345 id=4345 data-nosnippet>4345</a>        <span class="kw">let </span><span class="kw-2">mut </span>w_x_advance = <span class="number">0.0</span>;
-<a href=#4346 id=4346 data-nosnippet>4346</a>        <span class="kw">let </span><span class="kw-2">mut </span>w_y_advance = <span class="number">0.0</span>;
-<a href=#4347 id=4347 data-nosnippet>4347</a>
-<a href=#4348 id=4348 data-nosnippet>4348</a>        <span class="kw">let </span>glyphs: Vec&lt;<span class="kw">_</span>&gt; = buffer
-<a href=#4349 id=4349 data-nosnippet>4349</a>            .glyph_infos()
-<a href=#4350 id=4350 data-nosnippet>4350</a>            .iter()
-<a href=#4351 id=4351 data-nosnippet>4351</a>            .zip(buffer.glyph_positions())
-<a href=#4352 id=4352 data-nosnippet>4352</a>            .map(|(i, p)| {
-<a href=#4353 id=4353 data-nosnippet>4353</a>                <span class="kw">let </span>x_offset = to_layout(p.x_offset);
-<a href=#4354 id=4354 data-nosnippet>4354</a>                <span class="kw">let </span>y_offset = -to_layout(p.y_offset);
-<a href=#4355 id=4355 data-nosnippet>4355</a>                <span class="kw">let </span>x_advance = to_layout(p.x_advance);
-<a href=#4356 id=4356 data-nosnippet>4356</a>                <span class="kw">let </span>y_advance = to_layout(p.y_advance);
-<a href=#4357 id=4357 data-nosnippet>4357</a>
-<a href=#4358 id=4358 data-nosnippet>4358</a>                <span class="kw">let </span>point = (w_x_advance + x_offset, w_y_advance + y_offset);
-<a href=#4359 id=4359 data-nosnippet>4359</a>                w_x_advance += x_advance;
-<a href=#4360 id=4360 data-nosnippet>4360</a>                w_y_advance += y_advance;
-<a href=#4361 id=4361 data-nosnippet>4361</a>
-<a href=#4362 id=4362 data-nosnippet>4362</a>                ShapedGlyph {
-<a href=#4363 id=4363 data-nosnippet>4363</a>                    index: i.glyph_id,
-<a href=#4364 id=4364 data-nosnippet>4364</a>                    cluster: i.cluster,
-<a href=#4365 id=4365 data-nosnippet>4365</a>                    point,
-<a href=#4366 id=4366 data-nosnippet>4366</a>                }
-<a href=#4367 id=4367 data-nosnippet>4367</a>            })
-<a href=#4368 id=4368 data-nosnippet>4368</a>            .collect();
-<a href=#4369 id=4369 data-nosnippet>4369</a>
-<a href=#4370 id=4370 data-nosnippet>4370</a>        ShapedSegmentData {
-<a href=#4371 id=4371 data-nosnippet>4371</a>            glyphs,
-<a href=#4372 id=4372 data-nosnippet>4372</a>            x_advance: w_x_advance,
-<a href=#4373 id=4373 data-nosnippet>4373</a>            y_advance: w_y_advance,
-<a href=#4374 id=4374 data-nosnippet>4374</a>        }
-<a href=#4375 id=4375 data-nosnippet>4375</a>    }
+<a href=#4327 id=4327 data-nosnippet>4327</a>        <span class="kw">let </span>buffer = <span class="kw">if let </span><span class="prelude-val">Some</span>(font) = <span class="self">self</span>.face().harfrust_raw() {
+<a href=#4328 id=4328 data-nosnippet>4328</a>            <span class="kw">let </span><span class="kw-2">mut </span>buffer = <span class="self">self</span>.buffer_segment(seg, key);
+<a href=#4329 id=4329 data-nosnippet>4329</a>            <span class="kw">let </span>shaper = harfrust::ShaperFont::new(font);
+<a href=#4330 id=4330 data-nosnippet>4330</a>            <span class="kw">match </span>harfrust::shape(<span class="kw-2">&amp;</span>shaper, <span class="kw-2">&amp;mut </span>buffer, harfrust::ShapeOptions::new().features(features)) {
+<a href=#4331 id=4331 data-nosnippet>4331</a>                <span class="prelude-val">Ok</span>(()) =&gt; buffer,
+<a href=#4332 id=4332 data-nosnippet>4332</a>                <span class="prelude-val">Err</span>(e) =&gt; {
+<a href=#4333 id=4333 data-nosnippet>4333</a>                    <span class="macro">tracing::error!</span>(<span class="string">"shaper error, {e}"</span>);
+<a href=#4334 id=4334 data-nosnippet>4334</a>                    <span class="kw">return </span>ShapedSegmentData {
+<a href=#4335 id=4335 data-nosnippet>4335</a>                        glyphs: <span class="macro">vec!</span>[],
+<a href=#4336 id=4336 data-nosnippet>4336</a>                        x_advance: <span class="number">0.0</span>,
+<a href=#4337 id=4337 data-nosnippet>4337</a>                        y_advance: <span class="number">0.0</span>,
+<a href=#4338 id=4338 data-nosnippet>4338</a>                    };
+<a href=#4339 id=4339 data-nosnippet>4339</a>                }
+<a href=#4340 id=4340 data-nosnippet>4340</a>            }
+<a href=#4341 id=4341 data-nosnippet>4341</a>        } <span class="kw">else </span>{
+<a href=#4342 id=4342 data-nosnippet>4342</a>            <span class="kw">return </span>ShapedSegmentData {
+<a href=#4343 id=4343 data-nosnippet>4343</a>                glyphs: <span class="macro">vec!</span>[],
+<a href=#4344 id=4344 data-nosnippet>4344</a>                x_advance: <span class="number">0.0</span>,
+<a href=#4345 id=4345 data-nosnippet>4345</a>                y_advance: <span class="number">0.0</span>,
+<a href=#4346 id=4346 data-nosnippet>4346</a>            };
+<a href=#4347 id=4347 data-nosnippet>4347</a>        };
+<a href=#4348 id=4348 data-nosnippet>4348</a>
+<a href=#4349 id=4349 data-nosnippet>4349</a>        <span class="kw">let </span>size_scale = <span class="self">self</span>.<span class="number">0</span>.size.<span class="number">0 </span><span class="kw">as </span>f32 / <span class="self">self</span>.<span class="number">0</span>.metrics.units_per_em <span class="kw">as </span>f32;
+<a href=#4350 id=4350 data-nosnippet>4350</a>        <span class="kw">let </span>to_layout = |p: i32| p <span class="kw">as </span>f32 * size_scale;
+<a href=#4351 id=4351 data-nosnippet>4351</a>
+<a href=#4352 id=4352 data-nosnippet>4352</a>        <span class="kw">let </span><span class="kw-2">mut </span>w_x_advance = <span class="number">0.0</span>;
+<a href=#4353 id=4353 data-nosnippet>4353</a>        <span class="kw">let </span><span class="kw-2">mut </span>w_y_advance = <span class="number">0.0</span>;
+<a href=#4354 id=4354 data-nosnippet>4354</a>
+<a href=#4355 id=4355 data-nosnippet>4355</a>        <span class="kw">let </span>glyphs: Vec&lt;<span class="kw">_</span>&gt; = buffer
+<a href=#4356 id=4356 data-nosnippet>4356</a>            .glyph_infos()
+<a href=#4357 id=4357 data-nosnippet>4357</a>            .iter()
+<a href=#4358 id=4358 data-nosnippet>4358</a>            .zip(buffer.glyph_positions())
+<a href=#4359 id=4359 data-nosnippet>4359</a>            .map(|(i, p)| {
+<a href=#4360 id=4360 data-nosnippet>4360</a>                <span class="kw">let </span>x_offset = to_layout(p.x_offset);
+<a href=#4361 id=4361 data-nosnippet>4361</a>                <span class="kw">let </span>y_offset = -to_layout(p.y_offset);
+<a href=#4362 id=4362 data-nosnippet>4362</a>                <span class="kw">let </span>x_advance = to_layout(p.x_advance);
+<a href=#4363 id=4363 data-nosnippet>4363</a>                <span class="kw">let </span>y_advance = to_layout(p.y_advance);
+<a href=#4364 id=4364 data-nosnippet>4364</a>
+<a href=#4365 id=4365 data-nosnippet>4365</a>                <span class="kw">let </span>point = (w_x_advance + x_offset, w_y_advance + y_offset);
+<a href=#4366 id=4366 data-nosnippet>4366</a>                w_x_advance += x_advance;
+<a href=#4367 id=4367 data-nosnippet>4367</a>                w_y_advance += y_advance;
+<a href=#4368 id=4368 data-nosnippet>4368</a>
+<a href=#4369 id=4369 data-nosnippet>4369</a>                ShapedGlyph {
+<a href=#4370 id=4370 data-nosnippet>4370</a>                    index: i.glyph_id,
+<a href=#4371 id=4371 data-nosnippet>4371</a>                    cluster: i.cluster,
+<a href=#4372 id=4372 data-nosnippet>4372</a>                    point,
+<a href=#4373 id=4373 data-nosnippet>4373</a>                }
+<a href=#4374 id=4374 data-nosnippet>4374</a>            })
+<a href=#4375 id=4375 data-nosnippet>4375</a>            .collect();
 <a href=#4376 id=4376 data-nosnippet>4376</a>
-<a href=#4377 id=4377 data-nosnippet>4377</a>    <span class="kw">fn </span>shape_segment&lt;R&gt;(
-<a href=#4378 id=4378 data-nosnippet>4378</a>        <span class="kw-2">&amp;</span><span class="self">self</span>,
-<a href=#4379 id=4379 data-nosnippet>4379</a>        seg: <span class="kw-2">&amp;</span>str,
-<a href=#4380 id=4380 data-nosnippet>4380</a>        word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
-<a href=#4381 id=4381 data-nosnippet>4381</a>        features: <span class="kw-2">&amp;</span>[harfrust::Feature],
-<a href=#4382 id=4382 data-nosnippet>4382</a>        out: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>ShapedSegmentData) -&gt; R,
-<a href=#4383 id=4383 data-nosnippet>4383</a>    ) -&gt; R {
-<a href=#4384 id=4384 data-nosnippet>4384</a>        <span class="kw">if </span>!(<span class="number">1</span>..=WORD_CACHE_MAX_LEN).contains(<span class="kw-2">&amp;</span>seg.len()) || <span class="self">self</span>.face().is_empty() {
-<a href=#4385 id=4385 data-nosnippet>4385</a>            <span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
-<a href=#4386 id=4386 data-nosnippet>4386</a>            out(<span class="kw-2">&amp;</span>seg)
-<a href=#4387 id=4387 data-nosnippet>4387</a>        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(small) = <span class="self">Self</span>::to_small_word(seg) {
-<a href=#4388 id=4388 data-nosnippet>4388</a>            <span class="comment">// try cached
-<a href=#4389 id=4389 data-nosnippet>4389</a>            </span><span class="kw">let </span>cache = <span class="self">self</span>.<span class="number">0</span>.small_word_cache.read();
-<a href=#4390 id=4390 data-nosnippet>4390</a>
-<a href=#4391 id=4391 data-nosnippet>4391</a>            <span class="kw">let </span>hash = cache.hasher().hash_one(WordCacheKeyRef {
-<a href=#4392 id=4392 data-nosnippet>4392</a>                string: <span class="kw-2">&amp;</span>small,
-<a href=#4393 id=4393 data-nosnippet>4393</a>                ctx_key: word_ctx_key,
-<a href=#4394 id=4394 data-nosnippet>4394</a>            });
-<a href=#4395 id=4395 data-nosnippet>4395</a>
-<a href=#4396 id=4396 data-nosnippet>4396</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, seg)) = cache
-<a href=#4397 id=4397 data-nosnippet>4397</a>                .raw_entry()
-<a href=#4398 id=4398 data-nosnippet>4398</a>                .from_hash(hash, |e| e.string == small &amp;&amp; <span class="kw-2">&amp;</span>e.ctx_key == word_ctx_key)
-<a href=#4399 id=4399 data-nosnippet>4399</a>            {
-<a href=#4400 id=4400 data-nosnippet>4400</a>                <span class="kw">return </span>out(seg);
-<a href=#4401 id=4401 data-nosnippet>4401</a>            }
-<a href=#4402 id=4402 data-nosnippet>4402</a>            drop(cache);
-<a href=#4403 id=4403 data-nosnippet>4403</a>
-<a href=#4404 id=4404 data-nosnippet>4404</a>            <span class="comment">// shape and cache, can end-up shaping the same word here, but that is better then write locking
-<a href=#4405 id=4405 data-nosnippet>4405</a>            </span><span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
-<a href=#4406 id=4406 data-nosnippet>4406</a>            <span class="kw">let </span>key = WordCacheKey {
-<a href=#4407 id=4407 data-nosnippet>4407</a>                string: small,
-<a href=#4408 id=4408 data-nosnippet>4408</a>                ctx_key: word_ctx_key.clone(),
-<a href=#4409 id=4409 data-nosnippet>4409</a>            };
-<a href=#4410 id=4410 data-nosnippet>4410</a>            <span class="kw">let </span>r = out(<span class="kw-2">&amp;</span>seg);
-<a href=#4411 id=4411 data-nosnippet>4411</a>            <span class="kw">let </span><span class="kw-2">mut </span>cache = <span class="self">self</span>.<span class="number">0</span>.small_word_cache.write();
-<a href=#4412 id=4412 data-nosnippet>4412</a>            <span class="kw">if </span>cache.len() &gt; WORD_CACHE_MAX_ENTRIES {
-<a href=#4413 id=4413 data-nosnippet>4413</a>                cache.clear();
-<a href=#4414 id=4414 data-nosnippet>4414</a>            }
-<a href=#4415 id=4415 data-nosnippet>4415</a>            cache.insert(key, seg);
-<a href=#4416 id=4416 data-nosnippet>4416</a>            r
-<a href=#4417 id=4417 data-nosnippet>4417</a>        } <span class="kw">else </span>{
-<a href=#4418 id=4418 data-nosnippet>4418</a>            <span class="comment">// try cached
-<a href=#4419 id=4419 data-nosnippet>4419</a>            </span><span class="kw">let </span>cache = <span class="self">self</span>.<span class="number">0</span>.word_cache.read();
-<a href=#4420 id=4420 data-nosnippet>4420</a>
-<a href=#4421 id=4421 data-nosnippet>4421</a>            <span class="kw">let </span>hash = cache.hasher().hash_one(WordCacheKeyRef {
-<a href=#4422 id=4422 data-nosnippet>4422</a>                string: <span class="kw-2">&amp;</span>seg,
-<a href=#4423 id=4423 data-nosnippet>4423</a>                ctx_key: word_ctx_key,
-<a href=#4424 id=4424 data-nosnippet>4424</a>            });
-<a href=#4425 id=4425 data-nosnippet>4425</a>
-<a href=#4426 id=4426 data-nosnippet>4426</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, seg)) = cache
-<a href=#4427 id=4427 data-nosnippet>4427</a>                .raw_entry()
-<a href=#4428 id=4428 data-nosnippet>4428</a>                .from_hash(hash, |e| e.string.as_str() == seg &amp;&amp; <span class="kw-2">&amp;</span>e.ctx_key == word_ctx_key)
-<a href=#4429 id=4429 data-nosnippet>4429</a>            {
-<a href=#4430 id=4430 data-nosnippet>4430</a>                <span class="kw">return </span>out(seg);
-<a href=#4431 id=4431 data-nosnippet>4431</a>            }
-<a href=#4432 id=4432 data-nosnippet>4432</a>            drop(cache);
-<a href=#4433 id=4433 data-nosnippet>4433</a>
-<a href=#4434 id=4434 data-nosnippet>4434</a>            <span class="comment">// shape and cache, can end-up shaping the same word here, but that is better then write locking
-<a href=#4435 id=4435 data-nosnippet>4435</a>            </span><span class="kw">let </span>string = seg.to_owned();
-<a href=#4436 id=4436 data-nosnippet>4436</a>            <span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
-<a href=#4437 id=4437 data-nosnippet>4437</a>            <span class="kw">let </span>key = WordCacheKey {
-<a href=#4438 id=4438 data-nosnippet>4438</a>                string,
-<a href=#4439 id=4439 data-nosnippet>4439</a>                ctx_key: word_ctx_key.clone(),
-<a href=#4440 id=4440 data-nosnippet>4440</a>            };
-<a href=#4441 id=4441 data-nosnippet>4441</a>            <span class="kw">let </span>r = out(<span class="kw-2">&amp;</span>seg);
-<a href=#4442 id=4442 data-nosnippet>4442</a>            <span class="kw">let </span><span class="kw-2">mut </span>cache = <span class="self">self</span>.<span class="number">0</span>.word_cache.write();
-<a href=#4443 id=4443 data-nosnippet>4443</a>            <span class="kw">if </span>cache.len() &gt; WORD_CACHE_MAX_ENTRIES {
-<a href=#4444 id=4444 data-nosnippet>4444</a>                cache.clear();
-<a href=#4445 id=4445 data-nosnippet>4445</a>            }
-<a href=#4446 id=4446 data-nosnippet>4446</a>            cache.insert(key, seg);
-<a href=#4447 id=4447 data-nosnippet>4447</a>            r
-<a href=#4448 id=4448 data-nosnippet>4448</a>        }
-<a href=#4449 id=4449 data-nosnippet>4449</a>    }
-<a href=#4450 id=4450 data-nosnippet>4450</a>
-<a href=#4451 id=4451 data-nosnippet>4451</a>    <span class="doccomment">/// Glyph index for the space `' '` character.
-<a href=#4452 id=4452 data-nosnippet>4452</a>    </span><span class="kw">pub fn </span>space_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; GlyphIndex {
-<a href=#4453 id=4453 data-nosnippet>4453</a>        <span class="self">self</span>.shape_space().<span class="number">0
-<a href=#4454 id=4454 data-nosnippet>4454</a>    </span>}
-<a href=#4455 id=4455 data-nosnippet>4455</a>
-<a href=#4456 id=4456 data-nosnippet>4456</a>    <span class="doccomment">/// Returns the horizontal advance of the space `' '` character.
-<a href=#4457 id=4457 data-nosnippet>4457</a>    </span><span class="kw">pub fn </span>space_x_advance(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
-<a href=#4458 id=4458 data-nosnippet>4458</a>        <span class="self">self</span>.shape_space().<span class="number">1
-<a href=#4459 id=4459 data-nosnippet>4459</a>    </span>}
-<a href=#4460 id=4460 data-nosnippet>4460</a>
-<a href=#4461 id=4461 data-nosnippet>4461</a>    <span class="kw">fn </span>shape_space(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (GlyphIndex, Px) {
-<a href=#4462 id=4462 data-nosnippet>4462</a>        <span class="kw">let </span><span class="kw-2">mut </span>id = <span class="number">0</span>;
-<a href=#4463 id=4463 data-nosnippet>4463</a>        <span class="kw">let </span><span class="kw-2">mut </span>adv = <span class="number">0.0</span>;
-<a href=#4464 id=4464 data-nosnippet>4464</a>        <span class="self">self</span>.shape_segment(
-<a href=#4465 id=4465 data-nosnippet>4465</a>            <span class="string">" "</span>,
-<a href=#4466 id=4466 data-nosnippet>4466</a>            <span class="kw-2">&amp;</span>WordContextKey {
-<a href=#4467 id=4467 data-nosnippet>4467</a>                lang: unic_langid::subtags::Language::from_bytes(<span class="string">b"und"</span>).unwrap(),
-<a href=#4468 id=4468 data-nosnippet>4468</a>                script: <span class="prelude-val">None</span>,
-<a href=#4469 id=4469 data-nosnippet>4469</a>                direction: LayoutDirection::LTR,
-<a href=#4470 id=4470 data-nosnippet>4470</a>                features: Box::new([]),
-<a href=#4471 id=4471 data-nosnippet>4471</a>            },
-<a href=#4472 id=4472 data-nosnippet>4472</a>            <span class="kw-2">&amp;</span>[],
-<a href=#4473 id=4473 data-nosnippet>4473</a>            |r| {
-<a href=#4474 id=4474 data-nosnippet>4474</a>                id = r.glyphs.last().map(|g| g.index).unwrap_or(<span class="number">0</span>);
-<a href=#4475 id=4475 data-nosnippet>4475</a>                adv = r.x_advance;
-<a href=#4476 id=4476 data-nosnippet>4476</a>            },
-<a href=#4477 id=4477 data-nosnippet>4477</a>        );
-<a href=#4478 id=4478 data-nosnippet>4478</a>        (id, Px(adv <span class="kw">as _</span>))
-<a href=#4479 id=4479 data-nosnippet>4479</a>    }
-<a href=#4480 id=4480 data-nosnippet>4480</a>
-<a href=#4481 id=4481 data-nosnippet>4481</a>    <span class="doccomment">/// Calculates a [`ShapedText`].
-<a href=#4482 id=4482 data-nosnippet>4482</a>    </span><span class="kw">pub fn </span>shape_text(<span class="self">self</span>: <span class="kw-2">&amp;</span>Font, text: <span class="kw-2">&amp;</span>SegmentedText, config: <span class="kw-2">&amp;</span>TextShapingArgs) -&gt; ShapedText {
-<a href=#4483 id=4483 data-nosnippet>4483</a>        ShapedTextBuilder::shape_text(std::slice::from_ref(<span class="self">self</span>), text, config)
-<a href=#4484 id=4484 data-nosnippet>4484</a>    }
-<a href=#4485 id=4485 data-nosnippet>4485</a>
-<a href=#4486 id=4486 data-nosnippet>4486</a>    <span class="doccomment">/// Sends the sized vector path for a glyph to `sink`.
-<a href=#4487 id=4487 data-nosnippet>4487</a>    ///
-<a href=#4488 id=4488 data-nosnippet>4488</a>    /// Returns the glyph bounds if a full outline was sent to the sink.
-<a href=#4489 id=4489 data-nosnippet>4489</a>    </span><span class="kw">pub fn </span>outline(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, sink: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>OutlineSink) -&gt; <span class="prelude-ty">Option</span>&lt;PxRect&gt; {
-<a href=#4490 id=4490 data-nosnippet>4490</a>        <span class="kw">struct </span>AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
-<a href=#4491 id=4491 data-nosnippet>4491</a>            sink: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>S,
-<a href=#4492 id=4492 data-nosnippet>4492</a>            bounds: euclid::Box2D&lt;f32, Px&gt;,
-<a href=#4493 id=4493 data-nosnippet>4493</a>        }
-<a href=#4494 id=4494 data-nosnippet>4494</a>        <span class="kw">impl</span>&lt;S&gt; AdapterSink&lt;<span class="lifetime">'_</span>, S&gt; {
-<a href=#4495 id=4495 data-nosnippet>4495</a>            <span class="kw">fn </span>point(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) -&gt; euclid::Point2D&lt;f32, Px&gt; {
-<a href=#4496 id=4496 data-nosnippet>4496</a>                <span class="kw">let </span>p = euclid::point2(x, y);
-<a href=#4497 id=4497 data-nosnippet>4497</a>                <span class="self">self</span>.bounds.min = <span class="self">self</span>.bounds.min.min(p);
-<a href=#4498 id=4498 data-nosnippet>4498</a>                <span class="self">self</span>.bounds.max = <span class="self">self</span>.bounds.max.max(p);
-<a href=#4499 id=4499 data-nosnippet>4499</a>                p
-<a href=#4500 id=4500 data-nosnippet>4500</a>            }
-<a href=#4501 id=4501 data-nosnippet>4501</a>        }
-<a href=#4502 id=4502 data-nosnippet>4502</a>        <span class="kw">impl</span>&lt;S: OutlineSink&gt; skrifa::outline::OutlinePen <span class="kw">for </span>AdapterSink&lt;<span class="lifetime">'_</span>, S&gt; {
-<a href=#4503 id=4503 data-nosnippet>4503</a>            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
-<a href=#4504 id=4504 data-nosnippet>4504</a>                <span class="kw">let </span>p = <span class="self">self</span>.point(x, y);
-<a href=#4505 id=4505 data-nosnippet>4505</a>                <span class="self">self</span>.sink.move_to(p)
-<a href=#4506 id=4506 data-nosnippet>4506</a>            }
-<a href=#4507 id=4507 data-nosnippet>4507</a>
-<a href=#4508 id=4508 data-nosnippet>4508</a>            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
-<a href=#4509 id=4509 data-nosnippet>4509</a>                <span class="kw">let </span>p = <span class="self">self</span>.point(x, y);
-<a href=#4510 id=4510 data-nosnippet>4510</a>                <span class="self">self</span>.sink.line_to(p)
-<a href=#4511 id=4511 data-nosnippet>4511</a>            }
-<a href=#4512 id=4512 data-nosnippet>4512</a>
-<a href=#4513 id=4513 data-nosnippet>4513</a>            <span class="kw">fn </span>quad_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x: f32, y: f32) {
-<a href=#4514 id=4514 data-nosnippet>4514</a>                <span class="kw">let </span>ctrl = <span class="self">self</span>.point(x1, y1);
-<a href=#4515 id=4515 data-nosnippet>4515</a>                <span class="kw">let </span>to = <span class="self">self</span>.point(x, y);
-<a href=#4516 id=4516 data-nosnippet>4516</a>                <span class="self">self</span>.sink.quadratic_curve_to(ctrl, to)
-<a href=#4517 id=4517 data-nosnippet>4517</a>            }
-<a href=#4518 id=4518 data-nosnippet>4518</a>
-<a href=#4519 id=4519 data-nosnippet>4519</a>            <span class="kw">fn </span>curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
-<a href=#4520 id=4520 data-nosnippet>4520</a>                <span class="kw">let </span>l_from = <span class="self">self</span>.point(x1, y1);
-<a href=#4521 id=4521 data-nosnippet>4521</a>                <span class="kw">let </span>l_to = <span class="self">self</span>.point(x2, y2);
+<a href=#4377 id=4377 data-nosnippet>4377</a>        ShapedSegmentData {
+<a href=#4378 id=4378 data-nosnippet>4378</a>            glyphs,
+<a href=#4379 id=4379 data-nosnippet>4379</a>            x_advance: w_x_advance,
+<a href=#4380 id=4380 data-nosnippet>4380</a>            y_advance: w_y_advance,
+<a href=#4381 id=4381 data-nosnippet>4381</a>        }
+<a href=#4382 id=4382 data-nosnippet>4382</a>    }
+<a href=#4383 id=4383 data-nosnippet>4383</a>
+<a href=#4384 id=4384 data-nosnippet>4384</a>    <span class="kw">fn </span>shape_segment&lt;R&gt;(
+<a href=#4385 id=4385 data-nosnippet>4385</a>        <span class="kw-2">&amp;</span><span class="self">self</span>,
+<a href=#4386 id=4386 data-nosnippet>4386</a>        seg: <span class="kw-2">&amp;</span>str,
+<a href=#4387 id=4387 data-nosnippet>4387</a>        word_ctx_key: <span class="kw-2">&amp;</span>WordContextKey,
+<a href=#4388 id=4388 data-nosnippet>4388</a>        features: <span class="kw-2">&amp;</span>[harfrust::Feature],
+<a href=#4389 id=4389 data-nosnippet>4389</a>        out: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;</span>ShapedSegmentData) -&gt; R,
+<a href=#4390 id=4390 data-nosnippet>4390</a>    ) -&gt; R {
+<a href=#4391 id=4391 data-nosnippet>4391</a>        <span class="kw">if </span>!(<span class="number">1</span>..=WORD_CACHE_MAX_LEN).contains(<span class="kw-2">&amp;</span>seg.len()) || <span class="self">self</span>.face().is_empty() {
+<a href=#4392 id=4392 data-nosnippet>4392</a>            <span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
+<a href=#4393 id=4393 data-nosnippet>4393</a>            out(<span class="kw-2">&amp;</span>seg)
+<a href=#4394 id=4394 data-nosnippet>4394</a>        } <span class="kw">else if let </span><span class="prelude-val">Some</span>(small) = <span class="self">Self</span>::to_small_word(seg) {
+<a href=#4395 id=4395 data-nosnippet>4395</a>            <span class="comment">// try cached
+<a href=#4396 id=4396 data-nosnippet>4396</a>            </span><span class="kw">let </span>cache = <span class="self">self</span>.<span class="number">0</span>.small_word_cache.read();
+<a href=#4397 id=4397 data-nosnippet>4397</a>
+<a href=#4398 id=4398 data-nosnippet>4398</a>            <span class="kw">let </span>hash = cache.hasher().hash_one(WordCacheKeyRef {
+<a href=#4399 id=4399 data-nosnippet>4399</a>                string: <span class="kw-2">&amp;</span>small,
+<a href=#4400 id=4400 data-nosnippet>4400</a>                ctx_key: word_ctx_key,
+<a href=#4401 id=4401 data-nosnippet>4401</a>            });
+<a href=#4402 id=4402 data-nosnippet>4402</a>
+<a href=#4403 id=4403 data-nosnippet>4403</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, seg)) = cache
+<a href=#4404 id=4404 data-nosnippet>4404</a>                .raw_entry()
+<a href=#4405 id=4405 data-nosnippet>4405</a>                .from_hash(hash, |e| e.string == small &amp;&amp; <span class="kw-2">&amp;</span>e.ctx_key == word_ctx_key)
+<a href=#4406 id=4406 data-nosnippet>4406</a>            {
+<a href=#4407 id=4407 data-nosnippet>4407</a>                <span class="kw">return </span>out(seg);
+<a href=#4408 id=4408 data-nosnippet>4408</a>            }
+<a href=#4409 id=4409 data-nosnippet>4409</a>            drop(cache);
+<a href=#4410 id=4410 data-nosnippet>4410</a>
+<a href=#4411 id=4411 data-nosnippet>4411</a>            <span class="comment">// shape and cache, can end-up shaping the same word here, but that is better then write locking
+<a href=#4412 id=4412 data-nosnippet>4412</a>            </span><span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
+<a href=#4413 id=4413 data-nosnippet>4413</a>            <span class="kw">let </span>key = WordCacheKey {
+<a href=#4414 id=4414 data-nosnippet>4414</a>                string: small,
+<a href=#4415 id=4415 data-nosnippet>4415</a>                ctx_key: word_ctx_key.clone(),
+<a href=#4416 id=4416 data-nosnippet>4416</a>            };
+<a href=#4417 id=4417 data-nosnippet>4417</a>            <span class="kw">let </span>r = out(<span class="kw-2">&amp;</span>seg);
+<a href=#4418 id=4418 data-nosnippet>4418</a>            <span class="kw">let </span><span class="kw-2">mut </span>cache = <span class="self">self</span>.<span class="number">0</span>.small_word_cache.write();
+<a href=#4419 id=4419 data-nosnippet>4419</a>            <span class="kw">if </span>cache.len() &gt; WORD_CACHE_MAX_ENTRIES {
+<a href=#4420 id=4420 data-nosnippet>4420</a>                cache.clear();
+<a href=#4421 id=4421 data-nosnippet>4421</a>            }
+<a href=#4422 id=4422 data-nosnippet>4422</a>            cache.insert(key, seg);
+<a href=#4423 id=4423 data-nosnippet>4423</a>            r
+<a href=#4424 id=4424 data-nosnippet>4424</a>        } <span class="kw">else </span>{
+<a href=#4425 id=4425 data-nosnippet>4425</a>            <span class="comment">// try cached
+<a href=#4426 id=4426 data-nosnippet>4426</a>            </span><span class="kw">let </span>cache = <span class="self">self</span>.<span class="number">0</span>.word_cache.read();
+<a href=#4427 id=4427 data-nosnippet>4427</a>
+<a href=#4428 id=4428 data-nosnippet>4428</a>            <span class="kw">let </span>hash = cache.hasher().hash_one(WordCacheKeyRef {
+<a href=#4429 id=4429 data-nosnippet>4429</a>                string: <span class="kw-2">&amp;</span>seg,
+<a href=#4430 id=4430 data-nosnippet>4430</a>                ctx_key: word_ctx_key,
+<a href=#4431 id=4431 data-nosnippet>4431</a>            });
+<a href=#4432 id=4432 data-nosnippet>4432</a>
+<a href=#4433 id=4433 data-nosnippet>4433</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>((<span class="kw">_</span>, seg)) = cache
+<a href=#4434 id=4434 data-nosnippet>4434</a>                .raw_entry()
+<a href=#4435 id=4435 data-nosnippet>4435</a>                .from_hash(hash, |e| e.string.as_str() == seg &amp;&amp; <span class="kw-2">&amp;</span>e.ctx_key == word_ctx_key)
+<a href=#4436 id=4436 data-nosnippet>4436</a>            {
+<a href=#4437 id=4437 data-nosnippet>4437</a>                <span class="kw">return </span>out(seg);
+<a href=#4438 id=4438 data-nosnippet>4438</a>            }
+<a href=#4439 id=4439 data-nosnippet>4439</a>            drop(cache);
+<a href=#4440 id=4440 data-nosnippet>4440</a>
+<a href=#4441 id=4441 data-nosnippet>4441</a>            <span class="comment">// shape and cache, can end-up shaping the same word here, but that is better then write locking
+<a href=#4442 id=4442 data-nosnippet>4442</a>            </span><span class="kw">let </span>string = seg.to_owned();
+<a href=#4443 id=4443 data-nosnippet>4443</a>            <span class="kw">let </span>seg = <span class="self">self</span>.shape_segment_no_cache(seg, word_ctx_key, features);
+<a href=#4444 id=4444 data-nosnippet>4444</a>            <span class="kw">let </span>key = WordCacheKey {
+<a href=#4445 id=4445 data-nosnippet>4445</a>                string,
+<a href=#4446 id=4446 data-nosnippet>4446</a>                ctx_key: word_ctx_key.clone(),
+<a href=#4447 id=4447 data-nosnippet>4447</a>            };
+<a href=#4448 id=4448 data-nosnippet>4448</a>            <span class="kw">let </span>r = out(<span class="kw-2">&amp;</span>seg);
+<a href=#4449 id=4449 data-nosnippet>4449</a>            <span class="kw">let </span><span class="kw-2">mut </span>cache = <span class="self">self</span>.<span class="number">0</span>.word_cache.write();
+<a href=#4450 id=4450 data-nosnippet>4450</a>            <span class="kw">if </span>cache.len() &gt; WORD_CACHE_MAX_ENTRIES {
+<a href=#4451 id=4451 data-nosnippet>4451</a>                cache.clear();
+<a href=#4452 id=4452 data-nosnippet>4452</a>            }
+<a href=#4453 id=4453 data-nosnippet>4453</a>            cache.insert(key, seg);
+<a href=#4454 id=4454 data-nosnippet>4454</a>            r
+<a href=#4455 id=4455 data-nosnippet>4455</a>        }
+<a href=#4456 id=4456 data-nosnippet>4456</a>    }
+<a href=#4457 id=4457 data-nosnippet>4457</a>
+<a href=#4458 id=4458 data-nosnippet>4458</a>    <span class="doccomment">/// Glyph index for the space `' '` character.
+<a href=#4459 id=4459 data-nosnippet>4459</a>    </span><span class="kw">pub fn </span>space_index(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; GlyphIndex {
+<a href=#4460 id=4460 data-nosnippet>4460</a>        <span class="self">self</span>.shape_space().<span class="number">0
+<a href=#4461 id=4461 data-nosnippet>4461</a>    </span>}
+<a href=#4462 id=4462 data-nosnippet>4462</a>
+<a href=#4463 id=4463 data-nosnippet>4463</a>    <span class="doccomment">/// Returns the horizontal advance of the space `' '` character.
+<a href=#4464 id=4464 data-nosnippet>4464</a>    </span><span class="kw">pub fn </span>space_x_advance(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Px {
+<a href=#4465 id=4465 data-nosnippet>4465</a>        <span class="self">self</span>.shape_space().<span class="number">1
+<a href=#4466 id=4466 data-nosnippet>4466</a>    </span>}
+<a href=#4467 id=4467 data-nosnippet>4467</a>
+<a href=#4468 id=4468 data-nosnippet>4468</a>    <span class="kw">fn </span>shape_space(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; (GlyphIndex, Px) {
+<a href=#4469 id=4469 data-nosnippet>4469</a>        <span class="kw">let </span><span class="kw-2">mut </span>id = <span class="number">0</span>;
+<a href=#4470 id=4470 data-nosnippet>4470</a>        <span class="kw">let </span><span class="kw-2">mut </span>adv = <span class="number">0.0</span>;
+<a href=#4471 id=4471 data-nosnippet>4471</a>        <span class="self">self</span>.shape_segment(
+<a href=#4472 id=4472 data-nosnippet>4472</a>            <span class="string">" "</span>,
+<a href=#4473 id=4473 data-nosnippet>4473</a>            <span class="kw-2">&amp;</span>WordContextKey {
+<a href=#4474 id=4474 data-nosnippet>4474</a>                lang: unic_langid::subtags::Language::from_bytes(<span class="string">b"und"</span>).unwrap(),
+<a href=#4475 id=4475 data-nosnippet>4475</a>                script: <span class="prelude-val">None</span>,
+<a href=#4476 id=4476 data-nosnippet>4476</a>                direction: LayoutDirection::LTR,
+<a href=#4477 id=4477 data-nosnippet>4477</a>                features: Box::new([]),
+<a href=#4478 id=4478 data-nosnippet>4478</a>            },
+<a href=#4479 id=4479 data-nosnippet>4479</a>            <span class="kw-2">&amp;</span>[],
+<a href=#4480 id=4480 data-nosnippet>4480</a>            |r| {
+<a href=#4481 id=4481 data-nosnippet>4481</a>                id = r.glyphs.last().map(|g| g.index).unwrap_or(<span class="number">0</span>);
+<a href=#4482 id=4482 data-nosnippet>4482</a>                adv = r.x_advance;
+<a href=#4483 id=4483 data-nosnippet>4483</a>            },
+<a href=#4484 id=4484 data-nosnippet>4484</a>        );
+<a href=#4485 id=4485 data-nosnippet>4485</a>        (id, Px(adv <span class="kw">as _</span>))
+<a href=#4486 id=4486 data-nosnippet>4486</a>    }
+<a href=#4487 id=4487 data-nosnippet>4487</a>
+<a href=#4488 id=4488 data-nosnippet>4488</a>    <span class="doccomment">/// Calculates a [`ShapedText`].
+<a href=#4489 id=4489 data-nosnippet>4489</a>    </span><span class="kw">pub fn </span>shape_text(<span class="self">self</span>: <span class="kw-2">&amp;</span>Font, text: <span class="kw-2">&amp;</span>SegmentedText, config: <span class="kw-2">&amp;</span>TextShapingArgs) -&gt; ShapedText {
+<a href=#4490 id=4490 data-nosnippet>4490</a>        ShapedTextBuilder::shape_text(std::slice::from_ref(<span class="self">self</span>), text, config)
+<a href=#4491 id=4491 data-nosnippet>4491</a>    }
+<a href=#4492 id=4492 data-nosnippet>4492</a>
+<a href=#4493 id=4493 data-nosnippet>4493</a>    <span class="doccomment">/// Sends the sized vector path for a glyph to `sink`.
+<a href=#4494 id=4494 data-nosnippet>4494</a>    ///
+<a href=#4495 id=4495 data-nosnippet>4495</a>    /// Returns the glyph bounds if a full outline was sent to the sink.
+<a href=#4496 id=4496 data-nosnippet>4496</a>    </span><span class="kw">pub fn </span>outline(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, sink: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>OutlineSink) -&gt; <span class="prelude-ty">Option</span>&lt;PxRect&gt; {
+<a href=#4497 id=4497 data-nosnippet>4497</a>        <span class="kw">struct </span>AdapterSink&lt;<span class="lifetime">'a</span>, S&gt; {
+<a href=#4498 id=4498 data-nosnippet>4498</a>            sink: <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="kw-2">mut </span>S,
+<a href=#4499 id=4499 data-nosnippet>4499</a>            bounds: euclid::Box2D&lt;f32, Px&gt;,
+<a href=#4500 id=4500 data-nosnippet>4500</a>        }
+<a href=#4501 id=4501 data-nosnippet>4501</a>        <span class="kw">impl</span>&lt;S&gt; AdapterSink&lt;<span class="lifetime">'_</span>, S&gt; {
+<a href=#4502 id=4502 data-nosnippet>4502</a>            <span class="kw">fn </span>point(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) -&gt; euclid::Point2D&lt;f32, Px&gt; {
+<a href=#4503 id=4503 data-nosnippet>4503</a>                <span class="kw">let </span>p = euclid::point2(x, y);
+<a href=#4504 id=4504 data-nosnippet>4504</a>                <span class="self">self</span>.bounds.min = <span class="self">self</span>.bounds.min.min(p);
+<a href=#4505 id=4505 data-nosnippet>4505</a>                <span class="self">self</span>.bounds.max = <span class="self">self</span>.bounds.max.max(p);
+<a href=#4506 id=4506 data-nosnippet>4506</a>                p
+<a href=#4507 id=4507 data-nosnippet>4507</a>            }
+<a href=#4508 id=4508 data-nosnippet>4508</a>        }
+<a href=#4509 id=4509 data-nosnippet>4509</a>        <span class="kw">impl</span>&lt;S: OutlineSink&gt; skrifa::outline::OutlinePen <span class="kw">for </span>AdapterSink&lt;<span class="lifetime">'_</span>, S&gt; {
+<a href=#4510 id=4510 data-nosnippet>4510</a>            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
+<a href=#4511 id=4511 data-nosnippet>4511</a>                <span class="kw">let </span>p = <span class="self">self</span>.point(x, y);
+<a href=#4512 id=4512 data-nosnippet>4512</a>                <span class="self">self</span>.sink.move_to(p)
+<a href=#4513 id=4513 data-nosnippet>4513</a>            }
+<a href=#4514 id=4514 data-nosnippet>4514</a>
+<a href=#4515 id=4515 data-nosnippet>4515</a>            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x: f32, y: f32) {
+<a href=#4516 id=4516 data-nosnippet>4516</a>                <span class="kw">let </span>p = <span class="self">self</span>.point(x, y);
+<a href=#4517 id=4517 data-nosnippet>4517</a>                <span class="self">self</span>.sink.line_to(p)
+<a href=#4518 id=4518 data-nosnippet>4518</a>            }
+<a href=#4519 id=4519 data-nosnippet>4519</a>
+<a href=#4520 id=4520 data-nosnippet>4520</a>            <span class="kw">fn </span>quad_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x: f32, y: f32) {
+<a href=#4521 id=4521 data-nosnippet>4521</a>                <span class="kw">let </span>ctrl = <span class="self">self</span>.point(x1, y1);
 <a href=#4522 id=4522 data-nosnippet>4522</a>                <span class="kw">let </span>to = <span class="self">self</span>.point(x, y);
-<a href=#4523 id=4523 data-nosnippet>4523</a>                <span class="self">self</span>.sink.cubic_curve_to((l_from, l_to), to)
+<a href=#4523 id=4523 data-nosnippet>4523</a>                <span class="self">self</span>.sink.quadratic_curve_to(ctrl, to)
 <a href=#4524 id=4524 data-nosnippet>4524</a>            }
 <a href=#4525 id=4525 data-nosnippet>4525</a>
-<a href=#4526 id=4526 data-nosnippet>4526</a>            <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#4527 id=4527 data-nosnippet>4527</a>                <span class="self">self</span>.sink.close()
-<a href=#4528 id=4528 data-nosnippet>4528</a>            }
-<a href=#4529 id=4529 data-nosnippet>4529</a>        }
-<a href=#4530 id=4530 data-nosnippet>4530</a>        <span class="kw">let </span>size = skrifa::instance::Size::new(<span class="self">self</span>.size().<span class="number">0 </span><span class="kw">as </span>f32);
-<a href=#4531 id=4531 data-nosnippet>4531</a>
-<a href=#4532 id=4532 data-nosnippet>4532</a>        <span class="kw">let </span>f = <span class="self">self</span>.face().raw()<span class="question-mark">?</span>;
-<a href=#4533 id=4533 data-nosnippet>4533</a>        <span class="kw">let </span>o = f.outline_glyphs().get(skrifa::GlyphId::new(glyph_id))<span class="question-mark">?</span>;
-<a href=#4534 id=4534 data-nosnippet>4534</a>        <span class="kw">let </span><span class="kw-2">mut </span>sink = AdapterSink {
-<a href=#4535 id=4535 data-nosnippet>4535</a>            sink,
-<a href=#4536 id=4536 data-nosnippet>4536</a>            bounds: euclid::Box2D::zero(),
-<a href=#4537 id=4537 data-nosnippet>4537</a>        };
-<a href=#4538 id=4538 data-nosnippet>4538</a>        o.draw(
-<a href=#4539 id=4539 data-nosnippet>4539</a>            skrifa::outline::DrawSettings::unhinted(size, skrifa::instance::LocationRef::default()),
-<a href=#4540 id=4540 data-nosnippet>4540</a>            <span class="kw-2">&amp;mut </span>sink,
-<a href=#4541 id=4541 data-nosnippet>4541</a>        )
-<a href=#4542 id=4542 data-nosnippet>4542</a>        .ok()<span class="question-mark">?</span>;
-<a href=#4543 id=4543 data-nosnippet>4543</a>        <span class="prelude-val">Some</span>(sink.bounds.to_rect().cast())
-<a href=#4544 id=4544 data-nosnippet>4544</a>    }
-<a href=#4545 id=4545 data-nosnippet>4545</a>
-<a href=#4546 id=4546 data-nosnippet>4546</a>    <span class="doccomment">/// Ray cast an horizontal line across the glyph and returns the entry and exit hits.
-<a href=#4547 id=4547 data-nosnippet>4547</a>    ///
-<a href=#4548 id=4548 data-nosnippet>4548</a>    /// The `line_y_range` are two vertical offsets relative to the baseline, the offsets define
-<a href=#4549 id=4549 data-nosnippet>4549</a>    /// the start and inclusive end of the horizontal line, that is, `(underline, underline + thickness)`, note
-<a href=#4550 id=4550 data-nosnippet>4550</a>    /// that positions under the baseline are negative so a 2px underline set 1px under the baseline becomes `(-1.0, -3.0)`.
-<a href=#4551 id=4551 data-nosnippet>4551</a>    ///
-<a href=#4552 id=4552 data-nosnippet>4552</a>    /// Returns `Ok(Some(x_enter, x_exit))` where the two values are x-advances, returns `None` if there is no hit.
-<a href=#4553 id=4553 data-nosnippet>4553</a>    /// The first x-advance is from the left typographic border to the first hit on the outline,
-<a href=#4554 id=4554 data-nosnippet>4554</a>    /// the second x-advance is from the first across the outline to the exit hit.
-<a href=#4555 id=4555 data-nosnippet>4555</a>    </span><span class="kw">pub fn </span>h_line_hits(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, line_y_range: (f32, f32)) -&gt; <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt; {
-<a href=#4556 id=4556 data-nosnippet>4556</a>        <span class="comment">// Algorithm:
-<a href=#4557 id=4557 data-nosnippet>4557</a>        //
-<a href=#4558 id=4558 data-nosnippet>4558</a>        // - Ignore curves, everything is direct line.
-<a href=#4559 id=4559 data-nosnippet>4559</a>        // - If a line-y crosses `line_y_range` register the min-x and max-x from the two points.
-<a href=#4560 id=4560 data-nosnippet>4560</a>        // - Same if a line is inside `line_y_range`.
-<a href=#4561 id=4561 data-nosnippet>4561</a>        </span><span class="kw">struct </span>InterceptsSink {
-<a href=#4562 id=4562 data-nosnippet>4562</a>            start: <span class="prelude-ty">Option</span>&lt;euclid::Point2D&lt;f32, Px&gt;&gt;,
-<a href=#4563 id=4563 data-nosnippet>4563</a>            current: euclid::Point2D&lt;f32, Px&gt;,
-<a href=#4564 id=4564 data-nosnippet>4564</a>            under: (bool, bool),
-<a href=#4565 id=4565 data-nosnippet>4565</a>
-<a href=#4566 id=4566 data-nosnippet>4566</a>            line_y_range: (f32, f32),
-<a href=#4567 id=4567 data-nosnippet>4567</a>            hit: <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt;,
-<a href=#4568 id=4568 data-nosnippet>4568</a>        }
-<a href=#4569 id=4569 data-nosnippet>4569</a>        <span class="kw">impl </span>OutlineSink <span class="kw">for </span>InterceptsSink {
-<a href=#4570 id=4570 data-nosnippet>4570</a>            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
-<a href=#4571 id=4571 data-nosnippet>4571</a>                <span class="self">self</span>.start = <span class="prelude-val">Some</span>(to);
-<a href=#4572 id=4572 data-nosnippet>4572</a>                <span class="self">self</span>.current = to;
-<a href=#4573 id=4573 data-nosnippet>4573</a>                <span class="self">self</span>.under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
-<a href=#4574 id=4574 data-nosnippet>4574</a>            }
-<a href=#4575 id=4575 data-nosnippet>4575</a>
-<a href=#4576 id=4576 data-nosnippet>4576</a>            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
-<a href=#4577 id=4577 data-nosnippet>4577</a>                <span class="kw">let </span>under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
-<a href=#4578 id=4578 data-nosnippet>4578</a>
-<a href=#4579 id=4579 data-nosnippet>4579</a>                <span class="kw">if </span><span class="self">self</span>.under != under || under == (<span class="bool-val">true</span>, <span class="bool-val">false</span>) {
-<a href=#4580 id=4580 data-nosnippet>4580</a>                    <span class="comment">// crossed one or two y-range boundaries or both points are inside
-<a href=#4581 id=4581 data-nosnippet>4581</a>                    </span><span class="self">self</span>.under = under;
+<a href=#4526 id=4526 data-nosnippet>4526</a>            <span class="kw">fn </span>curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, x1: f32, y1: f32, x2: f32, y2: f32, x: f32, y: f32) {
+<a href=#4527 id=4527 data-nosnippet>4527</a>                <span class="kw">let </span>l_from = <span class="self">self</span>.point(x1, y1);
+<a href=#4528 id=4528 data-nosnippet>4528</a>                <span class="kw">let </span>l_to = <span class="self">self</span>.point(x2, y2);
+<a href=#4529 id=4529 data-nosnippet>4529</a>                <span class="kw">let </span>to = <span class="self">self</span>.point(x, y);
+<a href=#4530 id=4530 data-nosnippet>4530</a>                <span class="self">self</span>.sink.cubic_curve_to((l_from, l_to), to)
+<a href=#4531 id=4531 data-nosnippet>4531</a>            }
+<a href=#4532 id=4532 data-nosnippet>4532</a>
+<a href=#4533 id=4533 data-nosnippet>4533</a>            <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#4534 id=4534 data-nosnippet>4534</a>                <span class="self">self</span>.sink.close()
+<a href=#4535 id=4535 data-nosnippet>4535</a>            }
+<a href=#4536 id=4536 data-nosnippet>4536</a>        }
+<a href=#4537 id=4537 data-nosnippet>4537</a>        <span class="kw">let </span>size = skrifa::instance::Size::new(<span class="self">self</span>.size().<span class="number">0 </span><span class="kw">as </span>f32);
+<a href=#4538 id=4538 data-nosnippet>4538</a>
+<a href=#4539 id=4539 data-nosnippet>4539</a>        <span class="kw">let </span>f = <span class="self">self</span>.face().raw()<span class="question-mark">?</span>;
+<a href=#4540 id=4540 data-nosnippet>4540</a>        <span class="kw">let </span>o = f.outline_glyphs().get(skrifa::GlyphId::new(glyph_id))<span class="question-mark">?</span>;
+<a href=#4541 id=4541 data-nosnippet>4541</a>        <span class="kw">let </span><span class="kw-2">mut </span>sink = AdapterSink {
+<a href=#4542 id=4542 data-nosnippet>4542</a>            sink,
+<a href=#4543 id=4543 data-nosnippet>4543</a>            bounds: euclid::Box2D::zero(),
+<a href=#4544 id=4544 data-nosnippet>4544</a>        };
+<a href=#4545 id=4545 data-nosnippet>4545</a>        o.draw(
+<a href=#4546 id=4546 data-nosnippet>4546</a>            skrifa::outline::DrawSettings::unhinted(size, skrifa::instance::LocationRef::default()),
+<a href=#4547 id=4547 data-nosnippet>4547</a>            <span class="kw-2">&amp;mut </span>sink,
+<a href=#4548 id=4548 data-nosnippet>4548</a>        )
+<a href=#4549 id=4549 data-nosnippet>4549</a>        .ok()<span class="question-mark">?</span>;
+<a href=#4550 id=4550 data-nosnippet>4550</a>        <span class="prelude-val">Some</span>(sink.bounds.to_rect().cast())
+<a href=#4551 id=4551 data-nosnippet>4551</a>    }
+<a href=#4552 id=4552 data-nosnippet>4552</a>
+<a href=#4553 id=4553 data-nosnippet>4553</a>    <span class="doccomment">/// Ray cast an horizontal line across the glyph and returns the entry and exit hits.
+<a href=#4554 id=4554 data-nosnippet>4554</a>    ///
+<a href=#4555 id=4555 data-nosnippet>4555</a>    /// The `line_y_range` are two vertical offsets relative to the baseline, the offsets define
+<a href=#4556 id=4556 data-nosnippet>4556</a>    /// the start and inclusive end of the horizontal line, that is, `(underline, underline + thickness)`, note
+<a href=#4557 id=4557 data-nosnippet>4557</a>    /// that positions under the baseline are negative so a 2px underline set 1px under the baseline becomes `(-1.0, -3.0)`.
+<a href=#4558 id=4558 data-nosnippet>4558</a>    ///
+<a href=#4559 id=4559 data-nosnippet>4559</a>    /// Returns `Ok(Some(x_enter, x_exit))` where the two values are x-advances, returns `None` if there is no hit.
+<a href=#4560 id=4560 data-nosnippet>4560</a>    /// The first x-advance is from the left typographic border to the first hit on the outline,
+<a href=#4561 id=4561 data-nosnippet>4561</a>    /// the second x-advance is from the first across the outline to the exit hit.
+<a href=#4562 id=4562 data-nosnippet>4562</a>    </span><span class="kw">pub fn </span>h_line_hits(<span class="kw-2">&amp;</span><span class="self">self</span>, glyph_id: GlyphIndex, line_y_range: (f32, f32)) -&gt; <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt; {
+<a href=#4563 id=4563 data-nosnippet>4563</a>        <span class="comment">// Algorithm:
+<a href=#4564 id=4564 data-nosnippet>4564</a>        //
+<a href=#4565 id=4565 data-nosnippet>4565</a>        // - Ignore curves, everything is direct line.
+<a href=#4566 id=4566 data-nosnippet>4566</a>        // - If a line-y crosses `line_y_range` register the min-x and max-x from the two points.
+<a href=#4567 id=4567 data-nosnippet>4567</a>        // - Same if a line is inside `line_y_range`.
+<a href=#4568 id=4568 data-nosnippet>4568</a>        </span><span class="kw">struct </span>InterceptsSink {
+<a href=#4569 id=4569 data-nosnippet>4569</a>            start: <span class="prelude-ty">Option</span>&lt;euclid::Point2D&lt;f32, Px&gt;&gt;,
+<a href=#4570 id=4570 data-nosnippet>4570</a>            current: euclid::Point2D&lt;f32, Px&gt;,
+<a href=#4571 id=4571 data-nosnippet>4571</a>            under: (bool, bool),
+<a href=#4572 id=4572 data-nosnippet>4572</a>
+<a href=#4573 id=4573 data-nosnippet>4573</a>            line_y_range: (f32, f32),
+<a href=#4574 id=4574 data-nosnippet>4574</a>            hit: <span class="prelude-ty">Option</span>&lt;(f32, f32)&gt;,
+<a href=#4575 id=4575 data-nosnippet>4575</a>        }
+<a href=#4576 id=4576 data-nosnippet>4576</a>        <span class="kw">impl </span>OutlineSink <span class="kw">for </span>InterceptsSink {
+<a href=#4577 id=4577 data-nosnippet>4577</a>            <span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
+<a href=#4578 id=4578 data-nosnippet>4578</a>                <span class="self">self</span>.start = <span class="prelude-val">Some</span>(to);
+<a href=#4579 id=4579 data-nosnippet>4579</a>                <span class="self">self</span>.current = to;
+<a href=#4580 id=4580 data-nosnippet>4580</a>                <span class="self">self</span>.under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
+<a href=#4581 id=4581 data-nosnippet>4581</a>            }
 <a href=#4582 id=4582 data-nosnippet>4582</a>
-<a href=#4583 id=4583 data-nosnippet>4583</a>                    <span class="kw">let </span>(x0, x1) = <span class="kw">if </span><span class="self">self</span>.current.x &lt; to.x {
-<a href=#4584 id=4584 data-nosnippet>4584</a>                        (<span class="self">self</span>.current.x, to.x)
-<a href=#4585 id=4585 data-nosnippet>4585</a>                    } <span class="kw">else </span>{
-<a href=#4586 id=4586 data-nosnippet>4586</a>                        (to.x, <span class="self">self</span>.current.x)
-<a href=#4587 id=4587 data-nosnippet>4587</a>                    };
-<a href=#4588 id=4588 data-nosnippet>4588</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>((min, max)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.hit {
-<a href=#4589 id=4589 data-nosnippet>4589</a>                        <span class="kw-2">*</span>min = min.min(x0);
-<a href=#4590 id=4590 data-nosnippet>4590</a>                        <span class="kw-2">*</span>max = max.max(x1);
-<a href=#4591 id=4591 data-nosnippet>4591</a>                    } <span class="kw">else </span>{
-<a href=#4592 id=4592 data-nosnippet>4592</a>                        <span class="self">self</span>.hit = <span class="prelude-val">Some</span>((x0, x1));
-<a href=#4593 id=4593 data-nosnippet>4593</a>                    }
-<a href=#4594 id=4594 data-nosnippet>4594</a>                }
-<a href=#4595 id=4595 data-nosnippet>4595</a>
-<a href=#4596 id=4596 data-nosnippet>4596</a>                <span class="self">self</span>.current = to;
-<a href=#4597 id=4597 data-nosnippet>4597</a>                <span class="self">self</span>.under = under;
-<a href=#4598 id=4598 data-nosnippet>4598</a>            }
-<a href=#4599 id=4599 data-nosnippet>4599</a>
-<a href=#4600 id=4600 data-nosnippet>4600</a>            <span class="kw">fn </span>quadratic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: euclid::Point2D&lt;f32, Px&gt;, to: euclid::Point2D&lt;f32, Px&gt;) {
-<a href=#4601 id=4601 data-nosnippet>4601</a>                <span class="self">self</span>.line_to(to);
-<a href=#4602 id=4602 data-nosnippet>4602</a>            }
-<a href=#4603 id=4603 data-nosnippet>4603</a>
-<a href=#4604 id=4604 data-nosnippet>4604</a>            <span class="kw">fn </span>cubic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: (euclid::Point2D&lt;f32, Px&gt;, euclid::Point2D&lt;f32, Px&gt;), to: euclid::Point2D&lt;f32, Px&gt;) {
-<a href=#4605 id=4605 data-nosnippet>4605</a>                <span class="self">self</span>.line_to(to);
-<a href=#4606 id=4606 data-nosnippet>4606</a>            }
-<a href=#4607 id=4607 data-nosnippet>4607</a>
-<a href=#4608 id=4608 data-nosnippet>4608</a>            <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#4609 id=4609 data-nosnippet>4609</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.start.take()
-<a href=#4610 id=4610 data-nosnippet>4610</a>                    &amp;&amp; s != <span class="self">self</span>.current
-<a href=#4611 id=4611 data-nosnippet>4611</a>                {
-<a href=#4612 id=4612 data-nosnippet>4612</a>                    <span class="self">self</span>.line_to(s);
-<a href=#4613 id=4613 data-nosnippet>4613</a>                }
-<a href=#4614 id=4614 data-nosnippet>4614</a>            }
-<a href=#4615 id=4615 data-nosnippet>4615</a>        }
-<a href=#4616 id=4616 data-nosnippet>4616</a>        <span class="kw">let </span><span class="kw-2">mut </span>sink = InterceptsSink {
-<a href=#4617 id=4617 data-nosnippet>4617</a>            start: <span class="prelude-val">None</span>,
-<a href=#4618 id=4618 data-nosnippet>4618</a>            current: euclid::point2(<span class="number">0.0</span>, <span class="number">0.0</span>),
-<a href=#4619 id=4619 data-nosnippet>4619</a>            under: (<span class="bool-val">false</span>, <span class="bool-val">false</span>),
-<a href=#4620 id=4620 data-nosnippet>4620</a>
-<a href=#4621 id=4621 data-nosnippet>4621</a>            line_y_range,
-<a href=#4622 id=4622 data-nosnippet>4622</a>            hit: <span class="prelude-val">None</span>,
-<a href=#4623 id=4623 data-nosnippet>4623</a>        };
-<a href=#4624 id=4624 data-nosnippet>4624</a>        <span class="self">self</span>.outline(glyph_id, <span class="kw-2">&amp;mut </span>sink)<span class="question-mark">?</span>;
-<a href=#4625 id=4625 data-nosnippet>4625</a>
-<a href=#4626 id=4626 data-nosnippet>4626</a>        sink.hit.map(|(a, b)| (a, b - a))
-<a href=#4627 id=4627 data-nosnippet>4627</a>    }
-<a href=#4628 id=4628 data-nosnippet>4628</a>}
-<a href=#4629 id=4629 data-nosnippet>4629</a>
-<a href=#4630 id=4630 data-nosnippet>4630</a><span class="doccomment">/// Receives Bézier path rendering commands from [`Font::outline`].
-<a href=#4631 id=4631 data-nosnippet>4631</a>///
-<a href=#4632 id=4632 data-nosnippet>4632</a>/// The points are relative to the baseline, negative values under, positive over.
-<a href=#4633 id=4633 data-nosnippet>4633</a></span><span class="kw">pub trait </span>OutlineSink {
-<a href=#4634 id=4634 data-nosnippet>4634</a>    <span class="doccomment">/// Moves the pen to a point.
-<a href=#4635 id=4635 data-nosnippet>4635</a>    </span><span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;);
-<a href=#4636 id=4636 data-nosnippet>4636</a>    <span class="doccomment">/// Draws a line to a point.
-<a href=#4637 id=4637 data-nosnippet>4637</a>    </span><span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;);
-<a href=#4638 id=4638 data-nosnippet>4638</a>    <span class="doccomment">/// Draws a quadratic Bézier curve to a point.
-<a href=#4639 id=4639 data-nosnippet>4639</a>    </span><span class="kw">fn </span>quadratic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctrl: euclid::Point2D&lt;f32, Px&gt;, to: euclid::Point2D&lt;f32, Px&gt;);
-<a href=#4640 id=4640 data-nosnippet>4640</a>    <span class="doccomment">/// Draws a cubic Bézier curve to a point.
-<a href=#4641 id=4641 data-nosnippet>4641</a>    ///
-<a href=#4642 id=4642 data-nosnippet>4642</a>    /// The `ctrl` is a line (from, to).
-<a href=#4643 id=4643 data-nosnippet>4643</a>    </span><span class="kw">fn </span>cubic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctrl: (euclid::Point2D&lt;f32, Px&gt;, euclid::Point2D&lt;f32, Px&gt;), to: euclid::Point2D&lt;f32, Px&gt;);
-<a href=#4644 id=4644 data-nosnippet>4644</a>    <span class="doccomment">/// Closes the path, returning to the first point in it.
-<a href=#4645 id=4645 data-nosnippet>4645</a>    </span><span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>);
-<a href=#4646 id=4646 data-nosnippet>4646</a>}
-<a href=#4647 id=4647 data-nosnippet>4647</a>
-<a href=#4648 id=4648 data-nosnippet>4648</a><span class="kw">impl </span>FontList {
-<a href=#4649 id=4649 data-nosnippet>4649</a>    <span class="doccomment">/// Calculates a [`ShapedText`] using the [best](FontList::best) font in this list and the other fonts as fallback.
-<a href=#4650 id=4650 data-nosnippet>4650</a>    </span><span class="kw">pub fn </span>shape_text(<span class="kw-2">&amp;</span><span class="self">self</span>, text: <span class="kw-2">&amp;</span>SegmentedText, config: <span class="kw-2">&amp;</span>TextShapingArgs) -&gt; ShapedText {
-<a href=#4651 id=4651 data-nosnippet>4651</a>        ShapedTextBuilder::shape_text(<span class="self">self</span>, text, config)
-<a href=#4652 id=4652 data-nosnippet>4652</a>    }
+<a href=#4583 id=4583 data-nosnippet>4583</a>            <span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;) {
+<a href=#4584 id=4584 data-nosnippet>4584</a>                <span class="kw">let </span>under = (to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">0</span>, to.y &lt; <span class="self">self</span>.line_y_range.<span class="number">1</span>);
+<a href=#4585 id=4585 data-nosnippet>4585</a>
+<a href=#4586 id=4586 data-nosnippet>4586</a>                <span class="kw">if </span><span class="self">self</span>.under != under || under == (<span class="bool-val">true</span>, <span class="bool-val">false</span>) {
+<a href=#4587 id=4587 data-nosnippet>4587</a>                    <span class="comment">// crossed one or two y-range boundaries or both points are inside
+<a href=#4588 id=4588 data-nosnippet>4588</a>                    </span><span class="self">self</span>.under = under;
+<a href=#4589 id=4589 data-nosnippet>4589</a>
+<a href=#4590 id=4590 data-nosnippet>4590</a>                    <span class="kw">let </span>(x0, x1) = <span class="kw">if </span><span class="self">self</span>.current.x &lt; to.x {
+<a href=#4591 id=4591 data-nosnippet>4591</a>                        (<span class="self">self</span>.current.x, to.x)
+<a href=#4592 id=4592 data-nosnippet>4592</a>                    } <span class="kw">else </span>{
+<a href=#4593 id=4593 data-nosnippet>4593</a>                        (to.x, <span class="self">self</span>.current.x)
+<a href=#4594 id=4594 data-nosnippet>4594</a>                    };
+<a href=#4595 id=4595 data-nosnippet>4595</a>                    <span class="kw">if let </span><span class="prelude-val">Some</span>((min, max)) = <span class="kw-2">&amp;mut </span><span class="self">self</span>.hit {
+<a href=#4596 id=4596 data-nosnippet>4596</a>                        <span class="kw-2">*</span>min = min.min(x0);
+<a href=#4597 id=4597 data-nosnippet>4597</a>                        <span class="kw-2">*</span>max = max.max(x1);
+<a href=#4598 id=4598 data-nosnippet>4598</a>                    } <span class="kw">else </span>{
+<a href=#4599 id=4599 data-nosnippet>4599</a>                        <span class="self">self</span>.hit = <span class="prelude-val">Some</span>((x0, x1));
+<a href=#4600 id=4600 data-nosnippet>4600</a>                    }
+<a href=#4601 id=4601 data-nosnippet>4601</a>                }
+<a href=#4602 id=4602 data-nosnippet>4602</a>
+<a href=#4603 id=4603 data-nosnippet>4603</a>                <span class="self">self</span>.current = to;
+<a href=#4604 id=4604 data-nosnippet>4604</a>                <span class="self">self</span>.under = under;
+<a href=#4605 id=4605 data-nosnippet>4605</a>            }
+<a href=#4606 id=4606 data-nosnippet>4606</a>
+<a href=#4607 id=4607 data-nosnippet>4607</a>            <span class="kw">fn </span>quadratic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: euclid::Point2D&lt;f32, Px&gt;, to: euclid::Point2D&lt;f32, Px&gt;) {
+<a href=#4608 id=4608 data-nosnippet>4608</a>                <span class="self">self</span>.line_to(to);
+<a href=#4609 id=4609 data-nosnippet>4609</a>            }
+<a href=#4610 id=4610 data-nosnippet>4610</a>
+<a href=#4611 id=4611 data-nosnippet>4611</a>            <span class="kw">fn </span>cubic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: (euclid::Point2D&lt;f32, Px&gt;, euclid::Point2D&lt;f32, Px&gt;), to: euclid::Point2D&lt;f32, Px&gt;) {
+<a href=#4612 id=4612 data-nosnippet>4612</a>                <span class="self">self</span>.line_to(to);
+<a href=#4613 id=4613 data-nosnippet>4613</a>            }
+<a href=#4614 id=4614 data-nosnippet>4614</a>
+<a href=#4615 id=4615 data-nosnippet>4615</a>            <span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#4616 id=4616 data-nosnippet>4616</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(s) = <span class="self">self</span>.start.take()
+<a href=#4617 id=4617 data-nosnippet>4617</a>                    &amp;&amp; s != <span class="self">self</span>.current
+<a href=#4618 id=4618 data-nosnippet>4618</a>                {
+<a href=#4619 id=4619 data-nosnippet>4619</a>                    <span class="self">self</span>.line_to(s);
+<a href=#4620 id=4620 data-nosnippet>4620</a>                }
+<a href=#4621 id=4621 data-nosnippet>4621</a>            }
+<a href=#4622 id=4622 data-nosnippet>4622</a>        }
+<a href=#4623 id=4623 data-nosnippet>4623</a>        <span class="kw">let </span><span class="kw-2">mut </span>sink = InterceptsSink {
+<a href=#4624 id=4624 data-nosnippet>4624</a>            start: <span class="prelude-val">None</span>,
+<a href=#4625 id=4625 data-nosnippet>4625</a>            current: euclid::point2(<span class="number">0.0</span>, <span class="number">0.0</span>),
+<a href=#4626 id=4626 data-nosnippet>4626</a>            under: (<span class="bool-val">false</span>, <span class="bool-val">false</span>),
+<a href=#4627 id=4627 data-nosnippet>4627</a>
+<a href=#4628 id=4628 data-nosnippet>4628</a>            line_y_range,
+<a href=#4629 id=4629 data-nosnippet>4629</a>            hit: <span class="prelude-val">None</span>,
+<a href=#4630 id=4630 data-nosnippet>4630</a>        };
+<a href=#4631 id=4631 data-nosnippet>4631</a>        <span class="self">self</span>.outline(glyph_id, <span class="kw-2">&amp;mut </span>sink)<span class="question-mark">?</span>;
+<a href=#4632 id=4632 data-nosnippet>4632</a>
+<a href=#4633 id=4633 data-nosnippet>4633</a>        sink.hit.map(|(a, b)| (a, b - a))
+<a href=#4634 id=4634 data-nosnippet>4634</a>    }
+<a href=#4635 id=4635 data-nosnippet>4635</a>}
+<a href=#4636 id=4636 data-nosnippet>4636</a>
+<a href=#4637 id=4637 data-nosnippet>4637</a><span class="doccomment">/// Receives Bézier path rendering commands from [`Font::outline`].
+<a href=#4638 id=4638 data-nosnippet>4638</a>///
+<a href=#4639 id=4639 data-nosnippet>4639</a>/// The points are relative to the baseline, negative values under, positive over.
+<a href=#4640 id=4640 data-nosnippet>4640</a></span><span class="kw">pub trait </span>OutlineSink {
+<a href=#4641 id=4641 data-nosnippet>4641</a>    <span class="doccomment">/// Moves the pen to a point.
+<a href=#4642 id=4642 data-nosnippet>4642</a>    </span><span class="kw">fn </span>move_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;);
+<a href=#4643 id=4643 data-nosnippet>4643</a>    <span class="doccomment">/// Draws a line to a point.
+<a href=#4644 id=4644 data-nosnippet>4644</a>    </span><span class="kw">fn </span>line_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, to: euclid::Point2D&lt;f32, Px&gt;);
+<a href=#4645 id=4645 data-nosnippet>4645</a>    <span class="doccomment">/// Draws a quadratic Bézier curve to a point.
+<a href=#4646 id=4646 data-nosnippet>4646</a>    </span><span class="kw">fn </span>quadratic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctrl: euclid::Point2D&lt;f32, Px&gt;, to: euclid::Point2D&lt;f32, Px&gt;);
+<a href=#4647 id=4647 data-nosnippet>4647</a>    <span class="doccomment">/// Draws a cubic Bézier curve to a point.
+<a href=#4648 id=4648 data-nosnippet>4648</a>    ///
+<a href=#4649 id=4649 data-nosnippet>4649</a>    /// The `ctrl` is a line (from, to).
+<a href=#4650 id=4650 data-nosnippet>4650</a>    </span><span class="kw">fn </span>cubic_curve_to(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctrl: (euclid::Point2D&lt;f32, Px&gt;, euclid::Point2D&lt;f32, Px&gt;), to: euclid::Point2D&lt;f32, Px&gt;);
+<a href=#4651 id=4651 data-nosnippet>4651</a>    <span class="doccomment">/// Closes the path, returning to the first point in it.
+<a href=#4652 id=4652 data-nosnippet>4652</a>    </span><span class="kw">fn </span>close(<span class="kw-2">&amp;mut </span><span class="self">self</span>);
 <a href=#4653 id=4653 data-nosnippet>4653</a>}
 <a href=#4654 id=4654 data-nosnippet>4654</a>
-<a href=#4655 id=4655 data-nosnippet>4655</a><span class="doccomment">/// Like [`std::ops::Range&lt;usize&gt;`], but implements [`Copy`].
-<a href=#4656 id=4656 data-nosnippet>4656</a></span><span class="attr">#[derive(Clone, Copy)]
-<a href=#4657 id=4657 data-nosnippet>4657</a></span><span class="kw">struct </span>IndexRange(<span class="kw">pub </span>usize, <span class="kw">pub </span>usize);
-<a href=#4658 id=4658 data-nosnippet>4658</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>IndexRange {
-<a href=#4659 id=4659 data-nosnippet>4659</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
-<a href=#4660 id=4660 data-nosnippet>4660</a>        <span class="macro">write!</span>(f, <span class="string">"{}..{}"</span>, <span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
-<a href=#4661 id=4661 data-nosnippet>4661</a>    }
-<a href=#4662 id=4662 data-nosnippet>4662</a>}
-<a href=#4663 id=4663 data-nosnippet>4663</a><span class="kw">impl </span>IntoIterator <span class="kw">for </span>IndexRange {
-<a href=#4664 id=4664 data-nosnippet>4664</a>    <span class="kw">type </span>Item = usize;
-<a href=#4665 id=4665 data-nosnippet>4665</a>
-<a href=#4666 id=4666 data-nosnippet>4666</a>    <span class="kw">type </span>IntoIter = std::ops::Range&lt;usize&gt;;
-<a href=#4667 id=4667 data-nosnippet>4667</a>
-<a href=#4668 id=4668 data-nosnippet>4668</a>    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
-<a href=#4669 id=4669 data-nosnippet>4669</a>        <span class="self">self</span>.iter()
-<a href=#4670 id=4670 data-nosnippet>4670</a>    }
-<a href=#4671 id=4671 data-nosnippet>4671</a>}
-<a href=#4672 id=4672 data-nosnippet>4672</a><span class="kw">impl </span>From&lt;IndexRange&gt; <span class="kw">for </span>std::ops::Range&lt;usize&gt; {
-<a href=#4673 id=4673 data-nosnippet>4673</a>    <span class="kw">fn </span>from(c: IndexRange) -&gt; <span class="self">Self </span>{
-<a href=#4674 id=4674 data-nosnippet>4674</a>        c.iter()
-<a href=#4675 id=4675 data-nosnippet>4675</a>    }
-<a href=#4676 id=4676 data-nosnippet>4676</a>}
-<a href=#4677 id=4677 data-nosnippet>4677</a><span class="kw">impl </span>From&lt;std::ops::Range&lt;usize&gt;&gt; <span class="kw">for </span>IndexRange {
-<a href=#4678 id=4678 data-nosnippet>4678</a>    <span class="kw">fn </span>from(r: std::ops::Range&lt;usize&gt;) -&gt; <span class="self">Self </span>{
-<a href=#4679 id=4679 data-nosnippet>4679</a>        IndexRange(r.start, r.end)
-<a href=#4680 id=4680 data-nosnippet>4680</a>    }
-<a href=#4681 id=4681 data-nosnippet>4681</a>}
-<a href=#4682 id=4682 data-nosnippet>4682</a><span class="kw">impl </span>IndexRange {
-<a href=#4683 id=4683 data-nosnippet>4683</a>    <span class="kw">pub fn </span>from_bounds(bounds: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="self">Self </span>{
-<a href=#4684 id=4684 data-nosnippet>4684</a>        <span class="comment">// start..end
-<a href=#4685 id=4685 data-nosnippet>4685</a>        </span><span class="kw">let </span>start = <span class="kw">match </span>bounds.start_bound() {
-<a href=#4686 id=4686 data-nosnippet>4686</a>            ops::Bound::Included(<span class="kw-2">&amp;</span>i) =&gt; i,
-<a href=#4687 id=4687 data-nosnippet>4687</a>            ops::Bound::Excluded(<span class="kw-2">&amp;</span>i) =&gt; i + <span class="number">1</span>,
-<a href=#4688 id=4688 data-nosnippet>4688</a>            ops::Bound::Unbounded =&gt; <span class="number">0</span>,
-<a href=#4689 id=4689 data-nosnippet>4689</a>        };
-<a href=#4690 id=4690 data-nosnippet>4690</a>        <span class="kw">let </span>end = <span class="kw">match </span>bounds.end_bound() {
-<a href=#4691 id=4691 data-nosnippet>4691</a>            ops::Bound::Included(<span class="kw-2">&amp;</span>i) =&gt; i + <span class="number">1</span>,
-<a href=#4692 id=4692 data-nosnippet>4692</a>            ops::Bound::Excluded(<span class="kw-2">&amp;</span>i) =&gt; i,
-<a href=#4693 id=4693 data-nosnippet>4693</a>            ops::Bound::Unbounded =&gt; <span class="number">0</span>,
-<a href=#4694 id=4694 data-nosnippet>4694</a>        };
-<a href=#4695 id=4695 data-nosnippet>4695</a>        <span class="self">Self</span>(start, end)
-<a href=#4696 id=4696 data-nosnippet>4696</a>    }
-<a href=#4697 id=4697 data-nosnippet>4697</a>
-<a href=#4698 id=4698 data-nosnippet>4698</a>    <span class="doccomment">/// Into `Range&lt;usize&gt;`.
-<a href=#4699 id=4699 data-nosnippet>4699</a>    </span><span class="kw">pub fn </span>iter(<span class="self">self</span>) -&gt; std::ops::Range&lt;usize&gt; {
-<a href=#4700 id=4700 data-nosnippet>4700</a>        <span class="self">self</span>.<span class="number">0</span>..<span class="self">self</span>.<span class="number">1
-<a href=#4701 id=4701 data-nosnippet>4701</a>    </span>}
-<a href=#4702 id=4702 data-nosnippet>4702</a>
-<a href=#4703 id=4703 data-nosnippet>4703</a>    <span class="doccomment">/// `self.0`
-<a href=#4704 id=4704 data-nosnippet>4704</a>    </span><span class="kw">pub fn </span>start(<span class="self">self</span>) -&gt; usize {
-<a href=#4705 id=4705 data-nosnippet>4705</a>        <span class="self">self</span>.<span class="number">0
-<a href=#4706 id=4706 data-nosnippet>4706</a>    </span>}
-<a href=#4707 id=4707 data-nosnippet>4707</a>
-<a href=#4708 id=4708 data-nosnippet>4708</a>    <span class="doccomment">/// `self.1`
-<a href=#4709 id=4709 data-nosnippet>4709</a>    </span><span class="kw">pub fn </span>end(<span class="self">self</span>) -&gt; usize {
-<a href=#4710 id=4710 data-nosnippet>4710</a>        <span class="self">self</span>.<span class="number">1
-<a href=#4711 id=4711 data-nosnippet>4711</a>    </span>}
-<a href=#4712 id=4712 data-nosnippet>4712</a>
-<a href=#4713 id=4713 data-nosnippet>4713</a>    <span class="doccomment">/// `self.end - self.start`
-<a href=#4714 id=4714 data-nosnippet>4714</a>    </span><span class="kw">pub fn </span>len(<span class="self">self</span>) -&gt; usize {
-<a href=#4715 id=4715 data-nosnippet>4715</a>        <span class="self">self</span>.end() - <span class="self">self</span>.start()
-<a href=#4716 id=4716 data-nosnippet>4716</a>    }
-<a href=#4717 id=4717 data-nosnippet>4717</a>}
-<a href=#4718 id=4718 data-nosnippet>4718</a><span class="kw">impl </span>std::ops::RangeBounds&lt;usize&gt; <span class="kw">for </span>IndexRange {
-<a href=#4719 id=4719 data-nosnippet>4719</a>    <span class="kw">fn </span>start_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::ops::Bound&lt;<span class="kw-2">&amp;</span>usize&gt; {
-<a href=#4720 id=4720 data-nosnippet>4720</a>        std::ops::Bound::Included(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
-<a href=#4721 id=4721 data-nosnippet>4721</a>    }
-<a href=#4722 id=4722 data-nosnippet>4722</a>
-<a href=#4723 id=4723 data-nosnippet>4723</a>    <span class="kw">fn </span>end_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::ops::Bound&lt;<span class="kw-2">&amp;</span>usize&gt; {
-<a href=#4724 id=4724 data-nosnippet>4724</a>        std::ops::Bound::Excluded(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">1</span>)
-<a href=#4725 id=4725 data-nosnippet>4725</a>    }
-<a href=#4726 id=4726 data-nosnippet>4726</a>}
-<a href=#4727 id=4727 data-nosnippet>4727</a>
-<a href=#4728 id=4728 data-nosnippet>4728</a><span class="doccomment">/// `f32` comparison, panics for `NaN`.
-<a href=#4729 id=4729 data-nosnippet>4729</a></span><span class="kw">pub fn </span>f32_cmp(a: <span class="kw-2">&amp;</span>f32, b: <span class="kw-2">&amp;</span>f32) -&gt; std::cmp::Ordering {
-<a href=#4730 id=4730 data-nosnippet>4730</a>    a.partial_cmp(b).unwrap()
-<a href=#4731 id=4731 data-nosnippet>4731</a>}
-<a href=#4732 id=4732 data-nosnippet>4732</a>
-<a href=#4733 id=4733 data-nosnippet>4733</a><span class="kw">fn </span>into_harf_direction(d: LayoutDirection) -&gt; harfrust::Direction {
-<a href=#4734 id=4734 data-nosnippet>4734</a>    <span class="kw">match </span>d {
-<a href=#4735 id=4735 data-nosnippet>4735</a>        LayoutDirection::LTR =&gt; harfrust::Direction::LeftToRight,
-<a href=#4736 id=4736 data-nosnippet>4736</a>        LayoutDirection::RTL =&gt; harfrust::Direction::RightToLeft,
-<a href=#4737 id=4737 data-nosnippet>4737</a>    }
+<a href=#4655 id=4655 data-nosnippet>4655</a><span class="kw">impl </span>FontList {
+<a href=#4656 id=4656 data-nosnippet>4656</a>    <span class="doccomment">/// Calculates a [`ShapedText`] using the [best](FontList::best) font in this list and the other fonts as fallback.
+<a href=#4657 id=4657 data-nosnippet>4657</a>    </span><span class="kw">pub fn </span>shape_text(<span class="kw-2">&amp;</span><span class="self">self</span>, text: <span class="kw-2">&amp;</span>SegmentedText, config: <span class="kw-2">&amp;</span>TextShapingArgs) -&gt; ShapedText {
+<a href=#4658 id=4658 data-nosnippet>4658</a>        ShapedTextBuilder::shape_text(<span class="self">self</span>, text, config)
+<a href=#4659 id=4659 data-nosnippet>4659</a>    }
+<a href=#4660 id=4660 data-nosnippet>4660</a>}
+<a href=#4661 id=4661 data-nosnippet>4661</a>
+<a href=#4662 id=4662 data-nosnippet>4662</a><span class="doccomment">/// Like [`std::ops::Range&lt;usize&gt;`], but implements [`Copy`].
+<a href=#4663 id=4663 data-nosnippet>4663</a></span><span class="attr">#[derive(Clone, Copy)]
+<a href=#4664 id=4664 data-nosnippet>4664</a></span><span class="kw">struct </span>IndexRange(<span class="kw">pub </span>usize, <span class="kw">pub </span>usize);
+<a href=#4665 id=4665 data-nosnippet>4665</a><span class="kw">impl </span>fmt::Debug <span class="kw">for </span>IndexRange {
+<a href=#4666 id=4666 data-nosnippet>4666</a>    <span class="kw">fn </span>fmt(<span class="kw-2">&amp;</span><span class="self">self</span>, f: <span class="kw-2">&amp;mut </span>fmt::Formatter&lt;<span class="lifetime">'_</span>&gt;) -&gt; fmt::Result {
+<a href=#4667 id=4667 data-nosnippet>4667</a>        <span class="macro">write!</span>(f, <span class="string">"{}..{}"</span>, <span class="self">self</span>.<span class="number">0</span>, <span class="self">self</span>.<span class="number">1</span>)
+<a href=#4668 id=4668 data-nosnippet>4668</a>    }
+<a href=#4669 id=4669 data-nosnippet>4669</a>}
+<a href=#4670 id=4670 data-nosnippet>4670</a><span class="kw">impl </span>IntoIterator <span class="kw">for </span>IndexRange {
+<a href=#4671 id=4671 data-nosnippet>4671</a>    <span class="kw">type </span>Item = usize;
+<a href=#4672 id=4672 data-nosnippet>4672</a>
+<a href=#4673 id=4673 data-nosnippet>4673</a>    <span class="kw">type </span>IntoIter = std::ops::Range&lt;usize&gt;;
+<a href=#4674 id=4674 data-nosnippet>4674</a>
+<a href=#4675 id=4675 data-nosnippet>4675</a>    <span class="kw">fn </span>into_iter(<span class="self">self</span>) -&gt; <span class="self">Self</span>::IntoIter {
+<a href=#4676 id=4676 data-nosnippet>4676</a>        <span class="self">self</span>.iter()
+<a href=#4677 id=4677 data-nosnippet>4677</a>    }
+<a href=#4678 id=4678 data-nosnippet>4678</a>}
+<a href=#4679 id=4679 data-nosnippet>4679</a><span class="kw">impl </span>From&lt;IndexRange&gt; <span class="kw">for </span>std::ops::Range&lt;usize&gt; {
+<a href=#4680 id=4680 data-nosnippet>4680</a>    <span class="kw">fn </span>from(c: IndexRange) -&gt; <span class="self">Self </span>{
+<a href=#4681 id=4681 data-nosnippet>4681</a>        c.iter()
+<a href=#4682 id=4682 data-nosnippet>4682</a>    }
+<a href=#4683 id=4683 data-nosnippet>4683</a>}
+<a href=#4684 id=4684 data-nosnippet>4684</a><span class="kw">impl </span>From&lt;std::ops::Range&lt;usize&gt;&gt; <span class="kw">for </span>IndexRange {
+<a href=#4685 id=4685 data-nosnippet>4685</a>    <span class="kw">fn </span>from(r: std::ops::Range&lt;usize&gt;) -&gt; <span class="self">Self </span>{
+<a href=#4686 id=4686 data-nosnippet>4686</a>        IndexRange(r.start, r.end)
+<a href=#4687 id=4687 data-nosnippet>4687</a>    }
+<a href=#4688 id=4688 data-nosnippet>4688</a>}
+<a href=#4689 id=4689 data-nosnippet>4689</a><span class="kw">impl </span>IndexRange {
+<a href=#4690 id=4690 data-nosnippet>4690</a>    <span class="kw">pub fn </span>from_bounds(bounds: <span class="kw">impl </span>ops::RangeBounds&lt;usize&gt;) -&gt; <span class="self">Self </span>{
+<a href=#4691 id=4691 data-nosnippet>4691</a>        <span class="comment">// start..end
+<a href=#4692 id=4692 data-nosnippet>4692</a>        </span><span class="kw">let </span>start = <span class="kw">match </span>bounds.start_bound() {
+<a href=#4693 id=4693 data-nosnippet>4693</a>            ops::Bound::Included(<span class="kw-2">&amp;</span>i) =&gt; i,
+<a href=#4694 id=4694 data-nosnippet>4694</a>            ops::Bound::Excluded(<span class="kw-2">&amp;</span>i) =&gt; i + <span class="number">1</span>,
+<a href=#4695 id=4695 data-nosnippet>4695</a>            ops::Bound::Unbounded =&gt; <span class="number">0</span>,
+<a href=#4696 id=4696 data-nosnippet>4696</a>        };
+<a href=#4697 id=4697 data-nosnippet>4697</a>        <span class="kw">let </span>end = <span class="kw">match </span>bounds.end_bound() {
+<a href=#4698 id=4698 data-nosnippet>4698</a>            ops::Bound::Included(<span class="kw-2">&amp;</span>i) =&gt; i + <span class="number">1</span>,
+<a href=#4699 id=4699 data-nosnippet>4699</a>            ops::Bound::Excluded(<span class="kw-2">&amp;</span>i) =&gt; i,
+<a href=#4700 id=4700 data-nosnippet>4700</a>            ops::Bound::Unbounded =&gt; <span class="number">0</span>,
+<a href=#4701 id=4701 data-nosnippet>4701</a>        };
+<a href=#4702 id=4702 data-nosnippet>4702</a>        <span class="self">Self</span>(start, end)
+<a href=#4703 id=4703 data-nosnippet>4703</a>    }
+<a href=#4704 id=4704 data-nosnippet>4704</a>
+<a href=#4705 id=4705 data-nosnippet>4705</a>    <span class="doccomment">/// Into `Range&lt;usize&gt;`.
+<a href=#4706 id=4706 data-nosnippet>4706</a>    </span><span class="kw">pub fn </span>iter(<span class="self">self</span>) -&gt; std::ops::Range&lt;usize&gt; {
+<a href=#4707 id=4707 data-nosnippet>4707</a>        <span class="self">self</span>.<span class="number">0</span>..<span class="self">self</span>.<span class="number">1
+<a href=#4708 id=4708 data-nosnippet>4708</a>    </span>}
+<a href=#4709 id=4709 data-nosnippet>4709</a>
+<a href=#4710 id=4710 data-nosnippet>4710</a>    <span class="doccomment">/// `self.0`
+<a href=#4711 id=4711 data-nosnippet>4711</a>    </span><span class="kw">pub fn </span>start(<span class="self">self</span>) -&gt; usize {
+<a href=#4712 id=4712 data-nosnippet>4712</a>        <span class="self">self</span>.<span class="number">0
+<a href=#4713 id=4713 data-nosnippet>4713</a>    </span>}
+<a href=#4714 id=4714 data-nosnippet>4714</a>
+<a href=#4715 id=4715 data-nosnippet>4715</a>    <span class="doccomment">/// `self.1`
+<a href=#4716 id=4716 data-nosnippet>4716</a>    </span><span class="kw">pub fn </span>end(<span class="self">self</span>) -&gt; usize {
+<a href=#4717 id=4717 data-nosnippet>4717</a>        <span class="self">self</span>.<span class="number">1
+<a href=#4718 id=4718 data-nosnippet>4718</a>    </span>}
+<a href=#4719 id=4719 data-nosnippet>4719</a>
+<a href=#4720 id=4720 data-nosnippet>4720</a>    <span class="doccomment">/// `self.end - self.start`
+<a href=#4721 id=4721 data-nosnippet>4721</a>    </span><span class="kw">pub fn </span>len(<span class="self">self</span>) -&gt; usize {
+<a href=#4722 id=4722 data-nosnippet>4722</a>        <span class="self">self</span>.end() - <span class="self">self</span>.start()
+<a href=#4723 id=4723 data-nosnippet>4723</a>    }
+<a href=#4724 id=4724 data-nosnippet>4724</a>}
+<a href=#4725 id=4725 data-nosnippet>4725</a><span class="kw">impl </span>std::ops::RangeBounds&lt;usize&gt; <span class="kw">for </span>IndexRange {
+<a href=#4726 id=4726 data-nosnippet>4726</a>    <span class="kw">fn </span>start_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::ops::Bound&lt;<span class="kw-2">&amp;</span>usize&gt; {
+<a href=#4727 id=4727 data-nosnippet>4727</a>        std::ops::Bound::Included(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">0</span>)
+<a href=#4728 id=4728 data-nosnippet>4728</a>    }
+<a href=#4729 id=4729 data-nosnippet>4729</a>
+<a href=#4730 id=4730 data-nosnippet>4730</a>    <span class="kw">fn </span>end_bound(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; std::ops::Bound&lt;<span class="kw-2">&amp;</span>usize&gt; {
+<a href=#4731 id=4731 data-nosnippet>4731</a>        std::ops::Bound::Excluded(<span class="kw-2">&amp;</span><span class="self">self</span>.<span class="number">1</span>)
+<a href=#4732 id=4732 data-nosnippet>4732</a>    }
+<a href=#4733 id=4733 data-nosnippet>4733</a>}
+<a href=#4734 id=4734 data-nosnippet>4734</a>
+<a href=#4735 id=4735 data-nosnippet>4735</a><span class="doccomment">/// `f32` comparison, panics for `NaN`.
+<a href=#4736 id=4736 data-nosnippet>4736</a></span><span class="kw">pub fn </span>f32_cmp(a: <span class="kw-2">&amp;</span>f32, b: <span class="kw-2">&amp;</span>f32) -&gt; std::cmp::Ordering {
+<a href=#4737 id=4737 data-nosnippet>4737</a>    a.partial_cmp(b).unwrap()
 <a href=#4738 id=4738 data-nosnippet>4738</a>}
 <a href=#4739 id=4739 data-nosnippet>4739</a>
-<a href=#4740 id=4740 data-nosnippet>4740</a><span class="attr">#[cfg(test)]
-<a href=#4741 id=4741 data-nosnippet>4741</a></span><span class="kw">mod </span>tests {
-<a href=#4742 id=4742 data-nosnippet>4742</a>    <span class="kw">use crate</span>::{
-<a href=#4743 id=4743 data-nosnippet>4743</a>        FONTS, Font, FontName, FontStretch, FontStyle, FontWeight, ParagraphBreak, SegmentedText, TextReshapingArgs, TextShapingArgs,
-<a href=#4744 id=4744 data-nosnippet>4744</a>        WordContextKey,
-<a href=#4745 id=4745 data-nosnippet>4745</a>    };
-<a href=#4746 id=4746 data-nosnippet>4746</a>    <span class="kw">use </span>zng_app::APP;
-<a href=#4747 id=4747 data-nosnippet>4747</a>    <span class="kw">use </span>zng_ext_l10n::lang;
-<a href=#4748 id=4748 data-nosnippet>4748</a>    <span class="kw">use </span>zng_layout::{
-<a href=#4749 id=4749 data-nosnippet>4749</a>        context::LayoutDirection,
-<a href=#4750 id=4750 data-nosnippet>4750</a>        unit::{Px, PxConstraints2d},
-<a href=#4751 id=4751 data-nosnippet>4751</a>    };
-<a href=#4752 id=4752 data-nosnippet>4752</a>
-<a href=#4753 id=4753 data-nosnippet>4753</a>    <span class="kw">fn </span>test_font() -&gt; Font {
-<a href=#4754 id=4754 data-nosnippet>4754</a>        <span class="kw">let </span><span class="kw-2">mut </span>app = APP.minimal().run_headless(<span class="bool-val">false</span>);
-<a href=#4755 id=4755 data-nosnippet>4755</a>        <span class="kw">let </span>font = app
-<a href=#4756 id=4756 data-nosnippet>4756</a>            .run_test(<span class="kw">async </span>{
-<a href=#4757 id=4757 data-nosnippet>4757</a>                FONTS
-<a href=#4758 id=4758 data-nosnippet>4758</a>                    .normal(<span class="kw-2">&amp;</span>FontName::sans_serif(), <span class="kw-2">&amp;</span><span class="macro">lang!</span>(und))
-<a href=#4759 id=4759 data-nosnippet>4759</a>                    .wait_rsp()
-<a href=#4760 id=4760 data-nosnippet>4760</a>                    .<span class="kw">await
-<a href=#4761 id=4761 data-nosnippet>4761</a>                    </span>.unwrap()
-<a href=#4762 id=4762 data-nosnippet>4762</a>                    .sized(Px(<span class="number">20</span>), <span class="macro">vec!</span>[])
-<a href=#4763 id=4763 data-nosnippet>4763</a>            })
-<a href=#4764 id=4764 data-nosnippet>4764</a>            .unwrap();
-<a href=#4765 id=4765 data-nosnippet>4765</a>        drop(app);
-<a href=#4766 id=4766 data-nosnippet>4766</a>        font
-<a href=#4767 id=4767 data-nosnippet>4767</a>    }
-<a href=#4768 id=4768 data-nosnippet>4768</a>
-<a href=#4769 id=4769 data-nosnippet>4769</a>    <span class="attr">#[test]
-<a href=#4770 id=4770 data-nosnippet>4770</a>    </span><span class="kw">fn </span>set_line_spacing() {
-<a href=#4771 id=4771 data-nosnippet>4771</a>        <span class="kw">let </span>text = <span class="string">"0\n1\n2\n3\n4"</span>;
-<a href=#4772 id=4772 data-nosnippet>4772</a>        test_line_spacing(text, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
-<a href=#4773 id=4773 data-nosnippet>4773</a>        test_line_spacing(text, Px(<span class="number">0</span>), Px(<span class="number">20</span>));
-<a href=#4774 id=4774 data-nosnippet>4774</a>        test_line_spacing(text, Px(<span class="number">4</span>), Px(<span class="number">6</span>));
-<a href=#4775 id=4775 data-nosnippet>4775</a>        test_line_spacing(text, Px(<span class="number">4</span>), Px(<span class="number">4</span>));
-<a href=#4776 id=4776 data-nosnippet>4776</a>        test_line_spacing(<span class="string">"a line\nanother\nand another"</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
-<a href=#4777 id=4777 data-nosnippet>4777</a>        test_line_spacing(<span class="string">""</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
-<a href=#4778 id=4778 data-nosnippet>4778</a>        test_line_spacing(<span class="string">"a line"</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
-<a href=#4779 id=4779 data-nosnippet>4779</a>    }
-<a href=#4780 id=4780 data-nosnippet>4780</a>    <span class="kw">fn </span>test_line_spacing(text: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, from: Px, to: Px) {
-<a href=#4781 id=4781 data-nosnippet>4781</a>        <span class="kw">let </span>font = test_font();
-<a href=#4782 id=4782 data-nosnippet>4782</a>        <span class="kw">let </span><span class="kw-2">mut </span>config = TextShapingArgs {
-<a href=#4783 id=4783 data-nosnippet>4783</a>            line_height: Px(<span class="number">40</span>),
-<a href=#4784 id=4784 data-nosnippet>4784</a>            line_spacing: from,
-<a href=#4785 id=4785 data-nosnippet>4785</a>            ..Default::default()
-<a href=#4786 id=4786 data-nosnippet>4786</a>        };
-<a href=#4787 id=4787 data-nosnippet>4787</a>
-<a href=#4788 id=4788 data-nosnippet>4788</a>        <span class="kw">let </span>text = SegmentedText::new(text, LayoutDirection::LTR);
-<a href=#4789 id=4789 data-nosnippet>4789</a>        <span class="kw">let </span><span class="kw-2">mut </span>test = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
-<a href=#4790 id=4790 data-nosnippet>4790</a>
-<a href=#4791 id=4791 data-nosnippet>4791</a>        config.line_spacing = to;
-<a href=#4792 id=4792 data-nosnippet>4792</a>        <span class="kw">let </span>expected = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
-<a href=#4793 id=4793 data-nosnippet>4793</a>
-<a href=#4794 id=4794 data-nosnippet>4794</a>        <span class="macro">assert_eq!</span>(from, test.line_spacing());
-<a href=#4795 id=4795 data-nosnippet>4795</a>        test.reshape_lines(<span class="kw-2">&amp;</span>TextReshapingArgs {
-<a href=#4796 id=4796 data-nosnippet>4796</a>            constraints: PxConstraints2d::new_fill_size(test.align_size()),
-<a href=#4797 id=4797 data-nosnippet>4797</a>            inline_constraints: <span class="prelude-val">None</span>,
-<a href=#4798 id=4798 data-nosnippet>4798</a>            align: test.align(),
-<a href=#4799 id=4799 data-nosnippet>4799</a>            overflow_align: test.overflow_align(),
-<a href=#4800 id=4800 data-nosnippet>4800</a>            direction: test.direction(),
-<a href=#4801 id=4801 data-nosnippet>4801</a>            line_height: test.line_height(),
-<a href=#4802 id=4802 data-nosnippet>4802</a>            line_spacing: to,
-<a href=#4803 id=4803 data-nosnippet>4803</a>            paragraph_spacing: Px(<span class="number">0</span>),
-<a href=#4804 id=4804 data-nosnippet>4804</a>            paragraph_indent: (Px(<span class="number">0</span>), <span class="bool-val">false</span>),
-<a href=#4805 id=4805 data-nosnippet>4805</a>            paragraph_break: ParagraphBreak::None,
-<a href=#4806 id=4806 data-nosnippet>4806</a>        });
-<a href=#4807 id=4807 data-nosnippet>4807</a>        <span class="macro">assert_eq!</span>(to, test.line_spacing());
-<a href=#4808 id=4808 data-nosnippet>4808</a>
-<a href=#4809 id=4809 data-nosnippet>4809</a>        <span class="kw">for </span>(i, (g0, g1)) <span class="kw">in </span>test.glyphs.iter().zip(expected.glyphs.iter()).enumerate() {
-<a href=#4810 id=4810 data-nosnippet>4810</a>            <span class="macro">assert_eq!</span>(g0, g1, <span class="string">"testing {from} to {to}, glyph {i} is not equal"</span>);
-<a href=#4811 id=4811 data-nosnippet>4811</a>        }
-<a href=#4812 id=4812 data-nosnippet>4812</a>
-<a href=#4813 id=4813 data-nosnippet>4813</a>        <span class="macro">assert_eq!</span>(test.size(), expected.size());
-<a href=#4814 id=4814 data-nosnippet>4814</a>    }
+<a href=#4740 id=4740 data-nosnippet>4740</a><span class="kw">fn </span>into_harf_direction(d: LayoutDirection) -&gt; harfrust::Direction {
+<a href=#4741 id=4741 data-nosnippet>4741</a>    <span class="kw">match </span>d {
+<a href=#4742 id=4742 data-nosnippet>4742</a>        LayoutDirection::LTR =&gt; harfrust::Direction::LeftToRight,
+<a href=#4743 id=4743 data-nosnippet>4743</a>        LayoutDirection::RTL =&gt; harfrust::Direction::RightToLeft,
+<a href=#4744 id=4744 data-nosnippet>4744</a>    }
+<a href=#4745 id=4745 data-nosnippet>4745</a>}
+<a href=#4746 id=4746 data-nosnippet>4746</a>
+<a href=#4747 id=4747 data-nosnippet>4747</a><span class="attr">#[cfg(test)]
+<a href=#4748 id=4748 data-nosnippet>4748</a></span><span class="kw">mod </span>tests {
+<a href=#4749 id=4749 data-nosnippet>4749</a>    <span class="kw">use crate</span>::{
+<a href=#4750 id=4750 data-nosnippet>4750</a>        FONTS, Font, FontName, FontStretch, FontStyle, FontWeight, ParagraphBreak, SegmentedText, TextReshapingArgs, TextShapingArgs,
+<a href=#4751 id=4751 data-nosnippet>4751</a>        WordContextKey,
+<a href=#4752 id=4752 data-nosnippet>4752</a>    };
+<a href=#4753 id=4753 data-nosnippet>4753</a>    <span class="kw">use </span>zng_app::APP;
+<a href=#4754 id=4754 data-nosnippet>4754</a>    <span class="kw">use </span>zng_ext_l10n::lang;
+<a href=#4755 id=4755 data-nosnippet>4755</a>    <span class="kw">use </span>zng_layout::{
+<a href=#4756 id=4756 data-nosnippet>4756</a>        context::LayoutDirection,
+<a href=#4757 id=4757 data-nosnippet>4757</a>        unit::{Px, PxConstraints2d},
+<a href=#4758 id=4758 data-nosnippet>4758</a>    };
+<a href=#4759 id=4759 data-nosnippet>4759</a>
+<a href=#4760 id=4760 data-nosnippet>4760</a>    <span class="kw">fn </span>test_font() -&gt; Font {
+<a href=#4761 id=4761 data-nosnippet>4761</a>        <span class="kw">let </span><span class="kw-2">mut </span>app = APP.minimal().run_headless(<span class="bool-val">false</span>);
+<a href=#4762 id=4762 data-nosnippet>4762</a>        <span class="kw">let </span>font = app
+<a href=#4763 id=4763 data-nosnippet>4763</a>            .run_test(<span class="kw">async </span>{
+<a href=#4764 id=4764 data-nosnippet>4764</a>                FONTS
+<a href=#4765 id=4765 data-nosnippet>4765</a>                    .normal(<span class="kw-2">&amp;</span>FontName::sans_serif(), <span class="kw-2">&amp;</span><span class="macro">lang!</span>(und))
+<a href=#4766 id=4766 data-nosnippet>4766</a>                    .wait_rsp()
+<a href=#4767 id=4767 data-nosnippet>4767</a>                    .<span class="kw">await
+<a href=#4768 id=4768 data-nosnippet>4768</a>                    </span>.unwrap()
+<a href=#4769 id=4769 data-nosnippet>4769</a>                    .sized(Px(<span class="number">20</span>), <span class="macro">vec!</span>[])
+<a href=#4770 id=4770 data-nosnippet>4770</a>            })
+<a href=#4771 id=4771 data-nosnippet>4771</a>            .unwrap();
+<a href=#4772 id=4772 data-nosnippet>4772</a>        drop(app);
+<a href=#4773 id=4773 data-nosnippet>4773</a>        font
+<a href=#4774 id=4774 data-nosnippet>4774</a>    }
+<a href=#4775 id=4775 data-nosnippet>4775</a>
+<a href=#4776 id=4776 data-nosnippet>4776</a>    <span class="attr">#[test]
+<a href=#4777 id=4777 data-nosnippet>4777</a>    </span><span class="kw">fn </span>set_line_spacing() {
+<a href=#4778 id=4778 data-nosnippet>4778</a>        <span class="kw">let </span>text = <span class="string">"0\n1\n2\n3\n4"</span>;
+<a href=#4779 id=4779 data-nosnippet>4779</a>        test_line_spacing(text, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
+<a href=#4780 id=4780 data-nosnippet>4780</a>        test_line_spacing(text, Px(<span class="number">0</span>), Px(<span class="number">20</span>));
+<a href=#4781 id=4781 data-nosnippet>4781</a>        test_line_spacing(text, Px(<span class="number">4</span>), Px(<span class="number">6</span>));
+<a href=#4782 id=4782 data-nosnippet>4782</a>        test_line_spacing(text, Px(<span class="number">4</span>), Px(<span class="number">4</span>));
+<a href=#4783 id=4783 data-nosnippet>4783</a>        test_line_spacing(<span class="string">"a line\nanother\nand another"</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
+<a href=#4784 id=4784 data-nosnippet>4784</a>        test_line_spacing(<span class="string">""</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
+<a href=#4785 id=4785 data-nosnippet>4785</a>        test_line_spacing(<span class="string">"a line"</span>, Px(<span class="number">20</span>), Px(<span class="number">0</span>));
+<a href=#4786 id=4786 data-nosnippet>4786</a>    }
+<a href=#4787 id=4787 data-nosnippet>4787</a>    <span class="kw">fn </span>test_line_spacing(text: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, from: Px, to: Px) {
+<a href=#4788 id=4788 data-nosnippet>4788</a>        <span class="kw">let </span>font = test_font();
+<a href=#4789 id=4789 data-nosnippet>4789</a>        <span class="kw">let </span><span class="kw-2">mut </span>config = TextShapingArgs {
+<a href=#4790 id=4790 data-nosnippet>4790</a>            line_height: Px(<span class="number">40</span>),
+<a href=#4791 id=4791 data-nosnippet>4791</a>            line_spacing: from,
+<a href=#4792 id=4792 data-nosnippet>4792</a>            ..Default::default()
+<a href=#4793 id=4793 data-nosnippet>4793</a>        };
+<a href=#4794 id=4794 data-nosnippet>4794</a>
+<a href=#4795 id=4795 data-nosnippet>4795</a>        <span class="kw">let </span>text = SegmentedText::new(text, LayoutDirection::LTR);
+<a href=#4796 id=4796 data-nosnippet>4796</a>        <span class="kw">let </span><span class="kw-2">mut </span>test = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
+<a href=#4797 id=4797 data-nosnippet>4797</a>
+<a href=#4798 id=4798 data-nosnippet>4798</a>        config.line_spacing = to;
+<a href=#4799 id=4799 data-nosnippet>4799</a>        <span class="kw">let </span>expected = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
+<a href=#4800 id=4800 data-nosnippet>4800</a>
+<a href=#4801 id=4801 data-nosnippet>4801</a>        <span class="macro">assert_eq!</span>(from, test.line_spacing());
+<a href=#4802 id=4802 data-nosnippet>4802</a>        test.reshape_lines(<span class="kw-2">&amp;</span>TextReshapingArgs {
+<a href=#4803 id=4803 data-nosnippet>4803</a>            constraints: PxConstraints2d::new_fill_size(test.align_size()),
+<a href=#4804 id=4804 data-nosnippet>4804</a>            inline_constraints: <span class="prelude-val">None</span>,
+<a href=#4805 id=4805 data-nosnippet>4805</a>            align: test.align(),
+<a href=#4806 id=4806 data-nosnippet>4806</a>            overflow_align: test.overflow_align(),
+<a href=#4807 id=4807 data-nosnippet>4807</a>            direction: test.direction(),
+<a href=#4808 id=4808 data-nosnippet>4808</a>            line_height: test.line_height(),
+<a href=#4809 id=4809 data-nosnippet>4809</a>            line_spacing: to,
+<a href=#4810 id=4810 data-nosnippet>4810</a>            paragraph_spacing: Px(<span class="number">0</span>),
+<a href=#4811 id=4811 data-nosnippet>4811</a>            paragraph_indent: (Px(<span class="number">0</span>), <span class="bool-val">false</span>),
+<a href=#4812 id=4812 data-nosnippet>4812</a>            paragraph_break: ParagraphBreak::None,
+<a href=#4813 id=4813 data-nosnippet>4813</a>        });
+<a href=#4814 id=4814 data-nosnippet>4814</a>        <span class="macro">assert_eq!</span>(to, test.line_spacing());
 <a href=#4815 id=4815 data-nosnippet>4815</a>
-<a href=#4816 id=4816 data-nosnippet>4816</a>    <span class="attr">#[test]
-<a href=#4817 id=4817 data-nosnippet>4817</a>    </span><span class="kw">fn </span>set_line_height() {
-<a href=#4818 id=4818 data-nosnippet>4818</a>        <span class="kw">let </span>text = <span class="string">"0\n1\n2\n3\n4"</span>;
-<a href=#4819 id=4819 data-nosnippet>4819</a>        test_line_height(text, Px(<span class="number">20</span>), Px(<span class="number">20</span>));
-<a href=#4820 id=4820 data-nosnippet>4820</a>        test_line_height(text, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
-<a href=#4821 id=4821 data-nosnippet>4821</a>        test_line_height(text, Px(<span class="number">10</span>), Px(<span class="number">20</span>));
-<a href=#4822 id=4822 data-nosnippet>4822</a>        test_line_height(<span class="string">"a line\nanother\nand another"</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
-<a href=#4823 id=4823 data-nosnippet>4823</a>        test_line_height(<span class="string">""</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
-<a href=#4824 id=4824 data-nosnippet>4824</a>        test_line_height(<span class="string">"a line"</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
-<a href=#4825 id=4825 data-nosnippet>4825</a>    }
-<a href=#4826 id=4826 data-nosnippet>4826</a>    <span class="kw">fn </span>test_line_height(text: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, from: Px, to: Px) {
-<a href=#4827 id=4827 data-nosnippet>4827</a>        <span class="kw">let </span>font = test_font();
-<a href=#4828 id=4828 data-nosnippet>4828</a>        <span class="kw">let </span><span class="kw-2">mut </span>config = TextShapingArgs {
-<a href=#4829 id=4829 data-nosnippet>4829</a>            line_height: from,
-<a href=#4830 id=4830 data-nosnippet>4830</a>            line_spacing: Px(<span class="number">20</span>),
-<a href=#4831 id=4831 data-nosnippet>4831</a>            ..Default::default()
-<a href=#4832 id=4832 data-nosnippet>4832</a>        };
-<a href=#4833 id=4833 data-nosnippet>4833</a>
-<a href=#4834 id=4834 data-nosnippet>4834</a>        <span class="kw">let </span>text = SegmentedText::new(text, LayoutDirection::LTR);
-<a href=#4835 id=4835 data-nosnippet>4835</a>        <span class="kw">let </span><span class="kw-2">mut </span>test = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
-<a href=#4836 id=4836 data-nosnippet>4836</a>
-<a href=#4837 id=4837 data-nosnippet>4837</a>        config.line_height = to;
-<a href=#4838 id=4838 data-nosnippet>4838</a>        <span class="kw">let </span>expected = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
-<a href=#4839 id=4839 data-nosnippet>4839</a>
-<a href=#4840 id=4840 data-nosnippet>4840</a>        <span class="macro">assert_eq!</span>(from, test.line_height());
-<a href=#4841 id=4841 data-nosnippet>4841</a>        test.reshape_lines(<span class="kw-2">&amp;</span>TextReshapingArgs {
-<a href=#4842 id=4842 data-nosnippet>4842</a>            constraints: PxConstraints2d::new_fill_size(test.align_size()),
-<a href=#4843 id=4843 data-nosnippet>4843</a>            inline_constraints: <span class="prelude-val">None</span>,
-<a href=#4844 id=4844 data-nosnippet>4844</a>            align: test.align(),
-<a href=#4845 id=4845 data-nosnippet>4845</a>            overflow_align: test.overflow_align(),
-<a href=#4846 id=4846 data-nosnippet>4846</a>            direction: test.direction(),
-<a href=#4847 id=4847 data-nosnippet>4847</a>            line_height: to,
-<a href=#4848 id=4848 data-nosnippet>4848</a>            line_spacing: test.line_spacing(),
-<a href=#4849 id=4849 data-nosnippet>4849</a>            paragraph_spacing: Px(<span class="number">0</span>),
-<a href=#4850 id=4850 data-nosnippet>4850</a>            paragraph_indent: (Px(<span class="number">0</span>), <span class="bool-val">false</span>),
-<a href=#4851 id=4851 data-nosnippet>4851</a>            paragraph_break: ParagraphBreak::None,
-<a href=#4852 id=4852 data-nosnippet>4852</a>        });
-<a href=#4853 id=4853 data-nosnippet>4853</a>        <span class="macro">assert_eq!</span>(to, test.line_height());
-<a href=#4854 id=4854 data-nosnippet>4854</a>
-<a href=#4855 id=4855 data-nosnippet>4855</a>        <span class="kw">for </span>(i, (g0, g1)) <span class="kw">in </span>test.glyphs.iter().zip(expected.glyphs.iter()).enumerate() {
-<a href=#4856 id=4856 data-nosnippet>4856</a>            <span class="macro">assert_eq!</span>(g0, g1, <span class="string">"testing {from} to {to}, glyph {i} is not equal"</span>);
-<a href=#4857 id=4857 data-nosnippet>4857</a>        }
-<a href=#4858 id=4858 data-nosnippet>4858</a>
-<a href=#4859 id=4859 data-nosnippet>4859</a>        <span class="macro">assert_eq!</span>(test.size(), expected.size());
-<a href=#4860 id=4860 data-nosnippet>4860</a>    }
+<a href=#4816 id=4816 data-nosnippet>4816</a>        <span class="kw">for </span>(i, (g0, g1)) <span class="kw">in </span>test.glyphs.iter().zip(expected.glyphs.iter()).enumerate() {
+<a href=#4817 id=4817 data-nosnippet>4817</a>            <span class="macro">assert_eq!</span>(g0, g1, <span class="string">"testing {from} to {to}, glyph {i} is not equal"</span>);
+<a href=#4818 id=4818 data-nosnippet>4818</a>        }
+<a href=#4819 id=4819 data-nosnippet>4819</a>
+<a href=#4820 id=4820 data-nosnippet>4820</a>        <span class="macro">assert_eq!</span>(test.size(), expected.size());
+<a href=#4821 id=4821 data-nosnippet>4821</a>    }
+<a href=#4822 id=4822 data-nosnippet>4822</a>
+<a href=#4823 id=4823 data-nosnippet>4823</a>    <span class="attr">#[test]
+<a href=#4824 id=4824 data-nosnippet>4824</a>    </span><span class="kw">fn </span>set_line_height() {
+<a href=#4825 id=4825 data-nosnippet>4825</a>        <span class="kw">let </span>text = <span class="string">"0\n1\n2\n3\n4"</span>;
+<a href=#4826 id=4826 data-nosnippet>4826</a>        test_line_height(text, Px(<span class="number">20</span>), Px(<span class="number">20</span>));
+<a href=#4827 id=4827 data-nosnippet>4827</a>        test_line_height(text, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
+<a href=#4828 id=4828 data-nosnippet>4828</a>        test_line_height(text, Px(<span class="number">10</span>), Px(<span class="number">20</span>));
+<a href=#4829 id=4829 data-nosnippet>4829</a>        test_line_height(<span class="string">"a line\nanother\nand another"</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
+<a href=#4830 id=4830 data-nosnippet>4830</a>        test_line_height(<span class="string">""</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
+<a href=#4831 id=4831 data-nosnippet>4831</a>        test_line_height(<span class="string">"a line"</span>, Px(<span class="number">20</span>), Px(<span class="number">10</span>));
+<a href=#4832 id=4832 data-nosnippet>4832</a>    }
+<a href=#4833 id=4833 data-nosnippet>4833</a>    <span class="kw">fn </span>test_line_height(text: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, from: Px, to: Px) {
+<a href=#4834 id=4834 data-nosnippet>4834</a>        <span class="kw">let </span>font = test_font();
+<a href=#4835 id=4835 data-nosnippet>4835</a>        <span class="kw">let </span><span class="kw-2">mut </span>config = TextShapingArgs {
+<a href=#4836 id=4836 data-nosnippet>4836</a>            line_height: from,
+<a href=#4837 id=4837 data-nosnippet>4837</a>            line_spacing: Px(<span class="number">20</span>),
+<a href=#4838 id=4838 data-nosnippet>4838</a>            ..Default::default()
+<a href=#4839 id=4839 data-nosnippet>4839</a>        };
+<a href=#4840 id=4840 data-nosnippet>4840</a>
+<a href=#4841 id=4841 data-nosnippet>4841</a>        <span class="kw">let </span>text = SegmentedText::new(text, LayoutDirection::LTR);
+<a href=#4842 id=4842 data-nosnippet>4842</a>        <span class="kw">let </span><span class="kw-2">mut </span>test = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
+<a href=#4843 id=4843 data-nosnippet>4843</a>
+<a href=#4844 id=4844 data-nosnippet>4844</a>        config.line_height = to;
+<a href=#4845 id=4845 data-nosnippet>4845</a>        <span class="kw">let </span>expected = font.shape_text(<span class="kw-2">&amp;</span>text, <span class="kw-2">&amp;</span>config);
+<a href=#4846 id=4846 data-nosnippet>4846</a>
+<a href=#4847 id=4847 data-nosnippet>4847</a>        <span class="macro">assert_eq!</span>(from, test.line_height());
+<a href=#4848 id=4848 data-nosnippet>4848</a>        test.reshape_lines(<span class="kw-2">&amp;</span>TextReshapingArgs {
+<a href=#4849 id=4849 data-nosnippet>4849</a>            constraints: PxConstraints2d::new_fill_size(test.align_size()),
+<a href=#4850 id=4850 data-nosnippet>4850</a>            inline_constraints: <span class="prelude-val">None</span>,
+<a href=#4851 id=4851 data-nosnippet>4851</a>            align: test.align(),
+<a href=#4852 id=4852 data-nosnippet>4852</a>            overflow_align: test.overflow_align(),
+<a href=#4853 id=4853 data-nosnippet>4853</a>            direction: test.direction(),
+<a href=#4854 id=4854 data-nosnippet>4854</a>            line_height: to,
+<a href=#4855 id=4855 data-nosnippet>4855</a>            line_spacing: test.line_spacing(),
+<a href=#4856 id=4856 data-nosnippet>4856</a>            paragraph_spacing: Px(<span class="number">0</span>),
+<a href=#4857 id=4857 data-nosnippet>4857</a>            paragraph_indent: (Px(<span class="number">0</span>), <span class="bool-val">false</span>),
+<a href=#4858 id=4858 data-nosnippet>4858</a>            paragraph_break: ParagraphBreak::None,
+<a href=#4859 id=4859 data-nosnippet>4859</a>        });
+<a href=#4860 id=4860 data-nosnippet>4860</a>        <span class="macro">assert_eq!</span>(to, test.line_height());
 <a href=#4861 id=4861 data-nosnippet>4861</a>
-<a href=#4862 id=4862 data-nosnippet>4862</a>    <span class="attr">#[test]
-<a href=#4863 id=4863 data-nosnippet>4863</a>    </span><span class="kw">fn </span>font_fallback_issue() {
-<a href=#4864 id=4864 data-nosnippet>4864</a>        <span class="kw">let </span><span class="kw-2">mut </span>app = APP.minimal().run_headless(<span class="bool-val">false</span>);
-<a href=#4865 id=4865 data-nosnippet>4865</a>        app.run_test(<span class="kw">async </span>{
-<a href=#4866 id=4866 data-nosnippet>4866</a>            <span class="kw">let </span>font = FONTS
-<a href=#4867 id=4867 data-nosnippet>4867</a>                .list(
-<a href=#4868 id=4868 data-nosnippet>4868</a>                    <span class="kw-2">&amp;</span>[FontName::new(<span class="string">"Consolas"</span>), FontName::monospace()],
-<a href=#4869 id=4869 data-nosnippet>4869</a>                    FontStyle::Normal,
-<a href=#4870 id=4870 data-nosnippet>4870</a>                    FontWeight::NORMAL,
-<a href=#4871 id=4871 data-nosnippet>4871</a>                    FontStretch::NORMAL,
-<a href=#4872 id=4872 data-nosnippet>4872</a>                    <span class="kw-2">&amp;</span><span class="macro">lang!</span>(und),
-<a href=#4873 id=4873 data-nosnippet>4873</a>                )
-<a href=#4874 id=4874 data-nosnippet>4874</a>                .wait_rsp()
-<a href=#4875 id=4875 data-nosnippet>4875</a>                .<span class="kw">await
-<a href=#4876 id=4876 data-nosnippet>4876</a>                </span>.sized(Px(<span class="number">20</span>), <span class="macro">vec!</span>[]);
-<a href=#4877 id=4877 data-nosnippet>4877</a>
-<a href=#4878 id=4878 data-nosnippet>4878</a>            <span class="kw">let </span>config = TextShapingArgs::default();
-<a href=#4879 id=4879 data-nosnippet>4879</a>
-<a href=#4880 id=4880 data-nosnippet>4880</a>            <span class="kw">let </span>txt_seg = SegmentedText::new(<span class="string">"النص ثنائي الاتجاه (بالإنجليزية:Bi"</span>, LayoutDirection::RTL);
-<a href=#4881 id=4881 data-nosnippet>4881</a>            <span class="kw">let </span>txt_shape = font.shape_text(<span class="kw-2">&amp;</span>txt_seg, <span class="kw-2">&amp;</span>config);
-<a href=#4882 id=4882 data-nosnippet>4882</a>
-<a href=#4883 id=4883 data-nosnippet>4883</a>            <span class="kw">let </span>_ok = (txt_seg, txt_shape);
-<a href=#4884 id=4884 data-nosnippet>4884</a>        })
-<a href=#4885 id=4885 data-nosnippet>4885</a>        .unwrap()
-<a href=#4886 id=4886 data-nosnippet>4886</a>    }
-<a href=#4887 id=4887 data-nosnippet>4887</a>
-<a href=#4888 id=4888 data-nosnippet>4888</a>    <span class="attr">#[test]
-<a href=#4889 id=4889 data-nosnippet>4889</a>    </span><span class="kw">fn </span>cluster_is_byte() {
-<a href=#4890 id=4890 data-nosnippet>4890</a>        <span class="kw">let </span>font = test_font();
-<a href=#4891 id=4891 data-nosnippet>4891</a>
-<a href=#4892 id=4892 data-nosnippet>4892</a>        <span class="kw">let </span>data = font.shape_segment_no_cache(<span class="string">"£a"</span>, <span class="kw-2">&amp;</span>WordContextKey::new(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(<span class="string">"en-US"</span>), LayoutDirection::LTR, <span class="kw-2">&amp;</span><span class="macro">vec!</span>[]), <span class="kw-2">&amp;</span>[]);
-<a href=#4893 id=4893 data-nosnippet>4893</a>
-<a href=#4894 id=4894 data-nosnippet>4894</a>        <span class="kw">for </span>((i, <span class="kw">_</span>), g) <span class="kw">in </span><span class="string">"£a"</span>.char_indices().zip(<span class="kw-2">&amp;</span>data.glyphs) {
-<a href=#4895 id=4895 data-nosnippet>4895</a>            <span class="macro">assert_eq!</span>(i <span class="kw">as </span>u32, g.cluster);
-<a href=#4896 id=4896 data-nosnippet>4896</a>        }
-<a href=#4897 id=4897 data-nosnippet>4897</a>    }
-<a href=#4898 id=4898 data-nosnippet>4898</a>}
+<a href=#4862 id=4862 data-nosnippet>4862</a>        <span class="kw">for </span>(i, (g0, g1)) <span class="kw">in </span>test.glyphs.iter().zip(expected.glyphs.iter()).enumerate() {
+<a href=#4863 id=4863 data-nosnippet>4863</a>            <span class="macro">assert_eq!</span>(g0, g1, <span class="string">"testing {from} to {to}, glyph {i} is not equal"</span>);
+<a href=#4864 id=4864 data-nosnippet>4864</a>        }
+<a href=#4865 id=4865 data-nosnippet>4865</a>
+<a href=#4866 id=4866 data-nosnippet>4866</a>        <span class="macro">assert_eq!</span>(test.size(), expected.size());
+<a href=#4867 id=4867 data-nosnippet>4867</a>    }
+<a href=#4868 id=4868 data-nosnippet>4868</a>
+<a href=#4869 id=4869 data-nosnippet>4869</a>    <span class="attr">#[test]
+<a href=#4870 id=4870 data-nosnippet>4870</a>    </span><span class="kw">fn </span>font_fallback_issue() {
+<a href=#4871 id=4871 data-nosnippet>4871</a>        <span class="kw">let </span><span class="kw-2">mut </span>app = APP.minimal().run_headless(<span class="bool-val">false</span>);
+<a href=#4872 id=4872 data-nosnippet>4872</a>        app.run_test(<span class="kw">async </span>{
+<a href=#4873 id=4873 data-nosnippet>4873</a>            <span class="kw">let </span>font = FONTS
+<a href=#4874 id=4874 data-nosnippet>4874</a>                .list(
+<a href=#4875 id=4875 data-nosnippet>4875</a>                    <span class="kw-2">&amp;</span>[FontName::new(<span class="string">"Consolas"</span>), FontName::monospace()],
+<a href=#4876 id=4876 data-nosnippet>4876</a>                    FontStyle::Normal,
+<a href=#4877 id=4877 data-nosnippet>4877</a>                    FontWeight::NORMAL,
+<a href=#4878 id=4878 data-nosnippet>4878</a>                    FontStretch::NORMAL,
+<a href=#4879 id=4879 data-nosnippet>4879</a>                    <span class="kw-2">&amp;</span><span class="macro">lang!</span>(und),
+<a href=#4880 id=4880 data-nosnippet>4880</a>                )
+<a href=#4881 id=4881 data-nosnippet>4881</a>                .wait_rsp()
+<a href=#4882 id=4882 data-nosnippet>4882</a>                .<span class="kw">await
+<a href=#4883 id=4883 data-nosnippet>4883</a>                </span>.sized(Px(<span class="number">20</span>), <span class="macro">vec!</span>[]);
+<a href=#4884 id=4884 data-nosnippet>4884</a>
+<a href=#4885 id=4885 data-nosnippet>4885</a>            <span class="kw">let </span>config = TextShapingArgs::default();
+<a href=#4886 id=4886 data-nosnippet>4886</a>
+<a href=#4887 id=4887 data-nosnippet>4887</a>            <span class="kw">let </span>txt_seg = SegmentedText::new(<span class="string">"النص ثنائي الاتجاه (بالإنجليزية:Bi"</span>, LayoutDirection::RTL);
+<a href=#4888 id=4888 data-nosnippet>4888</a>            <span class="kw">let </span>txt_shape = font.shape_text(<span class="kw-2">&amp;</span>txt_seg, <span class="kw-2">&amp;</span>config);
+<a href=#4889 id=4889 data-nosnippet>4889</a>
+<a href=#4890 id=4890 data-nosnippet>4890</a>            <span class="kw">let </span>_ok = (txt_seg, txt_shape);
+<a href=#4891 id=4891 data-nosnippet>4891</a>        })
+<a href=#4892 id=4892 data-nosnippet>4892</a>        .unwrap()
+<a href=#4893 id=4893 data-nosnippet>4893</a>    }
+<a href=#4894 id=4894 data-nosnippet>4894</a>
+<a href=#4895 id=4895 data-nosnippet>4895</a>    <span class="attr">#[test]
+<a href=#4896 id=4896 data-nosnippet>4896</a>    </span><span class="kw">fn </span>cluster_is_byte() {
+<a href=#4897 id=4897 data-nosnippet>4897</a>        <span class="kw">let </span>font = test_font();
+<a href=#4898 id=4898 data-nosnippet>4898</a>
+<a href=#4899 id=4899 data-nosnippet>4899</a>        <span class="kw">let </span>data = font.shape_segment_no_cache(<span class="string">"£a"</span>, <span class="kw-2">&amp;</span>WordContextKey::new(<span class="kw-2">&amp;</span><span class="macro">lang!</span>(<span class="string">"en-US"</span>), LayoutDirection::LTR, <span class="kw-2">&amp;</span><span class="macro">vec!</span>[]), <span class="kw-2">&amp;</span>[]);
+<a href=#4900 id=4900 data-nosnippet>4900</a>
+<a href=#4901 id=4901 data-nosnippet>4901</a>        <span class="kw">for </span>((i, <span class="kw">_</span>), g) <span class="kw">in </span><span class="string">"£a"</span>.char_indices().zip(<span class="kw-2">&amp;</span>data.glyphs) {
+<a href=#4902 id=4902 data-nosnippet>4902</a>            <span class="macro">assert_eq!</span>(i <span class="kw">as </span>u32, g.cluster);
+<a href=#4903 id=4903 data-nosnippet>4903</a>        }
+<a href=#4904 id=4904 data-nosnippet>4904</a>    }
+<a href=#4905 id=4905 data-nosnippet>4905</a>}
 </code></pre></div></section></main></body></html>

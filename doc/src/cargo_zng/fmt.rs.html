@@ -21,7 +21,7 @@
 <a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>regex::Regex;
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>sha2::Digest;
 <a href=#23 id=23 data-nosnippet>23</a>
-<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::util;
+<a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span><span class="kw">crate</span>::util::{<span class="self">self</span>, glob_walker};
 <a href=#25 id=25 data-nosnippet>25</a>
 <a href=#26 id=26 data-nosnippet>26</a><span class="doccomment">/// Bump this for every change that can affect format result.
 <a href=#27 id=27 data-nosnippet>27</a></span><span class="kw">const </span>FMT_VERSION: <span class="kw-2">&amp;</span>str = <span class="string">"1"</span>;
@@ -162,8 +162,8 @@
 <a href=#162 id=162 data-nosnippet>162</a>    <span class="kw">let </span>files: HashSet&lt;PathBuf&gt; = file_patterns
 <a href=#163 id=163 data-nosnippet>163</a>        .into_par_iter()
 <a href=#164 id=164 data-nosnippet>164</a>        .flat_map(|pattern| {
-<a href=#165 id=165 data-nosnippet>165</a>            <span class="kw">let </span>files = <span class="kw">match </span>glob::glob(<span class="kw-2">&amp;</span>pattern.display().to_string().replace(<span class="string">'\\'</span>, <span class="string">"/"</span>)) {
-<a href=#166 id=166 data-nosnippet>166</a>                <span class="prelude-val">Ok</span>(f) =&gt; f.flat_map(|e| e.ok()).collect(),
+<a href=#165 id=165 data-nosnippet>165</a>            <span class="kw">let </span>files = <span class="kw">match </span>glob_walker(<span class="kw-2">&amp;</span>pattern.display().to_string().replace(<span class="string">'\\'</span>, <span class="string">"/"</span>), <span class="bool-val">true</span>) {
+<a href=#166 id=166 data-nosnippet>166</a>                <span class="prelude-val">Ok</span>(f) =&gt; f.flat_map(|e| e.ok().map(|p| p.into_path())).collect(),
 <a href=#167 id=167 data-nosnippet>167</a>                <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="macro">vec!</span>[],
 <a href=#168 id=168 data-nosnippet>168</a>            };
 <a href=#169 id=169 data-nosnippet>169</a>            files

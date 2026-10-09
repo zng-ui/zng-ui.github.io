@@ -3,7 +3,7 @@
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//!
 <a href=#4 id=4 data-nosnippet>4</a>//! Local LLM plugin for `cargo zng l10n`.
 <a href=#5 id=5 data-nosnippet>5</a>//!
-<a href=#6 id=6 data-nosnippet>6</a>//! Optionally define `LOCAL_TRANSLATOR_LLM_URL` is "http://localhost:8080/v1/chat/completions" by default.
+<a href=#6 id=6 data-nosnippet>6</a>//! Optionally define `LOCAL_TRANSLATOR_LLM_URL` is "http://localhost:9931/v1/chat/completions" by default.
 <a href=#7 id=7 data-nosnippet>7</a>//!
 <a href=#8 id=8 data-nosnippet>8</a>//! # Crate
 <a href=#9 id=9 data-nosnippet>9</a>//!
@@ -20,7 +20,7 @@
 <a href=#20 id=20 data-nosnippet>20</a>
 <a href=#21 id=21 data-nosnippet>21</a><span class="doccomment">/// Local LLVM plugin for `cargo zng l10n`
 <a href=#22 id=22 data-nosnippet>22</a>///
-<a href=#23 id=23 data-nosnippet>23</a>/// Optionally define `LOCAL_TRANSLATOR_LLM_URL` is "http://localhost:8080/v1/chat/completions" by default.
+<a href=#23 id=23 data-nosnippet>23</a>/// Optionally define `LOCAL_TRANSLATOR_LLM_URL` is "http://localhost:9931/v1/chat/completions" by default.
 <a href=#24 id=24 data-nosnippet>24</a></span><span class="attr">#[derive(Parser, Debug)]
 <a href=#25 id=25 data-nosnippet>25</a></span><span class="kw">struct </span>Cli {
 <a href=#26 id=26 data-nosnippet>26</a>    <span class="attr">#[arg(long)]
@@ -53,7 +53,7 @@
 <a href=#53 id=53 data-nosnippet>53</a>            }
 <a href=#54 id=54 data-nosnippet>54</a>        }
 <a href=#55 id=55 data-nosnippet>55</a>        <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">match </span>e {
-<a href=#56 id=56 data-nosnippet>56</a>            std::env::VarError::NotPresent =&gt; <span class="string">"http://localhost:8080/v1/chat/completions"</span>.to_owned(),
+<a href=#56 id=56 data-nosnippet>56</a>            std::env::VarError::NotPresent =&gt; <span class="string">"http://localhost:9931/v1/chat/completions"</span>.to_owned(),
 <a href=#57 id=57 data-nosnippet>57</a>            std::env::VarError::NotUnicode(<span class="kw">_</span>) =&gt; <span class="macro">fatal!</span>(<span class="string">"invalid `LOCAL_TRANSLATOR_LLM_URL`"</span>),
 <a href=#58 id=58 data-nosnippet>58</a>        },
 <a href=#59 id=59 data-nosnippet>59</a>    };

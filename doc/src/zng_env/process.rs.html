@@ -592,22 +592,21 @@
 <a href=#592 id=592 data-nosnippet>592</a>        <span class="kw-2">*</span>name = new_name;
 <a href=#593 id=593 data-nosnippet>593</a>        drop(name);
 <a href=#594 id=594 data-nosnippet>594</a>        <span class="comment">// WARNING: format of this message is public API, changing it is a breaking change
-<a href=#595 id=595 data-nosnippet>595</a>        // TODO(breaking) replace pid with process_path?
-<a href=#596 id=596 data-nosnippet>596</a>        </span><span class="macro">tracing::info!</span>(<span class="string">"pid: {}, name: {}"</span>, std::process::id(), process_name());
-<a href=#597 id=597 data-nosnippet>597</a>        <span class="bool-val">true
-<a href=#598 id=598 data-nosnippet>598</a>    </span>} <span class="kw">else </span>{
-<a href=#599 id=599 data-nosnippet>599</a>        <span class="bool-val">false
-<a href=#600 id=600 data-nosnippet>600</a>    </span>}
-<a href=#601 id=601 data-nosnippet>601</a>}
-<a href=#602 id=602 data-nosnippet>602</a>
-<a href=#603 id=603 data-nosnippet>603</a><span class="doccomment">/// Panics with an standard message if `zng::env::init!()` was not called or was not called correctly.
-<a href=#604 id=604 data-nosnippet>604</a></span><span class="kw">pub fn </span>assert_inited() {
-<a href=#605 id=605 data-nosnippet>605</a>    <span class="kw">match </span>process_lifetime_state() {
-<a href=#606 id=606 data-nosnippet>606</a>        ProcessLifetimeState::BeforeInit =&gt; <span class="macro">panic!</span>(<span class="string">"env not inited, please call `zng::env::init!()` in main"</span>),
-<a href=#607 id=607 data-nosnippet>607</a>        ProcessLifetimeState::Inited =&gt; {}
-<a href=#608 id=608 data-nosnippet>608</a>        ProcessLifetimeState::Exiting =&gt; {
-<a href=#609 id=609 data-nosnippet>609</a>            <span class="macro">panic!</span>(<span class="string">"env not inited correctly, please call `zng::env::init!()` at the beginning of the actual main function"</span>)
-<a href=#610 id=610 data-nosnippet>610</a>        }
-<a href=#611 id=611 data-nosnippet>611</a>    }
-<a href=#612 id=612 data-nosnippet>612</a>}
+<a href=#595 id=595 data-nosnippet>595</a>        </span><span class="macro">tracing::info!</span>(<span class="string">"pid: {}, name: {}"</span>, std::process::id(), process_name());
+<a href=#596 id=596 data-nosnippet>596</a>        <span class="bool-val">true
+<a href=#597 id=597 data-nosnippet>597</a>    </span>} <span class="kw">else </span>{
+<a href=#598 id=598 data-nosnippet>598</a>        <span class="bool-val">false
+<a href=#599 id=599 data-nosnippet>599</a>    </span>}
+<a href=#600 id=600 data-nosnippet>600</a>}
+<a href=#601 id=601 data-nosnippet>601</a>
+<a href=#602 id=602 data-nosnippet>602</a><span class="doccomment">/// Panics with an standard message if `zng::env::init!()` was not called or was not called correctly.
+<a href=#603 id=603 data-nosnippet>603</a></span><span class="kw">pub fn </span>assert_inited() {
+<a href=#604 id=604 data-nosnippet>604</a>    <span class="kw">match </span>process_lifetime_state() {
+<a href=#605 id=605 data-nosnippet>605</a>        ProcessLifetimeState::BeforeInit =&gt; <span class="macro">panic!</span>(<span class="string">"env not inited, please call `zng::env::init!()` in main"</span>),
+<a href=#606 id=606 data-nosnippet>606</a>        ProcessLifetimeState::Inited =&gt; {}
+<a href=#607 id=607 data-nosnippet>607</a>        ProcessLifetimeState::Exiting =&gt; {
+<a href=#608 id=608 data-nosnippet>608</a>            <span class="macro">panic!</span>(<span class="string">"env not inited correctly, please call `zng::env::init!()` at the beginning of the actual main function"</span>)
+<a href=#609 id=609 data-nosnippet>609</a>        }
+<a href=#610 id=610 data-nosnippet>610</a>    }
+<a href=#611 id=611 data-nosnippet>611</a>}
 </code></pre></div></section></main></body></html>

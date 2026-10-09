@@ -10,7 +10,7 @@
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>sha2::Digest;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>unic_langid::LanguageIdentifier;
 <a href=#12 id=12 data-nosnippet>12</a>
-<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span><span class="kw">crate</span>::util;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span><span class="kw">crate</span>::util::{<span class="self">self</span>, glob_walker};
 <a href=#14 id=14 data-nosnippet>14</a>
 <a href=#15 id=15 data-nosnippet>15</a><span class="kw">pub fn </span>translate(dir: <span class="kw-2">&amp;</span>str, from: <span class="kw-2">&amp;</span>str, to: <span class="kw-2">&amp;</span>str, replace: bool, check: bool) {
 <a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span>dir_path = Path::new(dir);
@@ -61,8 +61,8 @@
 <a href=#61 id=61 data-nosnippet>61</a>
 <a href=#62 id=62 data-nosnippet>62</a>    <span class="kw">let </span>pattern = dir_path.join(<span class="string">"**/*.ftl"</span>);
 <a href=#63 id=63 data-nosnippet>63</a>    <span class="kw">let </span><span class="kw-2">mut </span>files = <span class="macro">vec!</span>[];
-<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">for </span>entry <span class="kw">in </span>glob::glob(<span class="kw-2">&amp;</span>pattern.display().to_string()).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}`, {e}"</span>)) {
-<a href=#65 id=65 data-nosnippet>65</a>        <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}` entry, {e}"</span>));
+<a href=#64 id=64 data-nosnippet>64</a>    <span class="kw">for </span>entry <span class="kw">in </span>glob_walker(<span class="kw-2">&amp;</span>pattern.display().to_string(), <span class="bool-val">true</span>).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}`, {e}"</span>)) {
+<a href=#65 id=65 data-nosnippet>65</a>        <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}` entry, {e}"</span>)).into_path();
 <a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">let </span>relative_entry = entry.strip_prefix(dir_path).unwrap();
 <a href=#67 id=67 data-nosnippet>67</a>        <span class="kw">let </span>file = <span class="kw">match </span>std::fs::read_to_string(<span class="kw-2">&amp;</span>entry) {
 <a href=#68 id=68 data-nosnippet>68</a>            <span class="prelude-val">Ok</span>(f) =&gt; f,
@@ -176,8 +176,8 @@
 <a href=#176 id=176 data-nosnippet>176</a>        } <span class="kw">else </span>{
 <a href=#177 id=177 data-nosnippet>177</a>            <span class="kw">let </span>translators_pattern = install_dir.join(<span class="string">"zng-l10n-translator-*"</span>).display().to_string();
 <a href=#178 id=178 data-nosnippet>178</a>            <span class="kw">let </span><span class="kw-2">mut </span>options = <span class="macro">vec!</span>[];
-<a href=#179 id=179 data-nosnippet>179</a>            <span class="kw">for </span>opt <span class="kw">in </span>glob::glob(<span class="kw-2">&amp;</span>translators_pattern).unwrap() {
-<a href=#180 id=180 data-nosnippet>180</a>                options.push(opt.unwrap());
+<a href=#179 id=179 data-nosnippet>179</a>            <span class="kw">for </span>opt <span class="kw">in </span>glob_walker(<span class="kw-2">&amp;</span>translators_pattern, <span class="bool-val">false</span>).unwrap() {
+<a href=#180 id=180 data-nosnippet>180</a>                options.push(opt.unwrap().into_path());
 <a href=#181 id=181 data-nosnippet>181</a>            }
 <a href=#182 id=182 data-nosnippet>182</a>            <span class="kw">if </span>options.is_empty() {
 <a href=#183 id=183 data-nosnippet>183</a>                <span class="macro">fatal!</span>(<span class="string">"no translator installed\n   install a zng-l10n-translator-* crate\nor set ZNG_L10N_TRANSLATOR to a path"</span>)

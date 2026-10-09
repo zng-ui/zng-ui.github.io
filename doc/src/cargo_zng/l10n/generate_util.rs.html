@@ -2,7 +2,7 @@
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>fluent_syntax::ast::{Attribute, CallArguments, Entry, Expression, Identifier, InlineExpression, Pattern, PatternElement, VariantKey};
 <a href=#4 id=4 data-nosnippet>4</a>
-<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span><span class="kw">crate</span>::util;
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span><span class="kw">crate</span>::util::{<span class="self">self</span>, glob_walker};
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">pub fn </span>transform_dir(
 <a href=#8 id=8 data-nosnippet>8</a>    dir: <span class="kw-2">&amp;</span>str,
@@ -15,8 +15,8 @@
 <a href=#15 id=15 data-nosnippet>15</a>    <span class="kw">let </span>dir_path = Path::new(dir);
 <a href=#16 id=16 data-nosnippet>16</a>    <span class="kw">let </span>pattern = dir_path.join(<span class="string">"**/*.ftl"</span>);
 <a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">let </span>to_dir = dir_path.with_file_name(to_name);
-<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">for </span>entry <span class="kw">in </span>glob::glob(<span class="kw-2">&amp;</span>pattern.display().to_string()).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}`, {e}"</span>)) {
-<a href=#19 id=19 data-nosnippet>19</a>        <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}` entry, {e}"</span>));
+<a href=#18 id=18 data-nosnippet>18</a>    <span class="kw">for </span>entry <span class="kw">in </span>glob_walker(<span class="kw-2">&amp;</span>pattern.display().to_string(), <span class="bool-val">true</span>).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}`, {e}"</span>)) {
+<a href=#19 id=19 data-nosnippet>19</a>        <span class="kw">let </span>entry = entry.unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"cannot read `{dir}` entry, {e}"</span>)).into_path();
 <a href=#20 id=20 data-nosnippet>20</a>        <span class="kw">let </span>relative_entry = entry.strip_prefix(dir_path).unwrap();
 <a href=#21 id=21 data-nosnippet>21</a>        <span class="kw">let </span>to_file = to_dir.join(relative_entry);
 <a href=#22 id=22 data-nosnippet>22</a>        <span class="kw">let _ </span>= util::check_or_create_dir_all(check, to_file.parent().unwrap());

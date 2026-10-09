@@ -252,9 +252,9 @@
 <a href=#252 id=252 data-nosnippet>252</a>    }
 <a href=#253 id=253 data-nosnippet>253</a>
 <a href=#254 id=254 data-nosnippet>254</a>    <span class="doccomment">/// New `Other` error with a single entry.
-<a href=#255 id=255 data-nosnippet>255</a>    </span><span class="kw">pub fn </span>other(error: <span class="kw">impl </span>Error + Send + Sync + <span class="lifetime">'static</span>) -&gt; <span class="self">Self </span>{
-<a href=#256 id=256 data-nosnippet>256</a>        <span class="comment">// TODO(breaking) copy signature of std::io::Error::other
-<a href=#257 id=257 data-nosnippet>257</a>        </span><span class="self">Self</span>::Other(<span class="macro">vec!</span>[Arc::new(error)])
+<a href=#255 id=255 data-nosnippet>255</a>    </span><span class="kw">pub fn </span>other(error: <span class="kw">impl </span>Into&lt;Box&lt;<span class="kw">dyn </span>std::error::Error + Send + Sync&gt;&gt;) -&gt; <span class="self">Self </span>{
+<a href=#256 id=256 data-nosnippet>256</a>        <span class="comment">// Into&lt;Box.. because this conversion is implemented for types like String
+<a href=#257 id=257 data-nosnippet>257</a>        </span><span class="self">Self</span>::Other(<span class="macro">vec!</span>[error.into().into()])
 <a href=#258 id=258 data-nosnippet>258</a>    }
 <a href=#259 id=259 data-nosnippet>259</a>}
 <a href=#260 id=260 data-nosnippet>260</a><span class="doccomment">/// Inner errors only compare `Arc` pointer.

@@ -4,7 +4,7 @@
 <a href=#4 id=4 data-nosnippet>4</a>Copy the file or dir
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a>The request file:
-<a href=#7 id=7 data-nosnippet>7</a>  source/foo.txt.zr-copy
+<a href=#7 id=7 data-nosnippet>7</a>  source/foo.txt 'copy
 <a href=#8 id=8 data-nosnippet>8</a>   | # comment
 <a href=#9 id=9 data-nosnippet>9</a>   | path/bar.txt
 <a href=#10 id=10 data-nosnippet>10</a>
@@ -20,8 +20,8 @@
 <a href=#20 id=20 data-nosnippet>20</a>    </span><span class="kw">let </span>source = read_path(<span class="kw-2">&amp;</span>path(ZR_REQUEST)).unwrap_or_else(|e| <span class="macro">fatal!</span>(<span class="string">"{e}"</span>));
 <a href=#21 id=21 data-nosnippet>21</a>    <span class="comment">// target derived from the request file name
 <a href=#22 id=22 data-nosnippet>22</a>    </span><span class="kw">let </span><span class="kw-2">mut </span>target = path(ZR_TARGET);
-<a href=#23 id=23 data-nosnippet>23</a>    <span class="comment">// request without name "./.zr-copy", take name from source (this is deliberate not documented)
-<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">if </span>target.ends_with(<span class="string">".zr-copy"</span>) {
+<a href=#23 id=23 data-nosnippet>23</a>    <span class="comment">// request without name "./'copy", take name from source (this is deliberate not documented)
+<a href=#24 id=24 data-nosnippet>24</a>    </span><span class="kw">if </span>target.ends_with(<span class="string">"'copy"</span>) || target.ends_with(<span class="string">" 'copy"</span>) {
 <a href=#25 id=25 data-nosnippet>25</a>        target = target.with_file_name(source.file_name().unwrap());
 <a href=#26 id=26 data-nosnippet>26</a>    }
 <a href=#27 id=27 data-nosnippet>27</a>
