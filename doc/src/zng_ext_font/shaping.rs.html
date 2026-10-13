@@ -2815,7 +2815,7 @@
 <a href=#2815 id=2815 data-nosnippet>2815</a>            <span class="self">self</span>.out.has_colored_glyphs = <span class="bool-val">true</span>;
 <a href=#2816 id=2816 data-nosnippet>2816</a>        }
 <a href=#2817 id=2817 data-nosnippet>2817</a>        <span class="kw">if </span>(font.face().has_raster_images() || (<span class="macro">cfg!</span>(feature = <span class="string">"svg"</span>) &amp;&amp; font.face().has_svg_images()))
-<a href=#2818 id=2818 data-nosnippet>2818</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(ttf) = font.face().raw()
+<a href=#2818 id=2818 data-nosnippet>2818</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(ttf) = font.face().read_fonts_ref()
 <a href=#2819 id=2819 data-nosnippet>2819</a>        {
 <a href=#2820 id=2820 data-nosnippet>2820</a>            <span class="kw">for </span>(i, g) <span class="kw">in </span>shaped_seg.glyphs.iter().enumerate() {
 <a href=#2821 id=2821 data-nosnippet>2821</a>                <span class="kw">use </span>read_fonts::TableProvider <span class="kw">as _</span>;
@@ -4324,7 +4324,7 @@
 <a href=#4324 id=4324 data-nosnippet>4324</a>    }
 <a href=#4325 id=4325 data-nosnippet>4325</a>
 <a href=#4326 id=4326 data-nosnippet>4326</a>    <span class="kw">fn </span>shape_segment_no_cache(<span class="kw-2">&amp;</span><span class="self">self</span>, seg: <span class="kw-2">&amp;</span>str, key: <span class="kw-2">&amp;</span>WordContextKey, features: <span class="kw-2">&amp;</span>[harfrust::Feature]) -&gt; ShapedSegmentData {
-<a href=#4327 id=4327 data-nosnippet>4327</a>        <span class="kw">let </span>buffer = <span class="kw">if let </span><span class="prelude-val">Some</span>(font) = <span class="self">self</span>.face().harfrust_raw() {
+<a href=#4327 id=4327 data-nosnippet>4327</a>        <span class="kw">let </span>buffer = <span class="kw">if let </span><span class="prelude-val">Some</span>(font) = <span class="self">self</span>.face().harfrust_font() {
 <a href=#4328 id=4328 data-nosnippet>4328</a>            <span class="kw">let </span><span class="kw-2">mut </span>buffer = <span class="self">self</span>.buffer_segment(seg, key);
 <a href=#4329 id=4329 data-nosnippet>4329</a>            <span class="kw">let </span>shaper = harfrust::ShaperFont::new(font);
 <a href=#4330 id=4330 data-nosnippet>4330</a>            <span class="kw">match </span>harfrust::shape(<span class="kw-2">&amp;</span>shaper, <span class="kw-2">&amp;mut </span>buffer, harfrust::ShapeOptions::new().features(features)) {
@@ -4536,7 +4536,7 @@
 <a href=#4536 id=4536 data-nosnippet>4536</a>        }
 <a href=#4537 id=4537 data-nosnippet>4537</a>        <span class="kw">let </span>size = skrifa::instance::Size::new(<span class="self">self</span>.size().<span class="number">0 </span><span class="kw">as </span>f32);
 <a href=#4538 id=4538 data-nosnippet>4538</a>
-<a href=#4539 id=4539 data-nosnippet>4539</a>        <span class="kw">let </span>f = <span class="self">self</span>.face().raw()<span class="question-mark">?</span>;
+<a href=#4539 id=4539 data-nosnippet>4539</a>        <span class="kw">let </span>f = <span class="self">self</span>.face().read_fonts_ref()<span class="question-mark">?</span>;
 <a href=#4540 id=4540 data-nosnippet>4540</a>        <span class="kw">let </span>o = f.outline_glyphs().get(skrifa::GlyphId::new(glyph_id))<span class="question-mark">?</span>;
 <a href=#4541 id=4541 data-nosnippet>4541</a>        <span class="kw">let </span><span class="kw-2">mut </span>sink = AdapterSink {
 <a href=#4542 id=4542 data-nosnippet>4542</a>            sink,

@@ -966,11 +966,11 @@
 <a href=#966 id=966 data-nosnippet>966</a>
 <a href=#967 id=967 data-nosnippet>967</a>    <span class="doccomment">/// Deserialize the file content as YAML.
 <a href=#968 id=968 data-nosnippet>968</a>    </span><span class="attr">#[cfg(feature = <span class="string">"yaml"</span>)]
-<a href=#969 id=969 data-nosnippet>969</a>    </span><span class="kw">pub fn </span>yaml&lt;O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; serde_yaml::Result&lt;O&gt;
+<a href=#969 id=969 data-nosnippet>969</a>    </span><span class="kw">pub fn </span>yaml&lt;O&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;O, serde_saphyr::Error&gt;
 <a href=#970 id=970 data-nosnippet>970</a>    <span class="kw">where
 <a href=#971 id=971 data-nosnippet>971</a>        </span>O: serde::de::DeserializeOwned,
 <a href=#972 id=972 data-nosnippet>972</a>    {
-<a href=#973 id=973 data-nosnippet>973</a>        serde_yaml::from_reader(io::BufReader::new(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>))
+<a href=#973 id=973 data-nosnippet>973</a>        serde_saphyr::from_reader(io::BufReader::new(<span class="kw-2">&amp;mut </span><span class="self">self</span>.<span class="number">0</span>))
 <a href=#974 id=974 data-nosnippet>974</a>    }
 <a href=#975 id=975 data-nosnippet>975</a>
 <a href=#976 id=976 data-nosnippet>976</a>    <span class="doccomment">/// Read file and parse it.
@@ -1165,7 +1165,7 @@
 <a href=#1165 id=1165 data-nosnippet>1165</a>    </span><span class="attr">#[cfg(feature = <span class="string">"yaml"</span>)]
 <a href=#1166 id=1166 data-nosnippet>1166</a>    </span><span class="kw">pub fn </span>write_yaml&lt;O: serde::Serialize&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, value: <span class="kw-2">&amp;</span>O) -&gt; io::Result&lt;()&gt; {
 <a href=#1167 id=1167 data-nosnippet>1167</a>        <span class="kw">let </span><span class="kw-2">mut </span>buf = io::BufWriter::new(ops::DerefMut::deref_mut(<span class="self">self</span>));
-<a href=#1168 id=1168 data-nosnippet>1168</a>        serde_yaml::to_writer(<span class="kw-2">&amp;mut </span>buf, value).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))<span class="question-mark">?</span>;
+<a href=#1168 id=1168 data-nosnippet>1168</a>        serde_saphyr::to_io_writer(<span class="kw-2">&amp;mut </span>buf, value).map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))<span class="question-mark">?</span>;
 <a href=#1169 id=1169 data-nosnippet>1169</a>        buf.flush()
 <a href=#1170 id=1170 data-nosnippet>1170</a>    }
 <a href=#1171 id=1171 data-nosnippet>1171</a>

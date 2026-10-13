@@ -35,10 +35,10 @@ empty.</p>
 v0.append(<span class="kw-2">&amp;mut </span>v1);
 <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>v0, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]);
 <span class="macro">assert_eq!</span>(<span class="kw-2">*</span>v1, []);</code></pre></div></div></details><details class="toggle method-toggle" open><summary><section id="method.grow" class="method"><h4 class="code-header">pub fn <a href="#method.grow" class="fn">grow</a>(&amp;mut self, new_cap: <a class="primitive" href="https://doc.rust-lang.org/1.99.0/std/primitive.usize.html">usize</a>)</h4></section></summary><div class="docblock"><p>Re-allocate to set the capacity to <code>max(new_cap, inline_size())</code>.</p>
-<p>Panics if <code>new_cap</code> is less than the vector’s length
-or if the capacity computation overflows <code>usize</code>.</p>
+<p>If <code>new_cap</code> is less than the vector’s length, this is a no-op.
+Panics if the capacity computation overflows <code>usize</code>.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.try_grow" class="method"><h4 class="code-header">pub fn <a href="#method.try_grow" class="fn">try_grow</a>(&amp;mut self, new_cap: <a class="primitive" href="https://doc.rust-lang.org/1.99.0/std/primitive.usize.html">usize</a>) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.99.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/1.99.0/std/primitive.unit.html">()</a>, CollectionAllocErr&gt;</h4></section></summary><div class="docblock"><p>Re-allocate to set the capacity to <code>max(new_cap, inline_size())</code>.</p>
-<p>Panics if <code>new_cap</code> is less than the vector’s length</p>
+<p>If <code>new_cap</code> is less than the vector’s length, this is a no-op.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.reserve" class="method"><h4 class="code-header">pub fn <a href="#method.reserve" class="fn">reserve</a>(&amp;mut self, additional: <a class="primitive" href="https://doc.rust-lang.org/1.99.0/std/primitive.usize.html">usize</a>)</h4></section></summary><div class="docblock"><p>Reserve capacity for <code>additional</code> more elements to be inserted.</p>
 <p>May reserve more space to avoid frequent reallocations.</p>
 <p>Panics if the capacity computation overflows <code>usize</code>.</p>
