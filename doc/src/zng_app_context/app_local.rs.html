@@ -64,7 +64,7 @@
 <a href=#64 id=64 data-nosnippet>64</a>    <span class="comment">// we don't use a single RwLock here to avoid lock inversion deadlock between apps,
 <a href=#65 id=65 data-nosnippet>65</a>    // but data still needs to drop on app deinit so we use an Option.
 <a href=#66 id=66 data-nosnippet>66</a>    </span><span class="attr">#[cfg(feature = <span class="string">"multi_app"</span>)]
-<a href=#67 id=67 data-nosnippet>67</a>    </span>value: append_only_vec::AppendOnlyVec&lt;(AppId, RwLock&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;)&gt;,
+<a href=#67 id=67 data-nosnippet>67</a>    </span>value: boxcar::Vec&lt;(AppId, RwLock&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt;)&gt;,
 <a href=#68 id=68 data-nosnippet>68</a>    <span class="attr">#[cfg(feature = <span class="string">"multi_app"</span>)]
 <a href=#69 id=69 data-nosnippet>69</a>    </span>init: <span class="kw">fn</span>() -&gt; T,
 <a href=#70 id=70 data-nosnippet>70</a>    <span class="attr">#[cfg(not(feature = <span class="string">"multi_app"</span>))]
@@ -74,7 +74,7 @@
 <a href=#74 id=74 data-nosnippet>74</a></span><span class="kw">impl</span>&lt;T: Send + Sync + <span class="lifetime">'static</span>&gt; AppLocalVec&lt;T&gt; {
 <a href=#75 id=75 data-nosnippet>75</a>    <span class="kw">pub const fn </span>new(init: <span class="kw">fn</span>() -&gt; T) -&gt; <span class="self">Self </span>{
 <a href=#76 id=76 data-nosnippet>76</a>        <span class="self">Self </span>{
-<a href=#77 id=77 data-nosnippet>77</a>            value: append_only_vec::AppendOnlyVec::new(),
+<a href=#77 id=77 data-nosnippet>77</a>            value: boxcar::Vec::new(),
 <a href=#78 id=78 data-nosnippet>78</a>            init,
 <a href=#79 id=79 data-nosnippet>79</a>        }
 <a href=#80 id=80 data-nosnippet>80</a>    }
@@ -83,7 +83,7 @@
 <a href=#83 id=83 data-nosnippet>83</a>        <span class="self">self</span>.try_cleanup(id, <span class="number">0</span>);
 <a href=#84 id=84 data-nosnippet>84</a>    }
 <a href=#85 id=85 data-nosnippet>85</a>    <span class="kw">fn </span>try_cleanup(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>, id: AppId, tries: u8) {
-<a href=#86 id=86 data-nosnippet>86</a>        <span class="kw">for </span>(app, data) <span class="kw">in </span><span class="self">self</span>.value.iter() {
+<a href=#86 id=86 data-nosnippet>86</a>        <span class="kw">for </span>(<span class="kw">_</span>, (app, data)) <span class="kw">in </span><span class="self">self</span>.value.iter() {
 <a href=#87 id=87 data-nosnippet>87</a>            <span class="kw">if </span><span class="kw-2">*</span>app == id {
 <a href=#88 id=88 data-nosnippet>88</a>                <span class="kw">let </span>timeout = <span class="kw">if </span>tries == <span class="number">0 </span>{
 <a href=#89 id=89 data-nosnippet>89</a>                    std::time::Duration::from_millis(<span class="number">50</span>)
@@ -109,14 +109,14 @@
 <a href=#109 id=109 data-nosnippet>109</a>
 <a href=#110 id=110 data-nosnippet>110</a>    <span class="kw">fn </span>app_lock(<span class="kw-2">&amp;</span><span class="lifetime">'static </span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="lifetime">'static </span>RwLock&lt;<span class="prelude-ty">Option</span>&lt;T&gt;&gt; {
 <a href=#111 id=111 data-nosnippet>111</a>        <span class="kw">let </span>id = LocalContext::current_app().expect(<span class="string">"no app running, `app_local` can only be accessed inside apps"</span>);
-<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">for </span>(app, lock) <span class="kw">in </span><span class="self">self</span>.value.iter() {
+<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">for </span>(<span class="kw">_</span>, (app, lock)) <span class="kw">in </span><span class="self">self</span>.value.iter() {
 <a href=#113 id=113 data-nosnippet>113</a>            <span class="kw">if </span><span class="kw-2">*</span>app == id {
 <a href=#114 id=114 data-nosnippet>114</a>                <span class="kw">return </span>lock;
 <a href=#115 id=115 data-nosnippet>115</a>            }
 <a href=#116 id=116 data-nosnippet>116</a>        }
 <a href=#117 id=117 data-nosnippet>117</a>        <span class="self">self</span>.value.push((id, RwLock::new(<span class="prelude-val">None</span>)));
 <a href=#118 id=118 data-nosnippet>118</a>        <span class="comment">// ensure we always ref the first entry, in case of a race condition inserting multiple
-<a href=#119 id=119 data-nosnippet>119</a>        </span><span class="kw">for </span>(app, lock) <span class="kw">in </span><span class="self">self</span>.value.iter() {
+<a href=#119 id=119 data-nosnippet>119</a>        </span><span class="kw">for </span>(<span class="kw">_</span>, (app, lock)) <span class="kw">in </span><span class="self">self</span>.value.iter() {
 <a href=#120 id=120 data-nosnippet>120</a>            <span class="kw">if </span><span class="kw-2">*</span>app == id {
 <a href=#121 id=121 data-nosnippet>121</a>                <span class="kw">return </span>lock;
 <a href=#122 id=122 data-nosnippet>122</a>            }
