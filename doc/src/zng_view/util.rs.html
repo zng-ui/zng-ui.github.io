@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/util.rs`."><title>util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-0c87338a.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.1 (58cf8f9c3 2026-10-13)" data-channel="1.99.1" data-search-js="search-cf4fc35e.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_view/</div>util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::cell::RefCell;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/zng-view/src/util.rs`."><title>util.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-203241e4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng_view" data-themes="" data-resource-suffix="" data-rustdoc-version="1.100.0 (0ef1bc386 2026-11-09)" data-channel="1.100.0" data-search-js="search-b167f383.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-1814ead3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">zng_view/</div>util.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::cell::RefCell;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::collections::HashMap;
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>std::hash::Hasher;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::marker::PhantomData;
@@ -1313,600 +1313,597 @@
 <a href=#1313 id=1313 data-nosnippet>1313</a>        }
 <a href=#1314 id=1314 data-nosnippet>1314</a>    }
 <a href=#1315 id=1315 data-nosnippet>1315</a>    <span class="comment">// new cache
-<a href=#1316 id=1316 data-nosnippet>1316</a>    </span><span class="kw">if </span>std::fs::create_dir_all(driver_dir).is_ok() {
-<a href=#1317 id=1317 data-nosnippet>1317</a>        <span class="kw">return </span><span class="bool-val">true</span>;
-<a href=#1318 id=1318 data-nosnippet>1318</a>    }
-<a href=#1319 id=1319 data-nosnippet>1319</a>    <span class="bool-val">false
-<a href=#1320 id=1320 data-nosnippet>1320</a></span>}
-<a href=#1321 id=1321 data-nosnippet>1321</a>
-<a href=#1322 id=1322 data-nosnippet>1322</a><span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
-<a href=#1323 id=1323 data-nosnippet>1323</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>arboard_to_clip(e: arboard::Error) -&gt; clipboard_api::ClipboardError {
-<a href=#1324 id=1324 data-nosnippet>1324</a>    <span class="kw">match </span>e {
-<a href=#1325 id=1325 data-nosnippet>1325</a>        arboard::Error::ContentNotAvailable =&gt; clipboard_api::ClipboardError::NotFound,
-<a href=#1326 id=1326 data-nosnippet>1326</a>        arboard::Error::ClipboardNotSupported =&gt; clipboard_api::ClipboardError::NotSupported,
-<a href=#1327 id=1327 data-nosnippet>1327</a>        e =&gt; clipboard_api::ClipboardError::Other(<span class="macro">zng_txt::formatx!</span>(<span class="string">"{e:?}"</span>)),
-<a href=#1328 id=1328 data-nosnippet>1328</a>    }
-<a href=#1329 id=1329 data-nosnippet>1329</a>}
-<a href=#1330 id=1330 data-nosnippet>1330</a>
-<a href=#1331 id=1331 data-nosnippet>1331</a><span class="attr">#[cfg(windows)]
-<a href=#1332 id=1332 data-nosnippet>1332</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>clipboard_win_to_clip(e: clipboard_win::ErrorCode) -&gt; clipboard_api::ClipboardError {
-<a href=#1333 id=1333 data-nosnippet>1333</a>    <span class="kw">use </span>zng_txt::formatx;
-<a href=#1334 id=1334 data-nosnippet>1334</a>
-<a href=#1335 id=1335 data-nosnippet>1335</a>    <span class="kw">if </span>e.raw_code() == <span class="number">0 </span>{
-<a href=#1336 id=1336 data-nosnippet>1336</a>        <span class="comment">// If GetClipboardData fails it returns a NULL, but GetLastError sometimes (always?) returns 0 (ERROR_SUCCESS)
-<a href=#1337 id=1337 data-nosnippet>1337</a>        </span>clipboard_api::ClipboardError::NotFound
-<a href=#1338 id=1338 data-nosnippet>1338</a>    } <span class="kw">else </span>{
-<a href=#1339 id=1339 data-nosnippet>1339</a>        clipboard_api::ClipboardError::Other(<span class="macro">formatx!</span>(<span class="string">"{e:?}"</span>))
-<a href=#1340 id=1340 data-nosnippet>1340</a>    }
-<a href=#1341 id=1341 data-nosnippet>1341</a>}
-<a href=#1342 id=1342 data-nosnippet>1342</a>
-<a href=#1343 id=1343 data-nosnippet>1343</a><span class="kw">fn </span>accesskit_to_px(length: f64) -&gt; Px {
-<a href=#1344 id=1344 data-nosnippet>1344</a>    Px(length.round() <span class="kw">as _</span>)
-<a href=#1345 id=1345 data-nosnippet>1345</a>}
-<a href=#1346 id=1346 data-nosnippet>1346</a>
-<a href=#1347 id=1347 data-nosnippet>1347</a><span class="kw">fn </span>accesskit_point_to_px(p: accesskit::Point) -&gt; PxPoint {
-<a href=#1348 id=1348 data-nosnippet>1348</a>    PxPoint::new(accesskit_to_px(p.x), accesskit_to_px(p.y))
-<a href=#1349 id=1349 data-nosnippet>1349</a>}
-<a href=#1350 id=1350 data-nosnippet>1350</a>
-<a href=#1351 id=1351 data-nosnippet>1351</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>accesskit_to_event(
-<a href=#1352 id=1352 data-nosnippet>1352</a>    window_id: zng_view_api::window::WindowId,
-<a href=#1353 id=1353 data-nosnippet>1353</a>    request: accesskit::ActionRequest,
-<a href=#1354 id=1354 data-nosnippet>1354</a>) -&gt; <span class="prelude-ty">Option</span>&lt;zng_view_api::Event&gt; {
-<a href=#1355 id=1355 data-nosnippet>1355</a>    <span class="kw">use </span>accesskit::Action;
-<a href=#1356 id=1356 data-nosnippet>1356</a>    <span class="kw">use </span>zng_view_api::access::<span class="kw-2">*</span>;
-<a href=#1357 id=1357 data-nosnippet>1357</a>
-<a href=#1358 id=1358 data-nosnippet>1358</a>    <span class="kw">let </span>target = AccessNodeId(request.target_node.<span class="number">0</span>);
-<a href=#1359 id=1359 data-nosnippet>1359</a>
-<a href=#1360 id=1360 data-nosnippet>1360</a>    <span class="prelude-val">Some</span>(zng_view_api::Event::AccessCommand {
-<a href=#1361 id=1361 data-nosnippet>1361</a>        window: window_id,
-<a href=#1362 id=1362 data-nosnippet>1362</a>        target,
-<a href=#1363 id=1363 data-nosnippet>1363</a>        command: <span class="kw">match </span>request.action {
-<a href=#1364 id=1364 data-nosnippet>1364</a>            Action::Click =&gt; AccessCmd::Click(<span class="bool-val">true</span>),
-<a href=#1365 id=1365 data-nosnippet>1365</a>            Action::ShowContextMenu =&gt; AccessCmd::Click(<span class="bool-val">false</span>),
-<a href=#1366 id=1366 data-nosnippet>1366</a>            Action::Focus =&gt; AccessCmd::Focus(<span class="bool-val">true</span>),
-<a href=#1367 id=1367 data-nosnippet>1367</a>            Action::SetSequentialFocusNavigationStartingPoint =&gt; AccessCmd::FocusNavOrigin,
-<a href=#1368 id=1368 data-nosnippet>1368</a>            Action::Blur =&gt; AccessCmd::Focus(<span class="bool-val">false</span>),
-<a href=#1369 id=1369 data-nosnippet>1369</a>            Action::Collapse =&gt; AccessCmd::SetExpanded(<span class="bool-val">false</span>),
-<a href=#1370 id=1370 data-nosnippet>1370</a>            Action::Expand =&gt; AccessCmd::SetExpanded(<span class="bool-val">true</span>),
-<a href=#1371 id=1371 data-nosnippet>1371</a>            Action::CustomAction =&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
-<a href=#1372 id=1372 data-nosnippet>1372</a>            Action::Decrement =&gt; AccessCmd::Increment(-<span class="number">1</span>),
-<a href=#1373 id=1373 data-nosnippet>1373</a>            Action::Increment =&gt; AccessCmd::Increment(<span class="number">1</span>),
-<a href=#1374 id=1374 data-nosnippet>1374</a>            Action::HideTooltip =&gt; AccessCmd::SetToolTipVis(<span class="bool-val">false</span>),
-<a href=#1375 id=1375 data-nosnippet>1375</a>            Action::ShowTooltip =&gt; AccessCmd::SetToolTipVis(<span class="bool-val">true</span>),
-<a href=#1376 id=1376 data-nosnippet>1376</a>            Action::ReplaceSelectedText =&gt; {
-<a href=#1377 id=1377 data-nosnippet>1377</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::Value(s)) = request.data {
-<a href=#1378 id=1378 data-nosnippet>1378</a>                    AccessCmd::ReplaceSelectedText(Txt::from_str(<span class="kw-2">&amp;</span>s))
-<a href=#1379 id=1379 data-nosnippet>1379</a>                } <span class="kw">else </span>{
-<a href=#1380 id=1380 data-nosnippet>1380</a>                    AccessCmd::ReplaceSelectedText(Txt::from_str(<span class="string">""</span>))
-<a href=#1381 id=1381 data-nosnippet>1381</a>                }
-<a href=#1382 id=1382 data-nosnippet>1382</a>            }
-<a href=#1383 id=1383 data-nosnippet>1383</a>            Action::ScrollDown =&gt; AccessCmd::Scroll(ScrollCmd::PageDown),
-<a href=#1384 id=1384 data-nosnippet>1384</a>            Action::ScrollLeft =&gt; AccessCmd::Scroll(ScrollCmd::PageLeft),
-<a href=#1385 id=1385 data-nosnippet>1385</a>            Action::ScrollRight =&gt; AccessCmd::Scroll(ScrollCmd::PageRight),
-<a href=#1386 id=1386 data-nosnippet>1386</a>            Action::ScrollUp =&gt; AccessCmd::Scroll(ScrollCmd::PageUp),
-<a href=#1387 id=1387 data-nosnippet>1387</a>            Action::ScrollIntoView =&gt; AccessCmd::Scroll(ScrollCmd::ScrollTo),
-<a href=#1388 id=1388 data-nosnippet>1388</a>            Action::ScrollToPoint =&gt; {
-<a href=#1389 id=1389 data-nosnippet>1389</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::ScrollToPoint(p)) = request.data {
-<a href=#1390 id=1390 data-nosnippet>1390</a>                    AccessCmd::Scroll(ScrollCmd::ScrollToRect(PxRect::new(accesskit_point_to_px(p), PxSize::splat(Px(<span class="number">1</span>)))))
-<a href=#1391 id=1391 data-nosnippet>1391</a>                } <span class="kw">else </span>{
-<a href=#1392 id=1392 data-nosnippet>1392</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#1393 id=1393 data-nosnippet>1393</a>                }
-<a href=#1394 id=1394 data-nosnippet>1394</a>            }
-<a href=#1395 id=1395 data-nosnippet>1395</a>            Action::SetScrollOffset =&gt; {
-<a href=#1396 id=1396 data-nosnippet>1396</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::SetScrollOffset(o)) = request.data {
-<a href=#1397 id=1397 data-nosnippet>1397</a>                    AccessCmd::Scroll(ScrollCmd::ScrollToRect(PxRect::new(accesskit_point_to_px(o), PxSize::splat(Px(<span class="number">1</span>)))))
-<a href=#1398 id=1398 data-nosnippet>1398</a>                } <span class="kw">else </span>{
-<a href=#1399 id=1399 data-nosnippet>1399</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#1400 id=1400 data-nosnippet>1400</a>                }
-<a href=#1401 id=1401 data-nosnippet>1401</a>            }
-<a href=#1402 id=1402 data-nosnippet>1402</a>            Action::SetTextSelection =&gt; {
-<a href=#1403 id=1403 data-nosnippet>1403</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::SetTextSelection(s)) = request.data {
-<a href=#1404 id=1404 data-nosnippet>1404</a>                    AccessCmd::SelectText {
-<a href=#1405 id=1405 data-nosnippet>1405</a>                        start: (AccessNodeId(s.anchor.node.<span class="number">0</span>), s.anchor.character_index),
-<a href=#1406 id=1406 data-nosnippet>1406</a>                        caret: (AccessNodeId(s.focus.node.<span class="number">0</span>), s.focus.character_index),
-<a href=#1407 id=1407 data-nosnippet>1407</a>                    }
-<a href=#1408 id=1408 data-nosnippet>1408</a>                } <span class="kw">else </span>{
-<a href=#1409 id=1409 data-nosnippet>1409</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#1410 id=1410 data-nosnippet>1410</a>                }
-<a href=#1411 id=1411 data-nosnippet>1411</a>            }
-<a href=#1412 id=1412 data-nosnippet>1412</a>            Action::SetValue =&gt; <span class="kw">match </span>request.data {
-<a href=#1413 id=1413 data-nosnippet>1413</a>                <span class="prelude-val">Some</span>(accesskit::ActionData::Value(s)) =&gt; AccessCmd::SetString(Txt::from_str(<span class="kw-2">&amp;</span>s)),
-<a href=#1414 id=1414 data-nosnippet>1414</a>                <span class="prelude-val">Some</span>(accesskit::ActionData::NumericValue(n)) =&gt; AccessCmd::SetNumber(n),
-<a href=#1415 id=1415 data-nosnippet>1415</a>                <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
-<a href=#1416 id=1416 data-nosnippet>1416</a>            },
-<a href=#1417 id=1417 data-nosnippet>1417</a>        },
-<a href=#1418 id=1418 data-nosnippet>1418</a>    })
-<a href=#1419 id=1419 data-nosnippet>1419</a>}
+<a href=#1316 id=1316 data-nosnippet>1316</a>    </span>std::fs::create_dir_all(driver_dir).is_ok()
+<a href=#1317 id=1317 data-nosnippet>1317</a>}
+<a href=#1318 id=1318 data-nosnippet>1318</a>
+<a href=#1319 id=1319 data-nosnippet>1319</a><span class="attr">#[cfg(not(any(windows, target_os = <span class="string">"android"</span>)))]
+<a href=#1320 id=1320 data-nosnippet>1320</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>arboard_to_clip(e: arboard::Error) -&gt; clipboard_api::ClipboardError {
+<a href=#1321 id=1321 data-nosnippet>1321</a>    <span class="kw">match </span>e {
+<a href=#1322 id=1322 data-nosnippet>1322</a>        arboard::Error::ContentNotAvailable =&gt; clipboard_api::ClipboardError::NotFound,
+<a href=#1323 id=1323 data-nosnippet>1323</a>        arboard::Error::ClipboardNotSupported =&gt; clipboard_api::ClipboardError::NotSupported,
+<a href=#1324 id=1324 data-nosnippet>1324</a>        e =&gt; clipboard_api::ClipboardError::Other(<span class="macro">zng_txt::formatx!</span>(<span class="string">"{e:?}"</span>)),
+<a href=#1325 id=1325 data-nosnippet>1325</a>    }
+<a href=#1326 id=1326 data-nosnippet>1326</a>}
+<a href=#1327 id=1327 data-nosnippet>1327</a>
+<a href=#1328 id=1328 data-nosnippet>1328</a><span class="attr">#[cfg(windows)]
+<a href=#1329 id=1329 data-nosnippet>1329</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>clipboard_win_to_clip(e: clipboard_win::ErrorCode) -&gt; clipboard_api::ClipboardError {
+<a href=#1330 id=1330 data-nosnippet>1330</a>    <span class="kw">use </span>zng_txt::formatx;
+<a href=#1331 id=1331 data-nosnippet>1331</a>
+<a href=#1332 id=1332 data-nosnippet>1332</a>    <span class="kw">if </span>e.raw_code() == <span class="number">0 </span>{
+<a href=#1333 id=1333 data-nosnippet>1333</a>        <span class="comment">// If GetClipboardData fails it returns a NULL, but GetLastError sometimes (always?) returns 0 (ERROR_SUCCESS)
+<a href=#1334 id=1334 data-nosnippet>1334</a>        </span>clipboard_api::ClipboardError::NotFound
+<a href=#1335 id=1335 data-nosnippet>1335</a>    } <span class="kw">else </span>{
+<a href=#1336 id=1336 data-nosnippet>1336</a>        clipboard_api::ClipboardError::Other(<span class="macro">formatx!</span>(<span class="string">"{e:?}"</span>))
+<a href=#1337 id=1337 data-nosnippet>1337</a>    }
+<a href=#1338 id=1338 data-nosnippet>1338</a>}
+<a href=#1339 id=1339 data-nosnippet>1339</a>
+<a href=#1340 id=1340 data-nosnippet>1340</a><span class="kw">fn </span>accesskit_to_px(length: f64) -&gt; Px {
+<a href=#1341 id=1341 data-nosnippet>1341</a>    Px(length.round() <span class="kw">as _</span>)
+<a href=#1342 id=1342 data-nosnippet>1342</a>}
+<a href=#1343 id=1343 data-nosnippet>1343</a>
+<a href=#1344 id=1344 data-nosnippet>1344</a><span class="kw">fn </span>accesskit_point_to_px(p: accesskit::Point) -&gt; PxPoint {
+<a href=#1345 id=1345 data-nosnippet>1345</a>    PxPoint::new(accesskit_to_px(p.x), accesskit_to_px(p.y))
+<a href=#1346 id=1346 data-nosnippet>1346</a>}
+<a href=#1347 id=1347 data-nosnippet>1347</a>
+<a href=#1348 id=1348 data-nosnippet>1348</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>accesskit_to_event(
+<a href=#1349 id=1349 data-nosnippet>1349</a>    window_id: zng_view_api::window::WindowId,
+<a href=#1350 id=1350 data-nosnippet>1350</a>    request: accesskit::ActionRequest,
+<a href=#1351 id=1351 data-nosnippet>1351</a>) -&gt; <span class="prelude-ty">Option</span>&lt;zng_view_api::Event&gt; {
+<a href=#1352 id=1352 data-nosnippet>1352</a>    <span class="kw">use </span>accesskit::Action;
+<a href=#1353 id=1353 data-nosnippet>1353</a>    <span class="kw">use </span>zng_view_api::access::<span class="kw-2">*</span>;
+<a href=#1354 id=1354 data-nosnippet>1354</a>
+<a href=#1355 id=1355 data-nosnippet>1355</a>    <span class="kw">let </span>target = AccessNodeId(request.target_node.<span class="number">0</span>);
+<a href=#1356 id=1356 data-nosnippet>1356</a>
+<a href=#1357 id=1357 data-nosnippet>1357</a>    <span class="prelude-val">Some</span>(zng_view_api::Event::AccessCommand {
+<a href=#1358 id=1358 data-nosnippet>1358</a>        window: window_id,
+<a href=#1359 id=1359 data-nosnippet>1359</a>        target,
+<a href=#1360 id=1360 data-nosnippet>1360</a>        command: <span class="kw">match </span>request.action {
+<a href=#1361 id=1361 data-nosnippet>1361</a>            Action::Click =&gt; AccessCmd::Click(<span class="bool-val">true</span>),
+<a href=#1362 id=1362 data-nosnippet>1362</a>            Action::ShowContextMenu =&gt; AccessCmd::Click(<span class="bool-val">false</span>),
+<a href=#1363 id=1363 data-nosnippet>1363</a>            Action::Focus =&gt; AccessCmd::Focus(<span class="bool-val">true</span>),
+<a href=#1364 id=1364 data-nosnippet>1364</a>            Action::SetSequentialFocusNavigationStartingPoint =&gt; AccessCmd::FocusNavOrigin,
+<a href=#1365 id=1365 data-nosnippet>1365</a>            Action::Blur =&gt; AccessCmd::Focus(<span class="bool-val">false</span>),
+<a href=#1366 id=1366 data-nosnippet>1366</a>            Action::Collapse =&gt; AccessCmd::SetExpanded(<span class="bool-val">false</span>),
+<a href=#1367 id=1367 data-nosnippet>1367</a>            Action::Expand =&gt; AccessCmd::SetExpanded(<span class="bool-val">true</span>),
+<a href=#1368 id=1368 data-nosnippet>1368</a>            Action::CustomAction =&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
+<a href=#1369 id=1369 data-nosnippet>1369</a>            Action::Decrement =&gt; AccessCmd::Increment(-<span class="number">1</span>),
+<a href=#1370 id=1370 data-nosnippet>1370</a>            Action::Increment =&gt; AccessCmd::Increment(<span class="number">1</span>),
+<a href=#1371 id=1371 data-nosnippet>1371</a>            Action::HideTooltip =&gt; AccessCmd::SetToolTipVis(<span class="bool-val">false</span>),
+<a href=#1372 id=1372 data-nosnippet>1372</a>            Action::ShowTooltip =&gt; AccessCmd::SetToolTipVis(<span class="bool-val">true</span>),
+<a href=#1373 id=1373 data-nosnippet>1373</a>            Action::ReplaceSelectedText =&gt; {
+<a href=#1374 id=1374 data-nosnippet>1374</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::Value(s)) = request.data {
+<a href=#1375 id=1375 data-nosnippet>1375</a>                    AccessCmd::ReplaceSelectedText(Txt::from_str(<span class="kw-2">&amp;</span>s))
+<a href=#1376 id=1376 data-nosnippet>1376</a>                } <span class="kw">else </span>{
+<a href=#1377 id=1377 data-nosnippet>1377</a>                    AccessCmd::ReplaceSelectedText(Txt::from_str(<span class="string">""</span>))
+<a href=#1378 id=1378 data-nosnippet>1378</a>                }
+<a href=#1379 id=1379 data-nosnippet>1379</a>            }
+<a href=#1380 id=1380 data-nosnippet>1380</a>            Action::ScrollDown =&gt; AccessCmd::Scroll(ScrollCmd::PageDown),
+<a href=#1381 id=1381 data-nosnippet>1381</a>            Action::ScrollLeft =&gt; AccessCmd::Scroll(ScrollCmd::PageLeft),
+<a href=#1382 id=1382 data-nosnippet>1382</a>            Action::ScrollRight =&gt; AccessCmd::Scroll(ScrollCmd::PageRight),
+<a href=#1383 id=1383 data-nosnippet>1383</a>            Action::ScrollUp =&gt; AccessCmd::Scroll(ScrollCmd::PageUp),
+<a href=#1384 id=1384 data-nosnippet>1384</a>            Action::ScrollIntoView =&gt; AccessCmd::Scroll(ScrollCmd::ScrollTo),
+<a href=#1385 id=1385 data-nosnippet>1385</a>            Action::ScrollToPoint =&gt; {
+<a href=#1386 id=1386 data-nosnippet>1386</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::ScrollToPoint(p)) = request.data {
+<a href=#1387 id=1387 data-nosnippet>1387</a>                    AccessCmd::Scroll(ScrollCmd::ScrollToRect(PxRect::new(accesskit_point_to_px(p), PxSize::splat(Px(<span class="number">1</span>)))))
+<a href=#1388 id=1388 data-nosnippet>1388</a>                } <span class="kw">else </span>{
+<a href=#1389 id=1389 data-nosnippet>1389</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#1390 id=1390 data-nosnippet>1390</a>                }
+<a href=#1391 id=1391 data-nosnippet>1391</a>            }
+<a href=#1392 id=1392 data-nosnippet>1392</a>            Action::SetScrollOffset =&gt; {
+<a href=#1393 id=1393 data-nosnippet>1393</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::SetScrollOffset(o)) = request.data {
+<a href=#1394 id=1394 data-nosnippet>1394</a>                    AccessCmd::Scroll(ScrollCmd::ScrollToRect(PxRect::new(accesskit_point_to_px(o), PxSize::splat(Px(<span class="number">1</span>)))))
+<a href=#1395 id=1395 data-nosnippet>1395</a>                } <span class="kw">else </span>{
+<a href=#1396 id=1396 data-nosnippet>1396</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#1397 id=1397 data-nosnippet>1397</a>                }
+<a href=#1398 id=1398 data-nosnippet>1398</a>            }
+<a href=#1399 id=1399 data-nosnippet>1399</a>            Action::SetTextSelection =&gt; {
+<a href=#1400 id=1400 data-nosnippet>1400</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(accesskit::ActionData::SetTextSelection(s)) = request.data {
+<a href=#1401 id=1401 data-nosnippet>1401</a>                    AccessCmd::SelectText {
+<a href=#1402 id=1402 data-nosnippet>1402</a>                        start: (AccessNodeId(s.anchor.node.<span class="number">0</span>), s.anchor.character_index),
+<a href=#1403 id=1403 data-nosnippet>1403</a>                        caret: (AccessNodeId(s.focus.node.<span class="number">0</span>), s.focus.character_index),
+<a href=#1404 id=1404 data-nosnippet>1404</a>                    }
+<a href=#1405 id=1405 data-nosnippet>1405</a>                } <span class="kw">else </span>{
+<a href=#1406 id=1406 data-nosnippet>1406</a>                    <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#1407 id=1407 data-nosnippet>1407</a>                }
+<a href=#1408 id=1408 data-nosnippet>1408</a>            }
+<a href=#1409 id=1409 data-nosnippet>1409</a>            Action::SetValue =&gt; <span class="kw">match </span>request.data {
+<a href=#1410 id=1410 data-nosnippet>1410</a>                <span class="prelude-val">Some</span>(accesskit::ActionData::Value(s)) =&gt; AccessCmd::SetString(Txt::from_str(<span class="kw-2">&amp;</span>s)),
+<a href=#1411 id=1411 data-nosnippet>1411</a>                <span class="prelude-val">Some</span>(accesskit::ActionData::NumericValue(n)) =&gt; AccessCmd::SetNumber(n),
+<a href=#1412 id=1412 data-nosnippet>1412</a>                <span class="kw">_ </span>=&gt; <span class="kw">return </span><span class="prelude-val">None</span>,
+<a href=#1413 id=1413 data-nosnippet>1413</a>            },
+<a href=#1414 id=1414 data-nosnippet>1414</a>        },
+<a href=#1415 id=1415 data-nosnippet>1415</a>    })
+<a href=#1416 id=1416 data-nosnippet>1416</a>}
+<a href=#1417 id=1417 data-nosnippet>1417</a>
+<a href=#1418 id=1418 data-nosnippet>1418</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>access_tree_update_to_kit(update: zng_view_api::access::AccessTreeUpdate) -&gt; accesskit::TreeUpdate {
+<a href=#1419 id=1419 data-nosnippet>1419</a>    <span class="kw">let </span><span class="kw-2">mut </span>nodes = Vec::with_capacity(update.updates.iter().map(|t| t.len()).sum());
 <a href=#1420 id=1420 data-nosnippet>1420</a>
-<a href=#1421 id=1421 data-nosnippet>1421</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>access_tree_update_to_kit(update: zng_view_api::access::AccessTreeUpdate) -&gt; accesskit::TreeUpdate {
-<a href=#1422 id=1422 data-nosnippet>1422</a>    <span class="kw">let </span><span class="kw-2">mut </span>nodes = Vec::with_capacity(update.updates.iter().map(|t| t.len()).sum());
-<a href=#1423 id=1423 data-nosnippet>1423</a>
-<a href=#1424 id=1424 data-nosnippet>1424</a>    <span class="kw">for </span>update <span class="kw">in </span>update.updates {
-<a href=#1425 id=1425 data-nosnippet>1425</a>        access_node_to_kit(update.root(), <span class="kw-2">&amp;mut </span>nodes);
-<a href=#1426 id=1426 data-nosnippet>1426</a>    }
-<a href=#1427 id=1427 data-nosnippet>1427</a>
-<a href=#1428 id=1428 data-nosnippet>1428</a>    accesskit::TreeUpdate {
-<a href=#1429 id=1429 data-nosnippet>1429</a>        nodes,
-<a href=#1430 id=1430 data-nosnippet>1430</a>        tree: update.full_root.map(|id| accesskit::TreeInfo::new(access_id_to_kit(id))),
-<a href=#1431 id=1431 data-nosnippet>1431</a>        focus: access_id_to_kit(update.focused),
-<a href=#1432 id=1432 data-nosnippet>1432</a>        tree_id: accesskit::TreeId::ROOT,
-<a href=#1433 id=1433 data-nosnippet>1433</a>    }
-<a href=#1434 id=1434 data-nosnippet>1434</a>}
-<a href=#1435 id=1435 data-nosnippet>1435</a>
-<a href=#1436 id=1436 data-nosnippet>1436</a><span class="kw">fn </span>access_node_to_kit(
-<a href=#1437 id=1437 data-nosnippet>1437</a>    node: zng_view_api::access::AccessNodeRef,
-<a href=#1438 id=1438 data-nosnippet>1438</a>    output: <span class="kw-2">&amp;mut </span>Vec&lt;(accesskit::NodeId, accesskit::Node)&gt;,
-<a href=#1439 id=1439 data-nosnippet>1439</a>) -&gt; accesskit::NodeId {
-<a href=#1440 id=1440 data-nosnippet>1440</a>    <span class="kw">let </span>node_id = access_id_to_kit(node.id);
-<a href=#1441 id=1441 data-nosnippet>1441</a>    <span class="kw">let </span>node_role = node.role.map(access_role_to_kit).unwrap_or(accesskit::Role::Unknown);
-<a href=#1442 id=1442 data-nosnippet>1442</a>    <span class="kw">let </span><span class="kw-2">mut </span>builder = accesskit::Node::new(node_role);
-<a href=#1443 id=1443 data-nosnippet>1443</a>
-<a href=#1444 id=1444 data-nosnippet>1444</a>    <span class="comment">// add bounds and transform
-<a href=#1445 id=1445 data-nosnippet>1445</a>    </span><span class="kw">if </span>!node.size.is_empty() {
-<a href=#1446 id=1446 data-nosnippet>1446</a>        <span class="kw">let </span><span class="kw-2">mut </span>bounds = accesskit::Rect::new(<span class="number">0.0</span>, <span class="number">0.0</span>, node.size.width.<span class="number">0 </span><span class="kw">as </span>f64, node.size.height.<span class="number">0 </span><span class="kw">as </span>f64);
-<a href=#1447 id=1447 data-nosnippet>1447</a>        <span class="kw">if </span>!node.transform.is_identity() {
-<a href=#1448 id=1448 data-nosnippet>1448</a>            <span class="kw">if </span>node.children_count() == <span class="number">0
-<a href=#1449 id=1449 data-nosnippet>1449</a>                </span>&amp;&amp; <span class="kw">let </span>PxTransform::Offset(o) = node.transform
-<a href=#1450 id=1450 data-nosnippet>1450</a>            {
-<a href=#1451 id=1451 data-nosnippet>1451</a>                <span class="kw">let </span>(x, y) = o.cast().to_tuple();
-<a href=#1452 id=1452 data-nosnippet>1452</a>                bounds = bounds.with_origin(accesskit::Point::new(x, y));
-<a href=#1453 id=1453 data-nosnippet>1453</a>            } <span class="kw">else </span>{
-<a href=#1454 id=1454 data-nosnippet>1454</a>                <span class="kw">let </span>t = node.transform.to_transform().to_2d();
-<a href=#1455 id=1455 data-nosnippet>1455</a>                builder.set_transform(accesskit::Affine::new(t.cast().to_array()));
-<a href=#1456 id=1456 data-nosnippet>1456</a>            }
-<a href=#1457 id=1457 data-nosnippet>1457</a>        }
-<a href=#1458 id=1458 data-nosnippet>1458</a>        builder.set_bounds(bounds);
-<a href=#1459 id=1459 data-nosnippet>1459</a>    }
-<a href=#1460 id=1460 data-nosnippet>1460</a>
-<a href=#1461 id=1461 data-nosnippet>1461</a>    <span class="comment">// add actions
-<a href=#1462 id=1462 data-nosnippet>1462</a>    </span><span class="kw">for </span>cmd <span class="kw">in </span><span class="kw-2">&amp;</span>node.commands {
-<a href=#1463 id=1463 data-nosnippet>1463</a>        <span class="kw">use </span>zng_view_api::access::AccessCmdName::<span class="kw-2">*</span>;
-<a href=#1464 id=1464 data-nosnippet>1464</a>
-<a href=#1465 id=1465 data-nosnippet>1465</a>        <span class="kw">match </span>cmd {
-<a href=#1466 id=1466 data-nosnippet>1466</a>            Click =&gt; {
-<a href=#1467 id=1467 data-nosnippet>1467</a>                builder.add_action(accesskit::Action::Click);
-<a href=#1468 id=1468 data-nosnippet>1468</a>                builder.add_action(accesskit::Action::ShowContextMenu);
-<a href=#1469 id=1469 data-nosnippet>1469</a>            }
-<a href=#1470 id=1470 data-nosnippet>1470</a>            Focus =&gt; {
-<a href=#1471 id=1471 data-nosnippet>1471</a>                builder.add_action(accesskit::Action::Focus);
-<a href=#1472 id=1472 data-nosnippet>1472</a>                builder.add_action(accesskit::Action::Blur);
-<a href=#1473 id=1473 data-nosnippet>1473</a>            }
-<a href=#1474 id=1474 data-nosnippet>1474</a>            SetExpanded =&gt; {
-<a href=#1475 id=1475 data-nosnippet>1475</a>                builder.add_action(accesskit::Action::Expand);
-<a href=#1476 id=1476 data-nosnippet>1476</a>                builder.add_action(accesskit::Action::Collapse);
+<a href=#1421 id=1421 data-nosnippet>1421</a>    <span class="kw">for </span>update <span class="kw">in </span>update.updates {
+<a href=#1422 id=1422 data-nosnippet>1422</a>        access_node_to_kit(update.root(), <span class="kw-2">&amp;mut </span>nodes);
+<a href=#1423 id=1423 data-nosnippet>1423</a>    }
+<a href=#1424 id=1424 data-nosnippet>1424</a>
+<a href=#1425 id=1425 data-nosnippet>1425</a>    accesskit::TreeUpdate {
+<a href=#1426 id=1426 data-nosnippet>1426</a>        nodes,
+<a href=#1427 id=1427 data-nosnippet>1427</a>        tree: update.full_root.map(|id| accesskit::TreeInfo::new(access_id_to_kit(id))),
+<a href=#1428 id=1428 data-nosnippet>1428</a>        focus: access_id_to_kit(update.focused),
+<a href=#1429 id=1429 data-nosnippet>1429</a>        tree_id: accesskit::TreeId::ROOT,
+<a href=#1430 id=1430 data-nosnippet>1430</a>    }
+<a href=#1431 id=1431 data-nosnippet>1431</a>}
+<a href=#1432 id=1432 data-nosnippet>1432</a>
+<a href=#1433 id=1433 data-nosnippet>1433</a><span class="kw">fn </span>access_node_to_kit(
+<a href=#1434 id=1434 data-nosnippet>1434</a>    node: zng_view_api::access::AccessNodeRef,
+<a href=#1435 id=1435 data-nosnippet>1435</a>    output: <span class="kw-2">&amp;mut </span>Vec&lt;(accesskit::NodeId, accesskit::Node)&gt;,
+<a href=#1436 id=1436 data-nosnippet>1436</a>) -&gt; accesskit::NodeId {
+<a href=#1437 id=1437 data-nosnippet>1437</a>    <span class="kw">let </span>node_id = access_id_to_kit(node.id);
+<a href=#1438 id=1438 data-nosnippet>1438</a>    <span class="kw">let </span>node_role = node.role.map(access_role_to_kit).unwrap_or(accesskit::Role::Unknown);
+<a href=#1439 id=1439 data-nosnippet>1439</a>    <span class="kw">let </span><span class="kw-2">mut </span>builder = accesskit::Node::new(node_role);
+<a href=#1440 id=1440 data-nosnippet>1440</a>
+<a href=#1441 id=1441 data-nosnippet>1441</a>    <span class="comment">// add bounds and transform
+<a href=#1442 id=1442 data-nosnippet>1442</a>    </span><span class="kw">if </span>!node.size.is_empty() {
+<a href=#1443 id=1443 data-nosnippet>1443</a>        <span class="kw">let </span><span class="kw-2">mut </span>bounds = accesskit::Rect::new(<span class="number">0.0</span>, <span class="number">0.0</span>, node.size.width.<span class="number">0 </span><span class="kw">as </span>f64, node.size.height.<span class="number">0 </span><span class="kw">as </span>f64);
+<a href=#1444 id=1444 data-nosnippet>1444</a>        <span class="kw">if </span>!node.transform.is_identity() {
+<a href=#1445 id=1445 data-nosnippet>1445</a>            <span class="kw">if </span>node.children_count() == <span class="number">0
+<a href=#1446 id=1446 data-nosnippet>1446</a>                </span>&amp;&amp; <span class="kw">let </span>PxTransform::Offset(o) = node.transform
+<a href=#1447 id=1447 data-nosnippet>1447</a>            {
+<a href=#1448 id=1448 data-nosnippet>1448</a>                <span class="kw">let </span>(x, y) = o.cast().to_tuple();
+<a href=#1449 id=1449 data-nosnippet>1449</a>                bounds = bounds.with_origin(accesskit::Point::new(x, y));
+<a href=#1450 id=1450 data-nosnippet>1450</a>            } <span class="kw">else </span>{
+<a href=#1451 id=1451 data-nosnippet>1451</a>                <span class="kw">let </span>t = node.transform.to_transform().to_2d();
+<a href=#1452 id=1452 data-nosnippet>1452</a>                builder.set_transform(accesskit::Affine::new(t.cast().to_array()));
+<a href=#1453 id=1453 data-nosnippet>1453</a>            }
+<a href=#1454 id=1454 data-nosnippet>1454</a>        }
+<a href=#1455 id=1455 data-nosnippet>1455</a>        builder.set_bounds(bounds);
+<a href=#1456 id=1456 data-nosnippet>1456</a>    }
+<a href=#1457 id=1457 data-nosnippet>1457</a>
+<a href=#1458 id=1458 data-nosnippet>1458</a>    <span class="comment">// add actions
+<a href=#1459 id=1459 data-nosnippet>1459</a>    </span><span class="kw">for </span>cmd <span class="kw">in </span><span class="kw-2">&amp;</span>node.commands {
+<a href=#1460 id=1460 data-nosnippet>1460</a>        <span class="kw">use </span>zng_view_api::access::AccessCmdName::<span class="kw-2">*</span>;
+<a href=#1461 id=1461 data-nosnippet>1461</a>
+<a href=#1462 id=1462 data-nosnippet>1462</a>        <span class="kw">match </span>cmd {
+<a href=#1463 id=1463 data-nosnippet>1463</a>            Click =&gt; {
+<a href=#1464 id=1464 data-nosnippet>1464</a>                builder.add_action(accesskit::Action::Click);
+<a href=#1465 id=1465 data-nosnippet>1465</a>                builder.add_action(accesskit::Action::ShowContextMenu);
+<a href=#1466 id=1466 data-nosnippet>1466</a>            }
+<a href=#1467 id=1467 data-nosnippet>1467</a>            Focus =&gt; {
+<a href=#1468 id=1468 data-nosnippet>1468</a>                builder.add_action(accesskit::Action::Focus);
+<a href=#1469 id=1469 data-nosnippet>1469</a>                builder.add_action(accesskit::Action::Blur);
+<a href=#1470 id=1470 data-nosnippet>1470</a>            }
+<a href=#1471 id=1471 data-nosnippet>1471</a>            SetExpanded =&gt; {
+<a href=#1472 id=1472 data-nosnippet>1472</a>                builder.add_action(accesskit::Action::Expand);
+<a href=#1473 id=1473 data-nosnippet>1473</a>                builder.add_action(accesskit::Action::Collapse);
+<a href=#1474 id=1474 data-nosnippet>1474</a>            }
+<a href=#1475 id=1475 data-nosnippet>1475</a>            Increment =&gt; {
+<a href=#1476 id=1476 data-nosnippet>1476</a>                builder.add_action(accesskit::Action::Increment);
 <a href=#1477 id=1477 data-nosnippet>1477</a>            }
-<a href=#1478 id=1478 data-nosnippet>1478</a>            Increment =&gt; {
-<a href=#1479 id=1479 data-nosnippet>1479</a>                builder.add_action(accesskit::Action::Increment);
-<a href=#1480 id=1480 data-nosnippet>1480</a>            }
-<a href=#1481 id=1481 data-nosnippet>1481</a>            SetToolTipVis =&gt; {
-<a href=#1482 id=1482 data-nosnippet>1482</a>                builder.add_action(accesskit::Action::ShowTooltip);
-<a href=#1483 id=1483 data-nosnippet>1483</a>                builder.add_action(accesskit::Action::HideTooltip);
-<a href=#1484 id=1484 data-nosnippet>1484</a>            }
-<a href=#1485 id=1485 data-nosnippet>1485</a>            Scroll =&gt; {
-<a href=#1486 id=1486 data-nosnippet>1486</a>                builder.add_action(accesskit::Action::ScrollUp);
-<a href=#1487 id=1487 data-nosnippet>1487</a>                builder.add_action(accesskit::Action::ScrollLeft);
-<a href=#1488 id=1488 data-nosnippet>1488</a>                builder.add_action(accesskit::Action::ScrollDown);
-<a href=#1489 id=1489 data-nosnippet>1489</a>                builder.add_action(accesskit::Action::ScrollRight);
-<a href=#1490 id=1490 data-nosnippet>1490</a>                builder.add_action(accesskit::Action::ScrollIntoView);
-<a href=#1491 id=1491 data-nosnippet>1491</a>                builder.add_action(accesskit::Action::ScrollToPoint);
+<a href=#1478 id=1478 data-nosnippet>1478</a>            SetToolTipVis =&gt; {
+<a href=#1479 id=1479 data-nosnippet>1479</a>                builder.add_action(accesskit::Action::ShowTooltip);
+<a href=#1480 id=1480 data-nosnippet>1480</a>                builder.add_action(accesskit::Action::HideTooltip);
+<a href=#1481 id=1481 data-nosnippet>1481</a>            }
+<a href=#1482 id=1482 data-nosnippet>1482</a>            Scroll =&gt; {
+<a href=#1483 id=1483 data-nosnippet>1483</a>                builder.add_action(accesskit::Action::ScrollUp);
+<a href=#1484 id=1484 data-nosnippet>1484</a>                builder.add_action(accesskit::Action::ScrollLeft);
+<a href=#1485 id=1485 data-nosnippet>1485</a>                builder.add_action(accesskit::Action::ScrollDown);
+<a href=#1486 id=1486 data-nosnippet>1486</a>                builder.add_action(accesskit::Action::ScrollRight);
+<a href=#1487 id=1487 data-nosnippet>1487</a>                builder.add_action(accesskit::Action::ScrollIntoView);
+<a href=#1488 id=1488 data-nosnippet>1488</a>                builder.add_action(accesskit::Action::ScrollToPoint);
+<a href=#1489 id=1489 data-nosnippet>1489</a>            }
+<a href=#1490 id=1490 data-nosnippet>1490</a>            ReplaceSelectedText =&gt; {
+<a href=#1491 id=1491 data-nosnippet>1491</a>                builder.add_action(accesskit::Action::ReplaceSelectedText);
 <a href=#1492 id=1492 data-nosnippet>1492</a>            }
-<a href=#1493 id=1493 data-nosnippet>1493</a>            ReplaceSelectedText =&gt; {
-<a href=#1494 id=1494 data-nosnippet>1494</a>                builder.add_action(accesskit::Action::ReplaceSelectedText);
+<a href=#1493 id=1493 data-nosnippet>1493</a>            SelectText =&gt; {
+<a href=#1494 id=1494 data-nosnippet>1494</a>                builder.add_action(accesskit::Action::SetTextSelection);
 <a href=#1495 id=1495 data-nosnippet>1495</a>            }
-<a href=#1496 id=1496 data-nosnippet>1496</a>            SelectText =&gt; {
-<a href=#1497 id=1497 data-nosnippet>1497</a>                builder.add_action(accesskit::Action::SetTextSelection);
+<a href=#1496 id=1496 data-nosnippet>1496</a>            SetString =&gt; {
+<a href=#1497 id=1497 data-nosnippet>1497</a>                builder.add_action(accesskit::Action::SetValue);
 <a href=#1498 id=1498 data-nosnippet>1498</a>            }
-<a href=#1499 id=1499 data-nosnippet>1499</a>            SetString =&gt; {
+<a href=#1499 id=1499 data-nosnippet>1499</a>            SetNumber =&gt; {
 <a href=#1500 id=1500 data-nosnippet>1500</a>                builder.add_action(accesskit::Action::SetValue);
 <a href=#1501 id=1501 data-nosnippet>1501</a>            }
-<a href=#1502 id=1502 data-nosnippet>1502</a>            SetNumber =&gt; {
-<a href=#1503 id=1503 data-nosnippet>1503</a>                builder.add_action(accesskit::Action::SetValue);
-<a href=#1504 id=1504 data-nosnippet>1504</a>            }
-<a href=#1505 id=1505 data-nosnippet>1505</a>            <span class="kw">_ </span>=&gt; {}
-<a href=#1506 id=1506 data-nosnippet>1506</a>        }
-<a href=#1507 id=1507 data-nosnippet>1507</a>    }
-<a href=#1508 id=1508 data-nosnippet>1508</a>
-<a href=#1509 id=1509 data-nosnippet>1509</a>    <span class="comment">// add state
-<a href=#1510 id=1510 data-nosnippet>1510</a>    </span><span class="kw">for </span>state <span class="kw">in </span><span class="kw-2">&amp;</span>node.state {
-<a href=#1511 id=1511 data-nosnippet>1511</a>        <span class="kw">use </span>zng_view_api::access::{<span class="self">self</span>, AccessState::<span class="kw-2">*</span>};
-<a href=#1512 id=1512 data-nosnippet>1512</a>
-<a href=#1513 id=1513 data-nosnippet>1513</a>        <span class="kw">match </span>state {
-<a href=#1514 id=1514 data-nosnippet>1514</a>            AutoComplete(s) =&gt; {
-<a href=#1515 id=1515 data-nosnippet>1515</a>                <span class="kw">if </span><span class="kw-2">*</span>s == access::AutoComplete::BOTH {
-<a href=#1516 id=1516 data-nosnippet>1516</a>                    builder.set_auto_complete(accesskit::AutoComplete::Both)
-<a href=#1517 id=1517 data-nosnippet>1517</a>                } <span class="kw">else if </span><span class="kw-2">*</span>s == access::AutoComplete::INLINE {
-<a href=#1518 id=1518 data-nosnippet>1518</a>                    builder.set_auto_complete(accesskit::AutoComplete::Inline)
-<a href=#1519 id=1519 data-nosnippet>1519</a>                } <span class="kw">else if </span><span class="kw-2">*</span>s == access::AutoComplete::LIST {
-<a href=#1520 id=1520 data-nosnippet>1520</a>                    builder.set_auto_complete(accesskit::AutoComplete::List)
-<a href=#1521 id=1521 data-nosnippet>1521</a>                }
-<a href=#1522 id=1522 data-nosnippet>1522</a>            }
-<a href=#1523 id=1523 data-nosnippet>1523</a>            Checked(b) =&gt; builder.set_toggled(<span class="kw">match </span>b {
-<a href=#1524 id=1524 data-nosnippet>1524</a>                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) =&gt; accesskit::Toggled::True,
-<a href=#1525 id=1525 data-nosnippet>1525</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) =&gt; accesskit::Toggled::False,
-<a href=#1526 id=1526 data-nosnippet>1526</a>                <span class="prelude-val">None </span>=&gt; accesskit::Toggled::Mixed,
-<a href=#1527 id=1527 data-nosnippet>1527</a>            }),
-<a href=#1528 id=1528 data-nosnippet>1528</a>            Current(kind) =&gt; <span class="kw">match </span>kind {
-<a href=#1529 id=1529 data-nosnippet>1529</a>                access::CurrentKind::Page =&gt; builder.set_aria_current(accesskit::AriaCurrent::Page),
-<a href=#1530 id=1530 data-nosnippet>1530</a>                access::CurrentKind::Step =&gt; builder.set_aria_current(accesskit::AriaCurrent::Step),
-<a href=#1531 id=1531 data-nosnippet>1531</a>                access::CurrentKind::Location =&gt; builder.set_aria_current(accesskit::AriaCurrent::Location),
-<a href=#1532 id=1532 data-nosnippet>1532</a>                access::CurrentKind::Date =&gt; builder.set_aria_current(accesskit::AriaCurrent::Date),
-<a href=#1533 id=1533 data-nosnippet>1533</a>                access::CurrentKind::Time =&gt; builder.set_aria_current(accesskit::AriaCurrent::Time),
-<a href=#1534 id=1534 data-nosnippet>1534</a>                access::CurrentKind::Item =&gt; builder.set_aria_current(accesskit::AriaCurrent::True),
-<a href=#1535 id=1535 data-nosnippet>1535</a>                <span class="kw">_ </span>=&gt; {}
-<a href=#1536 id=1536 data-nosnippet>1536</a>            },
-<a href=#1537 id=1537 data-nosnippet>1537</a>            Disabled =&gt; builder.set_disabled(),
-<a href=#1538 id=1538 data-nosnippet>1538</a>            ErrorMessage(id) =&gt; builder.set_error_message(access_id_to_kit(<span class="kw-2">*</span>id)),
-<a href=#1539 id=1539 data-nosnippet>1539</a>            Expanded(b) =&gt; builder.set_expanded(<span class="kw-2">*</span>b),
-<a href=#1540 id=1540 data-nosnippet>1540</a>            Popup(pop) =&gt; <span class="kw">match </span>pop {
-<a href=#1541 id=1541 data-nosnippet>1541</a>                access::Popup::Menu =&gt; builder.set_has_popup(accesskit::HasPopup::Menu),
-<a href=#1542 id=1542 data-nosnippet>1542</a>                access::Popup::ListBox =&gt; builder.set_has_popup(accesskit::HasPopup::Listbox),
-<a href=#1543 id=1543 data-nosnippet>1543</a>                access::Popup::Tree =&gt; builder.set_has_popup(accesskit::HasPopup::Tree),
-<a href=#1544 id=1544 data-nosnippet>1544</a>                access::Popup::Grid =&gt; builder.set_has_popup(accesskit::HasPopup::Grid),
-<a href=#1545 id=1545 data-nosnippet>1545</a>                access::Popup::Dialog =&gt; builder.set_has_popup(accesskit::HasPopup::Dialog),
-<a href=#1546 id=1546 data-nosnippet>1546</a>                <span class="kw">_ </span>=&gt; {}
-<a href=#1547 id=1547 data-nosnippet>1547</a>            },
-<a href=#1548 id=1548 data-nosnippet>1548</a>            Invalid(i) =&gt; {
-<a href=#1549 id=1549 data-nosnippet>1549</a>                <span class="kw">if </span>i.contains(access::Invalid::SPELLING) {
-<a href=#1550 id=1550 data-nosnippet>1550</a>                    builder.set_invalid(accesskit::Invalid::Spelling)
-<a href=#1551 id=1551 data-nosnippet>1551</a>                } <span class="kw">else if </span>i.contains(access::Invalid::GRAMMAR) {
-<a href=#1552 id=1552 data-nosnippet>1552</a>                    builder.set_invalid(accesskit::Invalid::Grammar)
-<a href=#1553 id=1553 data-nosnippet>1553</a>                } <span class="kw">else if </span>i.contains(access::Invalid::ANY) {
-<a href=#1554 id=1554 data-nosnippet>1554</a>                    builder.set_invalid(accesskit::Invalid::True)
-<a href=#1555 id=1555 data-nosnippet>1555</a>                }
-<a href=#1556 id=1556 data-nosnippet>1556</a>            }
-<a href=#1557 id=1557 data-nosnippet>1557</a>            Label(s) =&gt; builder.set_label(s.clone().into_owned().into_boxed_str()),
-<a href=#1558 id=1558 data-nosnippet>1558</a>            Level(n) =&gt; builder.set_level(n.get() <span class="kw">as </span>usize),
-<a href=#1559 id=1559 data-nosnippet>1559</a>            Modal =&gt; builder.set_modal(),
-<a href=#1560 id=1560 data-nosnippet>1560</a>            MultiSelectable =&gt; builder.set_multiselectable(),
-<a href=#1561 id=1561 data-nosnippet>1561</a>            Orientation(o) =&gt; <span class="kw">match </span>o {
-<a href=#1562 id=1562 data-nosnippet>1562</a>                access::Orientation::Horizontal =&gt; builder.set_orientation(accesskit::Orientation::Horizontal),
-<a href=#1563 id=1563 data-nosnippet>1563</a>                access::Orientation::Vertical =&gt; builder.set_orientation(accesskit::Orientation::Vertical),
-<a href=#1564 id=1564 data-nosnippet>1564</a>            },
-<a href=#1565 id=1565 data-nosnippet>1565</a>            Placeholder(p) =&gt; builder.set_placeholder(p.clone().into_owned().into_boxed_str()),
-<a href=#1566 id=1566 data-nosnippet>1566</a>            ReadOnly =&gt; builder.set_read_only(),
-<a href=#1567 id=1567 data-nosnippet>1567</a>            Required =&gt; builder.set_required(),
-<a href=#1568 id=1568 data-nosnippet>1568</a>            Selected =&gt; builder.set_selected(<span class="bool-val">true</span>),
-<a href=#1569 id=1569 data-nosnippet>1569</a>            Sort(o) =&gt; <span class="kw">match </span>o {
-<a href=#1570 id=1570 data-nosnippet>1570</a>                access::SortDirection::Ascending =&gt; builder.set_sort_direction(accesskit::SortDirection::Ascending),
-<a href=#1571 id=1571 data-nosnippet>1571</a>                access::SortDirection::Descending =&gt; builder.set_sort_direction(accesskit::SortDirection::Descending),
-<a href=#1572 id=1572 data-nosnippet>1572</a>            },
-<a href=#1573 id=1573 data-nosnippet>1573</a>            ValueMax(m) =&gt; builder.set_max_numeric_value(<span class="kw-2">*</span>m),
-<a href=#1574 id=1574 data-nosnippet>1574</a>            ValueMin(m) =&gt; builder.set_min_numeric_value(<span class="kw-2">*</span>m),
-<a href=#1575 id=1575 data-nosnippet>1575</a>            Value(v) =&gt; builder.set_numeric_value(<span class="kw-2">*</span>v),
-<a href=#1576 id=1576 data-nosnippet>1576</a>            ValueText(v) =&gt; builder.set_value(v.clone().into_owned().into_boxed_str()),
-<a href=#1577 id=1577 data-nosnippet>1577</a>            Live { indicator, atomic, busy } =&gt; {
-<a href=#1578 id=1578 data-nosnippet>1578</a>                builder.set_live(<span class="kw">match </span>indicator {
-<a href=#1579 id=1579 data-nosnippet>1579</a>                    access::LiveIndicator::Assertive =&gt; accesskit::Live::Assertive,
-<a href=#1580 id=1580 data-nosnippet>1580</a>                    access::LiveIndicator::OnlyFocused =&gt; accesskit::Live::Off,
-<a href=#1581 id=1581 data-nosnippet>1581</a>                    access::LiveIndicator::Polite =&gt; accesskit::Live::Polite,
-<a href=#1582 id=1582 data-nosnippet>1582</a>                    <span class="kw">_ </span>=&gt; accesskit::Live::Polite,
-<a href=#1583 id=1583 data-nosnippet>1583</a>                });
-<a href=#1584 id=1584 data-nosnippet>1584</a>                <span class="kw">if </span><span class="kw-2">*</span>atomic {
-<a href=#1585 id=1585 data-nosnippet>1585</a>                    builder.set_live_atomic();
+<a href=#1502 id=1502 data-nosnippet>1502</a>            <span class="kw">_ </span>=&gt; {}
+<a href=#1503 id=1503 data-nosnippet>1503</a>        }
+<a href=#1504 id=1504 data-nosnippet>1504</a>    }
+<a href=#1505 id=1505 data-nosnippet>1505</a>
+<a href=#1506 id=1506 data-nosnippet>1506</a>    <span class="comment">// add state
+<a href=#1507 id=1507 data-nosnippet>1507</a>    </span><span class="kw">for </span>state <span class="kw">in </span><span class="kw-2">&amp;</span>node.state {
+<a href=#1508 id=1508 data-nosnippet>1508</a>        <span class="kw">use </span>zng_view_api::access::{<span class="self">self</span>, AccessState::<span class="kw-2">*</span>};
+<a href=#1509 id=1509 data-nosnippet>1509</a>
+<a href=#1510 id=1510 data-nosnippet>1510</a>        <span class="kw">match </span>state {
+<a href=#1511 id=1511 data-nosnippet>1511</a>            AutoComplete(s) =&gt; {
+<a href=#1512 id=1512 data-nosnippet>1512</a>                <span class="kw">if </span><span class="kw-2">*</span>s == access::AutoComplete::BOTH {
+<a href=#1513 id=1513 data-nosnippet>1513</a>                    builder.set_auto_complete(accesskit::AutoComplete::Both)
+<a href=#1514 id=1514 data-nosnippet>1514</a>                } <span class="kw">else if </span><span class="kw-2">*</span>s == access::AutoComplete::INLINE {
+<a href=#1515 id=1515 data-nosnippet>1515</a>                    builder.set_auto_complete(accesskit::AutoComplete::Inline)
+<a href=#1516 id=1516 data-nosnippet>1516</a>                } <span class="kw">else if </span><span class="kw-2">*</span>s == access::AutoComplete::LIST {
+<a href=#1517 id=1517 data-nosnippet>1517</a>                    builder.set_auto_complete(accesskit::AutoComplete::List)
+<a href=#1518 id=1518 data-nosnippet>1518</a>                }
+<a href=#1519 id=1519 data-nosnippet>1519</a>            }
+<a href=#1520 id=1520 data-nosnippet>1520</a>            Checked(b) =&gt; builder.set_toggled(<span class="kw">match </span>b {
+<a href=#1521 id=1521 data-nosnippet>1521</a>                <span class="prelude-val">Some</span>(<span class="bool-val">true</span>) =&gt; accesskit::Toggled::True,
+<a href=#1522 id=1522 data-nosnippet>1522</a>                <span class="prelude-val">Some</span>(<span class="bool-val">false</span>) =&gt; accesskit::Toggled::False,
+<a href=#1523 id=1523 data-nosnippet>1523</a>                <span class="prelude-val">None </span>=&gt; accesskit::Toggled::Mixed,
+<a href=#1524 id=1524 data-nosnippet>1524</a>            }),
+<a href=#1525 id=1525 data-nosnippet>1525</a>            Current(kind) =&gt; <span class="kw">match </span>kind {
+<a href=#1526 id=1526 data-nosnippet>1526</a>                access::CurrentKind::Page =&gt; builder.set_aria_current(accesskit::AriaCurrent::Page),
+<a href=#1527 id=1527 data-nosnippet>1527</a>                access::CurrentKind::Step =&gt; builder.set_aria_current(accesskit::AriaCurrent::Step),
+<a href=#1528 id=1528 data-nosnippet>1528</a>                access::CurrentKind::Location =&gt; builder.set_aria_current(accesskit::AriaCurrent::Location),
+<a href=#1529 id=1529 data-nosnippet>1529</a>                access::CurrentKind::Date =&gt; builder.set_aria_current(accesskit::AriaCurrent::Date),
+<a href=#1530 id=1530 data-nosnippet>1530</a>                access::CurrentKind::Time =&gt; builder.set_aria_current(accesskit::AriaCurrent::Time),
+<a href=#1531 id=1531 data-nosnippet>1531</a>                access::CurrentKind::Item =&gt; builder.set_aria_current(accesskit::AriaCurrent::True),
+<a href=#1532 id=1532 data-nosnippet>1532</a>                <span class="kw">_ </span>=&gt; {}
+<a href=#1533 id=1533 data-nosnippet>1533</a>            },
+<a href=#1534 id=1534 data-nosnippet>1534</a>            Disabled =&gt; builder.set_disabled(),
+<a href=#1535 id=1535 data-nosnippet>1535</a>            ErrorMessage(id) =&gt; builder.set_error_message(access_id_to_kit(<span class="kw-2">*</span>id)),
+<a href=#1536 id=1536 data-nosnippet>1536</a>            Expanded(b) =&gt; builder.set_expanded(<span class="kw-2">*</span>b),
+<a href=#1537 id=1537 data-nosnippet>1537</a>            Popup(pop) =&gt; <span class="kw">match </span>pop {
+<a href=#1538 id=1538 data-nosnippet>1538</a>                access::Popup::Menu =&gt; builder.set_has_popup(accesskit::HasPopup::Menu),
+<a href=#1539 id=1539 data-nosnippet>1539</a>                access::Popup::ListBox =&gt; builder.set_has_popup(accesskit::HasPopup::Listbox),
+<a href=#1540 id=1540 data-nosnippet>1540</a>                access::Popup::Tree =&gt; builder.set_has_popup(accesskit::HasPopup::Tree),
+<a href=#1541 id=1541 data-nosnippet>1541</a>                access::Popup::Grid =&gt; builder.set_has_popup(accesskit::HasPopup::Grid),
+<a href=#1542 id=1542 data-nosnippet>1542</a>                access::Popup::Dialog =&gt; builder.set_has_popup(accesskit::HasPopup::Dialog),
+<a href=#1543 id=1543 data-nosnippet>1543</a>                <span class="kw">_ </span>=&gt; {}
+<a href=#1544 id=1544 data-nosnippet>1544</a>            },
+<a href=#1545 id=1545 data-nosnippet>1545</a>            Invalid(i) =&gt; {
+<a href=#1546 id=1546 data-nosnippet>1546</a>                <span class="kw">if </span>i.contains(access::Invalid::SPELLING) {
+<a href=#1547 id=1547 data-nosnippet>1547</a>                    builder.set_invalid(accesskit::Invalid::Spelling)
+<a href=#1548 id=1548 data-nosnippet>1548</a>                } <span class="kw">else if </span>i.contains(access::Invalid::GRAMMAR) {
+<a href=#1549 id=1549 data-nosnippet>1549</a>                    builder.set_invalid(accesskit::Invalid::Grammar)
+<a href=#1550 id=1550 data-nosnippet>1550</a>                } <span class="kw">else if </span>i.contains(access::Invalid::ANY) {
+<a href=#1551 id=1551 data-nosnippet>1551</a>                    builder.set_invalid(accesskit::Invalid::True)
+<a href=#1552 id=1552 data-nosnippet>1552</a>                }
+<a href=#1553 id=1553 data-nosnippet>1553</a>            }
+<a href=#1554 id=1554 data-nosnippet>1554</a>            Label(s) =&gt; builder.set_label(s.clone().into_owned().into_boxed_str()),
+<a href=#1555 id=1555 data-nosnippet>1555</a>            Level(n) =&gt; builder.set_level(n.get() <span class="kw">as </span>usize),
+<a href=#1556 id=1556 data-nosnippet>1556</a>            Modal =&gt; builder.set_modal(),
+<a href=#1557 id=1557 data-nosnippet>1557</a>            MultiSelectable =&gt; builder.set_multiselectable(),
+<a href=#1558 id=1558 data-nosnippet>1558</a>            Orientation(o) =&gt; <span class="kw">match </span>o {
+<a href=#1559 id=1559 data-nosnippet>1559</a>                access::Orientation::Horizontal =&gt; builder.set_orientation(accesskit::Orientation::Horizontal),
+<a href=#1560 id=1560 data-nosnippet>1560</a>                access::Orientation::Vertical =&gt; builder.set_orientation(accesskit::Orientation::Vertical),
+<a href=#1561 id=1561 data-nosnippet>1561</a>            },
+<a href=#1562 id=1562 data-nosnippet>1562</a>            Placeholder(p) =&gt; builder.set_placeholder(p.clone().into_owned().into_boxed_str()),
+<a href=#1563 id=1563 data-nosnippet>1563</a>            ReadOnly =&gt; builder.set_read_only(),
+<a href=#1564 id=1564 data-nosnippet>1564</a>            Required =&gt; builder.set_required(),
+<a href=#1565 id=1565 data-nosnippet>1565</a>            Selected =&gt; builder.set_selected(<span class="bool-val">true</span>),
+<a href=#1566 id=1566 data-nosnippet>1566</a>            Sort(o) =&gt; <span class="kw">match </span>o {
+<a href=#1567 id=1567 data-nosnippet>1567</a>                access::SortDirection::Ascending =&gt; builder.set_sort_direction(accesskit::SortDirection::Ascending),
+<a href=#1568 id=1568 data-nosnippet>1568</a>                access::SortDirection::Descending =&gt; builder.set_sort_direction(accesskit::SortDirection::Descending),
+<a href=#1569 id=1569 data-nosnippet>1569</a>            },
+<a href=#1570 id=1570 data-nosnippet>1570</a>            ValueMax(m) =&gt; builder.set_max_numeric_value(<span class="kw-2">*</span>m),
+<a href=#1571 id=1571 data-nosnippet>1571</a>            ValueMin(m) =&gt; builder.set_min_numeric_value(<span class="kw-2">*</span>m),
+<a href=#1572 id=1572 data-nosnippet>1572</a>            Value(v) =&gt; builder.set_numeric_value(<span class="kw-2">*</span>v),
+<a href=#1573 id=1573 data-nosnippet>1573</a>            ValueText(v) =&gt; builder.set_value(v.clone().into_owned().into_boxed_str()),
+<a href=#1574 id=1574 data-nosnippet>1574</a>            Live { indicator, atomic, busy } =&gt; {
+<a href=#1575 id=1575 data-nosnippet>1575</a>                builder.set_live(<span class="kw">match </span>indicator {
+<a href=#1576 id=1576 data-nosnippet>1576</a>                    access::LiveIndicator::Assertive =&gt; accesskit::Live::Assertive,
+<a href=#1577 id=1577 data-nosnippet>1577</a>                    access::LiveIndicator::OnlyFocused =&gt; accesskit::Live::Off,
+<a href=#1578 id=1578 data-nosnippet>1578</a>                    access::LiveIndicator::Polite =&gt; accesskit::Live::Polite,
+<a href=#1579 id=1579 data-nosnippet>1579</a>                    <span class="kw">_ </span>=&gt; accesskit::Live::Polite,
+<a href=#1580 id=1580 data-nosnippet>1580</a>                });
+<a href=#1581 id=1581 data-nosnippet>1581</a>                <span class="kw">if </span><span class="kw-2">*</span>atomic {
+<a href=#1582 id=1582 data-nosnippet>1582</a>                    builder.set_live_atomic();
+<a href=#1583 id=1583 data-nosnippet>1583</a>                }
+<a href=#1584 id=1584 data-nosnippet>1584</a>                <span class="kw">if </span><span class="kw-2">*</span>busy {
+<a href=#1585 id=1585 data-nosnippet>1585</a>                    builder.set_busy();
 <a href=#1586 id=1586 data-nosnippet>1586</a>                }
-<a href=#1587 id=1587 data-nosnippet>1587</a>                <span class="kw">if </span><span class="kw-2">*</span>busy {
-<a href=#1588 id=1588 data-nosnippet>1588</a>                    builder.set_busy();
-<a href=#1589 id=1589 data-nosnippet>1589</a>                }
-<a href=#1590 id=1590 data-nosnippet>1590</a>            }
-<a href=#1591 id=1591 data-nosnippet>1591</a>            ActiveDescendant(id) =&gt; builder.set_active_descendant(access_id_to_kit(<span class="kw-2">*</span>id)),
-<a href=#1592 id=1592 data-nosnippet>1592</a>            ColCount(c) =&gt; builder.set_column_count(<span class="kw-2">*</span>c),
-<a href=#1593 id=1593 data-nosnippet>1593</a>            ColIndex(i) =&gt; builder.set_column_index(<span class="kw-2">*</span>i),
-<a href=#1594 id=1594 data-nosnippet>1594</a>            ColSpan(s) =&gt; builder.set_column_span(<span class="kw-2">*</span>s),
-<a href=#1595 id=1595 data-nosnippet>1595</a>            Controls(ids) =&gt; builder.set_controls(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
-<a href=#1596 id=1596 data-nosnippet>1596</a>            DescribedBy(ids) =&gt; builder.set_described_by(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
-<a href=#1597 id=1597 data-nosnippet>1597</a>            Details(ids) =&gt; builder.set_details(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
-<a href=#1598 id=1598 data-nosnippet>1598</a>            FlowTo(ids) =&gt; builder.set_flow_to(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
-<a href=#1599 id=1599 data-nosnippet>1599</a>            LabelledBy(ids) =&gt; builder.set_labelled_by(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
-<a href=#1600 id=1600 data-nosnippet>1600</a>            LabelledByChild =&gt; {
-<a href=#1601 id=1601 data-nosnippet>1601</a>                <span class="kw">let </span>labelled_by: Vec&lt;<span class="kw">_</span>&gt; = <span class="kw">if </span>node.children.is_empty() {
-<a href=#1602 id=1602 data-nosnippet>1602</a>                    node.children().map(|c| access_id_to_kit(c.id)).collect()
-<a href=#1603 id=1603 data-nosnippet>1603</a>                } <span class="kw">else </span>{
-<a href=#1604 id=1604 data-nosnippet>1604</a>                    node.children.iter().map(|id| access_id_to_kit(<span class="kw-2">*</span>id)).collect()
-<a href=#1605 id=1605 data-nosnippet>1605</a>                };
-<a href=#1606 id=1606 data-nosnippet>1606</a>                builder.set_labelled_by(labelled_by);
-<a href=#1607 id=1607 data-nosnippet>1607</a>            }
-<a href=#1608 id=1608 data-nosnippet>1608</a>            Owns(ids) =&gt; {
-<a href=#1609 id=1609 data-nosnippet>1609</a>                <span class="kw">for </span>id <span class="kw">in </span>ids {
-<a href=#1610 id=1610 data-nosnippet>1610</a>                    builder.push_child(access_id_to_kit(<span class="kw-2">*</span>id));
-<a href=#1611 id=1611 data-nosnippet>1611</a>                }
-<a href=#1612 id=1612 data-nosnippet>1612</a>            }
-<a href=#1613 id=1613 data-nosnippet>1613</a>            ItemIndex(p) =&gt; builder.set_position_in_set(<span class="kw-2">*</span>p),
-<a href=#1614 id=1614 data-nosnippet>1614</a>            RowCount(c) =&gt; builder.set_row_count(<span class="kw-2">*</span>c),
-<a href=#1615 id=1615 data-nosnippet>1615</a>            RowIndex(i) =&gt; builder.set_row_index(<span class="kw-2">*</span>i),
-<a href=#1616 id=1616 data-nosnippet>1616</a>            RowSpan(s) =&gt; builder.set_row_span(<span class="kw-2">*</span>s),
-<a href=#1617 id=1617 data-nosnippet>1617</a>            ItemCount(s) =&gt; builder.set_size_of_set(<span class="kw-2">*</span>s),
-<a href=#1618 id=1618 data-nosnippet>1618</a>            Lang(l) =&gt; builder.set_language(l.to_string()),
-<a href=#1619 id=1619 data-nosnippet>1619</a>
-<a href=#1620 id=1620 data-nosnippet>1620</a>            ScrollHorizontal(x) =&gt; {
-<a href=#1621 id=1621 data-nosnippet>1621</a>                builder.set_scroll_x(<span class="kw-2">*</span>x <span class="kw">as </span>f64);
-<a href=#1622 id=1622 data-nosnippet>1622</a>                builder.set_scroll_x_min(<span class="number">0.0</span>);
-<a href=#1623 id=1623 data-nosnippet>1623</a>                builder.set_scroll_x_max(<span class="number">1.0</span>);
-<a href=#1624 id=1624 data-nosnippet>1624</a>            }
-<a href=#1625 id=1625 data-nosnippet>1625</a>            ScrollVertical(y) =&gt; {
-<a href=#1626 id=1626 data-nosnippet>1626</a>                builder.set_scroll_y(<span class="kw-2">*</span>y <span class="kw">as </span>f64);
-<a href=#1627 id=1627 data-nosnippet>1627</a>                builder.set_scroll_y_min(<span class="number">0.0</span>);
-<a href=#1628 id=1628 data-nosnippet>1628</a>                builder.set_scroll_y_max(<span class="number">1.0</span>);
-<a href=#1629 id=1629 data-nosnippet>1629</a>            }
-<a href=#1630 id=1630 data-nosnippet>1630</a>            <span class="kw">_ </span>=&gt; {}
-<a href=#1631 id=1631 data-nosnippet>1631</a>        }
-<a href=#1632 id=1632 data-nosnippet>1632</a>    }
-<a href=#1633 id=1633 data-nosnippet>1633</a>
-<a href=#1634 id=1634 data-nosnippet>1634</a>    <span class="comment">// add descendants
-<a href=#1635 id=1635 data-nosnippet>1635</a>    </span><span class="kw">if </span>node.children.is_empty() {
-<a href=#1636 id=1636 data-nosnippet>1636</a>        <span class="kw">for </span>child <span class="kw">in </span>node.children() {
-<a href=#1637 id=1637 data-nosnippet>1637</a>            <span class="kw">let </span>child_id = access_node_to_kit(child, output);
-<a href=#1638 id=1638 data-nosnippet>1638</a>            builder.push_child(child_id);
-<a href=#1639 id=1639 data-nosnippet>1639</a>        }
-<a href=#1640 id=1640 data-nosnippet>1640</a>    } <span class="kw">else </span>{
-<a href=#1641 id=1641 data-nosnippet>1641</a>        <span class="kw">for </span>id <span class="kw">in </span><span class="kw-2">&amp;</span>node.children {
-<a href=#1642 id=1642 data-nosnippet>1642</a>            builder.push_child(access_id_to_kit(<span class="kw-2">*</span>id));
+<a href=#1587 id=1587 data-nosnippet>1587</a>            }
+<a href=#1588 id=1588 data-nosnippet>1588</a>            ActiveDescendant(id) =&gt; builder.set_active_descendant(access_id_to_kit(<span class="kw-2">*</span>id)),
+<a href=#1589 id=1589 data-nosnippet>1589</a>            ColCount(c) =&gt; builder.set_column_count(<span class="kw-2">*</span>c),
+<a href=#1590 id=1590 data-nosnippet>1590</a>            ColIndex(i) =&gt; builder.set_column_index(<span class="kw-2">*</span>i),
+<a href=#1591 id=1591 data-nosnippet>1591</a>            ColSpan(s) =&gt; builder.set_column_span(<span class="kw-2">*</span>s),
+<a href=#1592 id=1592 data-nosnippet>1592</a>            Controls(ids) =&gt; builder.set_controls(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
+<a href=#1593 id=1593 data-nosnippet>1593</a>            DescribedBy(ids) =&gt; builder.set_described_by(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
+<a href=#1594 id=1594 data-nosnippet>1594</a>            Details(ids) =&gt; builder.set_details(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
+<a href=#1595 id=1595 data-nosnippet>1595</a>            FlowTo(ids) =&gt; builder.set_flow_to(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
+<a href=#1596 id=1596 data-nosnippet>1596</a>            LabelledBy(ids) =&gt; builder.set_labelled_by(ids.iter().copied().map(access_id_to_kit).collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;()),
+<a href=#1597 id=1597 data-nosnippet>1597</a>            LabelledByChild =&gt; {
+<a href=#1598 id=1598 data-nosnippet>1598</a>                <span class="kw">let </span>labelled_by: Vec&lt;<span class="kw">_</span>&gt; = <span class="kw">if </span>node.children.is_empty() {
+<a href=#1599 id=1599 data-nosnippet>1599</a>                    node.children().map(|c| access_id_to_kit(c.id)).collect()
+<a href=#1600 id=1600 data-nosnippet>1600</a>                } <span class="kw">else </span>{
+<a href=#1601 id=1601 data-nosnippet>1601</a>                    node.children.iter().map(|id| access_id_to_kit(<span class="kw-2">*</span>id)).collect()
+<a href=#1602 id=1602 data-nosnippet>1602</a>                };
+<a href=#1603 id=1603 data-nosnippet>1603</a>                builder.set_labelled_by(labelled_by);
+<a href=#1604 id=1604 data-nosnippet>1604</a>            }
+<a href=#1605 id=1605 data-nosnippet>1605</a>            Owns(ids) =&gt; {
+<a href=#1606 id=1606 data-nosnippet>1606</a>                <span class="kw">for </span>id <span class="kw">in </span>ids {
+<a href=#1607 id=1607 data-nosnippet>1607</a>                    builder.push_child(access_id_to_kit(<span class="kw-2">*</span>id));
+<a href=#1608 id=1608 data-nosnippet>1608</a>                }
+<a href=#1609 id=1609 data-nosnippet>1609</a>            }
+<a href=#1610 id=1610 data-nosnippet>1610</a>            ItemIndex(p) =&gt; builder.set_position_in_set(<span class="kw-2">*</span>p),
+<a href=#1611 id=1611 data-nosnippet>1611</a>            RowCount(c) =&gt; builder.set_row_count(<span class="kw-2">*</span>c),
+<a href=#1612 id=1612 data-nosnippet>1612</a>            RowIndex(i) =&gt; builder.set_row_index(<span class="kw-2">*</span>i),
+<a href=#1613 id=1613 data-nosnippet>1613</a>            RowSpan(s) =&gt; builder.set_row_span(<span class="kw-2">*</span>s),
+<a href=#1614 id=1614 data-nosnippet>1614</a>            ItemCount(s) =&gt; builder.set_size_of_set(<span class="kw-2">*</span>s),
+<a href=#1615 id=1615 data-nosnippet>1615</a>            Lang(l) =&gt; builder.set_language(l.to_string()),
+<a href=#1616 id=1616 data-nosnippet>1616</a>
+<a href=#1617 id=1617 data-nosnippet>1617</a>            ScrollHorizontal(x) =&gt; {
+<a href=#1618 id=1618 data-nosnippet>1618</a>                builder.set_scroll_x(<span class="kw-2">*</span>x <span class="kw">as </span>f64);
+<a href=#1619 id=1619 data-nosnippet>1619</a>                builder.set_scroll_x_min(<span class="number">0.0</span>);
+<a href=#1620 id=1620 data-nosnippet>1620</a>                builder.set_scroll_x_max(<span class="number">1.0</span>);
+<a href=#1621 id=1621 data-nosnippet>1621</a>            }
+<a href=#1622 id=1622 data-nosnippet>1622</a>            ScrollVertical(y) =&gt; {
+<a href=#1623 id=1623 data-nosnippet>1623</a>                builder.set_scroll_y(<span class="kw-2">*</span>y <span class="kw">as </span>f64);
+<a href=#1624 id=1624 data-nosnippet>1624</a>                builder.set_scroll_y_min(<span class="number">0.0</span>);
+<a href=#1625 id=1625 data-nosnippet>1625</a>                builder.set_scroll_y_max(<span class="number">1.0</span>);
+<a href=#1626 id=1626 data-nosnippet>1626</a>            }
+<a href=#1627 id=1627 data-nosnippet>1627</a>            <span class="kw">_ </span>=&gt; {}
+<a href=#1628 id=1628 data-nosnippet>1628</a>        }
+<a href=#1629 id=1629 data-nosnippet>1629</a>    }
+<a href=#1630 id=1630 data-nosnippet>1630</a>
+<a href=#1631 id=1631 data-nosnippet>1631</a>    <span class="comment">// add descendants
+<a href=#1632 id=1632 data-nosnippet>1632</a>    </span><span class="kw">if </span>node.children.is_empty() {
+<a href=#1633 id=1633 data-nosnippet>1633</a>        <span class="kw">for </span>child <span class="kw">in </span>node.children() {
+<a href=#1634 id=1634 data-nosnippet>1634</a>            <span class="kw">let </span>child_id = access_node_to_kit(child, output);
+<a href=#1635 id=1635 data-nosnippet>1635</a>            builder.push_child(child_id);
+<a href=#1636 id=1636 data-nosnippet>1636</a>        }
+<a href=#1637 id=1637 data-nosnippet>1637</a>    } <span class="kw">else </span>{
+<a href=#1638 id=1638 data-nosnippet>1638</a>        <span class="kw">for </span>id <span class="kw">in </span><span class="kw-2">&amp;</span>node.children {
+<a href=#1639 id=1639 data-nosnippet>1639</a>            builder.push_child(access_id_to_kit(<span class="kw-2">*</span>id));
+<a href=#1640 id=1640 data-nosnippet>1640</a>        }
+<a href=#1641 id=1641 data-nosnippet>1641</a>        <span class="kw">for </span>child <span class="kw">in </span>node.children() {
+<a href=#1642 id=1642 data-nosnippet>1642</a>            <span class="kw">let _ </span>= access_node_to_kit(child, output);
 <a href=#1643 id=1643 data-nosnippet>1643</a>        }
-<a href=#1644 id=1644 data-nosnippet>1644</a>        <span class="kw">for </span>child <span class="kw">in </span>node.children() {
-<a href=#1645 id=1645 data-nosnippet>1645</a>            <span class="kw">let _ </span>= access_node_to_kit(child, output);
-<a href=#1646 id=1646 data-nosnippet>1646</a>        }
-<a href=#1647 id=1647 data-nosnippet>1647</a>    }
-<a href=#1648 id=1648 data-nosnippet>1648</a>
-<a href=#1649 id=1649 data-nosnippet>1649</a>    <span class="kw">let </span>node = builder;
-<a href=#1650 id=1650 data-nosnippet>1650</a>    output.push((node_id, node));
-<a href=#1651 id=1651 data-nosnippet>1651</a>    node_id
-<a href=#1652 id=1652 data-nosnippet>1652</a>}
-<a href=#1653 id=1653 data-nosnippet>1653</a>
-<a href=#1654 id=1654 data-nosnippet>1654</a><span class="kw">fn </span>access_id_to_kit(id: AccessNodeId) -&gt; accesskit::NodeId {
-<a href=#1655 id=1655 data-nosnippet>1655</a>    accesskit::NodeId(id.<span class="number">0</span>)
-<a href=#1656 id=1656 data-nosnippet>1656</a>}
-<a href=#1657 id=1657 data-nosnippet>1657</a>
-<a href=#1658 id=1658 data-nosnippet>1658</a><span class="kw">fn </span>access_role_to_kit(role: zng_view_api::access::AccessRole) -&gt; accesskit::Role {
-<a href=#1659 id=1659 data-nosnippet>1659</a>    <span class="kw">use </span>accesskit::Role;
-<a href=#1660 id=1660 data-nosnippet>1660</a>    <span class="kw">use </span>zng_view_api::access::AccessRole::<span class="kw-2">*</span>;
-<a href=#1661 id=1661 data-nosnippet>1661</a>    <span class="kw">match </span>role {
-<a href=#1662 id=1662 data-nosnippet>1662</a>        Button =&gt; Role::Button,
-<a href=#1663 id=1663 data-nosnippet>1663</a>        CheckBox =&gt; Role::CheckBox,
-<a href=#1664 id=1664 data-nosnippet>1664</a>        GridCell =&gt; Role::Cell,
-<a href=#1665 id=1665 data-nosnippet>1665</a>        Link =&gt; Role::Link,
-<a href=#1666 id=1666 data-nosnippet>1666</a>        MenuItem =&gt; Role::MenuItem,
-<a href=#1667 id=1667 data-nosnippet>1667</a>        MenuItemCheckBox =&gt; Role::MenuItemCheckBox,
-<a href=#1668 id=1668 data-nosnippet>1668</a>        MenuItemRadio =&gt; Role::MenuItemRadio,
-<a href=#1669 id=1669 data-nosnippet>1669</a>        <span class="prelude-ty">Option </span>=&gt; Role::ListBoxOption,
-<a href=#1670 id=1670 data-nosnippet>1670</a>        ProgressBar =&gt; Role::ProgressIndicator,
-<a href=#1671 id=1671 data-nosnippet>1671</a>        Radio =&gt; Role::RadioButton,
-<a href=#1672 id=1672 data-nosnippet>1672</a>        ScrollBar =&gt; Role::ScrollBar,
-<a href=#1673 id=1673 data-nosnippet>1673</a>        SearchBox =&gt; Role::SearchInput,
-<a href=#1674 id=1674 data-nosnippet>1674</a>        Slider =&gt; Role::Slider,
-<a href=#1675 id=1675 data-nosnippet>1675</a>        SpinButton =&gt; Role::SpinButton,
-<a href=#1676 id=1676 data-nosnippet>1676</a>        Switch =&gt; Role::Switch,
-<a href=#1677 id=1677 data-nosnippet>1677</a>        Tab =&gt; Role::Tab,
-<a href=#1678 id=1678 data-nosnippet>1678</a>        TabPanel =&gt; Role::TabPanel,
-<a href=#1679 id=1679 data-nosnippet>1679</a>        TextInput =&gt; Role::TextInput,
-<a href=#1680 id=1680 data-nosnippet>1680</a>        TreeItem =&gt; Role::TreeItem,
-<a href=#1681 id=1681 data-nosnippet>1681</a>        ComboBox =&gt; Role::ComboBox,
-<a href=#1682 id=1682 data-nosnippet>1682</a>        Grid =&gt; Role::Grid,
-<a href=#1683 id=1683 data-nosnippet>1683</a>        ListBox =&gt; Role::ListBox,
-<a href=#1684 id=1684 data-nosnippet>1684</a>        Menu =&gt; Role::Menu,
-<a href=#1685 id=1685 data-nosnippet>1685</a>        MenuBar =&gt; Role::MenuBar,
-<a href=#1686 id=1686 data-nosnippet>1686</a>        RadioGroup =&gt; Role::RadioGroup,
-<a href=#1687 id=1687 data-nosnippet>1687</a>        TabList =&gt; Role::TabList,
-<a href=#1688 id=1688 data-nosnippet>1688</a>        Tree =&gt; Role::Tree,
-<a href=#1689 id=1689 data-nosnippet>1689</a>        TreeGrid =&gt; Role::TreeGrid,
-<a href=#1690 id=1690 data-nosnippet>1690</a>        Application =&gt; Role::Application,
-<a href=#1691 id=1691 data-nosnippet>1691</a>        Article =&gt; Role::Article,
-<a href=#1692 id=1692 data-nosnippet>1692</a>        Cell =&gt; Role::Cell,
-<a href=#1693 id=1693 data-nosnippet>1693</a>        ColumnHeader =&gt; Role::ColumnHeader,
-<a href=#1694 id=1694 data-nosnippet>1694</a>        Definition =&gt; Role::Definition,
-<a href=#1695 id=1695 data-nosnippet>1695</a>        Document =&gt; Role::Document,
-<a href=#1696 id=1696 data-nosnippet>1696</a>        Feed =&gt; Role::Feed,
-<a href=#1697 id=1697 data-nosnippet>1697</a>        Figure =&gt; Role::Figure,
-<a href=#1698 id=1698 data-nosnippet>1698</a>        Group =&gt; Role::Group,
-<a href=#1699 id=1699 data-nosnippet>1699</a>        Heading =&gt; Role::Heading,
-<a href=#1700 id=1700 data-nosnippet>1700</a>        Image =&gt; Role::Image,
-<a href=#1701 id=1701 data-nosnippet>1701</a>        List =&gt; Role::List,
-<a href=#1702 id=1702 data-nosnippet>1702</a>        ListItem =&gt; Role::ListItem,
-<a href=#1703 id=1703 data-nosnippet>1703</a>        Math =&gt; Role::Math,
-<a href=#1704 id=1704 data-nosnippet>1704</a>        Note =&gt; Role::Note,
-<a href=#1705 id=1705 data-nosnippet>1705</a>        Row =&gt; Role::Row,
-<a href=#1706 id=1706 data-nosnippet>1706</a>        RowGroup =&gt; Role::RowGroup,
-<a href=#1707 id=1707 data-nosnippet>1707</a>        RowHeader =&gt; Role::RowHeader,
-<a href=#1708 id=1708 data-nosnippet>1708</a>        Separator =&gt; Role::Splitter,
-<a href=#1709 id=1709 data-nosnippet>1709</a>        Table =&gt; Role::Table,
-<a href=#1710 id=1710 data-nosnippet>1710</a>        Term =&gt; Role::Term,
-<a href=#1711 id=1711 data-nosnippet>1711</a>        ToolBar =&gt; Role::Toolbar,
-<a href=#1712 id=1712 data-nosnippet>1712</a>        ToolTip =&gt; Role::Tooltip,
-<a href=#1713 id=1713 data-nosnippet>1713</a>        Banner =&gt; Role::Banner,
-<a href=#1714 id=1714 data-nosnippet>1714</a>        Complementary =&gt; Role::Complementary,
-<a href=#1715 id=1715 data-nosnippet>1715</a>        ContentInfo =&gt; Role::ContentInfo,
-<a href=#1716 id=1716 data-nosnippet>1716</a>        Form =&gt; Role::Form,
-<a href=#1717 id=1717 data-nosnippet>1717</a>        Main =&gt; Role::Main,
-<a href=#1718 id=1718 data-nosnippet>1718</a>        Navigation =&gt; Role::Navigation,
-<a href=#1719 id=1719 data-nosnippet>1719</a>        Region =&gt; Role::Region,
-<a href=#1720 id=1720 data-nosnippet>1720</a>        Search =&gt; Role::Search,
-<a href=#1721 id=1721 data-nosnippet>1721</a>        Alert =&gt; Role::Alert,
-<a href=#1722 id=1722 data-nosnippet>1722</a>        Log =&gt; Role::Log,
-<a href=#1723 id=1723 data-nosnippet>1723</a>        Marquee =&gt; Role::Marquee,
-<a href=#1724 id=1724 data-nosnippet>1724</a>        Status =&gt; Role::Status,
-<a href=#1725 id=1725 data-nosnippet>1725</a>        Timer =&gt; Role::Timer,
-<a href=#1726 id=1726 data-nosnippet>1726</a>        AlertDialog =&gt; Role::AlertDialog,
-<a href=#1727 id=1727 data-nosnippet>1727</a>        Dialog =&gt; Role::Dialog,
-<a href=#1728 id=1728 data-nosnippet>1728</a>        <span class="kw">_ </span>=&gt; Role::Unknown,
-<a href=#1729 id=1729 data-nosnippet>1729</a>    }
-<a href=#1730 id=1730 data-nosnippet>1730</a>}
+<a href=#1644 id=1644 data-nosnippet>1644</a>    }
+<a href=#1645 id=1645 data-nosnippet>1645</a>
+<a href=#1646 id=1646 data-nosnippet>1646</a>    <span class="kw">let </span>node = builder;
+<a href=#1647 id=1647 data-nosnippet>1647</a>    output.push((node_id, node));
+<a href=#1648 id=1648 data-nosnippet>1648</a>    node_id
+<a href=#1649 id=1649 data-nosnippet>1649</a>}
+<a href=#1650 id=1650 data-nosnippet>1650</a>
+<a href=#1651 id=1651 data-nosnippet>1651</a><span class="kw">fn </span>access_id_to_kit(id: AccessNodeId) -&gt; accesskit::NodeId {
+<a href=#1652 id=1652 data-nosnippet>1652</a>    accesskit::NodeId(id.<span class="number">0</span>)
+<a href=#1653 id=1653 data-nosnippet>1653</a>}
+<a href=#1654 id=1654 data-nosnippet>1654</a>
+<a href=#1655 id=1655 data-nosnippet>1655</a><span class="kw">fn </span>access_role_to_kit(role: zng_view_api::access::AccessRole) -&gt; accesskit::Role {
+<a href=#1656 id=1656 data-nosnippet>1656</a>    <span class="kw">use </span>accesskit::Role;
+<a href=#1657 id=1657 data-nosnippet>1657</a>    <span class="kw">use </span>zng_view_api::access::AccessRole::<span class="kw-2">*</span>;
+<a href=#1658 id=1658 data-nosnippet>1658</a>    <span class="kw">match </span>role {
+<a href=#1659 id=1659 data-nosnippet>1659</a>        Button =&gt; Role::Button,
+<a href=#1660 id=1660 data-nosnippet>1660</a>        CheckBox =&gt; Role::CheckBox,
+<a href=#1661 id=1661 data-nosnippet>1661</a>        GridCell =&gt; Role::Cell,
+<a href=#1662 id=1662 data-nosnippet>1662</a>        Link =&gt; Role::Link,
+<a href=#1663 id=1663 data-nosnippet>1663</a>        MenuItem =&gt; Role::MenuItem,
+<a href=#1664 id=1664 data-nosnippet>1664</a>        MenuItemCheckBox =&gt; Role::MenuItemCheckBox,
+<a href=#1665 id=1665 data-nosnippet>1665</a>        MenuItemRadio =&gt; Role::MenuItemRadio,
+<a href=#1666 id=1666 data-nosnippet>1666</a>        <span class="prelude-ty">Option </span>=&gt; Role::ListBoxOption,
+<a href=#1667 id=1667 data-nosnippet>1667</a>        ProgressBar =&gt; Role::ProgressIndicator,
+<a href=#1668 id=1668 data-nosnippet>1668</a>        Radio =&gt; Role::RadioButton,
+<a href=#1669 id=1669 data-nosnippet>1669</a>        ScrollBar =&gt; Role::ScrollBar,
+<a href=#1670 id=1670 data-nosnippet>1670</a>        SearchBox =&gt; Role::SearchInput,
+<a href=#1671 id=1671 data-nosnippet>1671</a>        Slider =&gt; Role::Slider,
+<a href=#1672 id=1672 data-nosnippet>1672</a>        SpinButton =&gt; Role::SpinButton,
+<a href=#1673 id=1673 data-nosnippet>1673</a>        Switch =&gt; Role::Switch,
+<a href=#1674 id=1674 data-nosnippet>1674</a>        Tab =&gt; Role::Tab,
+<a href=#1675 id=1675 data-nosnippet>1675</a>        TabPanel =&gt; Role::TabPanel,
+<a href=#1676 id=1676 data-nosnippet>1676</a>        TextInput =&gt; Role::TextInput,
+<a href=#1677 id=1677 data-nosnippet>1677</a>        TreeItem =&gt; Role::TreeItem,
+<a href=#1678 id=1678 data-nosnippet>1678</a>        ComboBox =&gt; Role::ComboBox,
+<a href=#1679 id=1679 data-nosnippet>1679</a>        Grid =&gt; Role::Grid,
+<a href=#1680 id=1680 data-nosnippet>1680</a>        ListBox =&gt; Role::ListBox,
+<a href=#1681 id=1681 data-nosnippet>1681</a>        Menu =&gt; Role::Menu,
+<a href=#1682 id=1682 data-nosnippet>1682</a>        MenuBar =&gt; Role::MenuBar,
+<a href=#1683 id=1683 data-nosnippet>1683</a>        RadioGroup =&gt; Role::RadioGroup,
+<a href=#1684 id=1684 data-nosnippet>1684</a>        TabList =&gt; Role::TabList,
+<a href=#1685 id=1685 data-nosnippet>1685</a>        Tree =&gt; Role::Tree,
+<a href=#1686 id=1686 data-nosnippet>1686</a>        TreeGrid =&gt; Role::TreeGrid,
+<a href=#1687 id=1687 data-nosnippet>1687</a>        Application =&gt; Role::Application,
+<a href=#1688 id=1688 data-nosnippet>1688</a>        Article =&gt; Role::Article,
+<a href=#1689 id=1689 data-nosnippet>1689</a>        Cell =&gt; Role::Cell,
+<a href=#1690 id=1690 data-nosnippet>1690</a>        ColumnHeader =&gt; Role::ColumnHeader,
+<a href=#1691 id=1691 data-nosnippet>1691</a>        Definition =&gt; Role::Definition,
+<a href=#1692 id=1692 data-nosnippet>1692</a>        Document =&gt; Role::Document,
+<a href=#1693 id=1693 data-nosnippet>1693</a>        Feed =&gt; Role::Feed,
+<a href=#1694 id=1694 data-nosnippet>1694</a>        Figure =&gt; Role::Figure,
+<a href=#1695 id=1695 data-nosnippet>1695</a>        Group =&gt; Role::Group,
+<a href=#1696 id=1696 data-nosnippet>1696</a>        Heading =&gt; Role::Heading,
+<a href=#1697 id=1697 data-nosnippet>1697</a>        Image =&gt; Role::Image,
+<a href=#1698 id=1698 data-nosnippet>1698</a>        List =&gt; Role::List,
+<a href=#1699 id=1699 data-nosnippet>1699</a>        ListItem =&gt; Role::ListItem,
+<a href=#1700 id=1700 data-nosnippet>1700</a>        Math =&gt; Role::Math,
+<a href=#1701 id=1701 data-nosnippet>1701</a>        Note =&gt; Role::Note,
+<a href=#1702 id=1702 data-nosnippet>1702</a>        Row =&gt; Role::Row,
+<a href=#1703 id=1703 data-nosnippet>1703</a>        RowGroup =&gt; Role::RowGroup,
+<a href=#1704 id=1704 data-nosnippet>1704</a>        RowHeader =&gt; Role::RowHeader,
+<a href=#1705 id=1705 data-nosnippet>1705</a>        Separator =&gt; Role::Splitter,
+<a href=#1706 id=1706 data-nosnippet>1706</a>        Table =&gt; Role::Table,
+<a href=#1707 id=1707 data-nosnippet>1707</a>        Term =&gt; Role::Term,
+<a href=#1708 id=1708 data-nosnippet>1708</a>        ToolBar =&gt; Role::Toolbar,
+<a href=#1709 id=1709 data-nosnippet>1709</a>        ToolTip =&gt; Role::Tooltip,
+<a href=#1710 id=1710 data-nosnippet>1710</a>        Banner =&gt; Role::Banner,
+<a href=#1711 id=1711 data-nosnippet>1711</a>        Complementary =&gt; Role::Complementary,
+<a href=#1712 id=1712 data-nosnippet>1712</a>        ContentInfo =&gt; Role::ContentInfo,
+<a href=#1713 id=1713 data-nosnippet>1713</a>        Form =&gt; Role::Form,
+<a href=#1714 id=1714 data-nosnippet>1714</a>        Main =&gt; Role::Main,
+<a href=#1715 id=1715 data-nosnippet>1715</a>        Navigation =&gt; Role::Navigation,
+<a href=#1716 id=1716 data-nosnippet>1716</a>        Region =&gt; Role::Region,
+<a href=#1717 id=1717 data-nosnippet>1717</a>        Search =&gt; Role::Search,
+<a href=#1718 id=1718 data-nosnippet>1718</a>        Alert =&gt; Role::Alert,
+<a href=#1719 id=1719 data-nosnippet>1719</a>        Log =&gt; Role::Log,
+<a href=#1720 id=1720 data-nosnippet>1720</a>        Marquee =&gt; Role::Marquee,
+<a href=#1721 id=1721 data-nosnippet>1721</a>        Status =&gt; Role::Status,
+<a href=#1722 id=1722 data-nosnippet>1722</a>        Timer =&gt; Role::Timer,
+<a href=#1723 id=1723 data-nosnippet>1723</a>        AlertDialog =&gt; Role::AlertDialog,
+<a href=#1724 id=1724 data-nosnippet>1724</a>        Dialog =&gt; Role::Dialog,
+<a href=#1725 id=1725 data-nosnippet>1725</a>        <span class="kw">_ </span>=&gt; Role::Unknown,
+<a href=#1726 id=1726 data-nosnippet>1726</a>    }
+<a href=#1727 id=1727 data-nosnippet>1727</a>}
+<a href=#1728 id=1728 data-nosnippet>1728</a>
+<a href=#1729 id=1729 data-nosnippet>1729</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>frame_render_reasons(frame: <span class="kw-2">&amp;</span>FrameRequest) -&gt; wr::RenderReasons {
+<a href=#1730 id=1730 data-nosnippet>1730</a>    <span class="kw">let </span><span class="kw-2">mut </span>reasons = wr::RenderReasons::SCENE;
 <a href=#1731 id=1731 data-nosnippet>1731</a>
-<a href=#1732 id=1732 data-nosnippet>1732</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>frame_render_reasons(frame: <span class="kw-2">&amp;</span>FrameRequest) -&gt; wr::RenderReasons {
-<a href=#1733 id=1733 data-nosnippet>1733</a>    <span class="kw">let </span><span class="kw-2">mut </span>reasons = wr::RenderReasons::SCENE;
-<a href=#1734 id=1734 data-nosnippet>1734</a>
-<a href=#1735 id=1735 data-nosnippet>1735</a>    <span class="kw">if </span>frame.capture != FrameCapture::None {
-<a href=#1736 id=1736 data-nosnippet>1736</a>        reasons |= wr::RenderReasons::SNAPSHOT;
-<a href=#1737 id=1737 data-nosnippet>1737</a>    }
+<a href=#1732 id=1732 data-nosnippet>1732</a>    <span class="kw">if </span>frame.capture != FrameCapture::None {
+<a href=#1733 id=1733 data-nosnippet>1733</a>        reasons |= wr::RenderReasons::SNAPSHOT;
+<a href=#1734 id=1734 data-nosnippet>1734</a>    }
+<a href=#1735 id=1735 data-nosnippet>1735</a>
+<a href=#1736 id=1736 data-nosnippet>1736</a>    reasons
+<a href=#1737 id=1737 data-nosnippet>1737</a>}
 <a href=#1738 id=1738 data-nosnippet>1738</a>
-<a href=#1739 id=1739 data-nosnippet>1739</a>    reasons
-<a href=#1740 id=1740 data-nosnippet>1740</a>}
+<a href=#1739 id=1739 data-nosnippet>1739</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>frame_update_render_reasons(update: <span class="kw-2">&amp;</span>FrameUpdateRequest) -&gt; wr::RenderReasons {
+<a href=#1740 id=1740 data-nosnippet>1740</a>    <span class="kw">let </span><span class="kw-2">mut </span>reasons = wr::RenderReasons::empty();
 <a href=#1741 id=1741 data-nosnippet>1741</a>
-<a href=#1742 id=1742 data-nosnippet>1742</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>frame_update_render_reasons(update: <span class="kw-2">&amp;</span>FrameUpdateRequest) -&gt; wr::RenderReasons {
-<a href=#1743 id=1743 data-nosnippet>1743</a>    <span class="kw">let </span><span class="kw-2">mut </span>reasons = wr::RenderReasons::empty();
-<a href=#1744 id=1744 data-nosnippet>1744</a>
-<a href=#1745 id=1745 data-nosnippet>1745</a>    <span class="kw">if </span>update.has_bounds() {
-<a href=#1746 id=1746 data-nosnippet>1746</a>        reasons |= wr::RenderReasons::ANIMATED_PROPERTY;
-<a href=#1747 id=1747 data-nosnippet>1747</a>    }
-<a href=#1748 id=1748 data-nosnippet>1748</a>
-<a href=#1749 id=1749 data-nosnippet>1749</a>    <span class="kw">if </span>update.capture != FrameCapture::None {
-<a href=#1750 id=1750 data-nosnippet>1750</a>        reasons |= wr::RenderReasons::SNAPSHOT;
-<a href=#1751 id=1751 data-nosnippet>1751</a>    }
-<a href=#1752 id=1752 data-nosnippet>1752</a>
-<a href=#1753 id=1753 data-nosnippet>1753</a>    <span class="kw">if </span>update.clear_color.is_some() {
-<a href=#1754 id=1754 data-nosnippet>1754</a>        reasons |= wr::RenderReasons::CONFIG_CHANGE;
-<a href=#1755 id=1755 data-nosnippet>1755</a>    }
+<a href=#1742 id=1742 data-nosnippet>1742</a>    <span class="kw">if </span>update.has_bounds() {
+<a href=#1743 id=1743 data-nosnippet>1743</a>        reasons |= wr::RenderReasons::ANIMATED_PROPERTY;
+<a href=#1744 id=1744 data-nosnippet>1744</a>    }
+<a href=#1745 id=1745 data-nosnippet>1745</a>
+<a href=#1746 id=1746 data-nosnippet>1746</a>    <span class="kw">if </span>update.capture != FrameCapture::None {
+<a href=#1747 id=1747 data-nosnippet>1747</a>        reasons |= wr::RenderReasons::SNAPSHOT;
+<a href=#1748 id=1748 data-nosnippet>1748</a>    }
+<a href=#1749 id=1749 data-nosnippet>1749</a>
+<a href=#1750 id=1750 data-nosnippet>1750</a>    <span class="kw">if </span>update.clear_color.is_some() {
+<a href=#1751 id=1751 data-nosnippet>1751</a>        reasons |= wr::RenderReasons::CONFIG_CHANGE;
+<a href=#1752 id=1752 data-nosnippet>1752</a>    }
+<a href=#1753 id=1753 data-nosnippet>1753</a>
+<a href=#1754 id=1754 data-nosnippet>1754</a>    reasons
+<a href=#1755 id=1755 data-nosnippet>1755</a>}
 <a href=#1756 id=1756 data-nosnippet>1756</a>
-<a href=#1757 id=1757 data-nosnippet>1757</a>    reasons
-<a href=#1758 id=1758 data-nosnippet>1758</a>}
-<a href=#1759 id=1759 data-nosnippet>1759</a>
-<a href=#1760 id=1760 data-nosnippet>1760</a><span class="attr">#[must_use = <span class="string">"call unset before drop"</span>]
-<a href=#1761 id=1761 data-nosnippet>1761</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoop(<span class="kw-2">*const </span>ActiveEventLoop);
-<a href=#1762 id=1762 data-nosnippet>1762</a><span class="kw">impl </span>WinitEventLoop {
-<a href=#1763 id=1763 data-nosnippet>1763</a>    <span class="kw">pub fn </span>set&lt;<span class="lifetime">'l</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop) -&gt; WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
-<a href=#1764 id=1764 data-nosnippet>1764</a>        <span class="self">self</span>.<span class="number">0 </span>= winit_loop;
-<a href=#1765 id=1765 data-nosnippet>1765</a>        WinitEventLoopGuard {
-<a href=#1766 id=1766 data-nosnippet>1766</a>            defused: <span class="bool-val">false</span>,
-<a href=#1767 id=1767 data-nosnippet>1767</a>            _loop_lifetime: PhantomData,
-<a href=#1768 id=1768 data-nosnippet>1768</a>        }
-<a href=#1769 id=1769 data-nosnippet>1769</a>    }
-<a href=#1770 id=1770 data-nosnippet>1770</a>}
-<a href=#1771 id=1771 data-nosnippet>1771</a><span class="kw">impl </span>Default <span class="kw">for </span>WinitEventLoop {
-<a href=#1772 id=1772 data-nosnippet>1772</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
-<a href=#1773 id=1773 data-nosnippet>1773</a>        <span class="self">Self</span>(std::ptr::null())
-<a href=#1774 id=1774 data-nosnippet>1774</a>    }
-<a href=#1775 id=1775 data-nosnippet>1775</a>}
-<a href=#1776 id=1776 data-nosnippet>1776</a><span class="kw">impl </span>ops::Deref <span class="kw">for </span>WinitEventLoop {
-<a href=#1777 id=1777 data-nosnippet>1777</a>    <span class="kw">type </span>Target = ActiveEventLoop;
-<a href=#1778 id=1778 data-nosnippet>1778</a>
-<a href=#1779 id=1779 data-nosnippet>1779</a>    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
-<a href=#1780 id=1780 data-nosnippet>1780</a>        <span class="macro">assert!</span>(!<span class="self">self</span>.<span class="number">0</span>.is_null(), <span class="string">"winit event loop not active"</span>);
-<a href=#1781 id=1781 data-nosnippet>1781</a>        <span class="comment">// SAFETY: just checked, and can only set pointer with `set`
-<a href=#1782 id=1782 data-nosnippet>1782</a>        </span><span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0 </span>}
-<a href=#1783 id=1783 data-nosnippet>1783</a>    }
-<a href=#1784 id=1784 data-nosnippet>1784</a>}
-<a href=#1785 id=1785 data-nosnippet>1785</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
-<a href=#1786 id=1786 data-nosnippet>1786</a>    defused: bool,
-<a href=#1787 id=1787 data-nosnippet>1787</a>    _loop_lifetime: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop&gt;,
-<a href=#1788 id=1788 data-nosnippet>1788</a>}
-<a href=#1789 id=1789 data-nosnippet>1789</a><span class="kw">impl </span>WinitEventLoopGuard&lt;<span class="lifetime">'_</span>&gt; {
-<a href=#1790 id=1790 data-nosnippet>1790</a>    <span class="kw">pub fn </span>unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: <span class="kw-2">&amp;mut </span>WinitEventLoop) {
-<a href=#1791 id=1791 data-nosnippet>1791</a>        <span class="self">self</span>.defused = <span class="bool-val">true</span>;
-<a href=#1792 id=1792 data-nosnippet>1792</a>        l.<span class="number">0 </span>= std::ptr::null();
-<a href=#1793 id=1793 data-nosnippet>1793</a>    }
-<a href=#1794 id=1794 data-nosnippet>1794</a>}
-<a href=#1795 id=1795 data-nosnippet>1795</a><span class="kw">impl </span>Drop <span class="kw">for </span>WinitEventLoopGuard&lt;<span class="lifetime">'_</span>&gt; {
-<a href=#1796 id=1796 data-nosnippet>1796</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
-<a href=#1797 id=1797 data-nosnippet>1797</a>        <span class="kw">if </span>!<span class="self">self</span>.defused {
-<a href=#1798 id=1798 data-nosnippet>1798</a>            <span class="kw">let </span>msg = <span class="string">"unsafe pointer to winit ActiveEventLoop not cleared"</span>;
-<a href=#1799 id=1799 data-nosnippet>1799</a>            <span class="kw">if </span>std::thread::panicking() {
-<a href=#1800 id=1800 data-nosnippet>1800</a>                <span class="macro">tracing::error!</span>(<span class="string">"{msg}"</span>);
-<a href=#1801 id=1801 data-nosnippet>1801</a>            } <span class="kw">else </span>{
-<a href=#1802 id=1802 data-nosnippet>1802</a>                <span class="macro">panic!</span>(<span class="string">"{msg}"</span>);
-<a href=#1803 id=1803 data-nosnippet>1803</a>            }
-<a href=#1804 id=1804 data-nosnippet>1804</a>        }
-<a href=#1805 id=1805 data-nosnippet>1805</a>    }
-<a href=#1806 id=1806 data-nosnippet>1806</a>}
+<a href=#1757 id=1757 data-nosnippet>1757</a><span class="attr">#[must_use = <span class="string">"call unset before drop"</span>]
+<a href=#1758 id=1758 data-nosnippet>1758</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoop(<span class="kw-2">*const </span>ActiveEventLoop);
+<a href=#1759 id=1759 data-nosnippet>1759</a><span class="kw">impl </span>WinitEventLoop {
+<a href=#1760 id=1760 data-nosnippet>1760</a>    <span class="kw">pub fn </span>set&lt;<span class="lifetime">'l</span>&gt;(<span class="kw-2">&amp;mut </span><span class="self">self</span>, winit_loop: <span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop) -&gt; WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+<a href=#1761 id=1761 data-nosnippet>1761</a>        <span class="self">self</span>.<span class="number">0 </span>= winit_loop;
+<a href=#1762 id=1762 data-nosnippet>1762</a>        WinitEventLoopGuard {
+<a href=#1763 id=1763 data-nosnippet>1763</a>            defused: <span class="bool-val">false</span>,
+<a href=#1764 id=1764 data-nosnippet>1764</a>            _loop_lifetime: PhantomData,
+<a href=#1765 id=1765 data-nosnippet>1765</a>        }
+<a href=#1766 id=1766 data-nosnippet>1766</a>    }
+<a href=#1767 id=1767 data-nosnippet>1767</a>}
+<a href=#1768 id=1768 data-nosnippet>1768</a><span class="kw">impl </span>Default <span class="kw">for </span>WinitEventLoop {
+<a href=#1769 id=1769 data-nosnippet>1769</a>    <span class="kw">fn </span>default() -&gt; <span class="self">Self </span>{
+<a href=#1770 id=1770 data-nosnippet>1770</a>        <span class="self">Self</span>(std::ptr::null())
+<a href=#1771 id=1771 data-nosnippet>1771</a>    }
+<a href=#1772 id=1772 data-nosnippet>1772</a>}
+<a href=#1773 id=1773 data-nosnippet>1773</a><span class="kw">impl </span>ops::Deref <span class="kw">for </span>WinitEventLoop {
+<a href=#1774 id=1774 data-nosnippet>1774</a>    <span class="kw">type </span>Target = ActiveEventLoop;
+<a href=#1775 id=1775 data-nosnippet>1775</a>
+<a href=#1776 id=1776 data-nosnippet>1776</a>    <span class="kw">fn </span>deref(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="self">Self</span>::Target {
+<a href=#1777 id=1777 data-nosnippet>1777</a>        <span class="macro">assert!</span>(!<span class="self">self</span>.<span class="number">0</span>.is_null(), <span class="string">"winit event loop not active"</span>);
+<a href=#1778 id=1778 data-nosnippet>1778</a>        <span class="comment">// SAFETY: just checked, and can only set pointer with `set`
+<a href=#1779 id=1779 data-nosnippet>1779</a>        </span><span class="kw">unsafe </span>{ <span class="kw-2">&amp;*</span><span class="self">self</span>.<span class="number">0 </span>}
+<a href=#1780 id=1780 data-nosnippet>1780</a>    }
+<a href=#1781 id=1781 data-nosnippet>1781</a>}
+<a href=#1782 id=1782 data-nosnippet>1782</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">struct </span>WinitEventLoopGuard&lt;<span class="lifetime">'l</span>&gt; {
+<a href=#1783 id=1783 data-nosnippet>1783</a>    defused: bool,
+<a href=#1784 id=1784 data-nosnippet>1784</a>    _loop_lifetime: PhantomData&lt;<span class="kw-2">&amp;</span><span class="lifetime">'l </span>ActiveEventLoop&gt;,
+<a href=#1785 id=1785 data-nosnippet>1785</a>}
+<a href=#1786 id=1786 data-nosnippet>1786</a><span class="kw">impl </span>WinitEventLoopGuard&lt;<span class="lifetime">'_</span>&gt; {
+<a href=#1787 id=1787 data-nosnippet>1787</a>    <span class="kw">pub fn </span>unset(<span class="kw-2">&amp;mut </span><span class="self">self</span>, l: <span class="kw-2">&amp;mut </span>WinitEventLoop) {
+<a href=#1788 id=1788 data-nosnippet>1788</a>        <span class="self">self</span>.defused = <span class="bool-val">true</span>;
+<a href=#1789 id=1789 data-nosnippet>1789</a>        l.<span class="number">0 </span>= std::ptr::null();
+<a href=#1790 id=1790 data-nosnippet>1790</a>    }
+<a href=#1791 id=1791 data-nosnippet>1791</a>}
+<a href=#1792 id=1792 data-nosnippet>1792</a><span class="kw">impl </span>Drop <span class="kw">for </span>WinitEventLoopGuard&lt;<span class="lifetime">'_</span>&gt; {
+<a href=#1793 id=1793 data-nosnippet>1793</a>    <span class="kw">fn </span>drop(<span class="kw-2">&amp;mut </span><span class="self">self</span>) {
+<a href=#1794 id=1794 data-nosnippet>1794</a>        <span class="kw">if </span>!<span class="self">self</span>.defused {
+<a href=#1795 id=1795 data-nosnippet>1795</a>            <span class="kw">let </span>msg = <span class="string">"unsafe pointer to winit ActiveEventLoop not cleared"</span>;
+<a href=#1796 id=1796 data-nosnippet>1796</a>            <span class="kw">if </span>std::thread::panicking() {
+<a href=#1797 id=1797 data-nosnippet>1797</a>                <span class="macro">tracing::error!</span>(<span class="string">"{msg}"</span>);
+<a href=#1798 id=1798 data-nosnippet>1798</a>            } <span class="kw">else </span>{
+<a href=#1799 id=1799 data-nosnippet>1799</a>                <span class="macro">panic!</span>(<span class="string">"{msg}"</span>);
+<a href=#1800 id=1800 data-nosnippet>1800</a>            }
+<a href=#1801 id=1801 data-nosnippet>1801</a>        }
+<a href=#1802 id=1802 data-nosnippet>1802</a>    }
+<a href=#1803 id=1803 data-nosnippet>1803</a>}
+<a href=#1804 id=1804 data-nosnippet>1804</a>
+<a href=#1805 id=1805 data-nosnippet>1805</a><span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
+<a href=#1806 id=1806 data-nosnippet>1806</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>png_color::png_color_metadata_to_icc;
 <a href=#1807 id=1807 data-nosnippet>1807</a>
 <a href=#1808 id=1808 data-nosnippet>1808</a><span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
-<a href=#1809 id=1809 data-nosnippet>1809</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>png_color::png_color_metadata_to_icc;
-<a href=#1810 id=1810 data-nosnippet>1810</a>
-<a href=#1811 id=1811 data-nosnippet>1811</a><span class="attr">#[cfg(feature = <span class="string">"image_png"</span>)]
-<a href=#1812 id=1812 data-nosnippet>1812</a></span><span class="kw">mod </span>png_color {
-<a href=#1813 id=1813 data-nosnippet>1813</a>    <span class="kw">use </span>lcms2::{CIExyY, CIExyYTRIPLE, Profile, ToneCurve};
-<a href=#1814 id=1814 data-nosnippet>1814</a>    <span class="kw">use </span>png::{ScaledFloat, SourceChromaticities};
-<a href=#1815 id=1815 data-nosnippet>1815</a>
-<a href=#1816 id=1816 data-nosnippet>1816</a>    <span class="kw">fn </span>is_srgb_equivalent(gamma: <span class="prelude-ty">Option</span>&lt;ScaledFloat&gt;, chromaticities: <span class="prelude-ty">Option</span>&lt;SourceChromaticities&gt;) -&gt; bool {
-<a href=#1817 id=1817 data-nosnippet>1817</a>        <span class="kw">const </span>SRGB_GAMMA: f32 = <span class="number">1.0 </span>/ <span class="number">2.2</span>;
-<a href=#1818 id=1818 data-nosnippet>1818</a>        <span class="kw">const </span>GAMMA_EPSILON: f32 = <span class="number">0.01</span>;
-<a href=#1819 id=1819 data-nosnippet>1819</a>
-<a href=#1820 id=1820 data-nosnippet>1820</a>        <span class="kw">const </span>SRGB_WHITE_X: f32 = <span class="number">0.3127</span>;
-<a href=#1821 id=1821 data-nosnippet>1821</a>        <span class="kw">const </span>SRGB_WHITE_Y: f32 = <span class="number">0.3290</span>;
-<a href=#1822 id=1822 data-nosnippet>1822</a>        <span class="kw">const </span>SRGB_RED_X: f32 = <span class="number">0.64</span>;
-<a href=#1823 id=1823 data-nosnippet>1823</a>        <span class="kw">const </span>SRGB_RED_Y: f32 = <span class="number">0.33</span>;
-<a href=#1824 id=1824 data-nosnippet>1824</a>        <span class="kw">const </span>SRGB_GREEN_X: f32 = <span class="number">0.30</span>;
-<a href=#1825 id=1825 data-nosnippet>1825</a>        <span class="kw">const </span>SRGB_GREEN_Y: f32 = <span class="number">0.60</span>;
-<a href=#1826 id=1826 data-nosnippet>1826</a>        <span class="kw">const </span>SRGB_BLUE_X: f32 = <span class="number">0.15</span>;
-<a href=#1827 id=1827 data-nosnippet>1827</a>        <span class="kw">const </span>SRGB_BLUE_Y: f32 = <span class="number">0.06</span>;
-<a href=#1828 id=1828 data-nosnippet>1828</a>        <span class="kw">const </span>CHROMA_EPSILON: f32 = <span class="number">0.001</span>;
-<a href=#1829 id=1829 data-nosnippet>1829</a>
-<a href=#1830 id=1830 data-nosnippet>1830</a>        <span class="kw">let </span>about_eq = |a: f32, b: f32, epsilon: f32| (a - b).abs() &lt; epsilon;
-<a href=#1831 id=1831 data-nosnippet>1831</a>
-<a href=#1832 id=1832 data-nosnippet>1832</a>        <span class="kw">let </span>gamma_matches = gamma.is_some_and(|g| about_eq(g.into_value(), SRGB_GAMMA, GAMMA_EPSILON));
-<a href=#1833 id=1833 data-nosnippet>1833</a>
-<a href=#1834 id=1834 data-nosnippet>1834</a>        <span class="kw">let </span>chroma_matches = chromaticities.is_some_and(|c| {
-<a href=#1835 id=1835 data-nosnippet>1835</a>            about_eq(c.white.<span class="number">0</span>.into_value(), SRGB_WHITE_X, CHROMA_EPSILON)
-<a href=#1836 id=1836 data-nosnippet>1836</a>                &amp;&amp; about_eq(c.white.<span class="number">1</span>.into_value(), SRGB_WHITE_Y, CHROMA_EPSILON)
-<a href=#1837 id=1837 data-nosnippet>1837</a>                &amp;&amp; about_eq(c.red.<span class="number">0</span>.into_value(), SRGB_RED_X, CHROMA_EPSILON)
-<a href=#1838 id=1838 data-nosnippet>1838</a>                &amp;&amp; about_eq(c.red.<span class="number">1</span>.into_value(), SRGB_RED_Y, CHROMA_EPSILON)
-<a href=#1839 id=1839 data-nosnippet>1839</a>                &amp;&amp; about_eq(c.green.<span class="number">0</span>.into_value(), SRGB_GREEN_X, CHROMA_EPSILON)
-<a href=#1840 id=1840 data-nosnippet>1840</a>                &amp;&amp; about_eq(c.green.<span class="number">1</span>.into_value(), SRGB_GREEN_Y, CHROMA_EPSILON)
-<a href=#1841 id=1841 data-nosnippet>1841</a>                &amp;&amp; about_eq(c.blue.<span class="number">0</span>.into_value(), SRGB_BLUE_X, CHROMA_EPSILON)
-<a href=#1842 id=1842 data-nosnippet>1842</a>                &amp;&amp; about_eq(c.blue.<span class="number">1</span>.into_value(), SRGB_BLUE_Y, CHROMA_EPSILON)
-<a href=#1843 id=1843 data-nosnippet>1843</a>        });
-<a href=#1844 id=1844 data-nosnippet>1844</a>
-<a href=#1845 id=1845 data-nosnippet>1845</a>        <span class="kw">match </span>(gamma.is_some(), chromaticities.is_some()) {
-<a href=#1846 id=1846 data-nosnippet>1846</a>            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; gamma_matches &amp;&amp; chroma_matches,
-<a href=#1847 id=1847 data-nosnippet>1847</a>            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; gamma_matches,
-<a href=#1848 id=1848 data-nosnippet>1848</a>            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) =&gt; chroma_matches,
-<a href=#1849 id=1849 data-nosnippet>1849</a>            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) =&gt; <span class="bool-val">false</span>,
-<a href=#1850 id=1850 data-nosnippet>1850</a>        }
-<a href=#1851 id=1851 data-nosnippet>1851</a>    }
-<a href=#1852 id=1852 data-nosnippet>1852</a>
-<a href=#1853 id=1853 data-nosnippet>1853</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>png_color_metadata_to_icc(gamma: <span class="prelude-ty">Option</span>&lt;ScaledFloat&gt;, chromaticities: <span class="prelude-ty">Option</span>&lt;SourceChromaticities&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Profile&gt; {
-<a href=#1854 id=1854 data-nosnippet>1854</a>        <span class="kw">if </span>gamma.is_none() &amp;&amp; chromaticities.is_none() {
-<a href=#1855 id=1855 data-nosnippet>1855</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#1856 id=1856 data-nosnippet>1856</a>        }
-<a href=#1857 id=1857 data-nosnippet>1857</a>
-<a href=#1858 id=1858 data-nosnippet>1858</a>        <span class="kw">if </span>is_srgb_equivalent(gamma, chromaticities) {
-<a href=#1859 id=1859 data-nosnippet>1859</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
-<a href=#1860 id=1860 data-nosnippet>1860</a>        }
-<a href=#1861 id=1861 data-nosnippet>1861</a>
-<a href=#1862 id=1862 data-nosnippet>1862</a>        <span class="kw">let </span>white_point = chromaticities.map_or_else(
-<a href=#1863 id=1863 data-nosnippet>1863</a>            || CIExyY {
-<a href=#1864 id=1864 data-nosnippet>1864</a>                x: <span class="number">0.3127</span>,
-<a href=#1865 id=1865 data-nosnippet>1865</a>                y: <span class="number">0.3290</span>,
-<a href=#1866 id=1866 data-nosnippet>1866</a>                Y: <span class="number">1.0</span>,
-<a href=#1867 id=1867 data-nosnippet>1867</a>            },
-<a href=#1868 id=1868 data-nosnippet>1868</a>            |c| CIExyY {
-<a href=#1869 id=1869 data-nosnippet>1869</a>                x: c.white.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1870 id=1870 data-nosnippet>1870</a>                y: c.white.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1871 id=1871 data-nosnippet>1871</a>                Y: <span class="number">1.0</span>,
-<a href=#1872 id=1872 data-nosnippet>1872</a>            },
-<a href=#1873 id=1873 data-nosnippet>1873</a>        );
-<a href=#1874 id=1874 data-nosnippet>1874</a>
-<a href=#1875 id=1875 data-nosnippet>1875</a>        <span class="kw">let </span>primaries = chromaticities.map_or_else(
-<a href=#1876 id=1876 data-nosnippet>1876</a>            || CIExyYTRIPLE {
-<a href=#1877 id=1877 data-nosnippet>1877</a>                Red: CIExyY { x: <span class="number">0.64</span>, y: <span class="number">0.33</span>, Y: <span class="number">1.0 </span>},
-<a href=#1878 id=1878 data-nosnippet>1878</a>                Green: CIExyY { x: <span class="number">0.30</span>, y: <span class="number">0.60</span>, Y: <span class="number">1.0 </span>},
-<a href=#1879 id=1879 data-nosnippet>1879</a>                Blue: CIExyY { x: <span class="number">0.15</span>, y: <span class="number">0.06</span>, Y: <span class="number">1.0 </span>},
-<a href=#1880 id=1880 data-nosnippet>1880</a>            },
-<a href=#1881 id=1881 data-nosnippet>1881</a>            |c| CIExyYTRIPLE {
-<a href=#1882 id=1882 data-nosnippet>1882</a>                Red: CIExyY {
-<a href=#1883 id=1883 data-nosnippet>1883</a>                    x: c.red.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1884 id=1884 data-nosnippet>1884</a>                    y: c.red.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1885 id=1885 data-nosnippet>1885</a>                    Y: <span class="number">1.0</span>,
-<a href=#1886 id=1886 data-nosnippet>1886</a>                },
-<a href=#1887 id=1887 data-nosnippet>1887</a>                Green: CIExyY {
-<a href=#1888 id=1888 data-nosnippet>1888</a>                    x: c.green.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1889 id=1889 data-nosnippet>1889</a>                    y: c.green.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1890 id=1890 data-nosnippet>1890</a>                    Y: <span class="number">1.0</span>,
-<a href=#1891 id=1891 data-nosnippet>1891</a>                },
-<a href=#1892 id=1892 data-nosnippet>1892</a>                Blue: CIExyY {
-<a href=#1893 id=1893 data-nosnippet>1893</a>                    x: c.blue.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1894 id=1894 data-nosnippet>1894</a>                    y: c.blue.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
-<a href=#1895 id=1895 data-nosnippet>1895</a>                    Y: <span class="number">1.0</span>,
-<a href=#1896 id=1896 data-nosnippet>1896</a>                },
-<a href=#1897 id=1897 data-nosnippet>1897</a>            },
-<a href=#1898 id=1898 data-nosnippet>1898</a>        );
-<a href=#1899 id=1899 data-nosnippet>1899</a>
-<a href=#1900 id=1900 data-nosnippet>1900</a>        <span class="kw">let </span>display_gamma = <span class="kw">match </span>gamma.map(|g| g.into_value()) {
-<a href=#1901 id=1901 data-nosnippet>1901</a>            <span class="prelude-val">Some</span>(g) <span class="kw">if </span>(g - <span class="number">1.0</span>).abs() &lt; <span class="number">0.001 </span>=&gt; <span class="number">1.0</span>,
-<a href=#1902 id=1902 data-nosnippet>1902</a>            <span class="prelude-val">Some</span>(g) =&gt; (<span class="number">1.0 </span>/ g) <span class="kw">as </span>f64,
-<a href=#1903 id=1903 data-nosnippet>1903</a>            <span class="prelude-val">None </span>=&gt; <span class="number">2.2</span>,
-<a href=#1904 id=1904 data-nosnippet>1904</a>        };
+<a href=#1809 id=1809 data-nosnippet>1809</a></span><span class="kw">mod </span>png_color {
+<a href=#1810 id=1810 data-nosnippet>1810</a>    <span class="kw">use </span>lcms2::{CIExyY, CIExyYTRIPLE, Profile, ToneCurve};
+<a href=#1811 id=1811 data-nosnippet>1811</a>    <span class="kw">use </span>png::{ScaledFloat, SourceChromaticities};
+<a href=#1812 id=1812 data-nosnippet>1812</a>
+<a href=#1813 id=1813 data-nosnippet>1813</a>    <span class="kw">fn </span>is_srgb_equivalent(gamma: <span class="prelude-ty">Option</span>&lt;ScaledFloat&gt;, chromaticities: <span class="prelude-ty">Option</span>&lt;SourceChromaticities&gt;) -&gt; bool {
+<a href=#1814 id=1814 data-nosnippet>1814</a>        <span class="kw">const </span>SRGB_GAMMA: f32 = <span class="number">1.0 </span>/ <span class="number">2.2</span>;
+<a href=#1815 id=1815 data-nosnippet>1815</a>        <span class="kw">const </span>GAMMA_EPSILON: f32 = <span class="number">0.01</span>;
+<a href=#1816 id=1816 data-nosnippet>1816</a>
+<a href=#1817 id=1817 data-nosnippet>1817</a>        <span class="kw">const </span>SRGB_WHITE_X: f32 = <span class="number">0.3127</span>;
+<a href=#1818 id=1818 data-nosnippet>1818</a>        <span class="kw">const </span>SRGB_WHITE_Y: f32 = <span class="number">0.3290</span>;
+<a href=#1819 id=1819 data-nosnippet>1819</a>        <span class="kw">const </span>SRGB_RED_X: f32 = <span class="number">0.64</span>;
+<a href=#1820 id=1820 data-nosnippet>1820</a>        <span class="kw">const </span>SRGB_RED_Y: f32 = <span class="number">0.33</span>;
+<a href=#1821 id=1821 data-nosnippet>1821</a>        <span class="kw">const </span>SRGB_GREEN_X: f32 = <span class="number">0.30</span>;
+<a href=#1822 id=1822 data-nosnippet>1822</a>        <span class="kw">const </span>SRGB_GREEN_Y: f32 = <span class="number">0.60</span>;
+<a href=#1823 id=1823 data-nosnippet>1823</a>        <span class="kw">const </span>SRGB_BLUE_X: f32 = <span class="number">0.15</span>;
+<a href=#1824 id=1824 data-nosnippet>1824</a>        <span class="kw">const </span>SRGB_BLUE_Y: f32 = <span class="number">0.06</span>;
+<a href=#1825 id=1825 data-nosnippet>1825</a>        <span class="kw">const </span>CHROMA_EPSILON: f32 = <span class="number">0.001</span>;
+<a href=#1826 id=1826 data-nosnippet>1826</a>
+<a href=#1827 id=1827 data-nosnippet>1827</a>        <span class="kw">let </span>about_eq = |a: f32, b: f32, epsilon: f32| (a - b).abs() &lt; epsilon;
+<a href=#1828 id=1828 data-nosnippet>1828</a>
+<a href=#1829 id=1829 data-nosnippet>1829</a>        <span class="kw">let </span>gamma_matches = gamma.is_some_and(|g| about_eq(g.into_value(), SRGB_GAMMA, GAMMA_EPSILON));
+<a href=#1830 id=1830 data-nosnippet>1830</a>
+<a href=#1831 id=1831 data-nosnippet>1831</a>        <span class="kw">let </span>chroma_matches = chromaticities.is_some_and(|c| {
+<a href=#1832 id=1832 data-nosnippet>1832</a>            about_eq(c.white.<span class="number">0</span>.into_value(), SRGB_WHITE_X, CHROMA_EPSILON)
+<a href=#1833 id=1833 data-nosnippet>1833</a>                &amp;&amp; about_eq(c.white.<span class="number">1</span>.into_value(), SRGB_WHITE_Y, CHROMA_EPSILON)
+<a href=#1834 id=1834 data-nosnippet>1834</a>                &amp;&amp; about_eq(c.red.<span class="number">0</span>.into_value(), SRGB_RED_X, CHROMA_EPSILON)
+<a href=#1835 id=1835 data-nosnippet>1835</a>                &amp;&amp; about_eq(c.red.<span class="number">1</span>.into_value(), SRGB_RED_Y, CHROMA_EPSILON)
+<a href=#1836 id=1836 data-nosnippet>1836</a>                &amp;&amp; about_eq(c.green.<span class="number">0</span>.into_value(), SRGB_GREEN_X, CHROMA_EPSILON)
+<a href=#1837 id=1837 data-nosnippet>1837</a>                &amp;&amp; about_eq(c.green.<span class="number">1</span>.into_value(), SRGB_GREEN_Y, CHROMA_EPSILON)
+<a href=#1838 id=1838 data-nosnippet>1838</a>                &amp;&amp; about_eq(c.blue.<span class="number">0</span>.into_value(), SRGB_BLUE_X, CHROMA_EPSILON)
+<a href=#1839 id=1839 data-nosnippet>1839</a>                &amp;&amp; about_eq(c.blue.<span class="number">1</span>.into_value(), SRGB_BLUE_Y, CHROMA_EPSILON)
+<a href=#1840 id=1840 data-nosnippet>1840</a>        });
+<a href=#1841 id=1841 data-nosnippet>1841</a>
+<a href=#1842 id=1842 data-nosnippet>1842</a>        <span class="kw">match </span>(gamma.is_some(), chromaticities.is_some()) {
+<a href=#1843 id=1843 data-nosnippet>1843</a>            (<span class="bool-val">true</span>, <span class="bool-val">true</span>) =&gt; gamma_matches &amp;&amp; chroma_matches,
+<a href=#1844 id=1844 data-nosnippet>1844</a>            (<span class="bool-val">true</span>, <span class="bool-val">false</span>) =&gt; gamma_matches,
+<a href=#1845 id=1845 data-nosnippet>1845</a>            (<span class="bool-val">false</span>, <span class="bool-val">true</span>) =&gt; chroma_matches,
+<a href=#1846 id=1846 data-nosnippet>1846</a>            (<span class="bool-val">false</span>, <span class="bool-val">false</span>) =&gt; <span class="bool-val">false</span>,
+<a href=#1847 id=1847 data-nosnippet>1847</a>        }
+<a href=#1848 id=1848 data-nosnippet>1848</a>    }
+<a href=#1849 id=1849 data-nosnippet>1849</a>
+<a href=#1850 id=1850 data-nosnippet>1850</a>    <span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>png_color_metadata_to_icc(gamma: <span class="prelude-ty">Option</span>&lt;ScaledFloat&gt;, chromaticities: <span class="prelude-ty">Option</span>&lt;SourceChromaticities&gt;) -&gt; <span class="prelude-ty">Option</span>&lt;Profile&gt; {
+<a href=#1851 id=1851 data-nosnippet>1851</a>        <span class="kw">if </span>gamma.is_none() &amp;&amp; chromaticities.is_none() {
+<a href=#1852 id=1852 data-nosnippet>1852</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#1853 id=1853 data-nosnippet>1853</a>        }
+<a href=#1854 id=1854 data-nosnippet>1854</a>
+<a href=#1855 id=1855 data-nosnippet>1855</a>        <span class="kw">if </span>is_srgb_equivalent(gamma, chromaticities) {
+<a href=#1856 id=1856 data-nosnippet>1856</a>            <span class="kw">return </span><span class="prelude-val">None</span>;
+<a href=#1857 id=1857 data-nosnippet>1857</a>        }
+<a href=#1858 id=1858 data-nosnippet>1858</a>
+<a href=#1859 id=1859 data-nosnippet>1859</a>        <span class="kw">let </span>white_point = chromaticities.map_or_else(
+<a href=#1860 id=1860 data-nosnippet>1860</a>            || CIExyY {
+<a href=#1861 id=1861 data-nosnippet>1861</a>                x: <span class="number">0.3127</span>,
+<a href=#1862 id=1862 data-nosnippet>1862</a>                y: <span class="number">0.3290</span>,
+<a href=#1863 id=1863 data-nosnippet>1863</a>                Y: <span class="number">1.0</span>,
+<a href=#1864 id=1864 data-nosnippet>1864</a>            },
+<a href=#1865 id=1865 data-nosnippet>1865</a>            |c| CIExyY {
+<a href=#1866 id=1866 data-nosnippet>1866</a>                x: c.white.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1867 id=1867 data-nosnippet>1867</a>                y: c.white.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1868 id=1868 data-nosnippet>1868</a>                Y: <span class="number">1.0</span>,
+<a href=#1869 id=1869 data-nosnippet>1869</a>            },
+<a href=#1870 id=1870 data-nosnippet>1870</a>        );
+<a href=#1871 id=1871 data-nosnippet>1871</a>
+<a href=#1872 id=1872 data-nosnippet>1872</a>        <span class="kw">let </span>primaries = chromaticities.map_or_else(
+<a href=#1873 id=1873 data-nosnippet>1873</a>            || CIExyYTRIPLE {
+<a href=#1874 id=1874 data-nosnippet>1874</a>                Red: CIExyY { x: <span class="number">0.64</span>, y: <span class="number">0.33</span>, Y: <span class="number">1.0 </span>},
+<a href=#1875 id=1875 data-nosnippet>1875</a>                Green: CIExyY { x: <span class="number">0.30</span>, y: <span class="number">0.60</span>, Y: <span class="number">1.0 </span>},
+<a href=#1876 id=1876 data-nosnippet>1876</a>                Blue: CIExyY { x: <span class="number">0.15</span>, y: <span class="number">0.06</span>, Y: <span class="number">1.0 </span>},
+<a href=#1877 id=1877 data-nosnippet>1877</a>            },
+<a href=#1878 id=1878 data-nosnippet>1878</a>            |c| CIExyYTRIPLE {
+<a href=#1879 id=1879 data-nosnippet>1879</a>                Red: CIExyY {
+<a href=#1880 id=1880 data-nosnippet>1880</a>                    x: c.red.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1881 id=1881 data-nosnippet>1881</a>                    y: c.red.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1882 id=1882 data-nosnippet>1882</a>                    Y: <span class="number">1.0</span>,
+<a href=#1883 id=1883 data-nosnippet>1883</a>                },
+<a href=#1884 id=1884 data-nosnippet>1884</a>                Green: CIExyY {
+<a href=#1885 id=1885 data-nosnippet>1885</a>                    x: c.green.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1886 id=1886 data-nosnippet>1886</a>                    y: c.green.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1887 id=1887 data-nosnippet>1887</a>                    Y: <span class="number">1.0</span>,
+<a href=#1888 id=1888 data-nosnippet>1888</a>                },
+<a href=#1889 id=1889 data-nosnippet>1889</a>                Blue: CIExyY {
+<a href=#1890 id=1890 data-nosnippet>1890</a>                    x: c.blue.<span class="number">0</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1891 id=1891 data-nosnippet>1891</a>                    y: c.blue.<span class="number">1</span>.into_value() <span class="kw">as </span>f64,
+<a href=#1892 id=1892 data-nosnippet>1892</a>                    Y: <span class="number">1.0</span>,
+<a href=#1893 id=1893 data-nosnippet>1893</a>                },
+<a href=#1894 id=1894 data-nosnippet>1894</a>            },
+<a href=#1895 id=1895 data-nosnippet>1895</a>        );
+<a href=#1896 id=1896 data-nosnippet>1896</a>
+<a href=#1897 id=1897 data-nosnippet>1897</a>        <span class="kw">let </span>display_gamma = <span class="kw">match </span>gamma.map(|g| g.into_value()) {
+<a href=#1898 id=1898 data-nosnippet>1898</a>            <span class="prelude-val">Some</span>(g) <span class="kw">if </span>(g - <span class="number">1.0</span>).abs() &lt; <span class="number">0.001 </span>=&gt; <span class="number">1.0</span>,
+<a href=#1899 id=1899 data-nosnippet>1899</a>            <span class="prelude-val">Some</span>(g) =&gt; (<span class="number">1.0 </span>/ g) <span class="kw">as </span>f64,
+<a href=#1900 id=1900 data-nosnippet>1900</a>            <span class="prelude-val">None </span>=&gt; <span class="number">2.2</span>,
+<a href=#1901 id=1901 data-nosnippet>1901</a>        };
+<a href=#1902 id=1902 data-nosnippet>1902</a>
+<a href=#1903 id=1903 data-nosnippet>1903</a>        <span class="kw">let </span>tone_curve = ToneCurve::new(display_gamma);
+<a href=#1904 id=1904 data-nosnippet>1904</a>        <span class="kw">let </span>curves = [<span class="kw-2">&amp;</span>tone_curve, <span class="kw-2">&amp;</span>tone_curve, <span class="kw-2">&amp;</span>tone_curve];
 <a href=#1905 id=1905 data-nosnippet>1905</a>
-<a href=#1906 id=1906 data-nosnippet>1906</a>        <span class="kw">let </span>tone_curve = ToneCurve::new(display_gamma);
-<a href=#1907 id=1907 data-nosnippet>1907</a>        <span class="kw">let </span>curves = [<span class="kw-2">&amp;</span>tone_curve, <span class="kw-2">&amp;</span>tone_curve, <span class="kw-2">&amp;</span>tone_curve];
-<a href=#1908 id=1908 data-nosnippet>1908</a>
-<a href=#1909 id=1909 data-nosnippet>1909</a>        Profile::new_rgb(<span class="kw-2">&amp;</span>white_point, <span class="kw-2">&amp;</span>primaries, <span class="kw-2">&amp;</span>curves).ok()
-<a href=#1910 id=1910 data-nosnippet>1910</a>    }
-<a href=#1911 id=1911 data-nosnippet>1911</a>}
+<a href=#1906 id=1906 data-nosnippet>1906</a>        Profile::new_rgb(<span class="kw-2">&amp;</span>white_point, <span class="kw-2">&amp;</span>primaries, <span class="kw-2">&amp;</span>curves).ok()
+<a href=#1907 id=1907 data-nosnippet>1907</a>    }
+<a href=#1908 id=1908 data-nosnippet>1908</a>}
 </code></pre></div></section></main></body></html>
