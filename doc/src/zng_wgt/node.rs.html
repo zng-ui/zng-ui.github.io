@@ -2475,37 +2475,38 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#2439 id=2439 data-nosnippet>2439</a>        list_presenter(<span class="self">self</span>.clone(), wgt_fn)
 <a href=#2440 id=2440 data-nosnippet>2440</a>    }
 <a href=#2441 id=2441 data-nosnippet>2441</a>}
-<a href=#2442 id=2442 data-nosnippet>2442</a>
-<a href=#2443 id=2443 data-nosnippet>2443</a><span class="doccomment">/// Extension method fo *convert* a variable to a node list.
-<a href=#2444 id=2444 data-nosnippet>2444</a></span><span class="kw">pub trait </span>VarPresentListFromIter&lt;D: VarValue, L: IntoIterator&lt;Item = D&gt; + VarValue&gt; {
-<a href=#2445 id=2445 data-nosnippet>2445</a>    <span class="doccomment">/// Present the variable data using a [`list_presenter_from_iter`] node list.
-<a href=#2446 id=2446 data-nosnippet>2446</a>    </span><span class="kw">fn </span>present_list_from_iter(<span class="kw-2">&amp;</span><span class="self">self</span>, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;D&gt;&gt;) -&gt; UiNode;
-<a href=#2447 id=2447 data-nosnippet>2447</a>}
-<a href=#2448 id=2448 data-nosnippet>2448</a><span class="kw">impl</span>&lt;D: VarValue, L: IntoIterator&lt;Item = D&gt; + VarValue&gt; VarPresentListFromIter&lt;D, L&gt; <span class="kw">for </span>Var&lt;L&gt; {
-<a href=#2449 id=2449 data-nosnippet>2449</a>    <span class="kw">fn </span>present_list_from_iter(<span class="kw-2">&amp;</span><span class="self">self</span>, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;D&gt;&gt;) -&gt; UiNode {
-<a href=#2450 id=2450 data-nosnippet>2450</a>        list_presenter_from_iter(<span class="self">self</span>.clone(), wgt_fn)
-<a href=#2451 id=2451 data-nosnippet>2451</a>    }
-<a href=#2452 id=2452 data-nosnippet>2452</a>}
-<a href=#2453 id=2453 data-nosnippet>2453</a>
-<a href=#2454 id=2454 data-nosnippet>2454</a><span class="doccomment">/// Extension method to *convert* a variable to a node list.
-<a href=#2455 id=2455 data-nosnippet>2455</a></span><span class="kw">pub trait </span>VarPresentListFromNode&lt;L: VarValue&gt; {
-<a href=#2456 id=2456 data-nosnippet>2456</a>    <span class="doccomment">/// Present the variable data using a [`list_presenter_from_node`] node list.
-<a href=#2457 id=2457 data-nosnippet>2457</a>    </span><span class="kw">fn </span>present_list_from_node(<span class="kw-2">&amp;</span><span class="self">self</span>, list_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;L&gt;&gt;) -&gt; UiNode;
-<a href=#2458 id=2458 data-nosnippet>2458</a>}
-<a href=#2459 id=2459 data-nosnippet>2459</a><span class="kw">impl</span>&lt;L: VarValue&gt; VarPresentListFromNode&lt;L&gt; <span class="kw">for </span>Var&lt;L&gt; {
-<a href=#2460 id=2460 data-nosnippet>2460</a>    <span class="kw">fn </span>present_list_from_node(<span class="kw-2">&amp;</span><span class="self">self</span>, list_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;L&gt;&gt;) -&gt; UiNode {
-<a href=#2461 id=2461 data-nosnippet>2461</a>        list_presenter_from_node(<span class="self">self</span>.clone(), list_fn)
-<a href=#2462 id=2462 data-nosnippet>2462</a>    }
-<a href=#2463 id=2463 data-nosnippet>2463</a>}
-<a href=#2464 id=2464 data-nosnippet>2464</a>
-<a href=#2465 id=2465 data-nosnippet>2465</a><span class="doccomment">/// Extension method to *convert* a variable to a node.
-<a href=#2466 id=2466 data-nosnippet>2466</a></span><span class="kw">pub trait </span>VarPresentData&lt;D: VarValue&gt; {
-<a href=#2467 id=2467 data-nosnippet>2467</a>    <span class="doccomment">/// Present the `data` variable using a [`presenter`] node.
-<a href=#2468 id=2468 data-nosnippet>2468</a>    </span><span class="kw">fn </span>present_data(<span class="kw-2">&amp;</span><span class="self">self</span>, data: <span class="kw">impl </span>IntoVar&lt;D&gt;) -&gt; UiNode;
-<a href=#2469 id=2469 data-nosnippet>2469</a>}
-<a href=#2470 id=2470 data-nosnippet>2470</a><span class="kw">impl</span>&lt;D: VarValue&gt; VarPresentData&lt;D&gt; <span class="kw">for </span>Var&lt;WidgetFn&lt;D&gt;&gt; {
-<a href=#2471 id=2471 data-nosnippet>2471</a>    <span class="kw">fn </span>present_data(<span class="kw-2">&amp;</span><span class="self">self</span>, data: <span class="kw">impl </span>IntoVar&lt;D&gt;) -&gt; UiNode {
-<a href=#2472 id=2472 data-nosnippet>2472</a>        presenter(data, <span class="self">self</span>.clone())
-<a href=#2473 id=2473 data-nosnippet>2473</a>    }
-<a href=#2474 id=2474 data-nosnippet>2474</a>}
+<a href=#2442 id=2442 data-nosnippet>2442</a><span class="comment">// TODO(breaking) args type with index
+<a href=#2443 id=2443 data-nosnippet>2443</a>
+<a href=#2444 id=2444 data-nosnippet>2444</a></span><span class="doccomment">/// Extension method fo *convert* a variable to a node list.
+<a href=#2445 id=2445 data-nosnippet>2445</a></span><span class="kw">pub trait </span>VarPresentListFromIter&lt;D: VarValue, L: IntoIterator&lt;Item = D&gt; + VarValue&gt; {
+<a href=#2446 id=2446 data-nosnippet>2446</a>    <span class="doccomment">/// Present the variable data using a [`list_presenter_from_iter`] node list.
+<a href=#2447 id=2447 data-nosnippet>2447</a>    </span><span class="kw">fn </span>present_list_from_iter(<span class="kw-2">&amp;</span><span class="self">self</span>, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;D&gt;&gt;) -&gt; UiNode;
+<a href=#2448 id=2448 data-nosnippet>2448</a>}
+<a href=#2449 id=2449 data-nosnippet>2449</a><span class="kw">impl</span>&lt;D: VarValue, L: IntoIterator&lt;Item = D&gt; + VarValue&gt; VarPresentListFromIter&lt;D, L&gt; <span class="kw">for </span>Var&lt;L&gt; {
+<a href=#2450 id=2450 data-nosnippet>2450</a>    <span class="kw">fn </span>present_list_from_iter(<span class="kw-2">&amp;</span><span class="self">self</span>, wgt_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;D&gt;&gt;) -&gt; UiNode {
+<a href=#2451 id=2451 data-nosnippet>2451</a>        list_presenter_from_iter(<span class="self">self</span>.clone(), wgt_fn)
+<a href=#2452 id=2452 data-nosnippet>2452</a>    }
+<a href=#2453 id=2453 data-nosnippet>2453</a>}
+<a href=#2454 id=2454 data-nosnippet>2454</a>
+<a href=#2455 id=2455 data-nosnippet>2455</a><span class="doccomment">/// Extension method to *convert* a variable to a node list.
+<a href=#2456 id=2456 data-nosnippet>2456</a></span><span class="kw">pub trait </span>VarPresentListFromNode&lt;L: VarValue&gt; {
+<a href=#2457 id=2457 data-nosnippet>2457</a>    <span class="doccomment">/// Present the variable data using a [`list_presenter_from_node`] node list.
+<a href=#2458 id=2458 data-nosnippet>2458</a>    </span><span class="kw">fn </span>present_list_from_node(<span class="kw-2">&amp;</span><span class="self">self</span>, list_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;L&gt;&gt;) -&gt; UiNode;
+<a href=#2459 id=2459 data-nosnippet>2459</a>}
+<a href=#2460 id=2460 data-nosnippet>2460</a><span class="kw">impl</span>&lt;L: VarValue&gt; VarPresentListFromNode&lt;L&gt; <span class="kw">for </span>Var&lt;L&gt; {
+<a href=#2461 id=2461 data-nosnippet>2461</a>    <span class="kw">fn </span>present_list_from_node(<span class="kw-2">&amp;</span><span class="self">self</span>, list_fn: <span class="kw">impl </span>IntoVar&lt;WidgetFn&lt;L&gt;&gt;) -&gt; UiNode {
+<a href=#2462 id=2462 data-nosnippet>2462</a>        list_presenter_from_node(<span class="self">self</span>.clone(), list_fn)
+<a href=#2463 id=2463 data-nosnippet>2463</a>    }
+<a href=#2464 id=2464 data-nosnippet>2464</a>}
+<a href=#2465 id=2465 data-nosnippet>2465</a>
+<a href=#2466 id=2466 data-nosnippet>2466</a><span class="doccomment">/// Extension method to *convert* a variable to a node.
+<a href=#2467 id=2467 data-nosnippet>2467</a></span><span class="kw">pub trait </span>VarPresentData&lt;D: VarValue&gt; {
+<a href=#2468 id=2468 data-nosnippet>2468</a>    <span class="doccomment">/// Present the `data` variable using a [`presenter`] node.
+<a href=#2469 id=2469 data-nosnippet>2469</a>    </span><span class="kw">fn </span>present_data(<span class="kw-2">&amp;</span><span class="self">self</span>, data: <span class="kw">impl </span>IntoVar&lt;D&gt;) -&gt; UiNode;
+<a href=#2470 id=2470 data-nosnippet>2470</a>}
+<a href=#2471 id=2471 data-nosnippet>2471</a><span class="kw">impl</span>&lt;D: VarValue&gt; VarPresentData&lt;D&gt; <span class="kw">for </span>Var&lt;WidgetFn&lt;D&gt;&gt; {
+<a href=#2472 id=2472 data-nosnippet>2472</a>    <span class="kw">fn </span>present_data(<span class="kw-2">&amp;</span><span class="self">self</span>, data: <span class="kw">impl </span>IntoVar&lt;D&gt;) -&gt; UiNode {
+<a href=#2473 id=2473 data-nosnippet>2473</a>        presenter(data, <span class="self">self</span>.clone())
+<a href=#2474 id=2474 data-nosnippet>2474</a>    }
+<a href=#2475 id=2475 data-nosnippet>2475</a>}
 </code></pre></div></section></main></body></html>
