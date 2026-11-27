@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["fs_event"],"static":["FS_CHANGES_EVENT"],"struct":["FsChange","FsChangeNoteHandle","FsChangesArgs","WATCHER","WatchFile","WatcherHandle","WriteFile"],"trait":["FsChangeNote","IMAGES_Ext","WatcherReadStatus","WatcherSyncStatus"]};
+window.SIDEBAR_ITEMS = {"fn":["glob","glob_build"],"mod":["fs_event"],"static":["FS_CHANGES_EVENT"],"struct":["FileNameSortKey","FsChange","FsChangeNoteHandle","FsChangesArgs","WATCHER","WatchDir","WatchFile","WatcherHandle","WriteFile"],"trait":["FsChangeNote","IMAGES_Ext","WatcherReadStatus","WatcherSyncStatus"]};

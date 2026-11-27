@@ -143,33 +143,33 @@
 <a href=#143 id=143 data-nosnippet>143</a>            const_var(<span class="prelude-val">None</span>)
 <a href=#144 id=144 data-nosnippet>144</a>        }
 <a href=#145 id=145 data-nosnippet>145</a>    });
-<a href=#146 id=146 data-nosnippet>146</a>    <span class="kw">let </span>transform_id = SpatialFrameId::new_unique();
-<a href=#147 id=147 data-nosnippet>147</a>    match_node(child, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
-<a href=#148 id=148 data-nosnippet>148</a>        UiNodeOp::Init =&gt; {
-<a href=#149 id=149 data-nosnippet>149</a>            WIDGET
-<a href=#150 id=150 data-nosnippet>150</a>                .sub_var_render(<span class="kw-2">&amp;</span>selected_info)
-<a href=#151 id=151 data-nosnippet>151</a>                .sub_var_render(<span class="kw-2">&amp;</span>enabled)
-<a href=#152 id=152 data-nosnippet>152</a>                .sub_var_render(<span class="kw-2">&amp;</span>SELECTED_BORDER_VAR);
-<a href=#153 id=153 data-nosnippet>153</a>        }
-<a href=#154 id=154 data-nosnippet>154</a>        UiNodeOp::Render { frame } =&gt; {
-<a href=#155 id=155 data-nosnippet>155</a>            c.render(frame);
-<a href=#156 id=156 data-nosnippet>156</a>
-<a href=#157 id=157 data-nosnippet>157</a>            <span class="kw">if </span>!enabled.get() {
-<a href=#158 id=158 data-nosnippet>158</a>                <span class="kw">return</span>;
-<a href=#159 id=159 data-nosnippet>159</a>            }
-<a href=#160 id=160 data-nosnippet>160</a>            selected_info.with(|w| {
-<a href=#161 id=161 data-nosnippet>161</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = w {
-<a href=#162 id=162 data-nosnippet>162</a>                    <span class="kw">let </span>bounds = w.bounds_info();
-<a href=#163 id=163 data-nosnippet>163</a>                    <span class="kw">let </span>transform = bounds.inner_transform();
-<a href=#164 id=164 data-nosnippet>164</a>                    <span class="kw">let </span>size = bounds.inner_size();
-<a href=#165 id=165 data-nosnippet>165</a>
-<a href=#166 id=166 data-nosnippet>166</a>                    frame.push_reference_frame(transform_id.into(), transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
-<a href=#167 id=167 data-nosnippet>167</a>                        <span class="kw">let </span>widths = Dip::new(<span class="number">3</span>).to_px(frame.scale_factor());
-<a href=#168 id=168 data-nosnippet>168</a>                        frame.push_border(
-<a href=#169 id=169 data-nosnippet>169</a>                            PxRect::from_size(size).inflate(widths, widths),
-<a href=#170 id=170 data-nosnippet>170</a>                            PxSideOffsets::new_all_same(widths),
-<a href=#171 id=171 data-nosnippet>171</a>                            SELECTED_BORDER_VAR.get().into(),
-<a href=#172 id=172 data-nosnippet>172</a>                            PxCornerRadius::default(),
+<a href=#146 id=146 data-nosnippet>146</a>    match_node(child, <span class="kw">move </span>|c, op| <span class="kw">match </span>op {
+<a href=#147 id=147 data-nosnippet>147</a>        UiNodeOp::Init =&gt; {
+<a href=#148 id=148 data-nosnippet>148</a>            WIDGET
+<a href=#149 id=149 data-nosnippet>149</a>                .sub_var_render(<span class="kw-2">&amp;</span>selected_info)
+<a href=#150 id=150 data-nosnippet>150</a>                .sub_var_render(<span class="kw-2">&amp;</span>enabled)
+<a href=#151 id=151 data-nosnippet>151</a>                .sub_var_render(<span class="kw-2">&amp;</span>SELECTED_BORDER_VAR);
+<a href=#152 id=152 data-nosnippet>152</a>        }
+<a href=#153 id=153 data-nosnippet>153</a>        UiNodeOp::Render { frame } =&gt; {
+<a href=#154 id=154 data-nosnippet>154</a>            c.render(frame);
+<a href=#155 id=155 data-nosnippet>155</a>
+<a href=#156 id=156 data-nosnippet>156</a>            <span class="kw">if </span>!enabled.get() {
+<a href=#157 id=157 data-nosnippet>157</a>                <span class="kw">return</span>;
+<a href=#158 id=158 data-nosnippet>158</a>            }
+<a href=#159 id=159 data-nosnippet>159</a>            selected_info.with(|w| {
+<a href=#160 id=160 data-nosnippet>160</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = w {
+<a href=#161 id=161 data-nosnippet>161</a>                    <span class="kw">let </span>bounds = w.bounds_info();
+<a href=#162 id=162 data-nosnippet>162</a>                    <span class="kw">let </span>transform = bounds.inner_transform();
+<a href=#163 id=163 data-nosnippet>163</a>                    <span class="kw">let </span>size = bounds.inner_size();
+<a href=#164 id=164 data-nosnippet>164</a>
+<a href=#165 id=165 data-nosnippet>165</a>                    frame.push_reference_frame(transform.into(), <span class="bool-val">false</span>, <span class="bool-val">false</span>, |frame| {
+<a href=#166 id=166 data-nosnippet>166</a>                        <span class="kw">let </span>widths = Dip::new(<span class="number">3</span>).to_px(frame.scale_factor());
+<a href=#167 id=167 data-nosnippet>167</a>                        frame.push_border(
+<a href=#168 id=168 data-nosnippet>168</a>                            PxRect::from_size(size).inflate(widths, widths),
+<a href=#169 id=169 data-nosnippet>169</a>                            PxSideOffsets::new_all_same(widths),
+<a href=#170 id=170 data-nosnippet>170</a>                            SELECTED_BORDER_VAR.get().into(),
+<a href=#171 id=171 data-nosnippet>171</a>                            PxCornerRadius::default(),
+<a href=#172 id=172 data-nosnippet>172</a>                            CornerShape::default(),
 <a href=#173 id=173 data-nosnippet>173</a>                        );
 <a href=#174 id=174 data-nosnippet>174</a>                    });
 <a href=#175 id=175 data-nosnippet>175</a>                }

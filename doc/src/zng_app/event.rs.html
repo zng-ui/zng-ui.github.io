@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#7 id=7 data-nosnippet>7</a>    update::UPDATES,
 <a href=#8 id=8 data-nosnippet>8</a>    widget::{AnyVarSubscribe, OnVarArgs},
 <a href=#9 id=9 data-nosnippet>9</a>};
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>zng_app_context::AppLocal;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>zng_task::channel;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>zng_task::parking_lot::MappedRwLockReadGuard;
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>parking_lot::MappedRecursiveRwLockReadGuard;
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>zng_app_context::AppLocal;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>zng_task::channel;
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>zng_var::{AnyVar, VARS, Var, VarHandle, VarUpdateId, VarValue};
 <a href=#14 id=14 data-nosnippet>14</a>
 <a href=#15 id=15 data-nosnippet>15</a><span class="kw">use crate</span>::{
@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#152 id=152 data-nosnippet>152</a>    }
 <a href=#153 id=153 data-nosnippet>153</a>}
 <a href=#154 id=154 data-nosnippet>154</a><span class="kw">impl </span>AnyEvent {
-<a href=#155 id=155 data-nosnippet>155</a>    <span class="kw">fn </span>read_var(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRwLockReadGuard&lt;<span class="lifetime">'_</span>, AnyVar&gt; {
+<a href=#155 id=155 data-nosnippet>155</a>    <span class="kw">fn </span>read_var(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRecursiveRwLockReadGuard&lt;<span class="lifetime">'_</span>, AnyVar&gt; {
 <a href=#156 id=156 data-nosnippet>156</a>        <span class="self">self</span>.<span class="number">0</span>.read_map(|v| <span class="kw-2">&amp;</span>v.var)
 <a href=#157 id=157 data-nosnippet>157</a>    }
 <a href=#158 id=158 data-nosnippet>158</a>

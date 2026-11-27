@@ -50,9 +50,9 @@
 <a href=#50 id=50 data-nosnippet>50</a>                    </span>source: ExternalImageSource::RawData(<span class="kw-2">&amp;</span>pixels[range.clone()]),
 <a href=#51 id=51 data-nosnippet>51</a>                }
 <a href=#52 id=52 data-nosnippet>52</a>            }
-<a href=#53 id=53 data-nosnippet>53</a>            ImageData::NativeTexture { uv, texture: id } =&gt; ExternalImage {
+<a href=#53 id=53 data-nosnippet>53</a>            ImageData::NativeTexture { uv, texture: h } =&gt; ExternalImage {
 <a href=#54 id=54 data-nosnippet>54</a>                uv: <span class="kw-2">*</span>uv,
-<a href=#55 id=55 data-nosnippet>55</a>                source: ExternalImageSource::NativeTexture(<span class="kw-2">*</span>id),
+<a href=#55 id=55 data-nosnippet>55</a>                source: ExternalImageSource::NativeTexture(<span class="kw-2">*</span>h),
 <a href=#56 id=56 data-nosnippet>56</a>            },
 <a href=#57 id=57 data-nosnippet>57</a>        }
 <a href=#58 id=58 data-nosnippet>58</a>    }
@@ -287,7 +287,7 @@
 <a href=#287 id=287 data-nosnippet>287</a>                        r
 <a href=#288 id=288 data-nosnippet>288</a>                    };
 <a href=#289 id=289 data-nosnippet>289</a>                    <span class="kw">if </span>scaled_y != Px(<span class="number">0</span>) {
-<a href=#290 id=290 data-nosnippet>290</a>                        <span class="kw">let </span>spatial_id = wr_list.push_reference_frame(
+<a href=#290 id=290 data-nosnippet>290</a>                        <span class="kw">let </span>spatial_id = wr_list.define_reference_frame(
 <a href=#291 id=291 data-nosnippet>291</a>                            PxPoint::zero().to_wr(),
 <a href=#292 id=292 data-nosnippet>292</a>                            sc.spatial_id(),
 <a href=#293 id=293 data-nosnippet>293</a>                            wr::TransformStyle::Flat,
@@ -297,59 +297,57 @@
 <a href=#297 id=297 data-nosnippet>297</a>                                should_snap: <span class="bool-val">false</span>,
 <a href=#298 id=298 data-nosnippet>298</a>                                paired_with_perspective: <span class="bool-val">false</span>,
 <a href=#299 id=299 data-nosnippet>299</a>                            },
-<a href=#300 id=300 data-nosnippet>300</a>                            sc.next_view_process_frame_id().to_wr(),
-<a href=#301 id=301 data-nosnippet>301</a>                        );
-<a href=#302 id=302 data-nosnippet>302</a>                        sc.push_spatial(spatial_id);
-<a href=#303 id=303 data-nosnippet>303</a>                    }
-<a href=#304 id=304 data-nosnippet>304</a>                    <span class="kw">let </span><span class="kw-2">mut </span>clip_rect = clip_rect;
-<a href=#305 id=305 data-nosnippet>305</a>                    clip_rect.origin.y -= scaled_y;
-<a href=#306 id=306 data-nosnippet>306</a>                    <span class="kw">let </span>clip = sc.clip_chain_id(wr_list);
-<a href=#307 id=307 data-nosnippet>307</a>                    <span class="kw">let </span>props = wr::CommonItemProperties {
-<a href=#308 id=308 data-nosnippet>308</a>                        clip_rect: clip_rect.to_wr(),
-<a href=#309 id=309 data-nosnippet>309</a>                        clip_chain_id: clip,
-<a href=#310 id=310 data-nosnippet>310</a>                        spatial_id: sc.spatial_id(),
-<a href=#311 id=311 data-nosnippet>311</a>                        flags: sc.primitive_flags(),
-<a href=#312 id=312 data-nosnippet>312</a>                    };
-<a href=#313 id=313 data-nosnippet>313</a>                    wr_list.push_image(
-<a href=#314 id=314 data-nosnippet>314</a>                        <span class="kw-2">&amp;</span>props,
-<a href=#315 id=315 data-nosnippet>315</a>                        PxRect::from_size(scaled_stripe).to_wr(),
-<a href=#316 id=316 data-nosnippet>316</a>                        rendering.to_wr(),
-<a href=#317 id=317 data-nosnippet>317</a>                        wr::AlphaType::PremultipliedAlpha,
-<a href=#318 id=318 data-nosnippet>318</a>                        wr::ImageKey(cache.id_namespace(), stripe_id.get()),
-<a href=#319 id=319 data-nosnippet>319</a>                        wr::ColorF::WHITE,
-<a href=#320 id=320 data-nosnippet>320</a>                    );
-<a href=#321 id=321 data-nosnippet>321</a>                    <span class="kw">if </span>scaled_y != Px(<span class="number">0</span>) {
-<a href=#322 id=322 data-nosnippet>322</a>                        wr_list.pop_reference_frame();
-<a href=#323 id=323 data-nosnippet>323</a>                        sc.pop_spatial();
-<a href=#324 id=324 data-nosnippet>324</a>                    }
-<a href=#325 id=325 data-nosnippet>325</a>                    scaled_y += scaled_stripe.height;
-<a href=#326 id=326 data-nosnippet>326</a>                }
-<a href=#327 id=327 data-nosnippet>327</a>            }
-<a href=#328 id=328 data-nosnippet>328</a>        } <span class="kw">else </span>{
-<a href=#329 id=329 data-nosnippet>329</a>            <span class="kw">if </span>img.image.overflows_wr() {
-<a href=#330 id=330 data-nosnippet>330</a>                <span class="macro">tracing::error!</span>(<span class="string">"cannot tile or repeat image, too large"</span>);
-<a href=#331 id=331 data-nosnippet>331</a>                <span class="kw">return</span>;
-<a href=#332 id=332 data-nosnippet>332</a>            }
-<a href=#333 id=333 data-nosnippet>333</a>
-<a href=#334 id=334 data-nosnippet>334</a>            <span class="kw">let </span>bounds = clip_rect.to_wr();
-<a href=#335 id=335 data-nosnippet>335</a>            <span class="kw">let </span>clip = sc.clip_chain_id(wr_list);
-<a href=#336 id=336 data-nosnippet>336</a>            <span class="kw">let </span>props = wr::CommonItemProperties {
-<a href=#337 id=337 data-nosnippet>337</a>                clip_rect: bounds,
-<a href=#338 id=338 data-nosnippet>338</a>                clip_chain_id: clip,
-<a href=#339 id=339 data-nosnippet>339</a>                spatial_id: sc.spatial_id(),
-<a href=#340 id=340 data-nosnippet>340</a>                flags: sc.primitive_flags(),
-<a href=#341 id=341 data-nosnippet>341</a>            };
-<a href=#342 id=342 data-nosnippet>342</a>            wr_list.push_repeating_image(
-<a href=#343 id=343 data-nosnippet>343</a>                <span class="kw-2">&amp;</span>props,
-<a href=#344 id=344 data-nosnippet>344</a>                PxRect::from_size(image_size).to_wr(),
-<a href=#345 id=345 data-nosnippet>345</a>                tile_size.to_wr(),
-<a href=#346 id=346 data-nosnippet>346</a>                tile_spacing.to_wr(),
-<a href=#347 id=347 data-nosnippet>347</a>                rendering.to_wr(),
-<a href=#348 id=348 data-nosnippet>348</a>                wr::AlphaType::PremultipliedAlpha,
-<a href=#349 id=349 data-nosnippet>349</a>                wr::ImageKey(cache.id_namespace(), img.texture_id.get()),
-<a href=#350 id=350 data-nosnippet>350</a>                wr::ColorF::WHITE,
-<a href=#351 id=351 data-nosnippet>351</a>            );
-<a href=#352 id=352 data-nosnippet>352</a>        }
-<a href=#353 id=353 data-nosnippet>353</a>    }
-<a href=#354 id=354 data-nosnippet>354</a>}
+<a href=#300 id=300 data-nosnippet>300</a>                        );
+<a href=#301 id=301 data-nosnippet>301</a>                        sc.push_spatial(spatial_id);
+<a href=#302 id=302 data-nosnippet>302</a>                    }
+<a href=#303 id=303 data-nosnippet>303</a>                    <span class="kw">let </span><span class="kw-2">mut </span>clip_rect = clip_rect;
+<a href=#304 id=304 data-nosnippet>304</a>                    clip_rect.origin.y -= scaled_y;
+<a href=#305 id=305 data-nosnippet>305</a>                    <span class="kw">let </span>clip = sc.clip_chain_id(wr_list);
+<a href=#306 id=306 data-nosnippet>306</a>                    <span class="kw">let </span>props = wr::CommonItemProperties {
+<a href=#307 id=307 data-nosnippet>307</a>                        clip_rect: clip_rect.to_wr(),
+<a href=#308 id=308 data-nosnippet>308</a>                        clip_chain_id: clip,
+<a href=#309 id=309 data-nosnippet>309</a>                        spatial_id: sc.spatial_id(),
+<a href=#310 id=310 data-nosnippet>310</a>                        flags: sc.primitive_flags(),
+<a href=#311 id=311 data-nosnippet>311</a>                    };
+<a href=#312 id=312 data-nosnippet>312</a>                    wr_list.push_image(
+<a href=#313 id=313 data-nosnippet>313</a>                        <span class="kw-2">&amp;</span>props,
+<a href=#314 id=314 data-nosnippet>314</a>                        PxRect::from_size(scaled_stripe).to_wr(),
+<a href=#315 id=315 data-nosnippet>315</a>                        rendering.to_wr(),
+<a href=#316 id=316 data-nosnippet>316</a>                        wr::AlphaType::PremultipliedAlpha,
+<a href=#317 id=317 data-nosnippet>317</a>                        wr::ImageKey(cache.id_namespace(), stripe_id.get()),
+<a href=#318 id=318 data-nosnippet>318</a>                        wr::ColorF::WHITE,
+<a href=#319 id=319 data-nosnippet>319</a>                    );
+<a href=#320 id=320 data-nosnippet>320</a>                    <span class="kw">if </span>scaled_y != Px(<span class="number">0</span>) {
+<a href=#321 id=321 data-nosnippet>321</a>                        sc.pop_spatial();
+<a href=#322 id=322 data-nosnippet>322</a>                    }
+<a href=#323 id=323 data-nosnippet>323</a>                    scaled_y += scaled_stripe.height;
+<a href=#324 id=324 data-nosnippet>324</a>                }
+<a href=#325 id=325 data-nosnippet>325</a>            }
+<a href=#326 id=326 data-nosnippet>326</a>        } <span class="kw">else </span>{
+<a href=#327 id=327 data-nosnippet>327</a>            <span class="kw">if </span>img.image.overflows_wr() {
+<a href=#328 id=328 data-nosnippet>328</a>                <span class="macro">tracing::error!</span>(<span class="string">"cannot tile or repeat image, too large"</span>);
+<a href=#329 id=329 data-nosnippet>329</a>                <span class="kw">return</span>;
+<a href=#330 id=330 data-nosnippet>330</a>            }
+<a href=#331 id=331 data-nosnippet>331</a>
+<a href=#332 id=332 data-nosnippet>332</a>            <span class="kw">let </span>bounds = clip_rect.to_wr();
+<a href=#333 id=333 data-nosnippet>333</a>            <span class="kw">let </span>clip = sc.clip_chain_id(wr_list);
+<a href=#334 id=334 data-nosnippet>334</a>            <span class="kw">let </span>props = wr::CommonItemProperties {
+<a href=#335 id=335 data-nosnippet>335</a>                clip_rect: bounds,
+<a href=#336 id=336 data-nosnippet>336</a>                clip_chain_id: clip,
+<a href=#337 id=337 data-nosnippet>337</a>                spatial_id: sc.spatial_id(),
+<a href=#338 id=338 data-nosnippet>338</a>                flags: sc.primitive_flags(),
+<a href=#339 id=339 data-nosnippet>339</a>            };
+<a href=#340 id=340 data-nosnippet>340</a>            wr_list.push_repeating_image(
+<a href=#341 id=341 data-nosnippet>341</a>                <span class="kw-2">&amp;</span>props,
+<a href=#342 id=342 data-nosnippet>342</a>                PxRect::from_size(image_size).to_wr(),
+<a href=#343 id=343 data-nosnippet>343</a>                tile_size.to_wr(),
+<a href=#344 id=344 data-nosnippet>344</a>                tile_spacing.to_wr(),
+<a href=#345 id=345 data-nosnippet>345</a>                rendering.to_wr(),
+<a href=#346 id=346 data-nosnippet>346</a>                wr::AlphaType::PremultipliedAlpha,
+<a href=#347 id=347 data-nosnippet>347</a>                wr::ImageKey(cache.id_namespace(), img.texture_id.get()),
+<a href=#348 id=348 data-nosnippet>348</a>                wr::ColorF::WHITE,
+<a href=#349 id=349 data-nosnippet>349</a>            );
+<a href=#350 id=350 data-nosnippet>350</a>        }
+<a href=#351 id=351 data-nosnippet>351</a>    }
+<a href=#352 id=352 data-nosnippet>352</a>}
 </code></pre></div></section></main></body></html>

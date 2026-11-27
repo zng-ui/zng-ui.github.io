@@ -1,0 +1,42 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Walk all `pattern` matches."><title>glob in zng::fs_watcher - Rust</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-203241e4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="zng" data-themes="" data-resource-suffix="" data-rustdoc-version="1.100.0 (0ef1bc386 2026-11-09)" data-channel="1.100.0" data-search-js="search-b167f383.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="sidebar-items.js"></script><script defer src="../../static.files/main-1814ead3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="icon" href="https://zng-ui.github.io/res/zng-logo-icon.png"><link rel="stylesheet" href="/doc/zng-material-icons-extensions.css">
+</head><body class="rustdoc fn"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><rustdoc-topbar><h2><a href="#">glob</a></h2></rustdoc-topbar><nav class="sidebar"><div class="sidebar-crate"><a class="logo-container" href="../../zng/index.html"><img src="https://zng-ui.github.io/res/zng-logo.png" alt="logo"></a><h2><a href="../../zng/index.html">zng</a><span class="version">0.26.0</span></h2></div><div class="sidebar-elems"><section id="rustdoc-toc"><h2 class="location"><a href="#">glob</a></h2><h3><a href="#">Sections</a></h3><ul class="block top-toc"><li><a href="#syntax" title="Syntax">Syntax</a></li><li><a href="#performance" title="Performance">Performance</a></li><li><a href="#configuration" title="Configuration">Configuration</a></li></ul></section><div id="rustdoc-modnav"><h2><a href="index.html">In zng::<wbr>fs_<wbr>watcher</a></h2></div></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><div class="width-limiter"><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><div class="rustdoc-breadcrumbs"><a href="../index.html">zng</a>::<wbr><a href="index.html">fs_watcher</a></div><h1>Function <span class="fn">glob</span>&nbsp;<button id="copy-path" title="Copy item path to clipboard">Copy item path</button></h1><rustdoc-toolbar></rustdoc-toolbar><span class="sub-heading"><a class="src" href="../../src/zng_ext_fs_watcher/fs_util.rs.html#60">Source</a> </span></div><pre class="rust item-decl"><code>pub fn glob(
+    pattern: impl <a class="trait" href="https://doc.rust-lang.org/1.100.0/core/convert/trait.AsRef.html" title="trait core::convert::AsRef">AsRef</a>&lt;<a class="struct" href="https://doc.rust-lang.org/1.100.0/std/path/struct.Path.html" title="struct std::path::Path">Path</a>&gt;,
+    case_insensitive: <a class="primitive" href="https://doc.rust-lang.org/1.100.0/std/primitive.bool.html">bool</a>,
+) -&gt; <a class="enum" href="https://doc.rust-lang.org/1.100.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;impl <a class="trait" href="https://doc.rust-lang.org/1.100.0/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = <a class="enum" href="https://doc.rust-lang.org/1.100.0/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;DirEntry, Error&gt;&gt; + <a class="trait" href="https://doc.rust-lang.org/1.100.0/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + <a class="trait" href="https://doc.rust-lang.org/1.100.0/core/marker/trait.Sync.html" title="trait core::marker::Sync">Sync</a>, Error&gt;</code></pre><details class="toggle top-doc" open><summary class="hideme"><span>Expand description</span></summary><div class="docblock"><p>Walk all <code>pattern</code> matches.</p>
+<p>The <code>pattern</code> is split into path prefix and actual glob, for example, <code>"some/path/*/*.txt"</code> is
+split into path <code>"some/path"</code> and glob <code>"*/*.txt"</code>, the syntax rules apply only to the glob part.</p>
+<p>The iterator sorts by file name, using the system sorting function. See <a href="struct.FileNameSortKey.html" title="struct zng::fs_watcher::FileNameSortKey"><code>FileNameSortKey</code></a> for more details.</p>
+<h3 id="syntax"><a class="doc-anchor" href="#syntax">§</a>Syntax</h3>
+<p>Standard Unix-style glob syntax is supported (provided by <a href="https://docs.rs/globset/latest/globset/"><code>globset</code></a> crate):</p>
+<ul>
+<li><code>?</code> matches any single character.</li>
+<li><code>*</code> matches zero or more characters.</li>
+<li><code>**</code> recursively matches directories but are only legal in three situations.
+First, if the glob starts with <code>**/</code>, then it matches
+all directories. For example, <code>**/foo</code> matches <code>foo</code>
+and <code>bar/foo</code> but not <code>foo/bar</code>. Secondly, if the glob ends with
+<code>/**</code>, then it matches all sub-entries. For example,
+<code>foo/**</code> matches <code>foo/a</code> and <code>foo/a/b</code>, but not <code>foo</code>.
+Thirdly, if the glob contains <code>/**/</code> anywhere within
+the pattern, then it matches zero or more directories. Using <code>**</code> anywhere
+else is illegal (Note that the glob <code>**</code> is allowed and means “match everything”).</li>
+<li><code>{a,b}</code> matches <code>a</code> or <code>b</code> where <code>a</code> and <code>b</code> are arbitrary glob patterns or empty.
+(Note that nesting <code>{...}</code> is allowed.)</li>
+<li><code>[ab]</code> matches <code>a</code> or <code>b</code> where <code>a</code> and <code>b</code> are characters. Use
+<code>[!ab]</code> to match any character except for <code>a</code> and <code>b</code>.</li>
+<li><code>[[:alpha:]]</code>, <code>[[:digit:]]</code>, <code>[[:space:]]</code> etc. match POSIX character
+classes using ASCII-only definitions. Supported classes: <code>alnum</code>, <code>alpha</code>,
+<code>blank</code>, <code>cntrl</code>, <code>digit</code>, <code>graph</code>, <code>lower</code>, <code>print</code>, <code>punct</code>, <code>space</code>,
+<code>upper</code>, <code>xdigit</code>. These can be combined with regular ranges, e.g.,
+<code>[[:digit:]a-f]</code> matches hexadecimal digits.</li>
+<li>Metacharacters such as <code>*</code> and <code>?</code> can be escaped with character class
+notation. e.g., <code>[*]</code> matches <code>*</code>. Backslash does not escape, it matches path separators on all platforms.</li>
+<li><code>/</code> and <code>\\</code> matches path separators.</li>
+</ul>
+<h3 id="performance"><a class="doc-anchor" href="#performance">§</a>Performance</h3>
+<p>A <a href="https://docs.rs/walkdir/latest/walkdir/"><code>walkdir</code></a> iterator is configured to iterator over only the file depths that might match and each file is
+checked against the compiled pattern, this is generally pretty fast, but note that if <code>**</code> is in the pattern
+the entire directory depth is searched.</p>
+<h3 id="configuration"><a class="doc-anchor" href="#configuration">§</a>Configuration</h3>
+<p>Use <a href="fn.glob_build.html" title="fn zng::fs_watcher::glob_build"><code>glob_build</code></a> to modify the <a href="https://docs.rs/walkdir/latest/walkdir/struct.WalkDir.html"><code>walkdir::WalkDir</code></a> and <a href="https://docs.rs/globset/latest/globset/struct.GlobBuilder.html"><code>globset::GlobBuilder</code></a> before iteration starts.</p>
+</div></details></section></div></main></body></html>

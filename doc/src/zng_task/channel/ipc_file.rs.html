@@ -340,7 +340,7 @@
 <a href=#340 id=340 data-nosnippet>340</a>                socket_tmp = <span class="prelude-val">Some</span>(socket);
 <a href=#341 id=341 data-nosnippet>341</a>                r
 <a href=#342 id=342 data-nosnippet>342</a>            };
-<a href=#343 id=343 data-nosnippet>343</a>            <span class="kw">let </span>_cleanup = zng_app_context::RunOnDrop::new(<span class="kw">move </span>|| {
+<a href=#343 id=343 data-nosnippet>343</a>            <span class="kw">let </span>_cleanup = std::mem::DropGuard::new((), <span class="kw">move </span>|<span class="kw">_</span>| {
 <a href=#344 id=344 data-nosnippet>344</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(socket) = socket_tmp {
 <a href=#345 id=345 data-nosnippet>345</a>                    <span class="kw">let _ </span>= std::fs::remove_file(socket);
 <a href=#346 id=346 data-nosnippet>346</a>                }

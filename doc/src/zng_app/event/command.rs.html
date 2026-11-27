@@ -469,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#433 id=433 data-nosnippet>433</a>    /// [`is_enabled`]: Self::is_enabled
 <a href=#434 id=434 data-nosnippet>434</a>    </span><span class="kw">pub fn </span>with_meta&lt;R&gt;(<span class="kw-2">&amp;</span><span class="self">self</span>, visit: <span class="kw">impl </span>FnOnce(<span class="kw-2">&amp;mut </span>CommandMeta) -&gt; R) -&gt; R {
 <a href=#435 id=435 data-nosnippet>435</a>        <span class="comment">// code that runs before  calling `visit`, removed from the generics function
-<a href=#436 id=436 data-nosnippet>436</a>        </span><span class="kw">fn </span>init_meta(self_: <span class="kw-2">&amp;</span>Command) -&gt; parking_lot::MappedRwLockReadGuard&lt;<span class="lifetime">'static</span>, CommandData&gt; {
+<a href=#436 id=436 data-nosnippet>436</a>        </span><span class="kw">fn </span>init_meta(self_: <span class="kw-2">&amp;</span>Command) -&gt; parking_lot::MappedRecursiveRwLockReadGuard&lt;<span class="lifetime">'static</span>, CommandData&gt; {
 <a href=#437 id=437 data-nosnippet>437</a>            {
 <a href=#438 id=438 data-nosnippet>438</a>                <span class="kw">let </span><span class="kw-2">mut </span>write = self_.local.write();
 <a href=#439 id=439 data-nosnippet>439</a>                <span class="kw">match </span>write.meta_init.clone() {

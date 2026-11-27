@@ -51,10 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#15 id=15 data-nosnippet>15</a>    window::{MonitorId, WindowId},
 <a href=#16 id=16 data-nosnippet>16</a>};
 <a href=#17 id=17 data-nosnippet>17</a>
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>zng_app_context::app_local;
-<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>zng_layout::unit::{DipPoint, DipRect, DipSideOffsets, DipSize, Factor, Frequency, Px, PxPoint, PxRect};
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>zng_task::channel::{<span class="self">self</span>, ChannelError, IpcBytes, IpcReadHandle, IpcReceiver, Receiver};
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_task::parking_lot::{MappedRwLockReadGuard, MappedRwLockWriteGuard};
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>parking_lot::{MappedRecursiveRwLockReadGuard, MappedRecursiveRwLockWriteGuard};
+<a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>zng_app_context::app_local;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>zng_layout::unit::{DipPoint, DipRect, DipSideOffsets, DipSize, Factor, Frequency, Px, PxPoint, PxRect};
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>zng_task::channel::{<span class="self">self</span>, ChannelError, IpcBytes, IpcReadHandle, IpcReceiver, Receiver};
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>zng_txt::Txt;
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>zng_unique_id::IdMap;
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>zng_var::{ArcEq, ResponderVar, Var, VarHandle, WeakEq};
@@ -122,20 +122,20 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#86 id=86 data-nosnippet>86</a>        APP.is_running() &amp;&amp; VIEW_PROCESS_SV.read().is_some()
 <a href=#87 id=87 data-nosnippet>87</a>    }
 <a href=#88 id=88 data-nosnippet>88</a>
-<a href=#89 id=89 data-nosnippet>89</a>    <span class="kw">fn </span>read(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRwLockReadGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
+<a href=#89 id=89 data-nosnippet>89</a>    <span class="kw">fn </span>read(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRecursiveRwLockReadGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
 <a href=#90 id=90 data-nosnippet>90</a>        VIEW_PROCESS_SV.read_map(|e| e.as_ref().expect(<span class="string">"VIEW_PROCESS not available"</span>))
 <a href=#91 id=91 data-nosnippet>91</a>    }
 <a href=#92 id=92 data-nosnippet>92</a>
-<a href=#93 id=93 data-nosnippet>93</a>    <span class="kw">fn </span>write(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
+<a href=#93 id=93 data-nosnippet>93</a>    <span class="kw">fn </span>write(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRecursiveRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
 <a href=#94 id=94 data-nosnippet>94</a>        VIEW_PROCESS_SV.write_map(|e| e.as_mut().expect(<span class="string">"VIEW_PROCESS not available"</span>))
 <a href=#95 id=95 data-nosnippet>95</a>    }
 <a href=#96 id=96 data-nosnippet>96</a>
-<a href=#97 id=97 data-nosnippet>97</a>    <span class="kw">fn </span>try_write(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;MappedRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt;&gt; {
+<a href=#97 id=97 data-nosnippet>97</a>    <span class="kw">fn </span>try_write(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;MappedRecursiveRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt;&gt; {
 <a href=#98 id=98 data-nosnippet>98</a>        <span class="kw">let </span>vp = VIEW_PROCESS_SV.write();
 <a href=#99 id=99 data-nosnippet>99</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(w) = <span class="kw-2">&amp;*</span>vp
 <a href=#100 id=100 data-nosnippet>100</a>            &amp;&amp; w.process.is_connected()
 <a href=#101 id=101 data-nosnippet>101</a>        {
-<a href=#102 id=102 data-nosnippet>102</a>            <span class="kw">return </span><span class="prelude-val">Ok</span>(MappedRwLockWriteGuard::map(vp, |w| w.as_mut().unwrap()));
+<a href=#102 id=102 data-nosnippet>102</a>            <span class="kw">return </span><span class="prelude-val">Ok</span>(MappedRecursiveRwLockWriteGuard::map(vp, |w| w.as_mut().unwrap()));
 <a href=#103 id=103 data-nosnippet>103</a>        }
 <a href=#104 id=104 data-nosnippet>104</a>        <span class="prelude-val">Err</span>(ChannelError::disconnected())
 <a href=#105 id=105 data-nosnippet>105</a>    }
@@ -147,7 +147,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#111 id=111 data-nosnippet>111</a>        }
 <a href=#112 id=112 data-nosnippet>112</a>    }
 <a href=#113 id=113 data-nosnippet>113</a>
-<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">fn </span>handle_write(<span class="kw-2">&amp;</span><span class="self">self</span>, id: AppId) -&gt; MappedRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
+<a href=#114 id=114 data-nosnippet>114</a>    <span class="kw">fn </span>handle_write(<span class="kw-2">&amp;</span><span class="self">self</span>, id: AppId) -&gt; MappedRecursiveRwLockWriteGuard&lt;<span class="lifetime">'_</span>, ViewProcessService&gt; {
 <a href=#115 id=115 data-nosnippet>115</a>        <span class="self">self</span>.check_app(id);
 <a href=#116 id=116 data-nosnippet>116</a>        <span class="self">self</span>.write()
 <a href=#117 id=117 data-nosnippet>117</a>    }
@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
 <a href=#134 id=134 data-nosnippet>134</a>    <span class="doccomment">/// Read lock view-process and reference current generation info.
 <a href=#135 id=135 data-nosnippet>135</a>    ///
 <a href=#136 id=136 data-nosnippet>136</a>    /// Strongly recommend to clone/copy the info required, as the lock prevents info update on respawn.
-<a href=#137 id=137 data-nosnippet>137</a>    </span><span class="kw">pub fn </span>info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRwLockReadGuard&lt;<span class="lifetime">'static</span>, ViewProcessInfo&gt; {
+<a href=#137 id=137 data-nosnippet>137</a>    </span><span class="kw">pub fn </span>info(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; MappedRecursiveRwLockReadGuard&lt;<span class="lifetime">'static</span>, ViewProcessInfo&gt; {
 <a href=#138 id=138 data-nosnippet>138</a>        VIEW_PROCESS_INFO.read()
 <a href=#139 id=139 data-nosnippet>139</a>    }
 <a href=#140 id=140 data-nosnippet>140</a>
